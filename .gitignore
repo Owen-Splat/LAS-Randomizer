@@ -1,4 +1,4 @@
-/.qt_for_python
+__pycache__
 /build
 /dist
 /issues.txt
@@ -9,7 +9,3 @@
 /room_data_viewer.py
 /settings.yaml
 /shadow_link_trap.py
-/__pycache__
-/Randomizers/__pycache__
-/Tools/__pycache__
-/UI/__pycache__
