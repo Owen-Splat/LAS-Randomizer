@@ -1,0 +1,15 @@
+/.qt_for_python
+/build
+/dist
+/issues.txt
+/Links Awakening Randomizer.spec
+/Models
+/output
+/romfs
+/room_data_viewer.py
+/settings.yaml
+/shadow_link_trap.py
+/__pycache__
+/Randomizers/__pycache__
+/Tools/__pycache__
+/UI/__pycache__

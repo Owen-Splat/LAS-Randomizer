@@ -1,0 +1,137 @@
+Chest_Locations:
+  - beach-chest
+  - taltal-entrance-chest
+  - taltal-east-left-chest
+  - dream-shrine-right
+  - armos-cave
+  - goponga-cave-left
+  - goponga-cave-right
+  - ukuku-cave-west-chest
+  - ukuku-cave-east-chest
+  - kanalet-south-cave
+  - swamp-chest
+  - taltal-left-ascent-cave
+  - taltal-ledge-chest
+  - taltal-5-chest-puzzle
+  - taltal-west-chest
+  - villa-cave
+  - woods-crossing-cave-chest
+  - woods-north-cave-chest
+  - woods-south-chest
+  - woods-north-chest
+
+Fast_Fishing_Rewards:
+  - fishing-50
+  - fishing-orange
+  - fishing-loose
+
+Other_Fishing_Rewards:
+  - fishing-100
+  - fishing-150
+  - fishing-cheep-cheep
+  - fishing-ol-baron
+
+Rapids_Rewards:
+  - rapids-race-45
+  - rapids-race-35
+  - rapids-race-30
+  - rapids-middle-island
+  - rapids-west-island
+
+Dampe_Rewards:
+  - dampe-page-1
+  - dampe-heart-challenge
+  - dampe-page-2
+  - dampe-bottle-challenge
+  - dampe-final
+
+Free_Gifts:
+  - walrus
+  - ghost-reward
+  - marin
+  - manbo
+  - mamu
+  - mad-batter-bay
+  - mad-batter-taltal
+  - mad-batter-woods
+  - D0-fairy-1
+  - D0-fairy-2
+
+Trade_Gifts:
+  # - mamasha
+  # - ciao-ciao
+  # - sale
+  # - kiki
+  # - tarin-ukuku
+  # - chef-bear
+  # - papahl
+  # - christine-trade
+  - christine-grateful
+  # - mr-write
+  # - grandma-yahoo
+  # - bay-fisherman
+  # - mermaid-martha
+
+Boss_Locations:
+  - lanmola
+  - armos-knight
+  - D1-moldorm
+  - D2-genie
+  - D3-slime-eye
+  - D4-angler
+  - D5-slime-eel
+  - D5-master-stalfos
+  - D6-facade
+  - D7-eagle
+  - D8-hothead
+
+Misc_Items:
+  - washed-up
+  - dream-shrine-left
+  - taltal-rooster-cave
+  - woods-loose
+  # - mermaid-cave
+
+Mansion:
+  - 5-seashell-reward
+  - 15-seashell-reward
+  - 30-seashell-reward
+  - 40-seashell-reward
+  - 50-seashell-reward
+
+Lens_Gifts:
+  - invisible-zora
+  - goriya-trader
+
+Trendy_Rewards:
+  # - trendy-prize-1
+  # - trendy-prize-2
+  # - trendy-prize-3
+  # - trendy-prize-4
+  # - trendy-prize-5
+  # - trendy-prize-6
+  - trendy-prize-final
+
+Heart_Pieces:
+  - animal-village-northwest
+  - animal-village-cave
+  - taltal-entrance-blocks
+  - north-wasteland
+  - desert-cave
+  - graveyard-cave
+  - mabe-well
+  - ukuku-cave-west-loose
+  - ukuku-cave-east-loose
+  - bay-passage-sunken
+  - river-crossing-cave
+  - rapids-ascent-cave
+  - kanalet-moat-south
+  - south-bay-sunken
+  - taltal-crossing-cave
+  - taltal-east-drop
+  - taltal-west-escape
+  - above-turtle-rock
+  - pothole-north
+  - woods-crossing-cave-loose
+  - woods-north-cave-loose
+  - diamond-island
