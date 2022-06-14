@@ -254,7 +254,7 @@ class Room:
 		if len(chests) > chestIndex:
 			chest = chests[chestIndex]
 
-			if newContent == '$ENEMY' or room == 'taltal-5-chest-puzzle':
+			if newContent in ['$ENEMY', '$EXT:MasterStalfonLetter'] or room == 'taltal-5-chest-puzzle':
 				chest.parameters[1] = bytes(newContent, 'utf-8')
 			else:
 				chest.parameters[1] = bytes(f'$EXT:{room}', 'utf-8')

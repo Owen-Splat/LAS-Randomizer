@@ -1,4 +1,4 @@
-def make_datasheet_changes(sheet, placements):
+def makeDatasheetChanges(sheet, placements):
     for i in range(len(sheet['values'])):
         if sheet['values'][i]['mKey'] == 'HeartContainer0':
             firstHeartIndex = i

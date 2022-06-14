@@ -4,7 +4,7 @@ import Tools.event_tools as event_tools
 
 # Ensure that the flowchart has the AddItemByKey and GenericItemGetSequenceByKey actions, and the EventFlags actor
 # with the SetFlag and CheckFlag action/query.
-def add_needed_actors(flowchart, rom_path):
+def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Inventory')
     except ValueError:

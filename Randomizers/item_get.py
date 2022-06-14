@@ -1,11 +1,11 @@
 import Tools.event_tools as event_tools
-from data import SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND_FLAG, RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
+from Randomizers.data import SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND_FLAG, RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
 
 
 
 # Inserts an AddItemByKey and a GenericItemGetSequenceByKey, or a progressive item switch (depending on the item).
 # It goes after 'before' and before 'after'. Return the name of the first event in the sequence.
-def insert_item_get_animation(flowchart, item, index, before=None, after=None):
+def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
     if item == 'PowerBraceletLv1':
         return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', BRACELET_FOUND_FLAG, before, after)
 

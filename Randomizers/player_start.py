@@ -2,7 +2,7 @@ import Tools.event_tools as event_tools
 
 
 
-def make_start_changes(flow, placements):
+def makeStartChanges(flow, placements):
     playerStartFlagsFirstEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': 'FirstClear', 'value': True})
     playerStartFlagCheckEvent = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': 'FirstClear'}, {0: playerStartFlagsFirstEvent, 1: None})
 
@@ -23,12 +23,24 @@ def make_start_changes(flow, placements):
         ('EventFlags', 'SetFlag', {'symbol': 'WalrusAwaked', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True})
-        # ('EventFlags', 'SetFlag', {'symbol': 'SmallKeyFirstGet', 'value': True})
+        ('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}), # flag for the bridge, we make kiki use another flag
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradePinkBraGet', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True}),
     ]
     if placements['settings']['open-kanalet']:
         playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'GateOpen_Switch_KanaletCastle_01B', 'value': True}))
-        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}))
+        # playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}))
     
     event_tools.insertEventAfter(flow.flowchart, 'Event558', playerStartFlagCheckEvent)
     event_tools.createActionChain(flow.flowchart, playerStartFlagsFirstEvent, playerStartEventFlags)

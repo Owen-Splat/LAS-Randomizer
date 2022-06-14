@@ -1,4 +1,4 @@
-def make_flags(sheet):
+def makeFlags(sheet):
     sheet['values'].append({'symbol': 'AnimalVillageHeartGet', 'index': 1119})
     sheet['values'].append({'symbol': 'AnimalVillageCaveHeartGet', 'index': 1120})
     sheet['values'].append({'symbol': 'TaltalEntranceBlocksHeartGet', 'index': 1121})
@@ -45,3 +45,6 @@ def make_flags(sheet):
     sheet['values'].append({'symbol': 'TradeFishingHookGet', 'index': 1160})
     sheet['values'].append({'symbol': 'TradePinkBraGet', 'index': 1161})
     sheet['values'].append({'symbol': 'TradeMermaidsScaleGet', 'index': 1162})
+
+    sheet['values'].append({'symbol': 'KikiGone', 'index': 1163})
+    sheet['values'].append({'symbol': 'LetterDelivered', 'index': 1164})

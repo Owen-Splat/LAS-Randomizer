@@ -2,7 +2,7 @@ import Tools.event_tools as event_tools
 
 
 
-def write_events(flow, item1, item2, item3):
+def writeEvents(flow, item1, item2, item3):
     # Combine Talk and End entry points into one flow, cutting out the normal choose your upgrade dialogue.
     event_tools.insertEventAfter(flow.flowchart, 'Event19', 'Event13')
 

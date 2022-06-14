@@ -356,7 +356,7 @@ bomb:
 stalfos-note:
   type: junk
   quantity: 1
-  item-key: MasterStalfonLetter
+  item-key: $EXT:MasterStalfonLetter
 key-D1:
   type: D1
   quantity: 3

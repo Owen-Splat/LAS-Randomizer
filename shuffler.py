@@ -78,6 +78,19 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('woods-loose')
         vanilla_locations.remove('taltal-rooster-cave')
         vanilla_locations.remove('dream-shrine-left')
+        vanilla_locations.remove('mamasha')
+        vanilla_locations.remove('ciao-ciao')
+        vanilla_locations.remove('sale')
+        vanilla_locations.remove('kiki')
+        vanilla_locations.remove('tarin-ukuku')
+        vanilla_locations.remove('chef-bear')
+        vanilla_locations.remove('papahl')
+        vanilla_locations.remove('christine-trade')
+        vanilla_locations.remove('mr-write')
+        vanilla_locations.remove('grandma-yahoo')
+        vanilla_locations.remove('bay-fisherman')
+        vanilla_locations.remove('mermaid-martha')
+
         vanilla_locations.append('kanalet-kill-room')
         
         heart_pieces = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 

@@ -2,7 +2,7 @@ import Tools.event_tools as event_tools
 
 
 
-def make_event_changes(flow):
+def makeEventChanges(flow):
     fork = event_tools.findEvent(flow.flowchart, 'Event249')
     fork.data.forks.pop(0)
     event_tools.insertEventAfter(flow.flowchart, 'Event27', 'Event249')

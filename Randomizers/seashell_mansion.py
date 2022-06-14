@@ -3,7 +3,7 @@ from Randomizers.data import SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND
 
 
 
-def change_rewards(flow, treasureBoxFlow, powderCapacity, bombCapacity, arrowCapacity, redTunic, blueTunic, harp):
+def changeRewards(flow, treasureBoxFlow, powderCapacity, bombCapacity, arrowCapacity, redTunic, blueTunic, harp):
     spinAnim = event_tools.createActionChain(flow.flowchart, None, [
         ('Link', 'RequestSwordRolling', {}),
         ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
@@ -32,7 +32,7 @@ def change_rewards(flow, treasureBoxFlow, powderCapacity, bombCapacity, arrowCap
 
 
 
-def make_event_changes(flow, placements):
+def makeEventChanges(flow, placements):
     # 40 shells, doesn't use a present box
     event_tools.findEvent(flow.flowchart, 'Event65').data.forks.pop(0)
 

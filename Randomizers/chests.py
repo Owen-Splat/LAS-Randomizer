@@ -2,8 +2,8 @@ import Tools.event_tools as event_tools
 
 
 
-def write_chest_event(flow, room, itemKey, itemGetEvent):
-    if itemKey != '$ENEMY' and room != 'taltal-5-chest-puzzle':
+def writeChestEvent(flow, room, itemKey, itemGetEvent):
+    if itemKey not in ['$ENEMY', '$EXT:MasterStalfonLetter'] and room != 'taltal-5-chest-puzzle':
         event_tools.addEntryPoint(flow.flowchart, room)
 
     if itemKey == 'SecretMedicine':
@@ -20,8 +20,7 @@ def write_chest_event(flow, room, itemKey, itemGetEvent):
 
     if room == 'taltal-5-chest-puzzle':
         event_tools.removeEventAfter(flow.flowchart, 'Event32')
-    
-    event_tools.insertEventAfter(flow.flowchart, 'Event32', itemGetEvent)
+        event_tools.insertEventAfter(flow.flowchart, 'Event32', itemGetEvent)
 
     return flow
 

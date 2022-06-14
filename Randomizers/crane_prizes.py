@@ -1,4 +1,4 @@
-def make_datasheet_changes(sheet, shieldFlag):
+def makeDatasheetChanges(sheet, shieldFlag):
     for cranePrize in sheet['values']:
         # Shield should not be obtainable until you find your first shield
         if cranePrize['symbol'] == 'Shield':

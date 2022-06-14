@@ -2,7 +2,7 @@ import Tools.oead_tools as oead_tools
 
 
 
-def make_conditions(sheet, placements, shieldFlag):
+def makeConditions(sheet, placements, shieldFlag):
     # Create new condition sets for the seashell sensor to work with Dampe, Rapids guy, Fishing Guy, and Seashell mansion
     dampeCondition = oead_tools.createCondition('DampeShellsComplete', [(9, 'true')])
     dampeLocations = ['dampe-page-1', 'dampe-heart-challenge', 'dampe-page-2', 'dampe-bottle-challenge', 'dampe-final']
@@ -34,7 +34,7 @@ def make_conditions(sheet, placements, shieldFlag):
 
 
 
-def edit_conditions(condition, placements, shieldFlag):
+def editConditions(condition, placements, shieldFlag):
     # Make sure Marin always stays in the village even if you trade for the pineapple
     if condition['symbol'] == 'MarinVillageStay':
         condition['conditions'].pop(1)

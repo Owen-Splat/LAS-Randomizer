@@ -2,29 +2,23 @@ import Tools.event_tools as event_tools
 
 
 
-def write_instrument_event(flow, room, flag, itemGetAnim, level, location):
+def writeInstrumentEvent(flow, room, flag, getAnim):
     event_tools.addEntryPoint(flow.flowchart, room)
 
-    fadeEvent = insert_instrument_fade_event(flow.flowchart, level, location)
-
-    event_tools.insertEventAfter(flow.flowchart, itemGetAnim, fadeEvent)
-    
     event_tools.createActionChain(flow.flowchart, room, [
         ('SinkingSword', 'Destroy', {}),
         ('EventFlags', 'SetFlag', {'symbol': flag, 'value': True})
-    ], itemGetAnim)
+    ], getAnim)
 
 
 
-
-def write_room_data(roomData, room, modelPath, modelName, flag):
+def writeRoomData(roomData, room, modelPath, modelName, flag):
     for act in roomData.actors:
         if act.type in [157, 158, 159, 160, 161, 162, 163, 164]: # each instrument has its own type
             # store the level and location for the leveljump event since we will overwrite these parameters
             level = str(act.parameters[0], 'utf-8')
             location = str(act.parameters[1], 'utf-8')
-            # change to sinking sword and change neccessary params
-            act.type = 0x194
+            act.type = 0x8D # bird key
             act.parameters[0] = bytes(modelPath, 'utf-8')
             act.parameters[1] = bytes(modelName, 'utf-8')
             act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow
@@ -34,7 +28,7 @@ def write_room_data(roomData, room, modelPath, modelName, flag):
 
 
 
-def insert_instrument_fade_event(flowchart, level, location):
+def insertInstrumentFadeEvent(flowchart, level, location):
     return event_tools.createActionChain(flowchart, None, [
         ('Audio', 'StopAllBGM', {'duration': 1.0}),
         ('Link', 'PlayInstrumentShineEffect', {}),

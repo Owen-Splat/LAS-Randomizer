@@ -2,11 +2,11 @@ import Tools.event_tools as event_tools
 
 
 
-def write_swap_events(flow, greenGetEvent, checkRedEvent, checkBlueEvent):
+def writeSwapEvents(flow, greenGetEvent, checkRedEvent, checkBlueEvent):
     
-    getRedBlue = has_green_event(flow.flowchart, checkRedEvent, checkBlueEvent)
-    getBlueGreen = has_red_event(flow.flowchart, checkBlueEvent, greenGetEvent)
-    getRedGreen = has_blue_event(flow.flowchart, checkRedEvent, greenGetEvent)
+    getRedBlue = hasGreenEvent(flow.flowchart, checkRedEvent, checkBlueEvent)
+    getBlueGreen = hasRedEvent(flow.flowchart, checkBlueEvent, greenGetEvent)
+    getRedGreen = hasBlueEvent(flow.flowchart, checkRedEvent, greenGetEvent)
 
     tunicBlue = event_tools.createSwitchEvent(flow.flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 20}, {0: getRedBlue, 1: getRedGreen})
     tunicRed = event_tools.createSwitchEvent(flow.flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 19}, {0: tunicBlue, 1: getBlueGreen})
@@ -25,16 +25,16 @@ def write_swap_events(flow, greenGetEvent, checkRedEvent, checkBlueEvent):
 
 
 
-def has_green_event(flowchart, red, blue):
+def hasGreenEvent(flowchart, red, blue):
     dialogResult = event_tools.createSwitchEvent(flowchart, 'Dialog', 'GetLastResult4', {}, {0: red, 1: blue, 2: None})
     return event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy1_2'}, dialogResult)
 
 
-def has_red_event(flowchart, blue, green):
+def hasRedEvent(flowchart, blue, green):
     dialogResult = event_tools.createSwitchEvent(flowchart, 'Dialog', 'GetLastResult4', {}, {0: blue, 1: green, 2: None})
     return event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy1_4'}, dialogResult)
 
 
-def has_blue_event(flowchart, red, green):
+def hasBlueEvent(flowchart, red, green):
     dialogResult = event_tools.createSwitchEvent(flowchart, 'Dialog', 'GetLastResult4', {}, {0: red, 1: green, 2: None})
     return event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy1_3'}, dialogResult)

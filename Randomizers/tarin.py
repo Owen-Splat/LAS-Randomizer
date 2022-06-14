@@ -2,7 +2,7 @@ import Tools.event_tools as event_tools
 
 
 
-def make_event_changes(flow, placements):
+def makeEventChanges(flow, placements):
     # If reduce-farming is on, and Tarin has boots, also give 20 bombs if Tarin has boots
     if placements['tarin'] == 'boots' and placements['settings']['reduce-farming']:
         event_tools.createActionChain(flow.flowchart, 'Event31', [
