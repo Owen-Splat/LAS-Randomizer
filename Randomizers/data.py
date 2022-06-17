@@ -10,6 +10,7 @@ MANBO_FLAG              = 'unused0434'
 ROOSTER_CAVE_FLAG       = 'unused0707'
 DREAM_SHRINE_FLAG       = 'unused0708'
 WOODS_LOOSE_FLAG        = 'unused0709'
+MERMAID_CAVE_FLAG       = 'TradeLensGet'
 
 INSTRUMENT_FLAGS = {
     'D1-instrument': 'TailCaveInstrumentGet',

@@ -22,19 +22,39 @@ def addNeededActors(flowchart, rom_path):
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'GenericItemGetSequenceByKey')
     
     try:
+        event_tools.findActor(flowchart, 'Link').find_action('PlayTailorOtherChannelNoWait')
+    except:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'PlayTailorOtherChannelNoWait')
+
+    try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayTailorOtherChannelEx')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'PlayTailorOtherChannelEx')
-    
+
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('StopTailorOtherChannel')
+    except:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'StopTailorOtherChannel')
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('Heal')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'Heal')
-    
+
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('Damage')
+    except:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'Damage')
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('RequestSwordRolling')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'RequestSwordRolling')
+    
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('PlayAnimation')
+    except:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'PlayAnimation')
 
     try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayAnimationEx')

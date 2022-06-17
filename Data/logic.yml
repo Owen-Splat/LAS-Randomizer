@@ -78,7 +78,7 @@ grandma-yahoo:
   content: fishing-hook
   region: animal-village
   spoiler-region: animal-village
-  condition-basic: broom & full-moon-cello & sea-lilys-bell
+  condition-basic: broom
 beach-chest:
   type: item
   subtype: chest
@@ -892,7 +892,7 @@ papahl:
   content: hibiscus
   region: taltal-east-0
   spoiler-region: taltal-mountains-east
-  condition-basic: pineapple & sea-lilys-bell
+  condition-basic: pineapple
 taltal-bomb-hole:
   type: item
   subtype: bomb-hole

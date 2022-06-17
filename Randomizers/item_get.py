@@ -18,7 +18,9 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
 
     if item == 'Shield':
         return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield', SHIELD_FOUND_FLAG, before, after)
-
+    
+    ###############################################################################################################################################
+    ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
@@ -40,6 +42,8 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': 'Arrow_MaxUp'})
             ], after)
     
+    ############################################################################################################################################
+    ### Instrument flags - just ghost flags when getting harp for now :)
     if item == 'SurfHarp':
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}), # set flags before giving harp, otherwise ghost requirements may be met during the itemget animation, leaving the player with a ghost that can only be rid of by getting another follower
@@ -49,7 +53,9 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
-
+    
+    ############################################################################################################################################
+    ### tunics
     if item == 'ClothesRed':
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': RED_TUNIC_FOUND_FLAG, 'value': True}),
@@ -73,6 +79,8 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesGreen'})
         ], after)
     
+    ######################################################################################################################################
+    ### Medicine
     if item == 'SecretMedicine':
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
@@ -80,6 +88,97 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('Link', 'Heal', {'amount': 99})
     ], after)
 
+    ######################################################################################################################################
+    ### Trade Quest items
+    if item == 'YoshiDoll':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Ribbon':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'DogFood':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Bananas':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Stick':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Honeycomb':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Pineapple':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Hibiscus':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Letter':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'Broom':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'FishingHook':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'PinkBra':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+
+    if item == 'MermaidsScale':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+            ], after)
+    
+    # ######################################################################################################################################
+    # ### traps
+    # if item == 'ZapTrap':
+    #     event_tools.cre
+    #     return event_tools.createActionChain(flowchart, before, [
+    #         (),
+    #         ()
+    #     ], after)
+    
+    ######################################################################################################################################
+    ### everything else
     return event_tools.createActionChain(flowchart, before, [
         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})

@@ -78,6 +78,10 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('woods-loose')
         vanilla_locations.remove('taltal-rooster-cave')
         vanilla_locations.remove('dream-shrine-left')
+
+        vanilla_locations.remove('trendy-prize-1')
+        self.settings['excluded-locations'].update(['trendy-prize-1'])
+
         vanilla_locations.remove('mamasha')
         vanilla_locations.remove('ciao-ciao')
         vanilla_locations.remove('sale')
@@ -90,6 +94,7 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('grandma-yahoo')
         vanilla_locations.remove('bay-fisherman')
         vanilla_locations.remove('mermaid-martha')
+        vanilla_locations.remove('mermaid-cave')
 
         vanilla_locations.append('kanalet-kill-room')
         
@@ -116,9 +121,9 @@ class ItemShuffler(QtCore.QThread):
             for inst in instruments:
                 vanilla_locations.remove(inst)
                 
-        if self.settings['shuffle-lens']:
-            vanilla_locations.remove('mermaid-cave')
-            self.settings['excluded-locations'].update(['mermaid-cave'])
+        # if self.settings['shuffle-lens']:
+        #     vanilla_locations.remove('mermaid-cave')
+        #     self.settings['excluded-locations'].update(['mermaid-cave'])
         
         if self.settings['assured-sword-shield']:
             vanilla_locations.append('tarin')
@@ -488,7 +493,7 @@ class ItemShuffler(QtCore.QThread):
             random.shuffle(locations)
         
         # Place the zol traps and master stalfos note. These HAVE to go in chests so we need to do them first
-        toPlace = list(filter(lambda s: s == 'zol-trap' or s == 'stalfos-note', items))
+        toPlace = list(filter(lambda s: s in ['zol-trap', 'zap-trap', 'stalfos-note'], items))
         chests = list(filter(lambda s: self.logic_defs[s]['subtype'] == 'chest', locations))
         for item in toPlace:
             if self.threadActive:
@@ -541,7 +546,7 @@ class ItemShuffler(QtCore.QThread):
                 # Check for item type restrictions, i.e. songs can't be standing items
                 if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
                     validPlacement = False
-                elif (item in ['zol-trap', 'stalfos-note']) and self.logic_defs[locations[0]]['subtype'] != 'chest':
+                elif (item in ['zol-trap', 'zap-trap', 'stalfos-note']) and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     validPlacement = False
                 elif self.item_defs[item]['type'] == 'important' or self.item_defs[item]['type'] == 'seashell':
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic

@@ -148,6 +148,7 @@ def createProgressiveItemSwitch(flowchart, item1, item2, flag, before=None, afte
 
 	return flagCheckEvent
 
+
 # Creates a new action event. {actor} and {action} should be strings, {params} should be a dict.
 # {nextev} is the name of the next event.
 def createActionEvent(flowchart, actor, action, params, nextev=None):
@@ -223,3 +224,44 @@ def createSubFlowEvent(flowchart, refChart, entryPoint, params, nextev=None):
 		new.data.nxt.set_index(invertList(flowchart.events))
 
 	return new.name
+
+
+# Creates a new fork event and inserts it into the flow
+def createForkEvent(flowchart, forks, nextev=None):
+	new = evfl.event.Event()
+	new.data = evfl.event.ForkEvent()
+
+	joinEvent = createJoinEvent(flowchart, nextev)
+	new.data.join = evfl.util.make_rindex(joinEvent)
+	new.data.join.set_index(invertList(flowchart.events))
+
+	flowchart.add_event(new, idgen)
+	
+	forkEvents = []
+	for branch in forks:
+		ev = findEvent(flowchart, branch)
+		if ev:
+			fork = evfl.util.make_rindex(ev)
+			fork.set_index(invertList(flowchart.events))
+			forkEvents.append(fork)
+			# forkEvents[branch] = evfl.util.make_rindex(ev)
+			# forkEvents[branch].set_index(invertList(flowchart.events))
+
+	new.data.forks = forkEvents
+
+	return new.name, joinEvent.name
+
+# creates a new join event and inserts it into the flow
+def createJoinEvent(flowchart, nextev=None):
+	nextEvent = findEvent(flowchart, nextev)
+
+	new = evfl.event.Event()
+	new.data = evfl.event.JoinEvent()
+
+	flowchart.add_event(new, idgen)
+
+	if nextEvent:
+		new.data.nxt.v = nextEvent
+		new.data.nxt.set_index(invertList(flowchart.events))
+
+	return new

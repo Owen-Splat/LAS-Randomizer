@@ -27,13 +27,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.rom_path = rom_path
         self.out_dir = out_dir
         self.seed = seed
-        self.logic = 'None'
+        self.logic = 'Advanced'
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         self.settings = settings
         
-        self.valid_placements = 213
-        self.num_of_mod_files = 292
+        self.valid_placements = 226
+        self.num_of_mod_files = 301
 
         if not settings['shuffle-instruments']:
             self.valid_placements -= 8

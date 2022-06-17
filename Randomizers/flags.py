@@ -43,8 +43,9 @@ def makeFlags(sheet):
     sheet['values'].append({'symbol': 'TradeLetterGet', 'index': 1158})
     sheet['values'].append({'symbol': 'TradeBroomGet', 'index': 1159})
     sheet['values'].append({'symbol': 'TradeFishingHookGet', 'index': 1160})
-    sheet['values'].append({'symbol': 'TradePinkBraGet', 'index': 1161})
+    sheet['values'].append({'symbol': 'TradeNecklaceGet', 'index': 1161})
     sheet['values'].append({'symbol': 'TradeMermaidsScaleGet', 'index': 1162})
+    sheet['values'].append({'symbol': 'TradeLensGet', 'index': 1163})
 
-    sheet['values'].append({'symbol': 'KikiGone', 'index': 1163})
-    sheet['values'].append({'symbol': 'LetterDelivered', 'index': 1164})
+    sheet['values'].append({'symbol': 'KikiGone', 'index': 1164})
+    sheet['values'].append({'symbol': 'LetterDelivered', 'index': 1165})

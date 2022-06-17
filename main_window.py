@@ -844,7 +844,6 @@ def main():
         except AttributeError:
             pass
     
-
     app = QtWidgets.QApplication([])
     app.setStyle('Fusion')
     

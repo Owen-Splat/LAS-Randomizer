@@ -8,18 +8,20 @@ def makeNpcChanges(npc, placements):
         npc['graphics']['model'] = '$2'
         npc['eventTriggers'][2]['entryPoint'] = '$3'
     
-    if npc['symbol'] == 'ItemBirdKey':
-        npc['graphics']['path'] = '$0'
-        npc['graphics']['model'] = '$1'
+    if npc['symbol'] == 'ItemHeartPiece':
+        npc['graphics']['path'] = '$1'
+        npc['graphics']['model'] = '$2'
         npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
-        npc['eventTriggers'][0]['condition'] = 0
-        npc['eventTriggers'][0]['entryPoint'] = '$2'
-        npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
-        npc['layoutConditions'] = [{'category': 1, 'parameter': '$3', 'layoutID': -1}]
+        # npc['eventTriggers'][0]['condition'] = 0
+        npc['eventTriggers'][0]['entryPoint'] = '$3'
+        # npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
+        npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
+        # npc['behavior']['type'] = 0
+        # npc['behavior']['parameters'] = []
         # npc['collision']['traits'] = ''
         # npc['collision']['isStatic'] = True
         # npc['collision']['filter'] = 5
-        # npc['collision']['groundCheck'] = False
+        # npc['collision']['offset'] = {'x': 0.0, 'y': 0.25, 'z': 0.0}
 
     
     if npc['symbol'] == 'ItemClothesGreen':
@@ -27,21 +29,27 @@ def makeNpcChanges(npc, placements):
         npc['graphics']['model'] = 'SmallKey'
     
     if npc['symbol'] == 'ItemClothesRed':
-        npc['graphics']['path'] = 'ItemBirdKey.bfres'
-        npc['graphics']['model'] = 'BirdKey'
-    
-    """if npc['symbol'] == 'NpcPapahl':
-        npc['layoutConditions'][1] = {'category': 1, 'parameter': 'PineappleGet', 'layoutID': 2}
+        npc['graphics']['path'] = 'ItemHeartPiece.bfres'
+        npc['graphics']['model'] = 'HeartPiece'
+        
     if npc['symbol'] == 'ObjClothBag':
-        npc['layoutConditions'][1] = {'category': 1, 'parameter': 'PineappleGet', 'layoutID': 0}
+        npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 0}
+
     if npc['symbol'] == 'NpcGrandmaUlrira':
-        npc['layoutConditions'][1] = {'category': 2, 'parameter': 'Broom', 'layoutID': 4}"""
+        npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradeBroomGet', 'layoutID': 4}
     
+
     if npc['symbol'] == 'ObjSinkingSword':
         npc['graphics']['path'] = '$0'
         npc['graphics']['model'] = '$1'
         # npc['eventTriggers'][0]['condition'] = 0
         npc['eventTriggers'][0]['entryPoint'] = '$2'
+
+        # npc['eventTriggers'].append({'condition': 0, 'additionalConditions': [], 'entryPoint': '$2'})
+        # npc['eventTriggers'][1]['condition'] = 0
+        # npc['eventTriggers']['additionalConditions'].append({'category': 1, 'parameter': '$3'})
+        # npc['eventTriggers'][1]['entryPoint'] = '$2'
+
         npc['layoutConditions'][0]['parameter'] = '$3'
         # npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
         # npc['collision']['traits'] = 'HeartPiece'
@@ -52,8 +60,12 @@ def makeNpcChanges(npc, placements):
         npc['layoutConditions'].pop(0)
     
     if npc['symbol'] == 'ObjTelephone':
-        npc['talk'] == {'personalSpace': 1.5, 'talkerLabel': 'NpcGrandmaUlrira*'}
+        npc['talk'] == {'personalSpace': 1.5, 'talkerLabel': 'NpcFairyQueen*'}
     
+    # if npc['symbol'] == 'ObjTreasureBox':
+    #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
+    
+
     if npc['symbol'] == 'NpcBowWow':
         npc['layoutConditions'][2] = {'category': 3, 'parameter': 'BowWow', 'layoutID': -1}
     
@@ -66,10 +78,17 @@ def makeNpcChanges(npc, placements):
     
     if npc['symbol'] == 'NpcKiki':
         npc['layoutConditions'][0] = {'category': 1, 'parameter': 'KikiGone', 'layoutID': -1}
+    
+    if npc['symbol'] == 'NpcPapahl':
+        npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 2}
 
     # Adjustments for NPCs that can have seashells, to make the sensor work properly
     if npc['symbol'] == 'NpcChristine':
         npc['shellSensor'].pop()
+
+        if placements['christine-trade'] == 'seashell':
+            npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['christine-trade']}"})
+
         if placements['christine-grateful'] == 'seashell':
             npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['christine-grateful']}"})
     
@@ -78,9 +97,17 @@ def makeNpcChanges(npc, placements):
         if placements['tarin'] == 'seashell':
             npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin']}"})
         
-        npc['eventTriggers'][1]['additionalConditions'][0] = {'category': 1, 'parameter': 'TradeStickGet'} # Make Tarin ukuku check the flag that you have gotten stick
+        npc['eventTriggers'][1]['additionalConditions'][0] = {'category': 4, 'parameter': '3'} # Only the instance of Tarin-Ukuku should trigger the trade event
+        npc['shellSensor'].append({'category': 4, 'parameter': '3'}) # Only the instance of Tarin-Ukuku should ring the sensor
         if placements['tarin-ukuku'] == 'seashell':
             npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin-ukuku']}"})
+        
+        npc['layoutConditions'][4] = {'category': 1, 'parameter': 'TradeStickGet', 'layoutID': 3} # Make Tarin-ukuku appear when you get the stick
+    
+    if npc['symbol'] == 'NpcPapahl':
+        if placements['papahl'] == 'seashell':
+            npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['papahl']}"})
+    
 
     if npc['symbol'] == 'NpcMarin':
         npc['shellSensor'].append({'category': 4, 'parameter': '2'}) # Only the instance of Marin in Mabe should ring the sensor
