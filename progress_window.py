@@ -19,7 +19,7 @@ with open(os.path.join(DATA_PATH, 'Npc.yml'), 'r') as f:
 
 class ProgressWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, rom_path, out_dir, seed, item_defs, logic_defs, settings):
+    def __init__(self, rom_path, out_dir, seed, logic, item_defs, logic_defs, settings):
         super (ProgressWindow, self).__init__()
         self.ui = Ui_ProgressWindow()
         self.ui.setupUi(self)
@@ -27,7 +27,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.rom_path = rom_path
         self.out_dir = out_dir
         self.seed = seed
-        self.logic = 'None'
+        self.logic = logic
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         self.settings = settings

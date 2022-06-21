@@ -142,7 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ### DESCRIPTIONS
         self.checkBoxes = self.ui.tab.findChildren(QtWidgets.QCheckBox)
         self.checkBoxes.extend([self.ui.label_6, self.ui.horizontalSlider])
-        self.checkBoxes.extend([self.ui.label_6, self.ui.horizontalSlider_2])
+        self.checkBoxes.extend([self.ui.label_11, self.ui.horizontalSlider_2])
         for check in self.checkBoxes:
             check.installEventFilter(self)
     
@@ -825,7 +825,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 'excluded-locations': self.excludedChecks
             }
             
-            self.progress_window = ProgressWindow(romPath, outdir, seed, ITEM_DEFS, LOGIC_DEFS, settings)
+            self.progress_window = ProgressWindow(romPath, outdir, seed, self.logic, ITEM_DEFS, LOGIC_DEFS, settings)
             self.progress_window.setFixedSize(472, 125)
             self.progress_window.setWindowTitle(f"{seed}")
 

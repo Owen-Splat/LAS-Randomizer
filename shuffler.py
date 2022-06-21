@@ -143,12 +143,13 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['rupee-50']['quantity'] += 2
         
         if self.settings['zap-sanity']:
-            self.item_defs['zap-trap']['quantity'] = 40
+            self.item_defs['zap-trap']['quantity'] = 54
             self.forceChests.remove('zap-trap')
-            self.item_defs['heart-piece']['quantity'] -= 12
+            self.item_defs['heart-piece']['quantity'] -= 20
             self.item_defs['rupee-20']['quantity'] -= 3
             self.item_defs['rupee-50']['quantity'] -= 15
             self.item_defs['rupee-100']['quantity'] += 1
+            self.item_defs['chamber-stone']['quantity'] -= 14
         
         # Create a placement, spoiler log, and game mod.
         if self.threadActive:
@@ -363,9 +364,9 @@ class ItemShuffler(QtCore.QThread):
         # Ensure all excluded locations are actually location names
         forceJunk = [l for l in forceJunk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
         
-        # Make sure logic is a valid value, default to basic
-        if logic not in ['basic', 'advanced', 'glitched', 'none']:
-            logic = 'basic'
+        # # Make sure logic is a valid value, default to basic
+        # if logic not in ['basic', 'advanced', 'glitched', 'none']:
+        #     logic = 'basic'
         
         # Initialize the item and location lists, and the structures for tracking placements and access
         access = {}
