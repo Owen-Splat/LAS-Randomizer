@@ -19,7 +19,7 @@ class UpdateProcess(QtCore.QThread):
     
     def run(self):
         try:
-            updateFile = lib.urlopen("https://raw.githubusercontent.com/OSmart32/LASR-App-Dev/main/version.txt")
+            updateFile = lib.urlopen("https://raw.githubusercontent.com/OSmart32/LAS-Randomizer/master/version.txt")
             webVersion = float(updateFile.read())
             
             if webVersion > currentVersion:
