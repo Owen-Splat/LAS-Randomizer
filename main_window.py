@@ -93,6 +93,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Keep track of stuff
         self.maxSeashells = int(15)
         self.excludedChecks = set()
+        self.logic = str('basic')
         self.mode = str('dark')
 
 
@@ -129,6 +130,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.miscellaneousCheck.clicked.connect(self.MiscellaneousCheck_Clicked)
         self.ui.heartsCheck.clicked.connect(self.HeartsCheck_Clicked)
         self.ui.horizontalSlider.valueChanged.connect(self.UpdateSeashells)
+        self.ui.horizontalSlider_2.valueChanged.connect(self.UpdateLogic)
         # extra options
         self.ui.lessFishingCheck.clicked.connect(self.FastFishing_Clicked)
         # tab 2
@@ -325,7 +327,33 @@ class MainWindow(QtWidgets.QMainWindow):
             self.maxSeashells = 15
             self.ui.horizontalSlider.setValue(2)
             self.ui.label_6.setText("  Max Seashells: {}".format(self.maxSeashells))
-                
+        
+        # logic
+        try:
+            logic = str(SETTINGS['Logic'].lower())
+            if logic in ['basic, advanced', 'glitched', 'none']:
+                self.logic = logic
+                if logic == 'basic':
+                    self.ui.horizontalSlider_2.setValue(0)
+                    self.ui.label_11.setText('  Logic:  Basic')
+                elif logic == 'advanced':
+                    self.ui.horizontalSlider_2.setValue(1)
+                    self.ui.label_11.setText('  Logic:  Advanced')
+                elif logic == 'glitched':
+                    self.ui.horizontalSlider_2.setValue(2)
+                    self.ui.label_11.setText('  Logic:  Glitched')
+                else:
+                    self.ui.horizontalSlider_2.setValue(3)
+                    self.ui.label_11.setText('  Logic:  None')
+            else:
+                self.logic = 'Basic'
+                self.ui.horizontalSlider_2.setValue(0)
+                self.ui.label_11.setText('  Logic:  Basic')
+        except (KeyError, TypeError):
+            self.logic = 'Basic'
+            self.ui.horizontalSlider_2.setValue(0)
+            self.ui.label_11.setText('  Logic:  Basic')
+        
         # free book
         try:
             self.ui.bookCheck.setChecked(SETTINGS['Free_Book'])
@@ -487,6 +515,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excludedChecks.difference_update(set(['5-seashell-reward', '15-seashell-reward']))
         self.excludedChecks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
 
+        self.ui.label_11.setText('  Logic:  Basic')
+        self.ui.horizontalSlider_2.setValue(0)
+        self.logic = 'Basic'
+
         self.ui.bookCheck.setChecked(True)
         self.ui.unlockedBombsCheck.setChecked(True)
         self.ui.shuffledBombsCheck.setChecked(False)
@@ -516,6 +548,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Romfs_Folder': self.ui.lineEdit.text(),
             'Output_Folder': self.ui.lineEdit_2.text(),
             'Seed': self.ui.lineEdit_3.text(),
+            'Logic': self.logic,
             'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
             'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
             'Fishing': self.ui.fishingCheck.isChecked(),
@@ -733,6 +766,29 @@ class MainWindow(QtWidgets.QMainWindow):
         
     
     
+    # Update Logic
+    def UpdateLogic(self):
+
+        value = self.ui.horizontalSlider_2.value()
+
+        if value == 0:
+            self.ui.label_11.setText('  Logic:  Basic')
+            self.logic = 'basic'
+        
+        elif value == 1:
+            self.ui.label_11.setText('  Logic:  Advanced')
+            self.logic = 'advanced'
+        
+        elif value == 2:
+            self.ui.label_11.setText('  Logic:  Glitched')
+            self.logic = 'glitched'
+        
+        else:
+            self.ui.label_11.setText('  Logic:  None')
+            self.logic = 'none'
+
+
+
     # Randomize Button Clicked
     def RandomizeButton_Clicked(self):
         

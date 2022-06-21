@@ -523,7 +523,7 @@
        <property name="geometry">
         <rect>
          <x>548</x>
-         <y>105</y>
+         <y>68</y>
          <width>111</width>
          <height>22</height>
         </rect>
@@ -557,7 +557,7 @@
        <property name="geometry">
         <rect>
          <x>548</x>
-         <y>68</y>
+         <y>34</y>
          <width>111</width>
          <height>23</height>
         </rect>
@@ -621,7 +621,7 @@
         <string/>
        </property>
        <property name="whatsThis">
-        <string>This controls whether heart pieces can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
+        <string>This controls whether heart pieces can be progress items. Sunken ones are automatically excluded&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
        </property>
        <property name="text">
         <string>Heart Pieces</string>
@@ -755,6 +755,86 @@
        </property>
        <property name="checkable">
         <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QSlider" name="horizontalSlider_2">
+       <property name="geometry">
+        <rect>
+         <x>548</x>
+         <y>136</y>
+         <width>111</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="whatsThis">
+        <string>This controls whether the Seashell Mansion prizes can contain progress items</string>
+       </property>
+       <property name="maximum">
+        <number>3</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::NoTicks</enum>
+       </property>
+       <property name="tickInterval">
+        <number>1</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_11">
+       <property name="geometry">
+        <rect>
+         <x>548</x>
+         <y>102</y>
+         <width>111</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>This controls whether the Seashell Mansion prizes can contain progress items</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>  Logic:  Basic</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
        </property>
       </widget>
      </widget>

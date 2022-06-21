@@ -1,6 +1,6 @@
 import Tools.event_tools as event_tools
-import Randomizers.item_get as item_get
-from Randomizers.data import INSTRUMENT_FLAGS
+from Randomizers import item_get
+from Randomizers import data
 
 
 
@@ -19,7 +19,7 @@ def changeInstrument(flowchart, itemKey, itemIndex, modelPath, modelName, room, 
     act.parameters[0] = bytes(modelPath, 'utf-8')
     act.parameters[1] = bytes(modelName, 'utf-8')
     act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow
-    act.parameters[3] = bytes(INSTRUMENT_FLAGS[room], 'utf-8') # flag for if item appears
+    act.parameters[3] = bytes(data.INSTRUMENT_FLAGS[room], 'utf-8') # flag for if item appears
 
     fadeEvent = insertInstrumentFadeEvent(flowchart, level, location)
     instrumentGet = item_get.insertItemGetAnimation(flowchart, itemKey, itemIndex, None, fadeEvent)
@@ -27,7 +27,7 @@ def changeInstrument(flowchart, itemKey, itemIndex, modelPath, modelName, room, 
     event_tools.addEntryPoint(flowchart, room)
     event_tools.createActionChain(flowchart, room, [
         ('SinkingSword', 'Destroy', {}),
-        ('EventFlags', 'SetFlag', {'symbol': INSTRUMENT_FLAGS[room], 'value': True})
+        ('EventFlags', 'SetFlag', {'symbol': data.INSTRUMENT_FLAGS[room], 'value': True})
     ], instrumentGet)
 
 

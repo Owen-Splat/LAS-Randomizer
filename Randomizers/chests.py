@@ -1,5 +1,5 @@
 import Tools.event_tools as event_tools
-import Randomizers.item_get as item_get
+from Randomizers import item_get
 
 
 
@@ -41,17 +41,3 @@ def insertChestMedicineEvent(flowchart):
     leaveMedicineEvent = event_tools.createActionEvent(flowchart, 'Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keepCarry': False, 'messageEntry': 'SecretMedicine2'}, closeEvent)
 
     return event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 22}, {0: takeMedicineEvent, 1: leaveMedicineEvent})
-
-
-
-# # special event for zap trap
-# def insertZapTrapEvent(flowchart):
-#     stopEvent = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
-#     {'channel': 'toolshopkeeper_dmg', 'index': 0})
-
-#     return event_tools.createForkEvent(flowchart, [
-#         event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
-#         event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.5}),
-#         event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
-#         event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 8})
-#     ], stopEvent)

@@ -1,5 +1,5 @@
 import Tools.oead_tools as oead_tools
-from Randomizers.data import SHIELD_FOUND_FLAG, BOMBS_FOUND_FLAG
+from Randomizers import data
 
 
 
@@ -42,7 +42,7 @@ def editConditions(condition, placements):
 
     # Make the shop not sell shields until you find one
     if condition['symbol'] == 'ShopShieldCondition':
-        condition['conditions'][0] = {'category': 1, 'parameter': SHIELD_FOUND_FLAG}
+        condition['conditions'][0] = {'category': 1, 'parameter': data.SHIELD_FOUND_FLAG}
     
     # Make the animals in Animal village not be in the ring, which they would because of WalrusAwaked getting set
     if condition['symbol'] == 'AnimalPop':
@@ -57,7 +57,7 @@ def editConditions(condition, placements):
         if placements['settings']['unlocked-bombs']:
             condition['conditions'][0] = {'category': 9, 'parameter': 'true'}
         if placements['settings']['shuffle-bombs']:
-            condition['conditions'][0] = {'category': 1, 'parameter': BOMBS_FOUND_FLAG}
+            condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
         # else:
         #     condition['conditions'][0] = {'category': 2, 'parameter': 'Bomb'}
     

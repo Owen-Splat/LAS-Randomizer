@@ -1,6 +1,6 @@
 import Tools.event_tools as event_tools
-from Randomizers.data import SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND_FLAG
-import Randomizers.item_get as item_get
+from Randomizers import item_get
+from Randomizers import data
 
 
 
@@ -10,13 +10,13 @@ def changeRewards(flow, treasureBoxFlow):
         ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
     ], 'Event0')
 
-    swordFlagCheck = event_tools.createProgressiveItemSwitch(flow.flowchart, 'SwordLv1', 'SwordLv2', SWORD_FOUND_FLAG, None, spinAnim)
+    swordFlagCheck = event_tools.createProgressiveItemSwitch(flow.flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, None, spinAnim)
     swordContentCheck = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(treasureBoxFlow.flowchart, 'Event33').data.params.data['value1'], 'value2': 'SwordLv1'}, {0: swordFlagCheck, 1: 'Event3'})
     
-    shieldFlagCheck = event_tools.createProgressiveItemSwitch(flow.flowchart, 'Shield', 'MirrorShield', SHIELD_FOUND_FLAG, None, 'Event0')
+    shieldFlagCheck = event_tools.createProgressiveItemSwitch(flow.flowchart, 'Shield', 'MirrorShield', data.SHIELD_FOUND_FLAG, None, 'Event0')
     shieldContentCheck = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(treasureBoxFlow.flowchart, 'Event33').data.params.data['value1'], 'value2': 'Shield'}, {0: shieldFlagCheck, 1: swordContentCheck})
 
-    braceletFlagCheck = event_tools.createProgressiveItemSwitch(flow.flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', BRACELET_FOUND_FLAG, None, 'Event0')
+    braceletFlagCheck = event_tools.createProgressiveItemSwitch(flow.flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', data.BRACELET_FOUND_FLAG, None, 'Event0')
     braceletContentCheck = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(treasureBoxFlow.flowchart, 'Event33').data.params.data['value1'], 'value2': 'PowerBraceletLv1'}, {0: braceletFlagCheck, 1: shieldContentCheck})
 
     powderCapacityGet = item_get.insertItemGetAnimation(flow.flowchart, 'MagicPowder_MaxUp', -1, None, 'Event0')
@@ -96,19 +96,19 @@ def makeEventChanges(flow, placements):
     event_tools.insertEventAfter(flow.flowchart, 'Event64', 'Event65')
 
     # Remove the thing to show Link's sword because it will show L1 sword if he has none. 
-    swordCheck1 = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': SWORD_FOUND_FLAG}, {0: 'Event65', 1: 'Event64'})
+    swordCheck1 = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.SWORD_FOUND_FLAG}, {0: 'Event65', 1: 'Event64'})
     event_tools.insertEventAfter(flow.flowchart, 'Event80', swordCheck1)
 
     # However, leave it the 2nd time if he's going to get one here.
     if placements['40-seashell-reward'] != 'sword':
-        swordCheck2 = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': SWORD_FOUND_FLAG}, {0: 'Event48', 1: 'Event47'})
+        swordCheck2 = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.SWORD_FOUND_FLAG}, {0: 'Event48', 1: 'Event47'})
         event_tools.insertEventAfter(flow.flowchart, 'Event54', swordCheck2)
     
     # Special case, if there is a sword here, then actually give them item before the end of the animation so it looks like the vanilla cutscene :)
     if placements['40-seashell-reward'] == 'sword':
         earlyGiveSword1 = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItemByKey', {'itemKey': 'SwordLv1', 'count': 1, 'index': -1, 'autoEquip': False}, 'Event19')
         earlyGiveSword2 = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItemByKey', {'itemKey': 'SwordLv2', 'count': 1, 'index': -1, 'autoEquip': False}, 'Event19')
-        swordCheck3 = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': SWORD_FOUND_FLAG}, {0: earlyGiveSword1, 1: earlyGiveSword2})
+        swordCheck3 = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.SWORD_FOUND_FLAG}, {0: earlyGiveSword1, 1: earlyGiveSword2})
         event_tools.insertEventAfter(flow.flowchart, 'Event74', swordCheck3)
     else:
         event_tools.insertEventAfter(flow.flowchart, 'Event74', 'Event19')

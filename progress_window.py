@@ -27,13 +27,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.rom_path = rom_path
         self.out_dir = out_dir
         self.seed = seed
-        self.logic = 'Advanced'
+        self.logic = 'None'
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         self.settings = settings
         
         self.valid_placements = 228  # 226
-        self.num_of_mod_files = 302
+        self.num_of_mod_files = 304 # +1 since it takes half a second after completing before it is actually done
 
         if settings['shuffle-bombs']:
             self.num_of_mod_files -= 1
@@ -96,6 +96,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.mods_process.setParent(self)
             self.mods_process.progress_update.connect(self.UpdateProgress)
             self.mods_process.is_done.connect(self.AreModsDone)
+            self.mods_process.error.connect(self.modsError)
             self.mods_process.start()
         else:
             self.done = True
@@ -103,6 +104,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
 
     
+    def modsError(self, error):
+        if error:
+            self.error = True
+            print('Error detected')
+
+
+
     def AreModsDone(self, done):
         if done:
             # All done
@@ -111,17 +119,17 @@ class ProgressWindow(QtWidgets.QMainWindow):
                 self.ui.label.setText("All done! Check the Github page for instructions on how to play!")
                 # self.ui.label_2.setText('')
                 self.done = True
+            elif self.error:
+                self.ui.label.setText("Error detected. Please check that your romfs are valid!")
+                if os.path.exists(self.out_dir): # delete files if user canceled
+                    shutil.rmtree(self.out_dir, ignore_errors=True)
+                self.done = True
             else:
+                self.ui.label.setText("Canceling...")
                 if os.path.exists(self.out_dir): # delete files if user canceled
                     shutil.rmtree(self.out_dir, ignore_errors=True)
                 self.done = True
                 self.close()
-
-    
-    
-    def modsError(self, error):
-        if error:
-            self.error = True
 
 
 
@@ -131,7 +139,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             event.ignore()
             self.cancel = True
             self.ui.label.setText('Canceling...')
-            self.ui.label_2.setText('')
+            # self.ui.label_2.setText('')
             if self.current_job == 'shuffler':
                 self.shuffler_process.stop()
             elif self.current_job == 'modgenerator':

@@ -56,7 +56,7 @@ christine-grateful:
   index: 35
   region: animal-village
   spoiler-region: animal-village
-  condition-basic: letter & mr-write-house
+  condition-basic: hibiscus letter & mr-write-house
 invisible-zora:
   type: item
   subtype: npc

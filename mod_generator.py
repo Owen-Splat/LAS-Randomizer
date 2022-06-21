@@ -10,8 +10,7 @@ import Tools.leb as leb
 import Tools.event_tools as event_tools
 import Tools.oead_tools as oead_tools
 
-import Randomizers
-from Randomizers.data import *
+from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion, small_keys, tarin, trade_quest, tunic_swap
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -50,38 +49,39 @@ class ModsProcess(QtCore.QThread):
     
     # automatically called when this thread is started
     def run(self):
-        if self.thread_active: self.makeGeneralLEBChanges()
-        if self.thread_active: self.makeGeneralEventChanges()
-        if self.thread_active: self.makeGeneralDatasheetChanges()
-        
-        if self.thread_active: self.makeChestContentFixes()
-        if self.thread_active: self.makeEventContentChanges()
-        if self.thread_active: self.makeTradeQuestChanges()
+        try:
+            if self.thread_active: self.makeGeneralLEBChanges()
+            if self.thread_active: self.makeGeneralEventChanges()
+            if self.thread_active: self.makeGeneralDatasheetChanges()
+            
+            if self.thread_active: self.makeChestContentFixes()
+            if self.thread_active: self.makeEventContentChanges()
+            if self.thread_active: self.makeTradeQuestChanges()
 
-        if self.thread_active: self.makeSmallKeyChanges()
-        if self.thread_active: self.makeHeartPieceChanges()
+            if self.thread_active: self.makeSmallKeyChanges()
+            if self.thread_active: self.makeHeartPieceChanges()
 
-        if self.thread_active: self.makeTelephoneChanges()
+            if self.thread_active: self.makeTelephoneChanges()
 
-        if self.thread_active: self.makeGeneralARCChanges()
-        
-        if self.placements['settings']['free-book'] and self.thread_active:
-            self.setFreeBook()
+            if self.thread_active: self.makeGeneralARCChanges()
+            
+            if self.placements['settings']['free-book'] and self.thread_active:
+                self.setFreeBook()
 
-        if self.placements['settings']['shuffle-instruments'] and self.thread_active:
-            self.makeInstrumentChanges()
+            if self.placements['settings']['shuffle-instruments'] and self.thread_active:
+                self.makeInstrumentChanges()
 
-        if self.placements['settings']['randomize-music'] and self.thread_active:
-            self.randomizeMusic()
-        
-        if not self.thread_active:
+            if self.placements['settings']['randomize-music'] and self.thread_active:
+                self.randomizeMusic()
+        except (FileNotFoundError, ValueError):
+            # self.thread_active = False
             self.error.emit(True)
         
         # print(self.progress_value)
         self.is_done.emit(True)
     
 
-    
+
     # Patch LEB files of rooms with chests to update their contents
     def makeChestContentFixes(self):
         # Start by setting up the paths for the RomFS
@@ -89,15 +89,15 @@ class ModsProcess(QtCore.QThread):
             os.makedirs(f'{self.out_dir}/Romfs/region_common/level')
         
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        for room in CHEST_ROOMS:
+        for room in data.CHEST_ROOMS:
             if self.thread_active:
-                dirname = re.match('(.+)_\\d\\d[A-P]', CHEST_ROOMS[room]).group(1)
+                dirname = re.match('(.+)_\\d\\d[A-P]', data.CHEST_ROOMS[room]).group(1)
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
                     os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{dirname}')
                 
-                with open(f'{self.rom_path}/region_common/level/{dirname}/{CHEST_ROOMS[room]}.leb', 'rb') as roomfile:
+                with open(f'{self.rom_path}/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'rb') as roomfile:
                     roomData = leb.Room(roomfile.read())
 
                 itemKey = self.item_defs[self.placements[room]]['item-key']
@@ -110,7 +110,7 @@ class ModsProcess(QtCore.QThread):
                     roomData.setChestContent(itemKey, room)
                 
                 if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{CHEST_ROOMS[room]}.leb', 'wb') as outfile:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'wb') as outfile:
                         outfile.write(roomData.repack())
                         self.progress_value += 1 # update progress bar
                         self.progress_update.emit(self.progress_value)
@@ -141,7 +141,7 @@ class ModsProcess(QtCore.QThread):
                             self.progress_update.emit(self.progress_value)
 
                 # write the chest event
-                Randomizers.chests.writeChestEvent(flow, room, itemKey, itemIndex)
+                chests.writeChestEvent(flow, room, itemKey, itemIndex)
             
             else: break
         
@@ -160,22 +160,22 @@ class ModsProcess(QtCore.QThread):
 
         # Open up the SmallKey event to be ready to edit
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SmallKey.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        models = ITEM_MODELS[:]
+        models = data.ITEM_MODELS[:]
         models.append('SmallKey')
         models.append('NightmareKey')
         models.append('StoneBeak')
         models.append('Compass')
         models.append('DungeonMap')
 
-        for room in SMALL_KEY_ROOMS:
+        for room in data.SMALL_KEY_ROOMS:
             if self.thread_active:
-                dirname = re.match('(.+)_\\d\\d[A-P]', SMALL_KEY_ROOMS[room]).group(1)
+                dirname = re.match('(.+)_\\d\\d[A-P]', data.SMALL_KEY_ROOMS[room]).group(1)
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
                     os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{dirname}')
 
-                with open(f'{self.rom_path}/region_common/level/{dirname}/{SMALL_KEY_ROOMS[room]}.leb', 'rb') as roomfile:
+                with open(f'{self.rom_path}/region_common/level/{dirname}/{data.SMALL_KEY_ROOMS[room]}.leb', 'rb') as roomfile:
                     roomData = leb.Room(roomfile.read())
                 
                 item = self.placements[room]
@@ -189,11 +189,11 @@ class ModsProcess(QtCore.QThread):
                     modelName = random.choice(models)
                     modelPath = f'Item{modelName}.bfres'
                 
-                Randomizers.small_keys.writeKeyEvent(flow.flowchart, itemKey, itemIndex, room)
+                small_keys.writeKeyEvent(flow.flowchart, itemKey, itemIndex, room)
                 roomData.setSmallKeyParams(modelPath, modelName, room)
 
                 if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{SMALL_KEY_ROOMS[room]}.leb', 'wb') as outfile:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.SMALL_KEY_ROOMS[room]}.leb', 'wb') as outfile:
                         outfile.write(roomData.repack())
                         self.progress_value += 1 # update progress bar
                         self.progress_update.emit(self.progress_value)
@@ -256,12 +256,12 @@ class ModsProcess(QtCore.QThread):
     def tarinChanges(self):
         ### Event changes
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Tarin.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['tarin'] if 'tarin' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['tarin']]['item-key'], itemIndex, 'Event52', 'Event31')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['tarin']]['item-key'], itemIndex, 'Event52', 'Event31')
 
-        Randomizers.tarin.makeEventChanges(flow, self.placements)
+        tarin.makeEventChanges(flow, self.placements)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
@@ -272,7 +272,7 @@ class ModsProcess(QtCore.QThread):
 
     def sinkingSwordChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SinkingSword.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         # Beach
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field'):
@@ -289,10 +289,10 @@ class ModsProcess(QtCore.QThread):
             modelPath = self.item_defs[item]['model-path']
             modelName = self.item_defs[item]['model-name']
         else:
-            modelName = random.choice(ITEM_MODELS)
+            modelName = random.choice(data.ITEM_MODELS)
             modelPath = f'Item{modelName}.bfres'
         
-        Randomizers.miscellaneous.changeSunkenSword(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
+        miscellaneous.changeSunkenSword(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_16C.leb', 'wb') as file:
@@ -316,10 +316,10 @@ class ModsProcess(QtCore.QThread):
             modelPath = self.item_defs[item]['model-path']
             modelName = self.item_defs[item]['model-name']
         else:
-            modelName = random.choice(ITEM_MODELS)
+            modelName = random.choice(data.ITEM_MODELS)
             modelPath = f'Item{modelName}.bfres'
         
-        Randomizers.miscellaneous.changeBirdKey(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
+        miscellaneous.changeBirdKey(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/EagleKeyCave/EagleKeyCave_01A.leb', 'wb') as file:
@@ -343,10 +343,10 @@ class ModsProcess(QtCore.QThread):
             modelPath = self.item_defs[item]['model-path']
             modelName = self.item_defs[item]['model-name']
         else:
-            modelName = random.choice(ITEM_MODELS)
+            modelName = random.choice(data.ITEM_MODELS)
             modelPath = f'Item{modelName}.bfres'
         
-        Randomizers.miscellaneous.changeOcarina(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
+        miscellaneous.changeOcarina(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/DreamShrine/DreamShrine_01A.leb', 'wb') as file:
@@ -370,10 +370,10 @@ class ModsProcess(QtCore.QThread):
             modelPath = self.item_defs[item]['model-path']
             modelName = self.item_defs[item]['model-name']
         else:
-            modelName = random.choice(ITEM_MODELS)
+            modelName = random.choice(data.ITEM_MODELS)
             modelPath = f'Item{modelName}.bfres'
         
-        Randomizers.miscellaneous.changeMushroom(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
+        miscellaneous.changeMushroom(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_06A.leb', 'wb') as file:
@@ -397,10 +397,10 @@ class ModsProcess(QtCore.QThread):
             modelPath = self.item_defs[item]['model-path']
             modelName = self.item_defs[item]['model-name']
         else:
-            modelName = random.choice(ITEM_MODELS)
+            modelName = random.choice(data.ITEM_MODELS)
             modelPath = f'Item{modelName}.bfres'
         
-        Randomizers.miscellaneous.changeLens(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
+        miscellaneous.changeLens(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
         
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/MermaidStatue/MermaidStatue_01A.leb', 'wb') as file:
@@ -419,10 +419,10 @@ class ModsProcess(QtCore.QThread):
 
     def walrusChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Walrus.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['walrus'] if 'walrus' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['walrus']]['item-key'], itemIndex, 'Event53', 'Event110')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['walrus']]['item-key'], itemIndex, 'Event53', 'Event110')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Walrus.bfevfl', flow)
@@ -433,10 +433,10 @@ class ModsProcess(QtCore.QThread):
 
     def christineChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Christine.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['christine-grateful'] if 'christine-grateful' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['christine-grateful']]['item-key'], itemIndex, 'Event44', 'Event36')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['christine-grateful']]['item-key'], itemIndex, 'Event44', 'Event36')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl', flow)
@@ -447,10 +447,10 @@ class ModsProcess(QtCore.QThread):
 
     def invisibleZoraChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SecretZora.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['invisible-zora'] if 'invisible-zora' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['invisible-zora']]['item-key'], itemIndex, 'Event23', 'Event27')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['invisible-zora']]['item-key'], itemIndex, 'Event23', 'Event27')
 
         event_tools.insertEventAfter(flow.flowchart, 'Event32', 'Event23')
 
@@ -463,12 +463,12 @@ class ModsProcess(QtCore.QThread):
 
     def marinChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Marin.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'], itemIndex, 'Event246', 'Event666')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'], itemIndex, 'Event246', 'Event666')
 
-        Randomizers.marin.makeEventChanges(flow)
+        marin.makeEventChanges(flow)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Marin.bfevfl', flow)
@@ -479,12 +479,12 @@ class ModsProcess(QtCore.QThread):
 
     def ghostRewardChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Owl.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         new = event_tools.createActionEvent(flow.flowchart, 'Owl', 'Destroy', {})
 
         itemIndex = self.placements['indexes']['ghost-reward'] if 'ghost-reward' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['ghost-reward']]['item-key'], itemIndex, 'Event34', new)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['ghost-reward']]['item-key'], itemIndex, 'Event34', new)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Owl.bfevfl', flow)
@@ -495,13 +495,13 @@ class ModsProcess(QtCore.QThread):
 
     def clothesFairyChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/FairyQueen.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D0-fairy-2'] if 'D0-fairy-2' in self.placements['indexes'] else -1
-        item2 = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-2']]['item-key'], itemIndex, 'Event0', 'Event180')
+        item2 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-2']]['item-key'], itemIndex, 'Event0', 'Event180')
 
         itemIndex = self.placements['indexes']['D0-fairy-1'] if 'D0-fairy-1' in self.placements['indexes'] else -1
-        item1 = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-1']]['item-key'], itemIndex, 'Event0', item2)
+        item1 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-1']]['item-key'], itemIndex, 'Event0', item2)
 
         event_tools.insertEventAfter(flow.flowchart, 'Event128', 'Event58')
 
@@ -514,14 +514,14 @@ class ModsProcess(QtCore.QThread):
 
     def goriyaChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Goriya.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        flagEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': GORIYA_FLAG, 'value': True}, 'Event4')
+        flagEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': data.GORIYA_FLAG, 'value': True}, 'Event4')
 
         itemIndex = self.placements['indexes']['goriya-trader'] if 'goriya-trader' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['goriya-trader']]['item-key'], itemIndex, 'Event87', flagEvent)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['goriya-trader']]['item-key'], itemIndex, 'Event87', flagEvent)
 
-        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
+        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
         event_tools.insertEventAfter(flow.flowchart, 'Event24', flagCheck)
 
         if self.thread_active:
@@ -533,14 +533,14 @@ class ModsProcess(QtCore.QThread):
 
     def manboChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ManboTamegoro.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        flagEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': MANBO_FLAG, 'value': True}, 'Event13')
+        flagEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': data.MANBO_FLAG, 'value': True}, 'Event13')
 
         itemIndex = self.placements['indexes']['manbo'] if 'manbo' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['manbo']]['item-key'], itemIndex, 'Event31', flagEvent)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['manbo']]['item-key'], itemIndex, 'Event31', flagEvent)
 
-        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': MANBO_FLAG}, {0: 'Event37', 1: 'Event35'})
+        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.MANBO_FLAG}, {0: 'Event37', 1: 'Event35'})
         event_tools.insertEventAfter(flow.flowchart, 'Event9', flagCheck)
 
         if self.thread_active:
@@ -552,14 +552,14 @@ class ModsProcess(QtCore.QThread):
 
     def mamuChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Mamu.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        flagEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': MAMU_FLAG, 'value': True}, 'Event40')
+        flagEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': data.MAMU_FLAG, 'value': True}, 'Event40')
 
         itemIndex = self.placements['indexes']['mamu'] if 'mamu' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mamu']]['item-key'], itemIndex, 'Event85', flagEvent)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mamu']]['item-key'], itemIndex, 'Event85', flagEvent)
 
-        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': MAMU_FLAG}, {0: 'Event14', 1: 'Event98'})
+        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.MAMU_FLAG}, {0: 'Event14', 1: 'Event98'})
         event_tools.insertEventAfter(flow.flowchart, 'Event10', flagCheck)
 
         if self.thread_active:
@@ -571,16 +571,16 @@ class ModsProcess(QtCore.QThread):
 
     def rapidsChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RaftShopMan.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['rapids-race-45'] if 'rapids-race-45' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-45']]['item-key'], itemIndex, 'Event42', 'Event88')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-45']]['item-key'], itemIndex, 'Event42', 'Event88')
 
         itemIndex = self.placements['indexes']['rapids-race-35'] if 'rapids-race-35' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-35']]['item-key'], itemIndex, 'Event40', 'Event86')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-35']]['item-key'], itemIndex, 'Event40', 'Event86')
 
         itemIndex = self.placements['indexes']['rapids-race-30'] if 'rapids-race-30' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-30']]['item-key'], itemIndex, 'Event38', 'Event85')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-30']]['item-key'], itemIndex, 'Event38', 'Event85')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RaftShopMan.bfevfl', flow)
@@ -591,7 +591,7 @@ class ModsProcess(QtCore.QThread):
 
     def fishingChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Fisherman.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         changeDefs = [
             ('fishing-orange', 'Event113', 'Event212'),
@@ -608,9 +608,9 @@ class ModsProcess(QtCore.QThread):
                 itemKey = self.item_defs[self.placements[defs[0]]]['item-key']
                 itemIndex = self.placements['indexes'][defs[0]] if defs[0] in self.placements['indexes'] else -1
                 if itemKey == 'SwordLv1':
-                    event_tools.createProgressiveItemSwitch(flow.flowchart, 'SwordLv1', 'SwordLv2', SWORD_FOUND_FLAG, defs[1], defs[2])
+                    event_tools.createProgressiveItemSwitch(flow.flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, defs[1], defs[2])
                 else:
-                    Randomizers.item_get.insertItemGetAnimation(flow.flowchart, itemKey, itemIndex, defs[1], defs[2])
+                    item_get.insertItemGetAnimation(flow.flowchart, itemKey, itemIndex, defs[1], defs[2], False)
             else: break
         
         event_tools.insertEventAfter(flow.flowchart, 'Event20', 'Event3')
@@ -627,10 +627,10 @@ class ModsProcess(QtCore.QThread):
 
     def trendyChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/GameShopOwner.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['trendy-prize-final'] if 'trendy-prize-final' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['trendy-prize-final']]['item-key'], itemIndex, 'Event112', 'Event239')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['trendy-prize-final']]['item-key'], itemIndex, 'Event112', 'Event239')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/GameShopOwner.bfevfl', flow)
@@ -641,7 +641,7 @@ class ModsProcess(QtCore.QThread):
 
     def seashellMansionChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ShellMansionMaster.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['5-seashell-reward'] if '5-seashell-reward' in self.placements['indexes'] else -1
         event_tools.findEvent(flow.flowchart, 'Event36').data.params.data = {'pointIndex': 0, 'itemKey': self.item_defs[self.placements['5-seashell-reward']]['item-key'], 'itemIndex': itemIndex, 'flag': 'GetSeashell10'}
@@ -656,9 +656,9 @@ class ModsProcess(QtCore.QThread):
         event_tools.findEvent(flow.flowchart, 'Event13').data.params.data = {'pointIndex': 0, 'itemKey': self.item_defs[self.placements['50-seashell-reward']]['item-key'], 'itemIndex': itemIndex, 'flag': 'GetSeashell50'}
 
         itemIndex = self.placements['indexes']['40-seashell-reward'] if '40-seashell-reward' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['40-seashell-reward']]['item-key'], itemIndex, 'Event91', 'Event79')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['40-seashell-reward']]['item-key'], itemIndex, 'Event91', 'Event79')
 
-        Randomizers.seashell_mansion.makeEventChanges(flow, self.placements)
+        seashell_mansion.makeEventChanges(flow, self.placements)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ShellMansionMaster.bfevfl', flow)
@@ -669,18 +669,18 @@ class ModsProcess(QtCore.QThread):
 
     def madBatterChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MadBatter.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['mad-batter-bay'] if 'mad-batter-bay' in self.placements['indexes'] else -1
-        item1 = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mad-batter-bay']]['item-key'], itemIndex, None, 'Event23')
+        item1 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mad-batter-bay']]['item-key'], itemIndex, None, 'Event23')
 
         itemIndex = self.placements['indexes']['mad-batter-woods'] if 'mad-batter-woods' in self.placements['indexes'] else -1
-        item2 = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mad-batter-woods']]['item-key'], itemIndex, None, 'Event23')
+        item2 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mad-batter-woods']]['item-key'], itemIndex, None, 'Event23')
 
         itemIndex = self.placements['indexes']['mad-batter-taltal'] if 'mad-batter-taltal' in self.placements['indexes'] else -1
-        item3 = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mad-batter-taltal']]['item-key'], itemIndex, None, 'Event23')
+        item3 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mad-batter-taltal']]['item-key'], itemIndex, None, 'Event23')
 
-        Randomizers.mad_batter.writeEvents(flow, item1, item2, item3)
+        mad_batter.writeEvents(flow, item1, item2, item3)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MadBatter.bfevfl', flow)
@@ -693,17 +693,17 @@ class ModsProcess(QtCore.QThread):
         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceClearReward.gsheet')
 
         # Page 1 reward
-        Randomizers.dampe.makeDatasheetChanges(sheet, 3,
+        dampe.makeDatasheetChanges(sheet, 3,
         self.item_defs[self.placements['dampe-page-1']]['item-key'],
         self.placements['indexes']['dampe-page-1'] if 'dampe-page-1' in self.placements['indexes'] else -1)
 
         # Page 2 reward
-        Randomizers.dampe.makeDatasheetChanges(sheet, 7,
+        dampe.makeDatasheetChanges(sheet, 7,
         self.item_defs[self.placements['dampe-page-2']]['item-key'],
         self.placements['indexes']['dampe-page-2'] if 'dampe-page-2' in self.placements['indexes'] else -1)
 
         # Final reward
-        Randomizers.dampe.makeDatasheetChanges(sheet, 12,
+        dampe.makeDatasheetChanges(sheet, 12,
         self.item_defs[self.placements['dampe-final']]['item-key'],
         self.placements['indexes']['dampe-final'] if 'dampe-final' in self.placements['indexes'] else -1)
 
@@ -717,12 +717,12 @@ class ModsProcess(QtCore.QThread):
         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceTheme.gsheet')
 
         # 1-4 reward
-        Randomizers.dampe.makeDatasheetChanges(sheet, 3,
+        dampe.makeDatasheetChanges(sheet, 3,
         self.item_defs[self.placements['dampe-heart-challenge']]['item-key'],
         self.placements['indexes']['dampe-heart-challenge'] if 'dampe-heart-challenge' in self.placements['indexes'] else -1)
 
         # 3-2 reward
-        Randomizers.dampe.makeDatasheetChanges(sheet, 9,
+        dampe.makeDatasheetChanges(sheet, 9,
         self.item_defs[self.placements['dampe-bottle-challenge']]['item-key'],
         self.placements['indexes']['dampe-bottle-challenge'] if 'dampe-bottle-challenge' in self.placements['indexes'] else -1)
 
@@ -735,10 +735,10 @@ class ModsProcess(QtCore.QThread):
 
     def moldormChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguTail.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D1-moldorm'] if 'D1-moldorm' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D1-moldorm']]['item-key'], itemIndex, 'Event8', 'Event45')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D1-moldorm']]['item-key'], itemIndex, 'Event8', 'Event45')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguTail.bfevfl', flow)
@@ -749,10 +749,10 @@ class ModsProcess(QtCore.QThread):
 
     def genieChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PotDemonKing.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D2-genie'] if 'D2-genie' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D2-genie']]['item-key'], itemIndex, 'Event29', 'Event56')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D2-genie']]['item-key'], itemIndex, 'Event29', 'Event56')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PotDemonKing.bfevfl', flow)
@@ -763,10 +763,10 @@ class ModsProcess(QtCore.QThread):
 
     def slimeEyeChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguZol.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D3-slime-eye'] if 'D3-slime-eye' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D3-slime-eye']]['item-key'], itemIndex, 'Event29', 'Event43')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D3-slime-eye']]['item-key'], itemIndex, 'Event29', 'Event43')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguZol.bfevfl', flow)
@@ -777,10 +777,10 @@ class ModsProcess(QtCore.QThread):
 
     def anglerChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Angler.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D4-angler'] if 'D4-angler' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D4-angler']]['item-key'], itemIndex, 'Event25', 'Event50')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D4-angler']]['item-key'], itemIndex, 'Event25', 'Event50')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Angler.bfevfl', flow)
@@ -791,10 +791,10 @@ class ModsProcess(QtCore.QThread):
 
     def slimeEelChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Hooker.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D5-slime-eel'] if 'D5-slime-eel' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-slime-eel']]['item-key'], itemIndex, 'Event28', 'Event13')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-slime-eel']]['item-key'], itemIndex, 'Event28', 'Event13')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Hooker.bfevfl', flow)
@@ -805,10 +805,10 @@ class ModsProcess(QtCore.QThread):
 
     def facadeChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MatFace.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D6-facade'] if 'D6-facade' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D6-facade']]['item-key'], itemIndex, 'Event8', 'Event35')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D6-facade']]['item-key'], itemIndex, 'Event8', 'Event35')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MatFace.bfevfl', flow)
@@ -819,10 +819,10 @@ class ModsProcess(QtCore.QThread):
 
     def eagleChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Albatoss.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D7-eagle'] if 'D7-eagle' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D7-eagle']]['item-key'], itemIndex, 'Event40', 'Event51')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D7-eagle']]['item-key'], itemIndex, 'Event40', 'Event51')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Albatoss.bfevfl', flow)
@@ -833,10 +833,10 @@ class ModsProcess(QtCore.QThread):
 
     def hotheadChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguFlame.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D8-hothead'] if 'D8-hothead' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D8-hothead']]['item-key'], itemIndex, 'Event13', 'Event15')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D8-hothead']]['item-key'], itemIndex, 'Event13', 'Event15')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguFlame.bfevfl', flow)
@@ -847,10 +847,10 @@ class ModsProcess(QtCore.QThread):
 
     def lanmolaChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Lanmola.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['lanmola'] if 'lanmola' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['lanmola']]['item-key'], itemIndex, 'Event34', 'Event9')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['lanmola']]['item-key'], itemIndex, 'Event34', 'Event9')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Lanmola.bfevfl', flow)
@@ -861,13 +861,13 @@ class ModsProcess(QtCore.QThread):
 
     def armosKnightChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguArmos.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
         event_tools.removeEventAfter(flow.flowchart, 'Event2')
         event_tools.insertEventAfter(flow.flowchart, 'Event2', 'Event8')
 
 
         itemIndex = self.placements['indexes']['armos-knight'] if 'armos-knight' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['armos-knight']]['item-key'], itemIndex, 'Event47', None)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['armos-knight']]['item-key'], itemIndex, 'Event47', None)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguArmos.bfevfl', flow)
@@ -878,10 +878,10 @@ class ModsProcess(QtCore.QThread):
 
     def masterStalfosChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MasterStalfon.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['D5-master-stalfos'] if 'D5-master-stalfos' in self.placements['indexes'] else -1
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-master-stalfos']]['item-key'], itemIndex, 'Event37', 'Event194')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-master-stalfos']]['item-key'], itemIndex, 'Event37', 'Event194')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MasterStalfon.bfevfl', flow)
@@ -982,7 +982,7 @@ class ModsProcess(QtCore.QThread):
         playerStart = event_tools.readFlow(f'{self.rom_path}/region_common/event/PlayerStart.bfevfl')
         eventFlagsActor = event_tools.findActor(playerStart.flowchart, 'EventFlags') # Store this actor for later to add it to other event flows
 
-        Randomizers.player_start.makeStartChanges(playerStart, self.placements)
+        player_start.makeStartChanges(playerStart, self.placements)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl', playerStart)
@@ -997,10 +997,10 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### ShellMansionPresent event: Similar to TreasureBox, must make some items progressive.
         shellPresent = event_tools.readFlow(f'{self.rom_path}/region_common/event/ShellMansionPresent.bfevfl')
-        Randomizers.actors.addNeededActors(shellPresent.flowchart, self.rom_path)
+        actors.addNeededActors(shellPresent.flowchart, self.rom_path)
         shellPresent.flowchart.actors.append(flowControlActor)
 
-        Randomizers.seashell_mansion.changeRewards(shellPresent, treasureBox)
+        seashell_mansion.changeRewards(shellPresent, treasureBox)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ShellMansionPresent.bfevfl', shellPresent)
@@ -1092,12 +1092,12 @@ class ModsProcess(QtCore.QThread):
         ########################################################################################################################
         ### Make changes to field objects
         field = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldObject.bfevfl')
-        Randomizers.actors.addNeededActors(field.flowchart, self.rom_path)
+        actors.addNeededActors(field.flowchart, self.rom_path)
 
         # Give access to color dungeon even if you have a follower
         graveOpen = event_tools.createSubFlowEvent(field.flowchart, '', 'Grave_Push', {}, None)
         braceletCheck = event_tools.createSwitchEvent(field.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': BRACELET_FOUND_FLAG}, {0: 'Event193', 1: graveOpen})
+        {'symbol': data.BRACELET_FOUND_FLAG}, {0: 'Event193', 1: graveOpen})
         event_tools.insertEventAfter(field.flowchart, 'Grave_CantPush', braceletCheck)
 
         # remove the events that move link to a specified spot when opening dunegons
@@ -1129,7 +1129,7 @@ class ModsProcess(QtCore.QThread):
         npcSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
 
         if self.thread_active:
-            Randomizers.npcs.makeNpcChanges(npcSheet, self.placements)
+            npcs.makeNpcChanges(npcSheet, self.placements)
                 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', npcSheet)
@@ -1139,7 +1139,7 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### ItemDrop datasheet: remove HeartContainer drops 0-7, HookShot drop, AnglerKey and FaceKey drops.
         itemDropSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
-        Randomizers.item_drops.makeDatasheetChanges(itemDropSheet, self.placements)
+        item_drops.makeDatasheetChanges(itemDropSheet, self.placements)
 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ItemDrop.gsheet', itemDropSheet)
@@ -1152,19 +1152,19 @@ class ModsProcess(QtCore.QThread):
 
         for item in itemsSheet['values']:
             if self.thread_active:
-                if item['symbol'] == 'MagicPowder_MaxUp':
-                    item['actorID'] = 124
+                # if item['symbol'] == 'MagicPowder_MaxUp':
+                #     item['actorID'] = 124
                 
-                if item['symbol'] == 'Bomb_MaxUp':
-                    item['actorID'] = 117
+                # if item['symbol'] == 'Bomb_MaxUp':
+                #     item['actorID'] = 117
                 
-                if item['symbol'] == 'Arrow_MaxUp':
-                    item['actorID'] = 180
+                # if item['symbol'] == 'Arrow_MaxUp':
+                #     item['actorID'] = 180
                 
                 if item['symbol'] == 'SmallKey':
                     item['npcKey'] = 'ItemClothesGreen'
                 
-                if item['symbol'] == 'HeartPiece':
+                if item['symbol'] == 'YoshiDoll': # this is for ocarina as it is an ItemYoshiDoll actor
                     item['npcKey'] = 'ItemClothesRed'
             
             else: break
@@ -1180,10 +1180,10 @@ class ModsProcess(QtCore.QThread):
 
         for condition in conditionsSheet['values']:
             if self.thread_active:
-                Randomizers.conditions.editConditions(condition, self.placements)
+                conditions.editConditions(condition, self.placements)
             else: break
         
-        Randomizers.conditions.makeConditions(conditionsSheet, self.placements)
+        conditions.makeConditions(conditionsSheet, self.placements)
         
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Conditions.gsheet', conditionsSheet)
@@ -1193,17 +1193,27 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### CranePrize datasheet
         cranePrizeSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
-        Randomizers.crane_prizes.makeDatasheetChanges(cranePrizeSheet, SHIELD_FOUND_FLAG)
+        crane_prizes.makeDatasheetChanges(cranePrizeSheet, data.SHIELD_FOUND_FLAG)
 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', cranePrizeSheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        ###########################################################################################################################
+        #################################################################################################################################
+        ### Prize Group 1
+        cranePrizeSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        cranePrizeSheet['values'].pop(0) # remove yoshi doll
+
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', cranePrizeSheet)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        #################################################################################################################################
         ### GlobalFlags datasheet
         flagsSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
-        Randomizers.flags.makeFlags(flagsSheet)
+        flags.makeFlags(flagsSheet)
 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/GlobalFlags.gsheet', flagsSheet)
@@ -1228,18 +1238,18 @@ class ModsProcess(QtCore.QThread):
         source = f'{self.rom_path}/region_common/audio/stream'
         dest = f'{self.out_dir}/Romfs/region_common/audio/stream'
         files = os.listdir(source)
-        new_music = MUSIC_FILES[:]
+        new_music = data.MUSIC_FILES[:]
 
         if not os.path.exists(dest):
             os.makedirs(dest)
         
         for file in files:
             if self.thread_active:
-                track = file.removesuffix(MUSIC_SUFFIX)
-                if track in MUSIC_FILES:
+                track = file.removesuffix(data.MUSIC_SUFFIX)
+                if track in data.MUSIC_FILES:
                     song = random.choice(new_music)
                     new_music.remove(song)
-                    shutil.copy(f'{source}\\{file}', f'{dest}\\{song}{MUSIC_SUFFIX}')
+                    shutil.copy(f'{source}\\{file}', f'{dest}\\{song}{data.MUSIC_SUFFIX}')
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
     
@@ -1272,13 +1282,13 @@ class ModsProcess(QtCore.QThread):
         # Open up the already modded SinkingSword eventflow to make new events
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
         
-        for room in INSTRUMENT_ROOMS:
+        for room in data.INSTRUMENT_ROOMS:
             if self.thread_active:
-                dirname = re.match('(.+)_\\d\\d[A-P]', INSTRUMENT_ROOMS[room]).group(1)
+                dirname = re.match('(.+)_\\d\\d[A-P]', data.INSTRUMENT_ROOMS[room]).group(1)
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
                     os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{dirname}')
                 
-                with open(f'{self.rom_path}/region_common/level/{dirname}/{INSTRUMENT_ROOMS[room]}.leb', 'rb') as roomfile:
+                with open(f'{self.rom_path}/region_common/level/{dirname}/{data.INSTRUMENT_ROOMS[room]}.leb', 'rb') as roomfile:
                     roomData = leb.Room(roomfile.read())
                 
                 item = self.placements[room]
@@ -1289,13 +1299,13 @@ class ModsProcess(QtCore.QThread):
                     modelPath = self.item_defs[item]['model-path']
                     modelName = self.item_defs[item]['model-name']
                 else:
-                    modelName = random.choice(ITEM_MODELS)
+                    modelName = random.choice(data.ITEM_MODELS)
                     modelPath = f'Item{modelName}.bfres'
                 
-                Randomizers.instruments.changeInstrument(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData)
+                instruments.changeInstrument(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData)
                 
                 if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{INSTRUMENT_ROOMS[room]}.leb', 'wb') as outFile:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.INSTRUMENT_ROOMS[room]}.leb', 'wb') as outFile:
                         outFile.write(roomData.repack())
                         self.progress_value += 1 # update progress bar
                         self.progress_update.emit(self.progress_value)
@@ -1310,18 +1320,18 @@ class ModsProcess(QtCore.QThread):
         # Open up the already modded SinkingSword eventflow to make new events
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
         
-        for room in HEART_ROOMS:
+        for room in data.HEART_ROOMS:
             if self.thread_active:
-                dirname = re.match('(.+)_\\d\\d[A-P]', HEART_ROOMS[room]).group(1)
+                dirname = re.match('(.+)_\\d\\d[A-P]', data.HEART_ROOMS[room]).group(1)
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
                     os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{dirname}')
                 
-                if HEART_ROOMS[room] in CHEST_ROOMS.values():
+                if data.HEART_ROOMS[room] in data.CHEST_ROOMS.values():
                     path = f'{self.out_dir}/Romfs'
                 else:
                     path = self.rom_path
                 
-                with open(f'{path}/region_common/level/{dirname}/{HEART_ROOMS[room]}.leb', 'rb') as roomfile:
+                with open(f'{path}/region_common/level/{dirname}/{data.HEART_ROOMS[room]}.leb', 'rb') as roomfile:
                     roomData = leb.Room(roomfile.read())
                 
                 item = self.placements[room]
@@ -1332,16 +1342,16 @@ class ModsProcess(QtCore.QThread):
                     modelPath = self.item_defs[item]['model-path']
                     modelName = self.item_defs[item]['model-name']
                 else:
-                    modelName = random.choice(ITEM_MODELS)
+                    modelName = random.choice(data.ITEM_MODELS)
                     modelPath = f'Item{modelName}.bfres'
                 
-                Randomizers.heart_pieces.changeHeartPiece(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData)
+                heart_pieces.changeHeartPiece(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData)
                                 
                 if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{HEART_ROOMS[room]}.leb', 'wb') as outFile:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.HEART_ROOMS[room]}.leb', 'wb') as outFile:
                         outFile.write(roomData.repack())
 
-                        if HEART_ROOMS[room] not in CHEST_ROOMS.values():
+                        if data.HEART_ROOMS[room] not in data.CHEST_ROOMS.values():
                             self.progress_value += 1 # update progress bar
                             self.progress_update.emit(self.progress_value)
         
@@ -1356,22 +1366,22 @@ class ModsProcess(QtCore.QThread):
     # make telephones switch tunics
     def makeTelephoneChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Telephone.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
         
         # telephone needs dialog query 'GetLastResult4' to get dialog result
         event_tools.addActorQuery(event_tools.findActor(flow.flowchart, 'Dialog'), 'GetLastResult4')
 
-        greenGet = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, 'ClothesGreen', -1, None, None)
+        greenGet = item_get.insertItemGetAnimation(flow.flowchart, 'ClothesGreen', -1, None, None)
 
-        redGet = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, 'ClothesRed', -1, None, None)
+        redGet = item_get.insertItemGetAnimation(flow.flowchart, 'ClothesRed', -1, None, None)
         checkRed = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': RED_TUNIC_FOUND_FLAG}, {0: None, 1: redGet})
+        {'symbol': data.RED_TUNIC_FOUND_FLAG}, {0: None, 1: redGet})
 
-        blueGet = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, 'ClothesBlue', -1, None, None)
+        blueGet = item_get.insertItemGetAnimation(flow.flowchart, 'ClothesBlue', -1, None, None)
         checkBlue = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': BLUE_TUNIC_FOUND_FLAG}, {0: None, 1: blueGet})
+        {'symbol': data.BLUE_TUNIC_FOUND_FLAG}, {0: None, 1: blueGet})
 
-        Randomizers.tunic_swap.writeSwapEvents(flow, greenGet, checkRed, checkBlue)
+        tunic_swap.writeSwapEvents(flow, greenGet, checkRed, checkBlue)
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Telephone.bfevfl', flow)
@@ -1386,13 +1396,13 @@ class ModsProcess(QtCore.QThread):
         ###############################################################################################################################
         ### QuadrupletsMother
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/QuadrupletsMother.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['mamasha']
         itemIndex = self.placements['indexes']['mamasha'] if 'mamasha' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.mamashaChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event15')
+        trade_quest.mamashaChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event15')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/QuadrupletsMother.bfevfl', flow)
@@ -1402,13 +1412,13 @@ class ModsProcess(QtCore.QThread):
         ###############################################################################################################################
         ### CiaoCiao
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RibbonBowWow.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['ciao-ciao']
         itemIndex = self.placements['indexes']['ciao-ciao'] if 'ciao-ciao' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.ciaociaoChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event21')
+        trade_quest.ciaociaoChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event21')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RibbonBowWow.bfevfl', flow)
@@ -1418,13 +1428,13 @@ class ModsProcess(QtCore.QThread):
         ################################################################################################################################
         ### Sale
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Sale.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['sale']
         itemIndex = self.placements['indexes']['sale'] if 'sale' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.saleChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event31')
+        trade_quest.saleChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event31')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Sale.bfevfl', flow)
@@ -1434,13 +1444,13 @@ class ModsProcess(QtCore.QThread):
         ################################################################################################################################
         ### Kiki
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Kiki.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['kiki']
         itemIndex = self.placements['indexes']['kiki'] if 'kiki' in self.placements['indexes'] else -1
 
-        itemGet = Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, None, 'Event102')
-        Randomizers.trade_quest.kikiChanges(flow, itemGet)
+        itemGet = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, None, 'Event102')
+        trade_quest.kikiChanges(flow, itemGet)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Kiki.bfevfl', flow)
@@ -1450,13 +1460,13 @@ class ModsProcess(QtCore.QThread):
         ################################################################################################################################
         ### Tarin Bees
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl')
-        # Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        # actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['tarin-ukuku']
         itemIndex = self.placements['indexes']['tarin-ukuku'] if 'tarin-ukuku' in self.placements['indexes'] else -1
 
-        # Randomizers.trade_quest.tarinChanges(flow, itemGet)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event130', 'Event29')
+        # trade_quest.tarinChanges(flow, itemGet)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event130', 'Event29')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
@@ -1464,13 +1474,13 @@ class ModsProcess(QtCore.QThread):
         ######################################################################################################################
         ### Chef Bear
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ChefBear.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['chef-bear']
         itemIndex = self.placements['indexes']['chef-bear'] if 'chef-bear' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.chefChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event16', 'Event4')
+        trade_quest.chefChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event16', None) # Event4
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ChefBear.bfevfl', flow)
@@ -1480,13 +1490,13 @@ class ModsProcess(QtCore.QThread):
         ######################################################################################################################
         ### Papahl
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Papahl.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['papahl']
         itemIndex = self.placements['indexes']['papahl'] if 'papahl' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.papahlChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event32', 'Event62')
+        trade_quest.papahlChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event32', 'Event62')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Papahl.bfevfl', flow)
@@ -1496,13 +1506,13 @@ class ModsProcess(QtCore.QThread):
         ######################################################################################################################
         ### Christine
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl')
-        # Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        # actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['christine-trade']
         itemIndex = self.placements['indexes']['christine-trade'] if 'christine-trade' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.christineChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event15', 'Event22')
+        trade_quest.christineChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event15', 'Event22')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl', flow)
@@ -1510,13 +1520,13 @@ class ModsProcess(QtCore.QThread):
         ######################################################################################################################
         ### Mr Write
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DrWrite.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['mr-write']
         itemIndex = self.placements['indexes']['mr-write'] if 'mr-write' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.mrWriteChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event48', 'Event46')
+        trade_quest.mrWriteChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event48', 'Event46')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DrWrite.bfevfl', flow)
@@ -1526,13 +1536,13 @@ class ModsProcess(QtCore.QThread):
         ############################################################################################################################
         ### Grandma Yahoo
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/GrandmaUlrira.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['grandma-yahoo']
         itemIndex = self.placements['indexes']['grandma-yahoo'] if 'grandma-yahoo' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.grandmaYahooChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event54', 'Event33')
+        trade_quest.grandmaYahooChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event54', 'Event33')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/GrandmaUlrira.bfevfl', flow)
@@ -1542,13 +1552,13 @@ class ModsProcess(QtCore.QThread):
         #######################################################################################################################################
         ### Bay Fisherman
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MarthasBayFisherman.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['bay-fisherman']
         itemIndex = self.placements['indexes']['bay-fisherman'] if 'bay-fisherman' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.fishermanChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event28', 'Event42')
+        trade_quest.fishermanChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event28', 'Event42')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MarthasBayFisherman.bfevfl', flow)
@@ -1558,13 +1568,13 @@ class ModsProcess(QtCore.QThread):
         ########################################################################################################################################
         ### Mermaid Martha
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MermaidMartha.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item = self.placements['mermaid-martha']
         itemIndex = self.placements['indexes']['mermaid-martha'] if 'mermaid-martha' in self.placements['indexes'] else -1
 
-        Randomizers.trade_quest.mermaidChanges(flow)
-        Randomizers.item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event73', 'Event55')
+        trade_quest.mermaidChanges(flow)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[item]['item-key'], itemIndex, 'Event73', 'Event55')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MermaidMartha.bfevfl', flow)
@@ -1574,9 +1584,9 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         # Mermaid Statue
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MarthaStatue.bfevfl')
-        Randomizers.actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        Randomizers.trade_quest.statueChanges(flow)
+        trade_quest.statueChanges(flow)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MarthaStatue.bfevfl', flow)

@@ -1,5 +1,5 @@
 import Tools.event_tools as event_tools
-from Randomizers.data import RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
+from Randomizers import data
 
 
 
@@ -30,8 +30,8 @@ def makeStartChanges(flow, placements):
         playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'GateOpen_Switch_KanaletCastle_01B', 'value': True}))
     
     if not placements['settings']['shuffle-tunics']:
-        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': RED_TUNIC_FOUND_FLAG, 'value': True}))
-        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': BLUE_TUNIC_FOUND_FLAG, 'value': True}))
+        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))
+        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}))
     
     event_tools.insertEventAfter(flow.flowchart, 'Event558', playerStartFlagCheckEvent)
     event_tools.createActionChain(flow.flowchart, playerStartFlagsFirstEvent, playerStartEventFlags)

@@ -1,26 +1,28 @@
 import Tools.event_tools as event_tools
-from Randomizers.data import BOMBS_FOUND_FLAG, SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND_FLAG, RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
+from Randomizers import data
 
 
 
 # Inserts an AddItemByKey and a GenericItemGetSequenceByKey, or a progressive item switch (depending on the item).
 # It goes after 'before' and before 'after'. Return the name of the first event in the sequence.
-def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
+def insertItemGetAnimation(flowchart, item, index, before=None, after=None, playExtraAnim=True):
     if item == 'PowerBraceletLv1':
-        return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', BRACELET_FOUND_FLAG, before, after)
+        return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', data.BRACELET_FOUND_FLAG, before, after)
 
     if item == 'SwordLv1':
-        spinAnim = event_tools.createForkEvent(flowchart, before, [
-            event_tools.createActionChain(flowchart, None, [
-                ('Link', 'RequestSwordRolling', {}),
-                ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
-            ], None),
-            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 5})
-        ], after)[0]
-        return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', SWORD_FOUND_FLAG, before, spinAnim)
+        if playExtraAnim:
+            spinAnim = event_tools.createForkEvent(flowchart, before, [
+                event_tools.createActionChain(flowchart, None, [
+                    ('Link', 'RequestSwordRolling', {}),
+                    ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
+                ], None),
+            ], after)[0]
+            return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, before, spinAnim)
+        else:
+            return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, before, after)
 
     if item == 'Shield':
-        return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield', SHIELD_FOUND_FLAG, before, after)
+        return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield', data.SHIELD_FOUND_FLAG, before, after)
     
     ###############################################################################################################################################
     ### Capacity upgrades
@@ -36,7 +38,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
         {'itemKey': 'Bomb', 'count': 60, 'index': -1, 'autoEquip': False}, after)
 
         bombsCheck = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': BOMBS_FOUND_FLAG}, {0: after, 1: giveBombs})
+        {'symbol': data.BOMBS_FOUND_FLAG}, {0: after, 1: giveBombs})
 
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
@@ -82,7 +84,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
     ### tunics
     if item == 'ClothesRed':
         return event_tools.createActionChain(flowchart, before, [
-            ('EventFlags', 'SetFlag', {'symbol': RED_TUNIC_FOUND_FLAG, 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}),
             ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Red_00', 'index': 0, 'restart': False, 'time': 3.58}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesRed'})
@@ -90,7 +92,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
     
     if item == 'ClothesBlue':
         return event_tools.createActionChain(flowchart, before, [
-            ('EventFlags', 'SetFlag', {'symbol': BLUE_TUNIC_FOUND_FLAG, 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}),
             ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Blue_00', 'index': 0, 'restart': False, 'time': 3.58}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesBlue'})
@@ -116,7 +118,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
     ### Bomb for Shuffled Bombs
     if item == 'Bomb':
         return event_tools.createActionChain(flowchart, before, [
-            ('EventFlags', 'SetFlag', {'symbol': BOMBS_FOUND_FLAG, 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ])

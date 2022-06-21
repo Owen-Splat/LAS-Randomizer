@@ -51,6 +51,16 @@ def createCondition(name, checks):
 	return condition
 
 
+def createBehavior(type, datas=None):
+	behavior = {'type': type, 'parameters': oead.gsheet.StringArray()}
+	if datas:
+		print('working!')
+		for data in datas:
+			behavior['parameters'].append(data)
+	
+	return behavior
+
+
 # read and return sarc file
 def readSarc(sarcFile):
 	with open(sarcFile, 'rb') as file:

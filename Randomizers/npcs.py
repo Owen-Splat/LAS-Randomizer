@@ -1,5 +1,5 @@
 import Tools.oead_tools as oead_tools
-from Randomizers.data import BOMBS_FOUND_FLAG
+from Randomizers import data
 
 
 
@@ -14,17 +14,19 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['model'] = '$2'
             npc['eventTriggers'][2]['entryPoint'] = '$3'
         
-        # if npc['symbol'] == 'ItemHeartPiece':
-        #     npc['symbol'] = 'ObjHeartPiece'
-        #     npc['graphics']['path'] = '$1'
-        #     npc['graphics']['model'] = '$2'
-        #     npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
-        #     npc['eventTriggers'][0]['entryPoint'] = '$3'
-        #     npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
-        #     # npc['behavior']['type'] = 0
-        #     # npc['collision']['traits'] = ''
-        #     # npc['collision']['isStatic'] = True
-        #     # npc['collision']['filter'] = 5
+        if npc['symbol'] == 'ItemYoshiDoll':
+            npc['graphics']['path'] = '$0'
+            npc['graphics']['model'] = '$1'
+            npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
+            npc['eventTriggers'][0]['condition'] = 0
+            npc['eventTriggers'][0]['entryPoint'] = '$2'
+            npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
+            npc['layoutConditions'].append({'category': 1, 'parameter': '$3', 'layoutID': -1})
+            npc['behavior'] = oead_tools.createBehavior(type=0, datas=None)
+            npc['collision']['traits'] = ''
+            npc['collision']['isStatic'] = True
+            # npc['collision']['offset'] = {'x': 0.0, 'y': 0.0, 'z': 0.0}
+            npc['collision']['filter'] = 5
 
         
         if npc['symbol'] == 'ItemClothesGreen':
@@ -32,8 +34,8 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['model'] = 'SmallKey'
         
         if npc['symbol'] == 'ItemClothesRed':
-            npc['graphics']['path'] = 'ItemHeartPiece.bfres'
-            npc['graphics']['model'] = 'HeartPiece'
+            npc['graphics']['path'] = 'ItemYoshiDoll.bfres'
+            npc['graphics']['model'] = 'YoshiDoll'
             
         if npc['symbol'] == 'ObjClothBag':
             npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 0}
@@ -44,7 +46,9 @@ def makeNpcChanges(npcSheet, placements):
         if npc['symbol'] == 'ObjSinkingSword':
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
+            # npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
+            # npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
             npc['layoutConditions'][0]['parameter'] = '$3'
         
         if npc['symbol'] == 'ObjRoosterBones':
@@ -77,7 +81,7 @@ def makeNpcChanges(npcSheet, placements):
         # make the flying bomb refills not appear until you find your bombs
         if npc['symbol'] == 'ItemFeatherBomb':
             if placements['settings']['shuffle-bombs']:
-                npc['layoutConditions'].append({'category': 1, 'parameter': f'!{BOMBS_FOUND_FLAG}', 'layoutID': -1})
+                npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
         
 
         if npc['symbol'] == 'NpcBowWow':

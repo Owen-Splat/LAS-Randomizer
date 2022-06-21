@@ -106,6 +106,12 @@ class ItemShuffler(QtCore.QThread):
         and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
         for heart in heart_pieces:
             vanilla_locations.remove(heart)
+        
+        sunken = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
+        and self.logic_defs[l]['subtype'] in ['underwater'] 
+        and self.logic_defs[l]['content'] == 'heart-piece' 
+        and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
+        self.settings['excluded-locations'].update(sunken)
 
         if self.settings['shuffle-instruments']:
             instruments = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
@@ -137,8 +143,12 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['rupee-50']['quantity'] += 2
         
         if self.settings['zap-sanity']:
-            self.item_defs['zap-trap']['quantity'] = 30
+            self.item_defs['zap-trap']['quantity'] = 40
             self.forceChests.remove('zap-trap')
+            self.item_defs['heart-piece']['quantity'] -= 12
+            self.item_defs['rupee-20']['quantity'] -= 3
+            self.item_defs['rupee-50']['quantity'] -= 15
+            self.item_defs['rupee-100']['quantity'] += 1
         
         # Create a placement, spoiler log, and game mod.
         if self.threadActive:
@@ -354,7 +364,6 @@ class ItemShuffler(QtCore.QThread):
         forceJunk = [l for l in forceJunk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
         
         # Make sure logic is a valid value, default to basic
-        logic = logic.lower()
         if logic not in ['basic', 'advanced', 'glitched', 'none']:
             logic = 'basic'
         
@@ -419,7 +428,7 @@ class ItemShuffler(QtCore.QThread):
         random.shuffle(seashellItems)
         random.shuffle(goodItems)
         random.shuffle(junkItems)
-        items = importantItems + seashellItems + goodItems + dungeonItems
+        items = importantItems + seashellItems + goodItems + dungeonItems + junkItems
         
         # Assign vanilla contents to forceVanilla locations
         for loc in forceVanilla:
@@ -625,55 +634,55 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        # reset tracker for junk items and shuffle junk
-        placementTracker = []
+        # # reset tracker for junk items and shuffle junk
+        # placementTracker = []
 
-        while junkItems and locations and self.threadActive:
-            item = junkItems[0]
-            if verbose: print(item+' -> ', end='')
-            firstLocationTried = locations[0]
+        # while junkItems and locations and self.threadActive:
+        #     item = junkItems[0]
+        #     if verbose: print(item+' -> ', end='')
+        #     firstLocationTried = locations[0]
             
-            # Until we make a valid placement for this item
-            validPlacement = False
-            while not validPlacement and self.threadActive:
-                # Try placing the first item in the list in the first location
-                placements[locations[0]] = item
-                access = self.removeAccess(access, item)
+        #     # Until we make a valid placement for this item
+        #     validPlacement = False
+        #     while not validPlacement and self.threadActive:
+        #         # Try placing the first item in the list in the first location
+        #         placements[locations[0]] = item
+        #         access = self.removeAccess(access, item)
 
-                if (item in self.forceChests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
-                    validPlacement = False
-                else:
-                    validPlacement = True
+        #         if (item in self.forceChests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
+        #             validPlacement = False
+        #         else:
+        #             validPlacement = True
                 
-                # If it wasn't valid, put it back and shift the first location to the end of the list
-                if not validPlacement:
-                    access = self.addAccess(access, item)
-                    placements[locations[0]] = None
-                    locations.append(locations.pop(0))
-                    if locations[0] == firstLocationTried: 
-                        # If we tried every location and none work, undo the previous placement and try putting it somewhere else
-                        undoLocation = placementTracker.pop(0)
-                        locations.append(undoLocation)
-                        random.shuffle(locations)
-                        junkItems.insert(0, placements[undoLocation])
-                        access = self.addAccess(access, placements[undoLocation])
-                        placements[undoLocation] = None
-                        if verbose: print("can't place")
-                        break
+        #         # If it wasn't valid, put it back and shift the first location to the end of the list
+        #         if not validPlacement:
+        #             access = self.addAccess(access, item)
+        #             placements[locations[0]] = None
+        #             locations.append(locations.pop(0))
+        #             if locations[0] == firstLocationTried: 
+        #                 # If we tried every location and none work, undo the previous placement and try putting it somewhere else
+        #                 undoLocation = placementTracker.pop(0)
+        #                 locations.append(undoLocation)
+        #                 random.shuffle(locations)
+        #                 junkItems.insert(0, placements[undoLocation])
+        #                 access = self.addAccess(access, placements[undoLocation])
+        #                 placements[undoLocation] = None
+        #                 if verbose: print("can't place")
+        #                 break
                 
-                if validPlacement and self.threadActive:
-                    # After we successfully made a valid placement, remove the item and location from consideration
-                    if verbose: print(locations[0])
+        #         if validPlacement and self.threadActive:
+        #             # After we successfully made a valid placement, remove the item and location from consideration
+        #             if verbose: print(locations[0])
                     
-                    placedItem = junkItems.pop(0)
-                    # If the item is one that needs an index, give it the next available one
-                    if placedItem in indexesAvailable:
-                        placements['indexes'][locations[0]] = indexesAvailable[placedItem].pop(0)
+        #             placedItem = junkItems.pop(0)
+        #             # If the item is one that needs an index, give it the next available one
+        #             if placedItem in indexesAvailable:
+        #                 placements['indexes'][locations[0]] = indexesAvailable[placedItem].pop(0)
                 
-                    placementTracker.append(locations.pop(0))
+        #             placementTracker.append(locations.pop(0))
 
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
 
         if self.threadActive and placements['settings']['create-spoiler']:
             spoiler.generateSpoilerLog(placements, self.logic_defs, self.out_dir, self.seed)
