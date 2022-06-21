@@ -56,21 +56,23 @@ Free_Gifts:
   - mad-batter-woods
   - D0-fairy-1
   - D0-fairy-2
+  - invisible-zora
+  - goriya-trader
 
 Trade_Gifts:
-  # - mamasha
-  # - ciao-ciao
-  # - sale
-  # - kiki
-  # - tarin-ukuku
-  # - chef-bear
-  # - papahl
-  # - christine-trade
+  - mamasha
+  - ciao-ciao
+  - sale
+  - kiki
+  - tarin-ukuku
+  - chef-bear
+  - papahl
+  - christine-trade
   - christine-grateful
-  # - mr-write
-  # - grandma-yahoo
-  # - bay-fisherman
-  # - mermaid-martha
+  - mr-write
+  - grandma-yahoo
+  - bay-fisherman
+  - mermaid-martha
 
 Boss_Locations:
   - lanmola
@@ -90,7 +92,7 @@ Misc_Items:
   - dream-shrine-left
   - taltal-rooster-cave
   - woods-loose
-  # - mermaid-cave
+  - mermaid-cave
 
 Mansion:
   - 5-seashell-reward
@@ -98,10 +100,6 @@ Mansion:
   - 30-seashell-reward
   - 40-seashell-reward
   - 50-seashell-reward
-
-Lens_Gifts:
-  - invisible-zora
-  - goriya-trader
 
 Trendy_Rewards:
   # - trendy-prize-1

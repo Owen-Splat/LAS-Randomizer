@@ -32,19 +32,23 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.logic_defs = logic_defs
         self.settings = settings
         
-        self.valid_placements = 226
-        self.num_of_mod_files = 301
+        self.valid_placements = 228  # 226
+        self.num_of_mod_files = 302
 
+        if settings['shuffle-bombs']:
+            self.num_of_mod_files -= 1
+        
         if not settings['shuffle-instruments']:
             self.valid_placements -= 8
             self.num_of_mod_files -= 8
         
         if not settings['randomize-music']:
             self.num_of_mod_files -= 69
-
+        
         self.done = False
         self.cancel = False
-        
+        self.error =False
+
         self.shuffler_done = False
         self.mods_done = False
         
@@ -57,7 +61,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.current_job = 'shuffler'
         self.ui.progressBar.setMaximum(self.valid_placements)
         self.ui.label.setText(f'Shuffling item placements...')
-        self.ui.label_2.setText(f'0/{self.valid_placements}')
+        # self.ui.label_2.setText(f'0/{self.valid_placements}')
         self.shuffler_process = ItemShuffler(self.rom_path, self.out_dir, self.seed, self.logic, self.settings, self.item_defs, self.logic_defs)
         self.shuffler_process.setParent(self)
         self.shuffler_process.progress_update.connect(self.UpdateProgress)
@@ -68,10 +72,10 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     # receives the int signal as a parameter named progress
     def UpdateProgress(self, progress):
-        if self.current_job == 'shuffler':
-            self.ui.label_2.setText(f'{progress}/{self.valid_placements}')
-        elif self.current_job == 'modgenerator':
-            self.ui.label_2.setText(f'{progress}/{self.num_of_mod_files}')
+        # if self.current_job == 'shuffler':
+        #     self.ui.label_2.setText(f'{progress}/{self.valid_placements}')
+        # elif self.current_job == 'modgenerator':
+        #     self.ui.label_2.setText(f'{progress}/{self.num_of_mod_files}')
         self.ui.progressBar.setValue(progress)
     
     
@@ -87,8 +91,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.ui.progressBar.setValue(0)
             self.ui.progressBar.setMaximum(self.num_of_mod_files)
             self.ui.label.setText(f'Generating mod files...')
-            self.ui.label_2.setText(f'0/{self.num_of_mod_files}')
-            self.mods_process = ModsProcess(self.placements, self.rom_path, self.out_dir, self.item_defs, NEW_NPCS)
+            # self.ui.label_2.setText(f'0/{self.num_of_mod_files}')
+            self.mods_process = ModsProcess(self.placements, self.rom_path, self.out_dir, self.item_defs, NEW_NPCS, self.seed)
             self.mods_process.setParent(self)
             self.mods_process.progress_update.connect(self.UpdateProgress)
             self.mods_process.is_done.connect(self.AreModsDone)
@@ -97,14 +101,15 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.done = True
             self.close()
 
+
     
     def AreModsDone(self, done):
         if done:
             # All done
-            if not self.cancel:
+            if not self.cancel and not self.error:
                 self.ui.progressBar.setValue(self.num_of_mod_files)
                 self.ui.label.setText("All done! Check the Github page for instructions on how to play!")
-                self.ui.label_2.setText('')
+                # self.ui.label_2.setText('')
                 self.done = True
             else:
                 if os.path.exists(self.out_dir): # delete files if user canceled
@@ -114,6 +119,12 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     
     
+    def modsError(self, error):
+        if error:
+            self.error = True
+
+
+
     # override the window close event to close the randomization thread
     def closeEvent(self, event):
         if not self.done:

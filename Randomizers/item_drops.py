@@ -8,8 +8,12 @@ def makeDatasheetChanges(sheet, placements):
             sheet['values'][i]['mLotTable'][0]['mType'] = ''
         if sheet['values'][i]['mKey'] == 'HookShot':
             sheet['values'][i]['mLotTable'][0]['mType'] = ''
+        
         if sheet['values'][i]['mKey'] == 'Bomb' and placements['settings']['reduce-farming']:
             sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
+        if sheet['values'][i]['mKey'] == 'Bomb' and placements['settings']['shuffle-bombs']:
+            sheet['values'][i]['mLotTable'][0]['mCookie'] = 0
+
         if sheet['values'][i]['mKey'] == 'Arrow' and placements['settings']['reduce-farming']:
             sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
         if sheet['values'][i]['mKey'] == 'MagicPowder' and placements['settings']['reduce-farming']:

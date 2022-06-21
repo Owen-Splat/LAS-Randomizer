@@ -2143,7 +2143,7 @@ bottle-grotto:
   condition-glitched: mabe & swamp
 bridge:
   type: region
-  condition-basic: (plains & bananas) | (river & cross-water)
+  condition-basic: plains | (river & cross-water)
 catfish-maw:
   type: region
   condition-basic: river & flippers
@@ -2425,7 +2425,7 @@ bomb-arrows:
   condition-basic: bombs & shoot-arrows
 bombs:
   type: interaction
-  condition-basic: (mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8D & kill-goblin) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather))
+  condition-basic: (mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8D & kill-goblin) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))
 powder:
   type: interaction
   condition-basic: (woods & mushroom) | (color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))

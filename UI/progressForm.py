@@ -35,12 +35,8 @@ class Ui_ProgressWindow(object):
         self.progressBar.setTextVisible(False)
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(10, 20, 451, 23))
+        self.label.setGeometry(QRect(10, 12, 451, 61))
         self.label.setAlignment(Qt.AlignCenter)
-        self.label_2 = QLabel(self.centralwidget)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(10, 50, 451, 23))
-        self.label_2.setAlignment(Qt.AlignCenter)
         ProgressWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(ProgressWindow)
@@ -52,6 +48,5 @@ class Ui_ProgressWindow(object):
         ProgressWindow.setWindowTitle(QCoreApplication.translate("ProgressWindow", u"ProgressWindow", None))
         self.progressBar.setFormat("")
         self.label.setText(QCoreApplication.translate("ProgressWindow", u"Getting ready...", None))
-        self.label_2.setText("")
     # retranslateUi
 

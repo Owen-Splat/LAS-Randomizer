@@ -52,7 +52,6 @@ RAPIDS_REWARDS = LOCATIONS['Rapids_Rewards']
 DAMPE_REWARDS = LOCATIONS['Dampe_Rewards']
 FREE_GIFT_LOCATIONS = LOCATIONS['Free_Gifts']
 TRADE_GIFT_LOCATIONS = LOCATIONS['Trade_Gifts']
-LENS_GIFT_LOCATIONS = LOCATIONS['Lens_Gifts']
 BOSS_LOCATIONS = LOCATIONS['Boss_Locations']
 MISC_LOCATIONS = LOCATIONS['Misc_Items']
 SEASHELL_REWARDS = LOCATIONS['Mansion']
@@ -67,7 +66,6 @@ TOTAL_CHECKS.update(RAPIDS_REWARDS)
 TOTAL_CHECKS.update(DAMPE_REWARDS)
 TOTAL_CHECKS.update(FREE_GIFT_LOCATIONS)
 TOTAL_CHECKS.update(TRADE_GIFT_LOCATIONS)
-TOTAL_CHECKS.update(LENS_GIFT_LOCATIONS)
 TOTAL_CHECKS.update(BOSS_LOCATIONS)
 TOTAL_CHECKS.update(MISC_LOCATIONS)
 TOTAL_CHECKS.update(SEASHELL_REWARDS)
@@ -126,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.rapidsCheck.clicked.connect(self.RapidsCheck_Clicked)
         self.ui.dampeCheck.clicked.connect(self.DampeCheck_Clicked)
         self.ui.giftsCheck.clicked.connect(self.GiftsCheck_Clicked)
-        self.ui.lensCheck.clicked.connect(self.lensCheck_Clicked)
+        self.ui.tradeGiftsCheck.clicked.connect(self.tradeQuest_Clicked)
         self.ui.bossCheck.clicked.connect(self.BossCheck_Clicked)
         self.ui.miscellaneousCheck.clicked.connect(self.MiscellaneousCheck_Clicked)
         self.ui.heartsCheck.clicked.connect(self.HeartsCheck_Clicked)
@@ -262,11 +260,11 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.giftsCheck.setChecked(True)
         
-        # lens gifts
+        # trade gifts
         try:
-            self.ui.lensCheck.setChecked(SETTINGS['Lens_Gifts'])
+            self.ui.tradeGiftsCheck.setChecked(SETTINGS['Trade_Quest'])
         except (KeyError, TypeError):
-            self.ui.lensCheck.setChecked(False)
+            self.ui.tradeGiftsCheck.setChecked(False)
         
         # boss drops
         try:
@@ -336,9 +334,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # unlocked bombs
         try:
-            self.ui.bombsCheck.setChecked(SETTINGS['Unlocked_Bombs'])
+            self.ui.unlockedBombsCheck.setChecked(SETTINGS['Unlocked_Bombs'])
         except (KeyError, TypeError):
-            self.ui.bombsCheck.setChecked(True)
+            self.ui.unlockedBombsCheck.setChecked(True)
         
         # fast trendy
         try:
@@ -346,6 +344,12 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.trendyCheck.setChecked(False)
         
+        # shuffled bombs
+        try:
+            self.ui.shuffledBombsCheck.setChecked(SETTINGS['Shuffled_Bombs'])
+        except (KeyError, TypeError):
+            self.ui.shuffledBombsCheck.setChecked(False)
+
         # fast stealing
         try:
             self.ui.stealingCheck.setChecked(SETTINGS['Fast_Stealing'])
@@ -370,12 +374,42 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.kanaletCheck.setChecked(True)
         
+        # # fast songs
+        # try:
+        #     self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
+        # except (KeyError, TypeError):
+        #     self.ui.songsCheck.setChecked(False)
+
+        # shuffled tunics
+        try:
+            self.ui.tunicsCheck.setChecked(SETTINGS['Shuffled_Tunics'])
+        except (KeyError, TypeError):
+            self.ui.tunicsCheck.setChecked(True)
+
+        # zap sanity
+        try:
+            self.ui.zapsCheck.setChecked(SETTINGS['Zap_Sanity'])
+        except (KeyError, TypeError):
+            self.ui.zapsCheck.setChecked(False)
+
+        # # randomize entances
+        # try:
+        #     self.ui.loadingCheck.setChecked(SETTINGS['Randomize_Entrances'])
+        # except (KeyError, TypeError):
+        #     self.ui.loadingCheck.setChecked(False)
+
         # randomize music
         try:
             self.ui.musicCheck.setChecked(SETTINGS['Randomize_Music'])
         except (KeyError, TypeError):
             self.ui.musicCheck.setChecked(False)
-        
+
+        # # blue removal
+        # try:
+        #     self.ui.blurCheck.setChecked(SETTINGS['Blur_Removal'])
+        # except (KeyError, TypeError):
+        #     self.ui.blurCheck.setChecked(True)
+
         # spoiler log
         try:
             self.ui.spoilerCheck.setChecked(SETTINGS['Create_Spoiler'])
@@ -399,8 +433,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.excludedChecks.update(DAMPE_REWARDS)
             if not self.ui.giftsCheck.isChecked():
                 self.excludedChecks.update(FREE_GIFT_LOCATIONS)
-            if not self.ui.lensCheck.isChecked():
-                self.excludedChecks.update(LENS_GIFT_LOCATIONS)
+            if not self.ui.tradeGiftsCheck.isChecked():
+                self.excludedChecks.update(TRADE_GIFT_LOCATIONS)
             if not self.ui.bossCheck.isChecked():
                 self.excludedChecks.update(BOSS_LOCATIONS)
             if not self.ui.miscellaneousCheck.isChecked():
@@ -433,8 +467,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.giftsCheck.setChecked(True)
         self.excludedChecks.difference_update(FREE_GIFT_LOCATIONS)
         
-        self.ui.lensCheck.setChecked(False)
-        self.excludedChecks.update(LENS_GIFT_LOCATIONS)
+        self.ui.tradeGiftsCheck.setChecked(False)
+        self.excludedChecks.update(TRADE_GIFT_LOCATIONS)
 
         self.ui.bossCheck.setChecked(True)
         self.excludedChecks.difference_update(BOSS_LOCATIONS)
@@ -454,7 +488,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excludedChecks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
 
         self.ui.bookCheck.setChecked(True)
-        self.ui.bombsCheck.setChecked(True)
+        self.ui.unlockedBombsCheck.setChecked(True)
+        self.ui.shuffledBombsCheck.setChecked(False)
         self.ui.trendyCheck.setChecked(False)
         self.excludedChecks.update(TRENDY_REWARDS)
         self.ui.stealingCheck.setChecked(True)
@@ -463,11 +498,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.musicCheck.setChecked(False)
         self.ui.spoilerCheck.setChecked(True)
         self.ui.kanaletCheck.setChecked(True)
+        self.ui.tunicsCheck.setChecked(True)
+        self.ui.zapsCheck.setChecked(False)
 
         self.excludedChecks.update(TRADE_GIFT_LOCATIONS)
         # self.excludedChecks.add('rapids-middle-island')
         
-        self.Tab_Changed() # was only updating the list when the tab was changed, but now you can reset settings while viewing it lol
+        self.Tab_Changed() # just call the same event as when changing the tab to refresh the list
     
     
     
@@ -485,21 +522,27 @@ class MainWindow(QtWidgets.QMainWindow):
             'Rapids': self.ui.rapidsCheck.isChecked(),
             'Dampe': self.ui.dampeCheck.isChecked(),
             'Free_Gifts': self.ui.giftsCheck.isChecked(),
-            'Lens_Gifts': self.ui.lensCheck.isChecked(),
+            'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
             'Boss_Drops': self.ui.bossCheck.isChecked(),
             'Miscellaneous': self.ui.miscellaneousCheck.isChecked(),
             'Heart_Pieces': self.ui.heartsCheck.isChecked(),
             'Instruments': self.ui.instrumentCheck.isChecked(),
             'Seashells': self.maxSeashells,
             'Free_Book': self.ui.bookCheck.isChecked(),
-            'Unlocked_Bombs': self.ui.bombsCheck.isChecked(),
+            'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
+            'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
             'Fast_Trendy': self.ui.trendyCheck.isChecked(),
             'Fast_Stealing': self.ui.stealingCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
             'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
             'Less_Fishing': self.ui.lessFishingCheck.isChecked(),
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
+            # 'Fast_Songs': self.ui.songsCheck.isChecked(),
+            'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
+            'Zap_Sanity': self.ui.zapsCheck.isChecked(),
+            # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
+            # 'Blur_Removal': self.ui.blurCheck.isChecked(),
             'Excluded_Locations': list(self.excludedChecks)
         }
         
@@ -508,9 +551,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
-    
-    ### EVENTS
-    
+    ###############################################################################################################################
     # RomFS Folder Browse
     def RomBrowse(self):
         
@@ -612,12 +653,12 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Lens Check Changed
-    def lensCheck_Clicked(self):
+    def tradeQuest_Clicked(self):
         
-        if self.ui.lensCheck.isChecked():
-            self.excludedChecks.difference_update(LENS_GIFT_LOCATIONS)
+        if self.ui.tradeGiftsCheck.isChecked():
+            self.excludedChecks.difference_update(TRADE_GIFT_LOCATIONS)
         else:
-            self.excludedChecks.update(LENS_GIFT_LOCATIONS)
+            self.excludedChecks.update(TRADE_GIFT_LOCATIONS)
     
     
     
@@ -710,15 +751,20 @@ class MainWindow(QtWidgets.QMainWindow):
             settings = {
                 'create-spoiler': self.ui.spoilerCheck.isChecked(),
                 'free-book': self.ui.bookCheck.isChecked(),
-                'unlocked-bombs': self.ui.bombsCheck.isChecked(),
+                'unlocked-bombs': self.ui.unlockedBombsCheck.isChecked(),
+                'shuffle-bombs': self.ui.shuffledBombsCheck.isChecked(),
                 'fast-trendy': self.ui.trendyCheck.isChecked(),
                 'fast-stealing': self.ui.stealingCheck.isChecked(),
                 'assured-sword-shield': self.ui.vanillaCheck.isChecked(),
                 'reduce-farming': self.ui.farmingCheck.isChecked(),
-                'shuffle-lens': self.ui.lensCheck.isChecked(),
                 'shuffle-instruments': self.ui.instrumentCheck.isChecked(),
                 'open-kanalet': self.ui.kanaletCheck.isChecked(),
+                # 'fast-songs': self.ui.songsCheck.isChecked(),
+                'shuffle-tunics': self.ui.tunicsCheck.isChecked(),
+                'zap-sanity': self.ui.zapsCheck.isChecked(),
+                # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
+                # 'blur-removal': self.ui.blurCheck.isChecked(),
                 'excluded-locations': self.excludedChecks
             }
             
@@ -823,9 +869,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.SaveSettings()
         event.accept()
-
-
-
 
 
 

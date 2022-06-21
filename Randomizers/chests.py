@@ -1,16 +1,16 @@
 import Tools.event_tools as event_tools
+import Randomizers.item_get as item_get
 
 
 
-def writeChestEvent(flow, room, itemKey, itemGet):
+def writeChestEvent(flow, room, itemKey, itemIndex):
     if itemKey not in ['$ENEMY', '$EXT:MasterStalfonLetter'] and room != 'taltal-5-chest-puzzle':
         event_tools.addEntryPoint(flow.flowchart, room)
 
     if itemKey == 'SecretMedicine':
         itemGet = insertChestMedicineEvent(flow.flowchart)
-    
-    if itemKey == 'ZapTrap':
-        itemGet, join = insertZapTrapEvent(flow.flowchart)
+    else:
+        itemGet = item_get.insertItemGetAnimation(flow.flowchart, itemKey, itemIndex)
     
     actorSwitch = event_tools.createActionChain(flow.flowchart, None, [
         ('TreasureBox', 'SetActorSwitch', {'switchIndex': 1, 'value': True}),
@@ -44,14 +44,14 @@ def insertChestMedicineEvent(flowchart):
 
 
 
-# special event for zap trap
-def insertZapTrapEvent(flowchart):
-    stopEvent = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
-    {'channel': 'toolshopkeeper_dmg', 'index': 0})
+# # special event for zap trap
+# def insertZapTrapEvent(flowchart):
+#     stopEvent = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
+#     {'channel': 'toolshopkeeper_dmg', 'index': 0})
 
-    return event_tools.createForkEvent(flowchart, {
-        event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
-        event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.5}),
-        event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
-        event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 8})
-    }, stopEvent)
+#     return event_tools.createForkEvent(flowchart, [
+#         event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
+#         event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.5}),
+#         event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
+#         event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 8})
+#     ], stopEvent)

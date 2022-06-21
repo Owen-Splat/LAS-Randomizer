@@ -60,6 +60,11 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Link').find_action('PlayAnimationEx')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'PlayAnimationEx')
+    
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('SetFacialExpression')
+    except:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'SetFacialExpression')
 
     try:
         event_tools.findActor(flowchart, 'EventFlags')
@@ -116,3 +121,14 @@ def addNeededActors(flowchart, rom_path):
     except ValueError:
         timeActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Timer')
         flowchart.actors.append(timeActor)
+    
+    try:
+        event_tools.findActor(flowchart, 'Hud')
+    except ValueError:
+        hudActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopKeeper.bfevfl').flowchart, 'Hud')
+        flowchart.actors.append(hudActor)
+
+    try:
+        event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Hud'), 'SetHeartUpdateEnable')

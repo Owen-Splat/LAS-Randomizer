@@ -4,7 +4,7 @@ import Tools.event_tools as event_tools
 
 def makeEventChanges(flow, placements):
     # If reduce-farming is on, and Tarin has boots, also give 20 bombs if Tarin has boots
-    if placements['tarin'] == 'boots' and placements['settings']['reduce-farming']:
+    if placements['tarin'] == 'boots' and placements['settings']['reduce-farming'] and not placements['settings']['shuffle-bombs']:
         event_tools.createActionChain(flow.flowchart, 'Event31', [
             ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 20, 'index': -1, 'autoEquip': False})
             ], 'Event2')

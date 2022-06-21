@@ -76,10 +76,16 @@ def changeRewards(flow, treasureBoxFlow):
     scaleGet = item_get.insertItemGetAnimation(flow.flowchart, 'MermaidsScale', -1, None, 'Event0')
     scaleCheck = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(treasureBoxFlow.flowchart, 'Event33').data.params.data['value1'], 'value2': 'MermaidsScale'}, {0: scaleGet, 1: necklaceCheck})
 
+    zapGet = item_get.insertItemGetAnimation(flow.flowchart, 'ZapTrap', -1, None, 'Event0')
+    zapCheck = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(treasureBoxFlow.flowchart, 'Event33').data.params.data['value1'], 'value2': 'ZapTrap'}, {0: zapGet, 1: scaleCheck})
+    
+    bombGet = item_get.insertItemGetAnimation(flow.flowchart, 'Bomb', -1, None, 'Event0')
+    bombCheck = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(treasureBoxFlow.flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'}, {0: bombGet, 1: zapCheck})
+
     event_tools.insertEventAfter(flow.flowchart, 'Event3', 'Event4')
     event_tools.insertEventAfter(flow.flowchart, 'Event4', 'Event14')
     event_tools.insertEventAfter(flow.flowchart, 'Event14', 'Event0')
-    event_tools.insertEventAfter(flow.flowchart, 'Event25', scaleCheck)
+    event_tools.insertEventAfter(flow.flowchart, 'Event25', bombCheck)
 
 
 

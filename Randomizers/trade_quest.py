@@ -82,11 +82,6 @@ def kikiChanges(flow, itemGetAnim):
 
 
 
-def tarinChanges(flow, itemGet):
-    pass
-
-
-
 def chefChanges(flow):
     event1 = event_tools.findEvent(flow.flowchart, 'Event1')
     event11 = event_tools.findEvent(flow.flowchart, 'Event11')

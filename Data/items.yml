@@ -345,11 +345,11 @@ rupee-20:
   model-name: RupeeRed
 zol-trap:
   type: junk
-  quantity: 3
+  quantity: 1
   item-key: $ENEMY
 zap-trap:
   type: junk
-  quantity: 1
+  quantity: 3
   item-key: ZapTrap
 bomb:
   type: junk

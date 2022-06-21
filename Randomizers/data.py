@@ -12,6 +12,9 @@ DREAM_SHRINE_FLAG       = 'unused0708'
 WOODS_LOOSE_FLAG        = 'unused0709'
 MERMAID_CAVE_FLAG       = 'TradeLensGet'
 
+BOMBS_FOUND_FLAG        = 'BombsFound'
+
+
 INSTRUMENT_FLAGS = {
     'D1-instrument': 'TailCaveInstrumentGet',
     'D2-instrument': 'BottleGrottoInstrumentGet',
@@ -304,3 +307,64 @@ MUSIC_FILES = [
     'Title_OP'
 ]
 MUSIC_SUFFIX = '.ry.48.dspadpcm.bfstm'
+
+
+# item models so that zap traps can be disguised as other items
+ITEM_MODELS = [
+    'SwordLv1',
+    'SwordLv2',
+    'Shield',
+    'MirrorShield',
+    'Bomb',
+    'Bow',
+    'HookShot',
+    'Boomerang',
+    'MagicRod',
+    'Shovel',
+    'SleepyMushroom',
+    'MagicPowder',
+    'RocsFeather',
+    'PowerBraceletLv1',
+    'PowerBraceletLv2',
+    'PegasusBoots',
+    'Ocarina',
+    'Flippers',
+    'SecretMedicine',
+    'Seashell',
+    'SecretSeashell',
+    'TailKey',
+    'SlimeKey',
+    'AnglerKey',
+    'FaceKey',
+    'BirdKey',
+    'YoshiDoll',
+    'Ribbon',
+    'DogFood',
+    'Bananas',
+    'Stick',
+    'Honeycomb',
+    'Pineapple',
+    'Hibiscus',
+    'Letter',
+    'Broom',
+    'FishingHook',
+    'Necklace',
+    'MermaidsScale',
+    'MagnifyingLens',
+    'FullMoonCello',
+    'ConchHorn',
+    'SeaLilysBell',
+    'SurfHarp',
+    'WindMarimba',
+    'CoralTriangle',
+    'EveningCalmOrgan',
+    'ThunderDrum',
+    'HeartPiece',
+    'HeartContainer',
+    'RupeeRed',
+    'RupeePurple',
+    'RupeeSilver',
+    'RupeeGold',
+    'Bottle',
+    'ShellRader'
+]

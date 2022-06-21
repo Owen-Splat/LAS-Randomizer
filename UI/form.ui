@@ -513,7 +513,7 @@
         </rect>
        </property>
        <property name="whatsThis">
-        <string>This controls whether the miscellaneous standing items (sword, mushroom, ocarina, bird key) can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
+        <string>This controls whether the miscellaneous standing items (sword, mushroom, ocarina, bird key, lens) can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
        </property>
        <property name="text">
         <string>Miscellaneous</string>
@@ -645,23 +645,20 @@
        <property name="font">
         <font>
          <pointsize>9</pointsize>
-         <strikeout>true</strikeout>
+         <strikeout>false</strikeout>
         </font>
        </property>
        <property name="toolTip">
         <string/>
        </property>
        <property name="whatsThis">
-        <string>This controls whether the trading quest gifts can contain progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(80, 80, 80);</string>
+        <string>This controls whether the trading quest gifts can contain progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
        </property>
        <property name="text">
-        <string>Trade Gifts</string>
+        <string>Trade Quest</string>
        </property>
        <property name="checkable">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QCheckBox" name="seashellsCheck">
@@ -810,7 +807,7 @@
         <string>Free Book</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="bombsCheck">
+      <widget class="QCheckBox" name="unlockedBombsCheck">
        <property name="geometry">
         <rect>
          <x>189</x>
@@ -870,7 +867,7 @@
       <widget class="QCheckBox" name="stealingCheck">
        <property name="geometry">
         <rect>
-         <x>189</x>
+         <x>369</x>
          <y>68</y>
          <width>173</width>
          <height>21</height>
@@ -908,7 +905,7 @@
       <widget class="QCheckBox" name="lessFishingCheck">
        <property name="geometry">
         <rect>
-         <x>369</x>
+         <x>548</x>
          <y>68</y>
          <width>173</width>
          <height>21</height>
@@ -941,31 +938,6 @@
        </property>
        <property name="text">
         <string>Create Spoiler Log</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-      <widget class="QCheckBox" name="lensCheck">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>548</x>
-         <y>68</y>
-         <width>173</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="toolTip">
-        <string/>
-       </property>
-       <property name="whatsThis">
-        <string>Enables shuffle of the Magnifying Lens as well as Goriya Trader and Invisible Zora</string>
-       </property>
-       <property name="text">
-        <string>Shuffle Lens</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -1049,13 +1021,13 @@
         <string/>
        </property>
        <property name="whatsThis">
-        <string>Sets the Kanalet Gate to be open from the start&lt;br&gt;&lt;/br&gt;Also temporarily makes the bridge already built</string>
+        <string>Sets the Kanalet Gate to be open from the start</string>
        </property>
        <property name="text">
         <string>Open Kanalet</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="songs_Check">
+      <widget class="QCheckBox" name="songsCheck">
        <property name="geometry">
         <rect>
          <x>189</x>
@@ -1081,6 +1053,103 @@
        </property>
        <property name="text">
         <string>Fast Songs</string>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="shuffledBombsCheck">
+       <property name="geometry">
+        <rect>
+         <x>189</x>
+         <y>68</y>
+         <width>173</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>You need to find your bombs before you can obtain any from other means&lt;br&gt;&lt;/br&gt;This overrides Unlocked Bombs</string>
+       </property>
+       <property name="text">
+        <string>Shuffled Bombs</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="zapsCheck">
+       <property name="geometry">
+        <rect>
+         <x>548</x>
+         <y>102</y>
+         <width>173</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Increases the number of potential zap traps from 3 to 30&lt;br&gt;&lt;/br&gt;This also allows them to be placed anywhere, not just in chests</string>
+       </property>
+       <property name="text">
+        <string>Zap Sanity</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="tunicsCheck">
+       <property name="geometry">
+        <rect>
+         <x>369</x>
+         <y>102</y>
+         <width>173</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Tunics will appear as checks&lt;br&gt;&lt;/br&gt;You can only swap between tunics you have obtained</string>
+       </property>
+       <property name="text">
+        <string>Shuffled Tunics</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="blurCheck">
+       <property name="geometry">
+        <rect>
+         <x>369</x>
+         <y>136</y>
+         <width>173</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <strikeout>true</strikeout>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Removes the blur around the edges of the screen</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(80, 80, 80);</string>
+       </property>
+       <property name="text">
+        <string>Blur Removal</string>
        </property>
        <property name="checkable">
         <bool>false</bool>

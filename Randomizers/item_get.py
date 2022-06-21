@@ -1,5 +1,5 @@
 import Tools.event_tools as event_tools
-from Randomizers.data import SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND_FLAG, RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
+from Randomizers.data import BOMBS_FOUND_FLAG, SWORD_FOUND_FLAG, SHIELD_FOUND_FLAG, BRACELET_FOUND_FLAG, RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
 
 
 
@@ -10,10 +10,13 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
         return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', BRACELET_FOUND_FLAG, before, after)
 
     if item == 'SwordLv1':
-        spinAnim = event_tools.createActionChain(flowchart, before, [
-            ('Link', 'RequestSwordRolling', {}),
-            ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
-        ], after)
+        spinAnim = event_tools.createForkEvent(flowchart, before, [
+            event_tools.createActionChain(flowchart, None, [
+                ('Link', 'RequestSwordRolling', {}),
+                ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
+            ], None),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 5})
+        ], after)[0]
         return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', SWORD_FOUND_FLAG, before, spinAnim)
 
     if item == 'Shield':
@@ -29,11 +32,17 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ], after)
 
     if item == 'Bomb_MaxUp':
+        giveBombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+        {'itemKey': 'Bomb', 'count': 60, 'index': -1, 'autoEquip': False}, after)
+
+        bombsCheck = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': BOMBS_FOUND_FLAG}, {0: after, 1: giveBombs})
+
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 60, 'index': -1, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Bomb', 'keepCarry': False, 'messageEntry': 'Bomb_MaxUp'})
-            ], after)
+            ], bombsCheck)
+        
 
     if item == 'Arrow_MaxUp':
         return event_tools.createActionChain(flowchart, before, [
@@ -41,7 +50,22 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('Inventory', 'AddItemByKey', {'itemKey': 'Arrow', 'count': 60, 'index': -1, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': 'Arrow_MaxUp'})
             ], after)
-    
+
+    ######################################################################################################################################
+    ### traps
+    if item == 'ZapTrap':
+        stopEvent = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
+        {'channel': 'toolshopkeeper_dmg', 'index': 0}, after)
+
+        return event_tools.createForkEvent(flowchart, before, [
+            # event_tools.createActionEvent(flowchart, 'Link', 'SetFacialExpression', {'expression': 'wakeup'}),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 8}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+        ], stopEvent)[0]
+
     ############################################################################################################################################
     ### Instrument flags - just ghost flags when getting harp for now :)
     if item == 'SurfHarp':
@@ -88,6 +112,15 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('Link', 'Heal', {'amount': 99})
     ], after)
 
+    ######################################################################################################################################
+    ### Bomb for Shuffled Bombs
+    if item == 'Bomb':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': BOMBS_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+        ])
+    
     ######################################################################################################################################
     ### Trade Quest items
     if item == 'YoshiDoll':
@@ -167,16 +200,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None):
             ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
             ], after)
-    
-    # ######################################################################################################################################
-    # ### traps
-    # if item == 'ZapTrap':
-    #     event_tools.cre
-    #     return event_tools.createActionChain(flowchart, before, [
-    #         (),
-    #         ()
-    #     ], after)
-    
+        
     ######################################################################################################################################
     ### everything else
     return event_tools.createActionChain(flowchart, before, [

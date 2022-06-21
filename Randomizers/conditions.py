@@ -1,8 +1,9 @@
 import Tools.oead_tools as oead_tools
+from Randomizers.data import SHIELD_FOUND_FLAG, BOMBS_FOUND_FLAG
 
 
 
-def makeConditions(sheet, placements, shieldFlag):
+def makeConditions(sheet, placements):
     # Create new condition sets for the seashell sensor to work with Dampe, Rapids guy, Fishing Guy, and Seashell mansion
     dampeCondition = oead_tools.createCondition('DampeShellsComplete', [(9, 'true')])
     dampeLocations = ['dampe-page-1', 'dampe-heart-challenge', 'dampe-page-2', 'dampe-bottle-challenge', 'dampe-final']
@@ -34,25 +35,33 @@ def makeConditions(sheet, placements, shieldFlag):
 
 
 
-def editConditions(condition, placements, shieldFlag):
+def editConditions(condition, placements):
     # Make sure Marin always stays in the village even if you trade for the pineapple
     if condition['symbol'] == 'MarinVillageStay':
         condition['conditions'].pop(1)
 
     # Make the shop not sell shields until you find one
     if condition['symbol'] == 'ShopShieldCondition':
-        condition['conditions'][0] = {'category': 1, 'parameter': shieldFlag}
+        condition['conditions'][0] = {'category': 1, 'parameter': SHIELD_FOUND_FLAG}
     
     # Make the animals in Animal village not be in the ring, which they would because of WalrusAwaked getting set
     if condition['symbol'] == 'AnimalPop':
         condition['conditions'][0] = {'category': 9, 'parameter': 'false'}
-
+    
+    # Make Grandma Yahoo's broom invisible until you give her the broom
+    if condition['symbol'] == 'BroomInvisible':
+        condition['conditions'].pop(0)
+    
     # Remove the condition for bombs in the shop if the unlocked-bombs setting is on
-    if condition['symbol'] == 'ShopBombCondition' and placements['settings']['unlocked-bombs']:
-        condition['conditions'][0] = {'category': 9, 'parameter': 'true'}
+    if condition['symbol'] == 'ShopBombCondition':
+        if placements['settings']['unlocked-bombs']:
+            condition['conditions'][0] = {'category': 9, 'parameter': 'true'}
+        if placements['settings']['shuffle-bombs']:
+            condition['conditions'][0] = {'category': 1, 'parameter': BOMBS_FOUND_FLAG}
+        # else:
+        #     condition['conditions'][0] = {'category': 2, 'parameter': 'Bomb'}
     
     # ### BOMB SHOP TESTING
     # # Make the shop not sell bombs until you find one
     # if condition['symbol'] == 'ShopBombCondition':
     #     condition['conditions'][0] = {'category': 9, 'parameter': 'Bomb'}
-

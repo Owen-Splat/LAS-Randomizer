@@ -227,7 +227,7 @@ def createSubFlowEvent(flowchart, refChart, entryPoint, params, nextev=None):
 
 
 # Creates a new fork event and inserts it into the flow
-def createForkEvent(flowchart, forks, nextev=None):
+def createForkEvent(flowchart, before, forks, nextev=None):
 	new = evfl.event.Event()
 	new.data = evfl.event.ForkEvent()
 
@@ -237,6 +237,9 @@ def createForkEvent(flowchart, forks, nextev=None):
 
 	flowchart.add_event(new, idgen)
 	
+	if before != None:
+		insertEventAfter(flowchart, before, new.name)
+
 	forkEvents = []
 	for branch in forks:
 		ev = findEvent(flowchart, branch)
@@ -244,12 +247,11 @@ def createForkEvent(flowchart, forks, nextev=None):
 			fork = evfl.util.make_rindex(ev)
 			fork.set_index(invertList(flowchart.events))
 			forkEvents.append(fork)
-			# forkEvents[branch] = evfl.util.make_rindex(ev)
-			# forkEvents[branch].set_index(invertList(flowchart.events))
 
 	new.data.forks = forkEvents
 
 	return new.name, joinEvent.name
+
 
 # creates a new join event and inserts it into the flow
 def createJoinEvent(flowchart, nextev=None):

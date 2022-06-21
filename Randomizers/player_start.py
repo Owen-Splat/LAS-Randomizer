@@ -1,4 +1,5 @@
 import Tools.event_tools as event_tools
+from Randomizers.data import RED_TUNIC_FOUND_FLAG, BLUE_TUNIC_FOUND_FLAG
 
 
 
@@ -24,23 +25,13 @@ def makeStartChanges(flow, placements):
         ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}), # flag for the bridge, we make kiki use another flag
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True}),
-        # ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True}),
     ]
     if placements['settings']['open-kanalet']:
         playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'GateOpen_Switch_KanaletCastle_01B', 'value': True}))
-        # playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}))
+    
+    if not placements['settings']['shuffle-tunics']:
+        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': RED_TUNIC_FOUND_FLAG, 'value': True}))
+        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': BLUE_TUNIC_FOUND_FLAG, 'value': True}))
     
     event_tools.insertEventAfter(flow.flowchart, 'Event558', playerStartFlagCheckEvent)
     event_tools.createActionChain(flow.flowchart, playerStartFlagsFirstEvent, playerStartEventFlags)

@@ -1,4 +1,5 @@
 __pycache__
+.qt_for_python
 /build
 /dist
 /issues.txt
@@ -8,5 +9,4 @@ __pycache__
 /romfs
 /room_data_viewer.py
 /settings.yaml
-/shadow_link_trap.py
 /Resources/Dev Resources
