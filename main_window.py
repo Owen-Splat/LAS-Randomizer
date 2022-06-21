@@ -182,9 +182,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def ShowUpdate(self, update):
         
         if update:
-            self.ui.updateChecker.setText("<a href='https://github.com/OSmart32/LASR-App-Python/releases/latest'>Update found!</a>")
+            self.ui.updateChecker.setText("<a href='https://github.com/OSmart32/LAS-Randomizer/releases/latest'>Update found!</a>")
         else:
-            self.ui.updateChecker.setText('No update available.')
+            self.ui.updateChecker.setText('No updates available')
     
     
     
@@ -331,7 +331,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # logic
         try:
             logic = str(SETTINGS['Logic'].lower())
-            if logic in ['basic, advanced', 'glitched', 'none']:
+            if logic in ['basic', 'advanced', 'glitched', 'none']:
                 self.logic = logic
                 if logic == 'basic':
                     self.ui.horizontalSlider_2.setValue(0)
@@ -346,11 +346,11 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.ui.horizontalSlider_2.setValue(3)
                     self.ui.label_11.setText('  Logic:  None')
             else:
-                self.logic = 'Basic'
+                self.logic = 'basic'
                 self.ui.horizontalSlider_2.setValue(0)
                 self.ui.label_11.setText('  Logic:  Basic')
         except (KeyError, TypeError):
-            self.logic = 'Basic'
+            self.logic = 'basic'
             self.ui.horizontalSlider_2.setValue(0)
             self.ui.label_11.setText('  Logic:  Basic')
         
