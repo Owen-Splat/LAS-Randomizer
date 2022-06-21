@@ -773,7 +773,7 @@
         </font>
        </property>
        <property name="whatsThis">
-        <string>This controls whether the Seashell Mansion prizes can contain progress items</string>
+        <string>This controls the logic</string>
        </property>
        <property name="maximum">
         <number>3</number>

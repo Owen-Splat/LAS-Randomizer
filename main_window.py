@@ -142,6 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ### DESCRIPTIONS
         self.checkBoxes = self.ui.tab.findChildren(QtWidgets.QCheckBox)
         self.checkBoxes.extend([self.ui.label_6, self.ui.horizontalSlider])
+        self.checkBoxes.extend([self.ui.label_6, self.ui.horizontalSlider_2])
         for check in self.checkBoxes:
             check.installEventFilter(self)
     

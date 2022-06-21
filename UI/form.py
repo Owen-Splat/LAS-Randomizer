@@ -584,7 +584,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(whatsthis)
         self.instrumentCheck.setText(QCoreApplication.translate("MainWindow", u"Instruments", None))
 #if QT_CONFIG(whatsthis)
-        self.horizontalSlider_2.setWhatsThis(QCoreApplication.translate("MainWindow", u"This controls whether the Seashell Mansion prizes can contain progress items", None))
+        self.horizontalSlider_2.setWhatsThis(QCoreApplication.translate("MainWindow", u"This controls the logic", None))
 #endif // QT_CONFIG(whatsthis)
 #if QT_CONFIG(tooltip)
         self.label_11.setToolTip("")
