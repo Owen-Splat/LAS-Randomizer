@@ -73,8 +73,8 @@ class ModsProcess(QtCore.QThread):
 
             if self.placements['settings']['randomize-music'] and self.thread_active:
                 self.randomizeMusic()
-        except (FileNotFoundError, ValueError):
-            # self.thread_active = False
+        except (FileNotFoundError, KeyError, TypeError, ValueError) as e:
+            print(e)
             self.error.emit(True)
         
         # print(self.progress_value)
