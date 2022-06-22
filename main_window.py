@@ -825,7 +825,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 'excluded-locations': self.excludedChecks
             }
             
-            self.progress_window = ProgressWindow(romPath, outdir, seed, self.logic, ITEM_DEFS, LOGIC_DEFS, settings)
+            self.progress_window = ProgressWindow(romPath, outdir, seed, self.logic, ITEM_DEFS.copy(), LOGIC_DEFS.copy(), settings)
             self.progress_window.setFixedSize(472, 125)
             self.progress_window.setWindowTitle(f"{seed}")
 

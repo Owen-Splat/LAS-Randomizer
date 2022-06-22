@@ -47,7 +47,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         
         self.done = False
         self.cancel = False
-        self.error =False
+
+        self.shuffle_error = False
+        self.mods_error = False
 
         self.shuffler_done = False
         self.mods_done = False
@@ -67,6 +69,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.shuffler_process.progress_update.connect(self.UpdateProgress)
         self.shuffler_process.give_placements.connect(self.ReceivePlacements)
         self.shuffler_process.is_done.connect(self.AreItemsShuffled)
+        self.shuffler_process.error.connect(self.ShufflerError)
         self.shuffler_process.start() # start the item shuffler        
 
 
@@ -82,45 +85,52 @@ class ProgressWindow(QtWidgets.QMainWindow):
     # receive the placements from the shuffler thread to the modgenerator
     def ReceivePlacements(self, placements):
         self.placements = placements
-                
+    
+
+    def ShufflerError(self, error):
+        if error:
+            self.shuffle_error = True
+
 
     # receive signals when threads are done
     def AreItemsShuffled(self, done):
-        if done and not self.cancel: # make mod files
-            self.current_job = 'modgenerator'
-            self.ui.progressBar.setValue(0)
-            self.ui.progressBar.setMaximum(self.num_of_mod_files)
-            self.ui.label.setText(f'Generating mod files...')
-            # self.ui.label_2.setText(f'0/{self.num_of_mod_files}')
-            self.mods_process = ModsProcess(self.placements, self.rom_path, self.out_dir, self.item_defs, NEW_NPCS, self.seed)
-            self.mods_process.setParent(self)
-            self.mods_process.progress_update.connect(self.UpdateProgress)
-            self.mods_process.is_done.connect(self.AreModsDone)
-            self.mods_process.error.connect(self.modsError)
-            self.mods_process.start()
-        else:
-            self.done = True
-            self.close()
+        if done:
+            if not self.cancel and not self.shuffle_error: # make mod files
+                self.current_job = 'modgenerator'
+                self.ui.progressBar.setValue(0)
+                self.ui.progressBar.setMaximum(self.num_of_mod_files)
+                self.ui.label.setText(f'Generating mod files...')
+                # self.ui.label_2.setText(f'0/{self.num_of_mod_files}')
+                self.mods_process = ModsProcess(self.placements, self.rom_path, self.out_dir, self.item_defs, NEW_NPCS, self.seed)
+                self.mods_process.setParent(self)
+                self.mods_process.progress_update.connect(self.UpdateProgress)
+                self.mods_process.is_done.connect(self.AreModsDone)
+                self.mods_process.error.connect(self.ModsError)
+                self.mods_process.start()
+            elif self.shuffle_error:
+                self.ui.label.setText("Something went wrong! Please report this to either GitHub or Discord!")
+                self.done = True
+            else:
+                self.done = True
+                self.close()
 
 
     
-    def modsError(self, error):
+    def ModsError(self, error):
         if error:
-            self.error = True
-            print('Error detected')
-
+            self.mods_error = True
 
 
     def AreModsDone(self, done):
         if done:
             # All done
-            if not self.cancel and not self.error:
+            if not self.cancel and not self.mods_error:
                 self.ui.progressBar.setValue(self.num_of_mod_files)
                 self.ui.label.setText("All done! Check the Github page for instructions on how to play!")
                 # self.ui.label_2.setText('')
                 self.done = True
-            elif self.error:
-                self.ui.label.setText("Error detected. Please check that your romfs are valid!")
+            elif self.mods_error:
+                self.ui.label.setText("Error detected! Please check that your romfs are valid!")
                 if os.path.exists(self.out_dir): # delete files if user canceled
                     shutil.rmtree(self.out_dir, ignore_errors=True)
                 self.done = True
@@ -130,7 +140,6 @@ class ProgressWindow(QtWidgets.QMainWindow):
                     shutil.rmtree(self.out_dir, ignore_errors=True)
                 self.done = True
                 self.close()
-
 
 
     # override the window close event to close the randomization thread

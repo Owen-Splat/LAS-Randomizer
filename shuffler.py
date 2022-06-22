@@ -13,7 +13,8 @@ class ItemShuffler(QtCore.QThread):
     progress_update = QtCore.Signal(int)
     is_done = QtCore.Signal(bool)
     give_placements = QtCore.Signal(dict)
-    
+    error = QtCore.Signal(bool)
+
     
     # initialize
     def __init__(self, rom_path, out_dir, seed, logic, settings, items, logic_def, parent=None):
@@ -137,26 +138,30 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['bomb']['type'] = 'important'
             self.logic_defs['bombs']['condition-basic'] = 'can-shop & bomb'
         
+        if self.settings['zap-sanity']:
+            self.item_defs['zap-trap']['quantity'] = 45
+            self.forceChests.remove('zap-trap')
+            self.item_defs['heart-piece']['quantity'] = 12
+            self.item_defs['rupee-50']['quantity'] = 0
+            self.item_defs['rupee-100']['quantity'] = 7
+            self.item_defs['chamber-stone']['quantity'] = 9
+        
         if not self.settings['shuffle-tunics']:
             self.item_defs['red-tunic']['quantity'] = 0
             self.item_defs['blue-tunic']['quantity'] = 0
             self.item_defs['rupee-50']['quantity'] += 2
+            self.item_defs['zap-trap']['quantity'] -= 2
         
-        if self.settings['zap-sanity']:
-            self.item_defs['zap-trap']['quantity'] = 54
-            self.forceChests.remove('zap-trap')
-            self.item_defs['heart-piece']['quantity'] -= 20
-            self.item_defs['rupee-20']['quantity'] -= 3
-            self.item_defs['rupee-50']['quantity'] -= 15
-            self.item_defs['rupee-100']['quantity'] += 1
-            self.item_defs['chamber-stone']['quantity'] -= 14
-        
-        # Create a placement, spoiler log, and game mod.
-        if self.threadActive:
-            placements = self.makeRandomizedPlacement(self.seed, self.logic, self.settings['excluded-locations'], vanilla_locations, self.settings, False)
-        
-        if self.threadActive:
-            self.give_placements.emit(placements)
+        try:
+            # Create a placement, spoiler log, and game mod.
+            if self.threadActive:
+                placements = self.makeRandomizedPlacement(self.seed, self.logic, self.settings['excluded-locations'], vanilla_locations, self.settings, False)
+            
+            if self.threadActive:
+                self.give_placements.emit(placements)
+        except ValueError as e:
+            print(e)
+            self.error.emit(True)
         
         self.is_done.emit(True)
     
@@ -428,8 +433,8 @@ class ItemShuffler(QtCore.QThread):
         random.shuffle(importantItems)
         random.shuffle(seashellItems)
         random.shuffle(goodItems)
-        random.shuffle(junkItems)
-        items = importantItems + seashellItems + goodItems + dungeonItems + junkItems
+
+        items = importantItems + seashellItems + goodItems + junkItems + dungeonItems
         
         # Assign vanilla contents to forceVanilla locations
         for loc in forceVanilla:
@@ -440,12 +445,7 @@ class ItemShuffler(QtCore.QThread):
                 
                 # Place the defined vanilla content
                 placements[loc] = self.logic_defs[loc]['content']
-
-                try:
-                    items.remove(self.logic_defs[loc]['content'])
-                except ValueError:
-                    junkItems.remove(self.logic_defs[loc]['content'])
-                
+                items.remove(self.logic_defs[loc]['content'])
                 access = self.removeAccess(access, self.logic_defs[loc]['content'])
                 locations.remove(loc)
                 
@@ -505,10 +505,7 @@ class ItemShuffler(QtCore.QThread):
                     
                     if validPlacement and self.threadActive:
                         # After we successfully made a valid placement, remove the item and location from consideration
-                        try:
-                            items.remove(item)
-                        except ValueError:
-                            junkItems.remove(item)
+                        items.remove(item)
                         itemPool.remove(item)
                         if verbose: print(locationPool[0])
                         locations.remove(locationPool[0])
@@ -529,10 +526,7 @@ class ItemShuffler(QtCore.QThread):
                 if verbose: print(item+' -> ', end='')
                 chest = chests.pop(0)
                 placements[chest] = item
-                try:
-                    items.remove(item)
-                except:
-                    junkItems.remove(item)
+                items.remove(item)
                 locations.remove(chest)
                 if verbose: print(chests[0])
                 self.progress_value += 1 # update progress bar
