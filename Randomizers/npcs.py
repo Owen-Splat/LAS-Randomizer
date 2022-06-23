@@ -18,11 +18,11 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
             npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
-            npc['eventTriggers'][0]['condition'] = 0
+            # npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
-            npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
+            npc['doAction'] = {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.2999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
             npc['layoutConditions'].append({'category': 1, 'parameter': '$3', 'layoutID': -1})
-            npc['behavior'] = oead_tools.createBehavior(type=0, datas=None)
+            # npc['behavior'] = oead_tools.createBehavior(type=0, datas=None)
             npc['collision']['traits'] = ''
             npc['collision']['isStatic'] = True
             # npc['collision']['offset'] = {'x': 0.0, 'y': 0.0, 'z': 0.0}
@@ -46,10 +46,13 @@ def makeNpcChanges(npcSheet, placements):
         if npc['symbol'] == 'ObjSinkingSword':
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
-            # npc['eventTriggers'][0]['condition'] = 0
+            npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
-            # npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
-            npc['layoutConditions'][0]['parameter'] = '$3'
+            npc['eventTriggers'].append(oead_tools.createEventTrigger(2, [(2, '$3')], '$2')) # require flippers for sunken ones
+            npc['eventTriggers'].append(oead_tools.createEventTrigger(2, [(9, '$4')], '$2')) # true/false
+            npc['layoutConditions'][0]['parameter'] = '$5'
+            npc['layoutConditions'][0]['layoutID'] = 1
+            # npc['layoutConditions'].append({'category': 2, 'parameter': '$6', 'layoutID': -1})
         
         if npc['symbol'] == 'ObjRoosterBones':
             npc['layoutConditions'].pop(0)
@@ -73,9 +76,6 @@ def makeNpcChanges(npcSheet, placements):
 
         if npc['symbol'] == 'ObjEaglesLockRock':
             npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
-
-        # if npc['symbol'] == 'ObjTreasureBox':
-        #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
 
 
         # make the flying bomb refills not appear until you find your bombs

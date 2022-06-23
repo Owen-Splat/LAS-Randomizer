@@ -17,6 +17,12 @@ def addNeededActors(flowchart, rom_path):
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Inventory'), 'AddItemByKey')
 
     try:
+        event_tools.findActor(flowchart, 'Link')
+    except ValueError:
+        linkActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'Link')
+        flowchart.actors.append(linkActor)
+
+    try:
         event_tools.findActor(flowchart, 'Link').find_action('GenericItemGetSequenceByKey')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'GenericItemGetSequenceByKey')
@@ -132,3 +138,46 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Hud'), 'SetHeartUpdateEnable')
+    
+    # ####################################################################################################################################
+    # # Shadow Link
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink')
+    # except ValueError:
+    #     shadowActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ShadowLink.bfevfl').flowchart, 'ShadowLink')
+    #     flowchart.actors.append(shadowActor)
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('PopStart')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'PopStart')
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('LookAtCharacter')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'LookAtCharacter')
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('AimCompassPoint')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'AimCompassPoint')
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('PlayAnimation')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'PlayAnimation')
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('PlayTailorOtherChannelEx')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'PlayTailorOtherChannelEx')
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('ModelVisibility')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'ModelVisibility')
+
+    # try:
+    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('SetActorSwitch')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'SetActorSwitch')

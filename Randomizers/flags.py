@@ -48,4 +48,11 @@ def makeFlags(sheet):
     sheet['values'].append({'symbol': 'TradeLensGet', 'index': 1163})
 
     sheet['values'].append({'symbol': 'KikiGone', 'index': 1164})
+
     sheet['values'].append({'symbol': 'BombsFound', 'index': 1165})
+    sheet['values'].append({'symbol': 'BombBagFound', 'index': 1166})
+
+    sheet['values'].append({'symbol': 'MushroomFound', 'index': 1167})
+    sheet['values'].append({'symbol': 'PowderBagFound', 'index': 1168})
+
+    sheet['values'].append({'symbol': 'PotholeGet', 'index': 1169})

@@ -41,6 +41,8 @@ def dictToStruct(d):
 	return oead.gsheet.Struct(d)
 
 
+
+### CONDITIONS GSHEET
 # Return and create an empty structure for an element in the Conditions datasheet
 # checks is a list of (category, paramter) tuples
 def createCondition(name, checks):
@@ -51,6 +53,9 @@ def createCondition(name, checks):
 	return condition
 
 
+
+### NPC GSHEET
+# create npc behavior
 def createBehavior(type, datas=None):
 	behavior = {'type': type, 'parameters': oead.gsheet.StringArray()}
 	if datas:
@@ -61,6 +66,23 @@ def createBehavior(type, datas=None):
 	return behavior
 
 
+# create npc eventTriggers
+def createEventTrigger(condition, additionalConditions, entryPoint):
+	trigger = {'condition': condition, 'additionalConditions': oead.gsheet.StructArray(), 'entryPoint': entryPoint}
+	for category, parameter in additionalConditions:
+		trigger['additionalConditions'].append({'category': category, 'parameter': parameter})
+	
+	return trigger
+
+
+# create npc layoutConditions
+def createLayoutCondition(category, parameter, layoutId=-1):
+	layout = oead.gsheet.StructArray()
+	layout.append({'category': category, 'parameter': parameter, 'layoutID': layoutId})
+
+
+
+### SARC
 # read and return sarc file
 def readSarc(sarcFile):
 	with open(sarcFile, 'rb') as file:

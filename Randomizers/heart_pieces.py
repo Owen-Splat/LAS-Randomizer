@@ -30,14 +30,21 @@ def changeHeartPiece(flowchart, itemKey, itemIndex, modelPath, modelName, room, 
     for act in roomData.actors:
         if act.type == 0xB0:
 
-            act.type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
+            act.type = 0x194 # sinking sword
 
             if room in sunken:
-                act.Z += int(393216 * 3) # move sunken heart pieces 3 tiles upwards
+                if room not in ['taltal-east-drop', 'river-crossing-cave']:
+                    act.Z += int(393216 * 4) # move them up a bit
+                
+                act.parameters[3] = bytes('Flippers', 'utf-8')
+                act.parameters[4] = bytes('false', 'utf-8') # do not let you grab sunken heart pieces by pressing A
+            
             else:
                 act.Z += int(393216 / 2) # standing heart pieces go half a tile upwards
+                act.parameters[3] = b''
+                act.parameters[4] = bytes('true', 'utf-8') # let the player grab standing ones
             
             act.parameters[0] = bytes(modelPath, 'utf-8')
             act.parameters[1] = bytes(modelName, 'utf-8')
             act.parameters[2] = bytes(room, 'utf-8') # entry point
-            act.parameters[3] = bytes(data.HEART_FLAGS[room], 'utf-8') # flag which controls if the heart piece appears or not
+            act.parameters[5] = bytes(data.HEART_FLAGS[room], 'utf-8') # flag which controls if the heart piece appears or not

@@ -8,5 +8,7 @@ __pycache__
 /output
 /romfs
 /room_data_viewer.py
+/practice_file.py
 /settings.yaml
 /Resources/Dev Resources
+/Test

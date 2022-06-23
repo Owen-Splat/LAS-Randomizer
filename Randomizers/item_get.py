@@ -64,7 +64,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
             event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
             event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
-            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 8}),
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
         ], stopEvent)[0]
 

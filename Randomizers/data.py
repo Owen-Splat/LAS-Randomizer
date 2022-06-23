@@ -11,6 +11,7 @@ ROOSTER_CAVE_FLAG       = 'unused0707'
 DREAM_SHRINE_FLAG       = 'unused0708'
 WOODS_LOOSE_FLAG        = 'unused0709'
 MERMAID_CAVE_FLAG       = 'TradeLensGet'
+POTHOLE_FLAG            = 'PotholeGet'
 
 BOMBS_FOUND_FLAG        = 'BombsFound'
 

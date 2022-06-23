@@ -260,6 +260,18 @@ class Room:
 				chest.parameters[1] = bytes(f'$EXT:{room}', 'utf-8')
 			
 			chest.parameters[2] = b''
+
+			# if newContent == 'ShadowTrap':
+			# 	actorEntry = list(filter(lambda e: e.name == b'actor', self.fixedHash.entries))[0]
+			# 	newAct = Actor(actorEntry.data.entries[0].data, self.fixedHash.namesSection)
+			# 	newAct.type = 0x21E
+			# 	self.actors.append(newAct)
+
+			# 	actorEntry = list(filter(lambda e: e.name == b'actor', self.fixedHash.entries))[0]
+			# 	newAct = Actor(actorEntry.data.entries[0].data, self.fixedHash.namesSection)
+			# 	newAct.type = 0x244
+			# 	self.actors.append(newAct)
+
 	
 
 	def setSmallKeyParams(self, modelPath, modelName, room, keyIndex=0):

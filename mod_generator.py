@@ -5,6 +5,7 @@ import re
 import random
 import shutil
 import tempfile
+import traceback
 
 import Tools.leb as leb
 import Tools.event_tools as event_tools
@@ -73,8 +74,8 @@ class ModsProcess(QtCore.QThread):
 
             if self.placements['settings']['randomize-music'] and self.thread_active:
                 self.randomizeMusic()
-        except (FileNotFoundError, KeyError, TypeError, ValueError) as e:
-            print(e)
+        except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError):
+            print(traceback.format_exc())
             self.error.emit(True)
         
         # print(self.progress_value)
@@ -407,6 +408,33 @@ class ModsProcess(QtCore.QThread):
                 file.write(room.repack())
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
+        
+        # #########################################################################################################################
+        # # Slime Key
+        # if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field'):
+        #     os.makedirs(f'{self.out_dir}/Romfs/region_common/level/Field')
+
+        # with open(f'{self.rom_path}/region_common/level/Field/Field_13G.leb', 'rb') as file:
+        #     room = leb.Room(file.read())
+        
+        # item = self.placements['pothole-final']
+        # itemKey = self.item_defs[item]['item-key']
+        # itemIndex = self.placements['indexes']['pothole-final'] if 'pothole-final' in self.placements['indexes'] else -1
+
+        # if itemKey != 'ZapTrap':
+        #     modelPath = self.item_defs[item]['model-path']
+        #     modelName = self.item_defs[item]['model-name']
+        # else:
+        #     modelName = random.choice(data.ITEM_MODELS)
+        #     modelPath = f'Item{modelName}.bfres'
+        
+        # miscellaneous.changeSlimeKey(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
+
+        # if self.thread_active:
+        #     with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_13G.leb', 'wb') as file:
+        #         file.write(room.repack())
+        #         self.progress_value += 1 # update progress bar
+        #         self.progress_update.emit(self.progress_value)
 
         #########################################################################################################################
         # Done!
@@ -1089,28 +1117,44 @@ class ModsProcess(QtCore.QThread):
         # if self.placements['settings']['fast-songs']:
         #     pass
 
-        ########################################################################################################################
-        ### Make changes to field objects
-        field = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldObject.bfevfl')
-        actors.addNeededActors(field.flowchart, self.rom_path)
+        # ########################################################################################################################
+        # ### Make changes to field objects
+        # field = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldObject.bfevfl')
+        # actors.addNeededActors(field.flowchart, self.rom_path)
 
-        # Give access to color dungeon even if you have a follower
-        graveOpen = event_tools.createSubFlowEvent(field.flowchart, '', 'Grave_Push', {}, None)
-        braceletCheck = event_tools.createSwitchEvent(field.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.BRACELET_FOUND_FLAG}, {0: 'Event193', 1: graveOpen})
-        event_tools.insertEventAfter(field.flowchart, 'Grave_CantPush', braceletCheck)
+        # # Give access to color dungeon even if you have a follower
+        # graveOpen = event_tools.createSubFlowEvent(field.flowchart, '', 'Grave_Push', {}, None)
+        # braceletCheck = event_tools.createSwitchEvent(field.flowchart, 'EventFlags', 'CheckFlag',
+        # {'symbol': data.BRACELET_FOUND_FLAG}, {0: 'Event193', 1: graveOpen})
+        # event_tools.insertEventAfter(field.flowchart, 'Grave_CantPush', braceletCheck)
 
-        # remove the events that move link to a specified spot when opening dunegons
-        event_tools.setSwitchEventCase(field.flowchart, 'Event7', 1, 'Event160')
-        event_tools.setSwitchEventCase(field.flowchart, 'Event4', 1, 'Event206')
-        event_tools.setSwitchEventCase(field.flowchart, 'Event9', 1, 'Event208')
-        event_tools.setSwitchEventCase(field.flowchart, 'Event12', 1, 'Event130')
-        event_tools.setSwitchEventCase(field.flowchart, 'Event15', 1, 'Event147')
+        # # remove the events that move link to a specified spot when opening dunegons
+        # event_tools.setSwitchEventCase(field.flowchart, 'Event7', 1, 'Event160')
+        # event_tools.setSwitchEventCase(field.flowchart, 'Event4', 1, 'Event206')
+        # event_tools.setSwitchEventCase(field.flowchart, 'Event9', 1, 'Event208')
+        # event_tools.setSwitchEventCase(field.flowchart, 'Event12', 1, 'Event130')
+        # event_tools.setSwitchEventCase(field.flowchart, 'Event15', 1, 'Event147')
 
-        if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldObject.bfevfl', field)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+        # if self.thread_active:
+        #     event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldObject.bfevfl', field)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
+        
+        # ########################################################################################################################
+        # ### Shadow Link
+        # flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ShadowLink.bfevfl')
+        # actors.addNeededActors(flow.flowchart, self.rom_path)
+        
+        # disableEvent = event_tools.createActionChain(flow.flowchart, None, [
+        #     ('ShadowLink', 'ModelVisibility', {'modelIndex': 0, 'visible': False}),
+        #     ('ShadowLink', 'SetActorSwitch', {'switchIndex': 0, 'value': True})
+        # ], None)
+        # event_tools.insertEventAfter(flow.flowchart, 'Appear', disableEvent)
+
+        # if self.thread_active:
+        #     event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ShadowLink.bfevfl', flow)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
 
 
 
@@ -1164,7 +1208,7 @@ class ModsProcess(QtCore.QThread):
                 if item['symbol'] == 'SmallKey':
                     item['npcKey'] = 'ItemClothesGreen'
                 
-                if item['symbol'] == 'YoshiDoll': # this is for ocarina as it is an ItemYoshiDoll actor
+                if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                     item['npcKey'] = 'ItemClothesRed'
             
             else: break
