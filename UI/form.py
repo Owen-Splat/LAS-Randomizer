@@ -689,7 +689,7 @@ class Ui_MainWindow(object):
         self.zapsCheck.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(whatsthis)
-        self.zapsCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Increases the number of potential zap traps from 3 to 30<br></br>This also allows them to be placed anywhere, not just in chests", None))
+        self.zapsCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Increases the number of potential zap traps over tenfold<br></br>This also allows them to be placed anywhere, not just in chests", None))
 #endif // QT_CONFIG(whatsthis)
         self.zapsCheck.setText(QCoreApplication.translate("MainWindow", u"Zap Sanity", None))
 #if QT_CONFIG(tooltip)

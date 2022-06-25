@@ -39,8 +39,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_files -= 1
         
         if not settings['shuffle-instruments']:
-            self.valid_placements -= 8
-            self.num_of_mod_files -= 8
+            self.num_of_mod_files -= 1
         
         if not settings['randomize-music']:
             self.num_of_mod_files -= 69

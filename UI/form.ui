@@ -1170,7 +1170,7 @@
         <string/>
        </property>
        <property name="whatsThis">
-        <string>Increases the number of potential zap traps from 3 to 30&lt;br&gt;&lt;/br&gt;This also allows them to be placed anywhere, not just in chests</string>
+        <string>Increases the number of potential zap traps over tenfold&lt;br&gt;&lt;/br&gt;This also allows them to be placed anywhere, not just in chests</string>
        </property>
        <property name="text">
         <string>Zap Sanity</string>

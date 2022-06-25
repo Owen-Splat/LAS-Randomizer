@@ -1,4 +1,4 @@
-from oead import Sarc, SarcWriter, yaz0
+from oead import Sarc, SarcWriter
 import oead
 
 
@@ -39,6 +39,43 @@ def dictToStruct(d):
 			d[k] = dictToStruct(d[k])
 
 	return oead.gsheet.Struct(d)
+
+
+
+### ROOT FIELDS
+def createField(name, type_name, type, offset, flags=None):
+	field = oead.gsheet.Field()
+
+	field.name = name
+	field.type_name = type_name
+	field.type = type
+	
+	if flags:
+		field.flags = flags
+
+	if field.type is oead.gsheet.Field.Type.String:
+		field.inline_size = 0x10
+	
+	if field.type is oead.gsheet.Field.Type.Int:
+		field.inline_size = 0x4
+	
+	if field.type is oead.gsheet.Field.Type.Struct:
+		field.inline_size = 0x10
+		field.fields.append(createField('category', 'ConditionCategory', oead.gsheet.Field.Type.Int, 16, oead.gsheet.Field.Flag.IsEnum))
+		field.fields.append(createField('parameter', 'string', oead.gsheet.Field.Type.String, 16))
+	
+	field.data_size = field.inline_size
+	field.offset_in_value = offset
+	# field.x11 = 0
+
+	return field
+
+
+def createFieldCondition(category, parameter):
+	conditions = oead.gsheet.StructArray()
+	conditions.append({'category': category, 'parameter': parameter})
+
+	return conditions
 
 
 

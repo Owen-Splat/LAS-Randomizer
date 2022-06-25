@@ -1036,6 +1036,26 @@ class ModsProcess(QtCore.QThread):
             self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
+        ### MusicalInstrument event: Set ghost clear flags if you got the Surf Harp.
+        if not self.placements['settings']['shuffle-instruments']:
+            musicalInstrument = event_tools.readFlow(f'{self.rom_path}/region_common/event/MusicalInstrument.bfevfl')
+
+            musicalInstrument.flowchart.actors.append(eventFlagsActor)
+            event_tools.addActorQuery(event_tools.findActor(musicalInstrument.flowchart, 'Inventory'), 'HasItem')
+
+            ghostFlagsSetEvent = event_tools.createActionEvent(musicalInstrument.flowchart, 'EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True})
+
+            event_tools.insertEventAfter(musicalInstrument.flowchart, 'Event52', event_tools.createSwitchEvent(musicalInstrument.flowchart, 'Inventory', 'HasItem', {'itemType': 48, 'count': 1}, {0: 'Event0', 1: ghostFlagsSetEvent}))
+
+            event_tools.createActionChain(musicalInstrument.flowchart, ghostFlagsSetEvent, [
+                ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
+                ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
+                ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
+                ], 'Event0')
+
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MusicalInstrument.bfevfl', musicalInstrument)
+        
+        #################################################################################################################################
         ### Item: Add and fix some entry points for the ItemGetSequence
         item = event_tools.readFlow(f'{self.rom_path}/region_common/event/Item.bfevfl')
 
