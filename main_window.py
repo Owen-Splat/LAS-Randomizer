@@ -417,10 +417,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # zap sanity
         try:
-            self.ui.zapsCheck.setChecked(SETTINGS['Zap_Sanity'])
+            self.ui.zapsCheck.setChecked(SETTINGS['Zapsanity'])
         except (KeyError, TypeError):
             self.ui.zapsCheck.setChecked(False)
-
+        
+        # color dungeon rupees
+        try:
+            self.ui.rupCheck.setChecked(SETTINGS['Blupsanity'])
+        except(KeyError, TypeError):
+            self.ui.rupCheck.setChecked(False)
+        
         # # randomize entances
         # try:
         #     self.ui.loadingCheck.setChecked(SETTINGS['Randomize_Entrances'])
@@ -432,12 +438,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.musicCheck.setChecked(SETTINGS['Randomize_Music'])
         except (KeyError, TypeError):
             self.ui.musicCheck.setChecked(False)
-
-        # # blue removal
-        # try:
-        #     self.ui.blurCheck.setChecked(SETTINGS['Blur_Removal'])
-        # except (KeyError, TypeError):
-        #     self.ui.blurCheck.setChecked(True)
 
         # spoiler log
         try:
@@ -533,6 +533,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.kanaletCheck.setChecked(True)
         self.ui.tunicsCheck.setChecked(True)
         self.ui.zapsCheck.setChecked(False)
+        self.ui.rupCheck.setChecked(False)
 
         self.excludedChecks.update(TRADE_GIFT_LOCATIONS)
         # self.excludedChecks.add('rapids-middle-island')
@@ -573,10 +574,10 @@ class MainWindow(QtWidgets.QMainWindow):
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
             # 'Fast_Songs': self.ui.songsCheck.isChecked(),
             'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
-            'Zap_Sanity': self.ui.zapsCheck.isChecked(),
+            'Zapsanity': self.ui.zapsCheck.isChecked(),
+            'Blupsanity': self.ui.rupCheck.isChecked(),
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
-            # 'Blur_Removal': self.ui.blurCheck.isChecked(),
             'Excluded_Locations': list(self.excludedChecks)
         }
         
@@ -819,13 +820,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 # 'fast-songs': self.ui.songsCheck.isChecked(),
                 'shuffle-tunics': self.ui.tunicsCheck.isChecked(),
                 'zap-sanity': self.ui.zapsCheck.isChecked(),
+                'blup-sanity': self.ui.rupCheck.isChecked(),
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
-                # 'blur-removal': self.ui.blurCheck.isChecked(),
                 'excluded-locations': self.excludedChecks
             }
             
-            self.progress_window = ProgressWindow(romPath, outdir, seed, self.logic, ITEM_DEFS.copy(), LOGIC_DEFS.copy(), settings)
+            self.progress_window = ProgressWindow(romPath, outdir, seed, self.logic, ITEM_DEFS, LOGIC_DEFS, settings)
             self.progress_window.setFixedSize(472, 125)
             self.progress_window.setWindowTitle(f"{seed}")
 

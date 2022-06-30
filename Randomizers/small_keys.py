@@ -19,3 +19,18 @@ def writeKeyEvent(flowchart, itemKey, itemIndex, room):
         ('SmallKey', 'SetActorSwitch', {'value': True, 'switchIndex': 1}),
         ('SmallKey', 'Destroy', {})
     ], itemEvent)
+
+
+
+# def writeSunkenKeyEvent(flowchart):
+#     event_tools.addEntryPoint(flowchart, 'Lv4_04E_pop')
+
+#     event_tools.createActionChain(flowchart, 'Lv4_04E_pop', [
+#         ('GoldenLeaf', 'GenericGimmickSequence', {'cameraLookAt': True, 'distanceOffset': 0.0}),
+#         ('GoldenLeaf', 'Activate', {}),
+#         ('GoldenLeaf', 'PlayOneshotSE', {'label': 'SE_SY_NAZOKAGI_DROP', 'pitch': 1.0, 'volume': 1.0}),
+#         ('GoldenLeaf', 'Fall', {}),
+#         ('Timer', 'Wait', {'time': 2}),
+#         ('Audio', 'PlayJingle', {'label': 'BGM_NAZOTOKI_SEIKAI', 'volume': 1.0}),
+#         ('GoldenLeaf', 'Destroy', {})
+#     ])

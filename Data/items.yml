@@ -343,6 +343,12 @@ rupee-20:
   item-key: Rupee20
   model-path: ItemRupeeRed.bfres
   model-name: RupeeRed
+rupee-5:
+  type: junk
+  quantity: 28
+  item-key: Rupee5
+  model-path: ItemRupeeBlue.bfres
+  model-name: RupeeBlue
 zol-trap:
   type: junk
   quantity: 1

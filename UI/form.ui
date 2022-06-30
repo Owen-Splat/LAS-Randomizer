@@ -1029,7 +1029,7 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>189</x>
          <y>136</y>
          <width>173</width>
          <height>21</height>
@@ -1063,7 +1063,7 @@
        </property>
        <property name="geometry">
         <rect>
-         <x>189</x>
+         <x>369</x>
          <y>136</y>
          <width>173</width>
          <height>21</height>
@@ -1173,7 +1173,7 @@
         <string>Increases the number of potential zap traps over tenfold&lt;br&gt;&lt;/br&gt;This also allows them to be placed anywhere, not just in chests</string>
        </property>
        <property name="text">
-        <string>Zap Sanity</string>
+        <string>Zapsanity</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="tunicsCheck">
@@ -1204,35 +1204,23 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QCheckBox" name="blurCheck">
+      <widget class="QCheckBox" name="rupCheck">
        <property name="geometry">
         <rect>
-         <x>369</x>
+         <x>10</x>
          <y>136</y>
          <width>173</width>
          <height>21</height>
         </rect>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-         <strikeout>true</strikeout>
-        </font>
-       </property>
        <property name="toolTip">
         <string/>
        </property>
        <property name="whatsThis">
-        <string>Removes the blur around the edges of the screen</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(80, 80, 80);</string>
+        <string>Turns the 28 freestanding rupees in Color Dungeon into item checks&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked&lt;/u&gt;, they will stay as rupees</string>
        </property>
        <property name="text">
-        <string>Blur Removal</string>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
+        <string>Blupsanity</string>
        </property>
       </widget>
      </widget>

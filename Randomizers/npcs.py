@@ -1,4 +1,5 @@
 import Tools.oead_tools as oead_tools
+import oead
 from Randomizers import data
 
 
@@ -9,6 +10,17 @@ def makeNpcChanges(npcSheet, placements):
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['layoutConditions'].pop(1)
         
+        # if npc['symbol'] == 'ItemGoldenLeaf':
+        #     npc['graphics']['path'] = '$1'
+        #     npc['graphics']['model'] = '$2'
+        #     npc['eventTriggers'][0]['additionalConditions'][0] = {'category': 8, 'parameter': '!1'}
+        #     npc['eventTriggers'][1]['entryPoint'] = '$3'
+
+        #     cons = oead.gsheet.StructArray()
+        #     cons.append({'category': 4, 'parameter': 'Lv4_04E'})
+        #     cons.append({'category': 8, 'parameter': '!1'})
+        #     npc['eventTriggers'].append({'condition': 14, 'additionalConditions': cons, 'entryPoint': 'Lv4_04E_pop'})
+
         if npc['symbol'] == 'ItemSmallKey':
             npc['graphics']['path'] = '$1'
             npc['graphics']['model'] = '$2'
@@ -18,16 +30,12 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
             npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
-            # npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['doAction'] = {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.2999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
             npc['layoutConditions'].append({'category': 1, 'parameter': '$3', 'layoutID': -1})
-            # npc['behavior'] = oead_tools.createBehavior(type=0, datas=None)
             npc['collision']['traits'] = ''
             npc['collision']['isStatic'] = True
-            # npc['collision']['offset'] = {'x': 0.0, 'y': 0.0, 'z': 0.0}
             npc['collision']['filter'] = 5
-
         
         if npc['symbol'] == 'ItemClothesGreen':
             npc['graphics']['path'] = 'ItemSmallKey.bfres'

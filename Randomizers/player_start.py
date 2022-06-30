@@ -26,12 +26,17 @@ def makeStartChanges(flow, placements):
         ('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}), # flag for the bridge, we make kiki use another flag
     ]
+
     if placements['settings']['open-kanalet']:
         playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': 'GateOpen_Switch_KanaletCastle_01B', 'value': True}))
     
     if not placements['settings']['shuffle-tunics']:
         playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))
         playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}))
+    
+    if not placements['settings']['shuffle-bombs']:
+        playerStartEventFlags.append(('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}))
+    
     
     event_tools.insertEventAfter(flow.flowchart, 'Event558', playerStartFlagCheckEvent)
     event_tools.createActionChain(flow.flowchart, playerStartFlagsFirstEvent, playerStartEventFlags)

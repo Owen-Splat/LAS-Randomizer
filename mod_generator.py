@@ -11,7 +11,9 @@ import Tools.leb as leb
 import Tools.event_tools as event_tools
 import Tools.oead_tools as oead_tools
 
-from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion, small_keys, tarin, trade_quest, tunic_swap
+from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
+from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, shop, rupees
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -61,7 +63,8 @@ class ModsProcess(QtCore.QThread):
 
             if self.thread_active: self.makeSmallKeyChanges()
             if self.thread_active: self.makeHeartPieceChanges()
-
+            # if self.thread_active: self.makeShopChanges()
+            
             if self.thread_active: self.makeTelephoneChanges()
 
             if self.thread_active: self.makeGeneralARCChanges()
@@ -71,9 +74,13 @@ class ModsProcess(QtCore.QThread):
 
             if self.placements['settings']['shuffle-instruments'] and self.thread_active:
                 self.makeInstrumentChanges()
-
+            
+            if self.placements['settings']['blup-sanity'] and self.thread_active:
+                self.makeLv10RupeeChanges()
+            
             if self.placements['settings']['randomize-music'] and self.thread_active:
                 self.randomizeMusic()
+        
         except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError):
             print(traceback.format_exc())
             self.error.emit(True)
@@ -162,6 +169,7 @@ class ModsProcess(QtCore.QThread):
         # Open up the SmallKey event to be ready to edit
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SmallKey.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
+        # small_keys.writeSunkenKeyEvent(flow.flowchart)
 
         models = data.ITEM_MODELS[:]
         models.append('SmallKey')
@@ -210,6 +218,7 @@ class ModsProcess(QtCore.QThread):
                             outfile.write(roomData.repack())
                             self.progress_value += 1 # update progress bar
                             self.progress_update.emit(self.progress_value)
+            
             else: break
         
         if self.thread_active:
@@ -549,7 +558,8 @@ class ModsProcess(QtCore.QThread):
         itemIndex = self.placements['indexes']['goriya-trader'] if 'goriya-trader' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['goriya-trader']]['item-key'], itemIndex, 'Event87', flagEvent)
 
-        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
+        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
         event_tools.insertEventAfter(flow.flowchart, 'Event24', flagCheck)
 
         if self.thread_active:
@@ -568,7 +578,8 @@ class ModsProcess(QtCore.QThread):
         itemIndex = self.placements['indexes']['manbo'] if 'manbo' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['manbo']]['item-key'], itemIndex, 'Event31', flagEvent)
 
-        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.MANBO_FLAG}, {0: 'Event37', 1: 'Event35'})
+        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.MANBO_FLAG}, {0: 'Event37', 1: 'Event35'})
         event_tools.insertEventAfter(flow.flowchart, 'Event9', flagCheck)
 
         if self.thread_active:
@@ -587,7 +598,8 @@ class ModsProcess(QtCore.QThread):
         itemIndex = self.placements['indexes']['mamu'] if 'mamu' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mamu']]['item-key'], itemIndex, 'Event85', flagEvent)
 
-        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': data.MAMU_FLAG}, {0: 'Event14', 1: 'Event98'})
+        flagCheck = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.MAMU_FLAG}, {0: 'Event14', 1: 'Event98'})
         event_tools.insertEventAfter(flow.flowchart, 'Event10', flagCheck)
 
         if self.thread_active:
@@ -602,13 +614,13 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         itemIndex = self.placements['indexes']['rapids-race-45'] if 'rapids-race-45' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-45']]['item-key'], itemIndex, 'Event42', 'Event88')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-45']]['item-key'], itemIndex, 'Event42', 'Event88', canHurtPlayer=False)
 
         itemIndex = self.placements['indexes']['rapids-race-35'] if 'rapids-race-35' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-35']]['item-key'], itemIndex, 'Event40', 'Event86')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-35']]['item-key'], itemIndex, 'Event40', 'Event86', canHurtPlayer=False)
 
         itemIndex = self.placements['indexes']['rapids-race-30'] if 'rapids-race-30' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-30']]['item-key'], itemIndex, 'Event38', 'Event85')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['rapids-race-30']]['item-key'], itemIndex, 'Event38', 'Event85', canHurtPlayer=False)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RaftShopMan.bfevfl', flow)
@@ -638,7 +650,7 @@ class ModsProcess(QtCore.QThread):
                 if itemKey == 'SwordLv1':
                     event_tools.createProgressiveItemSwitch(flow.flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, defs[1], defs[2])
                 else:
-                    item_get.insertItemGetAnimation(flow.flowchart, itemKey, itemIndex, defs[1], defs[2], False)
+                    item_get.insertItemGetAnimation(flow.flowchart, itemKey, itemIndex, defs[1], defs[2], False, False)
             else: break
         
         event_tools.insertEventAfter(flow.flowchart, 'Event20', 'Event3')
@@ -1107,13 +1119,19 @@ class ModsProcess(QtCore.QThread):
             self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
-        ### SkeletalGuardBlue: Make him sell 20 bombs in addition to the 20 powder.
-        if self.placements['settings']['reduce-farming'] and not self.placements['settings']['shuffle-bombs']:
+        ### SkeletalGuardBlue: Make him sell 20 bombs in addition to the 20 powder
+        if self.placements['settings']['reduce-farming']:
             skeleton = event_tools.readFlow(f'{self.rom_path}/region_common/event/SkeletalGuardBlue.bfevfl')
 
-            event_tools.createActionChain(skeleton.flowchart, 'Event19', [
-                ('Inventory', 'AddItem', {'itemType': 4, 'count': 20, 'autoEquip': False})
-                ])
+            addBombs = event_tools.createActionEvent(skeleton.flowchart, 'Inventory', 'AddItem',
+            {'itemType': 4, 'count': 20, 'autoEquip': False})
+
+            if self.placements['settings']['shuffle-bombs']:
+                checkBombs = event_tools.createSwitchEvent(skeleton.flowchart, 'EventFlags', 'CheckFlag',
+                {'symbol': data.BOMBS_FOUND_FLAG}, {0: None, 1: addBombs})
+                event_tools.insertEventAfter(skeleton.flowchart, 'Event19', checkBombs)
+            else:
+                event_tools.insertEventAfter(skeleton.flowchart, 'Event19', addBombs)
 
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SkeletalGuardBlue.bfevfl', skeleton)
@@ -1203,6 +1221,7 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### ItemDrop datasheet: remove HeartContainer drops 0-7, HookShot drop, AnglerKey and FaceKey drops.
         itemDropSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
+        # item_drops.createDatasheetConditions(itemDropSheet)
         item_drops.makeDatasheetChanges(itemDropSheet, self.placements)
 
         if self.thread_active:
@@ -1257,7 +1276,7 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### CranePrize datasheet
         cranePrizeSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
-        crane_prizes.makeDatasheetChanges(cranePrizeSheet, data.SHIELD_FOUND_FLAG)
+        crane_prizes.makeDatasheetChanges(cranePrizeSheet)
 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', cranePrizeSheet)
@@ -1284,6 +1303,16 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
+        # #################################################################################################################################
+        # ### ShopItem datasheet
+        # shopSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
+        # shop.makeDatasheetChanges(shopSheet, self.placements, self.item_defs)
+
+        # if self.thread_active:
+        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ShopItem.gsheet', shopSheet)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
+
 
 
     # Set the event for the book of dark secrets to reveal the egg path without having the magnifying lens
@@ -1431,21 +1460,7 @@ class ModsProcess(QtCore.QThread):
     def makeTelephoneChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Telephone.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
-        
-        # telephone needs dialog query 'GetLastResult4' to get dialog result
-        event_tools.addActorQuery(event_tools.findActor(flow.flowchart, 'Dialog'), 'GetLastResult4')
-
-        greenGet = item_get.insertItemGetAnimation(flow.flowchart, 'ClothesGreen', -1, None, None)
-
-        redGet = item_get.insertItemGetAnimation(flow.flowchart, 'ClothesRed', -1, None, None)
-        checkRed = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.RED_TUNIC_FOUND_FLAG}, {0: None, 1: redGet})
-
-        blueGet = item_get.insertItemGetAnimation(flow.flowchart, 'ClothesBlue', -1, None, None)
-        checkBlue = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.BLUE_TUNIC_FOUND_FLAG}, {0: None, 1: blueGet})
-
-        tunic_swap.writeSwapEvents(flow, greenGet, checkRed, checkBlue)
+        tunic_swap.writeSwapEvents(flow.flowchart)
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Telephone.bfevfl', flow)
@@ -1454,6 +1469,52 @@ class ModsProcess(QtCore.QThread):
     
 
 
+    # shuffle color dungeon rupees
+    def makeLv10RupeeChanges(self):
+        flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
+
+        with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_08D.leb', 'rb') as file:
+            roomData = leb.Room(file.read())
+        
+        for i in range(28):
+            item = self.placements[f'D0-Rupee-{i + 1}']
+            itemKey = self.item_defs[item]['item-key']
+            itemIndex = self.placements['indexes'][f'D0-Rupee-{i + 1}'] if f'D0-Rupee-{i + 1}' in self.placements['indexes'] else -1
+
+            if itemKey != 'ZapTrap':
+                modelPath = self.item_defs[item]['model-path']
+                modelName = self.item_defs[item]['model-name']
+            else:
+                modelName = random.choice(data.ITEM_MODELS)
+                modelPath = f'Item{modelName}.bfres'
+
+            roomData.setRupeeParams(modelPath, modelName, f'Lv10Rupee_{i + 1}', i)
+            rupees.makeEventChanges(flow.flowchart, i, itemKey, itemIndex)
+        
+        if self.thread_active:
+            with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_08D.leb', 'wb') as file:
+                file.write(roomData.repack())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
+
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl', flow)
+
+
+
+    # shuffle shop items
+    def makeShopChanges(self):
+        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
+        actors.addNeededActors(flow.flowchart, self.rom_path)
+        shop.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
+
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+
+
+    # trade quest changes
     def makeTradeQuestChanges(self):
         ### yoshi doll
 

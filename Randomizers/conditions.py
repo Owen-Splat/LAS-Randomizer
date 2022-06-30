@@ -58,10 +58,13 @@ def editConditions(condition, placements):
             condition['conditions'][0] = {'category': 9, 'parameter': 'true'}
         if placements['settings']['shuffle-bombs']:
             condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
-        # else:
-        #     condition['conditions'][0] = {'category': 2, 'parameter': 'Bomb'}
     
-    # ### BOMB SHOP TESTING
-    # # Make the shop not sell bombs until you find one
-    # if condition['symbol'] == 'ShopBombCondition':
-    #     condition['conditions'][0] = {'category': 9, 'parameter': 'Bomb'}
+    # # Edit the condition for the shovel since it is shuffled
+    # if condition['symbol'] == 'ShopShovelCondition':
+    #     condition['conditions'].pop(0)
+    #     condition['conditions'][0] = {'category': 1, 'parameter': '!ShopShovelGet'}
+    
+    # # Edit the condition for the bow since it is shuffled
+    # if condition['symbol'] == 'ShopBowCondition':
+    #     condition['conditions'][0] = {'category': 1, 'parameter': 'ShopShovelGet'}
+    #     condition['conditions'][1] = {'category': 1, 'parameter': '!ShopBowGet'}

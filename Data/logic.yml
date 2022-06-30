@@ -2109,6 +2109,203 @@ D0-fairy-2:
   spoiler-region: color-dungeon
   condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
 
+D0-Rupee-1:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-2:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-3:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-4:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-5:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-6:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-7:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-8:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-9:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-10:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-11:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-12:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-13:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-14:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-15:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-16:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-17:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-18:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-19:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-20:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-21:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-22:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-23:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-24:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-25:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-26:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-27:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-Rupee-28:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+
 # Followers
 moblin-cave:
   type: follower
@@ -2425,7 +2622,7 @@ bomb-arrows:
   condition-basic: bombs & shoot-arrows
 bombs:
   type: interaction
-  condition-basic: (mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8D & kill-goblin) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))
+  condition-basic: (mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))
 powder:
   type: interaction
   condition-basic: (woods & mushroom) | (color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))
@@ -2482,7 +2679,7 @@ dampe-3-4:
 # Enemy interactions
 kill-3-of-a-kind:
   type: enemy
-  condition-basic: sword | shield | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | shield | shoot-arrows | hookshot | rod | boomerang
 kill-arm-mimic:
   type: enemy
   condition-basic: sword
@@ -2510,6 +2707,9 @@ kill-darknut-flail:
 kill-flower:
   type: enemy
   condition-basic: (hookshot & (sword | powder | shoot-arrows | bombs)) | rod | boomerang | bow-wow
+kill-big-flower:
+  type: enemy
+  condition-basic: (hookshot & (sword | shoot-arrows | bombs)) | rod | boomerang | bow-wow
 kill-gibdo:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | boomerang
@@ -2546,7 +2746,7 @@ kill-moblin-shield:
   condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
 kill-octorok:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang | shield:2
+  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
 kill-orb:
   type: enemy
   condition-basic: sword | hookshot | shoot-arrows | bombs | rod | boomerang

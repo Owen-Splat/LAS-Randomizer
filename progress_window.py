@@ -7,8 +7,8 @@ from mod_generator import ModsProcess
 from randomizer_paths import DATA_PATH
 
 import os
+import copy
 import shutil
-
 import yaml
 
 
@@ -28,17 +28,20 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.out_dir = out_dir
         self.seed = seed
         self.logic = logic
-        self.item_defs = item_defs
-        self.logic_defs = logic_defs
+        self.item_defs = copy.deepcopy(item_defs)
+        self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = settings
         
         self.valid_placements = 228  # 226
-        self.num_of_mod_files = 304 # +1 since it takes half a second after completing before it is actually done
+        self.num_of_mod_files = 305 # +1 since it takes half a second after completing before it is actually done
 
         if settings['shuffle-bombs']:
             self.num_of_mod_files -= 1
         
-        if not settings['shuffle-instruments']:
+        if settings['shuffle-instruments']:
+            self.num_of_mod_files += 7
+        
+        if not settings['blup-sanity']:
             self.num_of_mod_files -= 1
         
         if not settings['randomize-music']:

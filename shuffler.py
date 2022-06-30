@@ -18,7 +18,7 @@ class ItemShuffler(QtCore.QThread):
 
     
     # initialize
-    def __init__(self, rom_path, out_dir, seed, logic, settings, items, logic_def, parent=None):
+    def __init__(self, rom_path, out_dir, seed, logic, settings, item_defs, logic_defs, parent=None):
         QtCore.QThread.__init__(self, parent)
 
         self.rom_path = rom_path
@@ -29,8 +29,8 @@ class ItemShuffler(QtCore.QThread):
         self.out_dir = out_dir
         self.seed = seed
         self.settings = settings
-        self.item_defs = items
-        self.logic_defs = logic_def
+        self.item_defs = item_defs
+        self.logic_defs = logic_defs
         
         self.forceChests = ['zol-trap', 'zap-trap', 'shadow-trap', 'stalfos-note']
 
@@ -101,6 +101,8 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('mermaid-martha')
         vanilla_locations.remove('mermaid-cave')
 
+        # vanilla_locations.remove('shop-slot3-1st')
+        
         vanilla_locations.append('kanalet-kill-room')
         
         heart_pieces = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
@@ -136,23 +138,41 @@ class ItemShuffler(QtCore.QThread):
             vanilla_locations.append('tarin')
             vanilla_locations.append('washed-up')
         
+        if self.settings['blup-sanity']:
+            blupees = list(filter( lambda l: self.logic_defs[l]['type'] == 'item'
+            and self.logic_defs[l]['subtype'] == 'standing'
+            and self.logic_defs[l]['content'] == 'rupee-5', self.logic_defs))
+            for blue in blupees:
+                vanilla_locations.remove(blue)
+        # else:
+        #     self.item_defs.remove('rupee-5')
+        #     for l in self.logic_defs:
+        #         if l.startswith('D0-Rupee'):
+        #             self.logic_defs.remove(l)
+
         if self.settings['shuffle-bombs']:
             self.item_defs['bomb']['type'] = 'important'
-            self.logic_defs['bombs']['condition-basic'] = 'can-shop & bomb'
-        
-        if self.settings['zap-sanity']:
-            self.item_defs['zap-trap']['quantity'] = 41
-            self.forceChests.remove('zap-trap')
-            self.item_defs['heart-piece']['quantity'] = 12
-            self.item_defs['rupee-50']['quantity'] = 1
-            self.item_defs['rupee-100']['quantity'] = 9
-            self.item_defs['rupee-300']['quantity'] = 3
-            self.item_defs['chamber-stone']['quantity'] = 9
+            self.logic_defs['bombs']['condition-basic'] = '(can-shop | (can-farm-rupees & color-dungeon)) & bomb'
         
         if not self.settings['shuffle-tunics']:
             self.item_defs['red-tunic']['quantity'] = 0
             self.item_defs['blue-tunic']['quantity'] = 0
-            self.item_defs['rupee-50']['quantity'] += 2
+            self.item_defs['rupee-50']['quantity'] += 2 # +100 rupees
+        
+        if self.settings['zap-sanity']:
+            self.forceChests.remove('zap-trap')
+
+            if self.settings['blup-sanity']:
+                self.item_defs['rupee-5']['quantity'] -= 14 # removes half the blue rupees if blupeesanity is on
+                self.item_defs['zap-trap']['quantity'] = 55
+            else:
+                self.item_defs['zap-trap']['quantity'] = 41
+            
+            self.item_defs['heart-piece']['quantity'] -= 20 # leaves 12 heart pieces
+            self.item_defs['rupee-50']['quantity'] -= 18 # -900 rupees
+            self.item_defs['rupee-100']['quantity'] += 4 # +400 rupees
+            self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
+            self.item_defs['chamber-stone']['quantity'] -= 5 # leaves the shop and trendy ones since they are not shuffled
         
         try:
             # Create a placement, spoiler log, and game mod.
@@ -537,27 +557,6 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_update.emit(self.progress_value)
             else: break
 
-        # Place items on rapids race since they can't be zap traps, otherwise it could kill the player
-        # without flippers, they will respawn and drown, sending them to 0,0,0 and potentially killing their run
-        toPlace = list(filter((lambda s: s != 'zap-trap' and self.item_defs[s]['type'] in ['good', 'junk']), items))
-        raceLocations = ['rapids-race-45', 'rapids-race-35', 'rapids-race-30']
-        races = list(filter((lambda s: s in raceLocations and s in placements['force-junk']), locations)) 
-        for item in toPlace:
-            if self.threadActive:
-                if verbose: print(item+' -> ', end='')
-                try:
-                    race = races.pop(0)
-                except IndexError:
-                    break
-                placements[race] = item
-                items.remove(item)
-                locations.remove(race)
-                if verbose: print(race)
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
-            else: break
-
-
         # Next, place an item on Tarin. Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
         # Only do this if Tarin has no item placed, i.e. not forced to be vanilla
         if placements['tarin'] == None and self.threadActive:
@@ -598,8 +597,6 @@ class ItemShuffler(QtCore.QThread):
                 if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
                     validPlacement = False
                 elif (item in self.forceChests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
-                    validPlacement = False
-                elif (item == 'zap-trap') and (self.logic_defs[locations[0]]['subtype'] == 'npc') and (self.logic_defs[locations[0]]['region'] == 'rapids'):
                     validPlacement = False
                 elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic

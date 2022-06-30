@@ -272,7 +272,6 @@ class Room:
 			# 	newAct.type = 0x244
 			# 	self.actors.append(newAct)
 
-	
 
 	def setSmallKeyParams(self, modelPath, modelName, room, keyIndex=0):
 		keys = list(filter(lambda a: a.type == 0xA9, self.actors))
@@ -280,9 +279,24 @@ class Room:
 		if len(keys) > keyIndex:
 			key = keys[keyIndex]
 			
+			# key.type = 0x88 # GoldenLeaf
 			key.parameters[1] = bytes(modelPath, 'utf-8')
 			key.parameters[2] = bytes(modelName, 'utf-8')
 			key.parameters[3] = bytes(room, 'utf-8')
+	
+
+	def setRupeeParams(self, modelPath, modelName, entryPoint, rupIndex=0):
+		rups = list(filter(lambda a: a.type == 0xAB, self.actors))
+
+		if len(rups) > 0:
+			rup = rups[0] # since we are changing the type, the list of rupees gets smaller, therefore we just get the first rup
+			rup.type = 0x194 # sinking sword
+			rup.parameters[0] = bytes(modelPath, 'utf-8')
+			rup.parameters[1] = bytes(modelName, 'utf-8')
+			rup.parameters[2] = bytes(entryPoint, 'utf-8')
+			rup.parameters[3] = b''
+			rup.parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
+			rup.parameters[5] = bytes('Lv10RupeeGet' if rupIndex == 0 else f'Lv10RupeeGet_{rupIndex + 1}', 'utf-8')
 	
 
 	def setLoadingZoneTarget(self, newDestination, index=0):

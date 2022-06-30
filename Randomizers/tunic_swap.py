@@ -1,27 +1,38 @@
 import Tools.event_tools as event_tools
+from Randomizers import item_get, data
 
 
 
-def writeSwapEvents(flow, greenGetEvent, checkRedEvent, checkBlueEvent):
-    
-    getRedBlue = hasGreenEvent(flow.flowchart, checkRedEvent, checkBlueEvent)
-    getBlueGreen = hasRedEvent(flow.flowchart, checkBlueEvent, greenGetEvent)
-    getRedGreen = hasBlueEvent(flow.flowchart, checkRedEvent, greenGetEvent)
+def writeSwapEvents(flowchart):
+    # telephone needs dialog query 'GetLastResult4' to get dialog result
+    event_tools.addActorQuery(event_tools.findActor(flowchart, 'Dialog'), 'GetLastResult4')
 
-    tunicBlue = event_tools.createSwitchEvent(flow.flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 20}, {0: getRedBlue, 1: getRedGreen})
-    tunicRed = event_tools.createSwitchEvent(flow.flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 19}, {0: tunicBlue, 1: getBlueGreen})
+    greenGet = item_get.insertItemGetAnimation(flowchart, 'ClothesGreen', -1, None, None)
 
-    greeting = event_tools.createActionEvent(flow.flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy7'}, tunicRed)
+    redGet = item_get.insertItemGetAnimation(flowchart, 'ClothesRed', -1, None, None)
+    checkRed = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+    {'symbol': data.RED_TUNIC_FOUND_FLAG}, {0: None, 1: redGet})
 
-    event_tools.insertEventAfter(flow.flowchart, 'Telephone', greeting)
+    blueGet = item_get.insertItemGetAnimation(flowchart, 'ClothesBlue', -1, None, None)
+    checkBlue = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+    {'symbol': data.BLUE_TUNIC_FOUND_FLAG}, {0: None, 1: blueGet})
 
-    fork = event_tools.findEvent(flow.flowchart, 'Event231')
+    getRedBlue = hasGreenEvent(flowchart, checkRed, checkBlue)
+    getBlueGreen = hasRedEvent(flowchart, checkBlue, greenGet)
+    getRedGreen = hasBlueEvent(flowchart, checkRed, greenGet)
+
+    tunicBlue = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 20}, {0: getRedBlue, 1: getRedGreen})
+    tunicRed = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem', {'count': 1, 'itemType': 19}, {0: tunicBlue, 1: getBlueGreen})
+
+    greeting = event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy7'}, tunicRed)
+
+    event_tools.insertEventAfter(flowchart, 'Telephone', greeting)
+
+    fork = event_tools.findEvent(flowchart, 'Event231')
     fork.data.forks.pop(2) # remove the gethints event
 
-    subFlow = event_tools.createSubFlowEvent(flow.flowchart, '', 'Telephone', {}, 'Event113')
-    event_tools.insertEventAfter(flow.flowchart, 'Event98', subFlow)
-
-    return flow
+    subFlow = event_tools.createSubFlowEvent(flowchart, '', 'Telephone', {}, 'Event113')
+    event_tools.insertEventAfter(flowchart, 'Event98', subFlow)
 
 
 
