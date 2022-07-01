@@ -171,12 +171,14 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
         # small_keys.writeSunkenKeyEvent(flow.flowchart)
 
-        models = data.ITEM_MODELS[:]
-        models.append('SmallKey')
-        models.append('NightmareKey')
-        models.append('StoneBeak')
-        models.append('Compass')
-        models.append('DungeonMap')
+        models = data.ITEM_MODELS.copy()
+        models.update({
+            'SmallKey': 'ItemSmallKey.bfres',
+            'NightmareKey': 'ItemNightmareKey.bfres',
+            'StoneBeak': 'ItemStoneBeak.bfres',
+            'Compass': 'ItemCompass.bfres',
+            'DungeonMap': 'ItemDungeonMap.bfres'
+        })
 
         for room in data.SMALL_KEY_ROOMS:
             if self.thread_active:
