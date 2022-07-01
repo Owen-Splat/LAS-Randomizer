@@ -300,7 +300,10 @@ class ModsProcess(QtCore.QThread):
             modelName = self.item_defs[item]['model-name']
         else:
             modelName = random.choice(data.ITEM_MODELS)
-            modelPath = f'Item{modelName}.bfres'
+            if modelName != 'Seashell':
+                modelPath = f'Item{modelName}.bfres'
+            else:
+                modelPath = f'ItemSecretSeashell'
         
         miscellaneous.changeSunkenSword(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
@@ -327,7 +330,10 @@ class ModsProcess(QtCore.QThread):
             modelName = self.item_defs[item]['model-name']
         else:
             modelName = random.choice(data.ITEM_MODELS)
-            modelPath = f'Item{modelName}.bfres'
+            if modelName != 'Seashell':
+                modelPath = f'Item{modelName}.bfres'
+            else:
+                modelPath = f'ItemSecretSeashell'
         
         miscellaneous.changeBirdKey(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
@@ -354,7 +360,10 @@ class ModsProcess(QtCore.QThread):
             modelName = self.item_defs[item]['model-name']
         else:
             modelName = random.choice(data.ITEM_MODELS)
-            modelPath = f'Item{modelName}.bfres'
+            if modelName != 'Seashell':
+                modelPath = f'Item{modelName}.bfres'
+            else:
+                modelPath = f'ItemSecretSeashell'
         
         miscellaneous.changeOcarina(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
@@ -381,7 +390,10 @@ class ModsProcess(QtCore.QThread):
             modelName = self.item_defs[item]['model-name']
         else:
             modelName = random.choice(data.ITEM_MODELS)
-            modelPath = f'Item{modelName}.bfres'
+            if modelName != 'Seashell':
+                modelPath = f'Item{modelName}.bfres'
+            else:
+                modelPath = f'ItemSecretSeashell'
         
         miscellaneous.changeMushroom(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
 
@@ -408,7 +420,10 @@ class ModsProcess(QtCore.QThread):
             modelName = self.item_defs[item]['model-name']
         else:
             modelName = random.choice(data.ITEM_MODELS)
-            modelPath = f'Item{modelName}.bfres'
+            if modelName != 'Seashell':
+                modelPath = f'Item{modelName}.bfres'
+            else:
+                modelPath = f'ItemSecretSeashell'
         
         miscellaneous.changeLens(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room)
         
@@ -1393,8 +1408,11 @@ class ModsProcess(QtCore.QThread):
                     modelName = self.item_defs[item]['model-name']
                 else:
                     modelName = random.choice(data.ITEM_MODELS)
-                    modelPath = f'Item{modelName}.bfres'
-                
+                    if modelName != 'Seashell':
+                        modelPath = f'Item{modelName}.bfres'
+                    else:
+                        modelPath = f'ItemSecretSeashell'
+                    
                 instruments.changeInstrument(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData)
                 
                 if self.thread_active:
@@ -1436,7 +1454,10 @@ class ModsProcess(QtCore.QThread):
                     modelName = self.item_defs[item]['model-name']
                 else:
                     modelName = random.choice(data.ITEM_MODELS)
-                    modelPath = f'Item{modelName}.bfres'
+                    if modelName != 'Seashell':
+                        modelPath = f'Item{modelName}.bfres'
+                    else:
+                        modelPath = f'ItemSecretSeashell'
                 
                 heart_pieces.changeHeartPiece(flow.flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData)
                                 
@@ -1486,7 +1507,10 @@ class ModsProcess(QtCore.QThread):
                 modelName = self.item_defs[item]['model-name']
             else:
                 modelName = random.choice(data.ITEM_MODELS)
-                modelPath = f'Item{modelName}.bfres'
+                if modelName != 'Seashell':
+                    modelPath = f'Item{modelName}.bfres'
+                else:
+                    modelPath = f'ItemSecretSeashell'
 
             roomData.setRupeeParams(modelPath, modelName, f'Lv10Rupee_{i + 1}', i)
             rupees.makeEventChanges(flow.flowchart, i, itemKey, itemIndex)

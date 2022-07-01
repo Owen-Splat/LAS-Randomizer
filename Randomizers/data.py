@@ -332,7 +332,6 @@ ITEM_MODELS = [
     'Flippers',
     'SecretMedicine',
     'Seashell',
-    'SecretSeashell',
     'TailKey',
     'SlimeKey',
     'AnglerKey',
