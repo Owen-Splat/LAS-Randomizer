@@ -361,10 +361,6 @@ ITEM_MODELS = [
     'ThunderDrum',
     'HeartPiece',
     'HeartContainer',
-    'RupeeRed',
-    'RupeePurple',
-    'RupeeSilver',
-    'RupeeGold',
     'Bottle',
     'ShellRader'
 ]
