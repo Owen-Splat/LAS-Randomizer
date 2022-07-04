@@ -3,7 +3,7 @@ import urllib.request as lib
 import urllib.error as urlERROR
 
 
-currentVersion = 0.144
+currentVersion = 0.145
 
 
 

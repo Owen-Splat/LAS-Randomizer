@@ -598,6 +598,8 @@ class ItemShuffler(QtCore.QThread):
                     validPlacement = False
                 elif (item in self.forceChests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     validPlacement = False
+                elif (item == 'zap-trap' and locations[0] == 'D6-pot-chest'):
+                    validPlacement = False
                 elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
                     validPlacement = self.canReachLocation(locations[0], placements, access, logic)

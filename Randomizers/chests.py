@@ -82,3 +82,4 @@ def writeChestEvent(flowchart):
     bombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'}, {0: bombGet, 1: zapCheck})
 
     event_tools.insertEventAfter(flowchart, 'Event32', bombCheck)
+    event_tools.insertEventAfter(flowchart, 'Event28', bombCheck) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest
