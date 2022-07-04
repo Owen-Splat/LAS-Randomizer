@@ -248,29 +248,13 @@ class Room:
 			self.actors.append(Actor(entry.data, self.fixedHash.namesSection))
 
 
-	def setChestContent(self, newContent, room, chestIndex=0):
+	def setChestContent(self, newContent, itemIndex, chestIndex=0):
 		chests = list(filter(lambda a: a.type == 0xF7, self.actors))
 
 		if len(chests) > chestIndex:
 			chest = chests[chestIndex]
-
-			if newContent in ['$ENEMY', '$EXT:MasterStalfonLetter'] or room == 'taltal-5-chest-puzzle':
-				chest.parameters[1] = bytes(newContent, 'utf-8')
-			else:
-				chest.parameters[1] = bytes(f'$EXT:{room}', 'utf-8')
-			
-			chest.parameters[2] = b''
-
-			# if newContent == 'ShadowTrap':
-			# 	actorEntry = list(filter(lambda e: e.name == b'actor', self.fixedHash.entries))[0]
-			# 	newAct = Actor(actorEntry.data.entries[0].data, self.fixedHash.namesSection)
-			# 	newAct.type = 0x21E
-			# 	self.actors.append(newAct)
-
-			# 	actorEntry = list(filter(lambda e: e.name == b'actor', self.fixedHash.entries))[0]
-			# 	newAct = Actor(actorEntry.data.entries[0].data, self.fixedHash.namesSection)
-			# 	newAct.type = 0x244
-			# 	self.actors.append(newAct)
+			chest.parameters[1] = bytes(newContent, 'utf-8')
+			chest.parameters[2] = itemIndex if itemIndex != -1 else b''
 
 
 	def setSmallKeyParams(self, modelPath, modelName, room, keyIndex=0):

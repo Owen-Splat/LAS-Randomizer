@@ -113,9 +113,9 @@ class ModsProcess(QtCore.QThread):
                 
                 if room == 'taltal-5-chest-puzzle':
                     for i in range(5):
-                        roomData.setChestContent(itemKey, room, i)
+                        roomData.setChestContent(itemKey, itemIndex, i)
                 else:
-                    roomData.setChestContent(itemKey, room)
+                    roomData.setChestContent(itemKey, itemIndex)
                 
                 if self.thread_active:
                     with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'wb') as outfile:
@@ -128,7 +128,7 @@ class ModsProcess(QtCore.QThread):
                     with open(f'{self.rom_path}/region_common/level/Lv07EagleTower/Lv07EagleTower_06H.leb', 'rb') as roomfile:
                         roomData = leb.Room(roomfile.read())
 
-                    roomData.setChestContent(itemKey, room)
+                    roomData.setChestContent(itemKey, itemIndex)
                     
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv07EagleTower/Lv07EagleTower_06H.leb', 'wb') as outfile:
@@ -140,18 +140,17 @@ class ModsProcess(QtCore.QThread):
                     with open(f'{self.rom_path}/region_common/level/Lv07EagleTower/Lv07EagleTower_05G.leb', 'rb') as roomfile:
                         roomData = leb.Room(roomfile.read())
 
-                    roomData.setChestContent(itemKey, room)
+                    roomData.setChestContent(itemKey, itemIndex)
                     
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv07EagleTower/Lv07EagleTower_05G.leb', 'wb') as outfile:
                             outfile.write(roomData.repack())
                             self.progress_value += 1 # update progress bar
                             self.progress_update.emit(self.progress_value)
-
-                # write the chest event
-                chests.writeChestEvent(flow, room, itemKey, itemIndex)
-            
+                        
             else: break
+        # write the chest event
+        chests.writeChestEvent(flow.flowchart)
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/TreasureBox.bfevfl', flow)
@@ -171,8 +170,8 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
         # small_keys.writeSunkenKeyEvent(flow.flowchart)
 
-        models = data.ITEM_MODELS.copy()
-        models.update({
+        trapModels = data.ITEM_MODELS.copy()
+        trapModels.update({
             'SmallKey': 'ItemSmallKey.bfres',
             'NightmareKey': 'ItemNightmareKey.bfres',
             'StoneBeak': 'ItemStoneBeak.bfres',
@@ -197,8 +196,8 @@ class ModsProcess(QtCore.QThread):
                     modelPath = self.item_defs[item]['model-path']
                     modelName = self.item_defs[item]['model-name']
                 else:
-                    modelName = random.choice(list(data.ITEM_MODELS))
-                    modelPath = data.ITEM_MODELS[modelName]
+                    modelName = random.choice(list(trapModels))
+                    modelPath = trapModels[modelName]
                 
                 small_keys.writeKeyEvent(flow.flowchart, itemKey, itemIndex, room)
                 roomData.setSmallKeyParams(modelPath, modelName, room)
@@ -1478,6 +1477,15 @@ class ModsProcess(QtCore.QThread):
         with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_08D.leb', 'rb') as file:
             roomData = leb.Room(file.read())
         
+        trapModels = data.ITEM_MODELS.copy()
+        trapModels.update({
+            'SmallKey': 'ItemSmallKey.bfres',
+            'NightmareKey': 'ItemNightmareKey.bfres',
+            'StoneBeak': 'ItemStoneBeak.bfres',
+            'Compass': 'ItemCompass.bfres',
+            'DungeonMap': 'ItemDungeonMap.bfres'
+        })
+
         for i in range(28):
             item = self.placements[f'D0-Rupee-{i + 1}']
             itemKey = self.item_defs[item]['item-key']
@@ -1487,8 +1495,8 @@ class ModsProcess(QtCore.QThread):
                 modelPath = self.item_defs[item]['model-path']
                 modelName = self.item_defs[item]['model-name']
             else:
-                modelName = random.choice(list(data.ITEM_MODELS))
-                modelPath = data.ITEM_MODELS[modelName]
+                modelName = random.choice(list(trapModels))
+                modelPath = trapModels[modelName]
 
             roomData.setRupeeParams(modelPath, modelName, f'Lv10Rupee_{i + 1}', i)
             rupees.makeEventChanges(flow.flowchart, i, itemKey, itemIndex)
