@@ -4,19 +4,16 @@ from Randomizers import item_get, data
 
 
 def writeChestEvent(flowchart):
-    spinAnim = event_tools.createActionChain(flowchart, None, [
-        ('Link', 'RequestSwordRolling', {}),
-        ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
-    ])
+    """Writes an itemKey comparision and itemGet chain and connects it to the chest open events"""
 
-    swordFlagCheck = event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, None, spinAnim)
-    swordContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SwordLv1'}, {0: swordFlagCheck, 1: 'Event33'})
+    swordGet = item_get.insertItemGetAnimation(flowchart, 'SwordLv1', -1 , None, None)
+    swordContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SwordLv1'}, {0: swordGet, 1: 'Event33'})
     
-    shieldFlagCheck = event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield', data.SHIELD_FOUND_FLAG, None, None)
-    shieldContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Shield'}, {0: shieldFlagCheck, 1: swordContentCheck})
+    shieldGet = item_get.insertItemGetAnimation(flowchart, 'Shield', -1, None, None)
+    shieldContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Shield'}, {0: shieldGet, 1: swordContentCheck})
 
-    braceletFlagCheck = event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', data.BRACELET_FOUND_FLAG, None, None)
-    braceletContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'PowerBraceletLv1'}, {0: braceletFlagCheck, 1: shieldContentCheck})
+    braceletGet = item_get.insertItemGetAnimation(flowchart, 'PowerBraceletLv1', -1, None, None)
+    braceletContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'PowerBraceletLv1'}, {0: braceletGet, 1: shieldContentCheck})
 
     powderCapacityGet = item_get.insertItemGetAnimation(flowchart, 'MagicPowder_MaxUp', -1, None, None)
     powderCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'MagicPowder_MaxUp'}, {0: powderCapacityGet, 1: braceletContentCheck})
@@ -81,5 +78,13 @@ def writeChestEvent(flowchart):
     bombGet = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, None)
     bombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'}, {0: bombGet, 1: zapCheck})
 
-    event_tools.insertEventAfter(flowchart, 'Event32', bombCheck)
-    event_tools.insertEventAfter(flowchart, 'Event28', bombCheck) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest
+    boxClose = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)
+    medicineGet = event_tools.createActionChain(flowchart, None, [
+        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keeyCarry': False, 'messageEntry': 'SecretMedicine2'}),
+        ('Link', 'Heal', {'amount': 99}),
+        ('TreasureBox', 'SetActorSwitch', {'switchIndex': 1, 'value': False})
+    ], boxClose)
+    medicineCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SecretMedicine'}, {0: medicineGet, 1: bombCheck})
+
+    event_tools.insertEventAfter(flowchart, 'Event32', medicineCheck)
+    event_tools.insertEventAfter(flowchart, 'Event28', medicineCheck) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest

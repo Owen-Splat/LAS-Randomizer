@@ -4,7 +4,8 @@ from Randomizers import data
 
 
 def makeConditions(sheet, placements):
-    # Create new condition sets for the seashell sensor to work with Dampe, Rapids guy, Fishing Guy, and Seashell mansion
+    """Create new condition sets for the seashell sensor to work with Dampe, Rapids guy, Fishing Guy, and Seashell mansion"""
+
     dampeCondition = oead_tools.createCondition('DampeShellsComplete', [(9, 'true')])
     dampeLocations = ['dampe-page-1', 'dampe-heart-challenge', 'dampe-page-2', 'dampe-bottle-challenge', 'dampe-final']
     for location in dampeLocations:
@@ -36,6 +37,8 @@ def makeConditions(sheet, placements):
 
 
 def editConditions(condition, placements):
+    """Makes needed changes to conditions, such as making Marin staying in Mabe and the shop not sell shields until you find one"""
+    
     # Make sure Marin always stays in the village even if you trade for the pineapple
     if condition['symbol'] == 'MarinVillageStay':
         condition['conditions'].pop(1)

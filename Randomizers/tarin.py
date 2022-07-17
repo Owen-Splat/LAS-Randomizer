@@ -3,6 +3,8 @@ import Tools.event_tools as event_tools
 
 
 def makeEventChanges(flow, placements):
+    """Edits Tarin to detain you based on if you talked to him rather than on having shield"""
+    
     # If reduce-farming is on, and Tarin has boots, also give 20 bombs if Tarin has boots
     if placements['tarin'] == 'boots' and placements['settings']['reduce-farming'] and not placements['settings']['shuffle-bombs']:
         event_tools.createActionChain(flow.flowchart, 'Event31', [

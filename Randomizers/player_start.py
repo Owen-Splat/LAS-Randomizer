@@ -4,6 +4,9 @@ from Randomizers import data
 
 
 def makeStartChanges(flow, placements):
+    """Sets a bunch of flags when you leave the house for the first time, 
+    including Owl cutscenes watched, Walrus Awakened, and some flags specific to settings"""
+
     playerStartFlagsFirstEvent = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': 'FirstClear', 'value': True})
     playerStartFlagCheckEvent = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag', {'symbol': 'FirstClear'}, {0: playerStartFlagsFirstEvent, 1: None})
 

@@ -26,9 +26,9 @@ def changeSunkenSword(flowchart, itemKey, itemIndex, modelPath, modelName, room)
     room.actors[4].parameters[0] = bytes('ObjSinkingSword.bfres' if itemKey == 'SwordLv1' else modelPath, 'utf-8')
     room.actors[4].parameters[1] = bytes('SinkingSword' if itemKey == 'SwordLv1' else modelName, 'utf-8')
     room.actors[4].parameters[2] = bytes('examine', 'utf-8')
-    room.actors[4].parameters[3] = b''
-    room.actors[4].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
-    room.actors[4].parameters[5] = bytes('SwordGet', 'utf-8')
+    # room.actors[4].parameters[3] = b''
+    # room.actors[4].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
+    room.actors[4].parameters[3] = bytes('SwordGet', 'utf-8')
 
 
 
@@ -48,12 +48,12 @@ def changeBirdKey(flowchart, itemKey, itemIndex, modelPath, modelName, room):
     ], itemGet)
 
     room.actors[0].type = 0x194 # sinking sword
-    room.actors[0].parameters[0] = bytes(modelPath, 'utf-8')
-    room.actors[0].parameters[1] = bytes(modelName, 'utf-8')
+    room.actors[0].parameters[0] = bytes('ObjSinkingSword.bfres' if itemKey == 'SwordLv1' else modelPath, 'utf-8')
+    room.actors[0].parameters[1] = bytes('SinkingSword' if itemKey == 'SwordLv1' else modelName, 'utf-8')
     room.actors[0].parameters[2] = bytes('TalTal', 'utf-8')
-    room.actors[0].parameters[3] = b''
-    room.actors[0].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
-    room.actors[0].parameters[5] = bytes(data.ROOSTER_CAVE_FLAG, 'utf-8')
+    # room.actors[0].parameters[3] = b''
+    # room.actors[0].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
+    room.actors[0].parameters[3] = bytes(data.ROOSTER_CAVE_FLAG, 'utf-8')
 
 
 
@@ -73,8 +73,8 @@ def changeOcarina(flowchart, itemKey, itemIndex, modelPath, modelName, room):
     ], itemGet)
 
     room.actors[5].type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
-    room.actors[5].parameters[0] = bytes(modelPath, 'utf-8')
-    room.actors[5].parameters[1] = bytes(modelName, 'utf-8')
+    room.actors[5].parameters[0] = bytes('ObjSinkingSword.bfres' if itemKey == 'SwordLv1' else modelPath, 'utf-8')
+    room.actors[5].parameters[1] = bytes('SinkingSword' if itemKey == 'SwordLv1' else modelName, 'utf-8')
     room.actors[5].parameters[2] = bytes('DreamShrine', 'utf-8')
     room.actors[5].parameters[3] = bytes(data.DREAM_SHRINE_FLAG, 'utf-8')
 
@@ -96,12 +96,12 @@ def changeMushroom(flowchart, itemKey, itemIndex, modelPath, modelName, room):
     ], itemGet)
 
     room.actors[3].type = 0x194 # sinking sword
-    room.actors[3].parameters[0] = bytes(modelPath, 'utf-8')
-    room.actors[3].parameters[1] = bytes(modelName, 'utf-8')
+    room.actors[3].parameters[0] = bytes('ObjSinkingSword.bfres' if itemKey == 'SwordLv1' else modelPath, 'utf-8')
+    room.actors[3].parameters[1] = bytes('SinkingSword' if itemKey == 'SwordLv1' else modelName, 'utf-8')
     room.actors[3].parameters[2] = bytes('Woods', 'utf-8')
-    room.actors[3].parameters[3] = b''
-    room.actors[3].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
-    room.actors[3].parameters[5] = bytes(data.WOODS_LOOSE_FLAG, 'utf-8')
+    # room.actors[3].parameters[3] = b''
+    # room.actors[3].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
+    room.actors[3].parameters[3] = bytes(data.WOODS_LOOSE_FLAG, 'utf-8')
 
 
 
@@ -121,12 +121,12 @@ def changeLens(flowchart, itemKey, itemIndex, modelPath, modelName, room):
     ], itemGet)
 
     room.actors[7].type = 0x194 # sinking sword
-    room.actors[7].parameters[0] = bytes(modelPath, 'utf-8')
-    room.actors[7].parameters[1] = bytes(modelName, 'utf-8')
+    room.actors[7].parameters[0] = bytes('ObjSinkingSword.bfres' if itemKey == 'SwordLv1' else modelPath, 'utf-8')
+    room.actors[7].parameters[1] = bytes('SinkingSword' if itemKey == 'SwordLv1' else modelName, 'utf-8')
     room.actors[7].parameters[2] = bytes('MermaidCave', 'utf-8')
-    room.actors[7].parameters[3] = b''
-    room.actors[7].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
-    room.actors[7].parameters[5] = bytes(data.MERMAID_CAVE_FLAG, 'utf-8')
+    # room.actors[7].parameters[3] = b''
+    # room.actors[7].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
+    room.actors[7].parameters[3] = bytes(data.MERMAID_CAVE_FLAG, 'utf-8')
 
 
 
@@ -143,8 +143,8 @@ def changeLens(flowchart, itemKey, itemIndex, modelPath, modelName, room):
 #     room.actors[42].parameters[0] = bytes(modelPath, 'utf-8')
 #     room.actors[42].parameters[1] = bytes(modelName, 'utf-8')
 #     room.actors[42].parameters[2] = bytes('Pothole', 'utf-8')
-#     room.actors[42].parameters[3] = bytes('false', 'utf-8') # do not let the player grab by pressing A
-#     room.actors[42].parameters[4] = bytes(data.POTHOLE_FLAG, 'utf-8')
-#     room.actors[42].parameters[5] = bytes('!Shovel', 'utf-8')
+#     # room.actors[42].parameters[3] = bytes('false', 'utf-8') # do not let the player grab by pressing A
+#     # room.actors[42].parameters[4] = bytes(data.POTHOLE_FLAG, 'utf-8')
+#     room.actors[42].parameters[3] = bytes('!Shovel', 'utf-8')
     
 #     room.actors[42].Z += int(393216)

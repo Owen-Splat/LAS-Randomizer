@@ -3,6 +3,8 @@ import Tools.event_tools as event_tools
 
 
 def makeEventChanges(flow):
+    """Removes the event that gives Ballad and edits other events to check if you got the 'song'"""
+
     fork = event_tools.findEvent(flow.flowchart, 'Event249')
     fork.data.forks.pop(0)
     event_tools.insertEventAfter(flow.flowchart, 'Event27', 'Event249')

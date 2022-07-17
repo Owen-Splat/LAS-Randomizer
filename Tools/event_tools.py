@@ -2,12 +2,15 @@ import evfl
 
 idgen = evfl.util.IdGenerator()
 
-# Converts a list into a dict of {value: index} pairs
+
 def invertList(l):
+	"""Converts a list into a dict of {value: index} pairs"""
 	return {l[i]: i for i in range(len(l))}
 
 
 def readFlow(evflFile):
+	"""Reads the flow from the eventflow file and returns it"""
+	
 	flow = evfl.EventFlow()
 	with open(evflFile, 'rb') as file:
 		flow.read(file.read())
@@ -16,11 +19,14 @@ def readFlow(evflFile):
 
 
 def writeFlow(evflFile, flow):
+	"""Writes the given flow to a new eventflowfile"""
 	with open(evflFile, 'wb') as modified_file:
 		flow.write(modified_file)
 
-# Find and return an event from a flowchart given a name as a string. Return None if not found.
+
 def findEvent(flowchart, name):
+	"""Finds and returns an event from a flowchart given a name as a string. Returns None if not found"""
+
 	if name == None:
 		return
 
@@ -30,8 +36,10 @@ def findEvent(flowchart, name):
 
 	return None
 
-# Find and return an entry point from a flowchart given a name as a string. Return None if not found.
+
 def findEntryPoint(flowchart, name):
+	"""Finds and returns an entry point from a flowchart given a name as a string. Returns None if not found"""
+
 	if name == None:
 		return
 
@@ -41,8 +49,10 @@ def findEntryPoint(flowchart, name):
 
 	return None
 
+
 def findActor(flowchart, name, subName=None):
-	
+	"""Finds and returns an actor from a flowchart given a name and an optional subName as a string"""
+
 	if subName != None:
 		act = evfl.ActorIdentifier(name, subName)
 	else:
@@ -50,18 +60,27 @@ def findActor(flowchart, name, subName=None):
 
 	return flowchart.find_actor(act)
 
+
 def addActorAction(actor, action):
+	"""Appends an action to the actor in the flowchart"""
 	actor.actions.append(evfl.common.StringHolder(action))
 
+
 def addActorQuery(actor, action):
+	"""Appends a query to an actor in the flowchart"""
 	actor.queries.append(evfl.common.StringHolder(action))
 
+
 def addEntryPoint(flowchart, name):
+	"""Appends an entry point to the flowchart"""
 	flowchart.entry_points.append(evfl.entry_point.EntryPoint(name))
 
-# Change the previous event or entry point to have {new} be the next event. {previous} is the name of the event/entry point, {new} is the name of the event to add
-# Return True if any event or entry point was modified and False if not
+
 def insertEventAfter(flowchart, previous, new):
+	"""Change the previous event or entry point to have {new} be the next event 
+	{previous} is the name of the event/entry point, {new} is the name of the event to add 
+	Return True if any event or entry point was modified and False if not"""
+
 	newEvent = findEvent(flowchart, new)
 
 	prevEvent = findEvent(flowchart, previous)
@@ -81,6 +100,8 @@ def insertEventAfter(flowchart, previous, new):
 
 
 def setSwitchEventCase(flowchart, switch, case, new):
+	"""Changes the specified case in a switch event into the new event"""
+
 	newEvent = findEvent(flowchart, new)
 
 	switchEvent = findEvent(flowchart, switch)
@@ -92,8 +113,10 @@ def setSwitchEventCase(flowchart, switch, case, new):
 
 	return False
 
-# Removes the next event from the specified event, so that there is nothing after it in the flow.
+
 def removeEventAfter(flowchart, eventName):
+	"""Removes the next event from the specified event, so that there is nothing after it in the flow"""
+
 	event = findEvent(flowchart, eventName)
 	if not event:
 		print('Not an event!')
@@ -104,6 +127,8 @@ def removeEventAfter(flowchart, eventName):
 
 
 def insertActionChain(flowchart, before, events):
+	"""Inserts a chain of action events after a specified event. Returns if there are no events in the chain"""
+
 	if len(events) == 0:
 		return
 
@@ -113,9 +138,9 @@ def insertActionChain(flowchart, before, events):
 		insertEventAfter(flowchart, events[i-1], events[i])
 
 
-# Create a series of action events in order after {before} and followed by {after}.
-# Return the name of the first event in the chain.
 def createActionChain(flowchart, before, eventDefs, after=None):
+	"""Create a series of action events in order after {before} and followed by {after} 
+	Return the name of the first event in the chain"""
 	if len(eventDefs) == 0:
 		return
 
@@ -132,8 +157,9 @@ def createActionChain(flowchart, before, eventDefs, after=None):
 	return first
 
 
-# Create a switch event leading to getting one of two options depending on whether a flag was set beforehand
-def createProgressiveItemSwitch(flowchart, item1, item2, flag, before=None, after=None):
+def createProgressiveItemSwitch(flowchart, item1, item2, flag, flag2=None, before=None, after=None):
+	"""Create a switch event leading to getting one of two options depending on whether a flag was set beforehand"""
+
 	item1GetSeqEvent = createActionEvent(flowchart, 'Link', 'GenericItemGetSequenceByKey', {'itemKey': item1, 'keepCarry': False, 'messageEntry': ''}, after)
 	item1AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey', {'itemKey': item1, 'count': 1, 'index': -1, 'autoEquip': False}, item1GetSeqEvent)
 
@@ -142,16 +168,20 @@ def createProgressiveItemSwitch(flowchart, item1, item2, flag, before=None, afte
 
 	flagSetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': flag, 'value': True}, item1AddEvent)
 
-	flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: item2AddEvent})
+	if flag2:
+		flag2SetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': flag2, 'value': True}, item2AddEvent)
+		flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: flag2SetEvent})
+	else:
+		flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: item2AddEvent})
 
 	insertEventAfter(flowchart, before, flagCheckEvent)
 
 	return flagCheckEvent
 
 
-# Creates a new action event. {actor} and {action} should be strings, {params} should be a dict.
-# {nextev} is the name of the next event.
 def createActionEvent(flowchart, actor, action, params, nextev=None):
+	"""Creates a new action event. {actor} and {action} should be strings, {params} should be a dict 
+	{nextev} is the name of the next event"""
 	nextEvent = findEvent(flowchart, nextev)
 
 	if '[' in actor:
@@ -179,9 +209,10 @@ def createActionEvent(flowchart, actor, action, params, nextev=None):
 	return new.name
 
 
-# Creates a new switch event and adds it to the flowchart
-# {actor} and {query} should be strings, {params} should be a dict, {cases} is a dict if {int: event name}
 def createSwitchEvent(flowchart, actor, query, params, cases):
+	"""Creates a new switch event and adds it to the flowchart 
+	{actor} and {query} should be strings, {params} should be a dict, {cases} is a dict if {int: event name}"""
+
 	new = evfl.event.Event()
 	new.data = evfl.event.SwitchEvent()
 	new.data.actor = evfl.util.make_rindex(flowchart.find_actor(evfl.common.ActorIdentifier(actor)))
@@ -205,9 +236,10 @@ def createSwitchEvent(flowchart, actor, query, params, cases):
 	return new.name
 
 
-# Creates a new subflow event and insert it into the flow.
-# {nextev} is the name of the next event.
 def createSubFlowEvent(flowchart, refChart, entryPoint, params, nextev=None):
+	"""Creates a new subflow event and insert it into the flow 
+	{nextev} is the name of the next event"""
+
 	nextEvent = findEvent(flowchart, nextev)
 
 	new = evfl.event.Event()
@@ -226,8 +258,9 @@ def createSubFlowEvent(flowchart, refChart, entryPoint, params, nextev=None):
 	return new.name
 
 
-# Creates a new fork event and inserts it into the flow
 def createForkEvent(flowchart, before, forks, nextev=None):
+	"""Creates a new fork event and inserts it into the flow"""
+
 	new = evfl.event.Event()
 	new.data = evfl.event.ForkEvent()
 
@@ -253,8 +286,9 @@ def createForkEvent(flowchart, before, forks, nextev=None):
 	return new.name, joinEvent.name
 
 
-# creates a new join event and inserts it into the flow
 def createJoinEvent(flowchart, nextev=None):
+	"""creates a new join event and inserts it into the flow"""
+
 	nextEvent = findEvent(flowchart, nextev)
 
 	new = evfl.event.Event()
@@ -267,3 +301,34 @@ def createJoinEvent(flowchart, nextev=None):
 		new.data.nxt.set_index(invertList(flowchart.events))
 
 	return new
+
+
+def setForkEventFork(flowchart, forkevent, fork, new):
+	"""Changes the specified fork in the forkevent to be {new}"""
+
+	newEvent = findEvent(flowchart, new)
+
+	forkEvent = findEvent(flowchart, forkevent)
+	if forkEvent:
+		forkEvent.data.forks[forkEvent.data.forks.index(fork)].v = newEvent
+		forkEvent.data.forks[forkEvent.data.forks.index(fork)].set_index(invertList(flowchart.events))
+
+		return True
+
+	return False
+
+
+def addForkEventForks(flowchart, forkevent, forks):
+	"""Adds new forks to the forkevent"""
+
+	forkEvent = findEvent(flowchart, forkevent)
+
+	forkEvents = forkEvent.data.forks
+	for branch in forks:
+		ev = findEvent(flowchart, branch)
+		if ev:
+			fork = evfl.util.make_rindex(ev)
+			fork.set_index(invertList(flowchart.events))
+			forkEvents.append(fork)
+	
+	forkEvent.data.forks = forkEvents

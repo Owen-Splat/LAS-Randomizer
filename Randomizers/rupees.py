@@ -4,6 +4,8 @@ from Randomizers import item_get
 
 
 def makeEventChanges(flowchart, rupIndex, itemKey, itemIndex):
+    """Adds an entry point to the flowchart for each rupee, and inserts the ItemGetAnimation event into it"""
+    
     event_tools.addEntryPoint(flowchart, f'Lv10Rupee_{rupIndex + 1}')
 
     # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation

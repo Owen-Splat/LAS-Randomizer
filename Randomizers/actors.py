@@ -5,6 +5,8 @@ import Tools.event_tools as event_tools
 # Ensure that the flowchart has the AddItemByKey and GenericItemGetSequenceByKey actions, and the EventFlags actor
 # with the SetFlag and CheckFlag action/query.
 def addNeededActors(flowchart, rom_path):
+    """Ensures that the event flowchart has all the needed data by adding what is missing"""
+    
     try:
         event_tools.findActor(flowchart, 'Inventory')
     except ValueError:
@@ -88,7 +90,28 @@ def addNeededActors(flowchart, rom_path):
     except ValueError:
         event_tools.addActorQuery(event_tools.findActor(flowchart, 'EventFlags'), 'CheckFlag')
     
-    # extra needed actors for instrument level jump
+    try:
+        event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJump')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJump')
+        
+    # hud event actors so the player's hearts update while getting zapped
+    try:
+        event_tools.findActor(flowchart, 'Hud')
+    except ValueError:
+        hudActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopKeeper.bfevfl').flowchart, 'Hud')
+        flowchart.actors.append(hudActor)
+
+    try:
+        event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Hud'), 'SetHeartUpdateEnable')
+
+
+
+def addInstumentFadeActors(flowchart, rom_path):
+    """Ensures that the flowchart has the needed actors for the instument fade and warp events"""
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayInstrumentShineEffect')
     except ValueError:
@@ -127,57 +150,3 @@ def addNeededActors(flowchart, rom_path):
     except ValueError:
         timeActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Timer')
         flowchart.actors.append(timeActor)
-    
-    try:
-        event_tools.findActor(flowchart, 'Hud')
-    except ValueError:
-        hudActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopKeeper.bfevfl').flowchart, 'Hud')
-        flowchart.actors.append(hudActor)
-
-    try:
-        event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'Hud'), 'SetHeartUpdateEnable')
-    
-    # ####################################################################################################################################
-    # # Shadow Link
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink')
-    # except ValueError:
-    #     shadowActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ShadowLink.bfevfl').flowchart, 'ShadowLink')
-    #     flowchart.actors.append(shadowActor)
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('PopStart')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'PopStart')
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('LookAtCharacter')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'LookAtCharacter')
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('AimCompassPoint')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'AimCompassPoint')
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('PlayAnimation')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'PlayAnimation')
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('PlayTailorOtherChannelEx')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'PlayTailorOtherChannelEx')
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('ModelVisibility')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'ModelVisibility')
-
-    # try:
-    #     event_tools.findActor(flowchart, 'ShadowLink').find_action('SetActorSwitch')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'ShadowLink'), 'SetActorSwitch')

@@ -41,7 +41,7 @@ animal-village-cave:
   index: 8
   region: animal-village
   spoiler-region: animal-village
-  condition-basic: break-bush & bombs & hookshot
+  condition-basic: break-bush & bombs & ((hookshot & feather) | rooster)
 christine-trade:
   type: item
   subtype: npc
@@ -327,6 +327,7 @@ dream-shrine-left:
   region: dream-shrine
   spoiler-region: mabe-village
   condition-basic: break-obstacle & kill-arm-mimic
+  condition-glitched: kill-arm-mimic & feather 
 mabe-bushes:
   type: item
   subtype: hidden
@@ -673,6 +674,8 @@ mad-batter-bay:
   spoiler-region: marthas-bay
   condition-basic: (((rooster | feather) & (boomerang | rod)) | (feather & sword)) & cross-water & powder
   condition-advanced: (feather | rooster) & cross-water & powder
+  condition-glitched: plains & rooster & powder & ocarina & song-mambo
+  condition-death: plains & rooster & powder
 bay-passage-sunken:
   type: item
   subtype: underwater
@@ -711,8 +714,10 @@ kanalet-south-cave:
   index: 24
   region: plains
   spoiler-region: ukuku-prairie
-  condition-basic: hookshot & (flippers | (ocarina & song-mambo))
+  condition-basic: rooster | (hookshot & (flippers | (ocarina & song-mambo)))
   condition-advanced: hookshot & (feather | bombs)
+  condition-glitched: wasteland & feather & bracelet & (flippers | (ocarina & song-mambo))
+  condition-death: wasteland & feather & bracelet
 plains-rock-maze:
   type: item
   subtype: hidden
@@ -872,14 +877,16 @@ mamu:
   content: song-soul
   region: sign-maze
   spoiler-region: sign-maze
-  condition-basic: hookshot & ocarina & can-farm-rupees
+  condition-basic: (hookshot | rooster) & ocarina & can-farm-rupees
 swamp-chest:
   type: item
   subtype: chest
   content: rupee-50
   region: swamp
   spoiler-region: goponga-swamp
-  condition-basic: kill-flower
+  condition-basic: kill-big-flower
+  condition-glitched: mabe & (boots | feather) & ocarina & song-mambo
+  condition-death: mabe & (boots | feather)
 taltal-left-ascent-cave:
   type: item
   subtype: chest
@@ -1130,6 +1137,7 @@ woods-south-chest:
   region: woods
   spoiler-region: mysterious-woods
   condition-basic: bracelet
+  condition-death: mabe & swamp & feather
 woods-north-chest:
   type: item
   subtype: chest
@@ -1263,7 +1271,7 @@ D2-instrument:
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-4G & kill-genie
-  condition-glitched: D2-4G & feather & boots & sword
+  # condition-glitched: D2-4G & feather & boots & sword
 D2-genie:
   type: item
   subtype: boss
@@ -2337,13 +2345,14 @@ beach:
 bottle-grotto:
   type: region
   condition-basic: swamp & (kill-flower | bracelet)
-  condition-glitched: mabe & swamp
+  condition-death: mabe & swamp & feather
 bridge:
   type: region
   condition-basic: plains | (river & cross-water)
 catfish-maw:
   type: region
   condition-basic: river & flippers
+  condition-death: river & rooster & feather
 color-dungeon:
   type: region
   condition-basic: wasteland & bracelet
@@ -2353,7 +2362,7 @@ desert:
 dream-shrine:
   type: region
   condition-basic: mabe & bracelet
-  condition-glitched: woods & break-bush & dash-jump & bombs
+  condition-death: mabe & swamp & feather # woods & break-bush & dash-jump & bombs
 eagle-tower:
   type: region
   condition-basic: taltal-east-2 & ((feather & hookshot) | rooster) & bird-key & bracelet
@@ -2383,20 +2392,25 @@ kanalet-inside:
 key-cavern:
   type: region
   condition-basic: plains & (feather | cross-water) & slime-key
+  condition-glitched: plains & rooster
 mabe:
   type: region
 mr-write-house:
   type: region
   condition-basic: (swamp & (feather | rooster | hookshot)) | taltal-west-1 | taltal-west-2
+  condition-death: mabe & swamp
 plains:
   type: region
   condition-basic: (mabe & bracelet) | river | (wasteland & bracelet)
+  condition-death: mabe & swamp & feather
 pothole:
   type: region
   condition-basic: plains & golden-leaf:5
+  condition-glitched: plains & rooster
 rapids:
   type: region
   condition-basic: (heights & hookshot) | ((river | (armos-maze & bracelet)) & cross-water)
+  condition-death: plains & dash-jump & hookshot
 river:
   type: region
   condition-basic: (cross-water & (plains | bridge | animal-village | rapids)) | (taltal-river & flippers)
@@ -2406,6 +2420,8 @@ sale-house:
 sign-maze:
   type: region
   condition-basic: plains & (hookshot | rooster)
+  condition-glitched: mabe & swamp & dash-jump & ocarina & song-mambo
+  condition-death: mabe & swamp & dash-jump
 swamp:
   type: region
   condition-basic: (woods & break-bush & (powder | feather | rooster)) | (wasteland & bracelet) | (mr-write-house & (feather | rooster | hookshot))
@@ -2447,6 +2463,7 @@ trendy:
 turtle-rock:
   type: region
   condition-basic: taltal-west-2 & ocarina & song-soul & kill-turtle-rock
+  condition-glitched: taltal-west-2 & rooster & bombs & dash # requires the dash noclip setup since timing bomb flashes sucks
 wasteland:
   type: region
   condition-basic: (woods & (feather | bracelet | rooster | hookshot)) | (taltal-east-0 & (break-obstacle | rooster) & bracelet) | (heights & bracelet) | (swamp & bracelet) | (plains & bracelet)
@@ -2552,7 +2569,8 @@ D6-5D:
 D6-8D:
   type: room
   condition-basic: (river & face-key & (hookshot | rooster)) | (D6-3A & ((ocarina & song-mambo) | bombs | shoot-arrows | boomerang | rod))
-  condition-glitched: armos-maze & bracelet & feather & sword & boots & face-key
+  condition-glitched: armos-maze & bracelet & feather & sword & boots & face-key & ocarina & song-mambo
+  condition-death: armos-maze & bracelet & feather & sword & boots & face-key
 
 D7-2F:
   type: room
@@ -2901,31 +2919,31 @@ kill-nightmare:
   type: enemy
   condition-basic: egg & (magnifying-lens | free-book) & kill-nightmare-zol & kill-nightmare-agahnim & kill-nightmare-moldorm & kill-nightmare-ganon & kill-nightmare-lanmola & kill-dethl
 
-# Logic Tricks
-feather-skewing:
-  type: trick
-  condition-glitched: feather & sword & hookshot
-bomb-skewing:
-  type: trick
-  condition-glitched: bombs & sword & hookshot
-shovel-skewing:
-  type: trick
-  condition-glitched: shovel & sword & hookshot
-power-skewing:
-  type: trick
-  condition-glitched: bracelet & sword & hookshot
-dash-skewing:
-  type: trick
-  condition-glitched: boots & sword & hookshot
-early-ocarina:
-  type: trick
-  condition-glitched: feather & (sword | rod | boomerang)
-wall-riding:
-  type: trick
-  condition-glitched: boots & feather & (sword | rod | boomerang)
-wall-bomb-hover:
-  type: trick
-  condition-glitched: boots & feather & (sword | rod | boomerang) & bombs
-seam-walking:
-  type: trick
+# # Logic Tricks
+# feather-skewing:
+#   type: trick
+#   condition-glitched: feather & sword & hookshot
+# bomb-skewing:
+#   type: trick
+#   condition-glitched: bombs & sword & hookshot
+# shovel-skewing:
+#   type: trick
+#   condition-glitched: shovel & sword & hookshot
+# power-skewing:
+#   type: trick
+#   condition-glitched: bracelet & sword & hookshot
+# dash-skewing:
+#   type: trick
+#   condition-glitched: boots & sword & hookshot
+# early-ocarina:
+#   type: trick
+#   condition-glitched: feather & (sword | rod | boomerang)
+# wall-riding:
+#   type: trick
+#   condition-glitched: boots & feather & (sword | rod | boomerang)
+# wall-bomb-hover:
+#   type: trick
+#   condition-glitched: boots & feather & (sword | rod | boomerang) & bombs
+# seam-walking:
+#   type: trick
 ...

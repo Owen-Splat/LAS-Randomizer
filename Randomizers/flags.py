@@ -1,4 +1,6 @@
 def makeFlags(sheet):
+    """Appends new flags to the GlobalFlags datasheet to use for the Heart Pieces, Instruments, and Trade Items"""
+    
     sheet['values'].append({'symbol': 'AnimalVillageHeartGet', 'index': 1119})
     sheet['values'].append({'symbol': 'AnimalVillageCaveHeartGet', 'index': 1120})
     sheet['values'].append({'symbol': 'TaltalEntranceBlocksHeartGet', 'index': 1121})

@@ -5,6 +5,10 @@ from Randomizers import data
 
 
 def makeNpcChanges(npcSheet, placements):
+    """Makes lots of changes to the Npc datasheet to make this randomizer work, 
+    ranging from event triggers to layout conditions to even graphics changes. 
+    Also makes the shell sensor go off if the Npc holds a seashell"""
+    
     for npc in npcSheet['values']:
         if npc['symbol'] == 'NpcMadBatter':
             npc['eventTriggers'][0]['entryPoint'] = '$2'
@@ -26,7 +30,7 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['model'] = '$2'
             npc['eventTriggers'][2]['entryPoint'] = '$3'
         
-        if npc['symbol'] == 'ItemYoshiDoll':
+        if npc['symbol'] == 'ItemYoshiDoll': # This is for Ocarina and Instruments since I still want the player to press A to get them
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
             npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
@@ -56,11 +60,11 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['model'] = '$1'
             npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
-            npc['eventTriggers'].append(oead_tools.createEventTrigger(2, [(2, '$3')], '$2')) # require flippers for sunken ones
-            npc['eventTriggers'].append(oead_tools.createEventTrigger(2, [(9, '$4')], '$2')) # true/false
-            npc['layoutConditions'][0]['parameter'] = '$5'
-            npc['layoutConditions'][0]['layoutID'] = 1
-            # npc['layoutConditions'].append({'category': 2, 'parameter': '$6', 'layoutID': -1})
+            npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
+            npc['layoutConditions'][0]['parameter'] = '$3'
+            # npc['collision']['traits'] = 'HeartPiece'
+            # npc['collision']['isStatic'] = False
+            # npc['collision']['filter'] = 7
         
         if npc['symbol'] == 'ObjRoosterBones':
             npc['layoutConditions'].pop(0)

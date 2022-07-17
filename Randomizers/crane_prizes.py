@@ -2,10 +2,12 @@ from Randomizers import data
 
 
 
-def makeDatasheetChanges(sheet):
+def makeDatasheetChanges(sheet, placements):
+    """Edits conditions in the Trendy prizes datasheet. Trendy is not randomized yet"""
+    
     for cranePrize in sheet['values']:
         # Bombs should not be obtainable until you have bombs
-        if cranePrize['symbol'] == 'Bomb':
+        if cranePrize['symbol'] == 'Bomb' and placements['settings']['shuffle-bombs']:
             cranePrize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
         # Shield should not be obtainable until you find your first shield
         if cranePrize['symbol'] == 'Shield':

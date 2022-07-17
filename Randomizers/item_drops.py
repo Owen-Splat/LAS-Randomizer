@@ -5,6 +5,8 @@ import oead
 
 
 def makeDatasheetChanges(sheet, placements):
+    """Iterates through all the values in the ItemDrop datasheet and makes changes"""
+    
     for i in range(len(sheet['values'])):
 
         # sheet['values'][i]['conditions'] = oead.gsheet.StructArray()

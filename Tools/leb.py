@@ -278,9 +278,7 @@ class Room:
 			rup.parameters[0] = bytes(modelPath, 'utf-8')
 			rup.parameters[1] = bytes(modelName, 'utf-8')
 			rup.parameters[2] = bytes(entryPoint, 'utf-8')
-			rup.parameters[3] = b''
-			rup.parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
-			rup.parameters[5] = bytes('Lv10RupeeGet' if rupIndex == 0 else f'Lv10RupeeGet_{rupIndex + 1}', 'utf-8')
+			rup.parameters[3] = bytes('Lv10RupeeGet' if rupIndex == 0 else f'Lv10RupeeGet_{rupIndex + 1}', 'utf-8')
 	
 
 	def setLoadingZoneTarget(self, newDestination, index=0):

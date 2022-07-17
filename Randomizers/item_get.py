@@ -6,23 +6,46 @@ from Randomizers import data
 # Inserts an AddItemByKey and a GenericItemGetSequenceByKey, or a progressive item switch (depending on the item).
 # It goes after 'before' and before 'after'. Return the name of the first event in the sequence.
 def insertItemGetAnimation(flowchart, item, index, before=None, after=None, playExtraAnim=True, canHurtPlayer=True):
+    """Inserts the needed itemGet event into the flowchart and returns the name of the first event in the sequence
+    
+    Parameters
+    ----------
+    flowchart: dict[str, any]
+        The flowchart of the eventflow file
+    item : str
+        The key of the item
+    index : int
+        The index of the item
+    before : str | None
+        The event that comes before the returned ItemGetAnimation
+    after : str | None
+        The event that comes after the returned ItemGetAnimation
+    playExtraAnim : bool | True
+        Determines if special item animations will play when getting the item
+    canHurtPlayer : bool | True
+        Determines if the item can hurt the player. Specifically used for traps"""
+    
     if item == 'PowerBraceletLv1':
-        return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2', data.BRACELET_FOUND_FLAG, before, after)
+        return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2',
+        data.BRACELET_FOUND_FLAG, None, before, after)
 
     if item == 'SwordLv1':
         if playExtraAnim:
-            spinAnim = event_tools.createForkEvent(flowchart, before, [
+            spinAnim = event_tools.createForkEvent(flowchart, None, [
                 event_tools.createActionChain(flowchart, None, [
                     ('Link', 'RequestSwordRolling', {}),
                     ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
                 ], None),
             ], after)[0]
-            return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, before, spinAnim)
+            return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
+            data.SWORD_FOUND_FLAG, data.SWORD2_FOUND_FLAG, before, spinAnim)
         else:
-            return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2', data.SWORD_FOUND_FLAG, before, after)
+            return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
+            data.SWORD_FOUND_FLAG, data.SWORD2_FOUND_FLAG, before, after)
 
     if item == 'Shield':
-        return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield', data.SHIELD_FOUND_FLAG, before, after)
+        return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield',
+        data.SHIELD_FOUND_FLAG, None, before, after)
     
     ###############################################################################################################################################
     ### Capacity upgrades
@@ -30,7 +53,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder', 'keepCarry': False, 'messageEntry': 'MagicPowder_MaxUp'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder', 'keepCarry': False, 'messageEntry': item})
         ], after)
 
     if item == 'Bomb_MaxUp':
@@ -42,14 +65,14 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
 
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Bomb', 'keepCarry': False, 'messageEntry': 'Bomb_MaxUp'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Bomb', 'keepCarry': False, 'messageEntry': item})
         ], bombsCheck)
 
     if item == 'Arrow_MaxUp':
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Inventory', 'AddItemByKey', {'itemKey': 'Arrow', 'count': 60, 'index': -1, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': 'Arrow_MaxUp'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': item})
         ], after)
 
     ######################################################################################################################################

@@ -1,8 +1,11 @@
 SWORD_FOUND_FLAG        = 'unused0357'
-SHIELD_FOUND_FLAG       = 'unused0358'
-BRACELET_FOUND_FLAG     = 'unused0359'
-RED_TUNIC_FOUND_FLAG    = 'unused0360'
-BLUE_TUNIC_FOUND_FLAG   = 'unused0361'
+SWORD2_FOUND_FLAG       = 'unused0358'
+SHIELD_FOUND_FLAG       = 'unused0359'
+BRACELET_FOUND_FLAG     = 'unused0360'
+
+RED_TUNIC_FOUND_FLAG    = 'unused0361'
+BLUE_TUNIC_FOUND_FLAG   = 'unused0362'
+
 GORIYA_FLAG             = 'unused0432'
 MAMU_FLAG               = 'unused0433'
 MANBO_FLAG              = 'unused0434'
@@ -14,6 +17,7 @@ MERMAID_CAVE_FLAG       = 'TradeLensGet'
 POTHOLE_FLAG            = 'PotholeGet'
 
 BOMBS_FOUND_FLAG        = 'BombsFound'
+BOMB_BAG_FOUND_FLAG     = 'BombBagFound'
 
 
 INSTRUMENT_FLAGS = {
@@ -312,10 +316,10 @@ MUSIC_SUFFIX = '.ry.48.dspadpcm.bfstm'
 
 # item models so that zap traps can be disguised as other items
 ITEM_MODELS = {
-    'SwordLv1': 'ItemSwordLv1.bfres',
-    'SwordLv2': 'ItemSwordLv2.bfres',
+    'SinkingSword': 'ObjSinkingSword.bfres',
+    # 'SwordLv2': 'ItemSwordLv2.bfres',
     'Shield': 'ItemShield.bfres',
-    'MirrorShield': 'ItemMirrorShield.bfres',
+    # 'MirrorShield': 'ItemMirrorShield.bfres',
     'Bomb': 'ItemBomb.bfres',
     'Bow': 'ItemBow.bfres',
     'HookShot': 'ItemHookShot.bfres',
@@ -326,7 +330,7 @@ ITEM_MODELS = {
     'MagicPowder': 'ItemMagicPowder.bfres',
     'RocsFeather': 'ItemRocsFeather.bfres',
     'PowerBraceletLv1': 'ItemPowerBraceletLv1.bfres',
-    'PowerBraceletLv2': 'ItemPowerBraceletLv2.bfres',
+    # 'PowerBraceletLv2': 'ItemPowerBraceletLv2.bfres',
     'PegasusBoots': 'ItemPegasusBoots.bfres',
     'Ocarina': 'ItemOcarina.bfres',
     'Flippers': 'ItemFlippers.bfres',

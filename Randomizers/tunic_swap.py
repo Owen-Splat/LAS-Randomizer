@@ -4,6 +4,8 @@ from Randomizers import item_get, data
 
 
 def writeSwapEvents(flowchart):
+    """Makes the telephone pickup event to basically just be the Fairy Queen and lets you swap tunics"""
+
     # telephone needs dialog query 'GetLastResult4' to get dialog result
     event_tools.addActorQuery(event_tools.findActor(flowchart, 'Dialog'), 'GetLastResult4')
 
@@ -37,15 +39,21 @@ def writeSwapEvents(flowchart):
 
 
 def hasGreenEvent(flowchart, red, blue):
+    """If the player currently has the green tunic, create and return the dialog event for swapping between red and blue"""
+
     dialogResult = event_tools.createSwitchEvent(flowchart, 'Dialog', 'GetLastResult4', {}, {0: red, 1: blue, 2: None})
     return event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy1_2'}, dialogResult)
 
 
 def hasRedEvent(flowchart, blue, green):
+    """If the player currently has the red tunic, create and return the dialog event for swapping between blue and green"""
+
     dialogResult = event_tools.createSwitchEvent(flowchart, 'Dialog', 'GetLastResult4', {}, {0: blue, 1: green, 2: None})
     return event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy1_4'}, dialogResult)
 
 
 def hasBlueEvent(flowchart, red, green):
+    """If the player currently has the blue tunic, create and return the dialog event for swapping between red and green"""
+
     dialogResult = event_tools.createSwitchEvent(flowchart, 'Dialog', 'GetLastResult4', {}, {0: red, 1: green, 2: None})
     return event_tools.createActionEvent(flowchart, 'Telephone', 'Examine', {'message': 'SubEvent:QuestGrandFairy1_3'}, dialogResult)

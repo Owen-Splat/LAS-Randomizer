@@ -223,7 +223,7 @@ class Ui_MainWindow(object):
         self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
         self.horizontalSlider_2.setGeometry(QRect(548, 136, 111, 22))
         self.horizontalSlider_2.setFont(font2)
-        self.horizontalSlider_2.setMaximum(3)
+        self.horizontalSlider_2.setMaximum(4)
         self.horizontalSlider_2.setValue(0)
         self.horizontalSlider_2.setOrientation(Qt.Horizontal)
         self.horizontalSlider_2.setTickPosition(QSlider.NoTicks)

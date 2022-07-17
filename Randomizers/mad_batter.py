@@ -3,7 +3,9 @@ import Tools.event_tools as event_tools
 
 
 def writeEvents(flow, item1, item2, item3):
-    # Combine Talk and End entry points into one flow, cutting out the normal choose your upgrade dialogue.
+    """Combine Talk and End entry points into one flow, cutting out the normal choose your upgrade dialogue.
+    Then adds separate flows for each Mad Batter to give specific items"""
+    
     event_tools.insertEventAfter(flow.flowchart, 'Event19', 'Event13')
 
     ## Mad Batter A (bay)

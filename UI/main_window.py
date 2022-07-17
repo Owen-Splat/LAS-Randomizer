@@ -1,17 +1,14 @@
-#!/usr/bin/env python3
-
-from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore, QtWidgets
 from UI.form import Ui_MainWindow
-from progress_window import ProgressWindow
+from UI.progress_window import ProgressWindow
 from update import UpdateProcess
-from randomizer_paths import ROOT_PATH, DATA_PATH, RESOURCE_PATH
+from randomizer_paths import SETTINGS_PATH, DATA_PATH, IS_RUNNING_FROM_SOURCE
 
 import qdarktheme
 
 import yaml
 from indentation import MyDumper
 
-import sys
 import os
 import random
 from re import sub
@@ -37,7 +34,7 @@ with open(os.path.join(DATA_PATH, 'seeds.yml'), 'r') as f:
     CHARACTERS = seeds['Characters']
 
 try:
-    with open('settings.yaml', 'r') as settingsFile:
+    with open(SETTINGS_PATH, 'r') as settingsFile:
         SETTINGS = yaml.safe_load(settingsFile)
         DEFAULTS = False
 except FileNotFoundError:
@@ -88,14 +85,12 @@ class MainWindow(QtWidgets.QMainWindow):
                             "QPushButton {color: rgb(0, 0, 0)}"
                             "QPushButton:hover {background-color: rgb(200, 200, 200)}"
                             "QPushButton:pressed {background-color: rgb(175, 175, 175)}")
-        
 
         # Keep track of stuff
         self.maxSeashells = int(15)
         self.excludedChecks = set()
         self.logic = str('basic')
         self.mode = str('dark')
-
 
         # Load User Settings
         if not DEFAULTS:
@@ -109,7 +104,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.setStyleSheet(qdarktheme.load_stylesheet('dark'))
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-
 
         ### SUBSCRIBE TO EVENTS
         
@@ -138,15 +132,23 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.includeButton.clicked.connect(self.IncludeButton_Clicked)
         self.ui.excludeButton.clicked.connect(self.ExcludeButton_Clicked)
         
-        
         ### DESCRIPTIONS
         self.checkBoxes = self.ui.tab.findChildren(QtWidgets.QCheckBox)
         self.checkBoxes.extend([self.ui.label_6, self.ui.horizontalSlider])
         self.checkBoxes.extend([self.ui.label_11, self.ui.horizontalSlider_2])
         for check in self.checkBoxes:
             check.installEventFilter(self)
-    
-    
+        
+        ### show and update
+        self.show()
+        if not IS_RUNNING_FROM_SOURCE:
+            self.process = UpdateProcess() # initialize a new QThread class
+            self.process.canUpdate.connect(self.ShowUpdate) # connect a boolean signal to ShowUpdate()
+            self.process.start() # start the thread
+        else:
+            self.ui.updateChecker.setText('Running from source. No updates will be checked')
+
+
     
     # event filter for showing option info onto label
     def eventFilter(self, source, event):
@@ -166,16 +168,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
 
         return QtWidgets.QWidget.eventFilter(self, source, event)
-    
-    
-    
-    ### UPDATE CHECKER
-    def showEvent(self, event):
-        
-        self.process = UpdateProcess() # initialize a new QThread class
-        self.process.canUpdate.connect(self.ShowUpdate) # connect a boolean signal to ShowUpdate()
-        self.process.start() # start the thread
-        event.accept()
     
     
     
@@ -332,7 +324,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # logic
         try:
             logic = str(SETTINGS['Logic'].lower())
-            if logic in ['basic', 'advanced', 'glitched', 'none']:
+            if logic in ['basic', 'advanced', 'glitched', 'death', 'none']:
                 self.logic = logic
                 if logic == 'basic':
                     self.ui.horizontalSlider_2.setValue(0)
@@ -343,8 +335,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 elif logic == 'glitched':
                     self.ui.horizontalSlider_2.setValue(2)
                     self.ui.label_11.setText('  Logic:  Glitched')
-                else:
+                elif logic == 'death':
                     self.ui.horizontalSlider_2.setValue(3)
+                    self.ui.label_11.setText('  Logic:  Death')
+                else:
+                    self.ui.horizontalSlider_2.setValue(4)
                     self.ui.label_11.setText('  Logic:  None')
             else:
                 self.logic = 'basic'
@@ -581,7 +576,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Excluded_Locations': list(self.excludedChecks)
         }
         
-        with open('settings.yaml', 'w') as settingsFile:
+        with open(SETTINGS_PATH, 'w') as settingsFile:
             yaml.dump(settings_dict, settingsFile, Dumper=MyDumper, sort_keys=False)
     
     
@@ -785,6 +780,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.label_11.setText('  Logic:  Glitched')
             self.logic = 'glitched'
         
+        elif value == 3:
+            self.ui.label_11.setText('  Logic:  Death')
+            self.logic = 'death'
+        
         else:
             self.ui.label_11.setText('  Logic:  None')
             self.logic = 'none'
@@ -927,38 +926,3 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.SaveSettings()
         event.accept()
-
-
-
-
-
-#######################################################################################################
-def main():
-    
-    try:
-        from sys import _MEIPASS
-    except ImportError:
-        import ctypes
-        try:
-            # Need to set app id so windows will display the custom taskbar icon while running from source
-            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("Link's_Awakening_Switch_Randomizer")
-        except AttributeError:
-            pass
-    
-    app = QtWidgets.QApplication([])
-    app.setStyle('Fusion')
-    
-    icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(os.path.join(RESOURCE_PATH, 'LASR_Icon.png')), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-    app.setWindowIcon(icon)
-    
-    m = MainWindow()
-    m.setFixedSize(780, 639)
-    m.show()
-    
-    sys.exit(app.exec())
-
-
-
-if __name__ == '__main__':
-    main()

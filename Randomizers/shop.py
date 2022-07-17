@@ -5,6 +5,8 @@ from Randomizers import item_get, data
 
 
 def makeDatasheetChanges(sheet, placements, item_defs):
+    """Edit the ShopItem datasheet to for the new items. Incomplete, was only testing"""
+
     for slot in sheet['values']:
         if slot['mIndex'] == 2: # shovel/bow/arrows
             item = placements['shop-slot3-1st']
@@ -21,7 +23,8 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
 
 def makeEventChanges(flowchart, placements, item_defs):
-    
+    """edit the ToolShopKeeper event flow for the new items. Incomplete, was only testing"""
+
     # shovel
     item = placements['shop-slot3-1st']
     itemKey = item_defs[item]['item-key']

@@ -5,6 +5,8 @@ from Randomizers import data
 
 
 def changeInstrument(flowchart, itemKey, itemIndex, modelPath, modelName, room, roomData):
+    """Applies changes to both the Instrument actor and the event flowchart"""
+    
     if room == 'D6-instrument':
         act = roomData.actors[1]
     else:

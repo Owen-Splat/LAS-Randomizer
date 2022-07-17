@@ -12,10 +12,6 @@ import shutil
 import yaml
 
 
-with open(os.path.join(DATA_PATH, 'Npc.yml'), 'r') as f:
-    NEW_NPCS = yaml.safe_load(f)
-
-
 
 class ProgressWindow(QtWidgets.QMainWindow):
     
@@ -103,7 +99,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
                 self.ui.progressBar.setMaximum(self.num_of_mod_files)
                 self.ui.label.setText(f'Generating mod files...')
                 # self.ui.label_2.setText(f'0/{self.num_of_mod_files}')
-                self.mods_process = ModsProcess(self.placements, self.rom_path, self.out_dir, self.item_defs, NEW_NPCS, self.seed)
+                self.mods_process = ModsProcess(self.placements, self.rom_path, self.out_dir, self.item_defs, self.seed)
                 self.mods_process.setParent(self)
                 self.mods_process.progress_update.connect(self.UpdateProgress)
                 self.mods_process.is_done.connect(self.AreModsDone)

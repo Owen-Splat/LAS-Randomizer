@@ -4,6 +4,8 @@ from Randomizers import item_get
 
 
 def writeKeyEvent(flowchart, itemKey, itemIndex, room):
+    """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
+    
     # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
     if itemKey[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
         itemEvent = event_tools.createActionChain(flowchart, None, [

@@ -1,4 +1,4 @@
-from PyQt6 import QtCore
+from PySide6 import QtCore
 import urllib.request as lib
 import urllib.error as urlERROR
 
@@ -9,7 +9,7 @@ currentVersion = 0.145
 
 class UpdateProcess(QtCore.QThread):
     
-    canUpdate = QtCore.pyqtSignal(bool)
+    canUpdate = QtCore.Signal(bool)
     
     
     # initialize

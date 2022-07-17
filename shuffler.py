@@ -106,17 +106,17 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.append('kanalet-kill-room')
         
         heart_pieces = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
-        and self.logic_defs[l]['subtype'] in ['standing', 'underwater'] 
+        and self.logic_defs[l]['subtype'] in ['standing'] 
         and self.logic_defs[l]['content'] == 'heart-piece' 
         and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
         for heart in heart_pieces:
             vanilla_locations.remove(heart)
         
-        sunken = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
-        and self.logic_defs[l]['subtype'] in ['underwater'] 
-        and self.logic_defs[l]['content'] == 'heart-piece' 
-        and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
-        self.settings['excluded-locations'].update(sunken)
+        # sunken = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
+        # and self.logic_defs[l]['subtype'] in ['underwater'] 
+        # and self.logic_defs[l]['content'] == 'heart-piece' 
+        # and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
+        # self.settings['excluded-locations'].update(sunken)
 
         if self.settings['shuffle-instruments']:
             instruments = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
@@ -191,14 +191,10 @@ class ItemShuffler(QtCore.QThread):
     
     
     
-    
-    
     ########################################################################################################################
     # STOP THREAD
     def stop(self):
         self.threadActive = False
-    
-    
     
     
     
@@ -240,9 +236,10 @@ class ItemShuffler(QtCore.QThread):
             # For item and follower checks, see if you have access to the region. Otherwise, check on the conditions, if they exist
             regionAccess = self.hasAccess(access, self.logic_defs[newCheck]['region']) if (self.logic_defs[newCheck]['type'] == 'item' or self.logic_defs[newCheck]['type'] == 'follower') else True
             basic        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-basic']))    if ('condition-basic' in self.logic_defs[newCheck]) else True
-            advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic == 'advanced' or logic == 'glitched')) else False
-            glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic == 'glitched') else False
-            return regionAccess and (basic or advanced or glitched)
+            advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic in ['advanced', 'glitched', 'death'])) else False
+            glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic in ['glitched', 'death']) else False
+            death        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-death']))    if (('condition-death' in self.logic_defs[newCheck]) and logic == 'death') else False
+            return regionAccess and (basic or advanced or glitched or death)
     
     
     def parseCondition(self, condition):
@@ -564,7 +561,7 @@ class ItemShuffler(QtCore.QThread):
             while not success and self.threadActive:
                 placements['tarin'] = items[0]
                 success = self.canReachLocation('can-shop', placements, self.settingsAccess, logic) or self.canReachLocation('tail-cave', placements, self.settingsAccess, logic) or self.canReachLocation('beach', placements, self.settingsAccess, logic)
-                                
+                
                 if not success:
                     items.insert(items.index('seashell'), items[0])
                     items.pop(0)
@@ -597,8 +594,6 @@ class ItemShuffler(QtCore.QThread):
                 if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
                     validPlacement = False
                 elif (item in self.forceChests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
-                    validPlacement = False
-                elif (item == 'zap-trap' and locations[0] == 'D6-pot-chest'):
                     validPlacement = False
                 elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
