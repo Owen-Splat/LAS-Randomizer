@@ -74,7 +74,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Inventory', 'AddItemByKey', {'itemKey': 'Arrow', 'count': 60, 'index': -1, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': item})
         ], after)
-
+    
     ######################################################################################################################################
     ### traps
     if item == 'ZapTrap':
@@ -238,3 +238,105 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
     ], after)
+
+
+
+def insertSetItemFlag(flowchart, item, before=None, after=None):
+    if item == 'PowerBraceletLv1':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': data.BRACELET_FOUND_FLAG, 'value': True})
+        ], after)
+
+    if item == 'SwordLv1':
+        sword1Flag = event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': data.SWORD_FOUND_FLAG, 'value': True})
+        ], after)
+        sword2Flag = event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': data.BRACELET_FOUND_FLAG, 'value': True})
+        ], after)
+        return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': data.SWORD_FOUND_FLAG},
+            {0: sword1Flag, 1: sword2Flag})
+
+    if item == 'Shield':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': data.SHIELD_FOUND_FLAG, 'value': True})
+        ], after)
+
+    if item == 'SurfHarp':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}), # set flags before giving harp, otherwise ghost requirements may be met during the itemget animation, leaving the player with a ghost that can only be rid of by getting another follower
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True}),
+        ], after)
+
+    if item == 'Bomb':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
+        ], after)
+    
+    if item == 'YoshiDoll':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
+        ], after)
+
+    if item == 'Ribbon':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True}),
+        ], after)
+
+    if item == 'DogFood':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True}),
+        ], after)
+
+    if item == 'Bananas':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True}),
+        ], after)
+
+    if item == 'Stick':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True}),
+        ], after)
+
+    if item == 'Honeycomb':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True}),
+        ], after)
+
+    if item == 'Pineapple':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True}),
+        ], after)
+
+    if item == 'Hibiscus':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True}),
+        ], after)
+
+    if item == 'Letter':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True}),
+        ], after)
+
+    if item == 'Broom':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True}),
+        ], after)
+
+    if item == 'FishingHook':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True}),
+        ], after)
+
+    if item == 'PinkBra':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True}),
+        ], after)
+
+    if item == 'MermaidsScale':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True}),
+        ], after)

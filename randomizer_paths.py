@@ -15,9 +15,11 @@ try:
         SETTINGS_PATH = os.path.join(userdata_path, "settings.yaml")
     else:
         SETTINGS_PATH = os.path.join(".", "settings.yaml")
+        # MODELS_PATH = os.path.join(".", "Models")
 except ImportError:
     ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
     SETTINGS_PATH = os.path.join(ROOT_PATH, "settings.yaml")
+    # MODELS_PATH = os.path.join(ROOT_PATH, "Models")
     IS_RUNNING_FROM_SOURCE = True
 
 DATA_PATH = os.path.join(ROOT_PATH, 'Data')

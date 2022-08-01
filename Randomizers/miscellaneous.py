@@ -121,6 +121,7 @@ def changeLens(flowchart, itemKey, itemIndex, modelPath, modelName, room):
     ], itemGet)
 
     room.actors[7].type = 0x194 # sinking sword
+    room.actors[7].x20 = 0 # change rotation to be facing the screen
     room.actors[7].parameters[0] = bytes('ObjSinkingSword.bfres' if itemKey == 'SwordLv1' else modelPath, 'utf-8')
     room.actors[7].parameters[1] = bytes('SinkingSword' if itemKey == 'SwordLv1' else modelName, 'utf-8')
     room.actors[7].parameters[2] = bytes('MermaidCave', 'utf-8')

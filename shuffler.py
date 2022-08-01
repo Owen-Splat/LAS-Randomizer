@@ -1,10 +1,14 @@
 from PySide6 import QtCore
 
+import spoiler
+
 import re
 import random
 import traceback
 
-import spoiler
+
+dungeons = ['tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel',
+            'catfish-maw', 'face-shrine', 'eagle-tower', 'turtle-rock', 'color-dungeon']
 
 
 
@@ -12,9 +16,9 @@ class ItemShuffler(QtCore.QThread):
     
     # sends signals to main thread when emitted
     progress_update = QtCore.Signal(int)
-    is_done = QtCore.Signal(bool)
     give_placements = QtCore.Signal(dict)
-    error = QtCore.Signal(bool)
+    is_done = QtCore.Signal()
+    error = QtCore.Signal()
 
     
     # initialize
@@ -25,103 +29,38 @@ class ItemShuffler(QtCore.QThread):
         self.out_dir = out_dir
         self.seed = seed
         self.logic = logic
-        self.rom_path = rom_path
-        self.out_dir = out_dir
-        self.seed = seed
         self.settings = settings
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         
-        self.forceChests = ['zol-trap', 'zap-trap', 'shadow-trap', 'stalfos-note']
+        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
+        self.force_out_dungeons = ['rooster']
 
         self.progress_value = 0
-        self.threadActive = True
+        self.thread_active = True
     
     
     # thread automatically starts the run method
     def run(self):
         
         # TEMPORARY CODE HERE to make it so that everything that isn't a chest is set to vanilla
-        vanilla_locations = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' and self.logic_defs[l]['subtype'] not in ['chest', 'boss', 'drop'] , self.logic_defs))
-        vanilla_locations.remove('tarin')
-        vanilla_locations.remove('washed-up')
-        vanilla_locations.remove('marin')
-        vanilla_locations.remove('christine-grateful')
-        vanilla_locations.remove('invisible-zora')
-        vanilla_locations.remove('ghost-reward')
-        vanilla_locations.remove('walrus')
-        vanilla_locations.remove('D0-fairy-1')
-        vanilla_locations.remove('D0-fairy-2')
-        vanilla_locations.remove('goriya-trader')
-        vanilla_locations.remove('manbo')
-        vanilla_locations.remove('mamu')
-        vanilla_locations.remove('rapids-race-45')
-        vanilla_locations.remove('rapids-race-35')
-        vanilla_locations.remove('rapids-race-30')
-        vanilla_locations.remove('fishing-orange')
-        vanilla_locations.remove('fishing-cheep-cheep')
-        vanilla_locations.remove('fishing-ol-baron')
-        vanilla_locations.remove('fishing-50')
-        vanilla_locations.remove('fishing-100')
-        vanilla_locations.remove('fishing-150')
-        vanilla_locations.remove('fishing-loose')
-        vanilla_locations.remove('5-seashell-reward')
-        vanilla_locations.remove('15-seashell-reward')
-        vanilla_locations.remove('30-seashell-reward')
-        vanilla_locations.remove('40-seashell-reward')
-        vanilla_locations.remove('50-seashell-reward')
-        vanilla_locations.remove('mad-batter-bay')
-        vanilla_locations.remove('mad-batter-woods')
-        vanilla_locations.remove('mad-batter-taltal')
-        vanilla_locations.remove('dampe-page-1')
-        vanilla_locations.remove('dampe-page-2')
-        vanilla_locations.remove('dampe-final')
-        vanilla_locations.remove('dampe-heart-challenge')
-        vanilla_locations.remove('dampe-bottle-challenge')
-        vanilla_locations.remove('trendy-prize-final')
-        vanilla_locations.remove('woods-loose')
-        vanilla_locations.remove('taltal-rooster-cave')
-        vanilla_locations.remove('dream-shrine-left')
-        # vanilla_locations.remove('pothole-final')
-
-        vanilla_locations.remove('trendy-prize-1')
-        self.settings['excluded-locations'].update(['trendy-prize-1'])
-
-        vanilla_locations.remove('mamasha')
-        vanilla_locations.remove('ciao-ciao')
-        vanilla_locations.remove('sale')
-        vanilla_locations.remove('kiki')
-        vanilla_locations.remove('tarin-ukuku')
-        vanilla_locations.remove('chef-bear')
-        vanilla_locations.remove('papahl')
-        vanilla_locations.remove('christine-trade')
-        vanilla_locations.remove('mr-write')
-        vanilla_locations.remove('grandma-yahoo')
-        vanilla_locations.remove('bay-fisherman')
-        vanilla_locations.remove('mermaid-martha')
-        vanilla_locations.remove('mermaid-cave')
-
-        # vanilla_locations.remove('shop-slot3-1st')
-        
+        vanilla_locations = [k for k, v in self.logic_defs.items()
+                            if v['type'] == 'item'
+                            and v['subtype'] not in ['chest', 'boss', 'drop', 'npc', 'standing']
+        ]
+        vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
-        
-        heart_pieces = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
-        and self.logic_defs[l]['subtype'] in ['standing'] 
-        and self.logic_defs[l]['content'] == 'heart-piece' 
-        and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
-        for heart in heart_pieces:
-            vanilla_locations.remove(heart)
-        
-        # sunken = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
-        # and self.logic_defs[l]['subtype'] in ['underwater'] 
-        # and self.logic_defs[l]['content'] == 'heart-piece' 
-        # and self.logic_defs[l]['region'] != 'trendy', self.logic_defs))
-        # self.settings['excluded-locations'].update(sunken)
+        vanilla_locations.append('trendy-prize-1')
+        vanilla_locations.append('trendy-prize-2')
+        vanilla_locations.append('trendy-prize-3')
+        vanilla_locations.append('trendy-prize-4')
+        vanilla_locations.append('trendy-prize-5')
+        vanilla_locations.append('trendy-prize-6')
 
-        if self.settings['shuffle-instruments']:
-            instruments = list(filter( lambda l: self.logic_defs[l]['type'] == 'item' 
-            and self.logic_defs[l]['subtype'] == 'standing' 
-            and self.logic_defs[l]['content'] in [
+        instruments = [k for k, v in self.logic_defs.items()
+            if v['type'] == 'item'
+            and v['subtype'] == 'standing'
+            and v['content'] in [
                 'full-moon-cello',
                 'conch-horn',
                 'sea-lilys-bell',
@@ -130,25 +69,36 @@ class ItemShuffler(QtCore.QThread):
                 'coral-triangle',
                 'evening-calm-organ',
                 'thunder-drum'
-            ], self.logic_defs))
+            ]
+        ]
+        start_instruments = []
+        if self.settings['starting-instruments'] > 0:
+            random.seed(self.seed)
+            random.shuffle(instruments)
+            for i in range(self.settings['starting-instruments']):
+                inst = instruments.pop(0)
+                start_instruments.append(self.logic_defs[inst]['content'])
+            for i in start_instruments:
+                self.item_defs[i]['quantity'] = 0
+                self.item_defs['rupee-50']['quantity'] += 1
+
+        if not self.settings['shuffle-instruments']:
             for inst in instruments:
-                vanilla_locations.remove(inst)
-                
+                vanilla_locations.append(inst)
+
         if self.settings['assured-sword-shield']:
             vanilla_locations.append('tarin')
             vanilla_locations.append('washed-up')
         
-        if self.settings['blup-sanity']:
-            blupees = list(filter( lambda l: self.logic_defs[l]['type'] == 'item'
-            and self.logic_defs[l]['subtype'] == 'standing'
-            and self.logic_defs[l]['content'] == 'rupee-5', self.logic_defs))
+        ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
+        if not self.settings['blup-sanity']:
+            blupees = [k for k, v in self.logic_defs.items()
+                if v['type'] == 'item'
+                and v['subtype'] == 'standing'
+                and v['content'] == 'rupee-5'
+            ]
             for blue in blupees:
-                vanilla_locations.remove(blue)
-        # else:
-        #     self.item_defs.remove('rupee-5')
-        #     for l in self.logic_defs:
-        #         if l.startswith('D0-Rupee'):
-        #             self.logic_defs.remove(l)
+                vanilla_locations.append(blue)
 
         if self.settings['shuffle-bombs']:
             self.item_defs['bomb']['type'] = 'important'
@@ -160,10 +110,10 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['rupee-50']['quantity'] += 2 # +100 rupees
         
         if self.settings['zap-sanity']:
-            self.forceChests.remove('zap-trap')
+            self.force_chests.remove('zap-trap')
 
             if self.settings['blup-sanity']:
-                self.item_defs['rupee-5']['quantity'] -= 14 # removes half the blue rupees if blupeesanity is on
+                self.item_defs['rupee-5']['quantity'] -= 14 # replace half of the blue rupees with zap traps because fun :D
                 self.item_defs['zap-trap']['quantity'] = 55
             else:
                 self.item_defs['zap-trap']['quantity'] = 41
@@ -176,25 +126,25 @@ class ItemShuffler(QtCore.QThread):
         
         try:
             # Create a placement, spoiler log, and game mod.
-            if self.threadActive:
-                placements = self.makeRandomizedPlacement(self.seed, self.logic,
-                self.settings['excluded-locations'], vanilla_locations, self.settings, False)
+            if self.thread_active:
+                placements = self.makeRandomizedPlacement(self.logic, self.settings['excluded-locations'],
+                                                          vanilla_locations, self.settings, start_instruments, False)
             
-            if self.threadActive:
+            if self.thread_active:
                 self.give_placements.emit(placements)
         
-        except (IndexError, ValueError):
+        except (IndexError, KeyError, ValueError):
             print(traceback.format_exc())
-            self.error.emit(True)
+            self.error.emit()
         
-        self.is_done.emit(True)
+        self.is_done.emit()
     
     
     
     ########################################################################################################################
     # STOP THREAD
     def stop(self):
-        self.threadActive = False
+        self.thread_active = False
     
     
     
@@ -278,10 +228,10 @@ class ItemShuffler(QtCore.QThread):
         access = startingAccess.copy()
         accessAdded = True
         
-        while accessAdded and self.threadActive:
+        while accessAdded and self.thread_active:
             accessAdded = False
             for key in self.logic_defs:
-                if self.threadActive:
+                if self.thread_active:
                     if key not in access:
                         if self.checkAccess(key, access, logic):
                             access = self.addAccess(access, key)
@@ -324,10 +274,10 @@ class ItemShuffler(QtCore.QThread):
         # must have been forced vanilla. We don't want to count these directly in access.
         vanillaSeashells = 0
         
-        while accessAdded and self.threadActive:
+        while accessAdded and self.thread_active:
             accessAdded = False
             for key in self.logic_defs:
-                if self.threadActive:
+                if self.thread_active:
                     if key not in access:
                         if self.checkAccess(key, access, logic) or logic == 'none':
                             access = self.addAccess(access, key)
@@ -365,7 +315,7 @@ class ItemShuffler(QtCore.QThread):
     
     
     
-    def makeRandomizedPlacement(self, seed, logic, forceJunk, forceVanilla, settings, verbose=False):
+    def makeRandomizedPlacement(self, logic, force_junk, force_vanilla, settings, starting_instruments, verbose=False):
         """Creates and returns a a randomized placement of items, adhering to the logic
         
         Parameters
@@ -381,14 +331,12 @@ class ItemShuffler(QtCore.QThread):
             forceJunk takes priority over forceVanilla
         """
         
-        random.seed(seed)
-        
-        if not set(forceJunk).isdisjoint(forceVanilla):
+        if not set(force_junk).isdisjoint(force_vanilla):
             print('Warning! Some locations set as disabled are unrandomized. These locations will not actually be considered out of logic.')
-            forceJunk = [l for l in forceJunk if l not in forceVanilla]
+            force_junk = [l for l in force_junk if l not in force_vanilla]
         
         # Ensure all excluded locations are actually location names
-        forceJunk = [l for l in forceJunk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
+        force_junk = [l for l in force_junk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
         
         # # Make sure logic is a valid value, default to basic
         # if logic not in ['basic', 'advanced', 'glitched', 'none']:
@@ -407,15 +355,16 @@ class ItemShuffler(QtCore.QThread):
         vanillaSeashells = 0 # Keep track of how many seashells were forced into their vanilla locations. This is important for ensuring there is enough room to place the random ones.
         
         placements['settings'] = self.settings
-        placements['force-junk'] = forceJunk
-        placements['force-vanilla'] = forceVanilla
+        placements['force-junk'] = force_junk
+        placements['force-vanilla'] = force_vanilla
+        placements['starting-instruments'] = starting_instruments
         placements['indexes'] = {}
         
         indexesAvailable = {'seashell': list(range(50)), 'heart-piece': list(range(32)), 'heart-container': list(range(9)), 'bottle': list(range(3)), 'golden-leaf': list(range(5)), 'chamber-stone': [3, 4, 8, 10, 11, 12, 13, 20, 21, 22, 23, 24, 25, 26]}
         
         for key in self.logic_defs:
-            if self.threadActive:
-                if self.logic_defs[key]['type'] == 'item':
+            if self.thread_active:
+                if self.logic_defs[key]['type'] in ['item']:
                     locations.append(key)
                     placements[key] = None
                     access = self.addAccess(access, self.logic_defs[key]['content']) # we're going to assume the player starts with everything, then slowly loses things as they get placed into the wild
@@ -427,7 +376,7 @@ class ItemShuffler(QtCore.QThread):
         
         # For each type of item in the item pool, add its quantity to the item lists
         for key in self.item_defs:
-            if self.threadActive:
+            if self.thread_active:
                 if self.item_defs[key]['type'] == 'important':
                     importantItems += [key] * self.item_defs[key]['quantity']
                 elif self.item_defs[key]['type'] == 'seashell':
@@ -440,11 +389,11 @@ class ItemShuffler(QtCore.QThread):
                     dungeonItems += [key] * self.item_defs[key]['quantity']
             else: break
         
-        # Randomly place bow-wow and the rooster
-        """followers = ['bow-wow', 'rooster']
-        random.shuffle(followers)
-        placements['moblin-cave'] = followers[0]
-        placements['rooster-statue'] = followers[1]"""
+        # # Randomly place bow-wow and the rooster
+        # followers = ['bow-wow', 'rooster']
+        # random.shuffle(followers)
+        # placements['moblin-cave'] = followers[0]
+        # placements['rooster-statue'] = followers[1]
         
         # Force the followers to be vanilla (for now)
         placements['moblin-cave'] = 'bow-wow'
@@ -458,8 +407,8 @@ class ItemShuffler(QtCore.QThread):
         items = importantItems + seashellItems + goodItems + junkItems + dungeonItems
         
         # Assign vanilla contents to forceVanilla locations
-        for loc in forceVanilla:
-            if self.threadActive:
+        for loc in force_vanilla:
+            if self.thread_active:
                 # If it's not a valid location name, or already used for forceJunk, just ignore it
                 if loc not in locations:
                     continue
@@ -483,7 +432,7 @@ class ItemShuffler(QtCore.QThread):
         # Some may have been placed already because of forceVanilla so we need to factor that in
         dungeons = ['color-dungeon', 'tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel', 'catfish-maw', 'face-shrine', 'eagle-tower', 'turtle-rock']
         for i in range(len(dungeons)):
-            if self.threadActive:
+            if self.thread_active:
                 itemPool = list(filter((lambda s: len(s) >= 2 and s[-2:] == f'D{i}'), items))
                 locationPool = list(filter((lambda s: len(s) >= 2 and s[:2] == f'D{i}'), locations))
                 random.shuffle(locationPool)
@@ -492,14 +441,14 @@ class ItemShuffler(QtCore.QThread):
                 placementTracker = []
                 
                 # Iterate through the dungeon items for that dungeon (inherently in order of nightmare key, small keys, stone beak, compass, map)
-                while itemPool and self.threadActive:
+                while itemPool and self.thread_active:
                     item = itemPool[0]
                     if verbose: print(item+' -> ', end='')
                     firstLocationTried = locationPool[0]
                     
                     # Until we make a valid placement for this item
                     validPlacement = False
-                    while not validPlacement and self.threadActive:
+                    while not validPlacement and self.thread_active:
                         # Try placing the first item in the list in the first location
                         placements[locationPool[0]] = item
                         access = self.removeAccess(access, item)
@@ -524,7 +473,7 @@ class ItemShuffler(QtCore.QThread):
                                 if verbose: print("can't place")
                                 break
                     
-                    if validPlacement and self.threadActive:
+                    if validPlacement and self.thread_active:
                         # After we successfully made a valid placement, remove the item and location from consideration
                         items.remove(item)
                         itemPool.remove(item)
@@ -540,10 +489,10 @@ class ItemShuffler(QtCore.QThread):
         random.shuffle(locations)
         
         # Place the traps and master stalfos note. These HAVE to go in chests so we need to do them first
-        toPlace = list(filter(lambda s: s in self.forceChests, items))
+        toPlace = list(filter(lambda s: s in self.force_chests, items))
         chests = list(filter(lambda s: self.logic_defs[s]['subtype'] == 'chest', locations))
         for item in toPlace:
-            if self.threadActive:
+            if self.thread_active:
                 if verbose: print(item+' -> ', end='')
                 chest = chests.pop(0)
                 placements[chest] = item
@@ -553,12 +502,27 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
             else: break
-
+        
+        # # Place the followers. These cannot go inside dungeons and for now can only be in chests
+        # outside_chests = [x for x in locations if self.logic_defs[x]['subtype'] == 'chest'
+        #                   and self.logic_defs[x]['region'] not in dungeons]
+        # for item in self.force_out_dungeons:
+        #     if self.thread_active:
+        #         if verbose: print(item+' -> ', end='')
+        #         chest = outside_chests.pop(0)
+        #         placements[chest] = item
+        #         items.remove(item)
+        #         locations.remove(chest)
+        #         if verbose: print(outside_chests[0])
+        #         self.progress_value += 1 # update progress bar
+        #         self.progress_update.emit(self.progress_value)
+        #     else: break
+        
         # Next, place an item on Tarin. Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
         # Only do this if Tarin has no item placed, i.e. not forced to be vanilla
-        if placements['tarin'] == None and self.threadActive:
+        if placements['tarin'] == None and self.thread_active:
             success = False
-            while not success and self.threadActive:
+            while not success and self.thread_active:
                 placements['tarin'] = items[0]
                 success = self.canReachLocation('can-shop', placements, self.settingsAccess, logic) or self.canReachLocation('tail-cave', placements, self.settingsAccess, logic) or self.canReachLocation('beach', placements, self.settingsAccess, logic)
                 
@@ -578,14 +542,14 @@ class ItemShuffler(QtCore.QThread):
         placementTracker = []
         
         # Do a very similar process for all other items
-        while items and locations and self.threadActive:
+        while items and locations and self.thread_active:
             item = items[0]
             if verbose: print(item+' -> ', end='')
             firstLocationTried = locations[0]
             
             # Until we make a valid placement for this item
             validPlacement = False
-            while not validPlacement and self.threadActive:
+            while not validPlacement and self.thread_active:
                 # Try placing the first item in the list in the first location
                 placements[locations[0]] = item
                 access = self.removeAccess(access, item)
@@ -593,7 +557,9 @@ class ItemShuffler(QtCore.QThread):
                 # Check for item type restrictions, i.e. songs can't be standing items
                 if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
                     validPlacement = False
-                elif (item in self.forceChests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
+                elif (item in self.force_chests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
+                    validPlacement = False
+                elif (item in self.force_out_dungeons) and locations[0][:2] in dungeons:
                     validPlacement = False
                 elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
@@ -617,7 +583,7 @@ class ItemShuffler(QtCore.QThread):
                         if verbose: print("can't place")
                         break
             
-            if validPlacement and self.threadActive:
+            if validPlacement and self.thread_active:
                 # After we successfully made a valid placement, remove the item and location from consideration
                 if verbose: print(locations[0])
                 
@@ -649,7 +615,7 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        if self.threadActive and placements['settings']['create-spoiler']:
+        if self.thread_active and placements['settings']['create-spoiler']:
             spoiler.generateSpoilerLog(placements, self.logic_defs, self.out_dir, self.seed)
         
         return placements

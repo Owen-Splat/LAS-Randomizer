@@ -18,11 +18,15 @@ def generateSpoilerLog(placements, logicDefs, outputDir, seedName):
             for location in regions[key]:
                 output.write('  {0}: {1}\n'.format(location, placements[location]))
         
-        output.write('settings:\n')
+        output.write('\nsettings:\n')
         for setting in placements['settings']:
             if setting != 'excluded-locations':
                 output.write(f'  {setting}: {placements["settings"][setting]}\n')
         
-        output.write('excluded-locations:\n')
+        output.write('\nstarting-instruments:\n')
+        for inst in placements['starting-instruments']:
+            output.write(f'  {inst}\n')
+        
+        output.write('\nexcluded-locations:\n')
         for location in placements['force-junk']:
             output.write(f'  {location}\n')

@@ -13,6 +13,8 @@ __pycache__
 /heart_memories.py
 /dampe_tests.py
 /text_tests.py
+/challenges.py
+/event_data_viewer.py
 /settings.yaml
 /Resources/Dev Resources
 /Test

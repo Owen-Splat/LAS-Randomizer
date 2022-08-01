@@ -1,4 +1,6 @@
+import copy
 import re
+
 
 def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
@@ -255,6 +257,18 @@ class Room:
 			chest = chests[chestIndex]
 			chest.parameters[1] = bytes(newContent, 'utf-8')
 			chest.parameters[2] = itemIndex if itemIndex != -1 else b''
+	
+
+	def addChestRooster(self):
+		chests = list(filter(lambda a: a.type == 0xF7, self.actors))
+
+		new_actor = copy.deepcopy(chests[0])
+		new_actor.key = int('A10000005D1D906E', 16)
+		new_actor.name = bytes('NpcFlyingCucco-A10000005D1D906E', 'utf-8')
+		new_actor.type = 0x181
+		new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
+
+		self.actors.append(new_actor)
 
 
 	def setSmallKeyParams(self, modelPath, modelName, room, keyIndex=0):

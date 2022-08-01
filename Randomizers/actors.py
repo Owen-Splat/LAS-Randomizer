@@ -73,7 +73,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Link').find_action('SetFacialExpression')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'SetFacialExpression')
-
+    
     try:
         event_tools.findActor(flowchart, 'EventFlags')
     except ValueError:
@@ -89,12 +89,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'EventFlags').find_query('CheckFlag')
     except ValueError:
         event_tools.addActorQuery(event_tools.findActor(flowchart, 'EventFlags'), 'CheckFlag')
-    
-    try:
-        event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJump')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJump')
-        
+            
     # hud event actors so the player's hearts update while getting zapped
     try:
         event_tools.findActor(flowchart, 'Hud')
@@ -106,12 +101,8 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Hud'), 'SetHeartUpdateEnable')
-
-
-
-def addInstumentFadeActors(flowchart, rom_path):
-    """Ensures that the flowchart has the needed actors for the instument fade and warp events"""
-
+    
+    # instrument fade event actors
     try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayInstrumentShineEffect')
     except ValueError:
@@ -144,9 +135,31 @@ def addInstumentFadeActors(flowchart, rom_path):
     except ValueError:
         controlActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'GameControl')
         flowchart.actors.append(controlActor)
-    
+
+    try:
+        event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJump')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJump')
+
     try:
         event_tools.findActor(flowchart, 'Timer')
     except ValueError:
         timeActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Timer')
         flowchart.actors.append(timeActor)
+    
+    # needed stuff for rooster
+    try:
+        event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
+    except ValueError:
+        roosterActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
+        flowchart.actors.append(roosterActor)
+    
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
+    
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')

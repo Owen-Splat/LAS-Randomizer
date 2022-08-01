@@ -21,12 +21,10 @@ Chest_Locations:
   - woods-south-chest
   - woods-north-chest
 
-Fast_Fishing_Rewards:
+Fishing_Rewards:
   - fishing-50
   - fishing-orange
   - fishing-loose
-
-Other_Fishing_Rewards:
   - fishing-100
   - fishing-150
   - fishing-cheep-cheep
@@ -122,13 +120,13 @@ Heart_Pieces:
   - mabe-well
   - ukuku-cave-west-loose
   - ukuku-cave-east-loose
-  - bay-passage-sunken
-  - river-crossing-cave
+  # - bay-passage-sunken
+  # - river-crossing-cave
   - rapids-ascent-cave
-  - kanalet-moat-south
-  - south-bay-sunken
+  # - kanalet-moat-south
+  # - south-bay-sunken
   - taltal-crossing-cave
-  - taltal-east-drop
+  # - taltal-east-drop
   - taltal-west-escape
   - above-turtle-rock
   - pothole-north

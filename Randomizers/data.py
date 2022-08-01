@@ -239,7 +239,7 @@ HEART_ROOMS = {
 
 
 # music files
-MUSIC_FILES = [
+MUSIC_FILES = (
     '03_NameInput',
     '04_House_First',
     '06_Field_First',
@@ -310,7 +310,7 @@ MUSIC_FILES = [
     'RecorderField_TaruTaru',
     'ShellHouse',
     'Title_OP'
-]
+)
 MUSIC_SUFFIX = '.ry.48.dspadpcm.bfstm'
 
 
@@ -321,11 +321,11 @@ ITEM_MODELS = {
     'Shield': 'ItemShield.bfres',
     # 'MirrorShield': 'ItemMirrorShield.bfres',
     'Bomb': 'ItemBomb.bfres',
-    'Bow': 'ItemBow.bfres',
+    # 'Bow': 'ItemBow.bfres',
     'HookShot': 'ItemHookShot.bfres',
     'Boomerang': 'ItemBoomerang.bfres',
     'MagicRod': 'ItemMagicRod.bfres',
-    'Shovel': 'ItemShovel.bfres',
+    # 'Shovel': 'ItemShovel.bfres',
     'SleepyMushroom': 'ItemSleepyMushroom.bfres',
     'MagicPowder': 'ItemMagicPowder.bfres',
     'RocsFeather': 'ItemRocsFeather.bfres',
@@ -337,7 +337,7 @@ ITEM_MODELS = {
     'SecretMedicine': 'ItemSecretMedicine.bfres',
     'SecretSeashell': 'ItemSecretSeashell.bfres',
     'TailKey': 'ItemTailKey.bfres',
-    'SlimeKey': 'ItemSlimeKey.bfres',
+    # 'SlimeKey': 'ItemSlimeKey.bfres',
     'AnglerKey': 'ItemAnglerKey.bfres',
     'FaceKey': 'ItemFaceKey.bfres',
     'BirdKey': 'ItemBirdKey.bfres',
@@ -372,4 +372,47 @@ ITEM_MODELS = {
     'RupeeGold': 'ItemRupeeGold.bfres',
     'Bottle': 'ItemBottle.bfres',
     'ShellRader': 'ItemShellRader.bfres'
+}
+
+
+CUSTOM_MODELS = (
+    # 'ItemBallad',
+    # 'ItemMambo',
+    # 'ItemSoul',
+    # 'ObjBombBag',
+    # 'ObjArrowBag'
+)
+MODELS_SUFFIX = '.bfres'
+
+
+ENTRANCE_ROOMS = {
+    'Lv01TailCave': {
+        '08D': {
+            'Actor': 2,
+            'Target': 'Field_14D'
+        }
+    },
+    'Lv02BottleGrotto': {
+        '08C': {
+            'Actor': 3,
+            'Target': 'Field_03E'
+        }
+    },
+    'Lv03KeyCavern': {
+        '08B': {
+            'Actor': 2,
+            'Target': 'Field_12F',
+        }
+    },
+    'Lv04AnglersTunnel': {
+        '08D': {
+            'Actor': 2,
+            'Target': 'Field_03L_a',
+        }
+    },
+    'Field': {
+        '03E': 0,
+        '12F': 0,
+        '14D': 0,
+    }
 }

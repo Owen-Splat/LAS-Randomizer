@@ -1,3 +1,4 @@
+from array import array
 from oead import Sarc, SarcWriter
 import oead
 
@@ -22,14 +23,24 @@ def writeSheet(sheetFile, sheet):
 		file.write(newSheet.to_binary())
 
 
-def parseStruct(struct):
+def parseStruct(struct, k=None):
 	result = {}
 	for k,v in struct.items():
 		if type(v) == oead.gsheet.Struct:
 			result[k] = parseStruct(v)
+		elif type(v) == oead.gsheet.StructArray:
+			result[k] = parseStructArray(v)
 		else:
 			result[k] = v
 
+	return result
+
+
+def parseStructArray(l):
+	result = []
+	for s in l:
+		result.append(parseStruct(s))
+	
 	return result
 
 
@@ -37,8 +48,35 @@ def dictToStruct(d):
 	for k in d:
 		if type(d[k]) == dict:
 			d[k] = dictToStruct(d[k])
+		elif type(d[k]) == list:
+			d[k] = listToSheetArray(k, d[k])
 
 	return oead.gsheet.Struct(d)
+
+
+def listToSheetArray(name, l):
+	if len(l) > 0:
+		if type(l[0]) == dict:
+			new = oead.gsheet.StructArray()
+		elif type(l[0]) == bool:
+			new = oead.gsheet.BoolArray()
+		elif type(l[0]) == int:
+			new = oead.gsheet.IntArray()
+		elif type(l[0]) == float:
+			new = oead.gsheet.FloatArray()
+		elif type(l[0]) == str:
+			new = oead.gsheet.StringArray()
+		for s in l:
+			if type(s) == dict:
+				d = dictToStruct(s)
+				new.append(d)
+			# elif type(s) == list:
+			# 	for k in s:
+			# 		new.append(listToSheetArray(k, s))
+	else:
+		new = oead.gsheet.StructArray()
+	
+	return new
 
 
 
@@ -92,6 +130,18 @@ def createCondition(name, checks):
 
 
 ### NPC GSHEET
+# # creates a new value for the npc gsheet
+# def newNpcFromDict(npc):
+# 	new = {
+# 		'symbol': npc['symbol'],
+# 		'graphics': {
+
+# 		}
+# 	}
+# 	new['symbol'] = npc['symbol']
+# 	new['graphics'][]
+
+
 # create npc behavior
 def createBehavior(type, datas=None):
 	behavior = {'type': type, 'parameters': oead.gsheet.StringArray()}

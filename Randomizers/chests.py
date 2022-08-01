@@ -78,13 +78,42 @@ def writeChestEvent(flowchart):
     bombGet = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, None)
     bombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'}, {0: bombGet, 1: zapCheck})
 
+    medicineGet = item_get.insertItemGetAnimation(flowchart, 'SecretMedicine', -1, None, None)
     boxClose = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)
-    medicineGet = event_tools.createActionChain(flowchart, None, [
+    medicine2Get = event_tools.createActionChain(flowchart, None, [
         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keeyCarry': False, 'messageEntry': 'SecretMedicine2'}),
         ('Link', 'Heal', {'amount': 99}),
         ('TreasureBox', 'SetActorSwitch', {'switchIndex': 1, 'value': False})
     ], boxClose)
-    medicineCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SecretMedicine'}, {0: medicineGet, 1: bombCheck})
+    checkDup = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+    {'count': 1, 'itemType': 22}, {0: medicineGet, 1: medicine2Get})
+    medicineCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SecretMedicine'}, {0: checkDup, 1: bombCheck})
 
-    event_tools.insertEventAfter(flowchart, 'Event32', medicineCheck)
-    event_tools.insertEventAfter(flowchart, 'Event28', medicineCheck) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest
+    roosterFork = event_tools.createForkEvent(flowchart, None, [
+        event_tools.createActionChain(flowchart, None, [
+            ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
+            ('FlyingCucco[FlyCocco]', 'StopTailorOtherChannel', {'channel': 'FlyingCucco_get', 'index': 0}),
+            ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0, 'name': 'ev_glad_ed'}),
+            ('FlyingCucco[FlyCocco]', 'CancelCarried', {}),
+            ('FlyingCucco[FlyCocco]', 'Join', {}),
+            # ('Link', 'SetDisablePowerUpEffect', {'effect': False, 'materialAnim': False, 'sound': False}),
+            ('GameControl', 'RequestAutoSave', {})
+        ], None),
+        event_tools.createActionChain(flowchart, None, [
+            ('Timer', 'Wait', {'time': 3.3})
+            # ('Audio', 'PlayZoneBGM', {'stopbgm': True})
+        ], None)
+    ], None)[0]
+    roosterGet = event_tools.createActionChain(flowchart, None, [
+        ('FlyingCucco[FlyCocco]', 'Activate', {}),
+        ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0, 'name': 'FlyingCocco_get'}),
+        ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),
+        ('Link', 'PlayAnimationEx', {'time': 0, 'blendTime': 0, 'name': 'item_get_lp'}),
+        ('FlyingCucco[FlyCocco]', 'BeCarried', {}),
+        ('Link', 'LookAtItemGettingPlayer', {'chaseRatio': 0.1, 'distanceOffset': 0, 'duration': 0.7}),
+        ('Audio', 'PlayOneshotSystemSE', {'label': 'SE_PL_ITEM_GET_LIGHT', 'volume': 1.0, 'pitch': 1.0})
+    ], roosterFork)
+    roosterCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Rooster'}, {0: roosterGet, 1: medicineCheck})
+
+    event_tools.insertEventAfter(flowchart, 'Event32', roosterCheck)
+    event_tools.insertEventAfter(flowchart, 'Event28', roosterCheck) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest

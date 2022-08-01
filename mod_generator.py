@@ -4,7 +4,7 @@ import os
 import re
 import random
 import shutil
-# import tempfile
+import tempfile
 import traceback
 
 import Tools.leb as leb
@@ -24,8 +24,8 @@ from randomizer_paths import RESOURCE_PATH
 class ModsProcess(QtCore.QThread):
     
     progress_update = QtCore.Signal(int)
-    is_done = QtCore.Signal(bool)
-    error = QtCore.Signal(bool)
+    is_done = QtCore.Signal()
+    error = QtCore.Signal()
 
     
     def __init__(self, placements, rom_path, out_dir, items, seed, parent=None):
@@ -35,9 +35,8 @@ class ModsProcess(QtCore.QThread):
         self.rom_path = rom_path
         self.out_dir = out_dir
         self.item_defs = items
-
-        random.seed(seed)
         self.seed = seed
+        random.seed(seed)
 
         self.progress_value = 0
         self.thread_active = True
@@ -54,8 +53,8 @@ class ModsProcess(QtCore.QThread):
     def run(self):
         try:
             if self.thread_active: self.makeGeneralLEBChanges()
-            if self.thread_active: self.makeGeneralEventChanges()
             if self.thread_active: self.makeGeneralDatasheetChanges()
+            if self.thread_active: self.makeGeneralEventChanges()
             
             if self.thread_active: self.makeChestContentFixes()
             if self.thread_active: self.makeEventContentChanges()
@@ -63,18 +62,17 @@ class ModsProcess(QtCore.QThread):
 
             if self.thread_active: self.makeSmallKeyChanges()
             if self.thread_active: self.makeHeartPieceChanges()
+            if self.thread_active: self.makeInstrumentChanges()
             # if self.thread_active: self.makeShopChanges()
             
             if self.thread_active: self.makeTelephoneChanges()
 
             if self.thread_active: self.makeGeneralARCChanges()
+            # if self.thread_active: self.makeItemModelFixes()
             # if self.thread_active: self.makeItemTextBoxes()
             
             if self.placements['settings']['free-book'] and self.thread_active:
                 self.setFreeBook()
-
-            if self.placements['settings']['shuffle-instruments'] and self.thread_active:
-                self.makeInstrumentChanges()
             
             if self.placements['settings']['blup-sanity'] and self.thread_active:
                 self.makeLv10RupeeChanges()
@@ -84,10 +82,10 @@ class ModsProcess(QtCore.QThread):
         
         except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError):
             print(traceback.format_exc())
-            self.error.emit(True)
+            self.error.emit()
         
         # print(self.progress_value)
-        self.is_done.emit(True)
+        self.is_done.emit()
     
 
 
@@ -116,6 +114,11 @@ class ModsProcess(QtCore.QThread):
                 else:
                     roomData.setChestContent(itemKey, itemIndex)
                 
+                if itemKey == 'BowWow':
+                    pass
+                elif itemKey == 'Rooster':
+                    roomData.addChestRooster()
+                
                 if self.thread_active:
                     with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'wb') as outfile:
                         outfile.write(roomData.repack())
@@ -129,6 +132,11 @@ class ModsProcess(QtCore.QThread):
 
                     roomData.setChestContent(itemKey, itemIndex)
                     
+                    if itemKey == 'BowWow':
+                        pass
+                    elif itemKey == 'Rooster':
+                        roomData.addChestRooster()
+
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv07EagleTower/Lv07EagleTower_06H.leb', 'wb') as outfile:
                             outfile.write(roomData.repack())
@@ -141,6 +149,11 @@ class ModsProcess(QtCore.QThread):
 
                     roomData.setChestContent(itemKey, itemIndex)
                     
+                    if itemKey == 'BowWow':
+                        pass
+                    elif itemKey == 'Rooster':
+                        roomData.addChestRooster()
+
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv07EagleTower/Lv07EagleTower_05G.leb', 'wb') as outfile:
                             outfile.write(roomData.repack())
@@ -261,11 +274,7 @@ class ModsProcess(QtCore.QThread):
         ### Event changes
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Tarin.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
-
-        itemIndex = self.placements['indexes']['tarin'] if 'tarin' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['tarin']]['item-key'], itemIndex, 'Event52', 'Event31')
-
-        tarin.makeEventChanges(flow, self.placements)
+        tarin.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
@@ -1012,25 +1021,25 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### MusicalInstrument event: Set ghost clear flags if you got the Surf Harp.
-        if not self.placements['settings']['shuffle-instruments']:
-            musicalInstrument = event_tools.readFlow(f'{self.rom_path}/region_common/event/MusicalInstrument.bfevfl')
+        # #################################################################################################################################
+        # ### MusicalInstrument event: Set ghost clear flags if you got the Surf Harp.
+        # if not self.placements['settings']['shuffle-instruments']:
+        #     musicalInstrument = event_tools.readFlow(f'{self.rom_path}/region_common/event/MusicalInstrument.bfevfl')
 
-            musicalInstrument.flowchart.actors.append(eventFlagsActor)
-            event_tools.addActorQuery(event_tools.findActor(musicalInstrument.flowchart, 'Inventory'), 'HasItem')
+        #     musicalInstrument.flowchart.actors.append(eventFlagsActor)
+        #     event_tools.addActorQuery(event_tools.findActor(musicalInstrument.flowchart, 'Inventory'), 'HasItem')
 
-            ghostFlagsSetEvent = event_tools.createActionEvent(musicalInstrument.flowchart, 'EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True})
+        #     ghostFlagsSetEvent = event_tools.createActionEvent(musicalInstrument.flowchart, 'EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True})
 
-            event_tools.insertEventAfter(musicalInstrument.flowchart, 'Event52', event_tools.createSwitchEvent(musicalInstrument.flowchart, 'Inventory', 'HasItem', {'itemType': 48, 'count': 1}, {0: 'Event0', 1: ghostFlagsSetEvent}))
+        #     event_tools.insertEventAfter(musicalInstrument.flowchart, 'Event52', event_tools.createSwitchEvent(musicalInstrument.flowchart, 'Inventory', 'HasItem', {'itemType': 48, 'count': 1}, {0: 'Event0', 1: ghostFlagsSetEvent}))
 
-            event_tools.createActionChain(musicalInstrument.flowchart, ghostFlagsSetEvent, [
-                ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
-                ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
-                ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
-                ], 'Event0')
+        #     event_tools.createActionChain(musicalInstrument.flowchart, ghostFlagsSetEvent, [
+        #         ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
+        #         ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
+        #         ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
+        #         ], 'Event0')
 
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MusicalInstrument.bfevfl', musicalInstrument)
+        #     event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MusicalInstrument.bfevfl', musicalInstrument)
         
         #################################################################################################################################
         ### Item: Add and fix some entry points for the ItemGetSequence
@@ -1053,13 +1062,12 @@ class ModsProcess(QtCore.QThread):
         event_tools.findEntryPoint(item.flowchart, 'RedClothes').name = 'ClothesRed'
         event_tools.findEntryPoint(item.flowchart, 'BlueClothes').name = 'ClothesBlue'
         event_tools.findEntryPoint(item.flowchart, 'Necklace').name = 'PinkBra'
-        
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', item)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-
+                
         #################################################################################################################################
         ### MadamMeowMeow: Change her behaviour to always take back BowWow if you have him, and not do anything based on having the Horn
         madam = event_tools.readFlow(f'{self.rom_path}/region_common/event/MadamMeowMeow.bfevfl')
@@ -1127,17 +1135,18 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
-        ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on
-        if self.placements['settings']['fast-trendy']:
-            prize = event_tools.readFlow(f'{self.rom_path}/region_common/event/PrizeCommon.bfevfl')
+        # #################################################################################################################################
+        # ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on, as well as needed changes for randomized prizes
+        # prize = event_tools.readFlow(f'{self.rom_path}/region_common/event/PrizeCommon.bfevfl')
+        # actors.addNeededActors(prize.flowchart, self.rom_path)
+        # prize.flowchart.actors.append(flowControlActor)
+        
+        # crane_prizes.makeEventChanges(prize.flowchart, self.placements)
 
-            event_tools.findEvent(prize.flowchart, 'Event5').data.params.data['prizeType'] = 10
-
-            if self.thread_active:
-                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PrizeCommon.bfevfl', prize)
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+        # if self.thread_active:
+        #     event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PrizeCommon.bfevfl', prize)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
         
         # ###############################################################################################################################
         # ### Fast Songs: Skip the song learning cutscene and gives item immediately
@@ -1158,100 +1167,132 @@ class ModsProcess(QtCore.QThread):
         ### in the GenericItemGetSequence
         ### same thing with ItemClothesRed for yoshi doll actors (instruments and ocarina)
         ### Make Papahl appear in the mountains after trading for the pineapple instead of the getting the Bell
-        npcSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
 
-        if self.thread_active:
-            npcs.makeNpcChanges(npcSheet, self.placements)
+        npcs.makeNpcChanges(sheet, self.placements)
+        npcs.makeNewNpcs(sheet)
                 
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', npcSheet)
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### ItemDrop datasheet: remove HeartContainer drops 0-7, HookShot drop, AnglerKey and FaceKey drops.
-        itemDropSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
-        # item_drops.createDatasheetConditions(itemDropSheet)
-        item_drops.makeDatasheetChanges(itemDropSheet, self.placements)
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
+        item_drops.makeDatasheetChanges(sheet, self.placements)
 
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ItemDrop.gsheet', itemDropSheet)
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ItemDrop.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### Items datasheet: Set npcKeys for SmallKeys, HeartPieces, and Seashells so they show something when you get them.
-        itemsSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
 
-        for item in itemsSheet['values']:
+        for item in sheet['values']:
             if self.thread_active:
                 # if item['symbol'] == 'MagicPowder_MaxUp':
                 #     item['actorID'] = 124
                 
                 # if item['symbol'] == 'Bomb_MaxUp':
                 #     item['actorID'] = 117
+                #     item['npcKey'] = 'ObjBombBag'
                 
                 # if item['symbol'] == 'Arrow_MaxUp':
                 #     item['actorID'] = 180
+                #     item['npcKey'] = 'ObjArrowBag'
                 
                 if item['symbol'] == 'SmallKey':
                     item['npcKey'] = 'ItemClothesGreen'
                 
                 if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                     item['npcKey'] = 'ItemClothesRed'
-            
+                
+                # if item['symbol'] == 'Song_WindFish':
+                #     item['actorID'] = 393
+                #     item['npcKey'] = 'ItemBallad'
+                
+                # if item['symbol'] == 'Song_Mambo':
+                #     item['actorID'] = 394
+                #     item['npcKey'] = 'ItemMambo'
+
+                # if item['symbol'] == 'Song_Soul':
+                #     item['actorID'] = 395
+                #     item['npcKey'] = 'ItemSoul'
+
+                # if item['symbol'] == 'Bottle':
+                #     item['actorID'] = 559 # set actor to ObjFishingBottle instead of ItemBottle
             else: break
         
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', itemsSheet)
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-
+        
         #################################################################################################################################
         ### Conditions datasheet
-        conditionsSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Conditions.gsheet')
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Conditions.gsheet')
 
-        for condition in conditionsSheet['values']:
+        for condition in sheet['values']:
             if self.thread_active:
                 conditions.editConditions(condition, self.placements)
             else: break
         
-        conditions.makeConditions(conditionsSheet, self.placements)
+        conditions.makeConditions(sheet, self.placements)
         
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Conditions.gsheet', conditionsSheet)
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Conditions.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### CranePrize datasheet
-        cranePrizeSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
-        crane_prizes.makeDatasheetChanges(cranePrizeSheet, self.placements)
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
+        crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
+        # print(oead_tools.parseStructArray(sheet['values']))
 
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', cranePrizeSheet)
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        # #################################################################################################################################
+        # ### Prize Groups
+        # group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
+
+        # crane_prizes.changePrizeGroups(group1, group2)
+
+        # if self.thread_active:
+        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
+        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
+        #     self.progress_value += 2 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
+
+        #################################################################################################################################
+        ### GlobalFlags datasheet
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
+        flags.makeFlags(sheet)
+
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/GlobalFlags.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
         #################################################################################################################################
-        ### Prize Group 1
-        cranePrizeSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
-        cranePrizeSheet['values'].pop(0) # remove yoshi doll
-
-        if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', cranePrizeSheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
-
-        #################################################################################################################################
-        ### GlobalFlags datasheet
-        flagsSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
-        flags.makeFlags(flagsSheet)
-
-        if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/GlobalFlags.gsheet', flagsSheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+        ### FishingFish datasheet: Remove the instrument requirements
+        if self.placements['settings']['fast-fishing']:
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/FishingFish.gsheet')
+            for fish in sheet['values']:
+                if fish['mOpenItem']:
+                    fish['mOpenItem'] = ''
+            
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/FishingFish.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
     
 
 
@@ -1275,7 +1316,7 @@ class ModsProcess(QtCore.QThread):
         source = f'{self.rom_path}/region_common/audio/stream'
         dest = f'{self.out_dir}/Romfs/region_common/audio/stream'
         files = os.listdir(source)
-        new_music = data.MUSIC_FILES[:]
+        new_music = list(data.MUSIC_FILES[:])
 
         if not os.path.exists(dest):
             os.makedirs(dest)
@@ -1624,3 +1665,24 @@ class ModsProcess(QtCore.QThread):
     #         self.progress_value += 1 # update progress bar
     #         self.progress_update.emit(self.progress_value)
 
+
+
+    # def makeItemModelFixes(self):
+    #     """Adds necessary model files needed for various different fixes"""
+
+    #     if not os.path.exists(f'{self.out_dir}/Romfs/region_common/actor'):
+    #         os.makedirs(f'{self.out_dir}/Romfs/region_common/actor')
+
+    #     files = os.listdir(MODELS_PATH)
+
+    #     for file in files:
+    #         model = file[:-len(data.MODELS_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
+    #         if model in data.CUSTOM_MODELS:
+    #             shutil.copy(os.path.join(MODELS_PATH, file), f'{self.out_dir}/Romfs/region_common/actor/{file}')
+    #             self.progress_value += 1 # update progress bar
+    #             self.progress_update.emit(self.progress_value)
+        
+    #     # if self.thread_active:
+    #     #     crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
+    #     #     self.progress_value += 1 # update progress bar
+    #     #     self.progress_update.emit(self.progress_value)

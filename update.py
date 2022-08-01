@@ -3,13 +3,13 @@ import urllib.request as lib
 import urllib.error as urlERROR
 
 
-currentVersion = 0.145
+current_version = 0.15
 
 
 
 class UpdateProcess(QtCore.QThread):
     
-    canUpdate = QtCore.Signal(bool)
+    can_update = QtCore.Signal(bool)
     
     
     # initialize
@@ -19,13 +19,13 @@ class UpdateProcess(QtCore.QThread):
     
     def run(self):
         try:
-            updateFile = lib.urlopen("https://raw.githubusercontent.com/OSmart32/LAS-Randomizer/master/version.txt")
-            webVersion = float(updateFile.read())
+            update_file = lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/version.txt")
+            web_version = float(update_file.read())
             
-            if webVersion > currentVersion:
-                self.canUpdate.emit(True)
+            if web_version > current_version:
+                self.can_update.emit(True)
             else:
-                self.canUpdate.emit(False)
+                self.can_update.emit(False)
         
         except urlERROR.URLError: # when users use this app while not connected to the internet
-            self.canUpdate.emit(False)
+            self.can_update.emit(False)

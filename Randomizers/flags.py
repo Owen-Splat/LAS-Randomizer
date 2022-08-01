@@ -59,8 +59,13 @@ def makeFlags(sheet):
 
     sheet['values'].append({'symbol': 'PotholeGet', 'index': 1169})
 
-    sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
-    sheet['values'].append({'symbol': 'ShopBowGet', 'index': 1171})
+    sheet['values'].append({'symbol': 'PrizeGet1', 'index': 1170})
+    sheet['values'].append({'symbol': 'PrizeGet2', 'index': 1171})
+    sheet['values'].append({'symbol': 'PrizeGet3', 'index': 1172})
+    sheet['values'].append({'symbol': 'PrizeGet4', 'index': 1173})
+    sheet['values'].append({'symbol': 'PrizeGet5', 'index': 1174})
+    sheet['values'].append({'symbol': 'PrizeGet6', 'index': 1175})
+
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})

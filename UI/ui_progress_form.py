@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'progressForm.ui'
+## Form generated from reading UI file 'ui_progress_form.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.3.0
 ##

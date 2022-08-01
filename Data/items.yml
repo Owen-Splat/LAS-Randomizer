@@ -257,6 +257,14 @@ thunder-drum:
   item-key: ThunderDrum
   model-path: ItemThunderDrum.bfres
   model-name: ThunderDrum
+# bow-wow:
+#   type: important
+#   quantity: 1
+#   item-key: BowWow
+# rooster:
+#   type: important
+#   quantity: 1
+#   item-key: Rooster
 seashell:
   type: seashell
   quantity: 50

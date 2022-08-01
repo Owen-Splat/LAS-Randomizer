@@ -17,8 +17,6 @@ def changeInstrument(flowchart, itemKey, itemIndex, modelPath, modelName, room, 
     location = str(act.parameters[1], 'utf-8')
 
     act.type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
-
-    # act.Z = int(act.Z + (393216 / 2)) # move item half a tile upwards
     act.parameters[0] = bytes(modelPath, 'utf-8')
     act.parameters[1] = bytes(modelName, 'utf-8')
     act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow
