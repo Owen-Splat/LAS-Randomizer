@@ -10,8 +10,8 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Inventory')
     except ValueError:
-        inventoryActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/Tarin.bfevfl').flowchart, 'Inventory')
-        flowchart.actors.append(inventoryActor)
+        inventory_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/Tarin.bfevfl').flowchart, 'Inventory')
+        flowchart.actors.append(inventory_actor)
 
     try:
         event_tools.findActor(flowchart, 'Inventory').find_action('AddItemByKey')
@@ -21,8 +21,8 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Link')
     except ValueError:
-        linkActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'Link')
-        flowchart.actors.append(linkActor)
+        link_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'Link')
+        flowchart.actors.append(link_actor)
 
     try:
         event_tools.findActor(flowchart, 'Link').find_action('GenericItemGetSequenceByKey')
@@ -77,8 +77,8 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'EventFlags')
     except ValueError:
-        eventFlagsActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'EventFlags')
-        flowchart.actors.append(eventFlagsActor)
+        event_flags_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'EventFlags')
+        flowchart.actors.append(event_flags_actor)
 
     try:
         event_tools.findActor(flowchart, 'EventFlags').find_action('SetFlag')
@@ -94,8 +94,8 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Hud')
     except ValueError:
-        hudActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopKeeper.bfevfl').flowchart, 'Hud')
-        flowchart.actors.append(hudActor)
+        hud_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopKeeper.bfevfl').flowchart, 'Hud')
+        flowchart.actors.append(hud_actor)
 
     try:
         event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
@@ -111,8 +111,8 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Audio')
     except ValueError:
-        audioActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Audio')
-        flowchart.actors.append(audioActor)
+        audio_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Audio')
+        flowchart.actors.append(audio_actor)
 
     try:
         event_tools.findActor(flowchart, 'Audio').find_action('StopOtherThanSystemSE')
@@ -127,14 +127,14 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Fade')
     except ValueError:
-        fadeActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Fade')
-        flowchart.actors.append(fadeActor)
+        fade_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Fade')
+        flowchart.actors.append(fade_actor)
     
     try:
         event_tools.findActor(flowchart, 'GameControl')
     except ValueError:
-        controlActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'GameControl')
-        flowchart.actors.append(controlActor)
+        control_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'GameControl')
+        flowchart.actors.append(control_actor)
 
     try:
         event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJump')
@@ -144,22 +144,22 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Timer')
     except ValueError:
-        timeActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Timer')
-        flowchart.actors.append(timeActor)
+        time_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Timer')
+        flowchart.actors.append(time_actor)
     
-    # needed stuff for rooster
-    try:
-        event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
-    except ValueError:
-        roosterActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
-        flowchart.actors.append(roosterActor)
+    # # needed stuff for rooster
+    # try:
+    #     event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
+    # except ValueError:
+    #     roosterActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
+    #     flowchart.actors.append(roosterActor)
     
-    try:
-        event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
+    # try:
+    #     event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
     
-    try:
-        event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')
+    # try:
+    #     event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')

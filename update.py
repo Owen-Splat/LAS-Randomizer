@@ -2,8 +2,7 @@ from PySide6 import QtCore
 import urllib.request as lib
 import urllib.error as urlERROR
 
-
-current_version = 0.15
+from randomizer_data import VERSION_WITHOUT_COMMIT
 
 
 
@@ -19,10 +18,11 @@ class UpdateProcess(QtCore.QThread):
     
     def run(self):
         try:
-            update_file = lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/version.txt")
+            update_file =\
+                lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/version.txt")
             web_version = float(update_file.read())
             
-            if web_version > current_version:
+            if web_version > VERSION_WITHOUT_COMMIT:
                 self.can_update.emit(True)
             else:
                 self.can_update.emit(False)

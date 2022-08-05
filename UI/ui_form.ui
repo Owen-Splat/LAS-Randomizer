@@ -868,7 +868,7 @@
        <widget class="QCheckBox" name="rupCheck">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>189</x>
           <y>144</y>
           <width>173</width>
           <height>21</height>
@@ -926,7 +926,7 @@
         <property name="geometry">
          <rect>
           <x>369</x>
-          <y>104</y>
+          <y>144</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -975,8 +975,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>144</y>
+          <x>369</x>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1006,7 +1006,7 @@
        <widget class="QCheckBox" name="kanaletCheck">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>189</x>
           <y>104</y>
           <width>173</width>
           <height>21</height>
@@ -1082,7 +1082,7 @@
        <widget class="QCheckBox" name="songsCheck">
         <property name="geometry">
          <rect>
-          <x>189</x>
+          <x>10</x>
           <y>104</y>
           <width>173</width>
           <height>21</height>
@@ -1113,8 +1113,8 @@
        <widget class="QCheckBox" name="zapsCheck">
         <property name="geometry">
          <rect>
-          <x>548</x>
-          <y>104</y>
+          <x>10</x>
+          <y>144</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1135,8 +1135,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>369</x>
-          <y>144</y>
+          <x>189</x>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1164,7 +1164,7 @@
         <property name="geometry">
          <rect>
           <x>548</x>
-          <y>144</y>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1199,6 +1199,81 @@
         </property>
         <property name="text">
          <string>Fast Fishing</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="mazeCheck">
+        <property name="geometry">
+         <rect>
+          <x>548</x>
+          <y>104</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Sets the Sign Maze to be automatically comleted</string>
+        </property>
+        <property name="text">
+         <string>Open Mamu</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="bridgeCheck">
+        <property name="geometry">
+         <rect>
+          <x>369</x>
+          <y>104</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Sets the Kanalet bridge to be built from the start</string>
+        </property>
+        <property name="text">
+         <string>Completed Bridge</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="swampCheck">
+        <property name="geometry">
+         <rect>
+          <x>548</x>
+          <y>144</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Turns the rock in front of Dungeon 2 into a flower</string>
+        </property>
+        <property name="text">
+         <string>Classic D2</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>

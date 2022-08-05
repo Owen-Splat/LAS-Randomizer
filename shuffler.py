@@ -99,7 +99,10 @@ class ItemShuffler(QtCore.QThread):
             ]
             for blue in blupees:
                 vanilla_locations.append(blue)
-
+        
+        if self.settings['classic-d2']:
+            self.logic_defs['bottle-grotto']['condition-basic'] = 'swamp & kill-flower'
+        
         if self.settings['shuffle-bombs']:
             self.item_defs['bomb']['type'] = 'important'
             self.logic_defs['bombs']['condition-basic'] = '(can-shop | (can-farm-rupees & color-dungeon)) & bomb'

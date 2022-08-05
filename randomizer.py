@@ -27,12 +27,9 @@ except ImportError:
 
 app = QtWidgets.QApplication([])
 app.setStyle('Fusion')
+app.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, 'LASR_Icon.ico')))
 
-icon = QtGui.QIcon()
-icon.addPixmap(QtGui.QPixmap(os.path.join(RESOURCE_PATH, 'LASR_Icon.png')), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-app.setWindowIcon(icon)
-
-timer = QtCore.QTimer() # Initialize a timer that will be updated frequently so that keyboard interrupts always work
+timer = QtCore.QTimer() # Initialize a timer to be updated frequently so keyboard interrupts work
 timer.start(100)
 timer.timeout.connect(lambda: None)
 

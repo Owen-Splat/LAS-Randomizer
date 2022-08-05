@@ -1,4 +1,4 @@
-from randomizer_paths import SETTINGS_PATH, DATA_PATH
+from randomizer_paths import DATA_PATH, ROOT_PATH, SETTINGS_PATH
 
 import qdarktheme
 import yaml
@@ -6,6 +6,13 @@ import os
 
 
 ### define constants
+with open(os.path.join(ROOT_PATH, 'version.txt'), 'r') as f:
+  VERSION = f.read().strip()
+
+VERSION_WITHOUT_COMMIT = VERSION
+
+DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
+
 LIGHT_STYLESHEET = qdarktheme.load_stylesheet('light')
 DARK_STYLESHEET = qdarktheme.load_stylesheet('dark')
 
@@ -14,7 +21,7 @@ with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
 
 with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
     LOGIC_DEFS = yaml.safe_load(f)
-    TRICKS = list(filter(lambda x: LOGIC_DEFS[x]['type'] == 'trick', LOGIC_DEFS))
+    TRICKS = [k for k, v in LOGIC_DEFS.items() if v['type'] == 'trick']
 
 with open(os.path.join(DATA_PATH, 'locations.yml'), 'r') as f:
     LOCATIONS = yaml.safe_load(f)

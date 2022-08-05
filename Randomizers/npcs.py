@@ -92,9 +92,8 @@ def makeNpcChanges(npcSheet, placements):
 
 
         # make the flying bomb refills not appear until you find your bombs
-        if npc['symbol'] == 'ItemFeatherBomb':
-            if placements['settings']['shuffle-bombs']:
-                npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
+        if npc['symbol'] == 'ItemFeatherBomb' and placements['settings']['shuffle-bombs']:
+            npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
         
 
         if npc['symbol'] == 'NpcBowWow':
@@ -107,7 +106,7 @@ def makeNpcChanges(npcSheet, placements):
         if npc['symbol'] == 'NpcChorusFrog':
             npc['layoutConditions'].pop(0)
         
-        if npc['symbol'] == 'NpcKiki':
+        if npc['symbol'] == 'NpcKiki' and placements['settings']['open-bridge']:
             npc['layoutConditions'][0] = {'category': 1, 'parameter': 'KikiGone', 'layoutID': -1}
         
         if npc['symbol'] == 'NpcPapahl':
@@ -186,36 +185,36 @@ def makeNpcChanges(npcSheet, placements):
     
 
 
-def makeNewNpcs(npcSheet):
+def makeNewNpcs(npc_sheet):
     """add new npcs so that we can properly show item models for items that normally cannot be standing items
     unfortunately will not by itself make them show properly when obtaining the item, only the freestanding model"""
 
     ballad = copy.deepcopy(DUMMY_NPC)
     ballad['symbol'] = 'ItemBallad'
     ballad['graphics']['path'] = 'ItemBallad.bfres'
-    npcSheet['values'].append(oead_tools.dictToStruct(ballad))
+    npc_sheet['values'].append(oead_tools.dictToStruct(ballad))
 
     mambo = copy.deepcopy(DUMMY_NPC)
     mambo['symbol'] = 'ItemMambo'
     mambo['graphics']['path'] = 'ItemMambo.bfres'
-    npcSheet['values'].append(oead_tools.dictToStruct(mambo))
+    npc_sheet['values'].append(oead_tools.dictToStruct(mambo))
 
     soul = copy.deepcopy(DUMMY_NPC)
     soul['symbol'] = 'ItemSoul'
     soul['graphics']['path'] = 'ItemSoul.bfres'
-    npcSheet['values'].append(oead_tools.dictToStruct(soul))
+    npc_sheet['values'].append(oead_tools.dictToStruct(soul))
 
     bombBag = copy.deepcopy(DUMMY_NPC)
     bombBag['symbol'] = 'ObjBombBag'
     bombBag['graphics']['path'] = 'ObjBombBag.bfres'
     bombBag['graphics']['model'] = 'BombBag'
-    npcSheet['values'].append(oead_tools.dictToStruct(bombBag))
+    npc_sheet['values'].append(oead_tools.dictToStruct(bombBag))
 
     arrowBag = copy.deepcopy(DUMMY_NPC)
     arrowBag['symbol'] = 'ObjArrowBag'
     arrowBag['graphics']['path'] = 'ObjArrowBag.bfres'
     arrowBag['graphics']['model'] = 'ArrowBag'
-    npcSheet['values'].append(oead_tools.dictToStruct(arrowBag))
+    npc_sheet['values'].append(oead_tools.dictToStruct(arrowBag))
 
 
 

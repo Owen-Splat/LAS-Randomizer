@@ -5,7 +5,7 @@ from Randomizers import data
 
 # Inserts an AddItemByKey and a GenericItemGetSequenceByKey, or a progressive item switch (depending on the item).
 # It goes after 'before' and before 'after'. Return the name of the first event in the sequence.
-def insertItemGetAnimation(flowchart, item, index, before=None, after=None, playExtraAnim=True, canHurtPlayer=True):
+def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play_extra_anim=True, can_hurt_player=True):
     """Inserts the needed itemGet event into the flowchart and returns the name of the first event in the sequence
     
     Parameters
@@ -30,7 +30,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         data.BRACELET_FOUND_FLAG, None, before, after)
 
     if item == 'SwordLv1':
-        if playExtraAnim:
+        if play_extra_anim:
             spinAnim = event_tools.createForkEvent(flowchart, None, [
                 event_tools.createActionChain(flowchart, None, [
                     ('Link', 'RequestSwordRolling', {}),
@@ -81,21 +81,17 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         stopEvent = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
         {'channel': 'toolshopkeeper_dmg', 'index': 0}, after)
 
-        if canHurtPlayer:
-            return event_tools.createForkEvent(flowchart, before, [
-                event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
-                event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
-                event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
-                event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6}),
-                event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
-            ], stopEvent)[0]
-        else:
-            return event_tools.createForkEvent(flowchart, before, [
-                event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
-                event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx', {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
-                event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
-                event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
-            ], stopEvent)[0]
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+                {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+        ]
+        if can_hurt_player:
+            forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6}))
+        
+        return event_tools.createForkEvent(flowchart, before, forks, stopEvent)[0]
 
     ############################################################################################################################################
     ### Instrument flags - just ghost flags when getting harp for now :)

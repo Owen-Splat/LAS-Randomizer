@@ -1,119 +1,173 @@
 import Tools.event_tools as event_tools
-from Randomizers import item_get, data
+from Randomizers import item_get
 
 
 
 def writeChestEvent(flowchart):
     """Writes an itemKey comparision and itemGet chain and connects it to the chest open events"""
 
-    swordGet = item_get.insertItemGetAnimation(flowchart, 'SwordLv1', -1 , None, None)
-    swordContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SwordLv1'}, {0: swordGet, 1: 'Event33'})
+    auto_save = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, None)
+
+    sword_get = item_get.insertItemGetAnimation(flowchart, 'SwordLv1', -1 , None, auto_save)
+    sword_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SwordLv1'},
+    {0: sword_get, 1: 'Event33'})
     
-    shieldGet = item_get.insertItemGetAnimation(flowchart, 'Shield', -1, None, None)
-    shieldContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Shield'}, {0: shieldGet, 1: swordContentCheck})
+    shield_get = item_get.insertItemGetAnimation(flowchart, 'Shield', -1, None, auto_save)
+    shield_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Shield'},
+    {0: shield_get, 1: sword_check})
 
-    braceletGet = item_get.insertItemGetAnimation(flowchart, 'PowerBraceletLv1', -1, None, None)
-    braceletContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'PowerBraceletLv1'}, {0: braceletGet, 1: shieldContentCheck})
+    bracelet_get = item_get.insertItemGetAnimation(flowchart, 'PowerBraceletLv1', -1, None, auto_save)
+    bracelet_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'PowerBraceletLv1'},
+    {0: bracelet_get, 1: shield_check})
 
-    powderCapacityGet = item_get.insertItemGetAnimation(flowchart, 'MagicPowder_MaxUp', -1, None, None)
-    powderCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'MagicPowder_MaxUp'}, {0: powderCapacityGet, 1: braceletContentCheck})
+    powder_capacity_get = item_get.insertItemGetAnimation(flowchart, 'MagicPowder_MaxUp', -1, None, auto_save)
+    powder_capacity_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'MagicPowder_MaxUp'},
+    {0: powder_capacity_get, 1: bracelet_check})
 
-    bombCapacityGet = item_get.insertItemGetAnimation(flowchart, 'Bomb_MaxUp', -1, None, None)
-    bombCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb_MaxUp'}, {0: bombCapacityGet, 1: powderCapacityCheck})
+    bomb_capacity_get = item_get.insertItemGetAnimation(flowchart, 'Bomb_MaxUp', -1, None, auto_save)
+    bomb_capacity_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb_MaxUp'},
+    {0: bomb_capacity_get, 1: powder_capacity_check})
 
-    arrowCapacityGet = item_get.insertItemGetAnimation(flowchart, 'Arrow_MaxUp', -1, None, None)
-    arrowCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Arrow_MaxUp'}, {0: arrowCapacityGet, 1: bombCapacityCheck})
+    arrow_capacity_get = item_get.insertItemGetAnimation(flowchart, 'Arrow_MaxUp', -1, None, auto_save)
+    arrow_capacity_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Arrow_MaxUp'},
+    {0: arrow_capacity_get, 1: bomb_capacity_check})
 
-    redTunicGet = item_get.insertItemGetAnimation(flowchart, 'ClothesRed', -1, None, None)
-    redTunicCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ClothesRed'}, {0: redTunicGet, 1: arrowCapacityCheck})
+    red_tunic_get = item_get.insertItemGetAnimation(flowchart, 'ClothesRed', -1, None, auto_save)
+    red_tunic_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ClothesRed'},
+    {0: red_tunic_get, 1: arrow_capacity_check})
 
-    blueTunicGet = item_get.insertItemGetAnimation(flowchart, 'ClothesBlue', -1, None, None)
-    blueTunicCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ClothesBlue'}, {0: blueTunicGet, 1: redTunicCheck})
+    blue_tunic_get = item_get.insertItemGetAnimation(flowchart, 'ClothesBlue', -1, None, auto_save)
+    blue_tunic_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ClothesBlue'},
+    {0: blue_tunic_get, 1: red_tunic_check})
 
-    harpGet = item_get.insertItemGetAnimation(flowchart, 'SurfHarp', -1, None, None)
-    harpCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SurfHarp'}, {0: harpGet, 1: blueTunicCheck})
+    harp_get = item_get.insertItemGetAnimation(flowchart, 'SurfHarp', -1, None, auto_save)
+    harp_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SurfHarp'},
+    {0: harp_get, 1: blue_tunic_check})
 
-    yoshiGet = item_get.insertItemGetAnimation(flowchart, 'YoshiDoll', -1, None, None)
-    yoshiCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'YoshiDoll'}, {0: yoshiGet, 1: harpCheck})
+    yoshi_get = item_get.insertItemGetAnimation(flowchart, 'YoshiDoll', -1, None, auto_save)
+    yoshi_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'YoshiDoll'},
+    {0: yoshi_get, 1: harp_check})
 
-    ribbonGet = item_get.insertItemGetAnimation(flowchart, 'Ribbon', -1, None, None)
-    ribbonCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Ribbon'}, {0: ribbonGet, 1: yoshiCheck})
+    ribbon_get = item_get.insertItemGetAnimation(flowchart, 'Ribbon', -1, None, auto_save)
+    ribbon_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Ribbon'},
+    {0: ribbon_get, 1: yoshi_check})
 
-    dogFoodGet = item_get.insertItemGetAnimation(flowchart, 'DogFood', -1, None, None)
-    dogFoodCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'DogFood'}, {0: dogFoodGet, 1: ribbonCheck})
+    dog_food_get = item_get.insertItemGetAnimation(flowchart, 'DogFood', -1, None, auto_save)
+    dog_food_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'DogFood'},
+    {0: dog_food_get, 1: ribbon_check})
 
-    bananasGet = item_get.insertItemGetAnimation(flowchart, 'Bananas', -1, None, None)
-    bananasCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bananas'}, {0: bananasGet, 1: dogFoodCheck})
+    bananas_get = item_get.insertItemGetAnimation(flowchart, 'Bananas', -1, None, auto_save)
+    bananas_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bananas'},
+    {0: bananas_get, 1: dog_food_check})
 
-    stickGet = item_get.insertItemGetAnimation(flowchart, 'Stick', -1, None, None)
-    stickCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Stick'}, {0: stickGet, 1: bananasCheck})
+    stick_get = item_get.insertItemGetAnimation(flowchart, 'Stick', -1, None, auto_save)
+    stick_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Stick'},
+    {0: stick_get, 1: bananas_check})
 
-    honeycombGet = item_get.insertItemGetAnimation(flowchart, 'Honeycomb', -1, None, None)
-    honeycombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Honeycomb'}, {0: honeycombGet, 1: stickCheck})
+    honeycomb_get = item_get.insertItemGetAnimation(flowchart, 'Honeycomb', -1, None, auto_save)
+    honeycomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Honeycomb'},
+    {0: honeycomb_get, 1: stick_check})
 
-    pineappleGet = item_get.insertItemGetAnimation(flowchart, 'Pineapple', -1, None, None)
-    pineappleCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Pineapple'}, {0: pineappleGet, 1: honeycombCheck})
+    pineapple_get = item_get.insertItemGetAnimation(flowchart, 'Pineapple', -1, None, auto_save)
+    pineapple_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Pineapple'},
+    {0: pineapple_get, 1: honeycomb_check})
 
-    hibiscusGet = item_get.insertItemGetAnimation(flowchart, 'Hibiscus', -1, None, None)
-    hibiscusCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Hibiscus'}, {0: hibiscusGet, 1: pineappleCheck})
+    hibiscus_get = item_get.insertItemGetAnimation(flowchart, 'Hibiscus', -1, None, auto_save)
+    hibiscus_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Hibiscus'},
+    {0: hibiscus_get, 1: pineapple_check})
 
-    letterGet = item_get.insertItemGetAnimation(flowchart, 'Letter', -1, None, None)
-    letterCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Letter'}, {0: letterGet, 1: hibiscusCheck})
+    letter_get = item_get.insertItemGetAnimation(flowchart, 'Letter', -1, None, auto_save)
+    letter_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Letter'},
+    {0: letter_get, 1: hibiscus_check})
 
-    broomGet = item_get.insertItemGetAnimation(flowchart, 'Broom', -1, None, None)
-    broomCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Broom'}, {0: broomGet, 1: letterCheck})
+    broom_get = item_get.insertItemGetAnimation(flowchart, 'Broom', -1, None, auto_save)
+    broom_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Broom'},
+    {0: broom_get, 1: letter_check})
 
-    hookGet = item_get.insertItemGetAnimation(flowchart, 'FishingHook', -1, None, None)
-    hookCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'FishingHook'}, {0: hookGet, 1: broomCheck})
+    hook_get = item_get.insertItemGetAnimation(flowchart, 'FishingHook', -1, None, auto_save)
+    hook_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'FishingHook'},
+    {0: hook_get, 1: broom_check})
 
-    necklaceGet = item_get.insertItemGetAnimation(flowchart, 'PinkBra', -1, None, None)
-    necklaceCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'PinkBra'}, {0: necklaceGet, 1: hookCheck})
+    necklace_get = item_get.insertItemGetAnimation(flowchart, 'PinkBra', -1, None, auto_save)
+    necklace_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'PinkBra'},
+    {0: necklace_get, 1: hook_check})
 
-    scaleGet = item_get.insertItemGetAnimation(flowchart, 'MermaidsScale', -1, None, None)
-    scaleCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'MermaidsScale'}, {0: scaleGet, 1: necklaceCheck})
+    scale_get = item_get.insertItemGetAnimation(flowchart, 'MermaidsScale', -1, None, auto_save)
+    scale_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'MermaidsScale'},
+    {0: scale_get, 1: necklace_check})
 
-    zapGet = item_get.insertItemGetAnimation(flowchart, 'ZapTrap', -1, None, None)
-    zapCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ZapTrap'}, {0: zapGet, 1: scaleCheck})
+    zap_get = item_get.insertItemGetAnimation(flowchart, 'ZapTrap', -1, None, auto_save)
+    zap_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ZapTrap'},
+    {0: zap_get, 1: scale_check})
     
-    bombGet = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, None)
-    bombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'}, {0: bombGet, 1: zapCheck})
+    bomb_get = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, auto_save)
+    bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'},
+    {0: bomb_get, 1: zap_check})
 
-    medicineGet = item_get.insertItemGetAnimation(flowchart, 'SecretMedicine', -1, None, None)
-    boxClose = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)
-    medicine2Get = event_tools.createActionChain(flowchart, None, [
+    medicine_get = item_get.insertItemGetAnimation(flowchart, 'SecretMedicine', -1, None, auto_save)
+    box_close = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)
+    medicine2_get = event_tools.createActionChain(flowchart, None, [
         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keeyCarry': False, 'messageEntry': 'SecretMedicine2'}),
         ('Link', 'Heal', {'amount': 99}),
         ('TreasureBox', 'SetActorSwitch', {'switchIndex': 1, 'value': False})
-    ], boxClose)
-    checkDup = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-    {'count': 1, 'itemType': 22}, {0: medicineGet, 1: medicine2Get})
-    medicineCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SecretMedicine'}, {0: checkDup, 1: bombCheck})
+    ], box_close)
+    check_dup = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+    {'count': 1, 'itemType': 22}, {0: medicine_get, 1: medicine2_get})
+    medicine_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SecretMedicine'},
+    {0: check_dup, 1: bomb_check})
 
-    roosterFork = event_tools.createForkEvent(flowchart, None, [
-        event_tools.createActionChain(flowchart, None, [
-            ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
-            ('FlyingCucco[FlyCocco]', 'StopTailorOtherChannel', {'channel': 'FlyingCucco_get', 'index': 0}),
-            ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0, 'name': 'ev_glad_ed'}),
-            ('FlyingCucco[FlyCocco]', 'CancelCarried', {}),
-            ('FlyingCucco[FlyCocco]', 'Join', {}),
-            # ('Link', 'SetDisablePowerUpEffect', {'effect': False, 'materialAnim': False, 'sound': False}),
-            ('GameControl', 'RequestAutoSave', {})
-        ], None),
-        event_tools.createActionChain(flowchart, None, [
-            ('Timer', 'Wait', {'time': 3.3})
-            # ('Audio', 'PlayZoneBGM', {'stopbgm': True})
-        ], None)
-    ], None)[0]
-    roosterGet = event_tools.createActionChain(flowchart, None, [
-        ('FlyingCucco[FlyCocco]', 'Activate', {}),
-        ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0, 'name': 'FlyingCocco_get'}),
-        ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),
-        ('Link', 'PlayAnimationEx', {'time': 0, 'blendTime': 0, 'name': 'item_get_lp'}),
-        ('FlyingCucco[FlyCocco]', 'BeCarried', {}),
-        ('Link', 'LookAtItemGettingPlayer', {'chaseRatio': 0.1, 'distanceOffset': 0, 'duration': 0.7}),
-        ('Audio', 'PlayOneshotSystemSE', {'label': 'SE_PL_ITEM_GET_LIGHT', 'volume': 1.0, 'pitch': 1.0})
-    ], roosterFork)
-    roosterCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Rooster'}, {0: roosterGet, 1: medicineCheck})
+    # rooster_fork = event_tools.createForkEvent(flowchart, None, [
+    #     event_tools.createActionChain(flowchart, None, [
+    #         ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
+    #         ('FlyingCucco[FlyCocco]', 'StopTailorOtherChannel', {'channel': 'FlyingCucco_get', 'index': 0}),
+    #         ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0, 'name': 'ev_glad_ed'}),
+    #         ('FlyingCucco[FlyCocco]', 'CancelCarried', {}),
+    #         ('FlyingCucco[FlyCocco]', 'Join', {}),
+    #         # ('Link', 'SetDisablePowerUpEffect', {'effect': False, 'materialAnim': False, 'sound': False}),
+    #         ('GameControl', 'RequestAutoSave', {})
+    #     ], None),
+    #     event_tools.createActionChain(flowchart, None, [
+    #         ('Timer', 'Wait', {'time': 3.3})
+    #         # ('Audio', 'PlayZoneBGM', {'stopbgm': True})
+    #     ], None)
+    # ], auto_save)[0]
+    # rooster_get = event_tools.createActionChain(flowchart, None, [
+    #     ('FlyingCucco[FlyCocco]', 'Activate', {}),
+    #     ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0, 'name': 'FlyingCocco_get'}),
+    #     ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),
+    #     ('Link', 'PlayAnimationEx', {'time': 0, 'blendTime': 0, 'name': 'item_get_lp'}),
+    #     ('FlyingCucco[FlyCocco]', 'BeCarried', {}),
+    #     ('Link', 'LookAtItemGettingPlayer', {'chaseRatio': 0.1, 'distanceOffset': 0, 'duration': 0.7}),
+    #     ('Audio', 'PlayOneshotSystemSE', {'label': 'SE_PL_ITEM_GET_LIGHT', 'volume': 1.0, 'pitch': 1.0})
+    # ], rooster_fork)
+    # rooster_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    # {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Rooster'},
+    # {0: rooster_get, 1: medicine_check})
 
-    event_tools.insertEventAfter(flowchart, 'Event32', roosterCheck)
-    event_tools.insertEventAfter(flowchart, 'Event28', roosterCheck) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest
+    event_tools.insertEventAfter(flowchart, 'Event32', medicine_check)
+    event_tools.insertEventAfter(flowchart, 'Event28', medicine_check) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest

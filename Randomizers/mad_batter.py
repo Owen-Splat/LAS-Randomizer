@@ -10,19 +10,19 @@ def writeEvents(flow, item1, item2, item3):
 
     ## Mad Batter A (bay)
     event_tools.addEntryPoint(flow.flowchart, 'BatterA')
-    subflowA = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
-    event_tools.insertEventAfter(flow.flowchart, 'BatterA', subflowA)
-    event_tools.insertEventAfter(flow.flowchart, subflowA, item1)
+    subflow_a = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
+    event_tools.insertEventAfter(flow.flowchart, 'BatterA', subflow_a)
+    event_tools.insertEventAfter(flow.flowchart, subflow_a, item1)
 
     ## Mad Batter B (woods)
     event_tools.addEntryPoint(flow.flowchart, 'BatterB')
-    subflowB = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
-    event_tools.insertEventAfter(flow.flowchart, 'BatterB', subflowB)
-    event_tools.insertEventAfter(flow.flowchart, subflowB, item2)
+    subflow_b = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
+    event_tools.insertEventAfter(flow.flowchart, 'BatterB', subflow_b)
+    event_tools.insertEventAfter(flow.flowchart, subflow_b, item2)
 
     ## Mad Batter C (mountain)
     event_tools.addEntryPoint(flow.flowchart, 'BatterC')
-    subflowC = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
-    event_tools.insertEventAfter(flow.flowchart, 'BatterC', subflowC)
-    event_tools.insertEventAfter(flow.flowchart, subflowC, item3)
+    subflow_c = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
+    event_tools.insertEventAfter(flow.flowchart, 'BatterC', subflow_c)
+    event_tools.insertEventAfter(flow.flowchart, subflow_c, item3)
 

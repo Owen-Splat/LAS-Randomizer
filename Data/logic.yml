@@ -877,7 +877,7 @@ mamu:
   content: song-soul
   region: sign-maze
   spoiler-region: sign-maze
-  condition-basic: (hookshot | rooster) & ocarina & can-farm-rupees
+  condition-basic: (hookshot | rooster) & (bracelet | open-mamu) & ocarina & can-farm-rupees
 swamp-chest:
   type: item
   subtype: chest
@@ -2350,7 +2350,7 @@ bottle-grotto:
   condition-death: mabe & swamp & feather
 bridge:
   type: region
-  condition-basic: plains | (river & cross-water)
+  condition-basic: (plains & (bananas | open-bridge)) | (river & cross-water)
 catfish-maw:
   type: region
   condition-basic: river & flippers

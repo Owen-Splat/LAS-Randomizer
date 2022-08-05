@@ -3,16 +3,16 @@ from Randomizers import item_get
 
 
 
-def writeKeyEvent(flowchart, itemKey, itemIndex, room):
+def writeKeyEvent(flowchart, item_key, item_index, room):
     """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
     
     # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-    if itemKey[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
-        itemEvent = event_tools.createActionChain(flowchart, None, [
-            ('Inventory', 'AddItemByKey', {'itemKey': itemKey, 'count': 1, 'index': itemIndex, 'autoEquip': False})
+    if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
+        item_event = event_tools.createActionChain(flowchart, None, [
+            ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         ], None)
     else:
-        itemEvent = item_get.insertItemGetAnimation(flowchart, itemKey, itemIndex)
+        item_event = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
     event_tools.addEntryPoint(flowchart, room)
 
@@ -20,7 +20,7 @@ def writeKeyEvent(flowchart, itemKey, itemIndex, room):
         ('SmallKey', 'Deactivate', {}),
         ('SmallKey', 'SetActorSwitch', {'value': True, 'switchIndex': 1}),
         ('SmallKey', 'Destroy', {})
-    ], itemEvent)
+    ], item_event)
 
 
 

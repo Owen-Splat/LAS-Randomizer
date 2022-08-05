@@ -19,7 +19,8 @@ def makeDatasheetChanges(sheet, placements):
         #     sheet['values'][i]['conditions'].append({'category': 9, 'parameter': 'true'})
         
         if sheet['values'][i]['mKey'] == 'HeartContainer0':
-            firstHeartIndex = i
+            first_heart_index = i
+        
         if sheet['values'][i]['mKey'] == 'AnglerKey':
             sheet['values'][i]['mLotTable'][0]['mType'] = ''
         if sheet['values'][i]['mKey'] == 'FaceKey':
@@ -43,7 +44,7 @@ def makeDatasheetChanges(sheet, placements):
             sheet['values'][i]['mLotTable'][3]['mWeight'] = 71
 
     for i in range(8):
-        sheet['values'][firstHeartIndex+i]['mLotTable'][0]['mType'] = ''
+        sheet['values'][first_heart_index+i]['mLotTable'][0]['mType'] = ''
 
 
 

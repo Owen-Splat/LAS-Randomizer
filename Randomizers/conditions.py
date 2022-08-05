@@ -6,33 +6,33 @@ from Randomizers import data
 def makeConditions(sheet, placements):
     """Create new condition sets for the seashell sensor to work with Dampe, Rapids guy, Fishing Guy, and Seashell mansion"""
 
-    dampeCondition = oead_tools.createCondition('DampeShellsComplete', [(9, 'true')])
-    dampeLocations = ['dampe-page-1', 'dampe-heart-challenge', 'dampe-page-2', 'dampe-bottle-challenge', 'dampe-final']
-    for location in dampeLocations:
+    dampe_condition = oead_tools.createCondition('DampeShellsComplete', [(9, 'true')])
+    dampe_locations = ['dampe-page-1', 'dampe-heart-challenge', 'dampe-page-2', 'dampe-bottle-challenge', 'dampe-final']
+    for location in dampe_locations:
         if placements[location] == 'seashell':
-            dampeCondition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
-    sheet['values'].append(dampeCondition)
+            dampe_condition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
+    sheet['values'].append(dampe_condition)
 
-    rapidsCondition = oead_tools.createCondition('RapidsShellsComplete', [(9, 'true')])
-    rapidsLocations = ['rapids-race-30', 'rapids-race-35', 'rapids-race-45']
-    for location in rapidsLocations:
+    rapids_condition = oead_tools.createCondition('RapidsShellsComplete', [(9, 'true')])
+    rapids_locations = ['rapids-race-30', 'rapids-race-35', 'rapids-race-45']
+    for location in rapids_locations:
         if placements[location] == 'seashell':
-            rapidsCondition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
-    sheet['values'].append(rapidsCondition)
+            rapids_condition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
+    sheet['values'].append(rapids_condition)
 
-    fishingCondition = oead_tools.createCondition('FishingShellsComplete', [(9, 'true')])
-    fishingLocations = ['fishing-orange', 'fishing-cheep-cheep', 'fishing-ol-baron', 'fishing-loose', 'fishing-50', 'fishing-100', 'fishing-150']
-    for location in fishingLocations:
+    fishing_condition = oead_tools.createCondition('FishingShellsComplete', [(9, 'true')])
+    fishing_locations = ['fishing-orange', 'fishing-cheep-cheep', 'fishing-ol-baron', 'fishing-loose', 'fishing-50', 'fishing-100', 'fishing-150']
+    for location in fishing_locations:
         if placements[location] == 'seashell':
-            fishingCondition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
-    sheet['values'].append(fishingCondition)
+            fishing_condition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
+    sheet['values'].append(fishing_condition)
 
-    mansionCondition = oead_tools.createCondition('MansionShellsComplete', [(9, 'true')])
-    mansionLocations = ['5-seashell-reward', '15-seashell-reward', '30-seashell-reward', '40-seashell-reward', '50-seashell-reward']
-    for location in mansionLocations:
+    mansion_condition = oead_tools.createCondition('MansionShellsComplete', [(9, 'true')])
+    mansion_locations = ['5-seashell-reward', '15-seashell-reward', '30-seashell-reward', '40-seashell-reward', '50-seashell-reward']
+    for location in mansion_locations:
         if placements[location] == 'seashell':
-            mansionCondition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
-    sheet['values'].append(mansionCondition)
+            mansion_condition['conditions'].append({'category': 2, 'parameter': f"Seashell:{placements['indexes'][location]}"})
+    sheet['values'].append(mansion_condition)
 
 
 

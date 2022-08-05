@@ -2,7 +2,7 @@ from PySide6 import QtCore, QtWidgets
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
 from update import UpdateProcess
-from randomizer_paths import SETTINGS_PATH, IS_RUNNING_FROM_SOURCE
+from randomizer_paths import IS_RUNNING_FROM_SOURCE
 from randomizer_data import *
 
 import yaml
@@ -117,14 +117,119 @@ class MainWindow(QtWidgets.QMainWindow):
     # show update if there is one
     def showUpdate(self, update):
         if update:
-            self.ui.updateChecker.setText("<a href='https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'>Update found!</a>")
+            self.ui.updateChecker.setText(f"<a href='{DOWNLOAD_PAGE}'>Update found!</a>")
         else:
             self.ui.updateChecker.setText('No updates available')
     
     
     
-    ### STORED SETTINGS
-    # apply stored settings or defaults
+    # apply defaults
+    def applyDefaults(self):
+        self.ui.chestsCheck.setChecked(True)
+        self.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
+
+        self.ui.fishingCheck.setChecked(True)
+        self.excluded_checks.difference_update(FISHING_REWARDS)
+
+        self.ui.rapidsCheck.setChecked(False)
+        self.excluded_checks.update(RAPIDS_REWARDS)
+
+        self.ui.dampeCheck.setChecked(False)
+        self.excluded_checks.update(DAMPE_REWARDS)
+
+        self.ui.giftsCheck.setChecked(True)
+        self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
+
+        self.ui.tradeGiftsCheck.setChecked(False)
+        self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
+
+        self.ui.bossCheck.setChecked(True)
+        self.excluded_checks.difference_update(BOSS_LOCATIONS)
+
+        self.ui.miscellaneousCheck.setChecked(True)
+        self.excluded_checks.difference_update(MISC_LOCATIONS)
+
+        self.ui.heartsCheck.setChecked(True)
+        self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
+
+        self.ui.instrumentCheck.setChecked(True)
+        self.ui.instrumentsComboBox.setCurrentIndex(0)
+
+        self.ui.label_6.setText("  Max Seashells: 15")
+        self.ui.horizontalSlider.setValue(2)
+        self.max_seashells = 15
+        self.excluded_checks.difference_update(set(['5-seashell-reward', '15-seashell-reward']))
+        self.excluded_checks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
+
+        self.ui.label_11.setText('  Logic:  Basic')
+        self.ui.horizontalSlider_2.setValue(0)
+        self.logic = 'basic'
+
+        self.ui.bookCheck.setChecked(True)
+        self.ui.unlockedBombsCheck.setChecked(True)
+        self.ui.shuffledBombsCheck.setChecked(False)
+        self.ui.fastTrendyCheck.setChecked(False)
+        self.ui.stealingCheck.setChecked(True)
+        self.ui.farmingCheck.setChecked(True)
+        self.ui.vanillaCheck.setChecked(True)
+        self.ui.musicCheck.setChecked(False)
+        self.ui.spoilerCheck.setChecked(True)
+        self.ui.kanaletCheck.setChecked(True)
+        self.ui.tunicsCheck.setChecked(True)
+        self.ui.zapsCheck.setChecked(False)
+        self.ui.rupCheck.setChecked(False)
+
+        self.excluded_checks.update(TRENDY_REWARDS)
+        self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
+
+        self.tab_Changed() # just call the same event as when changing the tab to refresh the list
+
+
+
+    def saveSettings(self):
+        settings_dict = {
+            'Theme': self.mode,
+            'Romfs_Folder': self.ui.lineEdit.text(),
+            'Output_Folder': self.ui.lineEdit_2.text(),
+            'Seed': self.ui.lineEdit_3.text(),
+            'Logic': self.logic,
+            'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
+            'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
+            'Fishing': self.ui.fishingCheck.isChecked(),
+            'Rapids': self.ui.rapidsCheck.isChecked(),
+            'Dampe': self.ui.dampeCheck.isChecked(),
+            'Free_Gifts': self.ui.giftsCheck.isChecked(),
+            'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
+            'Boss_Drops': self.ui.bossCheck.isChecked(),
+            'Miscellaneous': self.ui.miscellaneousCheck.isChecked(),
+            'Heart_Pieces': self.ui.heartsCheck.isChecked(),
+            'Instruments': self.ui.instrumentCheck.isChecked(),
+            'Starting_Instruments': self.ui.instrumentsComboBox.currentIndex(),
+            'Seashells': self.max_seashells,
+            'Free_Book': self.ui.bookCheck.isChecked(),
+            'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
+            'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
+            'Fast_Fishing': self.ui.fastFishingCheck.isChecked(),
+            'Fast_Stealing': self.ui.stealingCheck.isChecked(),
+            'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
+            'Reduced_Farming': self.ui.farmingCheck.isChecked(),
+            'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
+            'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
+            # 'Fast_Songs': self.ui.songsCheck.isChecked(),
+            'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
+            'Open_Mamu': self.ui.mazeCheck.isChecked(),
+            'Zapsanity': self.ui.zapsCheck.isChecked(),
+            'Blupsanity': self.ui.rupCheck.isChecked(),
+            # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
+            'Randomize_Music': self.ui.musicCheck.isChecked(),
+            'Excluded_Locations': list(self.excluded_checks)
+        }
+        
+        with open(SETTINGS_PATH, 'w') as settingsFile:
+            yaml.dump(settings_dict, settingsFile, Dumper=MyDumper, sort_keys=False)
+
+
+
     def loadSettings(self):
         
         # theme
@@ -165,8 +270,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # fishing
         try:
-            checked = SETTINGS['Fishing']
-            self.ui.fishingCheck.setChecked(checked)
+            self.ui.fishingCheck.setChecked(SETTINGS['Fishing'])
         except (KeyError, TypeError):
             self.ui.fishingCheck.setChecked(True)
         
@@ -262,32 +366,32 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # logic
         try:
-            logic = str(SETTINGS['Logic'].lower())
-            if logic in ['basic', 'advanced', 'glitched', 'death', 'none']:
-                self.logic = logic
-                if logic == 'basic':
+            settings_logic = str(SETTINGS['Logic'].lower())
+            if settings_logic in ['basic', 'advanced', 'glitched', 'death', 'none']:
+                self.logic = settings_logic
+                if settings_logic == 'basic':
                     self.ui.horizontalSlider_2.setValue(0)
-                    self.ui.label_11.setText('  Logic:  Basic')
-                elif logic == 'advanced':
+                    self.ui.label_11.setText('  Preset:  Basic')
+                elif settings_logic == 'advanced':
                     self.ui.horizontalSlider_2.setValue(1)
-                    self.ui.label_11.setText('  Logic:  Advanced')
-                elif logic == 'glitched':
+                    self.ui.label_11.setText('  Preset:  Advanced')
+                elif settings_logic == 'glitched':
                     self.ui.horizontalSlider_2.setValue(2)
-                    self.ui.label_11.setText('  Logic:  Glitched')
-                elif logic == 'death':
+                    self.ui.label_11.setText('  Preset:  Glitched')
+                elif settings_logic == 'death':
                     self.ui.horizontalSlider_2.setValue(3)
-                    self.ui.label_11.setText('  Logic:  Death')
+                    self.ui.label_11.setText('  Preset:  Death')
                 else:
                     self.ui.horizontalSlider_2.setValue(4)
-                    self.ui.label_11.setText('  Logic:  None')
+                    self.ui.label_11.setText('  Preset:  None')
             else:
                 self.logic = 'basic'
                 self.ui.horizontalSlider_2.setValue(0)
-                self.ui.label_11.setText('  Logic:  Basic')
+                self.ui.label_11.setText('  Preset:  Basic')
         except (KeyError, TypeError):
             self.logic = 'basic'
             self.ui.horizontalSlider_2.setValue(0)
-            self.ui.label_11.setText('  Logic:  Basic')
+            self.ui.label_11.setText('  Preset:  Basic')
         
         # free book
         try:
@@ -402,119 +506,10 @@ class MainWindow(QtWidgets.QMainWindow):
             if not self.ui.miscellaneousCheck.isChecked():
                 self.excluded_checks.update(MISC_LOCATIONS)
             if not self.ui.trendyCheck.isChecked():
-                self.excluded_checks.update(TRENDY_REWARDS)    
-    
+                self.excluded_checks.update(TRENDY_REWARDS)
+
 
     
-    # apply defaults
-    def applyDefaults(self):
-        
-        self.ui.chestsCheck.setChecked(True)
-        self.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
-        
-        self.ui.fishingCheck.setChecked(True)
-        self.excluded_checks.difference_update(FISHING_REWARDS)
-
-        self.ui.rapidsCheck.setChecked(False)
-        self.excluded_checks.update(RAPIDS_REWARDS)
-
-        self.ui.dampeCheck.setChecked(False)
-        self.excluded_checks.update(DAMPE_REWARDS)
-
-        self.ui.giftsCheck.setChecked(True)
-        self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
-        
-        self.ui.tradeGiftsCheck.setChecked(False)
-        self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
-
-        self.ui.bossCheck.setChecked(True)
-        self.excluded_checks.difference_update(BOSS_LOCATIONS)
-        
-        self.ui.miscellaneousCheck.setChecked(True)
-        self.excluded_checks.difference_update(MISC_LOCATIONS)
-        
-        self.ui.heartsCheck.setChecked(True)
-        self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
-
-        self.ui.instrumentCheck.setChecked(True)
-        
-        self.ui.label_6.setText("  Max Seashells: 15")
-        self.ui.horizontalSlider.setValue(2)
-        self.max_seashells = 15
-        self.excluded_checks.difference_update(set(['5-seashell-reward', '15-seashell-reward']))
-        self.excluded_checks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
-
-        self.ui.label_11.setText('  Logic:  Basic')
-        self.ui.horizontalSlider_2.setValue(0)
-        self.logic = 'Basic'
-
-        self.ui.bookCheck.setChecked(True)
-        self.ui.unlockedBombsCheck.setChecked(True)
-        self.ui.shuffledBombsCheck.setChecked(False)
-        self.ui.fastTrendyCheck.setChecked(False)
-        self.ui.stealingCheck.setChecked(True)
-        self.ui.farmingCheck.setChecked(True)
-        self.ui.vanillaCheck.setChecked(True)
-        self.ui.musicCheck.setChecked(False)
-        self.ui.spoilerCheck.setChecked(True)
-        self.ui.kanaletCheck.setChecked(True)
-        self.ui.tunicsCheck.setChecked(True)
-        self.ui.zapsCheck.setChecked(False)
-        self.ui.rupCheck.setChecked(False)
-
-        self.excluded_checks.update(TRENDY_REWARDS)
-        self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
-        
-        self.tab_Changed() # just call the same event as when changing the tab to refresh the list
-    
-    
-    
-    # save settings to file
-    def saveSettings(self):
-        
-        settings_dict = {
-            'Theme': self.mode,
-            'Romfs_Folder': self.ui.lineEdit.text(),
-            'Output_Folder': self.ui.lineEdit_2.text(),
-            'Seed': self.ui.lineEdit_3.text(),
-            'Logic': self.logic,
-            'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
-            'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
-            'Fishing': self.ui.fishingCheck.isChecked(),
-            'Rapids': self.ui.rapidsCheck.isChecked(),
-            'Dampe': self.ui.dampeCheck.isChecked(),
-            'Free_Gifts': self.ui.giftsCheck.isChecked(),
-            'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
-            'Boss_Drops': self.ui.bossCheck.isChecked(),
-            'Miscellaneous': self.ui.miscellaneousCheck.isChecked(),
-            'Heart_Pieces': self.ui.heartsCheck.isChecked(),
-            'Instruments': self.ui.instrumentCheck.isChecked(),
-            'Starting_Instruments': self.ui.instrumentsComboBox.currentIndex(),
-            'Seashells': self.max_seashells,
-            'Free_Book': self.ui.bookCheck.isChecked(),
-            'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
-            'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
-            'Fast_Fishing': self.ui.fastFishingCheck.isChecked(),
-            'Fast_Stealing': self.ui.stealingCheck.isChecked(),
-            'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
-            'Reduced_Farming': self.ui.farmingCheck.isChecked(),
-            'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
-            'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
-            # 'Fast_Songs': self.ui.songsCheck.isChecked(),
-            'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
-            'Zapsanity': self.ui.zapsCheck.isChecked(),
-            'Blupsanity': self.ui.rupCheck.isChecked(),
-            # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
-            'Randomize_Music': self.ui.musicCheck.isChecked(),
-            'Excluded_Locations': list(self.excluded_checks)
-        }
-        
-        with open(SETTINGS_PATH, 'w') as settingsFile:
-            yaml.dump(settings_dict, settingsFile, Dumper=MyDumper, sort_keys=False)
-    
-    
-    
-    ###############################################################################################################################
     # RomFS Folder Browse
     def romBrowse(self):
         folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
@@ -698,18 +693,21 @@ class MainWindow(QtWidgets.QMainWindow):
                 'free-book': self.ui.bookCheck.isChecked(),
                 'unlocked-bombs': self.ui.unlockedBombsCheck.isChecked(),
                 'shuffle-bombs': self.ui.shuffledBombsCheck.isChecked(),
+                'reduce-farming': self.ui.farmingCheck.isChecked(),
+                'assured-sword-shield': self.ui.vanillaCheck.isChecked(),
                 'fast-fishing': self.ui.fastFishingCheck.isChecked(),
                 'fast-stealing': self.ui.stealingCheck.isChecked(),
                 'fast-trendy': self.ui.fastTrendyCheck.isChecked(),
-                'assured-sword-shield': self.ui.vanillaCheck.isChecked(),
-                'reduce-farming': self.ui.farmingCheck.isChecked(),
+                # 'fast-songs': self.ui.songsCheck.isChecked(),
                 'shuffle-instruments': self.ui.instrumentCheck.isChecked(),
                 'starting-instruments': self.ui.instrumentsComboBox.currentIndex(),
-                'open-kanalet': self.ui.kanaletCheck.isChecked(),
-                # 'fast-songs': self.ui.songsCheck.isChecked(),
                 'shuffle-tunics': self.ui.tunicsCheck.isChecked(),
+                'open-kanalet': self.ui.kanaletCheck.isChecked(),
+                'open-bridge': self.ui.bridgeCheck.isChecked(),
+                'open-mamu': self.ui.mazeCheck.isChecked(),
                 'zap-sanity': self.ui.zapsCheck.isChecked(),
                 'blup-sanity': self.ui.rupCheck.isChecked(),
+                'classic-d2': self.ui.swampCheck.isChecked(),
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
                 'excluded-locations': self.excluded_checks

@@ -3,19 +3,19 @@ from Randomizers import item_get
 
 
 
-def makeEventChanges(flowchart, rupIndex, itemKey, itemIndex):
+def makeEventChanges(flowchart, rup_index, item_key, item_index):
     """Adds an entry point to the flowchart for each rupee, and inserts the ItemGetAnimation event into it"""
     
-    event_tools.addEntryPoint(flowchart, f'Lv10Rupee_{rupIndex + 1}')
+    event_tools.addEntryPoint(flowchart, f'Lv10Rupee_{rup_index + 1}')
 
     # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-    if itemKey[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
-        itemGet = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-        {'itemKey': itemKey, 'count': 1, 'index': itemIndex, 'autoEquip': False})
+    if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
+        item_get = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+        {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
-        itemGet = item_get.insertItemGetAnimation(flowchart, itemKey, itemIndex)
+        item_get = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
-    event_tools.createActionChain(flowchart, f'Lv10Rupee_{rupIndex + 1}', [
+    event_tools.createActionChain(flowchart, f'Lv10Rupee_{rup_index + 1}', [
         ('SinkingSword', 'Destroy', {}),
-        ('EventFlags', 'SetFlag', {'symbol': 'Lv10RupeeGet' if rupIndex == 0 else f'Lv10RupeeGet_{rupIndex + 1}', 'value': True})
-    ], itemGet)
+        ('EventFlags', 'SetFlag', {'symbol': 'Lv10RupeeGet' if rup_index == 0 else f'Lv10RupeeGet_{rup_index + 1}', 'value': True})
+    ], item_get)

@@ -6,7 +6,7 @@ import copy
 import oead
 
 
-prizesDict = {}
+prizes_dict = {}
 
 
 
@@ -59,7 +59,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         # prize1['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!PrizeGet1'})
         # prize1['layouts'][0]['gettingFlag'] = 'PrizeGet1'
         sheet['values'].append(oead_tools.dictToStruct(prize1))
-        prizesDict['prize1'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize1['symbol'], 'index': prize1['layouts'][0]['itemIndex']}
+        prizes_dict['prize1'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize1['symbol'], 'index': prize1['layouts'][0]['itemIndex']}
         symbols.append(prize1['symbol'])
         total_syms += 1
     else:
@@ -74,7 +74,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 }))
                 layoutNum = len(prize['layouts']) - 1
                 break
-        prizesDict['prize1'] = {
+        prizes_dict['prize1'] = {
             'cranePrizeId': symbols.index(item_defs[placements['trendy-prize-1']]['model-name']),
             'layoutIndex': layoutNum,
             'symbol': prize['symbol'],
@@ -89,7 +89,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         # prize2['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!PrizeGet2'})
         # prize2['layouts'][0]['gettingFlag'] = 'PrizeGet2'
         sheet['values'].append(oead_tools.dictToStruct(prize2))
-        prizesDict['prize2'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize2['symbol'], 'index': prize2['layouts'][0]['itemIndex']}
+        prizes_dict['prize2'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize2['symbol'], 'index': prize2['layouts'][0]['itemIndex']}
         symbols.append(item_defs[placements['trendy-prize-1']]['model-name'])
         total_syms += 1
     else:
@@ -104,7 +104,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 }))
                 layoutNum = len(prize['layouts']) - 1
                 break
-        prizesDict['prize2'] = {
+        prizes_dict['prize2'] = {
             'cranePrizeId': symbols.index(item_defs[placements['trendy-prize-2']]['model-name']),
             'layoutIndex': layoutNum,
             'symbol': prize['symbol'],
@@ -120,7 +120,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         # prize3['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!PrizeGet3'})
         # prize3['layouts'][0]['gettingFlag'] = 'PrizeGet3'
         sheet['values'].append(oead_tools.dictToStruct(prize3))
-        prizesDict['prize3'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize3['symbol'], 'index': prize3['layouts'][0]['itemIndex']}
+        prizes_dict['prize3'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize3['symbol'], 'index': prize3['layouts'][0]['itemIndex']}
         symbols.append(item_defs[placements['trendy-prize-1']]['model-name'])
         total_syms += 1
     else:
@@ -137,7 +137,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 }))
                 layoutNum = len(prize['layouts']) - 1
                 break
-        prizesDict['prize3'] = {
+        prizes_dict['prize3'] = {
             'cranePrizeId': symbols.index(item_defs[placements['trendy-prize-3']]['model-name']),
             'layoutIndex': layoutNum,
             'symbol': prize['symbol'],
@@ -155,7 +155,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize4['layouts'][0]['conditions'].append({'category': 2, 'parameter': 'ConchHorn'})
         # prize4['layouts'][0]['gettingFlag'] = 'PrizeGet4'
         sheet['values'].append(oead_tools.dictToStruct(prize4))
-        prizesDict['prize4'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize4['symbol'], 'index': prize4['layouts'][0]['itemIndex']}
+        prizes_dict['prize4'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize4['symbol'], 'index': prize4['layouts'][0]['itemIndex']}
         symbols.append(item_defs[placements['trendy-prize-1']]['model-name'])
         total_syms += 1
     else:
@@ -174,7 +174,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 if not placements['settings']['fast-trendy']:
                     prize['layouts'][layoutNum]['conditions'].append({'category': 2, 'parameter': 'ConchHorn'})
                 break
-        prizesDict['prize4'] = {
+        prizes_dict['prize4'] = {
             'cranePrizeId': symbols.index(item_defs[placements['trendy-prize-4']]['model-name']),
             'layoutIndex': layoutNum,
             'symbol': prize['symbol'],
@@ -192,7 +192,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize5['layouts'][0]['conditions'].append({'category': 2, 'parameter': 'SeaLilysBell'})
         # prize5['layouts'][0]['gettingFlag'] = 'PrizeGet5'
         sheet['values'].append(oead_tools.dictToStruct(prize5))
-        prizesDict['prize5'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize5['symbol'], 'index': prize5['layouts'][0]['itemIndex']}
+        prizes_dict['prize5'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize5['symbol'], 'index': prize5['layouts'][0]['itemIndex']}
         symbols.append(item_defs[placements['trendy-prize-1']]['model-name'])
         total_syms += 1
     else:
@@ -211,7 +211,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 if not placements['settings']['fast-trendy']:
                     prize['layouts'][layoutNum]['conditions'].append({'category': 2, 'parameter': 'SeaLilysBell'})
                 break
-        prizesDict['prize5'] = {
+        prizes_dict['prize5'] = {
             'cranePrizeId': symbols.index(item_defs[placements['trendy-prize-5']]['model-name']),
             'layoutIndex': layoutNum,
             'symbol': prize['symbol'],
@@ -229,7 +229,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize6['layouts'][0]['conditions'].append({'category': 2, 'parameter': 'SurfHarp'})
         # prize6['layouts'][0]['gettingFlag'] = 'PrizeGet6'
         sheet['values'].append(oead_tools.dictToStruct(prize6))
-        prizesDict['prize6'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize6['symbol'], 'index': prize6['layouts'][0]['itemIndex']}
+        prizes_dict['prize6'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize6['symbol'], 'index': prize6['layouts'][0]['itemIndex']}
         symbols.append(item_defs[placements['trendy-prize-1']]['model-name'])
         total_syms += 1
     else:
@@ -248,7 +248,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 if not placements['settings']['fast-trendy']:
                     prize['layouts'][layoutNum]['conditions'].append({'category': 2, 'parameter': 'SurfHarp'})
                 break
-        prizesDict['prize6'] = {
+        prizes_dict['prize6'] = {
             'cranePrizeId': symbols.index(item_defs[placements['trendy-prize-6']]['model-name']),
             'layoutIndex': layoutNum,
             'symbol': prize['symbol'],
@@ -257,25 +257,25 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
 
 def changePrizeGroups(sheet1, sheet2):
-    # print(prizesDict)
+    # print(prizes_dict)
 
-    sheet1['values'][0]['cranePrizeId'] = prizesDict['prize1']['cranePrizeId']
-    sheet1['values'][0]['layoutIndex'] = prizesDict['prize1']['layoutIndex']
+    sheet1['values'][0]['cranePrizeId'] = prizes_dict['prize1']['cranePrizeId']
+    sheet1['values'][0]['layoutIndex'] = prizes_dict['prize1']['layoutIndex']
 
-    sheet2['values'][0]['cranePrizeId'] = prizesDict['prize2']['cranePrizeId']
-    sheet2['values'][0]['layoutIndex'] = prizesDict['prize2']['layoutIndex']
+    sheet2['values'][0]['cranePrizeId'] = prizes_dict['prize2']['cranePrizeId']
+    sheet2['values'][0]['layoutIndex'] = prizes_dict['prize2']['layoutIndex']
 
-    sheet2['values'][1]['cranePrizeId'] = prizesDict['prize3']['cranePrizeId']
-    sheet2['values'][1]['layoutIndex'] = prizesDict['prize3']['layoutIndex']
+    sheet2['values'][1]['cranePrizeId'] = prizes_dict['prize3']['cranePrizeId']
+    sheet2['values'][1]['layoutIndex'] = prizes_dict['prize3']['layoutIndex']
 
-    sheet2['values'][2]['cranePrizeId'] = prizesDict['prize4']['cranePrizeId']
-    sheet2['values'][2]['layoutIndex'] = prizesDict['prize4']['layoutIndex']
+    sheet2['values'][2]['cranePrizeId'] = prizes_dict['prize4']['cranePrizeId']
+    sheet2['values'][2]['layoutIndex'] = prizes_dict['prize4']['layoutIndex']
 
-    sheet2['values'][3]['cranePrizeId'] = prizesDict['prize5']['cranePrizeId']
-    sheet2['values'][3]['layoutIndex'] = prizesDict['prize5']['layoutIndex']
+    sheet2['values'][3]['cranePrizeId'] = prizes_dict['prize5']['cranePrizeId']
+    sheet2['values'][3]['layoutIndex'] = prizes_dict['prize5']['layoutIndex']
 
-    sheet2['values'][4]['cranePrizeId'] = prizesDict['prize6']['cranePrizeId']
-    sheet2['values'][4]['layoutIndex'] = prizesDict['prize6']['layoutIndex']
+    sheet2['values'][4]['cranePrizeId'] = prizes_dict['prize6']['cranePrizeId']
+    sheet2['values'][4]['layoutIndex'] = prizes_dict['prize6']['layoutIndex']
 
 
 
@@ -378,33 +378,33 @@ def makeEventChanges(flowchart, placements):
     # ### PRIZE PARAMS CHECK
     # prize6Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
     #     {'symbol': 'PrizeGet6'}, bombCheck)
-    # prize6IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizesDict['prize6']['index']}, {0: prize6Get, 1: bombCheck})
-    # prize6SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizesDict['prize6']['symbol']}, {0: prize6IndexCheck, 1: bombCheck})
+    # prize6IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize6']['index']}, {0: prize6Get, 1: bombCheck})
+    # prize6SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize6']['symbol']}, {0: prize6IndexCheck, 1: bombCheck})
 
     # prize5Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
     #     {'symbol': 'PrizeGet5'}, bombCheck)
-    # prize5IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizesDict['prize5']['index']}, {0: prize5Get, 1: prize6SymbolCheck})
-    # prize5SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizesDict['prize5']['symbol']}, {0: prize5IndexCheck, 1: prize6SymbolCheck})
+    # prize5IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize5']['index']}, {0: prize5Get, 1: prize6SymbolCheck})
+    # prize5SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize5']['symbol']}, {0: prize5IndexCheck, 1: prize6SymbolCheck})
 
     # prize4Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
     #     {'symbol': 'PrizeGet4'}, bombCheck)
-    # prize4IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizesDict['prize4']['index']}, {0: prize4Get, 1: prize5SymbolCheck})
-    # prize4SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizesDict['prize4']['symbol']}, {0: prize4IndexCheck, 1: prize5SymbolCheck})
+    # prize4IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize4']['index']}, {0: prize4Get, 1: prize5SymbolCheck})
+    # prize4SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize4']['symbol']}, {0: prize4IndexCheck, 1: prize5SymbolCheck})
 
     # prize3Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
     #     {'symbol': 'PrizeGet3'}, bombCheck)
-    # prize3IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizesDict['prize3']['index']}, {0: prize3Get, 1: prize4SymbolCheck})
-    # prize3SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizesDict['prize3']['symbol']}, {0: prize3IndexCheck, 1: prize4SymbolCheck})
+    # prize3IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize3']['index']}, {0: prize3Get, 1: prize4SymbolCheck})
+    # prize3SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize3']['symbol']}, {0: prize3IndexCheck, 1: prize4SymbolCheck})
 
     # prize2Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
     #     {'symbol': 'PrizeGet2'}, bombCheck)
-    # prize2IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizesDict['prize2']['index']}, {0: prize2Get, 1: prize3SymbolCheck})
-    # prize2SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizesDict['prize2']['symbol']}, {0: prize2IndexCheck, 1: prize3SymbolCheck})
+    # prize2IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize2']['index']}, {0: prize2Get, 1: prize3SymbolCheck})
+    # prize2SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize2']['symbol']}, {0: prize2IndexCheck, 1: prize3SymbolCheck})
 
     # prize1Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
     #     {'symbol': 'PrizeGet1'}, bombCheck)
-    # prize1IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizesDict['prize1']['index']}, {0: prize1Get, 1: prize2SymbolCheck})
-    # prize1SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizesDict['prize1']['symbol']}, {0: prize1IndexCheck, 1: prize2SymbolCheck})
+    # prize1IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize1']['index']}, {0: prize1Get, 1: prize2SymbolCheck})
+    # prize1SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize1']['symbol']}, {0: prize1IndexCheck, 1: prize2SymbolCheck})
 
     ### CONNECT CHAIN TO EVENTS
     event_tools.insertEventAfter(flowchart, 'Event3', bombCheck)
