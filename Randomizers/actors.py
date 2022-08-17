@@ -147,19 +147,19 @@ def addNeededActors(flowchart, rom_path):
         time_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Timer')
         flowchart.actors.append(time_actor)
     
-    # # needed stuff for rooster
-    # try:
-    #     event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
-    # except ValueError:
-    #     roosterActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
-    #     flowchart.actors.append(roosterActor)
+    # needed stuff for rooster
+    try:
+        event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
+    except ValueError:
+        roosterActor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
+        flowchart.actors.append(roosterActor)
     
-    # try:
-    #     event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
     
-    # try:
-    #     event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
-    # except ValueError:
-    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')
+    try:
+        event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')

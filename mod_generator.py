@@ -14,7 +14,7 @@ import Tools.oead_tools as oead_tools
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, shop, rupees, rapids
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, shop, rupees, rapids, item_common, fishing
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -80,7 +80,7 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['randomize-music'] and self.thread_active:
                 self.randomizeMusic()
         
-        except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError):
+        except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError, OverflowError):
             print(traceback.format_exc())
             self.error.emit()
         
@@ -602,29 +602,9 @@ class ModsProcess(QtCore.QThread):
     def fishingChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Fisherman.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
-
-        change_defs = [
-            ('fishing-orange', 'Event113', 'Event212'),
-            ('fishing-cheep-cheep', 'Event3', 'Event10'),
-            ('fishing-ol-baron', 'Event133', 'Event140'),
-            ('fishing-50', 'Event182', 'Event240'),
-            ('fishing-100', 'Event191', 'Event247'),
-            ('fishing-150', 'Event193', 'Event255'),
-            ('fishing-loose', 'Event264', 'Event265')
-        ]
-
-        for defs in change_defs:
-            if self.thread_active:
-                item_key = self.item_defs[self.placements[defs[0]]]['item-key']
-                item_index = self.placements['indexes'][defs[0]] if defs[0] in self.placements['indexes'] else -1
-                item_get.insertItemGetAnimation(flow.flowchart, item_key, item_index, defs[1], defs[2], False, False)
-            else: break
+        fishing.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
+        fishing.fixFishingBottle(flow.flowchart)
         
-        event_tools.insertEventAfter(flow.flowchart, 'Event20', 'Event3')
-        event_tools.insertEventAfter(flow.flowchart, 'Event18', 'Event133')
-        event_tools.insertEventAfter(flow.flowchart, 'Event24', 'Event191')
-        event_tools.insertEventAfter(flow.flowchart, 'FishingGetBottle', 'Event264')
-
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Fisherman.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -702,17 +682,20 @@ class ModsProcess(QtCore.QThread):
         # Page 1 reward
         dampe.makeDatasheetChanges(sheet, 3,
         self.item_defs[self.placements['dampe-page-1']]['item-key'],
-        self.placements['indexes']['dampe-page-1'] if 'dampe-page-1' in self.placements['indexes'] else -1)
+        self.placements['indexes']['dampe-page-1'] if 'dampe-page-1' in self.placements['indexes'] else -1,
+        'DampePage1')
 
         # Page 2 reward
         dampe.makeDatasheetChanges(sheet, 7,
         self.item_defs[self.placements['dampe-page-2']]['item-key'],
-        self.placements['indexes']['dampe-page-2'] if 'dampe-page-2' in self.placements['indexes'] else -1)
+        self.placements['indexes']['dampe-page-2'] if 'dampe-page-2' in self.placements['indexes'] else -1,
+        'DampePage2')
 
         # Final reward
         dampe.makeDatasheetChanges(sheet, 12,
         self.item_defs[self.placements['dampe-final']]['item-key'],
-        self.placements['indexes']['dampe-final'] if 'dampe-final' in self.placements['indexes'] else -1)
+        self.placements['indexes']['dampe-final'] if 'dampe-final' in self.placements['indexes'] else -1,
+        'DampeFinal')
 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/MapPieceClearReward.gsheet', sheet)
@@ -723,15 +706,17 @@ class ModsProcess(QtCore.QThread):
 
         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceTheme.gsheet')
 
-        # 1-4 reward
+        # 1-4 reward - heart challenge
         dampe.makeDatasheetChanges(sheet, 3,
         self.item_defs[self.placements['dampe-heart-challenge']]['item-key'],
-        self.placements['indexes']['dampe-heart-challenge'] if 'dampe-heart-challenge' in self.placements['indexes'] else -1)
+        self.placements['indexes']['dampe-heart-challenge'] if 'dampe-heart-challenge' in self.placements['indexes'] else -1,
+        'DampeHeart')
 
-        # 3-2 reward
+        # 3-2 reward - bottle challenge
         dampe.makeDatasheetChanges(sheet, 9,
         self.item_defs[self.placements['dampe-bottle-challenge']]['item-key'],
-        self.placements['indexes']['dampe-bottle-challenge'] if 'dampe-bottle-challenge' in self.placements['indexes'] else -1)
+        self.placements['indexes']['dampe-bottle-challenge'] if 'dampe-bottle-challenge' in self.placements['indexes'] else -1,
+        'DampeBottle')
 
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/MapPieceTheme.gsheet', sheet)
@@ -899,6 +884,7 @@ class ModsProcess(QtCore.QThread):
 
     def makeGeneralLEBChanges(self):
         """Fix some LEB files in ways that are always done, regardless of item placements"""
+
         ### Entrance to Mysterious Forest: Set the owl to 0 instead of 1, prevents the cutscene from triggering in some circumstances.
         # For all other owls, setting the flags is sufficient but this one sucks.
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field'):
@@ -988,11 +974,35 @@ class ModsProcess(QtCore.QThread):
                     f.write(room_data.repack())
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
+        
+        ### Make Honeycomb show new graphics in tree
+        with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
+            room_data = leb.Room(f.read())
+        
+            item = self.placements['tarin-ukuku']
+            item_key = self.item_defs[item]['item-key']
+
+            if item_key != 'ZapTrap':
+                model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
+                model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
+            else:
+                model_name = random.choice(list(data.ITEM_MODELS))
+                model_path = data.ITEM_MODELS[model_name]
+
+        room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
+        room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
+
+        if self.thread_active:
+            with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
 
 
     def makeGeneralEventChanges(self):
         """Make changes to some events that should be in every seed, e.g. setting flags for having watched cutscenes"""
+        
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/event'):
             os.makedirs(f'{self.out_dir}/Romfs/region_common/event')
 
@@ -1009,13 +1019,13 @@ class ModsProcess(QtCore.QThread):
 
         #################################################################################################################################
         # ### TreasureBox event: Adds in events to make certain items be progressive.
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
-        actors.addNeededActors(flow.flowchart, self.rom_path)
-        chests.writeChestEvent(flow.flowchart)
-        flow_control_actor = event_tools.findActor(flow.flowchart, 'FlowControl') # store this to add to ShellMansionPresent
+        treasure_flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
+        actors.addNeededActors(treasure_flow.flowchart, self.rom_path)
+        chests.writeChestEvent(treasure_flow.flowchart)
+        flow_control_actor = event_tools.findActor(treasure_flow.flowchart, 'FlowControl') # store this to add to ShellMansionPresent
 
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/TreasureBox.bfevfl', flow)
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/TreasureBox.bfevfl', treasure_flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
@@ -1025,7 +1035,7 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
         flow.flowchart.actors.append(flow_control_actor)
 
-        seashell_mansion.changeRewards(flow.flowchart, flow)
+        seashell_mansion.changeRewards(flow.flowchart, treasure_flow.flowchart)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ShellMansionPresent.bfevfl', flow)
@@ -1035,7 +1045,8 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### Item: Add and fix some entry points for the ItemGetSequence
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Item.bfevfl')
-
+        actors.addNeededActors(flow.flowchart, self.rom_path)
+        
         event_tools.addEntryPoint(flow.flowchart, 'MagicPowder_MaxUp')
         event_tools.createActionChain(flow.flowchart, 'MagicPowder_MaxUp', [
             ('Dialog', 'Show', {'message': 'Randomizer:GetBombMaxUp'})
@@ -1054,11 +1065,25 @@ class ModsProcess(QtCore.QThread):
         event_tools.findEntryPoint(flow.flowchart, 'BlueClothes').name = 'ClothesBlue'
         event_tools.findEntryPoint(flow.flowchart, 'Necklace').name = 'PinkBra'
 
+        dampe.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
+
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-                
+        
+        # #################################################################################################################################
+        # ### ItemCommon: Testing to see if Dampe uses this, will make a CompareString event chain to customize item get events
+        # flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ItemCommon.bfevfl')
+        # actors.addNeededActors(flow.flowchart, self.rom_path)
+        # flow.flowchart.actors.append(flow_control_actor)
+        # item_common.addCompareStringChain(flow.flowchart)
+
+        # if self.thread_active:
+        #     event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ItemCommon.bfevfl', flow)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
+        
         #################################################################################################################################
         ### MadamMeowMeow: Change her behaviour to always take back BowWow if you have him, and not do anything based on having the Horn
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MadamMeowMeow.bfevfl')
@@ -1199,6 +1224,9 @@ class ModsProcess(QtCore.QThread):
                 
                 if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                     item['npcKey'] = 'ItemClothesRed'
+                
+                if item['symbol'] == 'Honeycomb': # ItemHoneycomb is changed, so point to new npc value for correct graphics
+                    item['npcKey'] = 'PatchHoneycomb'
                 
             else: break
         
@@ -1376,16 +1404,16 @@ class ModsProcess(QtCore.QThread):
         # Open up the already modded SinkingSword eventflow to make new events
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
         
-        sunken = [
-            'taltal-east-drop',
-            'south-bay-sunken',
-            'bay-passage-sunken',
-            'river-crossing-cave',
-            'kanalet-moat-south'
-        ]
-        non_sunken = (x for x in data.HEART_ROOMS if x not in sunken)
+        # sunken = [
+        #     'taltal-east-drop',
+        #     'south-bay-sunken',
+        #     'bay-passage-sunken',
+        #     'river-crossing-cave',
+        #     'kanalet-moat-south'
+        # ]
+        # non_sunken = (x for x in data.HEART_ROOMS if x not in sunken)
         
-        for room in non_sunken:
+        for room in data.HEART_ROOMS:
             if self.thread_active:
                 dirname = re.match('(.+)_\\d\\d[A-P]', data.HEART_ROOMS[room]).group(1)
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):

@@ -7,9 +7,7 @@ import os
 
 ### define constants
 with open(os.path.join(ROOT_PATH, 'version.txt'), 'r') as f:
-  VERSION = f.read().strip()
-
-VERSION_WITHOUT_COMMIT = VERSION
+    VERSION = f.read()
 
 DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
 

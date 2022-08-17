@@ -81,6 +81,16 @@ def listToSheetArray(name, l):
 
 
 ### ROOT FIELDS
+def readField(field):
+	return {
+		'name': field.name,
+		'type_name': field.type_name,
+		'type': field.type,
+		'flags': field.flags,
+		'fields': field.fields
+	}
+
+
 def createField(name, type_name, type, offset, flags=None):
 	field = oead.gsheet.Field()
 

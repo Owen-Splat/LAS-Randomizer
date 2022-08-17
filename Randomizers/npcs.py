@@ -49,7 +49,14 @@ def makeNpcChanges(npcSheet, placements):
         if npc['symbol'] == 'ItemClothesRed':
             npc['graphics']['path'] = 'ItemYoshiDoll.bfres'
             npc['graphics']['model'] = 'YoshiDoll'
-            
+        
+
+        ### make some trade quest items properly show in the cutscenes before obtaining them
+        if npc['symbol'] == 'ItemHoneycomb':
+            npc['graphics']['path'] = '$0'
+            npc['graphics']['model'] = '$1'
+
+
         if npc['symbol'] == 'ObjClothBag':
             npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 0}
 
@@ -182,39 +189,40 @@ def makeNpcChanges(npcSheet, placements):
             npc['shellSensor'].append({'category': 9, 'parameter': '!FishingShellsComplete'})
         if npc['symbol'] == 'NpcShellMansionMaster':
             npc['shellSensor'].append({'category': 9, 'parameter': '!MansionShellsComplete'})
-    
+
 
 
 def makeNewNpcs(npc_sheet):
     """add new npcs so that we can properly show item models for items that normally cannot be standing items
     unfortunately will not by itself make them show properly when obtaining the item, only the freestanding model"""
 
-    ballad = copy.deepcopy(DUMMY_NPC)
-    ballad['symbol'] = 'ItemBallad'
-    ballad['graphics']['path'] = 'ItemBallad.bfres'
-    npc_sheet['values'].append(oead_tools.dictToStruct(ballad))
+    new_npc = copy.deepcopy(DUMMY_NPC)
+    new_npc['symbol'] = 'PatchHoneycomb'
+    new_npc['graphics']['path'] = 'ItemHoneycomb.bfres'
+    new_npc['graphics']['model'] = 'Honeycomb'
+    npc_sheet['values'].append(oead_tools.dictToStruct(new_npc))
 
-    mambo = copy.deepcopy(DUMMY_NPC)
-    mambo['symbol'] = 'ItemMambo'
-    mambo['graphics']['path'] = 'ItemMambo.bfres'
-    npc_sheet['values'].append(oead_tools.dictToStruct(mambo))
+    # mambo = copy.deepcopy(DUMMY_NPC)
+    # mambo['symbol'] = 'ItemMambo'
+    # mambo['graphics']['path'] = 'ItemMambo.bfres'
+    # npc_sheet['values'].append(oead_tools.dictToStruct(mambo))
 
-    soul = copy.deepcopy(DUMMY_NPC)
-    soul['symbol'] = 'ItemSoul'
-    soul['graphics']['path'] = 'ItemSoul.bfres'
-    npc_sheet['values'].append(oead_tools.dictToStruct(soul))
+    # soul = copy.deepcopy(DUMMY_NPC)
+    # soul['symbol'] = 'ItemSoul'
+    # soul['graphics']['path'] = 'ItemSoul.bfres'
+    # npc_sheet['values'].append(oead_tools.dictToStruct(soul))
 
-    bombBag = copy.deepcopy(DUMMY_NPC)
-    bombBag['symbol'] = 'ObjBombBag'
-    bombBag['graphics']['path'] = 'ObjBombBag.bfres'
-    bombBag['graphics']['model'] = 'BombBag'
-    npc_sheet['values'].append(oead_tools.dictToStruct(bombBag))
+    # bombBag = copy.deepcopy(DUMMY_NPC)
+    # bombBag['symbol'] = 'ObjBombBag'
+    # bombBag['graphics']['path'] = 'ObjBombBag.bfres'
+    # bombBag['graphics']['model'] = 'BombBag'
+    # npc_sheet['values'].append(oead_tools.dictToStruct(bombBag))
 
-    arrowBag = copy.deepcopy(DUMMY_NPC)
-    arrowBag['symbol'] = 'ObjArrowBag'
-    arrowBag['graphics']['path'] = 'ObjArrowBag.bfres'
-    arrowBag['graphics']['model'] = 'ArrowBag'
-    npc_sheet['values'].append(oead_tools.dictToStruct(arrowBag))
+    # arrowBag = copy.deepcopy(DUMMY_NPC)
+    # arrowBag['symbol'] = 'ObjArrowBag'
+    # arrowBag['graphics']['path'] = 'ObjArrowBag.bfres'
+    # arrowBag['graphics']['model'] = 'ArrowBag'
+    # npc_sheet['values'].append(oead_tools.dictToStruct(arrowBag))
 
 
 

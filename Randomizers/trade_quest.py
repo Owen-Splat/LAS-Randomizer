@@ -95,6 +95,8 @@ def kikiChanges(flowchart, placements, item_defs, rom_path):
         {'symbol': 'kiki_gone', 'value': True}, get_event)
 
         event_tools.insertEventAfter(flowchart, 'Event89', kiki_gone)
+    else:
+        event_tools.insertEventAfter(flowchart, 'Event89', get_event)
 
 
 

@@ -7,10 +7,6 @@ import random
 import traceback
 
 
-dungeons = ['tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel',
-            'catfish-maw', 'face-shrine', 'eagle-tower', 'turtle-rock', 'color-dungeon']
-
-
 
 class ItemShuffler(QtCore.QThread):
     
@@ -34,7 +30,7 @@ class ItemShuffler(QtCore.QThread):
         self.logic_defs = logic_defs
         
         self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
-        self.force_out_dungeons = ['rooster']
+        # self.force_out_dungeons = ['rooster']
 
         self.progress_value = 0
         self.thread_active = True
@@ -42,7 +38,7 @@ class ItemShuffler(QtCore.QThread):
     
     # thread automatically starts the run method
     def run(self):
-        
+
         # TEMPORARY CODE HERE to make it so that everything that isn't a chest is set to vanilla
         vanilla_locations = [k for k, v in self.logic_defs.items()
                             if v['type'] == 'item'
@@ -56,6 +52,11 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.append('trendy-prize-4')
         vanilla_locations.append('trendy-prize-5')
         vanilla_locations.append('trendy-prize-6')
+        vanilla_locations.remove('bay-passage-sunken')
+        vanilla_locations.remove('river-crossing-cave')
+        vanilla_locations.remove('kanalet-moat-south')
+        vanilla_locations.remove('south-bay-sunken')
+        vanilla_locations.remove('taltal-east-drop')
 
         instruments = [k for k, v in self.logic_defs.items()
             if v['type'] == 'item'
@@ -136,7 +137,7 @@ class ItemShuffler(QtCore.QThread):
             if self.thread_active:
                 self.give_placements.emit(placements)
         
-        except (IndexError, KeyError, ValueError):
+        except (AttributeError, IndexError, KeyError, ValueError):
             print(traceback.format_exc())
             self.error.emit()
         
@@ -287,13 +288,13 @@ class ItemShuffler(QtCore.QThread):
                             accessAdded = True
                             
                             # if we're looking at an item or follower location, at the item it holds, if it has one
-                            if (self.logic_defs[key]['type'] == 'item' or self.logic_defs[key]['type'] == 'follower') and placements[key] != None:
+                            if (self.logic_defs[key]['type'] in ['item', 'follower']) and placements[key] != None:
                                 if placements[key] == 'seashell':
                                     vanillaSeashells += 1
                                 else:
                                     access = self.addAccess(access, placements[key])
                             
-                            if self.logic_defs[key]['type'] == 'item' and placements[key] == None:
+                            if self.logic_defs[key]['type'] in ['item', 'follower'] and placements[key] == None:
                                 locations.append(key)
                             
                             # if we're looking at an enemy, and we CAN kill it, then we can also kill it with access to pits or heavy objects, so add those too
@@ -527,7 +528,11 @@ class ItemShuffler(QtCore.QThread):
             success = False
             while not success and self.thread_active:
                 placements['tarin'] = items[0]
-                success = self.canReachLocation('can-shop', placements, self.settingsAccess, logic) or self.canReachLocation('tail-cave', placements, self.settingsAccess, logic) or self.canReachLocation('beach', placements, self.settingsAccess, logic)
+                success = (self.canReachLocation('can-shop', placements, self.settingsAccess, logic)
+                        or self.canReachLocation('tail-cave', placements, self.settingsAccess, logic)
+                        or self.canReachLocation('beach', placements, self.settingsAccess, logic)
+                        or self.canReachLocation('mamasha', placements, self.settingsAccess, logic)
+                        or self.canReachLocation('ciao-ciao', placements, self.settingsAccess, logic))
                 
                 if not success:
                     items.insert(items.index('seashell'), items[0])
@@ -562,8 +567,10 @@ class ItemShuffler(QtCore.QThread):
                     validPlacement = False
                 elif (item in self.force_chests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     validPlacement = False
-                elif (item in self.force_out_dungeons) and locations[0][:2] in dungeons:
+                elif (item == 'zap-trap') and locations[0][:5] == 'dampe':
                     validPlacement = False
+                # elif (item in self.force_out_dungeons) and locations[0] in dungeons:
+                #     validPlacement = False
                 elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
                     validPlacement = self.canReachLocation(locations[0], placements, access, logic)

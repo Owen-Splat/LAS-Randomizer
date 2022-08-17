@@ -1,11 +1,13 @@
 # LAS-Randomizer
 A randomizer for The Legend of Zelda: Link's Awakening remake. Currently still very early in development.
 
-This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, boss drops, instruments, and heart pieces, with the sunken ones left vanilla due to issues with them. More work will come soon.
+This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and heart pieces, with the sunken ones left vanilla due to issues with them. More work will come soon.
 
-Also introducing Zapsanity and Blupsanity!
+Several extra options, including Zapsanity, Blupsanity, Randomized Music, selecting how many instruments you start with, and more! Don't like checking a specific location? You can toggle it to always be junk!
 
-Please note that while most things are functional, there is a definite possibility of the logic resulting in softlocks. This will be especially true with the glitched logic. It is recommended to primarily play the basic logic and make backup saves before going into an area that you might not be able to exit (e.g. going into Angler Tunnel without the flippers or the feather and neither are there).
+This GUI is dark mode by default, but can be toggled with ctrl + L
+
+Please note that while most things are functional, there is a definite possibility of the logic resulting in softlocks. This will be especially true with the glitched logics. If this does happen, dying and selecting the Save + Quit option will respawn you back at Marin's house.
 
 **NOTE**: There is a known issue with some seeds, rarely, getting stuck during generation. If this happens, just try again with a different seed. It should take in the vicinity of 10-20 seconds to generate, so much longer than that means it's probably stuck.
 

@@ -209,17 +209,19 @@ class MainWindow(QtWidgets.QMainWindow):
             'Free_Book': self.ui.bookCheck.isChecked(),
             'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
             'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
+            'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
             'Fast_Fishing': self.ui.fastFishingCheck.isChecked(),
             'Fast_Stealing': self.ui.stealingCheck.isChecked(),
             'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
+            # 'Fast_Songs': self.ui.songsCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
             'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
-            # 'Fast_Songs': self.ui.songsCheck.isChecked(),
-            'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
+            'Open_Bridge': self.ui.bridgeCheck.isChecked(),
             'Open_Mamu': self.ui.mazeCheck.isChecked(),
             'Zapsanity': self.ui.zapsCheck.isChecked(),
             'Blupsanity': self.ui.rupCheck.isChecked(),
+            'Classic_D2': self.ui.swampCheck.isChecked(),
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
             'Excluded_Locations': list(self.excluded_checks)
@@ -423,6 +425,12 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.stealingCheck.setChecked(True)
         
+        # # fast songs
+        # try:
+        #     self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
+        # except (KeyError, TypeError):
+        #     self.ui.songsCheck.setChecked(False)
+
         # reduced farming
         try:
             self.ui.farmingCheck.setChecked(SETTINGS['Reduced_Farming'])
@@ -441,12 +449,18 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.kanaletCheck.setChecked(True)
         
-        # # fast songs
-        # try:
-        #     self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
-        # except (KeyError, TypeError):
-        #     self.ui.songsCheck.setChecked(False)
-
+        # open bridge
+        try:
+            self.ui.bridgeCheck.setChecked(SETTINGS['Open_Bridge'])
+        except (KeyError, TypeError):
+            self.ui.bridgeCheck.setChecked(True)
+        
+        # open mamu
+        try:
+            self.ui.mazeCheck.setChecked(SETTINGS['Open_Mamu'])
+        except (KeyError, TypeError):
+            self.ui.mazeCheck.setChecked(True)
+        
         # shuffled tunics
         try:
             self.ui.tunicsCheck.setChecked(SETTINGS['Shuffled_Tunics'])
@@ -464,6 +478,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.rupCheck.setChecked(SETTINGS['Blupsanity'])
         except(KeyError, TypeError):
             self.ui.rupCheck.setChecked(False)
+        
+        # classic d2
+        try:
+            self.ui.swampCheck.setChecked(SETTINGS['Classic_D2'])
+        except (KeyError, TypeError):
+            self.ui.swampCheck.setChecked(False)
         
         # # randomize entances
         # try:

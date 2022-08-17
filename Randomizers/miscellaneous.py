@@ -12,8 +12,6 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
     else:
         item_get.insertItemGetAnimation(flowchart, item_key, item_index, 'Event5', 'Event8')
 
-    # item_get.insertItemGetAnimation(flowchart, item_key, item_index, 'Event5', 'Event8')
-
     fork = event_tools.findEvent(flowchart, 'Event0')
     fork.data.forks.pop(0) # remove the itemget animation event
     event_tools.removeEventAfter(flowchart, 'Event10')
@@ -26,8 +24,6 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
     room.actors[4].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
     room.actors[4].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[4].parameters[2] = bytes('examine', 'utf-8')
-    # room.actors[4].parameters[3] = b''
-    # room.actors[4].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
     room.actors[4].parameters[3] = bytes('SwordGet', 'utf-8')
 
 
@@ -39,8 +35,6 @@ def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room)
     else:
         itemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
-    # birdKeyItemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, None)
-
     event_tools.addEntryPoint(flowchart, 'TalTal')
     event_tools.createActionChain(flowchart, 'TalTal', [
         ('SinkingSword', 'Destroy', {}),
@@ -51,8 +45,6 @@ def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room)
     room.actors[0].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
     room.actors[0].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[0].parameters[2] = bytes('TalTal', 'utf-8')
-    # room.actors[0].parameters[3] = b''
-    # room.actors[0].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
     room.actors[0].parameters[3] = bytes(data.ROOSTER_CAVE_FLAG, 'utf-8')
 
 
@@ -63,8 +55,6 @@ def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room)
         {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
         itemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
-
-    # dreamShrineItemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, None)
 
     event_tools.addEntryPoint(flowchart, 'DreamShrine')
     event_tools.createActionChain(flowchart, 'DreamShrine', [
@@ -87,8 +77,6 @@ def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room
     else:
         itemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
-    # woodsItemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, None)
-
     event_tools.addEntryPoint(flowchart, 'Woods')
     event_tools.createActionChain(flowchart, 'Woods', [
         ('SinkingSword', 'Destroy', {}),
@@ -99,8 +87,6 @@ def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room
     room.actors[3].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
     room.actors[3].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[3].parameters[2] = bytes('Woods', 'utf-8')
-    # room.actors[3].parameters[3] = b''
-    # room.actors[3].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
     room.actors[3].parameters[3] = bytes(data.WOODS_LOOSE_FLAG, 'utf-8')
 
 
@@ -112,8 +98,6 @@ def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
     else:
         itemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
-    # lensItemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
-
     event_tools.addEntryPoint(flowchart, 'MermaidCave')
     event_tools.createActionChain(flowchart, 'MermaidCave', [
         ('SinkingSword', 'Destroy', {}),
@@ -121,12 +105,10 @@ def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
     ], itemGet)
 
     room.actors[7].type = 0x194 # sinking sword
-    room.actors[7].x20 = 0 # change rotation to be facing the screen
+    room.actors[7].rotY = 0 # rotate to be facing the screen
     room.actors[7].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
     room.actors[7].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[7].parameters[2] = bytes('MermaidCave', 'utf-8')
-    # room.actors[7].parameters[3] = b''
-    # room.actors[7].parameters[4] = bytes('true', 'utf-8') # let the player grab by pressing A
     room.actors[7].parameters[3] = bytes(data.MERMAID_CAVE_FLAG, 'utf-8')
 
 

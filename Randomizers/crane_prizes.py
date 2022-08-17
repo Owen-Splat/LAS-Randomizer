@@ -32,8 +32,8 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         # except IndexError:
         #     pass
         
-        # Bombs should not be obtainable until you have bombs
-        if prize['symbol'] == 'Bomb' and placements['settings']['shuffle-bombs']:
+        # Bombs should not be obtainable until you have bombs, or automatically if unlocked-bombs is on
+        if prize['symbol'] == 'Bomb':
             prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
         # Shield should not be obtainable until you find your first shield
         if prize['symbol'] == 'Shield':
@@ -48,8 +48,8 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize['layouts'][0]['conditions'].pop(0)
     
     return
-    ### ADD RANDOMIZED PRIZES
 
+    ### ADD RANDOMIZED PRIZES
     total_syms = len(symbols)
 
     if item_defs[placements['trendy-prize-1']]['model-name'] not in symbols:
@@ -258,10 +258,10 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
 def changePrizeGroups(sheet1, sheet2):
     # print(prizes_dict)
-
+    
     sheet1['values'][0]['cranePrizeId'] = prizes_dict['prize1']['cranePrizeId']
     sheet1['values'][0]['layoutIndex'] = prizes_dict['prize1']['layoutIndex']
-
+    
     sheet2['values'][0]['cranePrizeId'] = prizes_dict['prize2']['cranePrizeId']
     sheet2['values'][0]['layoutIndex'] = prizes_dict['prize2']['layoutIndex']
 

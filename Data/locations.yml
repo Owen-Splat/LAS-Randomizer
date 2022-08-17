@@ -120,13 +120,13 @@ Heart_Pieces:
   - mabe-well
   - ukuku-cave-west-loose
   - ukuku-cave-east-loose
-  # - bay-passage-sunken
-  # - river-crossing-cave
+  - bay-passage-sunken
+  - river-crossing-cave
   - rapids-ascent-cave
-  # - kanalet-moat-south
-  # - south-bay-sunken
+  - kanalet-moat-south
+  - south-bay-sunken
   - taltal-crossing-cave
-  # - taltal-east-drop
+  - taltal-east-drop
   - taltal-west-escape
   - above-turtle-rock
   - pothole-north

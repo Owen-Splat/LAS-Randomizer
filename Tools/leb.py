@@ -1,9 +1,13 @@
+import struct
 import copy
 import re
 
 
 def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
+
+def readFloat(bytes, start, length):
+	return struct.unpack('f', bytes[start : start + length])[0]
 
 def readString(data, start):
 	result = b''
@@ -151,6 +155,8 @@ class FixedHash:
 
 class Actor:
 	def __init__(self, data, names):
+		self.names = names
+
 		self.key = readBytes(data, 0x0, 8)
 		self.name = readString(names, readBytes(data, 0x8, 4))
 
@@ -160,14 +166,15 @@ class Actor:
 		self.type = readBytes(data, 0xC, 2)
 		self.xE = readBytes(data, 0xE, 2)
 		self.roomID = readBytes(data, 0x10, 4)
-		self.X = readBytes(data, 0x14, 4)
-		self.Z = readBytes(data, 0x18, 4)
-		self.Y = readBytes(data, 0x1C, 4)
-		self.x20 = readBytes(data, 0x20, 8)
-		self.x28 = readBytes(data, 0x28, 4)
-		self.x2C = readBytes(data, 0x2C, 4)
-		self.x30 = readBytes(data, 0x30, 4)
-		self.x34 = readBytes(data, 0x34, 4)
+		self.posX = readFloat(data, 0x14, 4)
+		self.posY = readFloat(data, 0x18, 4)
+		self.posZ = readFloat(data, 0x1C, 4)
+		self.rotX = readFloat(data, 0x20, 4)
+		self.rotY = readFloat(data, 0x24, 4)
+		self.rotZ = readFloat(data, 0x28, 4)
+		self.scaleX = readFloat(data, 0x2C, 4)
+		self.scaleY = readFloat(data, 0x30, 4)
+		self.scaleZ = readFloat(data, 0x34, 4)
 
 		self.parameters = []
 		for i in range(8):
@@ -184,9 +191,10 @@ class Actor:
 			(readBytes(data, 0x79, 1), readBytes(data, 0x7E, 2)),
 			(readBytes(data, 0x7A, 1), readBytes(data, 0x80, 2)),
 			(readBytes(data, 0x7B, 1), readBytes(data, 0x82, 2))
-			]
-
+		]
+		
 		self.x84 = data[0x84:]
+		# self.relationships = Relationship(data, names)
 
 	def __repr__(self):
 		return f'Actor: {self.name}'
@@ -200,14 +208,15 @@ class Actor:
 		packed += self.type.to_bytes(2, 'little')
 		packed += self.xE.to_bytes(2, 'little')
 		packed += self.roomID.to_bytes(4, 'little')
-		packed += self.X.to_bytes(4, 'little')
-		packed += self.Z.to_bytes(4, 'little')
-		packed += self.Y.to_bytes(4, 'little')
-		packed += self.x20.to_bytes(8, 'little')
-		packed += self.x28.to_bytes(4, 'little')
-		packed += self.x2C.to_bytes(4, 'little')
-		packed += self.x30.to_bytes(4, 'little')
-		packed += self.x34.to_bytes(4, 'little')
+		packed += struct.pack('<f', self.posX)
+		packed += struct.pack('<f', self.posY)
+		packed += struct.pack('<f', self.posZ)
+		packed += struct.pack('<f', self.rotX)
+		packed += struct.pack('<f', self.rotY)
+		packed += struct.pack('<f', self.rotZ)
+		packed += struct.pack('<f', self.scaleX)
+		packed += struct.pack('<f', self.scaleY)
+		packed += struct.pack('<f', self.scaleZ)
 
 		for i in range(8):
 			param = self.parameters[i]
@@ -224,11 +233,43 @@ class Actor:
 			packed += self.switches[i][0].to_bytes(1, 'little')
 			switches += self.switches[i][1].to_bytes(2, 'little')
 		packed += switches
-
+		
 		packed += self.x84
 
-		return packed
+		# packed += self.relationships.e.to_bytes(1, 'little')
+		# packed += self.relationships.k.to_bytes(1, 'little')
+		# packed += self.relationships.b.to_bytes(1, 'little')
+		# packed += self.relationships.x.to_bytes(1, 'little')
+		# packed += self.relationships.y.to_bytes(1, 'little')
+		# packed += self.relationships.z.to_bytes(1, 'little')
+		# packed += self.relationships.null
 
+		# for i in range(self.relationships.x):
+		# 	for b in range(2):
+		# 		param = self.relationships.section_1[i][b]
+		# 		if isinstance(param, bytes):
+		# 			packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+		# 			packed += (4).to_bytes(4, 'little')
+		# 			nameRepr += param + b'\x00'
+		# 		else:
+		# 			packed += param.to_bytes(4, 'little')
+		# 			packed += (3).to_bytes(4, 'little')
+		
+		# # for i in range(24):
+		# # 	pass
+		
+		# if self.relationships.y > 0:
+		# 	for i in range(4):
+		# 		id = self.relationships.section_3[i]
+		# 		if isinstance(id, bytes):
+		# 			packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+		# 			packed += (4).to_bytes(4, 'little')
+		# 			nameRepr += id + b'\x00'
+		# 		else:
+		# 			packed += id.to_bytes(4, 'little')
+		# 			packed += (3).to_bytes(4, 'little')
+
+		return packed
 
 
 	def display(self):
@@ -241,87 +282,136 @@ class Actor:
 
 class Room:
 	def __init__(self, data):
-		self.fixedHash = FixedHash(data)
+		self.fixed_hash = FixedHash(data)
 
 		self.actors = []
-		actorEntry = list(filter(lambda e: e.name == b'actor', self.fixedHash.entries))[0]
+		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 
-		for entry in actorEntry.data.entries:
-			self.actors.append(Actor(entry.data, self.fixedHash.namesSection))
+		for entry in actor_entry.data.entries:
+			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
 
 
-	def setChestContent(self, newContent, itemIndex, chestIndex=0):
-		chests = list(filter(lambda a: a.type == 0xF7, self.actors))
+	def setChestContent(self, new_content, item_index, chest_index=0):
+		chests = [a for a in self.actors if a.type == 0xF7]
 
-		if len(chests) > chestIndex:
-			chest = chests[chestIndex]
-			chest.parameters[1] = bytes(newContent, 'utf-8')
-			chest.parameters[2] = itemIndex if itemIndex != -1 else b''
+		if len(chests) > chest_index:
+			chest = chests[chest_index]
+			chest.parameters[1] = bytes(new_content, 'utf-8')
+			chest.parameters[2] = item_index if item_index != -1 else b''
 	
 
-	def addChestRooster(self):
-		chests = list(filter(lambda a: a.type == 0xF7, self.actors))
+	def addChestRooster(self, chest_index=0):
+		chests = [a for a in self.actors if a.type == 0xF7]
 
-		new_actor = copy.deepcopy(chests[0])
-		new_actor.key = int('A10000005D1D906E', 16)
-		new_actor.name = bytes('NpcFlyingCucco-A10000005D1D906E', 'utf-8')
-		new_actor.type = 0x181
-		new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
+		if len(chests) > chest_index:
+			chest = chests[chest_index]
+			new_actor = copy.deepcopy(chest)
 
-		self.actors.append(new_actor)
+			chest.relationships.x = 1
+			chest.relationships.section_1.append([77, 77, len(self.actors), 0])
+
+			name_hex = f'A1000{chest_index}005D1D906E'
+			new_actor.key = int(name_hex, 16)
+			new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
+			new_actor.type = 0x181
+			new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
+			new_actor.relationships.y = 1
+			new_actor.relationships.section_3 = [self.actors.index(chest), 0, 0, 0]
+			self.actors.append(new_actor)
 
 
-	def setSmallKeyParams(self, modelPath, modelName, room, keyIndex=0):
-		keys = list(filter(lambda a: a.type == 0xA9, self.actors))
+	def setSmallKeyParams(self, model_path, model_name, room, key_index=0):
+		keys = [a for a in self.actors if a.type == 0xA9]
 
-		if len(keys) > keyIndex:
-			key = keys[keyIndex]
+		if len(keys) > key_index:
+			key = keys[key_index]
 			
 			# key.type = 0x88 # GoldenLeaf
-			key.parameters[1] = bytes(modelPath, 'utf-8')
-			key.parameters[2] = bytes(modelName, 'utf-8')
+			key.parameters[1] = bytes(model_path, 'utf-8')
+			key.parameters[2] = bytes(model_name, 'utf-8')
 			key.parameters[3] = bytes(room, 'utf-8')
 	
 
-	def setRupeeParams(self, modelPath, modelName, entryPoint, rupIndex=0):
-		rups = list(filter(lambda a: a.type == 0xAB, self.actors))
+	def setRupeeParams(self, model_path, model_name, entry_point, rup_index=0):
+		rups = [a for a in self.actors if a.type == 0xAB]
 
 		if len(rups) > 0:
 			rup = rups[0] # since we are changing the type, the list of rupees gets smaller, therefore we just get the first rup
 			rup.type = 0x194 # sinking sword
-			rup.parameters[0] = bytes(modelPath, 'utf-8')
-			rup.parameters[1] = bytes(modelName, 'utf-8')
-			rup.parameters[2] = bytes(entryPoint, 'utf-8')
-			rup.parameters[3] = bytes('Lv10RupeeGet' if rupIndex == 0 else f'Lv10RupeeGet_{rupIndex + 1}', 'utf-8')
+			rup.parameters[0] = bytes(model_path, 'utf-8')
+			rup.parameters[1] = bytes(model_name, 'utf-8')
+			rup.parameters[2] = bytes(entry_point, 'utf-8')
+			rup.parameters[3] = bytes('Lv10RupeeGet' if rup_index == 0 else f'Lv10RupeeGet_{rup_index + 1}', 'utf-8')
 	
 
-	def setLoadingZoneTarget(self, newDestination, index=0):
-		zones = list(filter(lambda a: a.type == 0x190, self.actors))
+	def setLoadingZoneTarget(self, new_destination, index=0):
+		zones = [a for a in self.actors if a.type == 0x190]
 
 		if len(zones) > index:
 			zone = zones[index]
-			zone.parameters[0] = re.match(b'(.+)_\\d\\d[A-Z]', newDestination).group(1)
-			zone.parameters[1] = newDestination
+			zone.parameters[0] = re.match(b'(.+)_\\d\\d[A-Z]', new_destination).group(1)
+			zone.parameters[1] = new_destination
 	
 
 	def repack(self):
-		newNames = b''
+		new_names = b''
 
-		for entry in self.fixedHash.entries:
+		for entry in self.fixed_hash.entries:
 			if entry.name == b'actor':
 				entry.data.entries = []
 				for actor in self.actors:
 					# Create a new entry for the actor in the actors FixedHash, using a newly packed data block for that actor
-					entry.data.entries.append(Entry(0xFFF0, b'', 0xFFFFFFFF, actor.pack(len(newNames))))
+					entry.data.entries.append(Entry(0xFFF0, b'', 0xFFFFFFFF, actor.pack(len(new_names))))
 
-					newNames += actor.name + b'\x00'
+					new_names += actor.name + b'\x00'
 
 					for param in actor.parameters:
 						if isinstance(param, bytes):
-							newNames += param + b'\x00'
+							new_names += param + b'\x00'
 
-			newNames += entry.name + b'\x00'
+			new_names += entry.name + b'\x00'
 
-		self.fixedHash.namesSection = newNames
+		self.fixed_hash.namesSection = new_names
 
-		return self.fixedHash.toBinary()
+		return self.fixed_hash.toBinary()
+
+
+class Relationship:
+	def __init__(self, data, names):
+		self.e = data[0x84]
+		self.k = data[0x85]
+		self.b = data[0x86]
+		self.x = data[0x87]
+		self.y = data[0x88]
+		self.z = data[0x89]
+
+		self.null = data[0x8A:0x90]
+
+		self.section_1 = []
+		self.section_2 = []
+		self.section_3 = []
+
+		pos = 0x91
+
+		if self.x != 0x00:
+			for i in range(20):
+				seq = []
+				for b in range(2):
+					param = readBytes(data, pos + (0x8 * b), 4)
+					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+					if paramType == 0x4:
+						seq.append(readString(names, param))
+					else:
+						seq.append(param)
+				self.section_1.append(seq)
+				pos += 16
+		
+		if self.z != 0x00:
+			for i in range(24):
+				pass
+			pos += 0x18
+		
+		if self.y != 0x00:
+			for i in range(4):
+				id = readBytes(data, pos + (0x8 * i), 4)
+				self.section_3.append(id)
