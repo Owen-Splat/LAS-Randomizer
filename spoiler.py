@@ -9,7 +9,7 @@ def generateSpoilerLog(placements, logicDefs, outputDir, seedName):
     regions = {'mabe-village': [], 'toronbo-shores': [], 'mysterious-woods': [], 'koholint-prairie': [], 'tabahl-wasteland': [], 'ukuku-prairie': [], 'sign-maze': [], 'goponga-swamp': [], 'taltal-heights': [], 'marthas-bay': [], 'kanalet-castle': [], 'pothole-field': [], 'animal-village': [], 'yarna-desert': [], 'ancient-ruins': [], 'rapids-ride': [], 'taltal-mountains-east': [], 'taltal-mountains-west': [], 'color-dungeon': [], 'tail-cave': [], 'bottle-grotto': [], 'key-cavern': [], 'angler-tunnel': [], 'catfish-maw': [], 'face-shrine': [], 'eagle-tower': [], 'turtle-rock': []}
     
     for key in logicDefs:
-        if logicDefs[key]['type'] == 'item' or logicDefs[key]['type'] == 'follower':
+        if logicDefs[key]['type'] in ['item', 'follower']:
             regions[logicDefs[key]['spoiler-region']].append(key)
     
     with open(f'{outputDir}/spoiler_{seedName}.txt', 'w') as output:

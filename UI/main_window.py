@@ -30,9 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             "QPushButton:pressed {background-color: rgb(175, 175, 175)}")
 
         # Keep track of stuff
-        self.max_seashells = int(15)
         self.excluded_checks = set()
-        self.logic = str('basic')
         self.mode = str('dark')
 
         # Load User Settings
@@ -66,8 +64,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.bossCheck.clicked.connect(self.bossCheck_Clicked)
         self.ui.miscellaneousCheck.clicked.connect(self.miscellaneousCheck_Clicked)
         self.ui.heartsCheck.clicked.connect(self.heartsCheck_Clicked)
-        self.ui.horizontalSlider.valueChanged.connect(self.updateSeashells)
-        self.ui.horizontalSlider_2.valueChanged.connect(self.updateLogic)
+        self.ui.seashellsComboBox.currentIndexChanged.connect(self.updateSeashells)
         # locations tab
         self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
         self.ui.includeButton.clicked.connect(self.includeButton_Clicked)
@@ -75,8 +72,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### DESCRIPTIONS
         self.checkBoxes = self.ui.tab.findChildren(QtWidgets.QCheckBox)
-        self.checkBoxes.extend([self.ui.label_6, self.ui.horizontalSlider])
-        self.checkBoxes.extend([self.ui.label_11, self.ui.horizontalSlider_2])
+        self.checkBoxes.extend([self.ui.seashellsComboBox])
+        self.checkBoxes.extend([self.ui.tricksComboBox])
         for check in self.checkBoxes:
             check.installEventFilter(self)
         
@@ -155,15 +152,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.instrumentCheck.setChecked(True)
         self.ui.instrumentsComboBox.setCurrentIndex(0)
 
-        self.ui.label_6.setText("  Max Seashells: 15")
-        self.ui.horizontalSlider.setValue(2)
-        self.max_seashells = 15
+        self.ui.seashellsComboBox.setCurrentIndex(2)
         self.excluded_checks.difference_update(set(['5-seashell-reward', '15-seashell-reward']))
         self.excluded_checks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
 
-        self.ui.label_11.setText('  Logic:  Basic')
-        self.ui.horizontalSlider_2.setValue(0)
-        self.logic = 'basic'
+        self.ui.tricksComboBox.setCurrentIndex(0)
 
         self.ui.bookCheck.setChecked(True)
         self.ui.unlockedBombsCheck.setChecked(True)
@@ -178,6 +171,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tunicsCheck.setChecked(True)
         self.ui.zapsCheck.setChecked(False)
         self.ui.rupCheck.setChecked(False)
+        self.ui.owlsComboBox.setCurrentIndex(0)
 
         self.excluded_checks.update(TRENDY_REWARDS)
         self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
@@ -192,7 +186,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Romfs_Folder': self.ui.lineEdit.text(),
             'Output_Folder': self.ui.lineEdit_2.text(),
             'Seed': self.ui.lineEdit_3.text(),
-            'Logic': self.logic,
+            'Logic': LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()],
             'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
             'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
             'Fishing': self.ui.fishingCheck.isChecked(),
@@ -205,7 +199,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Heart_Pieces': self.ui.heartsCheck.isChecked(),
             'Instruments': self.ui.instrumentCheck.isChecked(),
             'Starting_Instruments': self.ui.instrumentsComboBox.currentIndex(),
-            'Seashells': self.max_seashells,
+            'Seashells': SEASHELL_VALUES[self.ui.seashellsComboBox.currentIndex()],
             'Free_Book': self.ui.bookCheck.isChecked(),
             'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
             'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
@@ -222,6 +216,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Zapsanity': self.ui.zapsCheck.isChecked(),
             'Blupsanity': self.ui.rupCheck.isChecked(),
             'Classic_D2': self.ui.swampCheck.isChecked(),
+            'Owl_Statues': OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()],
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
             'Excluded_Locations': list(self.excluded_checks)
@@ -338,62 +333,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # seashells
         try:
-            num = SETTINGS['Seashells']
-            if num == 0:
-                self.max_seashells = 0
-                self.ui.horizontalSlider.setValue(0)
-            elif num == 5:
-                self.max_seashells = 5
-                self.ui.horizontalSlider.setValue(1)
-            elif num == 15:
-                self.max_seashells = 15
-                self.ui.horizontalSlider.setValue(2)
-            elif num == 30:
-                self.max_seashells = 30
-                self.ui.horizontalSlider.setValue(3)
-            elif num == 40:
-                self.max_seashells = 40
-                self.ui.horizontalSlider.setValue(4)
-            elif num == 50:
-                self.max_seashells = 50
-                self.ui.horizontalSlider.setValue(5)
-            else:
-                self.max_seashells = 15
-                self.ui.horizontalSlider.setValue(2)
-        except (KeyError, TypeError):
-            self.max_seashells = 15
-            self.ui.horizontalSlider.setValue(2)
-        
-        self.ui.label_6.setText("  Max Seashells: {}".format(self.max_seashells))
+            self.ui.seashellsComboBox.setCurrentIndex(SEASHELL_VALUES.index(SETTINGS['Seashells']))
+        except (KeyError, TypeError, IndexError) as e:
+            print(e.args)
+            self.ui.seashellsComboBox.setCurrentIndex(2)
         
         # logic
         try:
-            settings_logic = str(SETTINGS['Logic'].lower())
-            if settings_logic in ['basic', 'advanced', 'glitched', 'death', 'none']:
-                self.logic = settings_logic
-                if settings_logic == 'basic':
-                    self.ui.horizontalSlider_2.setValue(0)
-                    self.ui.label_11.setText('  Preset:  Basic')
-                elif settings_logic == 'advanced':
-                    self.ui.horizontalSlider_2.setValue(1)
-                    self.ui.label_11.setText('  Preset:  Advanced')
-                elif settings_logic == 'glitched':
-                    self.ui.horizontalSlider_2.setValue(2)
-                    self.ui.label_11.setText('  Preset:  Glitched')
-                elif settings_logic == 'death':
-                    self.ui.horizontalSlider_2.setValue(3)
-                    self.ui.label_11.setText('  Preset:  Death')
-                else:
-                    self.ui.horizontalSlider_2.setValue(4)
-                    self.ui.label_11.setText('  Preset:  None')
-            else:
-                self.logic = 'basic'
-                self.ui.horizontalSlider_2.setValue(0)
-                self.ui.label_11.setText('  Preset:  Basic')
-        except (KeyError, TypeError):
-            self.logic = 'basic'
-            self.ui.horizontalSlider_2.setValue(0)
-            self.ui.label_11.setText('  Preset:  Basic')
+            self.ui.tricksComboBox.setCurrentIndex(LOGIC_PRESETS.index(SETTINGS['Logic'].lower().strip()))
+        except (KeyError, TypeError, IndexError):
+            self.ui.tricksComboBox.setCurrentIndex(0)
         
         # free book
         try:
@@ -485,6 +434,12 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.swampCheck.setChecked(False)
         
+        # owl statues
+        try:
+            self.ui.owlsComboBox.setCurrentIndex(OWLS_SETTINGS.index(SETTINGS['Owl_Statues'].lower().strip()))
+        except (KeyError, TypeError, IndexError):
+            self.ui.owlsComboBox.setCurrentIndex(0)
+
         # # randomize entances
         # try:
         #     self.ui.loadingCheck.setChecked(SETTINGS['Randomize_Entrances'])
@@ -638,58 +593,24 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Update Number of Max Seashells
     def updateSeashells(self):
-        value = self.ui.horizontalSlider.value()
+        value = self.ui.seashellsComboBox.currentIndex()
         
         if value == 0:
-            self.ui.label_6.setText("  Max Seashells: 0")
-            self.max_seashells = 0
             self.excluded_checks.update(SEASHELL_REWARDS)
         elif value == 1:
-            self.ui.label_6.setText("  Max Seashells: 5")
-            self.max_seashells = 5
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
             self.excluded_checks.update(['15-seashell-reward', '30-seashell-reward', '40-seashell-reward', '50-seashell-reward'])
         elif value == 2:
-            self.ui.label_6.setText("  Max Seashells: 15")
-            self.max_seashells = 15
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
             self.excluded_checks.update(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward'])
         elif value == 3:
-            self.ui.label_6.setText("  Max Seashells: 30")
-            self.max_seashells = 30
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
             self.excluded_checks.update(['40-seashell-reward', '50-seashell-reward'])
         elif value == 4:
-            self.ui.label_6.setText("  Max Seashells: 40")
-            self.max_seashells = 40
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
             self.excluded_checks.update(['50-seashell-reward'])
         else:
-            self.ui.label_6.setText("  Max Seashells: 50")
-            self.max_seashells = 50
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
-    
-    
-    
-    # Update Logic
-    def updateLogic(self):
-        value = self.ui.horizontalSlider_2.value()
-
-        if value == 0:
-            self.ui.label_11.setText('  Logic:  Basic')
-            self.logic = 'basic'
-        elif value == 1:
-            self.ui.label_11.setText('  Logic:  Advanced')
-            self.logic = 'advanced'
-        elif value == 2:
-            self.ui.label_11.setText('  Logic:  Glitched')
-            self.logic = 'glitched'
-        elif value == 3:
-            self.ui.label_11.setText('  Logic:  Death')
-            self.logic = 'death'
-        else:
-            self.ui.label_11.setText('  Logic:  None')
-            self.logic = 'none'
 
 
 
@@ -708,6 +629,8 @@ class MainWindow(QtWidgets.QMainWindow):
             
             outdir = f"{self.ui.lineEdit_2.text()}/{seed}"
             
+            logic = LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()]
+
             settings = {
                 'create-spoiler': self.ui.spoilerCheck.isChecked(),
                 'free-book': self.ui.bookCheck.isChecked(),
@@ -728,12 +651,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 'zap-sanity': self.ui.zapsCheck.isChecked(),
                 'blup-sanity': self.ui.rupCheck.isChecked(),
                 'classic-d2': self.ui.swampCheck.isChecked(),
+                'owl-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['gifts', 'hybrid'] else False,
+                'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
                 'excluded-locations': self.excluded_checks
             }
             
-            self.progress_window = ProgressWindow(romPath, outdir, seed, self.logic, ITEM_DEFS, LOGIC_DEFS, settings)
+            self.progress_window = ProgressWindow(romPath, outdir, seed, logic, ITEM_DEFS, LOGIC_DEFS, settings)
             self.progress_window.setFixedSize(472, 125)
             self.progress_window.setWindowTitle(f"{seed}")
 

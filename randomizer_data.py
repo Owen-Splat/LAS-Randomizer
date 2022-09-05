@@ -57,3 +57,9 @@ TOTAL_CHECKS = set([
     *BOSS_LOCATIONS, *MISC_LOCATIONS, *SEASHELL_REWARDS,
     *HEART_PIECE_LOCATIONS, *TRENDY_REWARDS
 ])
+
+SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
+
+LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'death', 'none')
+
+OWLS_SETTINGS = ('vanilla', 'hints', 'gifts', 'hybrid')

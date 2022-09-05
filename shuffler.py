@@ -30,7 +30,6 @@ class ItemShuffler(QtCore.QThread):
         self.logic_defs = logic_defs
         
         self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
-        # self.force_out_dungeons = ['rooster']
 
         self.progress_value = 0
         self.thread_active = True
@@ -38,12 +37,25 @@ class ItemShuffler(QtCore.QThread):
     
     # thread automatically starts the run method
     def run(self):
+        if not self.settings['blup-sanity']:
+            blupees = [k for k, v in self.logic_defs.items()
+                      if k.startswith('D0-rupee')]
+            for blue in blupees:
+                del self.logic_defs[blue]
+            self.item_defs['rupee-5']['quantity'] == 0
+        
+        if not self.settings['owl-gifts']:
+            owls = [k for k, v in self.logic_defs.items()
+                   if v['type'] == 'item'
+                   and v['subtype'] == 'statue']
+            for owl in owls:
+                del self.logic_defs[owl]
+            self.item_defs['rupee-20']['quantity'] = 5
 
-        # TEMPORARY CODE HERE to make it so that everything that isn't a chest is set to vanilla
+        # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
         vanilla_locations = [k for k, v in self.logic_defs.items()
                             if v['type'] == 'item'
-                            and v['subtype'] not in ['chest', 'boss', 'drop', 'npc', 'standing']
-        ]
+                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
         vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
         vanilla_locations.append('trendy-prize-1')
@@ -58,10 +70,11 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('south-bay-sunken')
         vanilla_locations.remove('taltal-east-drop')
 
+        ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
         instruments = [k for k, v in self.logic_defs.items()
             if v['type'] == 'item'
             and v['subtype'] == 'standing'
-            and v['content'] in [
+            and v['content'] in (
                 'full-moon-cello',
                 'conch-horn',
                 'sea-lilys-bell',
@@ -69,8 +82,7 @@ class ItemShuffler(QtCore.QThread):
                 'wind-marimba',
                 'coral-triangle',
                 'evening-calm-organ',
-                'thunder-drum'
-            ]
+                'thunder-drum')
         ]
         start_instruments = []
         if self.settings['starting-instruments'] > 0:
@@ -90,16 +102,6 @@ class ItemShuffler(QtCore.QThread):
         if self.settings['assured-sword-shield']:
             vanilla_locations.append('tarin')
             vanilla_locations.append('washed-up')
-        
-        ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
-        if not self.settings['blup-sanity']:
-            blupees = [k for k, v in self.logic_defs.items()
-                if v['type'] == 'item'
-                and v['subtype'] == 'standing'
-                and v['content'] == 'rupee-5'
-            ]
-            for blue in blupees:
-                vanilla_locations.append(blue)
         
         if self.settings['classic-d2']:
             self.logic_defs['bottle-grotto']['condition-basic'] = 'swamp & kill-flower'
@@ -188,10 +190,10 @@ class ItemShuffler(QtCore.QThread):
                 return eval(self.parseCondition(self.logic_defs[noParams]['condition-basic']))
         else:
             # For item and follower checks, see if you have access to the region. Otherwise, check on the conditions, if they exist
-            regionAccess = self.hasAccess(access, self.logic_defs[newCheck]['region']) if (self.logic_defs[newCheck]['type'] == 'item' or self.logic_defs[newCheck]['type'] == 'follower') else True
+            regionAccess = self.hasAccess(access, self.logic_defs[newCheck]['region']) if (self.logic_defs[newCheck]['type'] in ('item', 'follower')) else True
             basic        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-basic']))    if ('condition-basic' in self.logic_defs[newCheck]) else True
-            advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic in ['advanced', 'glitched', 'death'])) else False
-            glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic in ['glitched', 'death']) else False
+            advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic in ('advanced', 'glitched', 'death'))) else False
+            glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic in ('glitched', 'death')) else False
             death        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-death']))    if (('condition-death' in self.logic_defs[newCheck]) and logic == 'death') else False
             return regionAccess and (basic or advanced or glitched or death)
     
@@ -245,7 +247,7 @@ class ItemShuffler(QtCore.QThread):
                                 return True
                             
                             # if we're looking at an item or follower location, at the item it holds, if it has one
-                            if (self.logic_defs[key]['type'] == 'item' or self.logic_defs[key]['type'] == 'follower') and placements[key] != None:
+                            if (self.logic_defs[key]['type'] in ('item', 'follower')) and placements[key] != None:
                                 access = self.addAccess(access, placements[key])
                             
                             # if we're looking at an enemy, and we CAN kill it, then we can also kill it with access to pits or heavy objects, so add those too
@@ -288,13 +290,13 @@ class ItemShuffler(QtCore.QThread):
                             accessAdded = True
                             
                             # if we're looking at an item or follower location, at the item it holds, if it has one
-                            if (self.logic_defs[key]['type'] in ['item', 'follower']) and placements[key] != None:
+                            if (self.logic_defs[key]['type'] in ('item', 'follower')) and placements[key] != None:
                                 if placements[key] == 'seashell':
                                     vanillaSeashells += 1
                                 else:
                                     access = self.addAccess(access, placements[key])
                             
-                            if self.logic_defs[key]['type'] in ['item', 'follower'] and placements[key] == None:
+                            if self.logic_defs[key]['type'] in ('item', 'follower') and placements[key] == None:
                                 locations.append(key)
                             
                             # if we're looking at an enemy, and we CAN kill it, then we can also kill it with access to pits or heavy objects, so add those too
@@ -506,22 +508,7 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
             else: break
-        
-        # # Place the followers. These cannot go inside dungeons and for now can only be in chests
-        # outside_chests = [x for x in locations if self.logic_defs[x]['subtype'] == 'chest'
-        #                   and self.logic_defs[x]['region'] not in dungeons]
-        # for item in self.force_out_dungeons:
-        #     if self.thread_active:
-        #         if verbose: print(item+' -> ', end='')
-        #         chest = outside_chests.pop(0)
-        #         placements[chest] = item
-        #         items.remove(item)
-        #         locations.remove(chest)
-        #         if verbose: print(outside_chests[0])
-        #         self.progress_value += 1 # update progress bar
-        #         self.progress_update.emit(self.progress_value)
-        #     else: break
-        
+                
         # Next, place an item on Tarin. Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
         # Only do this if Tarin has no item placed, i.e. not forced to be vanilla
         if placements['tarin'] == None and self.thread_active:
@@ -532,7 +519,8 @@ class ItemShuffler(QtCore.QThread):
                         or self.canReachLocation('tail-cave', placements, self.settingsAccess, logic)
                         or self.canReachLocation('beach', placements, self.settingsAccess, logic)
                         or self.canReachLocation('mamasha', placements, self.settingsAccess, logic)
-                        or self.canReachLocation('ciao-ciao', placements, self.settingsAccess, logic))
+                        or self.canReachLocation('ciao-ciao', placements, self.settingsAccess, logic)
+                        or self.canReachLocation('marin', placements, self.settingsAccess, logic))
                 
                 if not success:
                     items.insert(items.index('seashell'), items[0])
@@ -567,10 +555,6 @@ class ItemShuffler(QtCore.QThread):
                     validPlacement = False
                 elif (item in self.force_chests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     validPlacement = False
-                elif (item == 'zap-trap') and locations[0][:5] == 'dampe':
-                    validPlacement = False
-                # elif (item in self.force_out_dungeons) and locations[0] in dungeons:
-                #     validPlacement = False
                 elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
                     validPlacement = self.canReachLocation(locations[0], placements, access, logic)

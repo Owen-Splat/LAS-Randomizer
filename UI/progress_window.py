@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = settings
         
         self.valid_placements = 187 - len(self.settings['excluded-locations'])
-        self.num_of_mod_files = 310
+        self.num_of_mod_files = 313
 
         if settings['shuffle-bombs']:
             self.num_of_mod_files -= 1

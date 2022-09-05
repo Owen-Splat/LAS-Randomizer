@@ -14,7 +14,7 @@ import Tools.oead_tools as oead_tools
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, shop, rupees, rapids, item_common, fishing
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -65,6 +65,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeInstrumentChanges()
             # if self.thread_active: self.makeShopChanges()
             
+            if self.thread_active: self.makeOwlStatueChanges()
             if self.thread_active: self.makeTelephoneChanges()
 
             if self.thread_active: self.makeGeneralARCChanges()
@@ -889,81 +890,86 @@ class ModsProcess(QtCore.QThread):
         # For all other owls, setting the flags is sufficient but this one sucks.
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field'):
             os.makedirs(f'{self.out_dir}/Romfs/region_common/level/Field')
-
-        with open(f'{self.rom_path}/region_common/level/Field/Field_09A.leb', 'rb') as file:
-            room = leb.Room(file.read())
-
-        room.actors[1].parameters[0] = 0
-
+        
         if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09A.leb', 'wb') as file:
-                file.write(room.repack())
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+            with open(f'{self.rom_path}/region_common/level/Field/Field_09A.leb', 'rb') as file:
+                room = leb.Room(file.read())
+
+            room.actors[1].parameters[0] = 0
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09A.leb', 'wb') as file:
+                    file.write(room.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
         ### Mad Batters: Give the batters a 3rd parameter for the event entry point to run
         # A: Bay
-        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell01'):
-            os.makedirs(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell01')
-
-        with open(f'{self.rom_path}/region_common/level/MadBattersWell01/MadBattersWell01_01A.leb', 'rb') as roomfile:
-            room_data = leb.Room(roomfile.read())
-
-        room_data.actors[2].parameters[2] = b'BatterA'
-
         if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell01/MadBattersWell01_01A.leb', 'wb') as outfile:
-                outfile.write(room_data.repack())
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell01'):
+                os.makedirs(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell01')
+
+            with open(f'{self.rom_path}/region_common/level/MadBattersWell01/MadBattersWell01_01A.leb', 'rb') as roomfile:
+                room_data = leb.Room(roomfile.read())
+
+            room_data.actors[2].parameters[2] = b'BatterA'
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell01/MadBattersWell01_01A.leb', 'wb') as outfile:
+                    outfile.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
         # B: Woods
-        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell02'):
-            os.makedirs(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell02')
-
-        with open(f'{self.rom_path}/region_common/level/MadBattersWell02/MadBattersWell02_01A.leb', 'rb') as roomfile:
-            room_data = leb.Room(roomfile.read())
-
-        room_data.actors[6].parameters[2] = b'BatterB'
-
         if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell02/MadBattersWell02_01A.leb', 'wb') as outfile:
-                outfile.write(room_data.repack())
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell02'):
+                os.makedirs(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell02')
+
+            with open(f'{self.rom_path}/region_common/level/MadBattersWell02/MadBattersWell02_01A.leb', 'rb') as roomfile:
+                room_data = leb.Room(roomfile.read())
+
+            room_data.actors[6].parameters[2] = b'BatterB'
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell02/MadBattersWell02_01A.leb', 'wb') as outfile:
+                    outfile.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
         # C: Mountain
-        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell03'):
-            os.makedirs(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell03')
-
-        with open(f'{self.rom_path}/region_common/level/MadBattersWell03/MadBattersWell03_01A.leb', 'rb') as roomfile:
-            room_data = leb.Room(roomfile.read())
-
-        room_data.actors[0].parameters[2] = b'BatterC'
-
         if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell03/MadBattersWell03_01A.leb', 'wb') as outfile:
-                outfile.write(room_data.repack())
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell03'):
+                os.makedirs(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell03')
+
+            with open(f'{self.rom_path}/region_common/level/MadBattersWell03/MadBattersWell03_01A.leb', 'rb') as roomfile:
+                room_data = leb.Room(roomfile.read())
+
+            room_data.actors[0].parameters[2] = b'BatterC'
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/MadBattersWell03/MadBattersWell03_01A.leb', 'wb') as outfile:
+                    outfile.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
         ### Lanmola Cave: Remove the AnglerKey actor
-        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/LanmolaCave'):
-            os.makedirs(f'{self.out_dir}/Romfs/region_common/level/LanmolaCave')
-
-        with open(f'{self.rom_path}/region_common/level/LanmolaCave/LanmolaCave_02A.leb', 'rb') as roomfile:
-            room_data = leb.Room(roomfile.read())
-
-        room_data.actors.pop(5) # remove angler key
-
         if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/LanmolaCave/LanmolaCave_02A.leb', 'wb') as outfile:
-                outfile.write(room_data.repack())
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/LanmolaCave'):
+                os.makedirs(f'{self.out_dir}/Romfs/region_common/level/LanmolaCave')
+
+            with open(f'{self.rom_path}/region_common/level/LanmolaCave/LanmolaCave_02A.leb', 'rb') as roomfile:
+                room_data = leb.Room(roomfile.read())
+
+            room_data.actors.pop(5) # remove angler key
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/LanmolaCave/LanmolaCave_02A.leb', 'wb') as outfile:
+                    outfile.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
         
         ### Classic D2: Turn the rock in front of Dungeon 2 into a swamp flower
-        if self.placements['settings']['classic-d2']:
+        if self.placements['settings']['classic-d2'] and self.thread_active:
             with open(f'{self.rom_path}/region_common/level/Field/Field_03E.leb', 'rb') as f:
                 room_data = leb.Room(f.read())
             
@@ -975,28 +981,28 @@ class ModsProcess(QtCore.QThread):
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
         
-        ### Make Honeycomb show new graphics in tree
-        with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
-            room_data = leb.Room(f.read())
+        # ### Make Honeycomb show new graphics in tree
+        # with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
+        #     room_data = leb.Room(f.read())
         
-            item = self.placements['tarin-ukuku']
-            item_key = self.item_defs[item]['item-key']
+        #     item = self.placements['tarin-ukuku']
+        #     item_key = self.item_defs[item]['item-key']
 
-            if item_key != 'ZapTrap':
-                model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
-                model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
-            else:
-                model_name = random.choice(list(data.ITEM_MODELS))
-                model_path = data.ITEM_MODELS[model_name]
+        #     if item_key != 'ZapTrap':
+        #         model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
+        #         model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
+        #     else:
+        #         model_name = random.choice(list(data.ITEM_MODELS))
+        #         model_path = data.ITEM_MODELS[model_name]
 
-        room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
-        room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
+        # room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
+        # room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
 
-        if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
-                    f.write(room_data.repack())
-                    self.progress_value += 1 # update progress bar
-                    self.progress_update.emit(self.progress_value)
+        # if self.thread_active:
+        #     with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
+        #             f.write(room_data.repack())
+        #             self.progress_value += 1 # update progress bar
+        #             self.progress_update.emit(self.progress_value)
 
 
 
@@ -1009,68 +1015,72 @@ class ModsProcess(QtCore.QThread):
         #################################################################################################################################
         ### PlayerStart event: Sets a bunch of flags for cutscenes being watched/triggered to prevent them from ever happening.
         ### First check if FirstClear is already set, to not do the work more than once and slightly slow down loading zones.
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PlayerStart.bfevfl')
-        player_start.makeStartChanges(flow, self.placements)
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PlayerStart.bfevfl')
+            player_start.makeStartChanges(flow, self.placements)
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         # ### TreasureBox event: Adds in events to make certain items be progressive.
-        treasure_flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
-        actors.addNeededActors(treasure_flow.flowchart, self.rom_path)
-        chests.writeChestEvent(treasure_flow.flowchart)
-        flow_control_actor = event_tools.findActor(treasure_flow.flowchart, 'FlowControl') # store this to add to ShellMansionPresent
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/TreasureBox.bfevfl', treasure_flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            treasure_flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
+            actors.addNeededActors(treasure_flow.flowchart, self.rom_path)
+            chests.writeChestEvent(treasure_flow.flowchart)
+            flow_control_actor = event_tools.findActor(treasure_flow.flowchart, 'FlowControl') # store this to add to ShellMansionPresent
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/TreasureBox.bfevfl', treasure_flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### ShellMansionPresent event: Similar to TreasureBox, must make some items progressive.
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ShellMansionPresent.bfevfl')
-        actors.addNeededActors(flow.flowchart, self.rom_path)
-        flow.flowchart.actors.append(flow_control_actor)
-
-        seashell_mansion.changeRewards(flow.flowchart, treasure_flow.flowchart)
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ShellMansionPresent.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ShellMansionPresent.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            flow.flowchart.actors.append(flow_control_actor)
+
+            seashell_mansion.changeRewards(flow.flowchart, treasure_flow.flowchart)
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ShellMansionPresent.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         #################################################################################################################################
         ### Item: Add and fix some entry points for the ItemGetSequence
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Item.bfevfl')
-        actors.addNeededActors(flow.flowchart, self.rom_path)
-        
-        event_tools.addEntryPoint(flow.flowchart, 'MagicPowder_MaxUp')
-        event_tools.createActionChain(flow.flowchart, 'MagicPowder_MaxUp', [
-            ('Dialog', 'Show', {'message': 'Randomizer:GetBombMaxUp'})
-        ])
-        event_tools.addEntryPoint(flow.flowchart, 'Bomb_MaxUp')
-        event_tools.createActionChain(flow.flowchart, 'Bomb_MaxUp', [
-            ('Dialog', 'Show', {'message': 'Randomizer:GetArrowMaxUp'})
-        ])
-        event_tools.addEntryPoint(flow.flowchart, 'Arrow_MaxUp')
-        event_tools.createActionChain(flow.flowchart, 'Arrow_MaxUp', [
-            ('Dialog', 'Show', {'message': 'Randomizer:GetMagicPowderMaxUp'})
-        ])
-        
-        event_tools.findEntryPoint(flow.flowchart, 'GreenClothes').name = 'ClothesGreen'
-        event_tools.findEntryPoint(flow.flowchart, 'RedClothes').name = 'ClothesRed'
-        event_tools.findEntryPoint(flow.flowchart, 'BlueClothes').name = 'ClothesBlue'
-        event_tools.findEntryPoint(flow.flowchart, 'Necklace').name = 'PinkBra'
-
-        dampe.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Item.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            
+            event_tools.addEntryPoint(flow.flowchart, 'MagicPowder_MaxUp')
+            event_tools.createActionChain(flow.flowchart, 'MagicPowder_MaxUp', [
+                ('Dialog', 'Show', {'message': 'Randomizer:GetBombMaxUp'})
+            ])
+            event_tools.addEntryPoint(flow.flowchart, 'Bomb_MaxUp')
+            event_tools.createActionChain(flow.flowchart, 'Bomb_MaxUp', [
+                ('Dialog', 'Show', {'message': 'Randomizer:GetArrowMaxUp'})
+            ])
+            event_tools.addEntryPoint(flow.flowchart, 'Arrow_MaxUp')
+            event_tools.createActionChain(flow.flowchart, 'Arrow_MaxUp', [
+                ('Dialog', 'Show', {'message': 'Randomizer:GetMagicPowderMaxUp'})
+            ])
+            
+            event_tools.findEntryPoint(flow.flowchart, 'GreenClothes').name = 'ClothesGreen'
+            event_tools.findEntryPoint(flow.flowchart, 'RedClothes').name = 'ClothesRed'
+            event_tools.findEntryPoint(flow.flowchart, 'BlueClothes').name = 'ClothesBlue'
+            event_tools.findEntryPoint(flow.flowchart, 'Necklace').name = 'PinkBra'
+
+            dampe.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         # #################################################################################################################################
         # ### ItemCommon: Testing to see if Dampe uses this, will make a CompareString event chain to customize item get events
@@ -1086,39 +1096,40 @@ class ModsProcess(QtCore.QThread):
         
         #################################################################################################################################
         ### MadamMeowMeow: Change her behaviour to always take back BowWow if you have him, and not do anything based on having the Horn
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MadamMeowMeow.bfevfl')
-
-        # Removes BowWowClear flag being set
-        event_tools.insertEventAfter(flow.flowchart, 'Event69', 'Event18')
-
-        # Rearranging her dialogue conditions
-        event_tools.insertEventAfter(flow.flowchart, 'Event22', 'Event5')
-        event_tools.setSwitchEventCase(flow.flowchart, 'Event5', 0, 'Event0')
-        event_tools.setSwitchEventCase(flow.flowchart, 'Event5', 1, 'Event52')
-        event_tools.setSwitchEventCase(flow.flowchart, 'Event0', 0, 'Event40')
-        event_tools.setSwitchEventCase(flow.flowchart, 'Event0', 1, 'Event21')
-        event_tools.setSwitchEventCase(flow.flowchart, 'Event21', 0, 'Event80')
-        event_tools.findEvent(flow.flowchart, 'Event21').data.params.data['symbol'] = 'BowWowJoin'
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MadamMeowMeow.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MadamMeowMeow.bfevfl')
+
+            # Removes BowWowClear flag being set
+            event_tools.insertEventAfter(flow.flowchart, 'Event69', 'Event18')
+
+            # Rearranging her dialogue conditions
+            event_tools.insertEventAfter(flow.flowchart, 'Event22', 'Event5')
+            event_tools.setSwitchEventCase(flow.flowchart, 'Event5', 0, 'Event0')
+            event_tools.setSwitchEventCase(flow.flowchart, 'Event5', 1, 'Event52')
+            event_tools.setSwitchEventCase(flow.flowchart, 'Event0', 0, 'Event40')
+            event_tools.setSwitchEventCase(flow.flowchart, 'Event0', 1, 'Event21')
+            event_tools.setSwitchEventCase(flow.flowchart, 'Event21', 0, 'Event80')
+            event_tools.findEvent(flow.flowchart, 'Event21').data.params.data['symbol'] = 'BowWowJoin'
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MadamMeowMeow.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### WindFishsEgg: Add and fix some entry points for the ItemGetSequence for capcity upgrades and tunics.
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/WindFishsEgg.bfevfl')
-
-        event_tools.insertEventAfter(flow.flowchart, 'Event142', None)
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/WindFishsEgg.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/WindFishsEgg.bfevfl')
+            event_tools.insertEventAfter(flow.flowchart, 'Event142', None)
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/WindFishsEgg.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### SkeletalGuardBlue: Make him sell 20 bombs in addition to the 20 powder
-        if self.placements['settings']['reduce-farming']:
+        if self.placements['settings']['reduce-farming'] and self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SkeletalGuardBlue.bfevfl')
 
             addBombs = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItem',
@@ -1138,18 +1149,19 @@ class ModsProcess(QtCore.QThread):
 
         #################################################################################################################################
         ### Make Save&Quit after getting a GameOver send you back to house
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Common.bfevfl')
-        actors.addNeededActors(flow.flowchart, self.rom_path)
-
-        event_tools.setSwitchEventCase(flow.flowchart, 'Event64', 1,
-            event_tools.createActionEvent(flow.flowchart, 'GameControl', 'RequestLevelJump',
-                {'level': 'MarinTarinHouse', 'locator': 'MarinTarinHouse_01A', 'offsetX': 0.0, 'offsetZ': 0.0},
-                'Event67'))
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Common.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Common.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+
+            event_tools.setSwitchEventCase(flow.flowchart, 'Event64', 1,
+                event_tools.createActionEvent(flow.flowchart, 'GameControl', 'RequestLevelJump',
+                    {'level': 'MarinTarinHouse', 'locator': 'MarinTarinHouse_01A', 'offsetX': 0.0, 'offsetZ': 0.0},
+                    'Event67'))
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Common.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         # #################################################################################################################################
         # ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on, as well as needed changes for randomized prizes
@@ -1183,24 +1195,26 @@ class ModsProcess(QtCore.QThread):
         ### in the GenericItemGetSequence
         ### same thing with ItemClothesRed for yoshi doll actors (instruments and ocarina)
         ### Make Papahl appear in the mountains after trading for the pineapple instead of the getting the Bell
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
-        npcs.makeNpcChanges(sheet, self.placements)
-        npcs.makeNewNpcs(sheet)
-                
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
+            npcs.makeNpcChanges(sheet, self.placements)
+            npcs.makeNewNpcs(sheet)
+                    
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### ItemDrop datasheet: remove HeartContainer drops 0-7, HookShot drop, AnglerKey and FaceKey drops.
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
-        item_drops.makeDatasheetChanges(sheet, self.placements)
-
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ItemDrop.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
+            item_drops.makeDatasheetChanges(sheet, self.placements)
+
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ItemDrop.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### Items datasheet: Set npcKeys for SmallKeys, HeartPieces, and Seashells so they show something when you get them.
@@ -1237,30 +1251,32 @@ class ModsProcess(QtCore.QThread):
         
         #################################################################################################################################
         ### Conditions datasheet
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Conditions.gsheet')
-
-        for condition in sheet['values']:
-            if self.thread_active:
-                conditions.editConditions(condition, self.placements)
-            else: break
-        
-        conditions.makeConditions(sheet, self.placements)
-        
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Conditions.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Conditions.gsheet')
+
+            for condition in sheet['values']:
+                if self.thread_active:
+                    conditions.editConditions(condition, self.placements)
+                else: break
+            
+            conditions.makeConditions(sheet, self.placements)
+            
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Conditions.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### CranePrize datasheet
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
-        crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
-        # print(oead_tools.parseStructArray(sheet['values']))
-
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
+            crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
+            # print(oead_tools.parseStructArray(sheet['values']))
+
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         # #################################################################################################################################
         # ### Prize Groups
@@ -1277,21 +1293,24 @@ class ModsProcess(QtCore.QThread):
 
         #################################################################################################################################
         ### GlobalFlags datasheet
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
-        flags.makeFlags(sheet)
-
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/GlobalFlags.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
+            flags.makeFlags(sheet)
+
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/GlobalFlags.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         #################################################################################################################################
         ### FishingFish datasheet: Remove the instrument requirements
-        if self.placements['settings']['fast-fishing']:
+        if self.placements['settings']['fast-fishing'] and self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/FishingFish.gsheet')
             for fish in sheet['values']:
-                if fish['mOpenItem']:
-                    fish['mOpenItem'] = ''
+                if self.thread_active:
+                    if fish['mOpenItem']:
+                        fish['mOpenItem'] = ''
+                else: break
             
             if self.thread_active:
                 oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/FishingFish.gsheet', sheet)
@@ -1447,6 +1466,7 @@ class ModsProcess(QtCore.QThread):
                         if data.HEART_ROOMS[room] not in data.CHEST_ROOMS.values():
                             self.progress_value += 1 # update progress bar
                             self.progress_update.emit(self.progress_value)
+            else: break
         
         # save event file
         if self.thread_active:
@@ -1488,19 +1508,21 @@ class ModsProcess(QtCore.QThread):
         })
 
         for i in range(28):
-            item = self.placements[f'D0-Rupee-{i + 1}']
-            item_key = self.item_defs[item]['item-key']
-            item_index = self.placements['indexes'][f'D0-Rupee-{i + 1}'] if f'D0-Rupee-{i + 1}' in self.placements['indexes'] else -1
+            if self.thread_active:
+                item = self.placements[f'D0-Rupee-{i + 1}']
+                item_key = self.item_defs[item]['item-key']
+                item_index = self.placements['indexes'][f'D0-Rupee-{i + 1}'] if f'D0-Rupee-{i + 1}' in self.placements['indexes'] else -1
 
-            if item_key != 'ZapTrap':
-                model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
-                model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
-            else:
-                model_name = random.choice(list(trap_models))
-                model_path = trap_models[model_name]
+                if item_key != 'ZapTrap':
+                    model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
+                    model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
+                else:
+                    model_name = random.choice(list(trap_models))
+                    model_path = trap_models[model_name]
 
-            room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', i)
-            rupees.makeEventChanges(flow.flowchart, i, item_key, item_index)
+                room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', i)
+                rupees.makeEventChanges(flow.flowchart, i, item_key, item_index)
+            else: break
         
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_08D.leb', 'wb') as file:
@@ -1539,107 +1561,153 @@ class ModsProcess(QtCore.QThread):
         """Edits various event files for the Trade Quest NPCs to give the randomized items"""
 
         ### QuadrupletsMother
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/QuadrupletsMother.bfevfl')
-        trade_quest.mamashaChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/QuadrupletsMother.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/QuadrupletsMother.bfevfl')
+            trade_quest.mamashaChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/QuadrupletsMother.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         ### CiaoCiao
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RibbonBowWow.bfevfl')
-        trade_quest.ciaociaoChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RibbonBowWow.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RibbonBowWow.bfevfl')
+            trade_quest.ciaociaoChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RibbonBowWow.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         ### Sale
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Sale.bfevfl')
-        trade_quest.saleChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Sale.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
-
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Sale.bfevfl')
+            trade_quest.saleChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Sale.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
+        
         ### Kiki
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Kiki.bfevfl')
-        trade_quest.kikiChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Kiki.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Kiki.bfevfl')
+            trade_quest.kikiChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Kiki.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         ### Tarin Bees
-        flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl')
-        trade_quest.tarinChanges(flow.flowchart, self.placements, self.item_defs)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
+            flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl')
+            trade_quest.tarinChanges(flow.flowchart, self.placements, self.item_defs)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
         
         ### Chef Bear
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ChefBear.bfevfl')
-        trade_quest.chefChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ChefBear.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ChefBear.bfevfl')
+            trade_quest.chefChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ChefBear.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         ### Papahl
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Papahl.bfevfl')
-        trade_quest.papahlChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Papahl.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Papahl.bfevfl')
+            trade_quest.papahlChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Papahl.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         ### Christine
-        flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl')
-        trade_quest.christineChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl', flow)
+            flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl')
+            trade_quest.christineChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl', flow)
 
         ### Mr Write
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DrWrite.bfevfl')
-        trade_quest.mrWriteChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DrWrite.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DrWrite.bfevfl')
+            trade_quest.mrWriteChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DrWrite.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         ### Grandma Yahoo
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/GrandmaUlrira.bfevfl')
-        trade_quest.grandmaYahooChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/GrandmaUlrira.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/GrandmaUlrira.bfevfl')
+            trade_quest.grandmaYahooChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/GrandmaUlrira.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         ### Bay Fisherman
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MarthasBayFisherman.bfevfl')
-        trade_quest.fishermanChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MarthasBayFisherman.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MarthasBayFisherman.bfevfl')
+            trade_quest.fishermanChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MarthasBayFisherman.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
         ### Mermaid Martha
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MermaidMartha.bfevfl')
-        trade_quest.mermaidChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MermaidMartha.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MermaidMartha.bfevfl')
+            trade_quest.mermaidChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MermaidMartha.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         # Mermaid Statue
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MarthaStatue.bfevfl')
-        trade_quest.statueChanges(flow.flowchart, self.rom_path)
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MarthaStatue.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MarthaStatue.bfevfl')
+            trade_quest.statueChanges(flow.flowchart, self.rom_path)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MarthaStatue.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
     
 
 
+    def makeOwlStatueChanges(self):
+        '''Edits the eventflows for the owl statues to give items, as well as one extra level file'''
+
+        if self.thread_active and self.placements['settings']['owl-gifts']:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldOwlStatue.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            owls.makeFieldChanges(flow.flowchart, self.placements, self.item_defs)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldOwlStatue.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
+            
+            if self.thread_active:
+                flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DungeonOwlStatue.bfevfl')
+                actors.addNeededActors(flow.flowchart, self.rom_path)
+                owls.makeDungeonChanges(flow.flowchart, self.placements, self.item_defs)
+                if self.thread_active:
+                    event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DungeonOwlStatue.bfevfl', flow)
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
+            
+            if self.thread_active:
+                with open(f'{self.rom_path}/region_common/level/Lv01TailCave/Lv01TailCave_04B.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+                room_data.actors[0].parameters[0] = bytes('examine_Tail04B', 'utf-8')
+                if self.thread_active:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv01TailCave/Lv01TailCave_04B.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+
+
+    
     # def makeItemTextBoxes(self):
     #     """Creates an MSBT file to make custom item textboxes for the Randomizer
     #     Currently used for the capacity upgrades since they do no have textboxes"""

@@ -20,3 +20,6 @@ def makeEventChanges(flow):
 
     # Make Marin not do beach_talk under any circumstance
     event_tools.setSwitchEventCase(flow.flowchart, 'Event21', 0, 'Event674')
+
+    # Remove checking for beach item to get song
+    event_tools.setSwitchEventCase(flow.flowchart, 'Event2', 1, 'Event21')

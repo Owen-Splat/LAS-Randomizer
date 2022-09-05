@@ -66,18 +66,20 @@ def makeNpcChanges(npcSheet, placements):
         if npc['symbol'] == 'ObjSinkingSword':
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
+            npc['graphics']['waterChannel']['limitDepth'] = 0.5 # idk what this does but probably helps see the item?
             npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
             npc['layoutConditions'][0]['parameter'] = '$3'
-            # npc['collision']['traits'] = 'HeartPiece'
-            # npc['collision']['isStatic'] = False
-            # npc['collision']['filter'] = 7
+            npc['collision']['traits'] = 'HeartPiece'
+            npc['collision']['isStatic'] = False
+            npc['collision']['filter'] = 7
+            npc['collision']['offset']['y'] = 0.25
         
         if npc['symbol'] == 'ObjRoosterBones':
             npc['layoutConditions'].pop(0)
         
-        if npc['symbol'] == 'ObjTelephone':
+        if npc['symbol'] == 'ObjTelephone': # since telephones swap tunics, make it so the Fairy Queen is talking
             npc['talk'] = {'personalSpace': 1.5, 'talkerLabel': 'NpcFairyQueen'}
         
 

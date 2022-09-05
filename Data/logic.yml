@@ -420,7 +420,7 @@ marin:
   content: song-ballad
   region: mabe
   spoiler-region: mabe-village
-  condition-basic: ocarina & beach
+  condition-basic: ocarina
 shop-slot3-1st:
   type: item
   subtype: shop
@@ -1263,6 +1263,27 @@ D1-beetles:
   region: tail-cave
   spoiler-region: tail-cave
   condition-basic: D1-8D & kill-hardhat-beetle[pit]
+D1-owl-statue-long-hallway:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: tail-cave
+  spoiler-region: tail-cave
+  condition-basic: D1-8D & key-D1:3 & stone-beak-D1
+D1-owl-statue-spinies:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: tail-cave
+  spoiler-region: tail-cave
+  condition-basic: D1-8D & key-D1:3 & stone-beak-D1
+D1-owl-statue-3-of-a-kind:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: tail-cave
+  spoiler-region: tail-cave
+  condition-basic: D1-6F & stone-beak-D1
 
 D2-instrument:
   type: item
@@ -1364,6 +1385,27 @@ D2-button-chest:
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-7D & feather & hit-crystal-switch
+D2-owl-statue-first:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: bottle-grotto
+  spoiler-region: bottle-grotto
+  condition-basic: D2-7D & stone-beak-D2
+D2-owl-statue-second:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: bottle-grotto
+  spoiler-region: bottle-grotto
+  condition-basic: D2-7D & feather & hit-crystal-switch & key-D2:3 & stone-beak-D2
+D2-owl-statue-third:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: bottle-grotto
+  spoiler-region: bottle-grotto
+  condition-basic: D2-4C & stone-beak-D2
 
 D3-instrument:
   type: item
@@ -1500,6 +1542,27 @@ D3-vacuum-mouth:
   region: key-cavern
   spoiler-region: key-cavern
   condition-basic: D3-8B & (boots | hookshot)
+D3-owl-statue-basement-north:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: key-cavern
+  spoiler-region: key-cavern
+  condition-basic: D3-3G & stone-beak-D3
+D3-owl-statue-arrow:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: key-cavern
+  spoiler-region: key-cavern
+  condition-basic: D3-4C & stone-beak-D3
+D3-owl-statue-northwest:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: key-cavern
+  spoiler-region: key-cavern
+  condition-basic: D3-4C & kill-zol-red & kill-stalfos & stone-beak-D3
 
 D4-instrument:
   type: item
@@ -1610,6 +1673,13 @@ D4-crystals:
   region: angler-tunnel
   spoiler-region: angler-tunnel
   condition-basic: D4-8D & kill-spiny & kill-zol-red & break-crystal & kill-water-tektite
+D4-owl-statue:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: angler-tunnel
+  spoiler-region: angler-tunnel
+  condition-basic: D4-4E & stone-beak-D4
 
 D5-instrument:
   type: item
@@ -1713,6 +1783,20 @@ D5-near-entrance:
   region: catfish-maw
   spoiler-region: catfish-maw
   condition-basic: D5-8H & hookshot
+D5-owl-statue-south:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: catfish-maw
+  spoiler-region: catfish-maw
+  condition-basic: D5-7F & stone-beak-D5
+D5-owl-statue-north:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: catfish-maw
+  spoiler-region: catfish-maw
+  condition-basic: D5-5G & feather & stone-beak-D5
 
 D6-instrument:
   type: item
@@ -1822,6 +1906,28 @@ D6-wizzrobes-ledge:
   region: face-shrine
   spoiler-region: face-shrine
   condition-basic: D6-8D & bracelet:2 & kill-wizzrobe
+D6-owl-statue-ledge:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: face-shrine
+  spoiler-region: face-shrine
+  condition-basic: D6-8D & stone-beak-D6
+D6-owl-statue-southeast:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: face-shrine
+  spoiler-region: face-shrine
+  condition-basic: D6-8D & bracelet:2 & kill-wizzrobe & stone-beak-D6
+D6-owl-statue-canal:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: face-shrine
+  spoiler-region: face-shrine
+  condition-basic: D6-4H & bombs & hookshot & bracelet & key-D6:3 & stone-beak-D6
+  condition-glitched: D6-4H & feather & bombs & bracelet & stone-beak-D6
 
 D7-instrument:
   type: item
@@ -1916,6 +2022,27 @@ D7-grim-creeper:
   region: eagle-tower
   spoiler-region: eagle-tower
   condition-basic: D7-2D & hit-crystal-switch & kill-battle-bat
+D7-owl-statue-ball:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: eagle-tower
+  spoiler-region: eagle-tower
+  condition-basic: D7-2D & stone-beak-D7
+D7-owl-statue-kirbys:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: eagle-tower
+  spoiler-region: eagle-tower
+  condition-basic: D7-2D & stone-beak-D7
+D7-owl-statue-4th-pillar:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: eagle-tower
+  spoiler-region: eagle-tower
+  condition-basic: D7-2D & hit-crystal-switch & bombs & stone-beak-D7
 
 D8-instrument:
   type: item
@@ -2052,6 +2179,28 @@ D8-far-southeast:
   region: turtle-rock
   spoiler-region: turtle-rock
   condition-basic: D8-8D & feather & kill-smasher & (bombs | break-pot)
+D8-owl-statue-above-smasher:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: turtle-rock
+  spoiler-region: turtle-rock
+  condition-basic: D8-8D & feather & ((bombs & kill-smasher) | (break-pot & kill-arm-mimic)) & stone-beak-D8
+  condition-advanced: D8-8D & dash-jump & kill-smasher & stone-beak-D8
+D8-owl-statue-below-gibdos:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: turtle-rock
+  spoiler-region: turtle-rock
+  condition-basic: D8-8D & feather & key-D8:2 & stone-beak-D8
+D8-owl-statue-eye-statue:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: turtle-rock
+  spoiler-region: turtle-rock
+  condition-basic: D8-4C & stone-beak-D8
 
 D0-northern-chest:
   type: item
@@ -2116,203 +2265,268 @@ D0-fairy-2:
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
+D0-owl-statue:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & stone-beak-D0
+D0-rupee-1:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-2:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-3:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-4:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-5:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-6:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-7:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-8:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-9:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-10:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-11:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-12:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-13:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-14:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-15:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-16:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-17:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-18:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-19:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-20:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-21:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-22:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-23:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-24:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-25:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-26:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-27:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+D0-rupee-28:
+  type: item
+  subtype: standing
+  content: rupee-5
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & bombs
 
-D0-Rupee-1:
+# Owl Statues
+owl-statue-below-D8:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-2:
+  subtype: statue
+  content: rupee-20
+  region: mr-write-house
+  spoiler-region: goponga-swamp
+owl-statue-moblin-cave:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-3:
+  subtype: statue
+  content: rupee-20
+  region: wasteland
+  spoiler-region: taltal-heights
+owl-statue-pothole:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-4:
+  subtype: statue
+  content: rupee-20
+  region: pothole
+  spoiler-region: pothole-field
+  condition-basic: break-bush
+owl-statue-above-cave:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-5:
+  subtype: statue
+  content: rupee-20
+  region: plains
+  spoiler-region: marthas-bay
+  condition-basic: bombs & (feather | rooster)
+owl-statue-south-bay:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-6:
+  subtype: statue
+  content: rupee-20
+  region: animal-village
+  spoiler-region: marthas-bay
+owl-statue-desert:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-7:
+  subtype: statue
+  content: rupee-20
+  region: desert
+  spoiler-region: yarna-desert
+owl-statue-maze:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-8:
+  subtype: statue
+  content: rupee-20
+  region: armos-maze
+  spoiler-region: ancient-ruins
+  condition-basic: bracelet
+owl-statue-rapids:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-9:
+  subtype: statue
+  content: rupee-20
+  region: rapids
+  spoiler-region: rapids-ride
+owl-statue-taltal-east:
   type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-10:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-11:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-12:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-13:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-14:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-15:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-16:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-17:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-18:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-19:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-20:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-21:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-22:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-23:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-24:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-25:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-26:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-27:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
-D0-Rupee-28:
-  type: item
-  subtype: standing
-  content: rupee-5
-  region: color-dungeon
-  spoiler-region: color-dungeon
-  condition-basic: D0-8C & kill-goblin[heavy] & bombs
+  subtype: statue
+  content: rupee-20
+  region: taltal-east-2
+  spoiler-region: taltal-mountains-east
 
 # Followers
 moblin-cave:
