@@ -29,12 +29,14 @@ def hash_string(s):
     return h
 
 
+
 class Entry:
 	def __init__(self, nodeIndex, name, nextOffset, data):
 		self.nodeIndex = nodeIndex
 		self.name = name
 		self.nextOffset = nextOffset
 		self.data = data
+
 
 
 class FixedHash:
@@ -193,8 +195,8 @@ class Actor:
 			(readBytes(data, 0x7B, 1), readBytes(data, 0x82, 2))
 		]
 		
-		self.x84 = data[0x84:]
-		# self.relationships = Relationship(data, names)
+		# self.x84 = data[0x84:]
+		self.relationships = Relationship(data, names)
 
 	def __repr__(self):
 		return f'Actor: {self.name}'
@@ -234,40 +236,67 @@ class Actor:
 			switches += self.switches[i][1].to_bytes(2, 'little')
 		packed += switches
 		
-		packed += self.x84
+		# packed += self.x84
 
-		# packed += self.relationships.e.to_bytes(1, 'little')
-		# packed += self.relationships.k.to_bytes(1, 'little')
-		# packed += self.relationships.b.to_bytes(1, 'little')
-		# packed += self.relationships.x.to_bytes(1, 'little')
-		# packed += self.relationships.y.to_bytes(1, 'little')
-		# packed += self.relationships.z.to_bytes(1, 'little')
-		# packed += self.relationships.null
+		packed += self.relationships.e.to_bytes(1, 'little')
+		packed += self.relationships.k.to_bytes(1, 'little')
+		packed += self.relationships.b.to_bytes(1, 'little')
+		packed += self.relationships.x.to_bytes(1, 'little')
+		packed += self.relationships.y.to_bytes(1, 'little')
+		packed += self.relationships.z.to_bytes(1, 'little')
+		packed += self.relationships.null
 
-		# for i in range(self.relationships.x):
-		# 	for b in range(2):
-		# 		param = self.relationships.section_1[i][b]
-		# 		if isinstance(param, bytes):
-		# 			packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 			packed += (4).to_bytes(4, 'little')
-		# 			nameRepr += param + b'\x00'
-		# 		else:
-		# 			packed += param.to_bytes(4, 'little')
-		# 			packed += (3).to_bytes(4, 'little')
+		for i in range(self.relationships.x):
+			param1 = self.relationships.section_1[i][0][0]
+			param2 = self.relationships.section_1[i][0][1]
+			act_index = self.relationships.section_1[i][1]
+
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			packed += act_index.to_bytes(4, 'little')
 		
-		# # for i in range(24):
-		# # 	pass
+		for i in range(self.relationships.z):
+			param1 = self.relationships.section_2[i][0][0]
+			param2 = self.relationships.section_2[i][0][1]
+			rail = self.relationships.section_2[i][1]
+			point = self.relationships.section_2[i][2]
+
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			packed += rail.to_bytes(4, 'little')
+			packed += point.to_bytes(4, 'little')
 		
-		# if self.relationships.y > 0:
-		# 	for i in range(4):
-		# 		id = self.relationships.section_3[i]
-		# 		if isinstance(id, bytes):
-		# 			packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 			packed += (4).to_bytes(4, 'little')
-		# 			nameRepr += id + b'\x00'
-		# 		else:
-		# 			packed += id.to_bytes(4, 'little')
-		# 			packed += (3).to_bytes(4, 'little')
+		if self.relationships.y > 0:
+			for i in range(self.relationships.y):
+				packed += self.relationships.section_3[i].to_bytes(4, 'little')
 
 		return packed
 
@@ -276,8 +305,9 @@ class Actor:
 		print(f'Name: {self.name}')
 		print(f'Type: {self.type}')
 		print(f'Room ID: {self.roomID}')
-		print(f'Coordinates: {self.X}, {self.Y}, {self.Z}')
+		print(f'Coordinates: {self.posX}, {self.posY}, {self.posZ}')
 		print(f'Parameters: {self.parameters}')
+
 
 
 class Room:
@@ -286,9 +316,11 @@ class Room:
 
 		self.actors = []
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
-
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
+		
+		# grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
+		# self.grid = Grid(grid_entry)
 
 
 	def setChestContent(self, new_content, item_index, chest_index=0):
@@ -308,7 +340,7 @@ class Room:
 			new_actor = copy.deepcopy(chest)
 
 			chest.relationships.x = 1
-			chest.relationships.section_1.append([77, 77, len(self.actors), 0])
+			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
 
 			name_hex = f'A1000{chest_index}005D1D906E'
 			new_actor.key = int(name_hex, 16)
@@ -316,7 +348,7 @@ class Room:
 			new_actor.type = 0x181
 			new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
 			new_actor.relationships.y = 1
-			new_actor.relationships.section_3 = [self.actors.index(chest), 0, 0, 0]
+			new_actor.relationships.section_3.append(self.actors.index(chest))
 			self.actors.append(new_actor)
 
 
@@ -376,6 +408,7 @@ class Room:
 		return self.fixed_hash.toBinary()
 
 
+
 class Relationship:
 	def __init__(self, data, names):
 		self.e = data[0x84]
@@ -386,16 +419,18 @@ class Relationship:
 		self.z = data[0x89]
 
 		self.null = data[0x8A:0x90]
-
+		
 		self.section_1 = []
 		self.section_2 = []
 		self.section_3 = []
 
-		pos = 0x91
-
-		if self.x != 0x00:
-			for i in range(20):
+		pos = 0x90
+		
+		if self.x > 0x00:
+			for i in range(self.x):
+				acts = []
 				seq = []
+
 				for b in range(2):
 					param = readBytes(data, pos + (0x8 * b), 4)
 					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
@@ -403,15 +438,35 @@ class Relationship:
 						seq.append(readString(names, param))
 					else:
 						seq.append(param)
-				self.section_1.append(seq)
-				pos += 16
+				
+				act_index = readBytes(data, pos + 0x10, 4)
+				acts.append(seq)
+				acts.append(act_index)
+				self.section_1.append(acts)
+				pos += 20
 		
-		if self.z != 0x00:
-			for i in range(24):
-				pass
-			pos += 0x18
+		if self.z > 0x00:
+			for i in range(self.z):
+				acts = []
+				seq = []
+
+				for b in range(2):
+					param = readBytes(data, pos + (0x8 * b), 4)
+					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+					if paramType == 0x4:
+						seq.append(readString(names, param))
+					else:
+						seq.append(param)
+				
+				rail = readBytes(data, pos + 0x10, 4)
+				point = readBytes(data, pos + 0x14, 4)
+				acts.append(seq)
+				acts.append(rail)
+				acts.append(point)
+				self.section_2.append(acts)
+				pos += 24
 		
-		if self.y != 0x00:
-			for i in range(4):
+		if self.y > 0x00:
+			for i in range(self.y):
 				id = readBytes(data, pos + (0x8 * i), 4)
 				self.section_3.append(id)
