@@ -255,8 +255,8 @@ graveyard-cave:
   index: 9
   region: ghost-grave
   spoiler-region: koholint-prairie
-  condition-basic: bracelet & feather & bombs & hookshot
-  condition-advanced: bracelet & dash-jump
+  condition-basic: (bombs & hookshot) | rooster
+  condition-advanced: dash-jump | obstacle-skip
 ghost-house-pot:
   type: item
   subtype: hidden
@@ -2582,6 +2582,7 @@ dream-shrine:
 eagle-tower:
   type: region
   condition-basic: taltal-east-2 & ((feather & hookshot) | rooster) & bird-key & bracelet
+  condition-trick: taltal-east-2 & seam-walking & bird-key & bracelet
 egg:
   type: region
   condition-basic: wasteland & bracelet & ocarina & song-ballad & full-moon-cello & conch-horn & sea-lilys-bell & surf-harp & wind-marimba & coral-triangle & evening-calm-organ & thunder-drum  # ideally at some point we can implement a setting for # of instruments needed and not always check for all 8
@@ -3135,31 +3136,41 @@ kill-nightmare:
   type: enemy
   condition-basic: egg & (magnifying-lens | free-book) & kill-nightmare-zol & kill-nightmare-agahnim & kill-nightmare-moldorm & kill-nightmare-ganon & kill-nightmare-lanmola & kill-dethl
 
-# # Logic Tricks
-# feather-skewing:
-#   type: trick
-#   condition-glitched: feather & sword & hookshot
-# bomb-skewing:
-#   type: trick
-#   condition-glitched: bombs & sword & hookshot
-# shovel-skewing:
-#   type: trick
-#   condition-glitched: shovel & sword & hookshot
-# power-skewing:
-#   type: trick
-#   condition-glitched: bracelet & sword & hookshot
-# dash-skewing:
-#   type: trick
-#   condition-glitched: boots & sword & hookshot
-# early-ocarina:
-#   type: trick
-#   condition-glitched: feather & (sword | rod | boomerang)
-# wall-riding:
-#   type: trick
-#   condition-glitched: boots & feather & (sword | rod | boomerang)
-# wall-bomb-hover:
-#   type: trick
-#   condition-glitched: boots & feather & (sword | rod | boomerang) & bombs
-# seam-walking:
-#   type: trick
+# Logic Tricks
+feather-skewing:
+  type: trick
+  condition-basic: feather & sword & hookshot
+shovel-skewing:
+  type: trick
+  condition-basic: shovel & sword & hookshot
+lift-skewing:
+  type: trick
+  condition-basic: sword & hookshot
+dash-skewing:
+  type: trick
+  condition-basic: boots & sword & hookshot
+obstacle-skip:
+  type: trick
+  condition-basic: feather
+early-ocarina:
+  type: trick
+  condition-basic: kill-arm-mimic & feather
+wall-riding:
+  type: trick
+  condition-basic: boots & feather
+wall-bomb-hover:
+  type: trick
+  condition-basic: boots & feather & bombs
+seam-walking:
+  type: trick
+  condition-basic: feather
+like-like-launch:
+  type: trick
+  condition-basic: mabe
+villa-skip:
+  type: trick
+  condition-basic: prairie & feather & sword & powder
+tracey-boost:
+  type: trick
+  condition-basic: tracey & can-farm-rupees & mabe & sword & bracelet & bombs
 ...

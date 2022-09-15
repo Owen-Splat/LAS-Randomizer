@@ -29,7 +29,7 @@ class ItemShuffler(QtCore.QThread):
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         
-        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
+        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note', 'rooster']
 
         self.progress_value = 0
         self.thread_active = True
@@ -54,8 +54,8 @@ class ItemShuffler(QtCore.QThread):
 
         # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
         vanilla_locations = [k for k, v in self.logic_defs.items()
-                            if v['type'] == 'item'
-                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
+                            if v['type'] in ('item', 'follower')
+                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue', 'follower')]
         vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
         vanilla_locations.append('trendy-prize-1')
@@ -64,6 +64,7 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.append('trendy-prize-4')
         vanilla_locations.append('trendy-prize-5')
         vanilla_locations.append('trendy-prize-6')
+        vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
         vanilla_locations.remove('bay-passage-sunken')
         vanilla_locations.remove('river-crossing-cave')
         vanilla_locations.remove('kanalet-moat-south')
@@ -342,7 +343,7 @@ class ItemShuffler(QtCore.QThread):
             force_junk = [l for l in force_junk if l not in force_vanilla]
         
         # Ensure all excluded locations are actually location names
-        force_junk = [l for l in force_junk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
+        force_junk = [l for l in force_junk if l in self.logic_defs and self.logic_defs[l]['type'] in ('item', 'follower')]
         
         # # Make sure logic is a valid value, default to basic
         # if logic not in ['basic', 'advanced', 'glitched', 'none']:
@@ -370,7 +371,7 @@ class ItemShuffler(QtCore.QThread):
         
         for key in self.logic_defs:
             if self.thread_active:
-                if self.logic_defs[key]['type'] in ['item']:
+                if self.logic_defs[key]['type'] in ('item', 'follower'):
                     locations.append(key)
                     placements[key] = None
                     access = self.addAccess(access, self.logic_defs[key]['content']) # we're going to assume the player starts with everything, then slowly loses things as they get placed into the wild
@@ -394,17 +395,11 @@ class ItemShuffler(QtCore.QThread):
                 else:
                     dungeonItems += [key] * self.item_defs[key]['quantity']
             else: break
-        
-        # # Randomly place bow-wow and the rooster
-        # followers = ['bow-wow', 'rooster']
-        # random.shuffle(followers)
-        # placements['moblin-cave'] = followers[0]
-        # placements['rooster-statue'] = followers[1]
-        
-        # Force the followers to be vanilla (for now)
-        placements['moblin-cave'] = 'bow-wow'
-        placements['rooster-statue'] = 'rooster'
-        
+                
+        # # Force the followers to be vanilla (for now)
+        # placements['moblin-cave'] = 'bow-wow'
+        # placements['rooster-statue'] = 'rupee-20'
+
         # Shuffle item and location lists
         random.shuffle(importantItems)
         random.shuffle(seashellItems)
