@@ -7,7 +7,7 @@ def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
 
 def readFloat(bytes, start, length):
-	return struct.unpack('f', bytes[start : start + length])[0]
+	return struct.unpack('<f', bytes[start : start + length])[0]
 
 def readString(data, start):
 	result = b''
@@ -339,7 +339,7 @@ class Room:
 			chest = chests[chest_index]
 			new_actor = copy.deepcopy(chest)
 
-			chest.relationships.x = 1
+			chest.relationships.x += 1
 			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
 
 			name_hex = f'A1000{chest_index}005D1D906E'
@@ -347,7 +347,7 @@ class Room:
 			new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
 			new_actor.type = 0x181
 			new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
-			new_actor.relationships.y = 1
+			new_actor.relationships.y += 1
 			new_actor.relationships.section_3.append(self.actors.index(chest))
 			self.actors.append(new_actor)
 
@@ -411,12 +411,12 @@ class Room:
 
 class Relationship:
 	def __init__(self, data, names):
-		self.e = data[0x84]
-		self.k = data[0x85]
-		self.b = data[0x86]
-		self.x = data[0x87]
-		self.y = data[0x88]
-		self.z = data[0x89]
+		self.e = readBytes(data, 0x84, 1)
+		self.k = readBytes(data, 0x85, 1)
+		self.b = readBytes(data, 0x86, 1)
+		self.x = readBytes(data, 0x87, 1)
+		self.y = readBytes(data, 0x88, 1)
+		self.z = readBytes(data, 0x89, 1)
 
 		self.null = data[0x8A:0x90]
 		
