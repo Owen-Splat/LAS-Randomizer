@@ -92,7 +92,10 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6}))
         
         return event_tools.createForkEvent(flowchart, before, forks, stopEvent)[0]
-
+    
+    # if item == 'ShadowLink':
+    #     return event_tools.createSubFlowEvent(flowchart, 'ShadowLink', 'Appear', {}, None)
+    
     ############################################################################################################################################
     ### Instrument flags - just ghost flags when getting harp for now :)
     if item == 'SurfHarp':

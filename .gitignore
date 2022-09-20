@@ -7,6 +7,8 @@ __pycache__
 /output
 /romfs
 /Resources/Dev Resources
+/Tools/levels.py
+/Tools/msbt.py
 /Test
 /room_data_viewer.py
 text_tests.py

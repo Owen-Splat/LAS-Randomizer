@@ -29,7 +29,7 @@ class ItemShuffler(QtCore.QThread):
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         
-        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note', 'rooster']
+        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
 
         self.progress_value = 0
         self.thread_active = True
@@ -54,8 +54,8 @@ class ItemShuffler(QtCore.QThread):
 
         # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
         vanilla_locations = [k for k, v in self.logic_defs.items()
-                            if v['type'] in ('item', 'follower')
-                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue', 'follower')]
+                            if v['type'] == 'item' # in ('item', 'follower')
+                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')] # , 'follower')]
         vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
         vanilla_locations.append('trendy-prize-1')
@@ -64,7 +64,7 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.append('trendy-prize-4')
         vanilla_locations.append('trendy-prize-5')
         vanilla_locations.append('trendy-prize-6')
-        vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
+        # vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
         vanilla_locations.remove('bay-passage-sunken')
         vanilla_locations.remove('river-crossing-cave')
         vanilla_locations.remove('kanalet-moat-south')
@@ -395,10 +395,10 @@ class ItemShuffler(QtCore.QThread):
                 else:
                     dungeonItems += [key] * self.item_defs[key]['quantity']
             else: break
-                
-        # # Force the followers to be vanilla (for now)
-        # placements['moblin-cave'] = 'bow-wow'
-        # placements['rooster-statue'] = 'rupee-20'
+        
+        # Force the followers to be vanilla (for now)
+        placements['moblin-cave'] = 'bow-wow'
+        placements['rooster-statue'] = 'rooster'
 
         # Shuffle item and location lists
         random.shuffle(importantItems)
