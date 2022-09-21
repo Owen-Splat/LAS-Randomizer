@@ -3,7 +3,9 @@ A randomizer for The Legend of Zelda: Link's Awakening remake. Currently still v
 
 This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and heart pieces, with the sunken ones left vanilla due to issues with them. More work will come soon.
 
-Several extra options, including Zapsanity, Blupsanity, Randomized Music, selecting how many instruments you start with, and more! Don't like checking a specific location? You can toggle it to always be junk!
+Several extra options, including Zapsanity, Blupsanity, Randomized Music, and more! Don't like checking a specific location? You can toggle it to always be junk!
+
+You can get early access to features just by running the randomizer code yourself (see below). There is an experimental tab, those settings either do not work at all or may be extremely broken.
 
 This GUI is dark mode by default, but can be toggled with ctrl + L
 
@@ -30,6 +32,7 @@ Then run the randomizer with:
 `py -3.8 randomizer.py` (on Windows)  
 `python3 randomizer.py` (on Mac)  
 `python3 randomizer.py` (on Linux)  
+
 
 ## How to play:
 
