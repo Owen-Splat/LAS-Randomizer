@@ -7,7 +7,7 @@ def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
 
 def readFloat(bytes, start, length):
-	return struct.unpack('<f', bytes[start : start + length])[0]
+	return float(struct.unpack('<f', bytes[start : start + length])[0])
 
 def readString(data, start):
 	result = b''
@@ -197,8 +197,8 @@ class Actor:
 			(readBytes(data, 0x7B, 1), readBytes(data, 0x82, 2))
 		]
 		
-		self.x84 = data[0x84:]
-		# self.relationships = Relationship(data, names)
+		# self.x84 = data[0x84:]
+		self.relationships = Relationship(data, names)
 
 	def __repr__(self):
 		return f'Actor: {self.name}'
@@ -238,67 +238,67 @@ class Actor:
 			switches += self.switches[i][1].to_bytes(2, 'little')
 		packed += switches
 		
-		packed += self.x84 # relationship data but it's unfinished so we just keep the data as is for now
+		# packed += self.x84 # relationship data but it's unfinished so we just keep the data as is for now
 
-		# packed += self.relationships.e.to_bytes(1, 'little')
-		# packed += self.relationships.k.to_bytes(1, 'little')
-		# packed += self.relationships.b.to_bytes(1, 'little')
-		# packed += self.relationships.x.to_bytes(1, 'little')
-		# packed += self.relationships.y.to_bytes(1, 'little')
-		# packed += self.relationships.z.to_bytes(1, 'little')
-		# packed += self.relationships.null
+		packed += self.relationships.e.to_bytes(1, 'little')
+		packed += self.relationships.k.to_bytes(1, 'little')
+		packed += self.relationships.b.to_bytes(1, 'little')
+		packed += self.relationships.x.to_bytes(1, 'little')
+		packed += self.relationships.y.to_bytes(1, 'little')
+		packed += self.relationships.z.to_bytes(1, 'little')
+		packed += self.relationships.null
 
-		# for i in range(self.relationships.x):
-		# 	param1 = self.relationships.section_1[i][0][0]
-		# 	param2 = self.relationships.section_1[i][0][1]
-		# 	act_index = self.relationships.section_1[i][1]
+		for i in range(self.relationships.x):
+			param1 = self.relationships.section_1[i][0][0]
+			param2 = self.relationships.section_1[i][0][1]
+			act_index = self.relationships.section_1[i][1]
 
-		# 	if isinstance(param1, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param1 + b'\x00'
-		# 	else:
-		# 		packed += param1.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
 			
-		# 	if isinstance(param2, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param2 + b'\x00'
-		# 	else:
-		# 		packed += param2.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
 			
-		# 	packed += act_index.to_bytes(4, 'little')
+			packed += act_index.to_bytes(4, 'little')
 		
-		# for i in range(self.relationships.z):
-		# 	param1 = self.relationships.section_2[i][0][0]
-		# 	param2 = self.relationships.section_2[i][0][1]
-		# 	rail = self.relationships.section_2[i][1]
-		# 	point = self.relationships.section_2[i][2]
+		for i in range(self.relationships.z):
+			param1 = self.relationships.section_2[i][0][0]
+			param2 = self.relationships.section_2[i][0][1]
+			rail = self.relationships.section_2[i][1]
+			point = self.relationships.section_2[i][2]
 
-		# 	if isinstance(param1, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param1 + b'\x00'
-		# 	else:
-		# 		packed += param1.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
 			
-		# 	if isinstance(param2, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param2 + b'\x00'
-		# 	else:
-		# 		packed += param2.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
 			
-		# 	packed += rail.to_bytes(4, 'little')
-		# 	packed += point.to_bytes(4, 'little')
+			packed += rail.to_bytes(4, 'little')
+			packed += point.to_bytes(4, 'little')
 		
-		# if self.relationships.y > 0:
-		# 	for i in range(self.relationships.y):
-		# 		packed += self.relationships.section_3[i].to_bytes(4, 'little')
+		if self.relationships.y > 0:
+			for i in range(self.relationships.y):
+				packed += self.relationships.section_3[i].to_bytes(4, 'little')
 
 		return packed
 
@@ -354,25 +354,25 @@ class Room:
 			self.actors.append(new_actor)
 	
 
-	def addShadowTrap(self, chest_index=0):
-		chests = [a for a in self.actors if a.type == 0xF7]
+	# def addShadowTrap(self, chest_index=0):
+	# 	chests = [a for a in self.actors if a.type == 0xF7]
 
-		if len(chests) > chest_index:
-			chest = chests[chest_index]
-			new_actor = copy.deepcopy(chest)
+	# 	if len(chests) > chest_index:
+	# 		chest = chests[chest_index]
+	# 		new_actor = copy.deepcopy(chest)
 
-			chest.relationships.x += 1
-			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
+	# 		chest.relationships.x += 1
+	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
 
-			name_hex = f'A1000{chest_index}006E2E017F'
-			new_actor.key = int(name_hex, 16)
-			new_actor.name = bytes(f'PanelShadowLink-{name_hex}', 'utf-8')
-			new_actor.type = 0x21E
-			# new_actor.posZ += 3 # move 2 tiles south of chest to appear behind the player
-			new_actor.parameters = [b'Appear', b'', b'', b'', b'', b'', b'', b'']
-			new_actor.relationships.y += 1
-			new_actor.relationships.section_3.append(self.actors.index(chest))
-			self.actors.append(new_actor)
+	# 		name_hex = f'A1000{chest_index}006E2E017F'
+	# 		new_actor.key = int(name_hex, 16)
+	# 		new_actor.name = bytes(f'PanelShadowLink-{name_hex}', 'utf-8')
+	# 		new_actor.type = 0x21E
+	# 		# new_actor.posZ += 3 # move 2 tiles south of chest to appear behind the player
+	# 		new_actor.parameters = [b'Appear', b'', b'', b'', b'', b'', b'', b'']
+	# 		new_actor.relationships.y += 1
+	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
+	# 		self.actors.append(new_actor)
 
 
 	def setSmallKeyParams(self, model_path, model_name, room, key_index=0):
@@ -491,5 +491,5 @@ class Relationship:
 		
 		if self.y > 0x00:
 			for i in range(self.y):
-				id = readBytes(data, pos + (0x8 * i), 4)
+				id = readBytes(data, pos + (0x4 * i), 4)
 				self.section_3.append(id)

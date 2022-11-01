@@ -115,10 +115,10 @@ class ModsProcess(QtCore.QThread):
                 else:
                     room_data.setChestContent(item_key, item_index)
                 
-                # if item_key == 'BowWow':
-                #     pass
-                # elif item_key == 'Rooster':
-                #     room_data.addChestRooster()
+                if item_key == 'BowWow':
+                    pass
+                elif item_key == 'Rooster':
+                    room_data.addChestRooster()
                 
                 if self.thread_active:
                     with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'wb') as outfile:
@@ -133,10 +133,10 @@ class ModsProcess(QtCore.QThread):
 
                     room_data.setChestContent(item_key, item_index)
                     
-                    # if item_key == 'BowWow':
-                    #     pass
-                    # elif item_key == 'Rooster':
-                    #     room_data.addChestRooster()
+                    if item_key == 'BowWow':
+                        pass
+                    elif item_key == 'Rooster':
+                        room_data.addChestRooster()
 
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv07EagleTower/Lv07EagleTower_06H.leb', 'wb') as outfile:
@@ -150,10 +150,10 @@ class ModsProcess(QtCore.QThread):
 
                     room_data.setChestContent(item_key, item_index)
                     
-                    # if item_key == 'BowWow':
-                    #     pass
-                    # elif item_key == 'Rooster':
-                    #     room_data.addChestRooster()
+                    if item_key == 'BowWow':
+                        pass
+                    elif item_key == 'Rooster':
+                        room_data.addChestRooster()
 
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv07EagleTower/Lv07EagleTower_05G.leb', 'wb') as outfile:
@@ -539,7 +539,7 @@ class ModsProcess(QtCore.QThread):
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['goriya-trader']]['item-key'], item_index, 'Event87', flag_event)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
+            {'symbol': data.GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
         event_tools.insertEventAfter(flow.flowchart, 'Event24', flag_check)
 
         if self.thread_active:
@@ -1198,7 +1198,7 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
             npcs.makeNpcChanges(sheet, self.placements)
-            npcs.makeNewNpcs(sheet)
+            # npcs.makeNewNpcs(sheet)
                     
             if self.thread_active:
                 oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', sheet)
@@ -1278,18 +1278,18 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        # #################################################################################################################################
-        # ### Prize Groups
-        # group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
-        # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
+        #################################################################################################################################
+        ### Prize Groups
+        group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
 
-        # crane_prizes.changePrizeGroups(group1, group2)
+        crane_prizes.changePrizeGroups(group1, group2)
 
-        # if self.thread_active:
-        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
-        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
-        #     self.progress_value += 2 # update progress bar
-        #     self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
+            self.progress_value += 2 # update progress bar
+            self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### GlobalFlags datasheet
@@ -1737,22 +1737,22 @@ class ModsProcess(QtCore.QThread):
 
 
 
-    # def makeItemModelFixes(self):
-    #     """Adds necessary model files needed for various different fixes"""
+    def makeItemModelFixes(self):
+        """Adds necessary model files needed for various different fixes"""
 
-    #     if not os.path.exists(f'{self.out_dir}/Romfs/region_common/actor'):
-    #         os.makedirs(f'{self.out_dir}/Romfs/region_common/actor')
+        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/actor'):
+            os.makedirs(f'{self.out_dir}/Romfs/region_common/actor')
 
-    #     files = os.listdir(MODELS_PATH)
+        # files = os.listdir(MODELS_PATH)
 
-    #     for file in files:
-    #         model = file[:-len(data.MODELS_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
-    #         if model in data.CUSTOM_MODELS:
-    #             shutil.copy(os.path.join(MODELS_PATH, file), f'{self.out_dir}/Romfs/region_common/actor/{file}')
-    #             self.progress_value += 1 # update progress bar
-    #             self.progress_update.emit(self.progress_value)
+        # for file in files:
+        #     model = file[:-len(data.MODELS_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
+        #     if model in data.CUSTOM_MODELS:
+        #         shutil.copy(os.path.join(MODELS_PATH, file), f'{self.out_dir}/Romfs/region_common/actor/{file}')
+        #         self.progress_value += 1 # update progress bar
+        #         self.progress_update.emit(self.progress_value)
         
-    #     # if self.thread_active:
-    #     #     crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
-    #     #     self.progress_value += 1 # update progress bar
-    #     #     self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)

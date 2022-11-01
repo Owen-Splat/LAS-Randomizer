@@ -47,7 +47,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         if prize['symbol'] == 'BowWow':
             prize['layouts'][0]['conditions'].pop(0)
     
-    return
+    # return
 
     ### ADD RANDOMIZED PRIZES
     total_syms = len(symbols)

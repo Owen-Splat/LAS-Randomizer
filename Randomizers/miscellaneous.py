@@ -20,6 +20,10 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
     fork = event_tools.findEvent(flowchart, 'Event8')
     fork.data.forks.pop(1) # remove the sword spin attack animation event
 
+    # just like the lens, this actor is rotated 180 degrees on the Y axis
+    # this makes it hard to differenciate between heart pieces and containers as both are grey from the back
+    room.actors[4].rotY = 180.0 if item_key == 'SwordLv1' else 0
+
     # Keep the normal model if it's a sword
     room.actors[4].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
     room.actors[4].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')

@@ -51,10 +51,10 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['model'] = 'YoshiDoll'
         
 
-        ### make some trade quest items properly show in the cutscenes before obtaining them
-        if npc['symbol'] == 'ItemHoneycomb':
-            npc['graphics']['path'] = '$0'
-            npc['graphics']['model'] = '$1'
+        # ### make some trade quest items properly show in the cutscenes before obtaining them
+        # if npc['symbol'] == 'ItemHoneycomb':
+        #     npc['graphics']['path'] = '$0'
+        #     npc['graphics']['model'] = '$1'
 
 
         if npc['symbol'] == 'ObjClothBag':
@@ -194,95 +194,95 @@ def makeNpcChanges(npcSheet, placements):
 
 
 
-def makeNewNpcs(npc_sheet):
-    """add new npcs so that we can properly show item models for items that normally cannot be standing items
-    unfortunately will not by itself make them show properly when obtaining the item, only the freestanding model"""
+# def makeNewNpcs(npc_sheet):
+#     """add new npcs so that we can properly show item models for items that normally cannot be standing items
+#     unfortunately will not by itself make them show properly when obtaining the item, only the freestanding model"""
 
-    new_npc = copy.deepcopy(DUMMY_NPC)
-    new_npc['symbol'] = 'PatchHoneycomb'
-    new_npc['graphics']['path'] = 'ItemHoneycomb.bfres'
-    new_npc['graphics']['model'] = 'Honeycomb'
-    npc_sheet['values'].append(oead_tools.dictToStruct(new_npc))
+#     new_npc = copy.deepcopy(DUMMY_NPC)
+#     new_npc['symbol'] = 'PatchHoneycomb'
+#     new_npc['graphics']['path'] = 'ItemHoneycomb.bfres'
+#     new_npc['graphics']['model'] = 'Honeycomb'
+#     npc_sheet['values'].append(oead_tools.dictToStruct(new_npc))
 
-    # mambo = copy.deepcopy(DUMMY_NPC)
-    # mambo['symbol'] = 'ItemMambo'
-    # mambo['graphics']['path'] = 'ItemMambo.bfres'
-    # npc_sheet['values'].append(oead_tools.dictToStruct(mambo))
+#     mambo = copy.deepcopy(DUMMY_NPC)
+#     mambo['symbol'] = 'ItemMambo'
+#     mambo['graphics']['path'] = 'ItemMambo.bfres'
+#     npc_sheet['values'].append(oead_tools.dictToStruct(mambo))
 
-    # soul = copy.deepcopy(DUMMY_NPC)
-    # soul['symbol'] = 'ItemSoul'
-    # soul['graphics']['path'] = 'ItemSoul.bfres'
-    # npc_sheet['values'].append(oead_tools.dictToStruct(soul))
+#     soul = copy.deepcopy(DUMMY_NPC)
+#     soul['symbol'] = 'ItemSoul'
+#     soul['graphics']['path'] = 'ItemSoul.bfres'
+#     npc_sheet['values'].append(oead_tools.dictToStruct(soul))
 
-    # bombBag = copy.deepcopy(DUMMY_NPC)
-    # bombBag['symbol'] = 'ObjBombBag'
-    # bombBag['graphics']['path'] = 'ObjBombBag.bfres'
-    # bombBag['graphics']['model'] = 'BombBag'
-    # npc_sheet['values'].append(oead_tools.dictToStruct(bombBag))
+#     bombBag = copy.deepcopy(DUMMY_NPC)
+#     bombBag['symbol'] = 'ObjBombBag'
+#     bombBag['graphics']['path'] = 'ObjBombBag.bfres'
+#     bombBag['graphics']['model'] = 'BombBag'
+#     npc_sheet['values'].append(oead_tools.dictToStruct(bombBag))
 
-    # arrowBag = copy.deepcopy(DUMMY_NPC)
-    # arrowBag['symbol'] = 'ObjArrowBag'
-    # arrowBag['graphics']['path'] = 'ObjArrowBag.bfres'
-    # arrowBag['graphics']['model'] = 'ArrowBag'
-    # npc_sheet['values'].append(oead_tools.dictToStruct(arrowBag))
-
-
+#     arrowBag = copy.deepcopy(DUMMY_NPC)
+#     arrowBag['symbol'] = 'ObjArrowBag'
+#     arrowBag['graphics']['path'] = 'ObjArrowBag.bfres'
+#     arrowBag['graphics']['model'] = 'ArrowBag'
+#     npc_sheet['values'].append(oead_tools.dictToStruct(arrowBag))
 
 
-DUMMY_NPC = {
-    'symbol': 'ItemOcarina',
-    'graphics': {
-        'path': 'ItemOcarina.bfres',
-        'model': 'Ocarina',
-        'animations': {'idle': '', 'talk': '', 'walk': '', 'run': ''},
-        'rootAnimEnabled': False,
-        'animSettings': [
-            {'name': 'wait', 'blendTime': 4, 'lipsync': 0, 'cull': 2},
-            {'name': 'talk', 'blendTime': 4, 'lipsync': 1, 'cull': 2},
-            {'name': 'walk', 'blendTime': 4, 'lipsync': 0, 'cull': 2},
-            {'name': 'run', 'blendTime': 4, 'lipsync': 0, 'cull': 2}
-        ],
-        'drsb': 'ItemOcarina.drsb',
-        'waterChannel': {'enable': True, 'offsetY': 0.0, 'limitDepth': 0.5},
-        'facial': '',
-        'interestIK': '',
-        'turn': {'enable': False, 'autoTurn': False, 'threshold': 30.0, 'reactionTime': 1.0, 'duration': 0.25},
-        'cull': 1
-    },
-    'eventInfo': {'eventAsset': 'ItemCommon.bfevfl', 'actorName': 'Item'},
-    'eventTriggers': [{'condition': 2, 'additionalConditions': [], 'entryPoint': 'Ocarina'}],
-    'doAction': {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.5, 'yDistance': 1.7999999523162842,
-        'playerAngleRange': 45.0, 'reactionAngleRange': 180.0},
-    'talk': {'personalSpace': 1.5, 'talkerLabel': ''},
-    'actorArgs': {'layoutID': 0, 'identifier': 0},
-    'popConditions': {
-        'conditions': [],
-        'depopEnable': False
-    },
-    'layoutConditions': [],
-    'lookAtOffsetY': 0.0,
-    'behavior': {
-        'type': 2,
-        'parameters': ['0', '0', '0', '0', '0']
-    },
-    'movement': {
-        'walk': {'moveSpeed': 1.5, 'turnSpeed': 45.0},
-        'run': {'moveSpeed': 2.5, 'turnSpeed': 120.0}
-    },
-    'collision': {
-        'shape': 3,
-        'traits': 'Ocarina',
-        'component': 1,
-        'isStatic': False,
-        'filter': 5,
-        'material': 0,
-        'groundCheck': True,
-        'offset': {'x': 0.0, 'y': 0.25, 'z': 0.0},
-        'rotation': {'x': 0.0, 'y': 0.0, 'z': 0.0},
-        'parameters': [1.7999999523162842, 0.5, 1.7999999523162842]
-    },
-    'damageCollision': {'enable': False, 'sizeDiff': 0.0},
-    'ocarina': {'enable': False, 'distance': 0.0},
-    'shellSensor': [],
-    'attribute': 0
-}
+
+
+# DUMMY_NPC = {
+#     'symbol': 'ItemOcarina',
+#     'graphics': {
+#         'path': 'ItemOcarina.bfres',
+#         'model': 'Ocarina',
+#         'animations': {'idle': '', 'talk': '', 'walk': '', 'run': ''},
+#         'rootAnimEnabled': False,
+#         'animSettings': [
+#             {'name': 'wait', 'blendTime': 4, 'lipsync': 0, 'cull': 2},
+#             {'name': 'talk', 'blendTime': 4, 'lipsync': 1, 'cull': 2},
+#             {'name': 'walk', 'blendTime': 4, 'lipsync': 0, 'cull': 2},
+#             {'name': 'run', 'blendTime': 4, 'lipsync': 0, 'cull': 2}
+#         ],
+#         'drsb': 'ItemOcarina.drsb',
+#         'waterChannel': {'enable': True, 'offsetY': 0.0, 'limitDepth': 0.5},
+#         'facial': '',
+#         'interestIK': '',
+#         'turn': {'enable': False, 'autoTurn': False, 'threshold': 30.0, 'reactionTime': 1.0, 'duration': 0.25},
+#         'cull': 1
+#     },
+#     'eventInfo': {'eventAsset': 'ItemCommon.bfevfl', 'actorName': 'Item'},
+#     'eventTriggers': [{'condition': 2, 'additionalConditions': [], 'entryPoint': 'Ocarina'}],
+#     'doAction': {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.5, 'yDistance': 1.7999999523162842,
+#         'playerAngleRange': 45.0, 'reactionAngleRange': 180.0},
+#     'talk': {'personalSpace': 1.5, 'talkerLabel': ''},
+#     'actorArgs': {'layoutID': 0, 'identifier': 0},
+#     'popConditions': {
+#         'conditions': [],
+#         'depopEnable': False
+#     },
+#     'layoutConditions': [],
+#     'lookAtOffsetY': 0.0,
+#     'behavior': {
+#         'type': 2,
+#         'parameters': ['0', '0', '0', '0', '0']
+#     },
+#     'movement': {
+#         'walk': {'moveSpeed': 1.5, 'turnSpeed': 45.0},
+#         'run': {'moveSpeed': 2.5, 'turnSpeed': 120.0}
+#     },
+#     'collision': {
+#         'shape': 3,
+#         'traits': 'Ocarina',
+#         'component': 1,
+#         'isStatic': False,
+#         'filter': 5,
+#         'material': 0,
+#         'groundCheck': True,
+#         'offset': {'x': 0.0, 'y': 0.25, 'z': 0.0},
+#         'rotation': {'x': 0.0, 'y': 0.0, 'z': 0.0},
+#         'parameters': [1.7999999523162842, 0.5, 1.7999999523162842]
+#     },
+#     'damageCollision': {'enable': False, 'sizeDiff': 0.0},
+#     'ocarina': {'enable': False, 'distance': 0.0},
+#     'shellSensor': [],
+#     'attribute': 0
+# }

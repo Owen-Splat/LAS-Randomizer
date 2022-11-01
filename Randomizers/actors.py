@@ -94,7 +94,7 @@ def addNeededActors(flowchart, rom_path):
     try:
         event_tools.findActor(flowchart, 'Hud')
     except ValueError:
-        hud_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopKeeper.bfevfl').flowchart, 'Hud')
+        hud_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/ToolShopkeeper.bfevfl').flowchart, 'Hud')
         flowchart.actors.append(hud_actor)
 
     try:

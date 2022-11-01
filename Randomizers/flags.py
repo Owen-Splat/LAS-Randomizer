@@ -69,9 +69,50 @@ def makeFlags(sheet):
     sheet['values'].append({'symbol': 'Bottle2Get', 'index': 1176})
     sheet['values'].append({'symbol': 'FishingBottleGet', 'index': 1177})
 
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1170})
+    sheet['values'].append({'symbol': 'owl-statue-below-D8', 'index': 1178})
+    sheet['values'].append({'symbol': 'owl-statue-pothole', 'index': 1179})
+    sheet['values'].append({'symbol': 'owl-statue-above-cave', 'index': 1180})
+    sheet['values'].append({'symbol': 'owl-statue-moblin-cave', 'index': 1181})
+    sheet['values'].append({'symbol': 'owl-statue-south-bay', 'index': 1182})
+    sheet['values'].append({'symbol': 'owl-statue-desert', 'index': 1183})
+    sheet['values'].append({'symbol': 'owl-statue-maze', 'index': 1184})
+    sheet['values'].append({'symbol': 'owl-statue-taltal-east', 'index': 1185})
+    sheet['values'].append({'symbol': 'owl-statue-rapids', 'index': 1186})
+
+    sheet['values'].append({'symbol': 'D1-owl-statue-spinies', 'index': 1187})
+    sheet['values'].append({'symbol': 'D1-owl-statue-3-of-a-kind', 'index': 1188})
+    sheet['values'].append({'symbol': 'D1-owl-statue-long-hallway', 'index': 1189})
+
+    sheet['values'].append({'symbol': 'D2-owl-statue-first', 'index': 1190})
+    sheet['values'].append({'symbol': 'D2-owl-statue-second', 'index': 1191})
+    sheet['values'].append({'symbol': 'D2-owl-statue-third', 'index': 1192})
+
+    sheet['values'].append({'symbol': 'D3-owl-statue-basement-north', 'index': 1193})
+    sheet['values'].append({'symbol': 'D3-owl-statue-arrow', 'index': 1194})
+    sheet['values'].append({'symbol': 'D3-owl-statue-northwest', 'index': 1195})
+
+    sheet['values'].append({'symbol': 'D4-owl-statue', 'index': 1196})
+
+    sheet['values'].append({'symbol': 'D5-owl-statue-south', 'index': 1197})
+    sheet['values'].append({'symbol': 'D5-owl-statue-north', 'index': 1198})
+    
+    sheet['values'].append({'symbol': 'D6-owl-statue-ledge', 'index': 1199})
+    sheet['values'].append({'symbol': 'D6-owl-statue-southeast', 'index': 1200})
+    sheet['values'].append({'symbol': 'D6-owl-statue-canal', 'index': 1201})
+
+    sheet['values'].append({'symbol': 'D7-owl-statue-ball', 'index': 1202})
+    sheet['values'].append({'symbol': 'D7-owl-statue-kirbys', 'index': 1203})
+    sheet['values'].append({'symbol': 'D7-owl-statue-4th-pillar', 'index': 1204})
+
+    sheet['values'].append({'symbol': 'D8-owl-statue-above-smasher', 'index': 1205})
+    sheet['values'].append({'symbol': 'D8-owl-statue-below-gibdos', 'index': 1206})
+    sheet['values'].append({'symbol': 'D8-owl-statue-eye-statue', 'index': 1207})
+
+    sheet['values'].append({'symbol': 'D0-owl-statue', 'index': 1208})
+
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
