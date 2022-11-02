@@ -110,6 +110,9 @@ def makeFlags(sheet):
 
     sheet['values'].append({'symbol': 'D0-owl-statue', 'index': 1208})
 
+    sheet['values'].append({'symbol': 'RoosterFound', 'index': 1209})
+    sheet['values'].append({'symbol': 'BowWowFound', 'index': 1210})
+
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})

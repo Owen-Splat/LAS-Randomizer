@@ -69,7 +69,8 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeTelephoneChanges()
 
             if self.thread_active: self.makeGeneralARCChanges()
-            # if self.thread_active: self.makeItemModelFixes()
+            
+            if self.thread_active: self.makeItemModelFixes()
             # if self.thread_active: self.makeItemTextBoxes()
             
             if self.placements['settings']['free-book'] and self.thread_active:
@@ -287,6 +288,7 @@ class ModsProcess(QtCore.QThread):
     def sinkingSwordChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SinkingSword.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
+        actors.addCompanionActors(flow.flowchart, self.rom_path)
 
         # Beach
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field'):
@@ -1029,6 +1031,7 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             treasure_flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
             actors.addNeededActors(treasure_flow.flowchart, self.rom_path)
+            actors.addCompanionActors(treasure_flow.flowchart, self.rom_path)
             chests.writeChestEvent(treasure_flow.flowchart)
             flow_control_actor = event_tools.findActor(treasure_flow.flowchart, 'FlowControl') # store this to add to ShellMansionPresent
 
@@ -1137,7 +1140,7 @@ class ModsProcess(QtCore.QThread):
 
             if self.placements['settings']['shuffle-bombs']:
                 checkBombs = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-                {'symbol': data.BOMBS_FOUND_FLAG}, {0: None, 1: addBombs})
+                    {'symbol': data.BOMBS_FOUND_FLAG}, {0: None, 1: addBombs})
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', checkBombs)
             else:
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', addBombs)
@@ -1477,7 +1480,9 @@ class ModsProcess(QtCore.QThread):
 
 
     def makeTelephoneChanges(self):
-        """Edits the telephone event file to allow the player to freely swap tunics"""
+        """Edits the telephone event file to allow the player to freely swap tunics
+        
+        Also adding rooster bones to press A on to obtain rooster back"""
 
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Telephone.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
@@ -1487,6 +1492,73 @@ class ModsProcess(QtCore.QThread):
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Telephone.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
+        
+        telephones = [
+            'TelephoneBox01_Ukuku1',
+            'TelephoneBox02_Mebe',
+            'TelephoneBox03_Kanalet',
+            'TelephoneBox04_AnimalVillage',
+            'TelephoneBox05_TurtleRock',
+            'TelephoneBox06_Goponga',
+            'TelephoneBox07_Ukuku2',
+            'TelephoneBox08_Martha'
+        ]
+
+        for e, tel in enumerate(telephones):
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{tel}'):
+                os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{tel}')
+
+            with open(f'{self.rom_path}/region_common/level/{tel}/{tel}_01A.leb', 'rb') as file:
+                room_data = leb.Room(file.read())
+            
+            room_data.addTelephoneRooster(e)
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/{tel}/{tel}_01A.leb', 'wb') as file:
+                    file.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
+        
+        flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
+
+        event_tools.addEntryPoint(flow.flowchart, 'GiveBackRooster')
+
+        rooster_fork = event_tools.createForkEvent(flow.flowchart, None, [
+            event_tools.createActionChain(flow.flowchart, None, [
+                ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
+                ('FlyingCucco[FlyCocco]', 'StopTailorOtherChannel', {'channel': 'FlyingCucco_get', 'index': 0}),
+                ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'ev_glad_ed'}),
+                ('FlyingCucco[FlyCocco]', 'CancelCarried', {}),
+                ('FlyingCucco[FlyCocco]', 'Join', {}),
+                # ('Link', 'SetDisablePowerUpEffect', {'effect': False, 'materialAnim': False, 'sound': False}),
+                ('GameControl', 'RequestAutoSave', {})
+            ], None),
+            event_tools.createActionChain(flow.flowchart, None, [
+                ('Timer', 'Wait', {'time': 3.3})
+                # ('Audio', 'PlayZoneBGM', {'stopbgm': True})
+            ], None)
+        ], None)[0]
+        rooster_get = event_tools.createActionChain(flow.flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.ROOSTER_FOUND_FLAG, 'value': True}),
+            ('FlyingCucco[FlyCocco]', 'Activate', {}),
+            ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'FlyingCocco_get'}),
+            ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),
+            ('Link', 'PlayAnimationEx', {'time': 0.0, 'blendTime': 0.0, 'name': 'item_get_lp'}),
+            ('FlyingCucco[FlyCocco]', 'BeCarried', {}),
+            ('Link', 'LookAtItemGettingPlayer', {'chaseRatio': 0.1, 'distanceOffset': 0.0, 'duration': 0.7}),
+            ('Audio', 'PlayOneshotSystemSE', {'label': 'SE_PL_ITEM_GET_LIGHT', 'volume': 1.0, 'pitch': 1.0})
+        ], rooster_fork)
+        free_previous = event_tools.createActionChain(flow.flowchart, None, [
+            ('SinkingSword', 'Destroy', {}),
+            # ('Link', 'LeaveCompanion', {}),
+            # ('FlyingCucco[companion]', 'Destroy', {}),
+            ('BowWow[companion]', 'Destroy', {})
+        ], rooster_get)
+
+        event_tools.insertEventAfter(flow.flowchart, 'GiveBackRooster', free_previous)
+
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl', flow)
     
 
 

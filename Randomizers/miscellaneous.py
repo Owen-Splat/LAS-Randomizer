@@ -70,7 +70,8 @@ def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room)
     room.actors[5].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
     room.actors[5].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[5].parameters[2] = bytes('DreamShrine', 'utf-8')
-    room.actors[5].parameters[3] = bytes(data.DREAM_SHRINE_FLAG, 'utf-8')
+    room.actors[5].parameters[3] = bytes(data.DREAM_SHRINE_FLAG, 'utf-8') # category 1
+    # room.actors[5].parameters[4] = bytes('None', 'utf-8') # category 3 for telephone rooster bones, other ItemYoshiDoll actors use None
 
 
 

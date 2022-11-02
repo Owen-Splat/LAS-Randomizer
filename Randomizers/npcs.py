@@ -38,10 +38,14 @@ def makeNpcChanges(npcSheet, placements):
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['doAction'] = {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.2999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
             npc['layoutConditions'].append({'category': 1, 'parameter': '$3', 'layoutID': -1})
+            # npc['layoutConditions'].append({'category': 3, 'parameter': '$4', 'layoutID': -1}) # for telephone rooster bones
             npc['collision']['traits'] = ''
             npc['collision']['isStatic'] = True
             npc['collision']['filter'] = 5
         
+        if npc['symbol'] == '':
+            pass
+
         if npc['symbol'] == 'ItemClothesGreen':
             npc['graphics']['path'] = 'ItemSmallKey.bfres'
             npc['graphics']['model'] = 'SmallKey'
@@ -50,6 +54,8 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['path'] = 'ItemYoshiDoll.bfres'
             npc['graphics']['model'] = 'YoshiDoll'
         
+        if npc['symbol'] == 'ItemClothesBlue': # telephone rooster bones
+            pass
 
         # ### make some trade quest items properly show in the cutscenes before obtaining them
         # if npc['symbol'] == 'ItemHoneycomb':
@@ -83,21 +89,21 @@ def makeNpcChanges(npcSheet, placements):
             npc['talk'] = {'personalSpace': 1.5, 'talkerLabel': 'NpcFairyQueen'}
         
 
-        # change dungeon lock statues to be able to be opened from any direction
-        if npc['symbol'] == 'ObjTailLockStatue':
-            npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
+        # # change dungeon lock statues to be able to be opened from any direction
+        # if npc['symbol'] == 'ObjTailLockStatue':
+        #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
 
-        if npc['symbol'] == 'ObjSlimeLockStatue':
-            npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
+        # if npc['symbol'] == 'ObjSlimeLockStatue':
+        #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
 
-        if npc['symbol'] == 'ObjAnglersKeyhole':
-            npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
+        # if npc['symbol'] == 'ObjAnglersKeyhole':
+        #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
 
-        if npc['symbol'] == 'ObjFaceLockStatue':
-            npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
+        # if npc['symbol'] == 'ObjFaceLockStatue':
+        #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
 
-        if npc['symbol'] == 'ObjEaglesLockRock':
-            npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
+        # if npc['symbol'] == 'ObjEaglesLockRock':
+        #     npc['doAction'] = {'type': 2, 'yOffset': 0.0, 'xzDistance': 1.7999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
 
 
         # make the flying bomb refills not appear until you find your bombs

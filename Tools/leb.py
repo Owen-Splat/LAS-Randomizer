@@ -354,6 +354,40 @@ class Room:
 			self.actors.append(new_actor)
 	
 
+	def addTelephoneRooster(self, id):
+		tel = [a for a in self.actors if a.type == 0x13A][0]
+		
+		bones = copy.deepcopy(tel)
+		bones.relationships.x += 1
+		bones.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
+		name_hex = f'720133{id}05CFF3744'
+		bones.key = int(name_hex, 16)
+		bones.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
+		bones.type = 0x8E # ItemYoshiDoll
+		bones.posX = 9.5
+		bones.posY = 0
+		bones.posZ = 4.15
+		bones.parameters[0] = bytes('NpcFlyingCucco.bfres', 'utf-8')
+		bones.parameters[1] = bytes('FlyingCucco', 'utf-8')
+		bones.parameters[2] = bytes('GiveBackRooster', 'utf-8')
+		bones.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
+		# bones.parameters[4] = bytes('FlyingCucco', 'utf-8') # category 3, other ItemYoshiDoll actors use None
+		self.actors.append(bones)
+
+		rooster = copy.deepcopy(tel)
+		name_hex = f'A1000{id}005D1D906E'
+		rooster.key = int(name_hex, 16)
+		rooster.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
+		rooster.type = 0x181
+		rooster.posX = 9.5
+		rooster.posY = 0
+		rooster.posZ = 4.15
+		rooster.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
+		rooster.relationships.y += 1
+		rooster.relationships.section_3.append(self.actors.index(bones))
+		self.actors.append(rooster)
+
+
 	# def addShadowTrap(self, chest_index=0):
 	# 	chests = [a for a in self.actors if a.type == 0xF7]
 

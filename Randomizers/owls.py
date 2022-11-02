@@ -20,10 +20,14 @@ def makeFieldChanges(flowchart, placements, item_defs):
     for k,v in field_owls.items():
         item = placements[k]
         item_index = placements['indexes'][k] if k in placements['indexes'] else -1
+        
         gift_event = item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, None, None)
 
+        flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': k, 'value': True}, gift_event)
+        
         flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': k}, {0: gift_event, 1: None})
+            {'symbol': k}, {0: flag_set, 1: None})
         
         event_tools.insertEventAfter(flowchart, v, flag_check)
 
@@ -74,9 +78,13 @@ def makeDungeonChanges(flowchart, placements, item_defs):
     for k,v in dungeon_owls.items():
         item = placements[k]
         item_index = placements['indexes'][k] if k in placements['indexes'] else -1
+
         gift_event = item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, None, None)
 
+        flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': k, 'value': True}, gift_event)
+
         flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': k}, {0: gift_event, 1: None})
+            {'symbol': k}, {0: flag_set, 1: None})
         
         event_tools.insertEventAfter(flowchart, v, flag_check)

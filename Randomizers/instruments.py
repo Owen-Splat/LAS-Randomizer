@@ -21,6 +21,7 @@ def changeInstrument(flowchart, item_key, item_index, model_path, model_name, ro
     act.parameters[1] = bytes(model_name, 'utf-8')
     act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow
     act.parameters[3] = bytes(data.INSTRUMENT_FLAGS[room], 'utf-8') # flag for if item appears
+    # act.parameters[4] = bytes('None', 'utf-8') # category 3 for telephone rooster bones, other ItemYoshiDoll actors use None
 
     fade_event = insertInstrumentFadeEvent(flowchart, level, location)
     instrument_get = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, fade_event)

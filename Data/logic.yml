@@ -885,8 +885,8 @@ swamp-chest:
   region: swamp
   spoiler-region: goponga-swamp
   condition-basic: kill-big-flower
-  condition-glitched: mabe & (boots | feather) & ocarina & song-mambo
-  condition-death: mabe & (boots | feather)
+  condition-glitched: mabe & ocarina & song-mambo
+  condition-death: mabe
 taltal-left-ascent-cave:
   type: item
   subtype: chest

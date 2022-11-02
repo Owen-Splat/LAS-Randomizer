@@ -1,5 +1,6 @@
 import Tools.event_tools as event_tools
 from Randomizers import item_get
+from Randomizers import data
 
 
 
@@ -131,7 +132,7 @@ def writeChestEvent(flowchart):
     medicine_get = item_get.insertItemGetAnimation(flowchart, 'SecretMedicine', -1, None, auto_save)
     box_close = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)
     medicine2_get = event_tools.createActionChain(flowchart, None, [
-        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keeyCarry': False, 'messageEntry': 'SecretMedicine2'}),
+        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keepCarry': False, 'messageEntry': 'SecretMedicine2'}),
         ('Link', 'Heal', {'amount': 99}),
         ('TreasureBox', 'SetActorSwitch', {'switchIndex': 1, 'value': False})
     ], box_close)
@@ -157,6 +158,7 @@ def writeChestEvent(flowchart):
         ], None)
     ], auto_save)[0]
     rooster_get = event_tools.createActionChain(flowchart, None, [
+        ('EventFlags', 'SetFlag', {'symbol': data.ROOSTER_FOUND_FLAG, 'value': True}),
         ('FlyingCucco[FlyCocco]', 'Activate', {}),
         ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'FlyingCocco_get'}),
         ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),

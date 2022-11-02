@@ -37,4 +37,4 @@ timer = QtCore.QTimer()
 timer.start(100)
 timer.timeout.connect(lambda: None)
 
-sys.exit(app.exec()) # 01006BB00C6F0000 title id, keeping it here for now, gonna make the output include this as a QoL
+sys.exit(app.exec())
