@@ -14,6 +14,7 @@ def makeNpcChanges(npcSheet, placements):
         if npc['symbol'] == 'NpcMadBatter':
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['layoutConditions'].pop(1)
+            continue
         
         # if npc['symbol'] == 'ItemGoldenLeaf':
         #     npc['graphics']['path'] = '$1'
@@ -30,6 +31,7 @@ def makeNpcChanges(npcSheet, placements):
             npc['graphics']['path'] = '$1'
             npc['graphics']['model'] = '$2'
             npc['eventTriggers'][2]['entryPoint'] = '$3'
+            continue
         
         if npc['symbol'] == 'ItemYoshiDoll': # This is for Ocarina and Instruments since I still want the player to press A to get them
             npc['graphics']['path'] = '$0'
@@ -42,32 +44,25 @@ def makeNpcChanges(npcSheet, placements):
             npc['collision']['traits'] = ''
             npc['collision']['isStatic'] = True
             npc['collision']['filter'] = 5
+            continue
         
-        if npc['symbol'] == '':
-            pass
-
         if npc['symbol'] == 'ItemClothesGreen':
             npc['graphics']['path'] = 'ItemSmallKey.bfres'
             npc['graphics']['model'] = 'SmallKey'
+            continue
         
         if npc['symbol'] == 'ItemClothesRed':
             npc['graphics']['path'] = 'ItemYoshiDoll.bfres'
             npc['graphics']['model'] = 'YoshiDoll'
+            continue
         
-        if npc['symbol'] == 'ItemClothesBlue': # telephone rooster bones
-            pass
-
-        # ### make some trade quest items properly show in the cutscenes before obtaining them
-        # if npc['symbol'] == 'ItemHoneycomb':
-        #     npc['graphics']['path'] = '$0'
-        #     npc['graphics']['model'] = '$1'
-
-
         if npc['symbol'] == 'ObjClothBag':
             npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 0}
+            continue
 
         if npc['symbol'] == 'NpcGrandmaUlrira':
             npc['layoutConditions'][1] = {'category': 9, 'parameter': 'true', 'layoutID': 4}
+            continue
         
         if npc['symbol'] == 'ObjSinkingSword':
             npc['graphics']['path'] = '$0'
@@ -81,12 +76,15 @@ def makeNpcChanges(npcSheet, placements):
             npc['collision']['isStatic'] = False
             npc['collision']['filter'] = 7
             npc['collision']['offset']['y'] = 0.25
+            continue
         
         if npc['symbol'] == 'ObjRoosterBones':
             npc['layoutConditions'].pop(0)
+            continue
         
         if npc['symbol'] == 'ObjTelephone': # since telephones swap tunics, make it so the Fairy Queen is talking
             npc['talk'] = {'personalSpace': 1.5, 'talkerLabel': 'NpcFairyQueen'}
+            continue
         
 
         # # change dungeon lock statues to be able to be opened from any direction
@@ -109,23 +107,30 @@ def makeNpcChanges(npcSheet, placements):
         # make the flying bomb refills not appear until you find your bombs
         if npc['symbol'] == 'ItemFeatherBomb' and placements['settings']['shuffle-bombs']:
             npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
-        
+            continue
 
+
+        # npc layout conditions
         if npc['symbol'] == 'NpcBowWow':
             npc['layoutConditions'][2] = {'category': 3, 'parameter': 'BowWow', 'layoutID': -1}
-        
+            continue
+
         if npc['symbol'] == 'NpcMadamMeowMeow':
             npc['layoutConditions'][2] = {'category': 1, 'parameter': 'BowWowJoin', 'layoutID': 3}
             npc['layoutConditions'].pop(1)
+            continue
         
         if npc['symbol'] == 'NpcChorusFrog':
             npc['layoutConditions'].pop(0)
+            continue
         
         if npc['symbol'] == 'NpcKiki' and placements['settings']['open-bridge']:
             npc['layoutConditions'][0] = {'category': 1, 'parameter': 'KikiGone', 'layoutID': -1}
+            continue
         
         if npc['symbol'] == 'NpcPapahl':
             npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 2}
+            continue
 
 
         # Adjustments for NPCs that can have seashells, to make the sensor work properly
@@ -134,9 +139,10 @@ def makeNpcChanges(npcSheet, placements):
 
             if placements['christine-trade'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['christine-trade']}"})
-
             if placements['christine-grateful'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['christine-grateful']}"})
+            
+            continue
         
         if npc['symbol'] == 'NpcTarin':
             npc['eventTriggers'][5]['additionalConditions'][0] = {'category': 1, 'parameter': '!ShieldGet'} # Make Tarin detain based on talking to him, not having Shield
@@ -150,53 +156,79 @@ def makeNpcChanges(npcSheet, placements):
             
             npc['layoutConditions'][2] = {'category': 1, 'parameter': 'HoneycombDrop', 'layoutID': -1}
             npc['layoutConditions'][4] = {'category': 1, 'parameter': 'TradeStickGet', 'layoutID': 3} # Make Tarin-ukuku appear when you get the stick
+            continue
         
         if npc['symbol'] == 'NpcPapahl':
             if placements['papahl'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['papahl']}"})
-        
+            continue
 
         if npc['symbol'] == 'NpcMarin':
             npc['shellSensor'].append({'category': 4, 'parameter': '2'}) # Only the instance of Marin in Mabe should ring the sensor
             if placements['marin'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['marin']}"})
+            continue
+
         if npc['symbol'] == 'NpcSecretZora':
             npc['shellSensor'].pop()
             if placements['invisible-zora'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['invisible-zora']}"})
+            continue
+        
         if npc['symbol'] == 'NpcGoriya':
             if placements['goriya-trader'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['goriya-trader']}"})
+            continue
+
         if npc['symbol'] == 'ObjGhostsGrave':
             if placements['ghost-reward'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['ghost-reward']}"})
+            continue
+
         if npc['symbol'] == 'NpcWalrus':
             npc['shellSensor'].pop()
             if placements['walrus'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['walrus']}"})
+            continue
+
         if npc['symbol'] == 'NpcFairyQueen':
             if placements['D0-fairy-1'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['D0-fairy-1']}"})
             if placements['D0-fairy-2'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['D0-fairy-2']}"})
+            continue
+
         if npc['symbol'] == 'NpcManboTamegoro':
             if placements['manbo'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['manbo']}"})
+            continue
+
         if npc['symbol'] == 'NpcMamu':
             npc['layoutConditions'].pop(0) # removes the frog's song layout condition so he's always there
             if placements['mamu'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['mamu']}"})
+            continue
+
         if npc['symbol'] == 'NpcGameShopOwner':
             if placements['trendy-prize-final'] == 'seashell':
                 npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['trendy-prize-final']}"})
+            continue
+
         if npc['symbol'] == 'NpcDanpei':
             npc['shellSensor'].append({'category': 9, 'parameter': '!DampeShellsComplete'})
+            continue
+
         if npc['symbol'] == 'NpcRaftShopMan':
             npc['shellSensor'].append({'category': 9, 'parameter': '!RapidsShellsComplete'})
+            continue
+
         if npc['symbol'] == 'NpcFisherman':
             npc['shellSensor'].append({'category': 9, 'parameter': '!FishingShellsComplete'})
+            continue
+
         if npc['symbol'] == 'NpcShellMansionMaster':
             npc['shellSensor'].append({'category': 9, 'parameter': '!MansionShellsComplete'})
+            continue
 
 
 

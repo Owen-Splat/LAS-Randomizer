@@ -217,6 +217,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Blupsanity': self.ui.rupCheck.isChecked(),
             'Classic_D2': self.ui.swampCheck.isChecked(),
             'Owl_Statues': OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()],
+            'Shuffled_Companions': self.ui.companionCheck.isChecked(),
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
             'Excluded_Locations': list(self.excluded_checks)
@@ -439,6 +440,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.owlsComboBox.setCurrentIndex(OWLS_SETTINGS.index(SETTINGS['Owl_Statues'].lower().strip()))
         except (KeyError, TypeError, IndexError):
             self.ui.owlsComboBox.setCurrentIndex(0)
+        
+        # companions
+        try:
+            self.ui.companionCheck.setChecked(SETTINGS['Shuffled_Companions'])
+        except (KeyError, TypeError):
+            self.ui.companionCheck.setChecked(True)
 
         # # randomize entances
         # try:
@@ -653,6 +660,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 'classic-d2': self.ui.swampCheck.isChecked(),
                 'owl-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['gifts', 'hybrid'] else False,
                 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
+                'shuffle-companions': self.ui.companionCheck.isChecked(),
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
                 'excluded-locations': self.excluded_checks

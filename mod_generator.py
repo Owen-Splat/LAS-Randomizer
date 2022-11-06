@@ -725,6 +725,15 @@ class ModsProcess(QtCore.QThread):
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/MapPieceTheme.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
+        
+        #######
+
+        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Danpei.bfevfl')
+        actors.addNeededActors(flow.flowchart, self.rom_path)
+        dampe.makeEventChanges(flow.flowchart)
+
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Danpe.bfevfl', flow)
 
 
 
@@ -1077,8 +1086,6 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEntryPoint(flow.flowchart, 'RedClothes').name = 'ClothesRed'
             event_tools.findEntryPoint(flow.flowchart, 'BlueClothes').name = 'ClothesBlue'
             event_tools.findEntryPoint(flow.flowchart, 'Necklace').name = 'PinkBra'
-
-            dampe.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
 
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', flow)
@@ -1482,7 +1489,7 @@ class ModsProcess(QtCore.QThread):
     def makeTelephoneChanges(self):
         """Edits the telephone event file to allow the player to freely swap tunics
         
-        Also adding rooster bones to press A on to obtain rooster back"""
+        Also adds rooster and bowwow to be able to get them back if companion shuffle is on"""
 
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Telephone.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
@@ -1493,72 +1500,73 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        telephones = [
-            'TelephoneBox01_Ukuku1',
-            'TelephoneBox02_Mebe',
-            'TelephoneBox03_Kanalet',
-            'TelephoneBox04_AnimalVillage',
-            'TelephoneBox05_TurtleRock',
-            'TelephoneBox06_Goponga',
-            'TelephoneBox07_Ukuku2',
-            'TelephoneBox08_Martha'
-        ]
+        if self.placements['settings']['shuffle-companions']:
+            telephones = [
+                'TelephoneBox01_Ukuku1',
+                'TelephoneBox02_Mebe',
+                'TelephoneBox03_Kanalet',
+                'TelephoneBox04_AnimalVillage',
+                'TelephoneBox05_TurtleRock',
+                'TelephoneBox06_Goponga',
+                'TelephoneBox07_Ukuku2',
+                'TelephoneBox08_Martha'
+            ]
 
-        for e, tel in enumerate(telephones):
-            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{tel}'):
-                os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{tel}')
+            for e, tel in enumerate(telephones):
+                if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{tel}'):
+                    os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{tel}')
 
-            with open(f'{self.rom_path}/region_common/level/{tel}/{tel}_01A.leb', 'rb') as file:
-                room_data = leb.Room(file.read())
+                with open(f'{self.rom_path}/region_common/level/{tel}/{tel}_01A.leb', 'rb') as file:
+                    room_data = leb.Room(file.read())
+                
+                room_data.addTelephoneRooster(e)
+
+                if self.thread_active:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/{tel}/{tel}_01A.leb', 'wb') as file:
+                        file.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
             
-            room_data.addTelephoneRooster(e)
+            flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
+
+            event_tools.addEntryPoint(flow.flowchart, 'GiveBackRooster')
+
+            rooster_fork = event_tools.createForkEvent(flow.flowchart, None, [
+                event_tools.createActionChain(flow.flowchart, None, [
+                    ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
+                    ('FlyingCucco[FlyCocco]', 'StopTailorOtherChannel', {'channel': 'FlyingCucco_get', 'index': 0}),
+                    ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'ev_glad_ed'}),
+                    ('FlyingCucco[FlyCocco]', 'CancelCarried', {}),
+                    ('FlyingCucco[FlyCocco]', 'Join', {}),
+                    # ('Link', 'SetDisablePowerUpEffect', {'effect': False, 'materialAnim': False, 'sound': False}),
+                    ('GameControl', 'RequestAutoSave', {})
+                ], None),
+                event_tools.createActionChain(flow.flowchart, None, [
+                    ('Timer', 'Wait', {'time': 3.3})
+                    # ('Audio', 'PlayZoneBGM', {'stopbgm': True})
+                ], None)
+            ], None)[0]
+            rooster_get = event_tools.createActionChain(flow.flowchart, None, [
+                ('EventFlags', 'SetFlag', {'symbol': data.ROOSTER_FOUND_FLAG, 'value': True}),
+                ('FlyingCucco[FlyCocco]', 'Activate', {}),
+                ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'FlyingCocco_get'}),
+                ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),
+                ('Link', 'PlayAnimationEx', {'time': 0.0, 'blendTime': 0.0, 'name': 'item_get_lp'}),
+                ('FlyingCucco[FlyCocco]', 'BeCarried', {}),
+                ('Link', 'LookAtItemGettingPlayer', {'chaseRatio': 0.1, 'distanceOffset': 0.0, 'duration': 0.7}),
+                ('Audio', 'PlayOneshotSystemSE', {'label': 'SE_PL_ITEM_GET_LIGHT', 'volume': 1.0, 'pitch': 1.0})
+            ], rooster_fork)
+            free_previous = event_tools.createActionChain(flow.flowchart, None, [
+                ('SinkingSword', 'Destroy', {}),
+                # ('Link', 'LeaveCompanion', {}),
+                # ('FlyingCucco[companion]', 'Destroy', {}),
+                ('BowWow[companion]', 'Destroy', {})
+            ], rooster_get)
+
+            event_tools.insertEventAfter(flow.flowchart, 'GiveBackRooster', free_previous)
 
             if self.thread_active:
-                with open(f'{self.out_dir}/Romfs/region_common/level/{tel}/{tel}_01A.leb', 'wb') as file:
-                    file.write(room_data.repack())
-                    self.progress_value += 1 # update progress bar
-                    self.progress_update.emit(self.progress_value)
-        
-        flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
-
-        event_tools.addEntryPoint(flow.flowchart, 'GiveBackRooster')
-
-        rooster_fork = event_tools.createForkEvent(flow.flowchart, None, [
-            event_tools.createActionChain(flow.flowchart, None, [
-                ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
-                ('FlyingCucco[FlyCocco]', 'StopTailorOtherChannel', {'channel': 'FlyingCucco_get', 'index': 0}),
-                ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'ev_glad_ed'}),
-                ('FlyingCucco[FlyCocco]', 'CancelCarried', {}),
-                ('FlyingCucco[FlyCocco]', 'Join', {}),
-                # ('Link', 'SetDisablePowerUpEffect', {'effect': False, 'materialAnim': False, 'sound': False}),
-                ('GameControl', 'RequestAutoSave', {})
-            ], None),
-            event_tools.createActionChain(flow.flowchart, None, [
-                ('Timer', 'Wait', {'time': 3.3})
-                # ('Audio', 'PlayZoneBGM', {'stopbgm': True})
-            ], None)
-        ], None)[0]
-        rooster_get = event_tools.createActionChain(flow.flowchart, None, [
-            ('EventFlags', 'SetFlag', {'symbol': data.ROOSTER_FOUND_FLAG, 'value': True}),
-            ('FlyingCucco[FlyCocco]', 'Activate', {}),
-            ('FlyingCucco[FlyCocco]', 'PlayAnimation', {'blendTime': 0.0, 'name': 'FlyingCocco_get'}),
-            ('Link', 'AimCompassPoint', {'direction': 0, 'duration': 0.1, 'withoutTurn': False}),
-            ('Link', 'PlayAnimationEx', {'time': 0.0, 'blendTime': 0.0, 'name': 'item_get_lp'}),
-            ('FlyingCucco[FlyCocco]', 'BeCarried', {}),
-            ('Link', 'LookAtItemGettingPlayer', {'chaseRatio': 0.1, 'distanceOffset': 0.0, 'duration': 0.7}),
-            ('Audio', 'PlayOneshotSystemSE', {'label': 'SE_PL_ITEM_GET_LIGHT', 'volume': 1.0, 'pitch': 1.0})
-        ], rooster_fork)
-        free_previous = event_tools.createActionChain(flow.flowchart, None, [
-            ('SinkingSword', 'Destroy', {}),
-            # ('Link', 'LeaveCompanion', {}),
-            # ('FlyingCucco[companion]', 'Destroy', {}),
-            ('BowWow[companion]', 'Destroy', {})
-        ], rooster_get)
-
-        event_tools.insertEventAfter(flow.flowchart, 'GiveBackRooster', free_previous)
-
-        if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl', flow)
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl', flow)
     
 
 

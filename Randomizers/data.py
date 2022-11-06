@@ -1,7 +1,9 @@
 SWORD_FOUND_FLAG        = 'unused0357'
 SWORD2_FOUND_FLAG       = 'unused0358'
 SHIELD_FOUND_FLAG       = 'unused0359'
+SHIELD2_FOUND_FLAG      = 'Shield2Get'
 BRACELET_FOUND_FLAG     = 'unused0360'
+BRACELET2_FOUND_FLAG    = 'Bracelet2Get'
 
 RED_TUNIC_FOUND_FLAG    = 'unused0361'
 BLUE_TUNIC_FOUND_FLAG   = 'unused0362'

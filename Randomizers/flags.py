@@ -1,5 +1,5 @@
 def makeFlags(sheet):
-    """Appends new flags to the GlobalFlags datasheet to use for the Heart Pieces, Instruments, and Trade Items"""
+    """Appends new flags to the GlobalFlags datasheet to use for Heart Pieces, Instruments, Trade Items, and Companions"""
     
     sheet['values'].append({'symbol': 'AnimalVillageHeartGet', 'index': 1119})
     sheet['values'].append({'symbol': 'AnimalVillageCaveHeartGet', 'index': 1120})
@@ -108,10 +108,16 @@ def makeFlags(sheet):
     sheet['values'].append({'symbol': 'D8-owl-statue-below-gibdos', 'index': 1206})
     sheet['values'].append({'symbol': 'D8-owl-statue-eye-statue', 'index': 1207})
 
-    sheet['values'].append({'symbol': 'D0-owl-statue', 'index': 1208})
+    sheet['values'].append({'symbol': 'D0-owl-statue-left', 'index': 1208})
+    sheet['values'].append({'symbol': 'D0-owl-statue-center', 'index': 1209})
+    sheet['values'].append({'symbol': 'D0-owl-statue-right', 'index': 1210})
 
-    sheet['values'].append({'symbol': 'RoosterFound', 'index': 1209})
-    sheet['values'].append({'symbol': 'BowWowFound', 'index': 1210})
+    sheet['values'].append({'symbol': 'RoosterFound', 'index': 1211})
+    sheet['values'].append({'symbol': 'BowWowFound', 'index': 1212})
+
+    sheet['values'].append({'symbol': 'Shield2Get', 'index': 1213})
+    sheet['values'].append({'symbol': 'Bracelet2Get', 'index': 1214})
+    sheet['values'].append({'symbol': 'DampeLens', 'index': 1215})
 
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})

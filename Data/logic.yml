@@ -2265,7 +2265,21 @@ D0-fairy-2:
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
-D0-owl-statue:
+D0-owl-statue-left:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-6D & key-D0:2 & stone-beak-D0
+D0-owl-statue-center:
+  type: item
+  subtype: statue
+  content: rupee-20
+  region: color-dungeon
+  spoiler-region: color-dungeon
+  condition-basic: D0-8C & kill-goblin[heavy] & stone-beak-D0
+D0-owl-statue-right:
   type: item
   subtype: statue
   content: rupee-20

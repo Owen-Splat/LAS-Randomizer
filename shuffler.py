@@ -64,12 +64,15 @@ class ItemShuffler(QtCore.QThread):
         # vanilla_locations.append('trendy-prize-4')
         # vanilla_locations.append('trendy-prize-5')
         # vanilla_locations.append('trendy-prize-6')
-        vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
         vanilla_locations.remove('bay-passage-sunken')
         vanilla_locations.remove('river-crossing-cave')
         vanilla_locations.remove('kanalet-moat-south')
         vanilla_locations.remove('south-bay-sunken')
         vanilla_locations.remove('taltal-east-drop')
+        
+        if not self.settings['shuffle-companions']:
+            vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
+            vanilla_locations.append('rooster-statue')
 
         ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
         instruments = [k for k, v in self.logic_defs.items()

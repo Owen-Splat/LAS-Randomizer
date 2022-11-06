@@ -51,6 +51,19 @@ def makeDungeonChanges(flowchart, placements, item_defs):
     subflow_b = event_tools.createSubFlowEvent(flowchart, '', 'examine_TailShared', {})
     event_tools.insertEventAfter(flowchart, 'examine_Tail04B05F', subflow_b)
 
+    ### all 3 owl statues in Color Dungeon use the same entrypoint, so same thing here
+    event_tools.addEntryPoint(flowchart, 'examine_Color06B') # left
+    subflow_c = event_tools.createSubFlowEvent(flowchart, '', 'examine_Color', {})
+    event_tools.insertEventAfter(flowchart, 'examine_Color06B', subflow_c)
+
+    event_tools.addEntryPoint(flowchart, 'examine_Color07C') # center
+    subflow_d = event_tools.createSubFlowEvent(flowchart, '', 'examine_Color', {})
+    event_tools.insertEventAfter(flowchart, 'examine_Color07C', subflow_d)
+
+    event_tools.addEntryPoint(flowchart, 'examine_Color05E') # right
+    subflow_e = event_tools.createSubFlowEvent(flowchart, '', 'examine_Color', {})
+    event_tools.insertEventAfter(flowchart, 'examine_Color05E', subflow_e)
+
     dungeon_owls = {
         'D1-owl-statue-spinies': subflow_a,
         'D1-owl-statue-3-of-a-kind': subflow_b,
@@ -73,7 +86,9 @@ def makeDungeonChanges(flowchart, placements, item_defs):
         'D8-owl-statue-above-smasher': 'Event39',
         'D8-owl-statue-below-gibdos': 'Event109',
         'D8-owl-statue-eye-statue': 'Event112',
-        'D0-owl-statue': 'Event115'
+        'D0-owl-statue-left': subflow_c,
+        'D0-owl-statue-center': subflow_d,
+        'D0-owl-statue-right': subflow_e
     }
     for k,v in dungeon_owls.items():
         item = placements[k]

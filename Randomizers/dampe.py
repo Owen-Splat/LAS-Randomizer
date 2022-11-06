@@ -1,5 +1,5 @@
 import Tools.event_tools as event_tools
-from Randomizers import item_get
+from Randomizers import item_get, data
 
 
 
@@ -12,36 +12,35 @@ def makeDatasheetChanges(sheet, reward_num, item_key, item_index, entry_point):
 
 
 
-def makeEventChanges(flowchart, placements, item_defs):
-    """Adds custom entries to the Item flowchart that normally controls what dialog to display. 
-    The messageEntry parameter in the GenericItemGetSequenceByKey event uses this"""
+def makeEventChanges(flowchart):
+    """Make Dampe perform inventory and flag checks before and after the reward event"""
 
-    event_tools.addEntryPoint(flowchart, 'DampePage1')
-    item_key = item_defs[placements['dampe-page-1']]['item-key']
-    item_index = placements['indexes']['dampe-page-1'] if 'dampe-page-1' in placements['indexes'] else -1
-    dialog = event_tools.createSubFlowEvent(flowchart, '', item_key, {}, None)
-    item_get.insertInventoryEvent(flowchart, item_key, item_index, 'DampePage1', dialog)
+    # 0 for HasItem means you do not have the item, 1 means you do
+
+    sword_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 0}, 'Event39')
+    sword_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SWORD2_FOUND_FLAG}, {0: sword_remove, 1: 'Event39'})
+    sword_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 0, 'count': 1}, {0: 'Event39', 1: sword_flag_check})
     
-    event_tools.addEntryPoint(flowchart, 'DampePage2')
-    item_key = item_defs[placements['dampe-page-2']]['item-key']
-    item_index = placements['indexes']['dampe-page-2'] if 'dampe-page-2' in placements['indexes'] else -1
-    dialog = event_tools.createSubFlowEvent(flowchart, '', item_key, {}, None)
-    item_get.insertInventoryEvent(flowchart, item_key, item_index, 'DampePage2', dialog)
+    shield_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 2}, sword_check)
+    shield_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SHIELD2_FOUND_FLAG}, {0: shield_remove, 1: sword_check})
+    shield_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 2, 'count': 1}, {0: sword_check, 1: shield_flag_check})
     
-    event_tools.addEntryPoint(flowchart, 'DampeFinal')
-    item_key = item_defs[placements['dampe-final']]['item-key']
-    item_index = placements['indexes']['dampe-final'] if 'dampe-final' in placements['indexes'] else -1
-    dialog = event_tools.createSubFlowEvent(flowchart, '', item_key, {}, None)
-    item_get.insertInventoryEvent(flowchart, item_key, item_index, 'DampeFinal', dialog)
+    bracelet_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 14}, shield_check)
+    bracelet_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SWORD2_FOUND_FLAG}, {0: bracelet_remove, 1: shield_check})
+    bracelet_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 14, 'count': 1}, {0: shield_check, 1: bracelet_flag_check})
     
-    event_tools.addEntryPoint(flowchart, 'DampeHeart')
-    item_key = item_defs[placements['dampe-heart-challenge']]['item-key']
-    item_index = placements['indexes']['dampe-heart-challenge'] if 'dampe-heart-challenge' in placements['indexes'] else -1
-    dialog = event_tools.createSubFlowEvent(flowchart, '', item_key, {}, None)
-    item_get.insertInventoryEvent(flowchart, item_key, item_index, 'DampeHeart', dialog)
+    lens_flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+        {'symbol': 'DampeLens', 'value': True}, bracelet_check)
+    lens_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 44, 'count': 1}, {0: bracelet_check, 1: lens_flag_set})
     
-    event_tools.addEntryPoint(flowchart, 'DampeBottle')
-    item_key = item_defs[placements['dampe-bottle-challenge']]['item-key']
-    item_index = placements['indexes']['dampe-bottle-challenge'] if 'dampe-bottle-challenge' in placements['indexes'] else -1
-    dialog = event_tools.createSubFlowEvent(flowchart, '', item_key, {}, None)
-    item_get.insertInventoryEvent(flowchart, item_key, item_index, 'DampeBottle', dialog)
+    event_tools.insertEventAfter(flowchart, 'Event43', lens_check)

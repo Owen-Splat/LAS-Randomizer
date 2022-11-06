@@ -801,6 +801,37 @@
           <bool>false</bool>
          </property>
         </widget>
+        <widget class="QCheckBox" name="companionCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>84</y>
+           <width>173</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>This controls if BowWow and the Rooster will be shuffled alongside other items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+         </property>
+         <property name="text">
+          <string>Shuffle Companions</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
        </widget>
        <widget class="QComboBox" name="seashellsComboBox">
         <property name="geometry">
@@ -1308,17 +1339,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Owl Statues: Hints</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>Owl Statues: Gifts</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Owl Statues: Hybrid</string>
          </property>
         </item>
        </widget>
