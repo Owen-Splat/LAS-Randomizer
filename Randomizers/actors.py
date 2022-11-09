@@ -17,6 +17,21 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Inventory').find_action('AddItemByKey')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Inventory'), 'AddItemByKey')
+    
+    try:
+        event_tools.findActor(flowchart, 'Inventory').find_action('AddItem')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Inventory'), 'AddItem')
+
+    try:
+        event_tools.findActor(flowchart, 'Inventory').find_action('RemoveItem')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Inventory'), 'RemoveItem')
+
+    try:
+        event_tools.findActor(flowchart, 'Inventory').find_query('HasItem')
+    except ValueError:
+        event_tools.addActorQuery(event_tools.findActor(flowchart, 'Inventory'), 'HasItem')
 
     try:
         event_tools.findActor(flowchart, 'Link')

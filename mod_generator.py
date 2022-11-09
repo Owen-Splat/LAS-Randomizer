@@ -733,7 +733,7 @@ class ModsProcess(QtCore.QThread):
         dampe.makeEventChanges(flow.flowchart)
 
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Danpe.bfevfl', flow)
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Danpei.bfevfl', flow)
 
 
 

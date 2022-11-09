@@ -29,7 +29,7 @@ class ItemShuffler(QtCore.QThread):
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         
-        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note', 'rooster']
+        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note'] #, 'rooster']
 
         self.progress_value = 0
         self.thread_active = True
@@ -70,9 +70,9 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('south-bay-sunken')
         vanilla_locations.remove('taltal-east-drop')
         
-        if not self.settings['shuffle-companions']:
-            vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
-            vanilla_locations.append('rooster-statue')
+        # if not self.settings['shuffle-companions']:
+        vanilla_locations.append('moblin-cave') # leave bowwow vanilla for now so I can focus on rooster first
+        vanilla_locations.append('rooster-statue')
 
         ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
         instruments = [k for k, v in self.logic_defs.items()
@@ -399,9 +399,9 @@ class ItemShuffler(QtCore.QThread):
                     dungeonItems += [key] * self.item_defs[key]['quantity']
             else: break
         
-        # Force the followers to be vanilla (for now)
-        placements['moblin-cave'] = 'bow-wow'
-        placements['rooster-statue'] = 'rooster'
+        # # Force the followers to be vanilla (for now)
+        # placements['moblin-cave'] = 'bow-wow'
+        # placements['rooster-statue'] = 'rooster'
 
         # Shuffle item and location lists
         random.shuffle(importantItems)
@@ -549,7 +549,8 @@ class ItemShuffler(QtCore.QThread):
                 access = self.removeAccess(access, item)
                 
                 # Check for item type restrictions, i.e. songs can't be standing items
-                if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic', 'bow-wow', 'rooster', 'zap-trap']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
+                # 'bow-wow', 'rooster'
+                if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic', 'zap-trap']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
                     validPlacement = False
                 elif (item in self.force_chests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     validPlacement = False

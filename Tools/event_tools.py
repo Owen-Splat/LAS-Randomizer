@@ -179,27 +179,6 @@ def createProgressiveItemSwitch(flowchart, item1, item2, flag, flag2=None, befor
 	return flagCheckEvent
 
 
-def createProgressiveInventorySwitch(flowchart, item1, item2, flag, flag2=None, before=None, after=None):
-	item1AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-	{'itemKey': item1, 'count': 1, 'index': -1, 'autoEquip': False}, after)
-
-	item2AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-	{'itemKey': item2, 'count': 1, 'index': -1, 'autoEquip': False}, after)
-
-	flagSetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': flag, 'value': True}, item1AddEvent)
-
-	if flag2:
-		flag2SetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': flag2, 'value': True}, item2AddEvent)
-		flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: flag2SetEvent})
-	else:
-		flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: item2AddEvent})
-
-	insertEventAfter(flowchart, before, flagCheckEvent)
-
-	return flagCheckEvent
-
-
-
 def createActionEvent(flowchart, actor, action, params, nextev=None):
 	"""Creates a new action event. {actor} and {action} should be strings, {params} should be a dict 
 	{nextev} is the name of the next event"""

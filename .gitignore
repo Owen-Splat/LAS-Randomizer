@@ -12,4 +12,5 @@ __pycache__
 /Test
 /room_data_viewer.py
 text_tests.py
+event_checker.py
 settings.txt

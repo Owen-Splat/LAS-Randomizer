@@ -224,7 +224,7 @@ class Ui_MainWindow(object):
         self.companionCheck.setEnabled(True)
         self.companionCheck.setGeometry(QRect(189, 84, 173, 21))
         self.companionCheck.setFont(font2)
-        self.companionCheck.setCheckable(False)
+        self.companionCheck.setCheckable(True)
         self.seashellsComboBox = QComboBox(self.tab_4)
         self.seashellsComboBox.addItem("")
         self.seashellsComboBox.addItem("")

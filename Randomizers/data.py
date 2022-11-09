@@ -1,9 +1,9 @@
 SWORD_FOUND_FLAG        = 'unused0357'
-SWORD2_FOUND_FLAG       = 'unused0358'
+# SWORD2_FOUND_FLAG       = 'unused0358'
 SHIELD_FOUND_FLAG       = 'unused0359'
-SHIELD2_FOUND_FLAG      = 'Shield2Get'
+# SHIELD2_FOUND_FLAG      = 'Shield2Get'
 BRACELET_FOUND_FLAG     = 'unused0360'
-BRACELET2_FOUND_FLAG    = 'Bracelet2Get'
+# BRACELET2_FOUND_FLAG    = 'Bracelet2Get'
 
 RED_TUNIC_FOUND_FLAG    = 'unused0361'
 BLUE_TUNIC_FOUND_FLAG   = 'unused0362'
@@ -23,6 +23,11 @@ BOMB_BAG_FOUND_FLAG     = 'BombBagFound'
 
 ROOSTER_FOUND_FLAG      = 'RoosterFound'
 BOWWOW_FOUND_FLAG       = 'BowWowFound'
+
+DAMPE_SWORD_FLAG        = 'DampeSword'
+DAMPE_SHIELD_FLAG       = 'DampeShield'
+DAMPE_BRACELET_FLAG     = 'DampeBracelet'
+DAMPE_LENS_FLAG         = 'DampeLens'
 
 INSTRUMENT_FLAGS = {
     'D1-instrument': 'TailCaveInstrumentGet',
