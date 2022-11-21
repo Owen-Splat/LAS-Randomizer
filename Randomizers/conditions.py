@@ -36,31 +36,33 @@ def makeConditions(sheet, placements):
 
 
 
-def editConditions(condition, placements):
+def editConditions(condition):
     """Makes needed changes to conditions, such as making Marin staying in Mabe and the shop not sell shields until you find one"""
     
     # Make sure Marin always stays in the village even if you trade for the pineapple
     if condition['symbol'] == 'MarinVillageStay':
         condition['conditions'].pop(1)
+        return
 
     # Make the shop not sell shields until you find one
     if condition['symbol'] == 'ShopShieldCondition':
         condition['conditions'][0] = {'category': 1, 'parameter': data.SHIELD_FOUND_FLAG}
+        return
     
     # Make the animals in Animal village not be in the ring, which they would because of WalrusAwaked getting set
     if condition['symbol'] == 'AnimalPop':
         condition['conditions'][0] = {'category': 9, 'parameter': 'false'}
+        return
     
     # Make Grandma Yahoo's broom invisible until you give her the broom
     if condition['symbol'] == 'BroomInvisible':
         condition['conditions'].pop(0)
+        return
     
-    # Remove the condition for bombs in the shop if the unlocked-bombs setting is on
+    # Make the shop not sell bombs until you find some (flag automatically set with unlocked bombs on)
     if condition['symbol'] == 'ShopBombCondition':
-        if placements['settings']['unlocked-bombs']:
-            condition['conditions'][0] = {'category': 9, 'parameter': 'true'}
-        if placements['settings']['shuffle-bombs']:
-            condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
+        condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
+        return
     
     # # Edit the condition for the shovel since it is shuffled
     # if condition['symbol'] == 'ShopShovelCondition':

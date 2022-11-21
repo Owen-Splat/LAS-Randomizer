@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = settings
         
         self.valid_placements = 187 - len(self.settings['excluded-locations'])
-        self.num_of_mod_files = 321
+        self.num_of_mod_files = 313
 
         if settings['shuffle-bombs']:
             self.num_of_mod_files -= 1
@@ -34,8 +34,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if not settings['blup-sanity']:
             self.num_of_mod_files -= 1
         
-        if not settings['shuffle-companions']:
-            self.num_of_mod_files -= 8
+        # if not settings['shuffle-companions']:
+        #     self.num_of_mod_files -= 8
         
         if not settings['randomize-music']:
             self.num_of_mod_files -= 69

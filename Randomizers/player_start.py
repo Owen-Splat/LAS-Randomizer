@@ -3,7 +3,7 @@ from Randomizers import data
 
 
 
-def makeStartChanges(flow, placements):
+def makeStartChanges(flow, settings):
     """Sets a bunch of flags when you leave the house for the first time, 
     including Owl cutscenes watched, Walrus Awakened, and some flags specific to settings"""
 
@@ -30,22 +30,21 @@ def makeStartChanges(flow, placements):
         ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True}),
     ]
 
-    if placements['settings']['open-kanalet']:
+    if settings['open-kanalet']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'GateOpen_Switch_KanaletCastle_01B', 'value': True}))
     
-    if placements['settings']['open-bridge']: # flag for the bridge, we make kiki use another flag
+    if settings['open-bridge']: # flag for the bridge, we make kiki use another flag
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'StickDrop', 'value': True}))
     
-    if placements['settings']['open-mamu']:
+    if settings['open-mamu']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}))
     
-    if not placements['settings']['shuffle-tunics']:
+    if not settings['shuffle-tunics']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}))
     
-    if not placements['settings']['shuffle-bombs']:
+    if not settings['shuffle-bombs'] and settings['unlocked-bombs']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}))
-    
     
     event_tools.insertEventAfter(flow.flowchart, 'Event558', player_start_flag_check_event)
     event_tools.createActionChain(flow.flowchart, player_start_flags_first_event, player_start_event_flags)
@@ -53,7 +52,7 @@ def makeStartChanges(flow, placements):
     # Remove the part that kills the rooster after D7 in Level7DungeonIn_FlyingCucco
     event_tools.insertEventAfter(flow.flowchart, 'Level7DungeonIn_FlyingCucco', 'Event476')
     
-    if placements['settings']['fast-stealing']:
+    if settings['fast-stealing']:
         # Remove the flag that says you stole so that the shopkeeper won't kill you
         event_tools.createActionChain(flow.flowchart, 'Event774', [
             ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})

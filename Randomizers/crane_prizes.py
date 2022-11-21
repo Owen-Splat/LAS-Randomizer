@@ -26,26 +26,25 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
         symbols.append(prize['symbol'])
 
-        # cranePrize['layouts'][0]['gettingFlag'] = ''
-        # try:
-        #     cranePrize['layouts'][1]['gettingFlag'] = ''
-        # except IndexError:
-        #     pass
-        
         # Bombs should not be obtainable until you have bombs, or automatically if unlocked-bombs is on
         if prize['symbol'] == 'Bomb':
             prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
+            continue
+
         # Shield should not be obtainable until you find your first shield
         if prize['symbol'] == 'Shield':
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': data.SHIELD_FOUND_FLAG})
+            continue
 
         # SmallBowWow (Ciao Ciao): Remove the condition of HintYosshi. It's unnecessary and can lead to a softlock
         if prize['symbol'] == 'SmallBowWow':
             prize['layouts'][0]['conditions'].pop(0)
+            continue
 
         # BowWow: Remove the ShadowClear condition. This was stupid in vanilla and it's even worse for rando.
         if prize['symbol'] == 'BowWow':
             prize['layouts'][0]['conditions'].pop(0)
+            continue
     
     # return
 
@@ -288,128 +287,173 @@ def makeEventChanges(flowchart, placements):
     if placements['settings']['fast-trendy']:
         event_tools.findEvent(flowchart, 'Event5').data.params.data['prizeType'] = 10
     
-
-    # basicGet = event_tools.createActionChain(flowchart, None, [
-    #     ('Inventory', 'AddItemByKey', {
-    #         'itemKey': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'],
-    #         'count': event_tools.findEvent(flowchart, 'Event1').data.params.data['count'],
-    #         'index': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'],
-    #         'autoEquip': False
-    #     }),
-    #     ('Link', 'GenericItemGetSequenceByKey', {
-    #         'itemKey': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'],
-    #         'keepCarry': False,
-    #         'messageEntry': ''
-    #     })
-    # ], 'Event5')
-
-    swordGet = item_get.insertSetItemFlag(flowchart, 'SwordLv1', None, None)
-    swordContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'SwordLv1'}, {0: swordGet, 1: None})
+    # after rewarding the item, set certain flags as well as remove trade quest items from inventory
+    sword2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
+        {'itemType': 1, 'count': 1}, None)
+    sword1_give = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+        {'symbol': data.SWORD_FOUND_FLAG, 'value': True}, None)
+    sword_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SWORD_FOUND_FLAG}, {0: sword1_give, 1: sword2_give})
+    sword_content_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'SwordLv1'},
+        {0: sword_flag_check, 1: None})
     
-    shieldGet = item_get.insertSetItemFlag(flowchart, 'Shield', None, None)
-    shieldContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Shield'}, {0: shieldGet, 1: swordContentCheck})
+    shield2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
+        {'itemType': 3, 'count': 1}, None)
+    shield1_give = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+        {'symbol': data.SHIELD_FOUND_FLAG, 'value': True}, None)
+    shield_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SHIELD_FOUND_FLAG}, {0: shield1_give, 1: shield2_give})
+    shield_content_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Shield'},
+        {0: shield_flag_check, 1: sword_content_check})
 
-    braceletGet = item_get.insertSetItemFlag(flowchart, 'PowerBraceletLv1', None, None)
-    braceletContentCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'PowerBraceletLv1'}, {0: braceletGet, 1: shieldContentCheck})
-
-    # powderCapacityGet = item_get.insertSetItemFlag(flowchart, 'MagicPowder_MaxUp', None, None)
-    # powderCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'MagicPowder_MaxUp'}, {0: powderCapacityGet, 1: braceletContentCheck})
-
-    # bombCapacityGet = item_get.insertSetItemFlag(flowchart, 'Bomb_MaxUp', None, None)
-    # bombCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Bomb_MaxUp'}, {0: bombCapacityGet, 1: powderCapacityCheck})
-
-    # arrowCapacityGet = item_get.insertSetItemFlag(flowchart, 'Arrow_MaxUp', None, None)
-    # arrowCapacityCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Arrow_MaxUp'}, {0: arrowCapacityGet, 1: bombCapacityCheck})
-
-    # redTunicGet = item_get.insertSetItemFlag(flowchart, 'ClothesRed', None, None)
-    # redTunicCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'ClothesRed'}, {0: redTunicGet, 1: arrowCapacityCheck})
-
-    # blueTunicGet = item_get.insertSetItemFlag(flowchart, 'ClothesBlue', None, None)
-    # blueTunicCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'ClothesBlue'}, {0: blueTunicGet, 1: redTunicCheck})
-
-    harpGet = item_get.insertSetItemFlag(flowchart, 'SurfHarp', None, None)
-    harpCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'SurfHarp'}, {0: harpGet, 1: braceletContentCheck})
-
-    yoshiGet = item_get.insertSetItemFlag(flowchart, 'YoshiDoll', None, None)
-    yoshiCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'YoshiDoll'}, {0: yoshiGet, 1: harpCheck})
-
-    ribbonGet = item_get.insertSetItemFlag(flowchart, 'Ribbon', None, None)
-    ribbonCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Ribbon'}, {0: ribbonGet, 1: yoshiCheck})
-
-    dogFoodGet = item_get.insertSetItemFlag(flowchart, 'DogFood', None, None)
-    dogFoodCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'DogFood'}, {0: dogFoodGet, 1: ribbonCheck})
-
-    bananasGet = item_get.insertSetItemFlag(flowchart, 'Bananas', None, None)
-    bananasCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Bananas'}, {0: bananasGet, 1: dogFoodCheck})
-
-    stickGet = item_get.insertSetItemFlag(flowchart, 'Stick', None, None)
-    stickCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Stick'}, {0: stickGet, 1: bananasCheck})
-
-    honeycombGet = item_get.insertSetItemFlag(flowchart, 'Honeycomb', None, None)
-    honeycombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Honeycomb'}, {0: honeycombGet, 1: stickCheck})
-
-    pineappleGet = item_get.insertSetItemFlag(flowchart, 'Pineapple', None, None)
-    pineappleCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Pineapple'}, {0: pineappleGet, 1: honeycombCheck})
-
-    hibiscusGet = item_get.insertSetItemFlag(flowchart, 'Hibiscus', None, None)
-    hibiscusCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Hibiscus'}, {0: hibiscusGet, 1: pineappleCheck})
-
-    letterGet = item_get.insertSetItemFlag(flowchart, 'Letter', None, None)
-    letterCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Letter'}, {0: letterGet, 1: hibiscusCheck})
-
-    broomGet = item_get.insertSetItemFlag(flowchart, 'Broom', None, None)
-    broomCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Broom'}, {0: broomGet, 1: letterCheck})
-
-    hookGet = item_get.insertSetItemFlag(flowchart, 'FishingHook', None, None)
-    hookCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'FishingHook'}, {0: hookGet, 1: broomCheck})
-
-    necklaceGet = item_get.insertSetItemFlag(flowchart, 'PinkBra', None, None)
-    necklaceCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'PinkBra'}, {0: necklaceGet, 1: hookCheck})
-
-    scaleGet = item_get.insertSetItemFlag(flowchart, 'MermaidsScale', None, None)
-    scaleCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'MermaidsScale'}, {0: scaleGet, 1: necklaceCheck})
-
-    # zapGet = item_get.insertSetItemFlag(flowchart, 'ZapTrap', None, None)
-    # zapCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'ZapTrap'}, {0: zapGet, 1: scaleCheck})
+    bracelet2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
+        {'itemType': 15, 'count': 1}, None)
+    bracelet1_give = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+        {'symbol': data.BRACELET_FOUND_FLAG, 'value': True}, None)
+    bracelet_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.BRACELET_FOUND_FLAG}, {0: bracelet1_give, 1: bracelet2_give})
+    bracelet_content_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'PowerBraceletLv1'},
+        {0: bracelet_flag_check, 1: shield_content_check})
     
-    bombGet = item_get.insertSetItemFlag(flowchart, 'Bomb', None, None)
-    bombCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Bomb'}, {0: bombGet, 1: scaleCheck})
+    bomb_give = event_tools.createActionChain(flowchart, None, [
+        ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
+        ('Inventory', 'AddItem', {'itemType': 4, 'count': 20})
+    ], None)
+    bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Bomb'},
+        {0: bomb_give, 1: bracelet_content_check})
+    
+    harp_flags = event_tools.createActionChain(flowchart, None, [
+        ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
+    ], None)
+    harp_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'SurfHarp'},
+        {0: harp_flags, 1: bomb_check})
+    
+    lens_give = event_tools.createActionChain(flowchart, None, [
+        ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
+        ('Inventory', 'AddItem', {'itemType': 44, 'count': 1})
+    ], None)
+    lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.LENS_FOUND_FLAG}, {0: None, 1: lens_give})
+    lens_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'MagnifyingLens'},
+        {0: lens_give, 1: harp_check})
 
-    # ### PRIZE PARAMS CHECK
-    # prize6Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    #     {'symbol': 'PrizeGet6'}, bombCheck)
-    # prize6IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize6']['index']}, {0: prize6Get, 1: bombCheck})
-    # prize6SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize6']['symbol']}, {0: prize6IndexCheck, 1: bombCheck})
+    scale_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 43}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True})
+    ], lens_flag_check)
+    scale_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'MermaidsScale'},
+        {0: scale_give, 1: lens_check})
 
-    # prize5Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    #     {'symbol': 'PrizeGet5'}, bombCheck)
-    # prize5IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize5']['index']}, {0: prize5Get, 1: prize6SymbolCheck})
-    # prize5SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize5']['symbol']}, {0: prize5IndexCheck, 1: prize6SymbolCheck})
+    necklace_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 41}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True})
+    ], lens_flag_check)
+    necklace_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'PinkBra'},
+        {0: necklace_give, 1: scale_check})
 
-    # prize4Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    #     {'symbol': 'PrizeGet4'}, bombCheck)
-    # prize4IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize4']['index']}, {0: prize4Get, 1: prize5SymbolCheck})
-    # prize4SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize4']['symbol']}, {0: prize4IndexCheck, 1: prize5SymbolCheck})
+    hook_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 40}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True})
+    ], lens_flag_check)
+    hook_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'FishingHook'},
+        {0: hook_give, 1: necklace_check})
 
-    # prize3Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    #     {'symbol': 'PrizeGet3'}, bombCheck)
-    # prize3IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize3']['index']}, {0: prize3Get, 1: prize4SymbolCheck})
-    # prize3SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize3']['symbol']}, {0: prize3IndexCheck, 1: prize4SymbolCheck})
+    broom_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 39}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True})
+    ], lens_flag_check)
+    broom_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Broom'},
+        {0: broom_give, 1: hook_check})
 
-    # prize2Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    #     {'symbol': 'PrizeGet2'}, bombCheck)
-    # prize2IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize2']['index']}, {0: prize2Get, 1: prize3SymbolCheck})
-    # prize2SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize2']['symbol']}, {0: prize2IndexCheck, 1: prize3SymbolCheck})
+    letter_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 38}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True})
+    ], lens_flag_check)
+    letter_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Letter'},
+        {0: letter_give, 1: broom_check})
 
-    # prize1Get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    #     {'symbol': 'PrizeGet1'}, bombCheck)
-    # prize1IndexCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['index'], 'value2': prizes_dict['prize1']['index']}, {0: prize1Get, 1: prize2SymbolCheck})
-    # prize1SymbolCheck = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString', {'value1': event_tools.findEvent(flowchart, 'Event1').data.params.data['prizeKey'], 'value2': prizes_dict['prize1']['symbol']}, {0: prize1IndexCheck, 1: prize2SymbolCheck})
+    hibiscus_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 37}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True})
+    ], lens_flag_check)
+    hibiscus_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Hibiscus'},
+        {0: hibiscus_give, 1: letter_check})
+
+    pineapple_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 36}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True})
+    ], lens_flag_check)
+    pineapple_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Pineapple'},
+        {0: pineapple_give, 1: hibiscus_check})
+
+    honeycomb_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 35}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True})
+    ], lens_flag_check)
+    honeycomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Honeycomb'},
+        {0: honeycomb_give, 1: pineapple_check})
+
+    stick_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 34}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True})
+    ], lens_flag_check)
+    stick_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Stick'},
+        {0: stick_give, 1: honeycomb_check})
+
+    bananas_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 33}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True})
+    ], lens_flag_check)
+    bananas_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Bananas'},
+        {0: bananas_give, 1: stick_check})
+
+    dogfood_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 32}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True})
+    ], lens_flag_check)
+    dogfood_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'DogFood'},
+        {0: dogfood_give, 1: bananas_check})
+
+    ribbon_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 31}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True})
+    ], lens_flag_check)
+    ribbon_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'Ribbon'},
+        {0: ribbon_give, 1: dogfood_check})
+
+    yoshi_give = event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'RemoveItem', {'itemType': 30}),
+        ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})
+    ], lens_flag_check)
+    yoshi_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event0').data.params.data['prizeKey'], 'value2': 'YoshiDoll'},
+        {0: yoshi_give, 1: ribbon_check})
 
     ### CONNECT CHAIN TO EVENTS
-    event_tools.insertEventAfter(flowchart, 'Event3', bombCheck)
-    event_tools.insertEventAfter(flowchart, 'Event7', bombCheck)
-    event_tools.insertEventAfter(flowchart, 'Event9', bombCheck)
+    event_tools.insertEventAfter(flowchart, 'Event3', yoshi_check)
+    event_tools.insertEventAfter(flowchart, 'Event7', yoshi_check)
+    event_tools.insertEventAfter(flowchart, 'Event9', yoshi_check)
 
 
 

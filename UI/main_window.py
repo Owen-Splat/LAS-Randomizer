@@ -59,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.fishingCheck.clicked.connect(self.fishingCheck_Clicked)
         self.ui.rapidsCheck.clicked.connect(self.rapidsCheck_Clicked)
         self.ui.dampeCheck.clicked.connect(self.dampeCheck_Clicked)
+        self.ui.trendyCheck.clicked.connect(self.trendyCheck_Clicked)
         self.ui.giftsCheck.clicked.connect(self.giftsCheck_Clicked)
         self.ui.tradeGiftsCheck.clicked.connect(self.tradeQuest_Clicked)
         self.ui.bossCheck.clicked.connect(self.bossCheck_Clicked)
@@ -134,6 +135,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.dampeCheck.setChecked(False)
         self.excluded_checks.update(DAMPE_REWARDS)
 
+        self.ui.trendyCheck.setChecked(True)
+        self.excluded_checks.difference_update(TRENDY_REWARDS)
+
         self.ui.giftsCheck.setChecked(True)
         self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
 
@@ -171,9 +175,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tunicsCheck.setChecked(True)
         self.ui.zapsCheck.setChecked(False)
         self.ui.rupCheck.setChecked(False)
+        self.ui.bridgeCheck.setChecked(True)
+        self.ui.mazeCheck.setChecked(True)
+        self.ui.swampCheck.setChecked(False)
         self.ui.owlsComboBox.setCurrentIndex(0)
 
-        self.excluded_checks.update(TRENDY_REWARDS)
+        # self.excluded_checks.update(TRENDY_REWARDS)
         self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
 
         self.tab_Changed() # just call the same event as when changing the tab to refresh the list
@@ -192,6 +199,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fishing': self.ui.fishingCheck.isChecked(),
             'Rapids': self.ui.rapidsCheck.isChecked(),
             'Dampe': self.ui.dampeCheck.isChecked(),
+            'Trendy': self.ui.trendyCheck.isChecked(),
             'Free_Gifts': self.ui.giftsCheck.isChecked(),
             'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
             'Boss_Drops': self.ui.bossCheck.isChecked(),
@@ -289,6 +297,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.dampeCheck.setChecked(SETTINGS['Dampe'])
         except (KeyError, TypeError):
             self.ui.dampeCheck.setChecked(False)
+        
+        # trendy
+        try:
+            self.ui.trendyCheck.setChecked(SETTINGS['Trendy'])
+        except (KeyError, TypeError):
+            self.ui.trendyCheck.setChecked(True)
         
         # free gifts
         try:
@@ -553,6 +567,15 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
+    # Trendy Check Changed
+    def trendyCheck_Clicked(self):
+        if self.ui.trendyCheck.isChecked():
+            self.excluded_checks.difference_update(TRENDY_REWARDS)
+        else:
+            self.excluded_checks.update(TRENDY_REWARDS)
+
+
+
     # Gifts Check Changed
     def giftsCheck_Clicked(self):
         if self.ui.giftsCheck.isChecked():

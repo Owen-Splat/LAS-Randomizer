@@ -666,172 +666,6 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
-        <widget class="QCheckBox" name="raceCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>44</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="whatsThis">
-          <string>If this setting is checked, only 4 of the 8 dungeons can contain progress items.&lt;br&gt;&lt;/br&gt;The needed dungeons will be highlighted on the map from the start</string>
-         </property>
-         <property name="text">
-          <string>Race Mode</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="trendyCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>369</x>
-           <y>44</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>This controls whether the Trendy Game can contain progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-         </property>
-         <property name="text">
-          <string>Trendy Game</string>
-         </property>
-         <property name="checkable">
-          <bool>false</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="seashellsCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>548</x>
-           <y>44</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="whatsThis">
-          <string>This controls whether seashells can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-         </property>
-         <property name="text">
-          <string>Seashells</string>
-         </property>
-         <property name="checkable">
-          <bool>false</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="dampeCheck">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>44</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;This is very broken right now,&lt;/u&gt; and is recommended to turn off until fixed</string>
-         </property>
-         <property name="text">
-          <string>Dampé</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="shopCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>84</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>This controls whether the shop can sell progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-         </property>
-         <property name="text">
-          <string>Shop</string>
-         </property>
-         <property name="checkable">
-          <bool>false</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="companionCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>84</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>This controls if BowWow and the Rooster will be shuffled alongside other items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-         </property>
-         <property name="text">
-          <string>Shuffle Companions</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
        </widget>
        <widget class="QComboBox" name="seashellsComboBox">
         <property name="geometry">
@@ -884,6 +718,160 @@
           <string>Max Seashells: 50</string>
          </property>
         </item>
+       </widget>
+       <widget class="QCheckBox" name="dampeCheck">
+        <property name="geometry">
+         <rect>
+          <x>189</x>
+          <y>24</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic is not written to work with instrument shuffle,&lt;/u&gt; and may result in unbeatable seeds</string>
+        </property>
+        <property name="text">
+         <string>Dampé</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="trendyCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>189</x>
+          <y>144</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>This controls whether the Trendy Game can contain progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
+        </property>
+        <property name="text">
+         <string>Trendy Game</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="shopCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>369</x>
+          <y>24</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>true</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>This controls whether the shop can sell progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(80, 80, 80);</string>
+        </property>
+        <property name="text">
+         <string>Shop</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="seashellsCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>369</x>
+          <y>144</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>true</strikeout>
+         </font>
+        </property>
+        <property name="whatsThis">
+         <string>This controls whether seashells can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(80, 80, 80);</string>
+        </property>
+        <property name="text">
+         <string>Seashells</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="companionCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>548</x>
+          <y>64</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>true</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>This controls if BowWow and the Rooster will be shuffled alongside other items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(80, 80, 80);</string>
+        </property>
+        <property name="text">
+         <string>Companions</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_5">
@@ -1208,7 +1196,7 @@
         <property name="geometry">
          <rect>
           <x>548</x>
-          <y>184</y>
+          <y>224</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1342,6 +1330,34 @@
           <string>Owl Statues: Gifts</string>
          </property>
         </item>
+       </widget>
+       <widget class="QCheckBox" name="raceCheck">
+        <property name="geometry">
+         <rect>
+          <x>548</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>true</strikeout>
+         </font>
+        </property>
+        <property name="whatsThis">
+         <string>If this setting is checked, only 4 of the 8 dungeons can contain progress items.&lt;br&gt;&lt;/br&gt;The needed dungeons will be highlighted on the map from the start</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(80, 80, 80);</string>
+        </property>
+        <property name="text">
+         <string>Race Mode</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
        </widget>
       </widget>
      </widget>

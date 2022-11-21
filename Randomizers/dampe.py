@@ -17,40 +17,29 @@ def makeEventChanges(flowchart):
 
     # 0 for HasItem means you do not have the item, 1 means you do
 
-    sword_remove = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 0}, 'Event39'),
-        ('EventFlags', 'SetFlag', {'symbol': data.DAMPE_SWORD_FLAG, 'value': True})
-    ], 'Event39')
+    sword_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 0}, 'Event39')
     sword2_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 1, 'count': 1}, {0: sword_remove, 1: 'Event39'})
     sword_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 0, 'count': 1}, {0: 'Event39', 1: sword2_check})
     
-    shield_remove = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 2}, sword_check),
-        ('EventFlags', 'SetFlag', {'symbol': data.DAMPE_SHIELD_FLAG, 'value': True})
-    ], sword_check)
+    shield_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 2}, sword_check),
     shield2_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 3, 'count': 1}, {0: shield_remove, 1: sword_check})
     shield_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 2, 'count': 1}, {0: sword_check, 1: shield2_check})
     
-    bracelet_remove = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 14}, shield_check),
-        ('EventFlags', 'SetFlag', {'symbol': data.DAMPE_BRACELET_FLAG, 'value': True})
-    ], shield_check)
+    bracelet_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 14}, shield_check)
     bracelet2_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 15, 'count': 1}, {0: bracelet_remove, 1: shield_check})
     bracelet_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 14, 'count': 1}, {0: shield_check, 1: bracelet2_check})
     
-    lens_flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-        {'symbol': data.DAMPE_LENS_FLAG, 'value': True}, bracelet_check)
-    lens_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 44, 'count': 1}, {0: bracelet_check, 1: lens_flag_set})
-    
-    event_tools.insertEventAfter(flowchart, 'Event43', lens_check)
-    afterRewardEvents(flowchart, lens_check)
+    event_tools.insertEventAfter(flowchart, 'Event43', bracelet_check)
+    afterRewardEvents(flowchart, bracelet_check)
 
 
 
@@ -72,7 +61,7 @@ def afterRewardEvents(flowchart, loop_event):
     sword_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 0, 'count': 1}, {0: sword1_give, 1: sword2_give})
     sword_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.DAMPE_SWORD_FLAG}, {0: first_sword_check, 1: sword_check})
+        {'symbol': data.SWORD_FOUND_FLAG}, {0: first_sword_check, 1: sword_check})
     
     shield2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
         {'itemType': 3, 'count': 1}, sword_flag_check)
@@ -87,7 +76,7 @@ def afterRewardEvents(flowchart, loop_event):
     shield_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 2, 'count': 1}, {0: shield1_give, 1: shield2_give})
     shield_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.DAMPE_SHIELD_FLAG}, {0: first_shield_check, 1: shield_check})
+        {'symbol': data.SHIELD_FOUND_FLAG}, {0: first_shield_check, 1: shield_check})
     
     bracelet2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
         {'itemType': 15, 'count': 1}, shield_flag_check)
@@ -102,7 +91,7 @@ def afterRewardEvents(flowchart, loop_event):
     bracelet_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 14, 'count': 1}, {0: bracelet1_give, 1: bracelet2_give})
     bracelet_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.DAMPE_BRACELET_FLAG}, {0: first_bracelet_check, 1: bracelet_check})
+        {'symbol': data.BRACELET_FOUND_FLAG}, {0: first_bracelet_check, 1: bracelet_check})
     
     bomb_flag = event_tools.createActionChain(flowchart, None, [
         ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
@@ -123,7 +112,7 @@ def afterRewardEvents(flowchart, loop_event):
     lens_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
         {'itemType': 44, 'count': 1}, harp_check)
     lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.DAMPE_LENS_FLAG}, {0: harp_check, 1: lens_give})
+        {'symbol': data.LENS_FOUND_FLAG}, {0: harp_check, 1: lens_give})
     lens_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 44, 'count': 1}, {0: lens_flag_check, 1: harp_check})
     

@@ -117,10 +117,15 @@ def changeRewards(flowchart, treasure_flowchart):
     {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'MermaidsScale'},
     {0: scale_get, 1: necklace_check})
 
+    lens_get = item_get.insertItemGetAnimation(flowchart, 'MagnifyingLens', -1, None, 'Event0')
+    lens_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'MagnifyingLens'},
+    {0: lens_get, 1: scale_check})
+
     zap_get = item_get.insertItemGetAnimation(flowchart, 'ZapTrap', -1, None, 'Event0')
     zap_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
     {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'ZapTrap'},
-    {0: zap_get, 1: scale_check})
+    {0: zap_get, 1: lens_check})
     
     bomb_get = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, 'Event0')
     bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',

@@ -240,6 +240,12 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
+    if item == 'MagnifyingLens':
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+        ], after)
+    
     ######################################################################################################################################
     ### everything else
     return event_tools.createActionChain(flowchart, before, [
