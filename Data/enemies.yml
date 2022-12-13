@@ -1,0 +1,387 @@
+---
+Actors:
+  EnemyTektight:
+    id: 0x1
+    type: land
+  EnemyOctorok:
+    id: 0x2
+    type: land
+  EnemySeaUrchin:
+    id: 0x3
+    type: land
+  EnemyLeever:
+    id: 0x4
+    type: land
+  EnemyPeese: # crab
+    id: 0x5
+    type: land
+  # EnemyTotakeke: # monkey
+  #    id: 0x6
+  #    type: tree
+  EnemyPeahat:
+    id: 0x7
+    type: land | air
+  EnemyMoriblinSword:
+    id: 0x8
+    type: land
+    parameters: [0]
+  EnemyMoriblinSpear:
+    id: 0x9
+    type: land
+    parameters: [0]
+  EnemyBuzzBlob:
+    id: 0xA
+    type: land
+  # EnemyNomos:
+  #    id: 0xB
+  #    type: land
+  EnemyCrowly:
+    id: 0xC
+    type: tree
+  EnemyPiranha: # the fish, not the plant
+    id: 0xD
+    type: water
+  # EnemyMonea:
+  #    id: 0xE
+  #    type: land
+  # EnemyAnaMonea:
+  #    id: 0xF
+  #    type: land
+  EnemyGhini:
+    id: 0x10
+    type: air
+  # EnemyDeguGhini: # this is too big and lots of them are annoying, you can't even dive under them
+  #   id: 0x11
+  #   type: air
+  EnemyZombie:
+    id: 0x12
+    type: land
+  EnemyMoblinSword:
+    id: 0x13
+    type: land
+    parameters: [0]
+  EnemyMoblinSpear:
+    id: 0x14
+    type: land
+    parameters: [0]
+  EnemyArmosLight:
+    id: 0x15
+    type: land
+  EnemyArmosDark:
+    id: 0x16
+    type: land
+    parameters: [2]
+    # switches: [[1, 16]] # global flag for if we revealed the stairs, we don't actually need this
+  EnemyFlyingOctorok:
+    id: 0x17
+    type: land
+  EnemyPiccolo: # the flying bugs in the d7 mini boss REQUIRES TESTING
+    id: 0x18
+    type: air
+  EnemyZoroZoro: # the bugs that crawl out from a hole below kanalet castle
+    id: 0x1E2 # the actual enemy id is 0x19, but we need to use a spawn box actor for it
+    type: hole
+    parameters: [4, 45, 120]
+    scale: [4.5, 3.0, 4.5]
+  EnemyZora:
+     id: 0x1A
+     type: water
+  EnemyZolGreen:
+    id: 0x1B
+    type: land
+  EnemyZolRed:
+    id: 0x1C
+    type: land
+    lens-parameter: 1
+  EnemyMiniZol:
+    id: 0x1D
+    type: land
+  EnemyHidy: # grass/rock/skull disguised beetle
+    id: 0x1E
+    type: land
+    parameters: [[0, 1, 2]] # parameter most likely determines the disguise
+  EnemyPokey:
+    id: 0x22
+    type: land
+  EnemyKyune: # dacto
+    id: 0x23
+    type: tree
+  EnemyPawn: # hardhat beetle
+    id: 0x24
+    type: land
+  EnemyRope:
+    id: 0x25
+    type: land
+  EnemyVire:
+    id: 0x26
+    type: air
+  EnemyTail:
+    id: 0x27
+    type: land
+  EnemyTogezo: # spiny
+    id: 0x28
+    type: land
+  EnemyVegas: # 3 of a kind
+    id: 0x29
+    type: land
+  # EnemyDeathBallVacuum: # pulls link towards
+  #    id: 0x2A
+  #   EnemyDeathBallReverse: # pushes link away
+  #    id: 0x2B
+  #   EnemyPakkun: # piranha plant
+  #    id: 0x2C
+  #         parameters: [[1069547520, 1077936128, 1086324736]] # not sure what this means
+  EnemyPincer:
+    id: 0x2D
+    type: hole
+  EnemyStalKnightSpear:
+    id: 0x2E
+    type: land
+    parameters: [0]
+  EnemyStalKnightSword:
+    id: 0x2F
+    type: land
+    parameters: [0]
+  EnemyMimic:
+    id: 0x30
+    type: land
+    lens-parameter: 0
+  EnemyBomberRed: # bounce until explodes
+    id: 0x31
+    type: land
+  EnemyBomberGreen: # countdown explosion
+    id: 0x32
+    type: land
+  EnemyGibdos:
+    id: 0x33
+    type: land
+    parameters: [1]
+  EnemyKeese: # not sure what the parameters mean
+    id: 0x34
+    type: air
+    #   parameters: [['', '-', 1, 2, 3, 4], ['', '-', 1, 2, 3, 4], ['', '-', 1, 2, 3, 4], ['', '-', 1, 2, 3, 4]]
+  EnemySoldierSword:
+    id: 0x35
+    type: land
+    parameters: [0]
+  EnemySoldierSpear:
+    id: 0x36
+    type: land
+    parameters: [0]
+  EnemyPolsVoice:
+    id: 0x37
+    type: land
+  EnemyLikeLike:
+    id: 0x38
+    type: land
+  EnemyStalfosGreen:
+    id: 0x39
+    type: land
+    parameters: [['', 0, 1]] # determines if it is awake or sleeping by default, not sure why there's 3 values yet
+  EnemyStalfosOrange:
+    id: 0x3A
+    type: land
+    parameters: [['', 0, 1], ''] # param[2] is always 1 if param[0] has a value, blank if not
+  EnemyWizzrobe:
+    id: 0x3B
+    type: land
+  EnemyKuribo: # goomba
+    id: 0x3C
+    type: land
+  EnemySpark:
+    id: 0x3D
+    type: land
+    parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 1045220557]] # not sure why the kanalet spark has this oddity
+  EnemyCreepee: # zirro / bomb fairy
+    id: 0x3E
+    type: air
+  EnemyKirby:
+    id: 0x3F
+    type: land
+  EnemyHiploop: # iron mask
+    id: 0x40
+    type: land
+  EnemyHeiho: # shy guy
+    id: 0x41
+    type: land
+  EnemyKyorobo: # pairodd
+    id: 0x42
+    type: land
+  EnemyHover:
+    id: 0x43
+    type: water
+  EnemyBallerine: # star
+    id: 0x44
+    type: land
+  EnemyPukuPuku: # cheep cheep
+    id: 0x45
+    type: water2D
+    parameters: [[0, 1]] # seems to decide if they jump or not, idk what determines if they move horizontally or vertically
+  EnemyMinigler: # angler fish babies
+    id: 0x46
+    type: water2D
+  EnemyGesso: # blooper
+    id: 0x47
+    type: water2D
+  EnemyBonePutter:
+    id: 0x48
+    type: air
+  EnemyBonePutterBounce:
+    id: 0x49
+    type: land
+  EnemyStretchyGhostGreen:
+    id: 0x4A
+    type: land
+  EnemyStretchyGhostRed:
+    id: 0x4B
+    type: land
+  EnemyStretchyGhostBlue:
+    id: 0x4C
+    type: land
+  EnemyKarakoroGreen:
+    id: 0x4D
+    type: land
+  EnemyKarakoroRed:
+    id: 0x4E
+    type: land
+  EnemyKarakoroBlue:
+    id: 0x4F
+    type: land
+  EnemyTeresa: # boo
+    id: 0x50
+    type: air
+  # EnemyRola:
+  #    id: 0x51
+  #    type: miniboss
+  #     parameters: [['RolaStart', '']] # D1 and D8 don't seem any different so I don't think this parameter is actually used
+  # EnemyBossblin:
+  #    id: 0x52
+  #    type: miniboss
+  #     parameters: ['Bossblin']
+  # EnemyHinox:
+  #    id: 0x53
+  #    type: miniboss
+  #     parameters: [['HinoxStart', 1, 2]] # determines color? I don't think this is used for the event then
+  EnemyBombKnuckle: # might need relationship section 2 entry [[b'', b''], 0, 0]
+    id: 0x54
+    type: hole
+  # EnemySoldierIronBall: # Hardcoded to drop a golden leaf, needs left out for now
+  #   id: 0x55
+  #   type: land
+  ################## boss datas incomplete, will eventually complete it lol
+  # EnemyDodongo:
+  #    id: 0x56
+  #    type: miniboss
+  # EnemyLanmola:
+  #    id: 0x57
+  #    type: miniboss
+  # EnemyHiploopHover: # cueball
+  #    id: 0x58
+  #    type: miniboss
+  # EnemyMasterStalfon:
+  #    id: 0x59
+  #    type: miniboss
+  # EnemyGohma:
+  #    id: 0x5A
+  #    type: miniboss
+  # EnemyDeguArmos:
+  #    id: 0x5B
+  #    type: miniboss
+  # EnemyJacky: # Smasher/Rover
+  #    id: 0x5C
+  #    type: miniboss
+  # EnemyPiccoloMaster: # Sans
+  #    id: 0x5D
+  #    type: miniboss
+  # EnemyTurtleRock:
+  #    id: 0x5E
+  #    type: miniboss
+  # EnemyMightPunch:
+  #    id: 0x5F
+  #    type: miniboss
+  # EnemyStoneHinox:
+  #    id: 0x60
+  #    type: miniboss
+  # EnemyBossBlob:
+  #    id: 0x61
+  #    type: miniboss
+  # EnemyDonPawn:
+  #    id: 0x62
+  #    type: boss
+  # EnemyDeguTail:
+  #    id: 0x63
+  #    type: boss
+  # EnemyPotDemonKing: # genie aka autoscroller
+  #    id: 0x64
+  #    type: boss
+  # EnemyDeguZol:
+  #    id: 0x65
+  #    type: boss
+  # EnemyAngler:
+  #    id: 0x66
+  #    type: boss
+  # EnemyHooker:
+  #    id: 0x67
+  #    type: boss
+  # EnemyMatFace:
+  #    id: 0x68
+  #    type: boss
+  # EnemyAlbatoss:
+  #    id: 0x69
+  #    type: boss
+  # EnemyDeguFlame:
+  #    id: 0x6A
+  #    type: boss
+  # EnemyShadowZol:
+  #    id: 0x6B
+  #    type: finalboss
+  # EnemyShadowAgahnim:
+  #    id: 0x6C
+  #    type: finalboss
+  # EnemyShadowDeguTail:
+  #    id: 0x6D
+  #    type: finalboss
+  # EnemyShadowGanon:
+  #    id: 0x6E
+  #    type: finalboss
+  # EnemyShadowLanmola:
+  #    id: 0x6F
+  #    type: finalboss
+  # EnemyShadowDethI:
+  #    id: 0x70
+  #    type: finalboss
+
+
+Excluded_Actors: # rooms each with a list of actors to not modify
+  Field_06I: [0] # kanalet crow
+  Field_06K: [0] # kanalet bomb knuckle
+#   Field_10N: [0] # dark armos blocking the entry to D6, is probably fine to randomize
+#   KanaletCastle_01C: [] # there are no enemy actors besides the spark, objfilledwall spawns them
+  KanaletCastle_01D: [0]
+  KanaletCastle_02A: [0, 1, 2]
+
+
+Included_Folders:
+  - AnimalVillageCave
+  - AnimalVillageEnter
+  - FaceShrineEnter
+  - Field
+  - GopongaCave
+  - KanaletCastle
+  - KanaletCastleEnter
+  - LanmolaCave
+  - MadBattersWellEnter
+  - MarthaUkuku
+  - MermaidStatue
+  - MysteriousWoodsCave01
+  - MysteriousWoodsCave02
+  - RichardCave
+  - Tamaranch01
+  - Tamaranch02
+  - Tamaranch03
+  - Tamaranch04
+  - Tamaranch05
+  - UkukuCave01
+  - UkukuCave02
+  - UnderGrave
+...

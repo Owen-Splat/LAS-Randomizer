@@ -202,7 +202,15 @@ class Actor:
 
 	def __repr__(self):
 		return f'Actor: {self.name}'
-
+	
+	def positionToPoint(self):
+		packed = b''
+		packed += struct.pack('<f', self.posX)
+		packed += struct.pack('<f', self.posY)
+		packed += struct.pack('<f', self.posZ)
+		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+		return packed
+	
 	def pack(self, nameOffset):
 		packed = b''
 		nameRepr = self.name + b'\x00'
@@ -312,6 +320,24 @@ class Actor:
 
 
 
+class Point:
+	def __init__(self, data):
+			self.posX = readFloat(data, 0x0, 4)
+			self.posY = readFloat(data, 0x4, 4)
+			self.posZ = readFloat(data, 0x8, 4)
+			self.xC = data[0xC:]
+	
+	def pack(self):
+		packed = b''
+		packed += struct.pack('<f', self.posX)
+		packed += struct.pack('<f', self.posY)
+		packed += struct.pack('<f', self.posZ)
+		packed += self.xC
+
+		return packed
+
+
+
 class Room:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
@@ -320,6 +346,11 @@ class Room:
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
+
+		self.points = []
+		point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
+		for entry in point_entry.data.entries:
+			self.points.append(Point(entry.data))
 		
 		# grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
 		# self.grid = Grid(grid_entry)
@@ -333,135 +364,6 @@ class Room:
 			chest.parameters[1] = bytes(new_content, 'utf-8')
 			chest.parameters[2] = item_index if item_index != -1 else b''
 	
-
-	# chest companions
-	def addChestRooster(self, chest_index=0):
-		chests = [a for a in self.actors if a.type == 0xF7]
-
-		if len(chests) > chest_index:
-			chest = chests[chest_index]
-			new_actor = copy.deepcopy(chest)
-
-			chest.relationships.x += 1
-			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-			name_hex = f'A1000{chest_index}005D1D906E'
-			new_actor.key = int(name_hex, 16)
-			new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-			new_actor.type = 0x181
-			new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
-			new_actor.relationships.y += 1
-			new_actor.relationships.section_3.append(self.actors.index(chest))
-			self.actors.append(new_actor)
-	
-
-	def addChestBowWow(self, chest_index=0):
-		chests = [a for a in self.actors if a.type == 0xF7]
-
-		if len(chests) > chest_index:
-			chest = chests[chest_index]
-			new_actor = copy.deepcopy(chest)
-
-			chest.relationships.x += 1
-			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-			name_hex = f'720133{chest_index}15CFF3744'
-			new_actor.key = int(name_hex, 16)
-			new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-			new_actor.type = 0x14D
-			new_actor.parameters = [1, b'', b'', b'', b'', b'', b'', b'']
-			new_actor.relationships.y += 1
-			new_actor.relationships.section_3.append(self.actors.index(chest))
-			self.actors.append(new_actor)
-	
-
-	# telephone companions
-	def addTelephoneRooster(self, id):
-		tel = [a for a in self.actors if a.type == 0x13A][0]
-		
-		doll = copy.deepcopy(tel)
-		doll.relationships.x += 1
-		doll.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
-		name_hex = f'720133{id}05CFF3744'
-		doll.key = int(name_hex, 16)
-		doll.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
-		doll.type = 0x8E # ItemYoshiDoll
-		doll.posX = 9.5
-		doll.posY = 0
-		doll.posZ = 4.15
-		doll.parameters[0] = bytes('NpcFlyingCucco.bfres', 'utf-8')
-		doll.parameters[1] = bytes('FlyingCucco', 'utf-8')
-		doll.parameters[2] = bytes('GiveBackRooster', 'utf-8')
-		doll.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
-		self.actors.append(doll)
-
-		rooster = copy.deepcopy(tel)
-		name_hex = f'A1000{id}005D1D906E'
-		rooster.key = int(name_hex, 16)
-		rooster.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-		rooster.type = 0x181 # rooster
-		rooster.posX = 9.5
-		rooster.posY = 0
-		rooster.posZ = 4.15
-		rooster.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
-		rooster.relationships.y += 1
-		rooster.relationships.section_3.append(self.actors.index(doll))
-		self.actors.append(rooster)
-	
-
-	def addTelephoneBowWow(self, id):
-		tel = [a for a in self.actors if a.type == 0x13A][0]
-		
-		doll = copy.deepcopy(tel)
-		doll.relationships.x += 1
-		doll.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
-		name_hex = f'720133{id}15CFF3744'
-		doll.key = int(name_hex, 16)
-		doll.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
-		doll.type = 0x8E # ItemYoshiDoll
-		doll.posX = 5.5
-		doll.posY = 0
-		doll.posZ = 4.15
-		doll.parameters[0] = bytes('NpcBowWow.bfres', 'utf-8')
-		doll.parameters[1] = bytes('BowWow', 'utf-8')
-		doll.parameters[2] = bytes('GiveBackBowWow', 'utf-8')
-		doll.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
-		self.actors.append(doll)
-
-		bowwow = copy.deepcopy(tel)
-		name_hex = f'610441{id}05BA1BB98'
-		bowwow.key = int(name_hex, 16)
-		bowwow.name = bytes(f'NpcBowWow-{name_hex}', 'utf-8')
-		bowwow.type = 0x14D # bowwow
-		bowwow.posX = 5.5
-		bowwow.posY = 0
-		bowwow.posZ = 4.15
-		bowwow.parameters = [1, b'', b'', b'', b'', b'', b'', b'']
-		bowwow.relationships.y += 1
-		bowwow.relationships.section_3.append(self.actors.index(doll))
-		self.actors.append(bowwow)
-
-
-	# def addShadowTrap(self, chest_index=0):
-	# 	chests = [a for a in self.actors if a.type == 0xF7]
-
-	# 	if len(chests) > chest_index:
-	# 		chest = chests[chest_index]
-	# 		new_actor = copy.deepcopy(chest)
-
-	# 		chest.relationships.x += 1
-	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-	# 		name_hex = f'A1000{chest_index}006E2E017F'
-	# 		new_actor.key = int(name_hex, 16)
-	# 		new_actor.name = bytes(f'PanelShadowLink-{name_hex}', 'utf-8')
-	# 		new_actor.type = 0x21E
-	# 		# new_actor.posZ += 3 # move 2 tiles south of chest to appear behind the player
-	# 		new_actor.parameters = [b'Appear', b'', b'', b'', b'', b'', b'', b'']
-	# 		new_actor.relationships.y += 1
-	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
-	# 		self.actors.append(new_actor)
-
 
 	def setSmallKeyParams(self, model_path, model_name, room, key_index=0):
 		keys = [a for a in self.actors if a.type == 0xA9]
@@ -500,6 +402,12 @@ class Room:
 		new_names = b''
 
 		for entry in self.fixed_hash.entries:
+			if entry.name == b'point':
+				entry.data.entries = []
+				for point in self.points:
+					# Create a new point entry for actors to use
+					entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
+
 			if entry.name == b'actor':
 				entry.data.entries = []
 				for actor in self.actors:
@@ -511,7 +419,19 @@ class Room:
 					for param in actor.parameters:
 						if isinstance(param, bytes):
 							new_names += param + b'\x00'
-
+					
+					for s1 in actor.relationships.section_1:
+						if isinstance(s1[0][0], bytes):
+							new_names += s1[0][0] + b'\x00'
+						if isinstance(s1[0][1], bytes):
+							new_names += s1[0][1] + b'\x00'
+					
+					for s2 in actor.relationships.section_2:
+						if isinstance(s2[0][0], bytes):
+							new_names += s2[0][0] + b'\x00'
+						if isinstance(s2[0][1], bytes):
+							new_names += s2[0][1] + b'\x00'
+			
 			new_names += entry.name + b'\x00'
 
 		self.fixed_hash.namesSection = new_names
@@ -581,3 +501,135 @@ class Relationship:
 			for i in range(self.y):
 				id = readBytes(data, pos + (0x4 * i), 4)
 				self.section_3.append(id)
+
+
+
+### COMPANION TEST STUFF - bunch of experiment code I did, leaving it here in case I need to reference
+
+	# # chest companions
+	# def addChestRooster(self, chest_index=0):
+	# 	chests = [a for a in self.actors if a.type == 0xF7]
+
+	# 	if len(chests) > chest_index:
+	# 		chest = chests[chest_index]
+	# 		new_actor = copy.deepcopy(chest)
+
+	# 		chest.relationships.x += 1
+	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
+
+	# 		name_hex = f'A1000{chest_index}005D1D906E'
+	# 		new_actor.key = int(name_hex, 16)
+	# 		new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
+	# 		new_actor.type = 0x181
+	# 		new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
+	# 		new_actor.relationships.y += 1
+	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
+	# 		self.actors.append(new_actor)
+	
+
+	# def addChestBowWow(self, chest_index=0):
+	# 	chests = [a for a in self.actors if a.type == 0xF7]
+
+	# 	if len(chests) > chest_index:
+	# 		chest = chests[chest_index]
+	# 		new_actor = copy.deepcopy(chest)
+
+	# 		chest.relationships.x += 1
+	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
+
+	# 		name_hex = f'720133{chest_index}15CFF3744'
+	# 		new_actor.key = int(name_hex, 16)
+	# 		new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
+	# 		new_actor.type = 0x14D
+	# 		new_actor.parameters = [1, b'', b'', b'', b'', b'', b'', b'']
+	# 		new_actor.relationships.y += 1
+	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
+	# 		self.actors.append(new_actor)
+	
+
+	# # telephone companions
+	# def addTelephoneRooster(self, id):
+	# 	tel = [a for a in self.actors if a.type == 0x13A][0]
+		
+	# 	doll = copy.deepcopy(tel)
+	# 	doll.relationships.x += 1
+	# 	doll.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
+	# 	name_hex = f'720133{id}05CFF3744'
+	# 	doll.key = int(name_hex, 16)
+	# 	doll.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
+	# 	doll.type = 0x8E # ItemYoshiDoll
+	# 	doll.posX = 9.5
+	# 	doll.posY = 0
+	# 	doll.posZ = 4.15
+	# 	doll.parameters[0] = bytes('NpcFlyingCucco.bfres', 'utf-8')
+	# 	doll.parameters[1] = bytes('FlyingCucco', 'utf-8')
+	# 	doll.parameters[2] = bytes('GiveBackRooster', 'utf-8')
+	# 	doll.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
+	# 	self.actors.append(doll)
+
+	# 	rooster = copy.deepcopy(tel)
+	# 	name_hex = f'A1000{id}005D1D906E'
+	# 	rooster.key = int(name_hex, 16)
+	# 	rooster.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
+	# 	rooster.type = 0x181 # rooster
+	# 	rooster.posX = 9.5
+	# 	rooster.posY = 0
+	# 	rooster.posZ = 4.15
+	# 	rooster.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
+	# 	rooster.relationships.y += 1
+	# 	rooster.relationships.section_3.append(self.actors.index(doll))
+	# 	self.actors.append(rooster)
+	
+
+	# def addTelephoneBowWow(self, id):
+	# 	tel = [a for a in self.actors if a.type == 0x13A][0]
+		
+	# 	doll = copy.deepcopy(tel)
+	# 	doll.relationships.x += 1
+	# 	doll.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
+	# 	name_hex = f'720133{id}15CFF3744'
+	# 	doll.key = int(name_hex, 16)
+	# 	doll.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
+	# 	doll.type = 0x8E # ItemYoshiDoll
+	# 	doll.posX = 5.5
+	# 	doll.posY = 0
+	# 	doll.posZ = 4.15
+	# 	doll.parameters[0] = bytes('NpcBowWow.bfres', 'utf-8')
+	# 	doll.parameters[1] = bytes('BowWow', 'utf-8')
+	# 	doll.parameters[2] = bytes('GiveBackBowWow', 'utf-8')
+	# 	doll.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
+	# 	self.actors.append(doll)
+
+	# 	bowwow = copy.deepcopy(tel)
+	# 	name_hex = f'610441{id}05BA1BB98'
+	# 	bowwow.key = int(name_hex, 16)
+	# 	bowwow.name = bytes(f'NpcBowWow-{name_hex}', 'utf-8')
+	# 	bowwow.type = 0x14D # bowwow
+	# 	bowwow.posX = 5.5
+	# 	bowwow.posY = 0
+	# 	bowwow.posZ = 4.15
+	# 	bowwow.parameters = [1, b'', b'', b'', b'', b'', b'', b'']
+	# 	bowwow.relationships.y += 1
+	# 	bowwow.relationships.section_3.append(self.actors.index(doll))
+	# 	self.actors.append(bowwow)
+
+
+	# def addShadowTrap(self, chest_index=0):
+	# 	chests = [a for a in self.actors if a.type == 0xF7]
+
+	# 	if len(chests) > chest_index:
+	# 		chest = chests[chest_index]
+	# 		new_actor = copy.deepcopy(chest)
+
+	# 		chest.relationships.x += 1
+	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
+
+	# 		name_hex = f'A1000{chest_index}006E2E017F'
+	# 		new_actor.key = int(name_hex, 16)
+	# 		new_actor.name = bytes(f'PanelShadowLink-{name_hex}', 'utf-8')
+	# 		new_actor.type = 0x21E
+	# 		# new_actor.posZ += 3 # move 2 tiles south of chest to appear behind the player
+	# 		new_actor.parameters = [b'Appear', b'', b'', b'', b'', b'', b'', b'']
+	# 		new_actor.relationships.y += 1
+	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
+	# 		self.actors.append(new_actor)
