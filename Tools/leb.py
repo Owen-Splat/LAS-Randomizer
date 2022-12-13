@@ -202,15 +202,7 @@ class Actor:
 
 	def __repr__(self):
 		return f'Actor: {self.name}'
-	
-	def positionToPoint(self):
-		packed = b''
-		packed += struct.pack('<f', self.posX)
-		packed += struct.pack('<f', self.posY)
-		packed += struct.pack('<f', self.posZ)
-		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
-		return packed
-	
+		
 	def pack(self, nameOffset):
 		packed = b''
 		nameRepr = self.name + b'\x00'
@@ -317,6 +309,16 @@ class Actor:
 		print(f'Room ID: {self.roomID}')
 		print(f'Coordinates: {self.posX}, {self.posY}, {self.posZ}')
 		print(f'Parameters: {self.parameters}')
+	
+
+	def positionToPoint(self):
+		packed = b''
+		packed += struct.pack('<f', self.posX)
+		packed += struct.pack('<f', self.posY)
+		packed += struct.pack('<f', self.posZ)
+		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+		
+		return packed
 
 
 
