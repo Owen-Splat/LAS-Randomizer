@@ -257,18 +257,18 @@ thunder-drum:
   item-key: ThunderDrum
   model-path: ItemThunderDrum.bfres
   model-name: ThunderDrum
-bow-wow:
-  type: important
-  quantity: 1
-  item-key: BowWow
-  model-path: NpcBowWow.bfres
-  model-name: BowWow
-rooster:
-  type: important
-  quantity: 1
-  item-key: Rooster
-  model-path: NpcFlyingCucco.bfres
-  model-name: FlyingCucco
+# bow-wow:
+#   type: important
+#   quantity: 1
+#   item-key: BowWow
+#   model-path: NpcBowWow.bfres
+#   model-name: BowWow
+# rooster:
+#   type: important
+#   quantity: 1
+#   item-key: Rooster
+#   model-path: NpcFlyingCucco.bfres
+#   model-name: FlyingCucco
 seashell:
   type: seashell
   quantity: 50
@@ -351,7 +351,7 @@ chamber-stone:
   model-name: PanelDungeonPiece
 rupee-20:
   type: junk
-  quantity: 38 # 5 without owl statues
+  quantity: 5
   item-key: Rupee20
   model-path: ItemRupeeRed.bfres
   model-name: RupeeRed

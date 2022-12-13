@@ -30,33 +30,28 @@ class ItemShuffler(QtCore.QThread):
         self.logic_defs = logic_defs
         
         self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
-        self.force_out_trendy = ['rupee-20', 'rupee-50', 'rupee-100', 'zap-trap']
+        # self.force_out_trendy = ['rupee-20', 'rupee-50', 'rupee-100', 'zap-trap']
+        # self.force_out_shop = ['zap-trap']
         self.progress_value = 0
         self.thread_active = True
     
     
     # thread automatically starts the run method
     def run(self):
-        if not self.settings['blup-sanity']:
-            blupees = [k for k, v in self.logic_defs.items()
-                      if k.startswith('D0-rupee')]
-            for blue in blupees:
-                del self.logic_defs[blue]
-            self.item_defs['rupee-5']['quantity'] = 0
-        
         if not self.settings['owl-gifts']:
             owls = [k for k, v in self.logic_defs.items()
                    if v['type'] == 'item'
                    and v['subtype'] == 'statue']
             for owl in owls:
                 del self.logic_defs[owl]
-            self.item_defs['rupee-20']['quantity'] = 5
+        else:
+            self.item_defs['rupee-20']['quantity'] += 33 # 33 total owl statues
         
         # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
         vanilla_locations = [k for k, v in self.logic_defs.items()
                             if v['type'] == 'item'
-                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue', 'follower')]
-        vanilla_locations.append('pothole-final')
+                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
+        # vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
         # vanilla_locations.append('trendy-prize-1') # do not limit yoshi doll there
         # vanilla_locations.append('trendy-prize-2')
@@ -70,9 +65,18 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.remove('south-bay-sunken')
         vanilla_locations.remove('taltal-east-drop')
         
+        vanilla_locations.remove('shop-slot3-1st')
+        vanilla_locations.remove('shop-slot3-2nd')
+
         # if not self.settings['shuffle-companions']:
-        vanilla_locations.append('moblin-cave')
-        vanilla_locations.append('rooster-statue')
+        # vanilla_locations.append('moblin-cave')
+        # vanilla_locations.append('rooster-statue')
+
+        if not self.settings['blup-sanity']:
+            blupees = [k for k, v in self.logic_defs.items()
+                      if k.startswith('D0-rupee')]
+            for blup in blupees:
+                vanilla_locations.append(blup)
 
         ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
         instruments = [k for k, v in self.logic_defs.items()
@@ -90,7 +94,6 @@ class ItemShuffler(QtCore.QThread):
         ]
         start_instruments = []
         if self.settings['starting-instruments'] > 0:
-            random.seed(self.seed)
             random.shuffle(instruments)
             for i in range(self.settings['starting-instruments']):
                 inst = instruments.pop(0)
@@ -124,15 +127,18 @@ class ItemShuffler(QtCore.QThread):
 
             if self.settings['blup-sanity']:
                 self.item_defs['rupee-5']['quantity'] -= 14 # replace half of the blue rupees with zap traps because fun :D
-                self.item_defs['zap-trap']['quantity'] = 55
-            else:
-                self.item_defs['zap-trap']['quantity'] = 41
+                self.item_defs['zap-trap']['quantity'] += 14
             
-            self.item_defs['heart-piece']['quantity'] -= 20 # leaves 12 heart pieces
+            if self.settings['owl-gifts']:
+                self.item_defs['rupee-20']['quantity'] -= 11 # replace a third of the owl 20 rupees with zap traps because fun :D
+                self.item_defs['zap-trap']['quantity'] += 11
+            
+            # self.item_defs['heart-piece']['quantity'] -= 20 # leaves 12 heart pieces
             self.item_defs['rupee-50']['quantity'] -= 18 # -900 rupees
             self.item_defs['rupee-100']['quantity'] += 4 # +400 rupees
             self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
-            self.item_defs['chamber-stone']['quantity'] -= 5 # leaves the shop and trendy ones since they are not shuffled
+            # self.item_defs['chamber-stone']['quantity'] -= 5 # leaves the shop and trendy ones since they are not shuffled
+            self.item_defs['zap-trap']['quantity'] += 13
         
         try:
             # Create a placement, spoiler log, and game mod.
@@ -194,7 +200,7 @@ class ItemShuffler(QtCore.QThread):
                 return eval(self.parseCondition(self.logic_defs[no_params]['condition-basic']))
         else:
             # For item and follower checks, see if you have access to the region. Otherwise, check on the conditions, if they exist
-            region_access = self.hasAccess(access, self.logic_defs[newCheck]['region']) if (self.logic_defs[newCheck]['type'] == 'item') else True
+            region_access = self.hasAccess(access, self.logic_defs[newCheck]['region']) if (self.logic_defs[newCheck]['type'] in ('item', 'follower')) else True
             basic        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-basic']))    if ('condition-basic' in self.logic_defs[newCheck]) else True
             advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic in ('advanced', 'glitched', 'death'))) else False
             glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic in ('glitched', 'death')) else False
@@ -251,7 +257,7 @@ class ItemShuffler(QtCore.QThread):
                                 return True
                             
                             # if we're looking at an item or follower location, at the item it holds, if it has one
-                            if (self.logic_defs[key]['type'] == 'item') and placements[key] != None:
+                            if (self.logic_defs[key]['type'] in ['item', 'follower']) and placements[key] != None:
                                 access = self.addAccess(access, placements[key])
                             
                             # if we're looking at an enemy, and we CAN kill it, then we can also kill it with access to pits or heavy objects, so add those too
@@ -294,7 +300,7 @@ class ItemShuffler(QtCore.QThread):
                             access_added = True
                             
                             # if we're looking at an item or follower location, at the item it holds, if it has one
-                            if (self.logic_defs[key]['type'] == 'item') and placements[key] != None:
+                            if (self.logic_defs[key]['type'] in ['item', 'follower']) and placements[key] != None:
                                 if placements[key] == 'seashell':
                                     vanilla_seashells += 1
                                 else:
@@ -339,8 +345,11 @@ class ItemShuffler(QtCore.QThread):
         forceVanilla : list
             A list of strings as location names, which should be forced to hold the same item they do in the normal game.
             forceJunk takes priority over forceVanilla
+        
         """
         
+        random.seed(self.seed)
+
         if not set(force_junk).isdisjoint(force_vanilla):
             print('Warning! Some locations set as disabled are unrandomized. These locations will not actually be considered out of logic.')
             force_junk = [l for l in force_junk if l not in force_vanilla]
@@ -364,7 +373,7 @@ class ItemShuffler(QtCore.QThread):
         
         vanilla_seashells = 0 # Keep track of how many seashells were forced into their vanilla locations. This is important for ensuring there is enough room to place the random ones.
         
-        placements['settings'] = self.settings
+        placements['settings'] = settings
         placements['force-junk'] = force_junk
         placements['force-vanilla'] = force_vanilla
         placements['starting-instruments'] = starting_instruments
@@ -380,8 +389,8 @@ class ItemShuffler(QtCore.QThread):
                     access = self.addAccess(access, self.logic_defs[key]['content']) # we're going to assume the player starts with everything, then slowly loses things as they get placed into the wild
             else: break
         
-        # Add the self.settings into the access. This affects some logic like with fast trendy, free fishing, etc.
-        settings_access = {setting: 1 for setting in self.settings if self.settings[setting] == True}
+        # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
+        settings_access = {setting: 1 for setting in settings if settings[setting] == True}
         access.update(settings_access)
         
         # For each type of item in the item pool, add its quantity to the item lists
@@ -399,9 +408,9 @@ class ItemShuffler(QtCore.QThread):
                     dungeon_items += [key] * self.item_defs[key]['quantity']
             else: break
         
-        # # Force the followers to be vanilla (for now)
-        # placements['moblin-cave'] = 'bow-wow'
-        # placements['rooster-statue'] = 'rooster'
+        # Force the followers to be vanilla (for now)
+        placements['moblin-cave'] = 'bow-wow'
+        placements['rooster-statue'] = 'rooster'
 
         # Shuffle item and location lists
         random.shuffle(important_items)
@@ -409,7 +418,8 @@ class ItemShuffler(QtCore.QThread):
         random.shuffle(good_items)
 
         items = important_items + seashell_items + good_items + junk_items + dungeon_items
-        
+        print(len(items))
+
         # Assign vanilla contents to forceVanilla locations
         for loc in force_vanilla:
             if self.thread_active:
@@ -493,9 +503,9 @@ class ItemShuffler(QtCore.QThread):
         random.shuffle(locations)
         
         # Place the traps and master stalfos note. These HAVE to go in chests so we need to do them first
-        toPlace = list(filter(lambda s: s in self.force_chests, items))
+        to_place = list(filter(lambda s: s in self.force_chests, items))
         chests = list(filter(lambda s: self.logic_defs[s]['subtype'] == 'chest', locations))
-        for item in toPlace:
+        for item in to_place:
             if self.thread_active:
                 if verbose: print(item+' -> ', end='')
                 chest = chests.pop(0)
@@ -536,7 +546,7 @@ class ItemShuffler(QtCore.QThread):
         placement_tracker = []
         
         # Do a very similar process for all other items
-        while items and locations and self.thread_active:
+        while items and self.thread_active:
             item = items[0]
             if verbose: print(item+' -> ', end='')
             first_location_tried = locations[0]
@@ -549,14 +559,15 @@ class ItemShuffler(QtCore.QThread):
                 access = self.removeAccess(access, item)
                 
                 # Check for item type restrictions, i.e. songs can't be standing items
-                if (item in ['song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic']) and (self.logic_defs[locations[0]]['subtype'] in ['standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop']):
+                if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('standing', 'hidden', 'dig', 'drop', 'boss', 'underwater', 'shop'):
                     valid_placement = False
-                elif (item in self.force_chests) and self.logic_defs[locations[0]]['subtype'] != 'chest':
+                elif item in self.force_chests and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     valid_placement = False
-                elif (item in self.force_out_trendy) and self.logic_defs[locations[0]]['region'] == 'trendy' \
-                    and not locations[0].endswith('final'):
+                elif item == 'zap-trap' and self.logic_defs[locations[0]]['region'] == 'trendy' and not locations[0].endswith('final'):
                     valid_placement = False
-                elif (self.item_defs[item]['type'] == 'important') or (self.item_defs[item]['type'] == 'seashell'):
+                elif item == 'zap-trap' and self.logic_defs[locations[0]]['subtype'] == 'shop':
+                    valid_placement = False
+                elif self.item_defs[item]['type'] in ('important', 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
                     valid_placement = self.canReachLocation(locations[0], placements, access, logic)
                 else:

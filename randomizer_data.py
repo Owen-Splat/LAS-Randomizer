@@ -21,6 +21,9 @@ with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
     LOGIC_DEFS = yaml.safe_load(f)
     TRICKS = [k for k, v in LOGIC_DEFS.items() if v['type'] == 'trick']
 
+with open(os.path.join(DATA_PATH, 'enemies.yml'), 'r') as f:
+    ENEMY_DATA = yaml.safe_load(f)
+
 with open(os.path.join(DATA_PATH, 'locations.yml'), 'r') as f:
     LOCATIONS = yaml.safe_load(f)
 

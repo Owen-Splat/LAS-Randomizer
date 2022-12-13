@@ -14,7 +14,7 @@ import Tools.oead_tools as oead_tools
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, shop
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -63,7 +63,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeSmallKeyChanges()
             if self.thread_active: self.makeHeartPieceChanges()
             if self.thread_active: self.makeInstrumentChanges()
-            # if self.thread_active: self.makeShopChanges()
+            if self.thread_active: self.makeShopChanges()
             
             if self.thread_active: self.makeOwlStatueChanges()
             if self.thread_active: self.makeTelephoneChanges()
@@ -81,6 +81,9 @@ class ModsProcess(QtCore.QThread):
             
             if self.placements['settings']['randomize-music'] and self.thread_active:
                 self.randomizeMusic()
+            
+            if self.placements['settings']['randomize-enemies'] and self.thread_active:
+                self.randomizeEnemies()
         
         except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError, OverflowError):
             print(traceback.format_exc())
@@ -992,28 +995,45 @@ class ModsProcess(QtCore.QThread):
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
         
-        # ### Make Honeycomb show new graphics in tree
-        # with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
-        #     room_data = leb.Room(f.read())
+        ### Remove the BoyA and BoyB cutscene after getting the FullMoonCello
+        if self.thread_active:
+            with open(f'{self.rom_path}/region_common/level/Field/Field_12A.leb', 'rb') as f:
+                room_data = leb.Room(f.read())
+            
+            # remove link between boy[1] and AreaEventBox[8]
+            room_data.actors[1].relationships.x -= 1
+            room_data.actors[1].relationships.section_1.pop(0)
+            room_data.actors[8].relationships.y -=1
+            room_data.actors[8].relationships.section_3.pop(0)
+
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_12A.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
+
+        ### Make Honeycomb show new graphics in tree
+        with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
+            room_data = leb.Room(f.read())
         
-        #     item = self.placements['tarin-ukuku']
-        #     item_key = self.item_defs[item]['item-key']
+            item = self.placements['tarin-ukuku']
+            item_key = self.item_defs[item]['item-key']
 
-        #     if item_key != 'ZapTrap':
-        #         model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
-        #         model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
-        #     else:
-        #         model_name = random.choice(list(data.ITEM_MODELS))
-        #         model_path = data.ITEM_MODELS[model_name]
+            if item_key != 'ZapTrap':
+                model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
+                model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
+            else:
+                model_name = random.choice(list(data.ITEM_MODELS))
+                model_path = data.ITEM_MODELS[model_name]
 
-        # room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
-        # room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
+        room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
+        room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
 
-        # if self.thread_active:
-        #     with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
-        #             f.write(room_data.repack())
-        #             self.progress_value += 1 # update progress bar
-        #             self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
 
 
@@ -1207,8 +1227,10 @@ class ModsProcess(QtCore.QThread):
         ### Make Papahl appear in the mountains after trading for the pineapple instead of the getting the Bell
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Npc.gsheet')
-            npcs.makeNpcChanges(sheet, self.placements)
-            # npcs.makeNewNpcs(sheet)
+            for npc in sheet['values']:
+                if self.thread_active:
+                    npcs.makeNpcChanges(npc, self.placements)
+            npcs.makeNewNpcs(sheet)
                     
             if self.thread_active:
                 oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Npc.gsheet', sheet)
@@ -1245,12 +1267,14 @@ class ModsProcess(QtCore.QThread):
                 
                 if item['symbol'] == 'SmallKey':
                     item['npcKey'] = 'ItemClothesGreen'
+                    continue
                 
                 if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                     item['npcKey'] = 'ItemClothesRed'
+                    continue
                 
-                # if item['symbol'] == 'Honeycomb': # ItemHoneycomb is changed, so point to new npc value for correct graphics
-                #     item['npcKey'] = 'PatchHoneycomb'
+                if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npc value for correct get graphics
+                    item['npcKey'] = 'PatchHoneycomb'
                 
             else: break
         
@@ -1266,7 +1290,7 @@ class ModsProcess(QtCore.QThread):
 
             for condition in sheet['values']:
                 if self.thread_active:
-                    conditions.editConditions(condition)
+                    conditions.editConditions(condition, self.placements, self.item_defs)
                 else: break
             
             conditions.makeConditions(sheet, self.placements)
@@ -1614,26 +1638,26 @@ class ModsProcess(QtCore.QThread):
 
 
 
-    # def makeShopChanges(self):
-    #     """Edits the ToolShopKeeper event file and the shop items datasheet"""
+    def makeShopChanges(self):
+        """Edits the ToolShopKeeper event file and the shop items datasheet"""
 
-    #     flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
-    #     actors.addNeededActors(flow.flowchart, self.rom_path)
-    #     shop.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
+        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
+        actors.addNeededActors(flow.flowchart, self.rom_path)
+        shop.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
 
-    #     if self.thread_active:
-    #         event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
-    #         self.progress_value += 1 # update progress bar
-    #         self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
         
-    #     ### ShopItem datasheet
-    #     shopSheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
-    #     shop.makeDatasheetChanges(shopSheet, self.placements, self.item_defs)
+        ### ShopItem datasheet
+        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
+        shop.makeDatasheetChanges(sheet, self.placements, self.item_defs)
 
-    #     if self.thread_active:
-    #         oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ShopItem.gsheet', shopSheet)
-    #         self.progress_value += 1 # update progress bar
-    #         self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ShopItem.gsheet', sheet)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
 
 
 
@@ -1836,3 +1860,67 @@ class ModsProcess(QtCore.QThread):
             crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
+    
+
+
+    def randomizeEnemies(self):
+        """Randomizes enemy actors in the overworld and in caves that do not affect logic"""
+
+        from randomizer_data import ENEMY_DATA
+
+        enemy_ids = []
+        for value in ENEMY_DATA['Actors'].values():
+            enemy_ids.append(value['id'])
+        
+        levels_path = f'{self.rom_path}/region_common/level'
+        out_levels = f'{self.out_dir}/Romfs/region_common/level'
+
+        folders = [f for f in os.listdir(levels_path) if f in ENEMY_DATA['Included_Folders']]
+
+        for folder in folders:
+            files = [f for f in os.listdir(f'{levels_path}/{folder}') if f.endswith('.leb')]
+
+            for file in files:
+                with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
+                    room_data = leb.Room(f.read())
+                
+                edited_room = False
+                excluded_actors = []
+
+                if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
+                    excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
+                
+                for i, act in enumerate(room_data.actors):
+                    if (act.type in enemy_ids) and (i not in excluded_actors): # check for valid enemy actors
+                        type_ids = []
+                        enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
+                        for value in ENEMY_DATA['Actors'].values():
+                            if value['type'] == enemy_type:
+                                type_ids.append(value['id'])
+                        act.type = random.choice(type_ids)
+                        try:
+                            params = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['parameters']
+                            try:
+                                for i in range(8):
+                                    if isinstance(params[i], list):
+                                        data = random.choice(params[i])
+                                    else:
+                                        data = params[i]
+                                    if isinstance(data, str):
+                                        data = bytes(data, 'utf-8')
+                                    act.parameters[i] = data
+                            except IndexError:
+                                pass
+                        except KeyError:
+                            act.parameters = []
+                        if act.type == 0x54: # special case for bombknuckle to work
+                            act.relationships.z = 1
+                            act.relationships.section_2 = [[[b'', b''], 0, 0]]
+                        edited_room = True
+                
+                if edited_room:
+                    if not os.path.exists(f'{out_levels}/{folder}'):
+                        os.makedirs(f'{out_levels}/{folder}')
+                    
+                    with open(f'{out_levels}/{folder}/{file}', 'wb') as f:
+                        f.write(room_data.repack())

@@ -2544,15 +2544,13 @@ owl-statue-taltal-east:
 
 # Followers
 moblin-cave:
-  type: item
-  subtype: follower
+  type: follower
   content: bow-wow
   region: wasteland
   spoiler-region: taltal-heights
   condition-basic: kill-moblin-shield & kill-moblin-spear & kill-king-moblin & full-moon-cello
 rooster-statue:
-  type: item
-  subtype: follower
+  type: follower
   content: rooster
   region: mabe
   spoiler-region: mabe-village

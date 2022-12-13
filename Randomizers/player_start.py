@@ -39,13 +39,16 @@ def makeStartChanges(flow, settings):
     if settings['open-mamu']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}))
     
+    if settings['randomize-enemies']: # special case where we need the stairs to D6 to be visible and open
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld10N', 'value': True}))
+
     if not settings['shuffle-tunics']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}))
     
     if not settings['shuffle-bombs'] and settings['unlocked-bombs']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}))
-    
+        
     event_tools.insertEventAfter(flow.flowchart, 'Event558', player_start_flag_check_event)
     event_tools.createActionChain(flow.flowchart, player_start_flags_first_event, player_start_event_flags)
 

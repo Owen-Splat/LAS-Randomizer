@@ -1007,7 +1007,7 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>369</x>
+          <x>548</x>
           <y>184</y>
           <width>173</width>
           <height>21</height>
@@ -1167,7 +1167,7 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>189</x>
+          <x>369</x>
           <y>184</y>
           <width>173</width>
           <height>21</height>
@@ -1334,8 +1334,8 @@
        <widget class="QCheckBox" name="raceCheck">
         <property name="geometry">
          <rect>
-          <x>548</x>
-          <y>184</y>
+          <x>369</x>
+          <y>224</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1357,6 +1357,37 @@
         </property>
         <property name="checkable">
          <bool>false</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="enemyCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>189</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Randomizes the enemies in the overworld and in caves</string>
+        </property>
+        <property name="text">
+         <string>Randomize Enemies</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </widget>

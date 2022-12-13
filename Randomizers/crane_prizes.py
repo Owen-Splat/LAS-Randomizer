@@ -11,7 +11,7 @@ prizes_dict = {}
 
 
 def makeDatasheetChanges(sheet, placements, item_defs):
-    """Edits conditions in the Trendy prizes datasheet. Trendy is not randomized yet"""
+    """Edits conditions in the Trendy prizes datasheet. Trendy is still a WIP"""
     
     # sheet['root_fields'][5].fields.append(oead_tools.createField(
     #     name='gettingFlag',

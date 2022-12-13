@@ -80,6 +80,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
+        self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
         self.show()
 
         if IS_RUNNING_FROM_SOURCE:
@@ -178,6 +179,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.bridgeCheck.setChecked(True)
         self.ui.mazeCheck.setChecked(True)
         self.ui.swampCheck.setChecked(False)
+        self.ui.enemyCheck.setChecked(False)
         self.ui.owlsComboBox.setCurrentIndex(0)
 
         # self.excluded_checks.update(TRENDY_REWARDS)
@@ -228,6 +230,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Shuffled_Companions': self.ui.companionCheck.isChecked(),
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
+            'Randomize_Enemies': self.ui.enemyCheck.isChecked(),
             'Excluded_Locations': list(self.excluded_checks)
         }
         
@@ -472,7 +475,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.musicCheck.setChecked(SETTINGS['Randomize_Music'])
         except (KeyError, TypeError):
             self.ui.musicCheck.setChecked(False)
-
+        
+        # randomize enemies
+        try:
+            self.ui.enemyCheck.setChecked(SETTINGS['Randomize_Enemies'])
+        except (KeyError, TypeError):
+            self.ui.enemyCheck.setChecked(False)
+        
         # spoiler log
         try:
             self.ui.spoilerCheck.setChecked(SETTINGS['Create_Spoiler'])
@@ -650,7 +659,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if os.path.exists(self.ui.lineEdit.text()) and os.path.exists(self.ui.lineEdit_2.text()):
             
             # get needed params
-            romPath = self.ui.lineEdit.text()
+            rom_path = self.ui.lineEdit.text()
             
             seed = self.ui.lineEdit_3.text()
             if seed == "" or seed.lower() == "random":
@@ -686,10 +695,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 'shuffle-companions': self.ui.companionCheck.isChecked(),
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
+                'randomize-enemies': self.ui.enemyCheck.isChecked(),
                 'excluded-locations': self.excluded_checks
             }
             
-            self.progress_window = ProgressWindow(romPath, outdir, seed, logic, ITEM_DEFS, LOGIC_DEFS, settings)
+            self.progress_window = ProgressWindow(rom_path, outdir, seed, logic, ITEM_DEFS, LOGIC_DEFS, settings)
             self.progress_window.setFixedSize(472, 125)
             self.progress_window.setWindowTitle(f"{seed}")
 
@@ -719,10 +729,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # Include Button Clicked
     def includeButton_Clicked(self):
-        
-        selectedItems = self.ui.listWidget_2.selectedItems()
-        
-        for i in selectedItems:
+        for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
             self.excluded_checks.remove(self.listToCheck(i.text()))
             self.ui.listWidget.addItem(i.text())
@@ -731,10 +738,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # Exclude Button Clicked
     def excludeButton_Clicked(self):
-        
-        selectedItems = self.ui.listWidget.selectedItems()
-        
-        for i in selectedItems:
+        for i in self.ui.listWidget.selectedItems():
             self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
             self.ui.listWidget_2.addItem(i.text())
             self.excluded_checks.add(self.listToCheck(i.text()))
