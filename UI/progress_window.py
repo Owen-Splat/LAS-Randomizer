@@ -37,8 +37,11 @@ class ProgressWindow(QtWidgets.QMainWindow):
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
         
-        if not settings['randomize-music']:
+        if settings['randomize-music']:
             self.num_of_mod_files += 69
+        
+        if settings['randomize-enemies']:
+            self.num_of_mod_files += 192
         
         self.done = False
         self.cancel = False

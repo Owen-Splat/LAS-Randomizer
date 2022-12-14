@@ -14,7 +14,7 @@ import Tools.oead_tools as oead_tools
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, shop
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -63,14 +63,14 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeSmallKeyChanges()
             if self.thread_active: self.makeHeartPieceChanges()
             if self.thread_active: self.makeInstrumentChanges()
-            if self.thread_active: self.makeShopChanges()
+            # if self.thread_active: self.makeShopChanges()
             
             if self.thread_active: self.makeOwlStatueChanges()
             if self.thread_active: self.makeTelephoneChanges()
 
             if self.thread_active: self.makeGeneralARCChanges()
             
-            if self.thread_active: self.makeItemModelFixes()
+            # if self.thread_active: self.makeItemModelFixes()
             # if self.thread_active: self.makeItemTextBoxes()
             
             if self.placements['settings']['free-book'] and self.thread_active:
@@ -609,7 +609,7 @@ class ModsProcess(QtCore.QThread):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Fisherman.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
         fishing.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
-        fishing.fixFishingBottle(flow.flowchart)
+        # fishing.fixFishingBottle(flow.flowchart)
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Fisherman.bfevfl', flow)
@@ -1199,7 +1199,7 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(prize.flowchart, self.rom_path)
         prize.flowchart.actors.append(flow_control_actor)
         
-        crane_prizes.makeEventChanges(prize.flowchart, self.placements)
+        crane_prizes.makeEventChanges(prize.flowchart, self.placements['settings'])
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PrizeCommon.bfevfl', prize)
@@ -1300,30 +1300,30 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### CranePrize datasheet
-        if self.thread_active:
-            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
-            crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
-            # print(oead_tools.parseStructArray(sheet['values']))
+        # #################################################################################################################################
+        # ### CranePrize datasheet
+        # if self.thread_active:
+        #     sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
+        #     crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
+        #     # print(oead_tools.parseStructArray(sheet['values']))
 
-            if self.thread_active:
-                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+        #     if self.thread_active:
+        #         oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
+        #         self.progress_value += 1 # update progress bar
+        #         self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
-        ### Prize Groups
-        group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
-        group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
+        # #################################################################################################################################
+        # ### Prize Groups
+        # group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
 
-        crane_prizes.changePrizeGroups(group1, group2)
+        # crane_prizes.changePrizeGroups(group1, group2)
 
-        if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
-            self.progress_value += 2 # update progress bar
-            self.progress_update.emit(self.progress_value)
+        # if self.thread_active:
+        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
+        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
+        #     self.progress_value += 2 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### GlobalFlags datasheet
@@ -1613,9 +1613,9 @@ class ModsProcess(QtCore.QThread):
 
         for i in range(28):
             if self.thread_active:
-                item = self.placements[f'D0-Rupee-{i + 1}']
+                item = self.placements[f'D0-rupee-{i + 1}']
                 item_key = self.item_defs[item]['item-key']
-                item_index = self.placements['indexes'][f'D0-Rupee-{i + 1}'] if f'D0-Rupee-{i + 1}' in self.placements['indexes'] else -1
+                item_index = self.placements['indexes'][f'D0-rupee-{i + 1}'] if f'D0-rupee-{i + 1}' in self.placements['indexes'] else -1
 
                 if item_key != 'ZapTrap':
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
@@ -1638,26 +1638,26 @@ class ModsProcess(QtCore.QThread):
 
 
 
-    def makeShopChanges(self):
-        """Edits the ToolShopKeeper event file and the shop items datasheet"""
+    # def makeShopChanges(self):
+    #     """Edits the ToolShopKeeper event file and the shop items datasheet"""
 
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
-        actors.addNeededActors(flow.flowchart, self.rom_path)
-        shop.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
+    #     flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
+    #     actors.addNeededActors(flow.flowchart, self.rom_path)
+    #     shop.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
 
-        if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+    #     if self.thread_active:
+    #         event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
+    #         self.progress_value += 1 # update progress bar
+    #         self.progress_update.emit(self.progress_value)
         
-        ### ShopItem datasheet
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
-        shop.makeDatasheetChanges(sheet, self.placements, self.item_defs)
+    #     ### ShopItem datasheet
+    #     sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
+    #     shop.makeDatasheetChanges(sheet, self.placements, self.item_defs)
 
-        if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ShopItem.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+    #     if self.thread_active:
+    #         oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ShopItem.gsheet', sheet)
+    #         self.progress_value += 1 # update progress bar
+    #         self.progress_update.emit(self.progress_value)
 
 
 
@@ -1841,25 +1841,25 @@ class ModsProcess(QtCore.QThread):
 
 
 
-    def makeItemModelFixes(self):
-        """Adds necessary model files needed for various different fixes"""
+    # def makeItemModelFixes(self):
+    #     """Adds necessary model files needed for various different fixes"""
 
-        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/actor'):
-            os.makedirs(f'{self.out_dir}/Romfs/region_common/actor')
+    #     if not os.path.exists(f'{self.out_dir}/Romfs/region_common/actor'):
+    #         os.makedirs(f'{self.out_dir}/Romfs/region_common/actor')
 
-        # files = os.listdir(MODELS_PATH)
+    #     # files = os.listdir(MODELS_PATH)
 
-        # for file in files:
-        #     model = file[:-len(data.MODELS_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
-        #     if model in data.CUSTOM_MODELS:
-        #         shutil.copy(os.path.join(MODELS_PATH, file), f'{self.out_dir}/Romfs/region_common/actor/{file}')
-        #         self.progress_value += 1 # update progress bar
-        #         self.progress_update.emit(self.progress_value)
+    #     # for file in files:
+    #     #     model = file[:-len(data.MODELS_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
+    #     #     if model in data.CUSTOM_MODELS:
+    #     #         shutil.copy(os.path.join(MODELS_PATH, file), f'{self.out_dir}/Romfs/region_common/actor/{file}')
+    #     #         self.progress_value += 1 # update progress bar
+    #     #         self.progress_update.emit(self.progress_value)
         
-        if self.thread_active:
-            crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+    #     if self.thread_active:
+    #         crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
+    #         self.progress_value += 1 # update progress bar
+    #         self.progress_update.emit(self.progress_value)
     
 
 
@@ -1868,59 +1868,103 @@ class ModsProcess(QtCore.QThread):
 
         from randomizer_data import ENEMY_DATA
 
-        enemy_ids = []
+        land_ids = []
+        air_ids = []
+        water_ids = []
+        water2D_ids = []
+        tree_ids = []
+        hole_ids = []
         for value in ENEMY_DATA['Actors'].values():
-            enemy_ids.append(value['id'])
+            if value['type'] == 'land':
+                land_ids.append(value['id'])
+            elif value['type'] == 'air':
+                air_ids.append(value['id'])
+            elif value['type'] == 'water':
+                water_ids.append(value['id'])
+            elif value['type'] == 'water2D':
+                water2D_ids.append(value['id'])
+            elif value['type'] == 'tree':
+                tree_ids.append(value['id'])
+            elif value['type'] == 'hole':
+                hole_ids.append(value['id'])
+        enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *tree_ids, *hole_ids)
         
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
 
         folders = [f for f in os.listdir(levels_path) if f in ENEMY_DATA['Included_Folders']]
 
+        num_of_mods = 0
+
         for folder in folders:
-            files = [f for f in os.listdir(f'{levels_path}/{folder}') if f.endswith('.leb')]
+            if self.thread_active:
+                files = [f for f in os.listdir(f'{levels_path}/{folder}') if f.endswith('.leb')]
 
-            for file in files:
-                with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
-                    room_data = leb.Room(f.read())
-                
-                edited_room = False
-                excluded_actors = []
+                for file in files:
+                    if self.thread_active:
+                        with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
+                            room_data = leb.Room(f.read())
+                        
+                        edited_room = False
+                        excluded_actors = []
 
-                if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
-                    excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
-                
-                for i, act in enumerate(room_data.actors):
-                    if (act.type in enemy_ids) and (i not in excluded_actors): # check for valid enemy actors
-                        type_ids = []
-                        enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
-                        for value in ENEMY_DATA['Actors'].values():
-                            if value['type'] == enemy_type:
-                                type_ids.append(value['id'])
-                        act.type = random.choice(type_ids)
-                        try:
-                            params = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['parameters']
-                            try:
-                                for i in range(8):
-                                    if isinstance(params[i], list):
-                                        data = random.choice(params[i])
-                                    else:
-                                        data = params[i]
-                                    if isinstance(data, str):
-                                        data = bytes(data, 'utf-8')
-                                    act.parameters[i] = data
-                            except IndexError:
-                                pass
-                        except KeyError:
-                            act.parameters = []
-                        if act.type == 0x54: # special case for bombknuckle to work
-                            act.relationships.z = 1
-                            act.relationships.section_2 = [[[b'', b''], 0, 0]]
-                        edited_room = True
-                
-                if edited_room:
-                    if not os.path.exists(f'{out_levels}/{folder}'):
-                        os.makedirs(f'{out_levels}/{folder}')
-                    
-                    with open(f'{out_levels}/{folder}/{file}', 'wb') as f:
-                        f.write(room_data.repack())
+                        if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
+                            excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
+                        
+                        for e, act in enumerate(room_data.actors):
+                            if act.type in enemy_ids and e not in excluded_actors: # check for enemy actors
+
+                                enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
+
+                                if enemy_type == 'land':
+                                    act.type = random.choice(land_ids)
+                                elif enemy_type == 'air':
+                                    act.type = random.choice(air_ids)
+                                elif enemy_type == 'water':
+                                    act.type = random.choice(water_ids)
+                                elif enemy_type == 'water2D':
+                                    act.type = random.choice(water2D_ids)
+                                elif enemy_type == 'tree':
+                                    act.type = random.choice(tree_ids)
+                                elif enemy_type == 'hole':
+                                    act.type = random.choice(hole_ids)
+                                
+                                try:
+                                    params = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['parameters']
+                                    for i in range(8):
+                                        try:
+                                            if isinstance(params[i], list):
+                                                data = random.choice(params[i])
+                                            else:
+                                                data = params[i]
+                                            if isinstance(data, str):
+                                                data = bytes(data, 'utf-8')
+                                            act.parameters[i] = data
+                                        except IndexError:
+                                            act.parameters[i] = b''
+                                except KeyError:
+                                    act.parameters = [b'', b'', b'', b'', b'', b'', b'', b'']
+
+                                if act.type == 0x1E2:
+                                    act.scaleX = 4.5
+                                    act.scaleY = 3.0
+                                    act.scaleZ = 4.5
+                                else:
+                                    act.scaleX = 1.0
+                                    act.scaleY = 1.0
+                                    act.scaleZ = 1.0
+                                
+                                act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
+
+                                edited_room = True
+
+                        if edited_room:
+                            if not os.path.exists(f'{out_levels}/{folder}'):
+                                os.makedirs(f'{out_levels}/{folder}')
+                            
+                            if self.thread_active:
+                                with open(f'{out_levels}/{folder}/{file}', 'wb') as f:
+                                    f.write(room_data.repack())
+                                    num_of_mods += 1
+        
+        print(num_of_mods)

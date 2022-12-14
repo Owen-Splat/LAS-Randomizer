@@ -53,20 +53,20 @@ class ItemShuffler(QtCore.QThread):
                             and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
         # vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
-        # vanilla_locations.append('trendy-prize-1') # do not limit yoshi doll there
-        # vanilla_locations.append('trendy-prize-2')
-        # vanilla_locations.append('trendy-prize-3')
-        # vanilla_locations.append('trendy-prize-4')
-        # vanilla_locations.append('trendy-prize-5')
-        # vanilla_locations.append('trendy-prize-6')
+        vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
+        vanilla_locations.append('trendy-prize-2')
+        vanilla_locations.append('trendy-prize-3')
+        vanilla_locations.append('trendy-prize-4')
+        vanilla_locations.append('trendy-prize-5')
+        vanilla_locations.append('trendy-prize-6')
         vanilla_locations.remove('bay-passage-sunken')
         vanilla_locations.remove('river-crossing-cave')
         vanilla_locations.remove('kanalet-moat-south')
         vanilla_locations.remove('south-bay-sunken')
         vanilla_locations.remove('taltal-east-drop')
         
-        vanilla_locations.remove('shop-slot3-1st')
-        vanilla_locations.remove('shop-slot3-2nd')
+        # vanilla_locations.remove('shop-slot3-1st')
+        # vanilla_locations.remove('shop-slot3-2nd')
 
         # if not self.settings['shuffle-companions']:
         # vanilla_locations.append('moblin-cave')
@@ -264,6 +264,7 @@ class ItemShuffler(QtCore.QThread):
                             if self.logic_defs[key]['type'] == 'enemy':
                                 access = self.addAccess(access, key+'[pit]')
                                 access = self.addAccess(access, key+'[heavy]')
+                        
                         # if we can't do the thing, but it's an enemy, we might be able to use pits or heavy throwables, so check those cases independently
                         elif self.logic_defs[key]['type'] == 'enemy':
                             if 'condition-pit' in self.logic_defs[key] and not self.hasAccess(access, key+'[pit]'):
@@ -418,7 +419,7 @@ class ItemShuffler(QtCore.QThread):
         random.shuffle(good_items)
 
         items = important_items + seashell_items + good_items + junk_items + dungeon_items
-        print(len(items))
+        # print(len(items))
 
         # Assign vanilla contents to forceVanilla locations
         for loc in force_vanilla:
@@ -563,10 +564,10 @@ class ItemShuffler(QtCore.QThread):
                     valid_placement = False
                 elif item in self.force_chests and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     valid_placement = False
-                elif item == 'zap-trap' and self.logic_defs[locations[0]]['region'] == 'trendy' and not locations[0].endswith('final'):
-                    valid_placement = False
-                elif item == 'zap-trap' and self.logic_defs[locations[0]]['subtype'] == 'shop':
-                    valid_placement = False
+                # elif item == 'zap-trap' and self.logic_defs[locations[0]]['region'] == 'trendy' and not locations[0].endswith('final'):
+                #     valid_placement = False
+                # elif item == 'zap-trap' and self.logic_defs[locations[0]]['subtype'] == 'shop':
+                #     valid_placement = False
                 elif self.item_defs[item]['type'] in ('important', 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
                     valid_placement = self.canReachLocation(locations[0], placements, access, logic)

@@ -1,5 +1,4 @@
 import struct
-import copy
 import re
 
 
@@ -296,9 +295,8 @@ class Actor:
 			packed += rail.to_bytes(4, 'little')
 			packed += point.to_bytes(4, 'little')
 		
-		if self.relationships.y > 0:
-			for i in range(self.relationships.y):
-				packed += self.relationships.section_3[i].to_bytes(4, 'little')
+		for i in range(self.relationships.y):
+			packed += self.relationships.section_3[i].to_bytes(4, 'little')
 
 		return packed
 
@@ -311,32 +309,93 @@ class Actor:
 		print(f'Parameters: {self.parameters}')
 	
 
-	def positionToPoint(self):
+	def positionToPoint(self, position):
 		packed = b''
-		packed += struct.pack('<f', self.posX)
-		packed += struct.pack('<f', self.posY)
-		packed += struct.pack('<f', self.posZ)
+		packed += struct.pack('<f', position[0])
+		packed += struct.pack('<f', position[1])
+		packed += struct.pack('<f', position[2])
 		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
 		
 		return packed
 
 
 
-class Point:
-	def __init__(self, data):
-			self.posX = readFloat(data, 0x0, 4)
-			self.posY = readFloat(data, 0x4, 4)
-			self.posZ = readFloat(data, 0x8, 4)
-			self.xC = data[0xC:]
+# class Point:
+# 	def __init__(self, data):
+# 			self.posX = readFloat(data, 0x0, 4)
+# 			self.posY = readFloat(data, 0x4, 4)
+# 			self.posZ = readFloat(data, 0x8, 4)
+# 			self.xC = data[0xC:]
 	
-	def pack(self):
-		packed = b''
-		packed += struct.pack('<f', self.posX)
-		packed += struct.pack('<f', self.posY)
-		packed += struct.pack('<f', self.posZ)
-		packed += self.xC
+# 	def pack(self):
+# 		packed = b''
+# 		packed += struct.pack('<f', self.posX)
+# 		packed += struct.pack('<f', self.posY)
+# 		packed += struct.pack('<f', self.posZ)
+# 		packed += self.xC
 
-		return packed
+# 		return packed
+
+
+
+# class Rail:
+# 	def __init__(self, data=None, points=None):
+# 		if data is not None:
+# 			self.x0 = data[0x0:0xC]
+
+# 			self.xC = []
+# 			for i in range(4):
+# 				param = readBytes(data, 0xC + (0x8 * i), 4)
+# 				# paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
+
+# 				# if paramType == 0xFFFFFF04 :
+# 				# 	self.xC.append(readString(names, param))
+# 				# else:
+# 				# 	self.xC.append(param)
+				
+# 				self.xC.append(param)
+			
+# 			self.num_entries = readBytes(data, 0x2C, 2)
+# 			self.num_indexes = readBytes(data, 0x2E, 2)
+
+# 			self.points = []
+# 			for i in range(self.num_entries):
+# 				self.points.append(readBytes(data, (0x30 + (0x2 * i)), 2))
+		
+# 		else:
+# 			self.x0 = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+# 			self.xC = [25, 25, 25, 25]
+# 			self.num_entries = len(points)
+# 			self.num_indexes = 0x1
+# 			self.points = points
+
+
+# 	def pack(self):
+# 		packed = b''
+# 		packed += self.x0
+		
+# 		# nameRepr = b'' + b'\x00'
+
+# 		for i in range(4):
+# 			param = self.xC[i]
+# 			# if isinstance(param, bytes):
+# 			# 	packed += (len(nameRepr) + 0x1).to_bytes(4, 'little')
+# 			# 	packed += (0xFFFFFF04).to_bytes(4, 'little')
+# 			# 	nameRepr += param + b'\x00'
+# 			# else:
+# 			# 	packed += param.to_bytes(4, 'little')
+# 			# 	packed += (3).to_bytes(4, 'little')
+
+# 			packed += param.to_bytes(4, 'little')
+# 			packed += (0xFFFFFF04).to_bytes(4, 'little')
+
+# 		packed += self.num_entries.to_bytes(2, 'little')
+# 		packed += self.num_indexes.to_bytes(2, 'little')
+
+# 		for i in range(self.num_entries):
+# 			packed += self.points[i].to_bytes(2, 'little')
+		
+# 		return packed
 
 
 
@@ -344,15 +403,20 @@ class Room:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
 
+		# self.points = []
+		# point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
+		# for entry in point_entry.data.entries:
+		# 	self.points.append(Point(entry.data))
+		
+		# self.rails = []
+		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
+		# for entry in rail_entry.data.entries:
+		# 	self.rails.append(Rail(entry.data))
+
 		self.actors = []
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
-
-		self.points = []
-		point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
-		for entry in point_entry.data.entries:
-			self.points.append(Point(entry.data))
 		
 		# grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
 		# self.grid = Grid(grid_entry)
@@ -404,12 +468,18 @@ class Room:
 		new_names = b''
 
 		for entry in self.fixed_hash.entries:
-			if entry.name == b'point':
-				entry.data.entries = []
-				for point in self.points:
-					# Create a new point entry for actors to use
-					entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
-
+			# if entry.name == b'point':
+			# 	entry.data.entries = []
+			# 	for point in self.points:
+			# 		# Create a new point entry for actors to use
+			# 		entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
+			
+			# if entry.name == b'rail':
+			# 	entry.data.entries = []
+			# 	for rail in self.rails:
+			# 		# Create a new rail entry to reference point indexes per rail
+			# 		entry.data.entries.append(Entry(0xFFF2, b'', 0xFFFFFFFF, rail.pack()))
+			
 			if entry.name == b'actor':
 				entry.data.entries = []
 				for actor in self.actors:

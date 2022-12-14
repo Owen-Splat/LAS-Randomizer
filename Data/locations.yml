@@ -102,12 +102,12 @@ Mansion:
   - 50-seashell-reward
 
 Trendy_Rewards:
-  - trendy-prize-1
-  - trendy-prize-2
-  - trendy-prize-3
-  - trendy-prize-4
-  - trendy-prize-5
-  - trendy-prize-6
+  # - trendy-prize-1
+  # - trendy-prize-2
+  # - trendy-prize-3
+  # - trendy-prize-4
+  # - trendy-prize-5
+  # - trendy-prize-6
   - trendy-prize-final
 
 Heart_Pieces:

@@ -3,44 +3,55 @@ Actors:
   EnemyTektight:
     id: 0x1
     type: land
+    enemy: True
   EnemyOctorok:
     id: 0x2
     type: land
+    enemy: True
   EnemySeaUrchin:
     id: 0x3
     type: land
+    enemy: True
   EnemyLeever:
     id: 0x4
     type: land
+    enemy: True
   EnemyPeese: # crab
     id: 0x5
     type: land
+    enemy: True
   # EnemyTotakeke: # monkey
   #    id: 0x6
   #    type: tree
   EnemyPeahat:
     id: 0x7
-    type: land | air
+    type: air
+    enemy: True
   EnemyMoriblinSword:
     id: 0x8
     type: land
     parameters: [0]
+    enemy: True
   EnemyMoriblinSpear:
     id: 0x9
     type: land
     parameters: [0]
+    enemy: True
   EnemyBuzzBlob:
     id: 0xA
     type: land
+    enemy: True
   # EnemyNomos:
   #    id: 0xB
   #    type: land
   EnemyCrowly:
     id: 0xC
     type: tree
+    enemy: True
   EnemyPiranha: # the fish, not the plant
     id: 0xD
     type: water
+    enemy: True
   # EnemyMonea:
   #    id: 0xE
   #    type: land
@@ -50,80 +61,101 @@ Actors:
   EnemyGhini:
     id: 0x10
     type: air
+    enemy: True
   # EnemyDeguGhini: # this is too big and lots of them are annoying, you can't even dive under them
   #   id: 0x11
   #   type: air
   EnemyZombie:
     id: 0x12
     type: land
+    enemy: True
   EnemyMoblinSword:
     id: 0x13
     type: land
     parameters: [0]
+    enemy: True
   EnemyMoblinSpear:
     id: 0x14
     type: land
     parameters: [0]
+    enemy: True
   EnemyArmosLight:
     id: 0x15
     type: land
+    enemy: True
   EnemyArmosDark:
     id: 0x16
     type: land
     parameters: [2]
+    enemy: True
     # switches: [[1, 16]] # global flag for if we revealed the stairs, we don't actually need this
   EnemyFlyingOctorok:
     id: 0x17
     type: land
-  EnemyPiccolo: # the flying bugs in the d7 mini boss REQUIRES TESTING
-    id: 0x18
-    type: air
+    enemy: True
+  # EnemyPiccolo: # the flying bugs in the d7 mini boss REQUIRES TESTING
+  #   id: 0x18
+  #   type: air
   EnemyZoroZoro: # the bugs that crawl out from a hole below kanalet castle
     id: 0x1E2 # the actual enemy id is 0x19, but we need to use a spawn box actor for it
     type: hole
     parameters: [4, 45, 120]
     scale: [4.5, 3.0, 4.5]
+    enemy: False
   EnemyZora:
-     id: 0x1A
-     type: water
+    id: 0x1A
+    type: water
+    enemy: True
   EnemyZolGreen:
     id: 0x1B
     type: land
+    enemy: True
   EnemyZolRed:
     id: 0x1C
     type: land
     lens-parameter: 1
+    enemy: True
   EnemyMiniZol:
     id: 0x1D
     type: land
+    enemy: True
   EnemyHidy: # grass/rock/skull disguised beetle
     id: 0x1E
     type: land
-    parameters: [[0, 1, 2]] # parameter most likely determines the disguise
+    parameters: [[0, 1, 2]] # parameter determines the disguise
+    enemy: True
   EnemyPokey:
     id: 0x22
     type: land
+    enemy: True
   EnemyKyune: # dacto
     id: 0x23
     type: tree
+    enemy: True
   EnemyPawn: # hardhat beetle
     id: 0x24
     type: land
+    enemy: True
   EnemyRope:
     id: 0x25
     type: land
+    enemy: True
   EnemyVire:
     id: 0x26
     type: air
+    enemy: True
   EnemyTail:
     id: 0x27
     type: land
+    enemy: True
   EnemyTogezo: # spiny
     id: 0x28
     type: land
+    enemy: True
   EnemyVegas: # 3 of a kind
     id: 0x29
     type: land
+    enemy: True
   # EnemyDeathBallVacuum: # pulls link towards
   #    id: 0x2A
   #   EnemyDeathBallReverse: # pushes link away
@@ -134,122 +166,158 @@ Actors:
   EnemyPincer:
     id: 0x2D
     type: hole
+    enemy: True
   EnemyStalKnightSpear:
     id: 0x2E
     type: land
     parameters: [0]
+    enemy: True
   EnemyStalKnightSword:
     id: 0x2F
     type: land
     parameters: [0]
+    enemy: True
   EnemyMimic:
     id: 0x30
     type: land
     lens-parameter: 0
+    enemy: True
   EnemyBomberRed: # bounce until explodes
     id: 0x31
     type: land
+    enemy: True
   EnemyBomberGreen: # countdown explosion
     id: 0x32
     type: land
+    enemy: True
   EnemyGibdos:
     id: 0x33
     type: land
     parameters: [1]
+    enemy: True
   EnemyKeese: # not sure what the parameters mean
     id: 0x34
     type: air
+    enemy: True
     #   parameters: [['', '-', 1, 2, 3, 4], ['', '-', 1, 2, 3, 4], ['', '-', 1, 2, 3, 4], ['', '-', 1, 2, 3, 4]]
   EnemySoldierSword:
     id: 0x35
     type: land
     parameters: [0]
+    enemy: True
   EnemySoldierSpear:
     id: 0x36
     type: land
     parameters: [0]
+    enemy: True
   EnemyPolsVoice:
     id: 0x37
     type: land
+    enemy: True
   EnemyLikeLike:
     id: 0x38
     type: land
+    enemy: True
   EnemyStalfosGreen:
     id: 0x39
     type: land
     parameters: [['', 0, 1]] # determines if it is awake or sleeping by default, not sure why there's 3 values yet
+    enemy: True
   EnemyStalfosOrange:
     id: 0x3A
     type: land
     parameters: [['', 0, 1], ''] # param[2] is always 1 if param[0] has a value, blank if not
+    enemy: True
   EnemyWizzrobe:
     id: 0x3B
     type: land
+    enemy: True
   EnemyKuribo: # goomba
     id: 0x3C
     type: land
+    enemy: True
   EnemySpark:
     id: 0x3D
     type: land
     parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 1045220557]] # not sure why the kanalet spark has this oddity
+    enemy: True
   EnemyCreepee: # zirro / bomb fairy
     id: 0x3E
     type: air
+    enemy: True
   EnemyKirby:
     id: 0x3F
     type: land
+    enemy: True
   EnemyHiploop: # iron mask
     id: 0x40
     type: land
+    enemy: True
   EnemyHeiho: # shy guy
     id: 0x41
     type: land
+    enemy: True
   EnemyKyorobo: # pairodd
     id: 0x42
     type: land
+    enemy: True
   EnemyHover:
     id: 0x43
     type: water
+    enemy: True
   EnemyBallerine: # star
     id: 0x44
     type: land
+    enemy: True
   EnemyPukuPuku: # cheep cheep
     id: 0x45
     type: water2D
     parameters: [[0, 1]] # seems to decide if they jump or not, idk what determines if they move horizontally or vertically
+    enemy: True
   EnemyMinigler: # angler fish babies
     id: 0x46
     type: water2D
+    enemy: False
   EnemyGesso: # blooper
     id: 0x47
     type: water2D
+    enemy: True
   EnemyBonePutter:
     id: 0x48
     type: air
+    enemy: True
   EnemyBonePutterBounce:
     id: 0x49
     type: land
+    enemy: True
   EnemyStretchyGhostGreen:
     id: 0x4A
     type: land
+    enemy: True
   EnemyStretchyGhostRed:
     id: 0x4B
     type: land
+    enemy: True
   EnemyStretchyGhostBlue:
     id: 0x4C
     type: land
+    enemy: True
   EnemyKarakoroGreen:
     id: 0x4D
     type: land
+    enemy: True
   EnemyKarakoroRed:
     id: 0x4E
     type: land
+    enemy: True
   EnemyKarakoroBlue:
     id: 0x4F
     type: land
+    enemy: True
   EnemyTeresa: # boo
     id: 0x50
     type: air
+    enemy: True
   # EnemyRola:
   #    id: 0x51
   #    type: miniboss
@@ -262,9 +330,12 @@ Actors:
   #    id: 0x53
   #    type: miniboss
   #     parameters: [['HinoxStart', 1, 2]] # determines color? I don't think this is used for the event then
-  EnemyBombKnuckle: # might need relationship section 2 entry [[b'', b''], 0, 0]
-    id: 0x54
-    type: hole
+
+  # EnemyBombKnuckle: # does not show up, missing something with the point and rail sections
+  #   id: 0x54
+  #   type: hole
+  #   enemy: False
+
   # EnemySoldierIronBall: # Hardcoded to drop a golden leaf, needs left out for now
   #   id: 0x55
   #   type: land

@@ -22,16 +22,16 @@ def changeHeartPiece(flowchart, item_key, item_index, model_path, model_name, ro
     
     if item_key != 'HeartPiece':
         if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
-            itemGet = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
             {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:
-            itemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
+            get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
         
         event_tools.addEntryPoint(flowchart, room)
         event_tools.createActionChain(flowchart, room, [
             ('SinkingSword', 'Destroy', {}),
             ('EventFlags', 'SetFlag', {'symbol': data.HEART_FLAGS[room], 'value': True})
-        ], itemGet)
+        ], get_anim)
 
         act.type = 0x194 # sinking sword
 

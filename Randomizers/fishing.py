@@ -29,19 +29,19 @@ def makeEventChanges(flowchart, placements, item_defs):
 
 
 
-def fixFishingBottle(flowchart):
-    take_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-    {'itemKey': 'Bottle', 'count': -1, 'index': 1, 'autoEquip': False}, 'Event74')
-    fishing_bottle_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-    {'symbol': 'FishingBottleGet'}, {0: take_bottle, 1: 'Event74'})
+# def fixFishingBottle(flowchart):
+#     take_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+#     {'itemKey': 'Bottle', 'count': -1, 'index': 1, 'autoEquip': False}, 'Event74')
+#     fishing_bottle_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+#     {'symbol': 'FishingBottleGet'}, {0: take_bottle, 1: 'Event74'})
 
-    event_tools.insertEventAfter(flowchart, 'Event315', fishing_bottle_check)
-    event_tools.insertEventAfter(flowchart, 'Event316', fishing_bottle_check)
-    event_tools.insertEventAfter(flowchart, 'Event317', fishing_bottle_check)
+#     event_tools.insertEventAfter(flowchart, 'Event315', fishing_bottle_check)
+#     event_tools.insertEventAfter(flowchart, 'Event316', fishing_bottle_check)
+#     event_tools.insertEventAfter(flowchart, 'Event317', fishing_bottle_check)
 
-    give_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-    {'itemKey': 'Bottle', 'count': 1, 'index': 1, 'autoEquip': False}, 'Event45')
-    bottle2_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-    {'symbol': 'Bottle2Get'}, {0: 'Event45', 1: give_bottle})
+#     give_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+#     {'itemKey': 'Bottle', 'count': 1, 'index': 1, 'autoEquip': False}, 'Event45')
+#     bottle2_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+#     {'symbol': 'Bottle2Get'}, {0: 'Event45', 1: give_bottle})
 
-    event_tools.insertEventAfter(flowchart, 'Event189', bottle2_check)
+#     event_tools.insertEventAfter(flowchart, 'Event189', bottle2_check)

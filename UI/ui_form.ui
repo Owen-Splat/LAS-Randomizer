@@ -758,7 +758,7 @@
         <property name="font">
          <font>
           <pointsize>9</pointsize>
-          <strikeout>false</strikeout>
+          <strikeout>true</strikeout>
          </font>
         </property>
         <property name="toolTip">
@@ -767,11 +767,14 @@
         <property name="whatsThis">
          <string>This controls whether the Trendy Game can contain progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(80, 80, 80);</string>
+        </property>
         <property name="text">
          <string>Trendy Game</string>
         </property>
         <property name="checkable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
        <widget class="QCheckBox" name="shopCheck">
