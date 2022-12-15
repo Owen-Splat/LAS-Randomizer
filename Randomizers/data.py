@@ -329,7 +329,7 @@ ITEM_MODELS = {
     'MagicRod': 'ItemMagicRod.bfres',
     # 'Shovel': 'ItemShovel.bfres',
     'SleepyMushroom': 'ItemSleepyMushroom.bfres',
-    'MagicPowder': 'ItemMagicPowder.bfres',
+    # 'MagicPowder': 'ItemMagicPowder.bfres',
     'RocsFeather': 'ItemRocsFeather.bfres',
     'PowerBraceletLv1': 'ItemPowerBraceletLv1.bfres',
     # 'PowerBraceletLv2': 'ItemPowerBraceletLv2.bfres',

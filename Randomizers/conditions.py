@@ -66,16 +66,16 @@ def editConditions(condition, placements, item_defs):
         return
     
     # Make the shop not sell bombs until you find some (flag automatically set with unlocked bombs on)
-    if condition['symbol'] == 'ShopBombCondition':
+    if condition['symbol'] == 'ShopBombCondition' and (placements['settings']['unlocked-bombs'] or placements['settings']['shuffle-bombs']):
         condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
         return
     
-    # Edit the condition for the shovel since it is shuffled
-    if condition['symbol'] == 'ShopShovelCondition':
-        condition['conditions'].pop(0)
-        condition['conditions'][0] = {'category': 11, 'parameter': f"!{item_defs[placements['shop-slot3-1st']]['item-key']}"}
+    # # Edit the condition for the shovel since it is shuffled
+    # if condition['symbol'] == 'ShopShovelCondition':
+    #     condition['conditions'].pop(0)
+    #     condition['conditions'][0] = {'category': 11, 'parameter': f"!{item_defs[placements['shop-slot3-1st']]['item-key']}"}
     
-    # Edit the condition for the bow since it is shuffled
-    if condition['symbol'] == 'ShopBowCondition':
-        condition['conditions'][0] = {'category': 1, 'parameter': item_defs[placements['shop-slot3-1st']]['item-key']}
-        condition['conditions'][1] = {'category': 1, 'parameter': f"!{item_defs[placements['shop-slot3-2nd']]['item-key']}"}
+    # # Edit the condition for the bow since it is shuffled
+    # if condition['symbol'] == 'ShopBowCondition':
+    #     condition['conditions'][0] = {'category': 1, 'parameter': item_defs[placements['shop-slot3-1st']]['item-key']}
+    #     condition['conditions'][1] = {'category': 1, 'parameter': f"!{item_defs[placements['shop-slot3-2nd']]['item-key']}"}

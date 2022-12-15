@@ -2,6 +2,7 @@ from PySide6 import QtCore
 
 import os
 import re
+import copy
 import random
 import shutil
 import tempfile
@@ -35,6 +36,16 @@ class ModsProcess(QtCore.QThread):
         self.rom_path = rom_path
         self.out_dir = out_dir
         self.item_defs = items
+        self.instruments = (
+            'FullMoonCello',
+            'ConchHorn',
+            'SeaLilysBell',
+            'SurfHarp',
+            'WindMarimba',
+            'CoralTriangle',
+            'EveningCalmOrgan',
+            'ThunderDrum'
+        )
         self.seed = seed
         random.seed(seed)
 
@@ -180,7 +191,7 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
         # small_keys.writeSunkenKeyEvent(flow.flowchart)
 
-        trap_models = data.ITEM_MODELS.copy()
+        trap_models = copy.deepcopy(data.ITEM_MODELS)
         trap_models.update({
             'SmallKey': 'ItemSmallKey.bfres',
             'NightmareKey': 'ItemNightmareKey.bfres',
@@ -188,6 +199,13 @@ class ModsProcess(QtCore.QThread):
             'Compass': 'ItemCompass.bfres',
             'DungeonMap': 'ItemDungeonMap.bfres'
         })
+        
+        if self.placements['settings']['shuffle-instruments']:
+            for inst in self.placements['starting-instruments']:
+                del trap_models[inst]
+        else:
+            for inst in self.instruments:
+                del trap_models[inst]
 
         for room in data.SMALL_KEY_ROOMS:
             if self.thread_active:
@@ -304,12 +322,21 @@ class ModsProcess(QtCore.QThread):
         item_key = self.item_defs[item]['item-key']
         item_index = self.placements['indexes']['washed-up'] if 'washed-up' in self.placements['indexes'] else -1
 
+        trap_models = copy.deepcopy(data.ITEM_MODELS)
+        
+        if self.placements['settings']['shuffle-instruments']:
+            for inst in self.placements['starting-instruments']:
+                del trap_models[inst]
+        else:
+            for inst in self.instruments:
+                del trap_models[inst]
+
         if item_key != 'ZapTrap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
-            model_name = random.choice(list(data.ITEM_MODELS))
-            model_path = data.ITEM_MODELS[model_name]
+            model_name = random.choice(list(trap_models))
+            model_path = trap_models[model_name]
         
         miscellaneous.changeSunkenSword(flow.flowchart, item_key, item_index, model_path, model_name, room)
 
@@ -335,8 +362,8 @@ class ModsProcess(QtCore.QThread):
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
-            model_name = random.choice(list(data.ITEM_MODELS))
-            model_path = data.ITEM_MODELS[model_name]
+            model_name = random.choice(list(trap_models))
+            model_path = trap_models[model_name]
         
         miscellaneous.changeBirdKey(flow.flowchart, item_key, item_index, model_path, model_name, room)
 
@@ -362,8 +389,8 @@ class ModsProcess(QtCore.QThread):
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
-            model_name = random.choice(list(data.ITEM_MODELS))
-            model_path = data.ITEM_MODELS[model_name]
+            model_name = random.choice(list(trap_models))
+            model_path = trap_models[model_name]
         
         miscellaneous.changeOcarina(flow.flowchart, item_key, item_index, model_path, model_name, room)
 
@@ -389,8 +416,8 @@ class ModsProcess(QtCore.QThread):
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
-            model_name = random.choice(list(data.ITEM_MODELS))
-            model_path = data.ITEM_MODELS[model_name]
+            model_name = random.choice(list(trap_models))
+            model_path = trap_models[model_name]
         
         miscellaneous.changeMushroom(flow.flowchart, item_key, item_index, model_path, model_name, room)
 
@@ -416,8 +443,8 @@ class ModsProcess(QtCore.QThread):
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
-            model_name = random.choice(list(data.ITEM_MODELS))
-            model_path = data.ITEM_MODELS[model_name]
+            model_name = random.choice(list(trap_models))
+            model_path = trap_models[model_name]
         
         miscellaneous.changeLens(flow.flowchart, item_key, item_index, model_path, model_name, room)
         
@@ -1023,8 +1050,17 @@ class ModsProcess(QtCore.QThread):
                 model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                 model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
             else:
-                model_name = random.choice(list(data.ITEM_MODELS))
-                model_path = data.ITEM_MODELS[model_name]
+                trap_models = copy.deepcopy(data.ITEM_MODELS)
+                
+                if self.placements['settings']['shuffle-instruments']:
+                    for inst in self.placements['starting-instruments']:
+                        del trap_models[inst]
+                else:
+                    for inst in self.instruments:
+                        del trap_models[inst]
+
+                model_name = random.choice(list(trap_models))
+                model_path = trap_models[model_name]
 
         room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
         room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
@@ -1378,6 +1414,8 @@ class ModsProcess(QtCore.QThread):
         if not os.path.exists(dest):
             os.makedirs(dest)
         
+        random.seed(self.seed) # restart the rng so that music will be the same regardless of settings
+
         for file in files:
             if self.thread_active:
                 track = file[:-len(data.MUSIC_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
@@ -1435,8 +1473,17 @@ class ModsProcess(QtCore.QThread):
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:
-                    model_name = random.choice(list(data.ITEM_MODELS))
-                    model_path = data.ITEM_MODELS[model_name]
+                    trap_models = copy.deepcopy(data.ITEM_MODELS)
+                    
+                    if self.placements['settings']['shuffle-instruments']:
+                        for inst in self.placements['starting-instruments']:
+                            del trap_models[inst]
+                    else:
+                        for inst in self.instruments:
+                            del trap_models[inst]
+                    
+                    model_name = random.choice(list(trap_models))
+                    model_path = trap_models[model_name]
                     
                 instruments.changeInstrument(flow.flowchart, item_key, item_index, model_path, model_name, room, room_data)
                 
@@ -1488,8 +1535,17 @@ class ModsProcess(QtCore.QThread):
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:
-                    model_name = random.choice(list(data.ITEM_MODELS))
-                    model_path = data.ITEM_MODELS[model_name]
+                    trap_models = copy.deepcopy(data.ITEM_MODELS)
+
+                    if self.placements['settings']['shuffle-instruments']:
+                        for inst in self.placements['starting-instruments']:
+                            del trap_models[inst]
+                    else:
+                        for inst in self.instruments:
+                            del trap_models[inst]
+
+                    model_name = random.choice(list(trap_models))
+                    model_path = trap_models[model_name]
                 
                 heart_pieces.changeHeartPiece(flow.flowchart, item_key, item_index, model_path, model_name, room, room_data)
                                 
@@ -1610,6 +1666,13 @@ class ModsProcess(QtCore.QThread):
             'Compass': 'ItemCompass.bfres',
             'DungeonMap': 'ItemDungeonMap.bfres'
         })
+        
+        if self.placements['settings']['shuffle-instruments']:
+            for inst in self.placements['starting-instruments']:
+                del trap_models[inst]
+        else:
+            for inst in self.instruments:
+                del trap_models[inst]
 
         for i in range(28):
             if self.thread_active:
@@ -1895,6 +1958,7 @@ class ModsProcess(QtCore.QThread):
         folders = [f for f in os.listdir(levels_path) if f in ENEMY_DATA['Included_Folders']]
 
         num_of_mods = 0
+        random.seed(self.seed) # restart the rng so that enemies will be the same regardless of settings
 
         for folder in folders:
             if self.thread_active:
@@ -1902,8 +1966,12 @@ class ModsProcess(QtCore.QThread):
 
                 for file in files:
                     if self.thread_active:
-                        with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
-                            room_data = leb.Room(f.read())
+                        if not os.path.exists(f'{out_levels}/{folder}/{file}'):
+                            with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
+                                room_data = leb.Room(f.read())
+                        else:
+                            with open(f'{out_levels}/{folder}/{file}', 'rb') as f:
+                                room_data = leb.Room(f.read())
                         
                         edited_room = False
                         excluded_actors = []
@@ -1934,12 +2002,12 @@ class ModsProcess(QtCore.QThread):
                                     for i in range(8):
                                         try:
                                             if isinstance(params[i], list):
-                                                data = random.choice(params[i])
+                                                param = random.choice(params[i])
                                             else:
-                                                data = params[i]
-                                            if isinstance(data, str):
-                                                data = bytes(data, 'utf-8')
-                                            act.parameters[i] = data
+                                                param = params[i]
+                                            if isinstance(param, str):
+                                                param = bytes(param, 'utf-8')
+                                            act.parameters[i] = param
                                         except IndexError:
                                             act.parameters[i] = b''
                                 except KeyError:
@@ -1965,6 +2033,8 @@ class ModsProcess(QtCore.QThread):
                             if self.thread_active:
                                 with open(f'{out_levels}/{folder}/{file}', 'wb') as f:
                                     f.write(room_data.repack())
+                                    self.progress_value += 1 # update progress bar
+                                    self.progress_update.emit(self.progress_value)
                                     num_of_mods += 1
         
         print(num_of_mods)

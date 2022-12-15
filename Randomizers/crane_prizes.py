@@ -12,21 +12,17 @@ prizes_dict = {}
 def makeDatasheetChanges(sheet, placements, item_defs):
     """Edits conditions in the Trendy prizes datasheet. Trendy is still a WIP"""
     
-    # sheet['root_fields'][5].fields.append(oead_tools.createField(
-    #     name='gettingFlag',
-    #     type_name='GlobalFlags',
-    #     type=oead.gsheet.Field.Type.String,
-    #     # flags=oead.gsheet.Field.Flag.IsKey,
-    #     offset=20
-    # ))
-    
+    # PRIZE PLACEMENTS
+    # type 1 is the lower level, index 0 on the left and index 2 on the right
+    # type 2 is upper level, index 0 on the left and index 1 on the right
+
     symbols = []
     for prize in sheet['values']:
 
         symbols.append(prize['symbol'])
 
         # Bombs should not be obtainable until you have bombs, or automatically if unlocked-bombs is on
-        if prize['symbol'] == 'Bomb':
+        if prize['symbol'] == 'Bomb' and (placements['settings']['unlocked-bombs'] or placements['settings']['shuffle-bombs']):
             prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
             continue
 
@@ -35,6 +31,11 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': data.SHIELD_FOUND_FLAG})
             continue
 
+        # Make the YoshiDoll prize go away once you get it since we don't actually keep the item
+        if prize['symbol'] == 'YoshiDoll':
+            prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': 'TradeYoshiDollGet'})
+            continue
+        
         # SmallBowWow (Ciao Ciao): Remove the condition of HintYosshi. It's unnecessary and can lead to a softlock
         if prize['symbol'] == 'SmallBowWow':
             prize['layouts'][0]['conditions'].pop(0)
@@ -283,19 +284,19 @@ def makeEventChanges(flowchart, settings):
         event_tools.findEvent(flowchart, 'Event5').data.params.data['prizeType'] = 10
     
     yoshi_lens_get = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 30}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
         ('Inventory', 'AddItem', {'itemType': 44, 'count': 1})
     ], None)
     yoshi_get = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 30}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})
-    ])
+    ], None)
     lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': data.LENS_FOUND_FLAG}, {0: yoshi_get, 1: yoshi_lens_get})
     yoshi_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasPrize',
-        {'prizeType': 19, 'count': 1}, {0: 'Event5', 1: lens_flag_check})
+        {'prizeType': 7, 'count': 1}, {0: None, 1: lens_flag_check})
 
     ### CONNECT LENS CHECK TO EVENTS
     event_tools.insertEventAfter(flowchart, 'Event3', yoshi_check)

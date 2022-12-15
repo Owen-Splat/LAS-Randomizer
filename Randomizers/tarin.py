@@ -34,6 +34,13 @@ def makeEventChanges(flowchart, placements, item_defs):
                     ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
                     ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
                 ]
+                continue
+
+            if inst == 'full-moon-cello': # close the moblin cave doors so the moblins appear
+                event_defs += [
+                    ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
+                    ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False})
+                ]
         event_tools.createActionChain(flowchart, 'Event36', event_defs, 'Event52')
     
     # event_tools.createActionChain(flowchart, 'Event36', [

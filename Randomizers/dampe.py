@@ -99,13 +99,20 @@ def afterRewardEvents(flowchart, loop_event):
     ], bracelet_flag_check)
     bomb_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 4, 'count': 1}, {0: bracelet_flag_check, 1: bomb_flag})
+    
+    cello_flags = event_tools.createActionChain(flowchart, None, [
+        ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
+        ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False})
+    ], bomb_check)
+    cello_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 45, 'count': 1}, {0: bomb_check, 1: cello_flags})
 
     harp_flags = event_tools.createActionChain(flowchart, None, [
         ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
-    ], bomb_check)
+    ], cello_check)
     harp_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 48, 'count': 1}, {0: bomb_check, 1: harp_flags})
     
@@ -117,91 +124,91 @@ def afterRewardEvents(flowchart, loop_event):
         {'itemType': 44, 'count': 1}, {0: lens_flag_check, 1: harp_check})
     
     scale_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 43}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True})
     ], lens_check)
     scale_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 43, 'count': 1}, {0: lens_check, 1: scale_give})
     
     necklace_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 41}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True})
     ], scale_check)
     necklace_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 41, 'count': 1}, {0: scale_check, 1: necklace_give})
     
     hook_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 40}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True})
     ], necklace_check)
     hook_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 40, 'count': 1}, {0: necklace_check, 1: hook_give})
     
     broom_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 39}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True})
     ], hook_check)
     broom_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 39, 'count': 1}, {0: hook_check, 1: broom_give})
     
     letter_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 38}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True})
     ], broom_check)
     letter_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 38, 'count': 1}, {0: broom_check, 1: letter_give})
 
     hibiscus_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 37}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True})
     ], letter_check)
     hibiscus_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 37, 'count': 1}, {0: letter_check, 1: hibiscus_give})
 
     pineapple_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 36}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True})
     ], hibiscus_check)
     pineapple_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 36, 'count': 1}, {0: hibiscus_check, 1: pineapple_give})
 
     honeycomb_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 35}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True})
     ], pineapple_check)
     honeycomb_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 35, 'count': 1}, {0: pineapple_check, 1: honeycomb_give})
 
     stick_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 34}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True})
     ], honeycomb_check)
     stick_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 34, 'count': 1}, {0: honeycomb_check, 1: stick_give})
 
     bananas_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 33}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True})
     ], stick_check)
     bananas_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 33, 'count': 1}, {0: stick_check, 1: bananas_give})
 
     dogfood_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 32}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True})
     ], bananas_check)
     dogfood_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 32, 'count': 1}, {0: bananas_check, 1: dogfood_give})
 
     ribbon_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 31}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True})
     ], dogfood_check)
     ribbon_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 31, 'count': 1}, {0: dogfood_check, 1: ribbon_give})
 
     yoshi_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'RemoveItem', {'itemType': 30}),
+        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
         ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})
     ], ribbon_check)
     yoshi_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',

@@ -238,65 +238,7 @@ class Actor:
 		packed += switches
 		
 		# packed += self.x84 # relationship data but it's unfinished so we just keep the data as is for now
-
-		packed += self.relationships.e.to_bytes(1, 'little')
-		packed += self.relationships.k.to_bytes(1, 'little')
-		packed += self.relationships.b.to_bytes(1, 'little')
-		packed += self.relationships.x.to_bytes(1, 'little')
-		packed += self.relationships.y.to_bytes(1, 'little')
-		packed += self.relationships.z.to_bytes(1, 'little')
-		packed += self.relationships.null
-
-		for i in range(self.relationships.x):
-			param1 = self.relationships.section_1[i][0][0]
-			param2 = self.relationships.section_1[i][0][1]
-			act_index = self.relationships.section_1[i][1]
-
-			if isinstance(param1, bytes):
-				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-				packed += (4).to_bytes(4, 'little')
-				nameRepr += param1 + b'\x00'
-			else:
-				packed += param1.to_bytes(4, 'little')
-				packed += (3).to_bytes(4, 'little')
-			
-			if isinstance(param2, bytes):
-				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-				packed += (4).to_bytes(4, 'little')
-				nameRepr += param2 + b'\x00'
-			else:
-				packed += param2.to_bytes(4, 'little')
-				packed += (3).to_bytes(4, 'little')
-			
-			packed += act_index.to_bytes(4, 'little')
-		
-		for i in range(self.relationships.z):
-			param1 = self.relationships.section_2[i][0][0]
-			param2 = self.relationships.section_2[i][0][1]
-			rail = self.relationships.section_2[i][1]
-			point = self.relationships.section_2[i][2]
-
-			if isinstance(param1, bytes):
-				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-				packed += (4).to_bytes(4, 'little')
-				nameRepr += param1 + b'\x00'
-			else:
-				packed += param1.to_bytes(4, 'little')
-				packed += (3).to_bytes(4, 'little')
-			
-			if isinstance(param2, bytes):
-				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-				packed += (4).to_bytes(4, 'little')
-				nameRepr += param2 + b'\x00'
-			else:
-				packed += param2.to_bytes(4, 'little')
-				packed += (3).to_bytes(4, 'little')
-			
-			packed += rail.to_bytes(4, 'little')
-			packed += point.to_bytes(4, 'little')
-		
-		for i in range(self.relationships.y):
-			packed += self.relationships.section_3[i].to_bytes(4, 'little')
+		packed += self.relationships.pack(nameRepr, nameOffset)
 
 		return packed
 
@@ -348,7 +290,7 @@ class Actor:
 # 				param = readBytes(data, 0xC + (0x8 * i), 4)
 # 				# paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
 
-# 				# if paramType == 0xFFFFFF04 :
+# 				# if paramType == 0xFFFFFF04:
 # 				# 	self.xC.append(readString(names, param))
 # 				# else:
 # 				# 	self.xC.append(param)
@@ -403,6 +345,11 @@ class Room:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
 
+		self.actors = []
+		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
+		for entry in actor_entry.data.entries:
+			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
+
 		# self.points = []
 		# point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
 		# for entry in point_entry.data.entries:
@@ -412,11 +359,6 @@ class Room:
 		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
 		# for entry in rail_entry.data.entries:
 		# 	self.rails.append(Rail(entry.data))
-
-		self.actors = []
-		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
-		for entry in actor_entry.data.entries:
-			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
 		
 		# grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
 		# self.grid = Grid(grid_entry)
@@ -468,18 +410,6 @@ class Room:
 		new_names = b''
 
 		for entry in self.fixed_hash.entries:
-			# if entry.name == b'point':
-			# 	entry.data.entries = []
-			# 	for point in self.points:
-			# 		# Create a new point entry for actors to use
-			# 		entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
-			
-			# if entry.name == b'rail':
-			# 	entry.data.entries = []
-			# 	for rail in self.rails:
-			# 		# Create a new rail entry to reference point indexes per rail
-			# 		entry.data.entries.append(Entry(0xFFF2, b'', 0xFFFFFFFF, rail.pack()))
-			
 			if entry.name == b'actor':
 				entry.data.entries = []
 				for actor in self.actors:
@@ -503,6 +433,18 @@ class Room:
 							new_names += s2[0][0] + b'\x00'
 						if isinstance(s2[0][1], bytes):
 							new_names += s2[0][1] + b'\x00'
+			
+			# if entry.name == b'point':
+			# 	entry.data.entries = []
+			# 	for point in self.points:
+			# 		# Create a new point entry for actors to use
+			# 		entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
+			
+			# if entry.name == b'rail':
+			# 	entry.data.entries = []
+			# 	for rail in self.rails:
+			# 		# Create a new rail entry to reference point indexes per rail
+			# 		entry.data.entries.append(Entry(0xFFF2, b'', 0xFFFFFFFF, rail.pack()))
 			
 			new_names += entry.name + b'\x00'
 
@@ -529,50 +471,112 @@ class Relationship:
 
 		pos = 0x90
 		
-		if self.x > 0x00:
-			for i in range(self.x):
-				acts = []
-				seq = []
+		for i in range(self.x):
+			acts = []
+			seq = []
 
-				for b in range(2):
-					param = readBytes(data, pos + (0x8 * b), 4)
-					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
-					if paramType == 0x4:
-						seq.append(readString(names, param))
-					else:
-						seq.append(param)
-				
-				act_index = readBytes(data, pos + 0x10, 4)
-				acts.append(seq)
-				acts.append(act_index)
-				self.section_1.append(acts)
-				pos += 20
+			for b in range(2):
+				param = readBytes(data, pos + (0x8 * b), 4)
+				paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+				if paramType == 0x4:
+					seq.append(readString(names, param))
+				else:
+					seq.append(param)
+			
+			act_index = readBytes(data, pos + 0x10, 4)
+			acts.append(seq)
+			acts.append(act_index)
+			self.section_1.append(acts)
+			pos += 20
 		
-		if self.z > 0x00:
-			for i in range(self.z):
-				acts = []
-				seq = []
+		for i in range(self.z):
+			acts = []
+			seq = []
 
-				for b in range(2):
-					param = readBytes(data, pos + (0x8 * b), 4)
-					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
-					if paramType == 0x4:
-						seq.append(readString(names, param))
-					else:
-						seq.append(param)
-				
-				rail = readBytes(data, pos + 0x10, 4)
-				point = readBytes(data, pos + 0x14, 4)
-				acts.append(seq)
-				acts.append(rail)
-				acts.append(point)
-				self.section_2.append(acts)
-				pos += 24
+			for b in range(2):
+				param = readBytes(data, pos + (0x8 * b), 4)
+				paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+				if paramType == 0x4:
+					seq.append(readString(names, param))
+				else:
+					seq.append(param)
+			
+			rail = readBytes(data, pos + 0x10, 4)
+			point = readBytes(data, pos + 0x14, 4)
+			acts.append(seq)
+			acts.append(rail)
+			acts.append(point)
+			self.section_2.append(acts)
+			pos += 24
 		
-		if self.y > 0x00:
-			for i in range(self.y):
-				id = readBytes(data, pos + (0x4 * i), 4)
-				self.section_3.append(id)
+		for i in range(self.y):
+			id = readBytes(data, pos + (0x4 * i), 4)
+			self.section_3.append(id)
+	
+
+	def pack(self, nameRepr, nameOffset):
+		packed = b''
+		packed += self.e.to_bytes(1, 'little')
+		packed += self.k.to_bytes(1, 'little')
+		packed += self.b.to_bytes(1, 'little')
+		packed += self.x.to_bytes(1, 'little')
+		packed += self.y.to_bytes(1, 'little')
+		packed += self.z.to_bytes(1, 'little')
+		packed += self.null
+
+		for i in range(self.x):
+			param1 = self.section_1[i][0][0]
+			param2 = self.section_1[i][0][1]
+			act_index = self.section_1[i][1]
+
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			packed += act_index.to_bytes(4, 'little')
+		
+		for i in range(self.z):
+			param1 = self.section_2[i][0][0]
+			param2 = self.section_2[i][0][1]
+			rail = self.section_2[i][1]
+			point = self.section_2[i][2]
+
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			packed += rail.to_bytes(4, 'little')
+			packed += point.to_bytes(4, 'little')
+		
+		for i in range(self.y):
+			packed += self.section_3[i].to_bytes(4, 'little')
+		
+		return packed
+
 
 
 

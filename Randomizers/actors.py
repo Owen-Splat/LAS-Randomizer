@@ -32,6 +32,11 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Inventory').find_query('HasItem')
     except ValueError:
         event_tools.addActorQuery(event_tools.findActor(flowchart, 'Inventory'), 'HasItem')
+    
+    try:
+        event_tools.findActor(flowchart, 'Inventory').find_action('SetWarashibeItem')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Inventory'), 'SetWarashibeItem')
 
     try:
         event_tools.findActor(flowchart, 'Link')
@@ -163,44 +168,44 @@ def addNeededActors(flowchart, rom_path):
         flowchart.actors.append(time_actor)
     
 
-def addCompanionActors(flowchart, rom_path):
-    """Adds the missing data for companion related events"""
+# def addCompanionActors(flowchart, rom_path):
+#     """Adds the missing data for companion related events"""
 
-    try:
-        event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
-    except ValueError:
-        rooster_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
-        flowchart.actors.append(rooster_actor)
+#     try:
+#         event_tools.findActor(flowchart, 'FlyingCucco', 'FlyCocco')
+#     except ValueError:
+#         rooster_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'FlyingCucco', 'FlyCocco')
+#         flowchart.actors.append(rooster_actor)
     
-    try:
-        event_tools.findActor(flowchart, 'Dialog')
-    except ValueError:
-        dialog_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'Dialog')
-        flowchart.actors.append(dialog_actor)
+#     try:
+#         event_tools.findActor(flowchart, 'Dialog')
+#     except ValueError:
+#         dialog_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/RoosterBones.bfevfl').flowchart, 'Dialog')
+#         flowchart.actors.append(dialog_actor)
     
-    try:
-        event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
+#     try:
+#         event_tools.findActor(flowchart, 'Link').find_action('AimCompassPoint')
+#     except ValueError:
+#         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AimCompassPoint')
     
-    try:
-        event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')
+#     try:
+#         event_tools.findActor(flowchart, 'Link').find_action('LookAtItemGettingPlayer')
+#     except ValueError:
+#         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LookAtItemGettingPlayer')
     
-    try:
-        event_tools.findActor(flowchart, 'Link').find_action('LeaveCompanion')
-    except ValueError:
-        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LeaveCompanion')
+#     try:
+#         event_tools.findActor(flowchart, 'Link').find_action('LeaveCompanion')
+#     except ValueError:
+#         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'LeaveCompanion')
     
-    try:
-        event_tools.findActor(flowchart, 'FlyingCucco', 'companion')
-    except ValueError:
-        rooster_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'FlyingCucco', 'companion')
-        flowchart.actors.append(rooster_actor)
+#     try:
+#         event_tools.findActor(flowchart, 'FlyingCucco', 'companion')
+#     except ValueError:
+#         rooster_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'FlyingCucco', 'companion')
+#         flowchart.actors.append(rooster_actor)
     
-    try:
-        event_tools.findActor(flowchart, 'BowWow', 'companion')
-    except ValueError:
-        bowwow_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'BowWow', 'companion')
-        flowchart.actors.append(bowwow_actor)
+#     try:
+#         event_tools.findActor(flowchart, 'BowWow', 'companion')
+#     except ValueError:
+#         bowwow_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'BowWow', 'companion')
+#         flowchart.actors.append(bowwow_actor)

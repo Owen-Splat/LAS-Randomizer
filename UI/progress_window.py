@@ -41,7 +41,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_files += 69
         
         if settings['randomize-enemies']:
-            self.num_of_mod_files += 192
+            self.num_of_mod_files += 351 # 192
         
         self.done = False
         self.cancel = False

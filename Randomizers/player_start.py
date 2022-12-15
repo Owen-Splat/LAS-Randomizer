@@ -39,8 +39,9 @@ def makeStartChanges(flow, settings):
     if settings['open-mamu']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}))
     
-    if settings['randomize-enemies']: # special case where we need the stairs to D6 to be visible and open
+    if settings['randomize-enemies']: # special case where we need stairs under armos to be visible and open
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld10N', 'value': True}))
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld11O', 'value': True}))
 
     if not settings['shuffle-tunics']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))

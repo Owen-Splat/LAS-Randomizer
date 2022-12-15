@@ -1,13 +1,12 @@
 import Tools.event_tools as event_tools
-from Randomizers import item_get
-from Randomizers import data
+from Randomizers import item_get, data
 
 
 
 def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, room):
     if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
         rup_collect = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-        {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False}, 'Event8')
+            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False}, 'Event8')
         event_tools.insertEventAfter(flowchart, 'Event5', rup_collect)
     else:
         item_get.insertItemGetAnimation(flowchart, item_key, item_index, 'Event5', 'Event8')
@@ -35,7 +34,7 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
 def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room):
     if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
         get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-        {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
         get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
@@ -56,7 +55,7 @@ def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room)
 def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room):
     if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
         get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-        {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
         get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
@@ -78,7 +77,7 @@ def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room)
 def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room):
     if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
         get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-        {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
         get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
@@ -99,7 +98,7 @@ def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room
 def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
     if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
         get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-        {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
         get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 

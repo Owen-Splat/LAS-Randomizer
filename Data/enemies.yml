@@ -421,15 +421,94 @@ Actors:
   # EnemyShadowDethI:
   #    id: 0x70
   #    type: finalboss
+  EnemyBubble:
+    id: 0xB7
+    type: land
+  # EnemyPotDemonPot:
+  #   id: 0xB9
+  #   type: boss
+  # EnemyGiantBubble:
+  #   id: 0x12A
+  #   type: 2D
+  # AreaZombieSpawnBox:
+  #   id: 0x197
+  #   type: land
+  EnemyVireChild:
+    id: 0x1D1
+    type: air
+  
 
 
 Excluded_Actors: # rooms each with a list of actors to not modify
-  Field_06I: [0] # kanalet crow
-  Field_06K: [0] # kanalet bomb knuckle
-#   Field_10N: [0] # dark armos blocking the entry to D6, is probably fine to randomize
-#   KanaletCastle_01C: [] # there are no enemy actors besides the spark, objfilledwall spawns them
+  Field_06I: [0]
+  Field_06K: [0]
   KanaletCastle_01D: [0]
   KanaletCastle_02A: [0, 1, 2]
+  Lv01TailCave_08C: [0, 1]
+  Lv01TailCave_07E: [0, 1, 2, 3]
+  Lv01TailCave_06C: [5]
+  Lv01TailCave_06D: [8]
+  Lv01TailCave_05F: [0, 1, 2]
+  Lv01TailCave_04B: [1, 2]
+  Lv02BottleGrotto_08D: [0]
+  Lv02BottleGrotto_07B: [4, 5]
+  Lv02BottleGrotto_07D: [0, 1]
+  Lv02BottleGrotto_07F: [0, 1]
+  Lv02BottleGrotto_03F: [0, 1, 2]
+  Lv02BottleGrotto_02B: [0, 1]
+  Lv02BottleGrotto_02G: [0, 1, 2]
+  Lv03KeyCavern_08G: [0, 1, 2, 3, 4]
+  Lv03KeyCavern_08H: [0, 1, 2]
+  Lv03KeyCavern_07B: [0, 1, 2, 3]
+  Lv03KeyCavern_06B: [0, 1, 2, 3]
+  Lv03KeyCavern_05B: [0, 1, 3]
+  Lv03KeyCavern_05G: [0, 1, 2, 3, 4]
+  Lv03KeyCavern_04C: [0, 1, 2, 3, 4]
+  Lv03KeyCavern_04F: [0, 1, 2, 3]
+  Lv03KeyCavern_04H: [0] # special case here because if an armos goes here, it will block your path if you cant kill it
+  Lv03KeyCavern_03A: [0, 1, 2, 3]
+  Lv03KeyCavern_03B: [0, 1, 2, 3, 4]
+  Lv03KeyCavern_03G: [2, 3]
+  Lv03KeyCavern_02A: [0, 1, 2]
+  Lv03KeyCavern_01B: [0, 1, 2]
+  # Lv03KeyCavern_01C: [0, 1, 2, 3]
+  Lv03KeyCavern_01D: [0, 1, 2, 3, 4]
+  Lv04AnglersTunnel_07D: [0, 1, 2]
+  Lv04AnglersTunnel_07E: [0, 1, 2, 3]
+  Lv04AnglersTunnel_04E: [0, 1]
+  # Lv04AnglersTunnel_04AL: [6, 7, 8, 9, 10] # angler fish babies, REQUIRES TESTING
+  Lv05CatfishsMaw_08F: [0, 1, 2, 3, 4]
+  Lv05CatfishsMaw_07D: [1, 2]
+  Lv05CatfishsMaw_07E: [4, 5]
+  Lv05CatfishsMaw_06F: [0, 1, 2]
+  Lv05CatfishsMaw_03C: [1, 2, 3]
+  Lv05CatfishsMaw_02F: [1, 2]
+  Lv06FaceShrine_08B: [1, 2, 3]
+  Lv06FaceShrine_08C: [1, 2, 3]
+  Lv06FaceShrine_07G: [1, 2, 3, 4]
+  Lv06FaceShrine_06E: [1]
+  Lv06FaceShrine_05A: [2, 3, 4]
+  Lv06FaceShrine_05C: [1, 2, 3, 4]
+  Lv06FaceShrine_04H: [1, 2, 3]
+  Lv06FaceShrine_03D: [1, 2]
+  Lv07EagleTower_08D: [0, 1]
+  Lv07EagleTower_04B: [0, 1, 2]
+  Lv07EagleTower_01B: [0, 1, 2]
+  Lv08TurtleRock_08E: [0, 1]
+  Lv08TurtleRock_07C: [0, 1, 2]
+  Lv08TurtleRock_07D: [0]
+  Lv08TurtleRock_07G: [1, 2]
+  Lv08TurtleRock_06A: [1]
+  Lv08TurtleRock_04E: [0]
+  Lv08TurtleRock_04G: [0, 1, 2, 3]
+  Lv08TurtleRock_03C: [0]
+  Lv08TurtleRock_03G: [0, 1]
+  Lv10ClothesDungeon_08F: [0, 1, 2, 3]
+  Lv10ClothesDungeon_07C: [0, 1, 15]
+  Lv10ClothesDungeon_07F: [0, 1]
+  Lv10ClothesDungeon_05D: [0, 1, 2, 3, 4, 5]
+  Lv10ClothesDungeon_05E: [0, 1, 2, 3]
+  Lv10ClothesDungeon_05G: [0, 1, 2]
 
 
 Included_Folders:
@@ -441,6 +520,15 @@ Included_Folders:
   - KanaletCastle
   - KanaletCastleEnter
   - LanmolaCave
+  - Lv01TailCave
+  - Lv02BottleGrotto
+  - Lv03KeyCavern
+  - Lv04AnglersTunnel
+  - Lv05CatfishsMaw
+  - Lv06FaceShrine
+  - Lv07EagleTower
+  - Lv08TurtleRock
+  - Lv10ClothesDungeon
   - MadBattersWellEnter
   - MarthaUkuku
   - MermaidStatue

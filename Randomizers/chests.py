@@ -48,11 +48,16 @@ def writeChestEvent(flowchart):
     blue_tunic_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ClothesBlue'},
         {0: blue_tunic_get, 1: red_tunic_check})
-
+    
+    cello_get = item_get.insertItemGetAnimation(flowchart, 'FullMoonCello', -1, None, auto_save)
+    cello_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'FullMoonCello'},
+        {0: cello_get, 1: blue_tunic_check})
+    
     harp_get = item_get.insertItemGetAnimation(flowchart, 'SurfHarp', -1, None, auto_save)
     harp_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SurfHarp'},
-        {0: harp_get, 1: blue_tunic_check})
+        {0: harp_get, 1: cello_check})
 
     yoshi_get = item_get.insertItemGetAnimation(flowchart, 'YoshiDoll', -1, None, auto_save)
     yoshi_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',

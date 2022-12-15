@@ -97,10 +97,18 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     #     return event_tools.createSubFlowEvent(flowchart, 'ShadowLink', 'Appear', {}, None)
     
     ############################################################################################################################################
-    ### Instrument flags - just ghost flags when getting harp for now :)
-    if item == 'SurfHarp':
+    ### Instrument flags
+    if item == 'FullMoonCello':
         return event_tools.createActionChain(flowchart, before, [
-            ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}), # set flags before giving harp, otherwise ghost requirements may be met during the itemget animation, leaving the player with a ghost that can only be rid of by getting another follower
+            ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
+            ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+        ], after)
+    
+    if item == 'SurfHarp': # set flags before giving harp, otherwise ghost requirements will be met during the itemget animation, leaving the player with a ghost that can only be rid of by getting another follower
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
             ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
             ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
             ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True}),
