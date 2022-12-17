@@ -101,6 +101,7 @@ def afterRewardEvents(flowchart, loop_event):
         {'itemType': 4, 'count': 1}, {0: bracelet_flag_check, 1: bomb_flag})
     
     cello_flags = event_tools.createActionChain(flowchart, None, [
+        ('EventFlags', 'SetFlag', {'symbol': 'BowWowEvent', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
         ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False})
     ], bomb_check)

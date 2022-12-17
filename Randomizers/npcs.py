@@ -42,6 +42,13 @@ def makeNpcChanges(npc, placements):
         npc['collision']['isStatic'] = True
         npc['collision']['filter'] = 5
     
+    # if npc['symbol'] == 'ItemHeartPiece':
+    #     npc['graphics']['path'] = '$1'
+    #     npc['graphics']['model'] = '$2'
+    #     npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
+    #     npc['eventTriggers'][0]['entryPoint'] = '$3'
+    #     npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
+    
     if npc['symbol'] == 'ItemClothesGreen':
         npc['graphics']['path'] = 'ItemSmallKey.bfres'
         npc['graphics']['model'] = 'SmallKey'

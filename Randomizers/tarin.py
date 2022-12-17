@@ -38,6 +38,7 @@ def makeEventChanges(flowchart, placements, item_defs):
 
             if inst == 'full-moon-cello': # close the moblin cave doors so the moblins appear
                 event_defs += [
+                    ('EventFlags', 'SetFlag', {'symbol': 'BowWowEvent', 'value': True}),
                     ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
                     ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False})
                 ]

@@ -21,8 +21,8 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
         symbols.append(prize['symbol'])
 
-        # Bombs should not be obtainable until you have bombs, or automatically if unlocked-bombs is on
-        if prize['symbol'] == 'Bomb' and (placements['settings']['unlocked-bombs'] or placements['settings']['shuffle-bombs']):
+        # Bombs should not be obtainable until you have bombs if shuffled bombs is on
+        if prize['symbol'] == 'Bomb' and placements['settings']['shuffle-bombs']:
             prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
             continue
 
@@ -31,9 +31,19 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': data.SHIELD_FOUND_FLAG})
             continue
 
+        # Now because the 2 non featured prizes in this slot have conditions, the shield is in by default if they aren't met?
+        # Lets fix this by adding RupeeRed prizes to the slot that will be met automatically
+        if prize['symbol'] == 'RupeeRed':
+            prize['layouts'].append(oead_tools.dictToStruct({
+                'itemIndex': -1,
+                'conditions': [],
+                'place': {'type': 2, 'index': 1}
+            }))
+            continue
+        
         # Make the YoshiDoll prize go away once you get it since we don't actually keep the item
         if prize['symbol'] == 'YoshiDoll':
-            prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': 'TradeYoshiDollGet'})
+            prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!TradeYoshiDollGet'})
             continue
         
         # SmallBowWow (Ciao Ciao): Remove the condition of HintYosshi. It's unnecessary and can lead to a softlock
@@ -55,8 +65,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         prize1 = copy.deepcopy(oead_tools.parseStruct(sheet['values'][7]))
         prize1['symbol'] = item_defs[placements['trendy-prize-1']]['model-name']
         prize1['layouts'][0]['itemIndex'] = placements['indexes']['trendy-prize-1'] if 'trendy-prize-1' in placements['indexes'] else -1
-        # prize1['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!PrizeGet1'})
-        # prize1['layouts'][0]['gettingFlag'] = 'PrizeGet1'
+        prize1['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!PrizeGet1'})
         sheet['values'].append(oead_tools.dictToStruct(prize1))
         prizes_dict['prize1'] = {'cranePrizeId': total_syms, 'layoutIndex': 0, 'symbol': prize1['symbol'], 'index': prize1['layouts'][0]['itemIndex']}
         symbols.append(prize1['symbol'])
@@ -67,9 +76,8 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 prize['layouts'].append(oead_tools.dictToStruct({
                     'itemIndex': placements['indexes']['trendy-prize-1'] if 'trendy-prize-1' in placements['indexes'] else -1,
                     'conditions': [],
-                    # 'conditions': [{'category': 1, 'parameter': '!PrizeGet1'}],
+                    'conditions': [{'category': 1, 'parameter': '!PrizeGet1'}],
                     'place': {'type': 1, 'index': 0},
-                    # 'gettingFlag': 'PrizeGet1'
                 }))
                 layoutNum = len(prize['layouts']) - 1
                 break
@@ -295,8 +303,8 @@ def makeEventChanges(flowchart, settings):
     ], None)
     lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': data.LENS_FOUND_FLAG}, {0: yoshi_get, 1: yoshi_lens_get})
-    yoshi_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasPrize',
-        {'prizeType': 7, 'count': 1}, {0: None, 1: lens_flag_check})
+    yoshi_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 30, 'count': 1}, {0: None, 1: lens_flag_check})
 
     ### CONNECT LENS CHECK TO EVENTS
     event_tools.insertEventAfter(flowchart, 'Event3', yoshi_check)

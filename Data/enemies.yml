@@ -239,7 +239,8 @@ Actors:
   EnemySpark:
     id: 0x3D
     type: land
-    parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 1045220557]] # not sure why the kanalet spark has this oddity
+    parameters: [0, 0, 0, 0]
+    # parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 1045220557]] # not sure why the kanalet spark has this oddity
     enemy: True
   EnemyCreepee: # zirro / bomb fairy
     id: 0x3E
@@ -274,10 +275,10 @@ Actors:
     type: water2D
     parameters: [[0, 1]] # seems to decide if they jump or not, idk what determines if they move horizontally or vertically
     enemy: True
-  EnemyMinigler: # angler fish babies
-    id: 0x46
-    type: water2D
-    enemy: False
+  # EnemyMinigler: # angler fish babies - cannot have these randomized
+  #   id: 0x46
+  #   type: water2D
+  #   enemy: False
   EnemyGesso: # blooper
     id: 0x47
     type: water2D
@@ -424,6 +425,7 @@ Actors:
   EnemyBubble:
     id: 0xB7
     type: land
+    enemy: True
   # EnemyPotDemonPot:
   #   id: 0xB9
   #   type: boss
@@ -433,9 +435,10 @@ Actors:
   # AreaZombieSpawnBox:
   #   id: 0x197
   #   type: land
-  EnemyVireChild:
-    id: 0x1D1
-    type: air
+  # EnemyVireChild:
+  #   id: 0x1D1
+  #   type: air
+  #   enemy: True
   
 
 
@@ -511,6 +514,15 @@ Excluded_Actors: # rooms each with a list of actors to not modify
   Lv10ClothesDungeon_05G: [0, 1, 2]
 
 
+# Excluded_Rooms:
+#   - PanelLv01TailCave_08B
+#   - PanelLv01TailCave_04B
+#   - PanelLv01TailCave_08C
+#   - PanelLv01TailCave_07E
+#   - PanelLv01TailCave_07C
+#   - PanelLv01TailCave_05H
+
+
 Included_Folders:
   - AnimalVillageCave
   - AnimalVillageEnter
@@ -534,6 +546,16 @@ Included_Folders:
   - MermaidStatue
   - MysteriousWoodsCave01
   - MysteriousWoodsCave02
+  - PanelLv01TailCave
+  - PanelLv02BottleGrotto
+  - PanelLv03KeyCavern
+  - PanelLv04AnglersTunnel
+  - PanelLv05CatfishsMaw
+  - PanelLv06FaceShrine
+  - PanelLv07EagleTower
+  - PanelLv08TurtleRock
+  - PanelLv10ClothesDungeon
+  - PanelLv11PanelOnlyDungeon
   - RichardCave
   - Tamaranch01
   - Tamaranch02

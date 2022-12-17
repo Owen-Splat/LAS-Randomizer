@@ -87,6 +87,9 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['free-book'] and self.thread_active:
                 self.setFreeBook()
             
+            if self.placements['settings']['fast-songs'] and self.thread_active:
+                self.setFastSongs()
+            
             if self.placements['settings']['blup-sanity'] and self.thread_active:
                 self.makeLv10RupeeChanges()
             
@@ -202,7 +205,7 @@ class ModsProcess(QtCore.QThread):
         
         if self.placements['settings']['shuffle-instruments']:
             for inst in self.placements['starting-instruments']:
-                del trap_models[inst]
+                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
         else:
             for inst in self.instruments:
                 del trap_models[inst]
@@ -326,7 +329,7 @@ class ModsProcess(QtCore.QThread):
         
         if self.placements['settings']['shuffle-instruments']:
             for inst in self.placements['starting-instruments']:
-                del trap_models[inst]
+                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
         else:
             for inst in self.instruments:
                 del trap_models[inst]
@@ -471,7 +474,8 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item_index = self.placements['indexes']['walrus'] if 'walrus' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['walrus']]['item-key'], item_index, 'Event53', 'Event110')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['walrus']]['item-key'],
+            item_index, 'Event53', 'Event110')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Walrus.bfevfl', flow)
@@ -485,7 +489,8 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item_index = self.placements['indexes']['christine-grateful'] if 'christine-grateful' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['christine-grateful']]['item-key'], item_index, 'Event44', 'Event36')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['christine-grateful']]['item-key'],
+            item_index, 'Event44', 'Event36')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Christine.bfevfl', flow)
@@ -499,7 +504,8 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item_index = self.placements['indexes']['invisible-zora'] if 'invisible-zora' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['invisible-zora']]['item-key'], item_index, 'Event23', 'Event27')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['invisible-zora']]['item-key'],
+            item_index, 'Event23', 'Event27')
 
         event_tools.insertEventAfter(flow.flowchart, 'Event32', 'Event23')
 
@@ -514,8 +520,14 @@ class ModsProcess(QtCore.QThread):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Marin.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
+        if self.placements['settings']['fast-songs']: # skip the cutscene if fast-songs is enabled
+            before_item = 'Event86'
+        else:
+            before_item = 'Event246'
+
         item_index = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'], item_index, 'Event246', 'Event666')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'],
+            item_index, before_item, 'Event666')
 
         marin.makeEventChanges(flow)
 
@@ -533,7 +545,8 @@ class ModsProcess(QtCore.QThread):
         new = event_tools.createActionEvent(flow.flowchart, 'Owl', 'Destroy', {})
 
         item_index = self.placements['indexes']['ghost-reward'] if 'ghost-reward' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['ghost-reward']]['item-key'], item_index, 'Event34', new)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['ghost-reward']]['item-key'],
+            item_index, 'Event34', new)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Owl.bfevfl', flow)
@@ -547,10 +560,12 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item_index = self.placements['indexes']['D0-fairy-2'] if 'D0-fairy-2' in self.placements['indexes'] else -1
-        item2 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-2']]['item-key'], item_index, 'Event0', 'Event180')
+        item2 = item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-2']]['item-key'],
+            item_index, 'Event0', 'Event180')
 
         item_index = self.placements['indexes']['D0-fairy-1'] if 'D0-fairy-1' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-1']]['item-key'], item_index, 'Event0', item2)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D0-fairy-1']]['item-key'],
+            item_index, 'Event0', item2)
 
         event_tools.insertEventAfter(flow.flowchart, 'Event128', 'Event58')
 
@@ -565,10 +580,12 @@ class ModsProcess(QtCore.QThread):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Goriya.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': data.GORIYA_FLAG, 'value': True}, 'Event4')
+        flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': data.GORIYA_FLAG, 'value': True}, 'Event4')
 
         item_index = self.placements['indexes']['goriya-trader'] if 'goriya-trader' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['goriya-trader']]['item-key'], item_index, 'Event87', flag_event)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['goriya-trader']]['item-key'],
+            item_index, 'Event87', flag_event)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
             {'symbol': data.GORIYA_FLAG}, {0: 'Event7', 1: 'Event15'})
@@ -585,10 +602,17 @@ class ModsProcess(QtCore.QThread):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ManboTamegoro.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': data.MANBO_FLAG, 'value': True}, 'Event13')
-
+        flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': data.MANBO_FLAG, 'value': True}, 'Event13')
+        
+        if self.placements['settings']['fast-songs']: # skip the cutscene if fast-songs is enabled
+            before_item = 'Event44'
+        else:
+            before_item = 'Event31'
+        
         item_index = self.placements['indexes']['manbo'] if 'manbo' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['manbo']]['item-key'], item_index, 'Event31', flag_event)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['manbo']]['item-key'],
+            item_index, before_item, flag_event)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': data.MANBO_FLAG}, {0: 'Event37', 1: 'Event35'})
@@ -605,10 +629,17 @@ class ModsProcess(QtCore.QThread):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Mamu.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
-        flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag', {'symbol': data.MAMU_FLAG, 'value': True}, 'Event40')
-
+        flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': data.MAMU_FLAG, 'value': True}, 'Event40')
+        
+        if self.placements['settings']['fast-songs']: # skip the cutscene if fast-songs is enabled
+            before_item = 'Event55'
+        else:
+            before_item = 'Event85'
+        
         item_index = self.placements['indexes']['mamu'] if 'mamu' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mamu']]['item-key'], item_index, 'Event85', flag_event)
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['mamu']]['item-key'],
+            item_index, before_item, flag_event)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': data.MAMU_FLAG}, {0: 'Event14', 1: 'Event98'})
@@ -650,7 +681,8 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item_index = self.placements['indexes']['trendy-prize-final'] if 'trendy-prize-final' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['trendy-prize-final']]['item-key'], item_index, 'Event112', 'Event239')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['trendy-prize-final']]['item-key'],
+            item_index, 'Event112', 'Event239')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/GameShopOwner.bfevfl', flow)
@@ -1054,7 +1086,7 @@ class ModsProcess(QtCore.QThread):
                 
                 if self.placements['settings']['shuffle-instruments']:
                     for inst in self.placements['starting-instruments']:
-                        del trap_models[inst]
+                        del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
                 else:
                     for inst in self.instruments:
                         del trap_models[inst]
@@ -1084,7 +1116,8 @@ class ModsProcess(QtCore.QThread):
         ### First check if FirstClear is already set, to not do the work more than once and slightly slow down loading zones.
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PlayerStart.bfevfl')
-            player_start.makeStartChanges(flow, self.placements['settings'])
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            player_start.makeStartChanges(flow.flowchart, self.placements['settings'])
 
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl', flow)
@@ -1147,18 +1180,6 @@ class ModsProcess(QtCore.QThread):
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', flow)
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
-        
-        # #################################################################################################################################
-        # ### ItemCommon: Testing to see if Dampe uses this, will make a CompareString event chain to customize item get events
-        # flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ItemCommon.bfevfl')
-        # actors.addNeededActors(flow.flowchart, self.rom_path)
-        # flow.flowchart.actors.append(flow_control_actor)
-        # item_common.addCompareStringChain(flow.flowchart)
-
-        # if self.thread_active:
-        #     event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ItemCommon.bfevfl', flow)
-        #     self.progress_value += 1 # update progress bar
-        #     self.progress_update.emit(self.progress_value)
         
         #################################################################################################################################
         ### MadamMeowMeow: Change her behaviour to always take back BowWow if you have him, and not do anything based on having the Horn
@@ -1241,11 +1262,6 @@ class ModsProcess(QtCore.QThread):
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PrizeCommon.bfevfl', prize)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-        
-        # ###############################################################################################################################
-        # ### Fast Songs: Skip the song learning cutscene and gives item immediately
-        # if self.placements['settings']['fast-songs']:
-        #     pass
 
 
 
@@ -1477,7 +1493,7 @@ class ModsProcess(QtCore.QThread):
                     
                     if self.placements['settings']['shuffle-instruments']:
                         for inst in self.placements['starting-instruments']:
-                            del trap_models[inst]
+                            del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
                     else:
                         for inst in self.instruments:
                             del trap_models[inst]
@@ -1539,7 +1555,7 @@ class ModsProcess(QtCore.QThread):
 
                     if self.placements['settings']['shuffle-instruments']:
                         for inst in self.placements['starting-instruments']:
-                            del trap_models[inst]
+                            del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
                     else:
                         for inst in self.instruments:
                             del trap_models[inst]
@@ -1669,7 +1685,7 @@ class ModsProcess(QtCore.QThread):
         
         if self.placements['settings']['shuffle-instruments']:
             for inst in self.placements['starting-instruments']:
-                del trap_models[inst]
+                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
         else:
             for inst in self.instruments:
                 del trap_models[inst]
@@ -1922,8 +1938,8 @@ class ModsProcess(QtCore.QThread):
     #     if self.thread_active:
     #         crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
     #         self.progress_value += 1 # update progress bar
-    #         self.progress_update.emit(self.progress_value)
-    
+    #         self.progress_update.emit(self.progress_value)  
+
 
 
     def randomizeEnemies(self):
@@ -1955,7 +1971,11 @@ class ModsProcess(QtCore.QThread):
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
 
-        folders = [f for f in os.listdir(levels_path) if f in ENEMY_DATA['Included_Folders']]
+        included_folders = ENEMY_DATA['Included_Folders']
+        if not self.placements['settings']['panel-enemies']:
+            included_folders = [s for s in included_folders if not s.startswith('Panel')]
+        
+        folders = [f for f in os.listdir(levels_path) if f in included_folders]
 
         num_of_mods = 0
         random.seed(self.seed) # restart the rng so that enemies will be the same regardless of settings
@@ -1985,11 +2005,11 @@ class ModsProcess(QtCore.QThread):
                                 enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
 
                                 if enemy_type == 'land':
-                                    act.type = random.choice(land_ids)
+                                    act.type = random.choice([*land_ids, *air_ids])
                                 elif enemy_type == 'air':
                                     act.type = random.choice(air_ids)
                                 elif enemy_type == 'water':
-                                    act.type = random.choice(water_ids)
+                                    act.type = random.choice([*water_ids, *air_ids])
                                 elif enemy_type == 'water2D':
                                     act.type = random.choice(water2D_ids)
                                 elif enemy_type == 'tree':

@@ -65,4 +65,4 @@ SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
 
 LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'death', 'none')
 
-OWLS_SETTINGS = ('vanilla', 'hints', 'gifts', 'hybrid')
+OWLS_SETTINGS = ('vanilla', 'gifts') # ('vanilla', 'hints', 'gifts', 'hybrid')

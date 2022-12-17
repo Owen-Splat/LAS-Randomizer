@@ -1010,8 +1010,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>548</x>
-          <y>184</y>
+          <x>10</x>
+          <y>224</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1126,7 +1126,7 @@
         <property name="font">
          <font>
           <pointsize>9</pointsize>
-          <strikeout>true</strikeout>
+          <strikeout>false</strikeout>
          </font>
         </property>
         <property name="toolTip">
@@ -1135,14 +1135,11 @@
         <property name="whatsThis">
          <string>Skips the song learning animations and instead just immediately gives the item</string>
         </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(80, 80, 80);</string>
-        </property>
         <property name="text">
          <string>Fast Songs</string>
         </property>
         <property name="checkable">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QCheckBox" name="zapsCheck">
@@ -1170,7 +1167,7 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>369</x>
+          <x>548</x>
           <y>184</y>
           <width>173</width>
           <height>21</height>
@@ -1368,6 +1365,37 @@
         </property>
         <property name="geometry">
          <rect>
+          <x>369</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Randomizes enemy actors. Currently no logic, needed kills are left vanilla&lt;br&gt;&lt;/br&gt;&lt;u&gt;This is in the very early stages,&lt;/u&gt; and as such things may break</string>
+        </property>
+        <property name="text">
+         <string>Randomize Enemies</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="fastMSCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
           <x>189</x>
           <y>184</y>
           <width>173</width>
@@ -1384,10 +1412,10 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Randomizes the enemies in the overworld and in caves</string>
+         <string>Makes it so that you only need to fight the last iteration of Master Stalfos</string>
         </property>
         <property name="text">
-         <string>Randomize Enemies</string>
+         <string>Fast Master Stalfos</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -1620,7 +1648,7 @@
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
-      <string>Logic Tricks</string>
+      <string>Logic</string>
      </attribute>
      <widget class="QListWidget" name="listWidget_4">
       <property name="geometry">

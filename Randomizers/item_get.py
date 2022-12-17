@@ -100,6 +100,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     ### Instrument flags
     if item == 'FullMoonCello':
         return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'BowWowEvent', 'value': True}),
             ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
             ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
