@@ -99,7 +99,7 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['randomize-enemies'] and self.thread_active:
                 self.randomizeEnemies()
         
-        except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError, OverflowError):
+        except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError, OverflowError, UnboundLocalError):
             print(traceback.format_exc())
             self.error.emit()
         
