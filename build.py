@@ -30,9 +30,9 @@ base_name = "Links Awakening Randomizer"
 
 import struct
 if (struct.calcsize("P") * 8) == 64:
-	bitness_suffix = "_64bit"
+	bitness_suffix = "_x64"
 else:
-	bitness_suffix = "_32bit"
+	bitness_suffix = "_x32"
 
 exe_ext = ""
 if platform.system() == "Windows":
