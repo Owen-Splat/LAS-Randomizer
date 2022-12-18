@@ -87,9 +87,6 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['free-book'] and self.thread_active:
                 self.setFreeBook()
             
-            if self.placements['settings']['fast-songs'] and self.thread_active:
-                self.setFastSongs()
-            
             if self.placements['settings']['blup-sanity'] and self.thread_active:
                 self.makeLv10RupeeChanges()
             
