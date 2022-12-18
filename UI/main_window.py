@@ -180,6 +180,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.bridgeCheck.setChecked(True)
         self.ui.mazeCheck.setChecked(True)
         self.ui.swampCheck.setChecked(False)
+        self.ui.fastMSCheck.setChecked(False)
+        self.ui.songsCheck.setChecked(False)
         self.ui.enemyCheck.setChecked(False)
         self.ui.owlsComboBox.setCurrentIndex(0)
 
@@ -216,6 +218,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fast_Stealing': self.ui.stealingCheck.isChecked(),
             'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
             'Fast_Songs': self.ui.songsCheck.isChecked(),
+            'Fast_Master_Stalfos': self.ui.fastMSCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
             'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
@@ -395,7 +398,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
         except (KeyError, TypeError):
             self.ui.songsCheck.setChecked(False)
-
+        
+        # fast master stalfos
+        try:
+            self.ui.fastMSCheck.setChecked(SETTINGS['Fast_Master_Stalfos'])
+        except (KeyError, TypeError):
+            self.ui.fastMSCheck.setChecked(False)
+        
         # reduced farming
         try:
             self.ui.farmingCheck.setChecked(SETTINGS['Reduced_Farming'])
