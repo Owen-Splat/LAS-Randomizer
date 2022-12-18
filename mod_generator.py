@@ -1885,6 +1885,36 @@ class ModsProcess(QtCore.QThread):
                         f.write(room_data.repack())
                         self.progress_value += 1 # update progress bar
                         self.progress_update.emit(self.progress_value)
+            
+            if self.thread_active:
+                with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_06C.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+                room_data.actors[0].parameters[0] = bytes('examine_Color06C', 'utf-8')
+                if self.thread_active:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_06C.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+
+            if self.thread_active:
+                with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+                room_data.actors[0].parameters[0] = bytes('examine_Color07D', 'utf-8')
+                if self.thread_active:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+
+            if self.thread_active:
+                with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+                room_data.actors[0].parameters[0] = bytes('examine_Color05F', 'utf-8')
+                if self.thread_active:
+                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
 
 
     

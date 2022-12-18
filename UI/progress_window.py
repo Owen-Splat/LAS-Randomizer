@@ -37,6 +37,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
         
+        if settings['owl-gifts']:
+            self.num_of_mod_files += 4
+        
         if settings['randomize-music']:
             self.num_of_mod_files += 69
         
