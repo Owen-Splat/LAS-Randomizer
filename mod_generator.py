@@ -518,14 +518,20 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         if self.placements['settings']['fast-songs']: # skip the cutscene if fast-songs is enabled
-            before_item = 'Event86'
+
+            flag_set = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
+                {'symbol': 'MarinsongGet', 'value': True}, None)
+            event_tools.insertEventAfter(flow.flowchart, 'Event86', flag_set)
+
+            item_index = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
+            item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'],
+                item_index, flag_set, 'Event666')
+        
         else:
-            before_item = 'Event246'
-
-        item_index = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'],
-            item_index, before_item, 'Event666')
-
+            item_index = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
+            item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'],
+                item_index, 'Event246', 'Event666')
+            
         marin.makeEventChanges(flow)
 
         if self.thread_active:
