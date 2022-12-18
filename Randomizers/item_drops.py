@@ -48,11 +48,11 @@ def makeDatasheetChanges(sheet, placements):
 
 
 
-def createDatasheetConditions(sheet):
-    sheet['root_fields'].append(oead_tools.createField(
-    name='conditions',
-    type_name='__inline_struct_ItemDrop_conditions',
-    type=oead.gsheet.Field.Type.Struct,
-    flags=oead.gsheet.Field.Flag.IsArray,
-    offset=28
-))
+# def createDatasheetConditions(sheet):
+#     sheet['root_fields'].append(oead_tools.createField(
+#     name='conditions',
+#     type_name='__inline_struct_ItemDrop_conditions',
+#     type=oead.gsheet.Field.Type.Struct,
+#     flags=oead.gsheet.Field.Flag.IsArray,
+#     offset=28
+# ))

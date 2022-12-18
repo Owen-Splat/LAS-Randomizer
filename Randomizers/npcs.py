@@ -42,13 +42,6 @@ def makeNpcChanges(npc, placements):
         npc['collision']['isStatic'] = True
         npc['collision']['filter'] = 5
     
-    # if npc['symbol'] == 'ItemHeartPiece':
-    #     npc['graphics']['path'] = '$1'
-    #     npc['graphics']['model'] = '$2'
-    #     npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
-    #     npc['eventTriggers'][0]['entryPoint'] = '$3'
-    #     npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
-    
     if npc['symbol'] == 'ItemClothesGreen':
         npc['graphics']['path'] = 'ItemSmallKey.bfres'
         npc['graphics']['model'] = 'SmallKey'
@@ -137,8 +130,8 @@ def makeNpcChanges(npc, placements):
     
     if npc['symbol'] == 'NpcTarin':
         npc['eventTriggers'][5]['additionalConditions'][0] = {'category': 1, 'parameter': '!ShieldGet'} # Make Tarin detain based on talking to him, not having Shield
-        if placements['tarin'] == 'seashell':
-            npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin']}"})
+        # if placements['tarin'] == 'seashell':
+        #     npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin']}"})
         
         npc['eventTriggers'][1]['additionalConditions'][0] = {'category': 4, 'parameter': '3'} # Only the instance of Tarin-Ukuku should trigger the trade event
         npc['shellSensor'].append({'category': 4, 'parameter': '3'}) # Only the instance of Tarin-Ukuku should ring the sensor

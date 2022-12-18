@@ -1298,7 +1298,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
-        ### Items datasheet: Set npcKeys for SmallKeys, HeartPieces, and Seashells so they show something when you get them.
+        ### Items datasheet: Set npcKeys so certain items will show something when you get them.
         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
 
         for item in sheet['values']:
@@ -1897,7 +1897,7 @@ class ModsProcess(QtCore.QThread):
                         self.progress_update.emit(self.progress_value)
 
             if self.thread_active:
-                with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'rb') as f:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'rb') as f:
                     room_data = leb.Room(f.read())
                 room_data.actors[4].parameters[0] = bytes('examine_Color07D', 'utf-8')
                 if self.thread_active:
@@ -1907,7 +1907,7 @@ class ModsProcess(QtCore.QThread):
                         self.progress_update.emit(self.progress_value)
 
             if self.thread_active:
-                with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'rb') as f:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'rb') as f:
                     room_data = leb.Room(f.read())
                 room_data.actors[4].parameters[0] = bytes('examine_Color05F', 'utf-8')
                 if self.thread_active:
