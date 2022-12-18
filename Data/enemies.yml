@@ -546,16 +546,16 @@ Included_Folders:
   - MermaidStatue
   - MysteriousWoodsCave01
   - MysteriousWoodsCave02
-  - PanelLv01TailCave
-  - PanelLv02BottleGrotto
-  - PanelLv03KeyCavern
-  - PanelLv04AnglersTunnel
-  - PanelLv05CatfishsMaw
-  - PanelLv06FaceShrine
-  - PanelLv07EagleTower
-  - PanelLv08TurtleRock
-  - PanelLv10ClothesDungeon
-  - PanelLv11PanelOnlyDungeon
+  # - PanelLv01TailCave
+  # - PanelLv02BottleGrotto
+  # - PanelLv03KeyCavern
+  # - PanelLv04AnglersTunnel
+  # - PanelLv05CatfishsMaw
+  # - PanelLv06FaceShrine
+  # - PanelLv07EagleTower
+  # - PanelLv08TurtleRock
+  # - PanelLv10ClothesDungeon
+  # - PanelLv11PanelOnlyDungeon
   - RichardCave
   - Tamaranch01
   - Tamaranch02

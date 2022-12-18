@@ -1969,8 +1969,8 @@ class ModsProcess(QtCore.QThread):
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
 
         included_folders = ENEMY_DATA['Included_Folders']
-        if not self.placements['settings']['panel-enemies']:
-            included_folders = [s for s in included_folders if not s.startswith('Panel')]
+        # if not self.placements['settings']['panel-enemies']:
+        #     included_folders = [s for s in included_folders if not s.startswith('Panel')]
         
         folders = [f for f in os.listdir(levels_path) if f in included_folders]
 
