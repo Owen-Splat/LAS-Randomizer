@@ -42,10 +42,10 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             }))
             continue
         
-        # Make the YoshiDoll prize go away once you get it since we don't actually keep the item
-        if prize['symbol'] == 'YoshiDoll':
-            prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!TradeYoshiDollGet'})
-            continue
+        # # Make the YoshiDoll prize go away once you get it since we don't actually keep the item
+        # if prize['symbol'] == 'YoshiDoll':
+        #     prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!TradeYoshiDollGet'})
+        #     continue
         
         # get rid of the instrument requirements if fast-trendy is on
         if prize['symbol'] == 'HeartPiece' and placements['settings']['fast-trendy']:
@@ -57,7 +57,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             continue
         
         if prize['symbol'] == 'PanelDungeonPiece' and placements['settings']['fast-trendy']:
-            prize['layouts'][1]['conditions'].pop(0)
+            prize['layouts'][0]['conditions'].pop(0)
             continue
 
         # SmallBowWow (Ciao Ciao): Remove the condition of HintYosshi. It's unnecessary and can lead to a softlock
