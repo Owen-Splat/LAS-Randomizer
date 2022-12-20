@@ -666,6 +666,30 @@
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <widget class="QCheckBox" name="dampeCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>64</y>
+           <width>173</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;This is still likely broken,&lt;/u&gt; no logic for instrument shuffle and progressive items may not work</string>
+         </property>
+         <property name="text">
+          <string>Dampé</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QComboBox" name="seashellsComboBox">
         <property name="geometry">
@@ -719,7 +743,7 @@
          </property>
         </item>
        </widget>
-       <widget class="QCheckBox" name="dampeCheck">
+       <widget class="QCheckBox" name="dampeTEMPCheck">
         <property name="geometry">
          <rect>
           <x>189</x>
@@ -731,6 +755,7 @@
         <property name="font">
          <font>
           <pointsize>9</pointsize>
+          <strikeout>true</strikeout>
          </font>
         </property>
         <property name="toolTip">
@@ -739,8 +764,14 @@
         <property name="whatsThis">
          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic is not written to work with instrument shuffle,&lt;/u&gt; and may result in unbeatable seeds</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(80, 80, 80);</string>
+        </property>
         <property name="text">
          <string>Dampé</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
         </property>
        </widget>
        <widget class="QCheckBox" name="trendyCheck">
@@ -951,7 +982,7 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Gives the final Trendy reward from getting the Bow-Wow Figure</string>
+         <string>Removes instrument requirements and gives the final Trendy reward from getting the CiaoCiao Figure</string>
         </property>
         <property name="text">
          <string>Fast Trendy</string>
@@ -1316,6 +1347,9 @@
           <width>161</width>
           <height>22</height>
          </rect>
+        </property>
+        <property name="whatsThis">
+         <string>This determines if Owl Statues will give items or not</string>
         </property>
         <property name="currentIndex">
          <number>0</number>

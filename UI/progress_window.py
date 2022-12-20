@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = settings
         
         self.valid_placements = 187 - len(self.settings['excluded-locations'])
-        self.num_of_mod_files = 246
+        self.num_of_mod_files = 248
         
         if settings['shuffle-bombs']:
             self.num_of_mod_files -= 1
@@ -44,7 +44,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_files += 69
         
         if settings['randomize-enemies']:
-            self.num_of_mod_files += 351 # 192
+            self.num_of_mod_files += 348
         
         self.done = False
         self.cancel = False

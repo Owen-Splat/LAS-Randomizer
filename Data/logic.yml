@@ -375,7 +375,7 @@ fishing-100:
   index: 45
   region: mabe
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (wind-marimba | coral-triangle | free-fishing)
+  condition-basic: can-farm-rupees & (wind-marimba | coral-triangle | fast-fishing)
 fishing-150:
   type: item
   subtype: npc
@@ -383,7 +383,7 @@ fishing-150:
   index: 11
   region: mabe
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (coral-triangle | free-fishing)
+  condition-basic: can-farm-rupees & (coral-triangle | fast-fishing)
 fishing-cheep-cheep:
   type: item
   subtype: npc
@@ -391,7 +391,7 @@ fishing-cheep-cheep:
   index: 44
   region: mabe
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (surf-harp | free-fishing)
+  condition-basic: can-farm-rupees & (surf-harp | fast-fishing)
 fishing-ol-baron:
   type: item
   subtype: npc
@@ -399,7 +399,7 @@ fishing-ol-baron:
   index: 12
   region: mabe
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (coral-triangle | free-fishing)
+  condition-basic: can-farm-rupees & (coral-triangle | fast-fishing)
 fishing-loose:
   type: item
   subtype: standing
@@ -2775,7 +2775,7 @@ D5-3E:
   condition-basic: (D5-7F & kill-gohma & hookshot & feather & key-D5:3) | (D5-5G & feather & kill-star)
 D5-5G:
   type: room
-  condition-basic: (D5-7F & kill-stalfos-yellow & kill-stalfos-red & kill-master-stalfos) | (D5-3E & key-D5:3 & hookshot & feather & kill-star)
+  condition-basic: (D5-7F & kill-stalfos-yellow & kill-stalfos-red & (kill-master-stalfos | fast-master-stalfos)) | (D5-3E & key-D5:3 & hookshot & feather & kill-star)
 D5-7F:
   type: room
   condition-basic: D5-8H & key-D5:1

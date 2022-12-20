@@ -1,6 +1,6 @@
 from Randomizers import data
 import Tools.oead_tools as oead_tools
-import oead
+from Randomizers import data
 import copy
 
 
@@ -118,8 +118,13 @@ def makeNpcChanges(npc, placements):
     
     if npc['symbol'] == 'NpcPapahl':
         npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 2}
-
-
+    
+    if npc['symbol'] == 'NpcSecretZora':
+        npc['popConditions']['conditions'][0] = {'category': 1, 'parameter': data.LENS_FOUND_FLAG}
+    
+    if npc['symbol'] == 'NpcGoriya':
+        npc['popConditions']['conditions'][0] = {'category': 1, 'parameter': data.LENS_FOUND_FLAG}
+    
     # Adjustments for NPCs that can have seashells, to make the sensor work properly
     if npc['symbol'] == 'NpcChristine':
         npc['shellSensor'].pop()

@@ -27,7 +27,7 @@ def makeStartChanges(flowchart, settings):
         ('EventFlags', 'SetFlag', {'symbol': 'FourteenClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'FiveteenClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'WalrusAwaked', 'value': True}),
-        ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True})
     ]
 
     if settings['open-kanalet']:

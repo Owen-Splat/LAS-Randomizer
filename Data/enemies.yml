@@ -315,10 +315,10 @@ Actors:
     id: 0x4F
     type: land
     enemy: True
-  EnemyTeresa: # boo
-    id: 0x50
-    type: air
-    enemy: True
+  # EnemyTeresa: # boo - cant kill them until you get rod and they can be super annoying
+  #   id: 0x50
+  #   type: air
+  #   enemy: True
   # EnemyRola:
   #    id: 0x51
   #    type: miniboss
@@ -439,15 +439,20 @@ Actors:
   #   id: 0x1D1
   #   type: air
   #   enemy: True
-  
+
 
 
 Excluded_Actors: # rooms each with a list of actors to not modify
+  Field_10G: [0] # villa skip pincer
   Field_06I: [0]
   Field_06K: [0]
+  Field_04B: [1] # bowwow skip like like
+  Field_04I: [3] # ak skip boarblin
   KanaletCastle_01D: [0]
   KanaletCastle_02A: [0, 1, 2]
+  Lv01TailCave_08B: [1, 2, 3, 4] # kill room but can reset
   Lv01TailCave_08C: [0, 1]
+  Lv01TailCave_07C: [0, 1, 2, 3] # kill room but can reset
   Lv01TailCave_07E: [0, 1, 2, 3]
   Lv01TailCave_06C: [5]
   Lv01TailCave_06D: [8]
@@ -476,28 +481,36 @@ Excluded_Actors: # rooms each with a list of actors to not modify
   Lv03KeyCavern_01B: [0, 1, 2]
   # Lv03KeyCavern_01C: [0, 1, 2, 3]
   Lv03KeyCavern_01D: [0, 1, 2, 3, 4]
+  Lv04AnglersTunnel_08E: [0, 1, 2, 3] # kill room but can reset
   Lv04AnglersTunnel_07D: [0, 1, 2]
   Lv04AnglersTunnel_07E: [0, 1, 2, 3]
   Lv04AnglersTunnel_04E: [0, 1]
+  Lv04AnglersTunnel_02D: [0, 1] # kill room but can reset
   # Lv04AnglersTunnel_04AL: [6, 7, 8, 9, 10] # angler fish babies, REQUIRES TESTING
+  Lv05CatfishsMaw_08E: [1, 2] # kill room but can reset
   Lv05CatfishsMaw_08F: [0, 1, 2, 3, 4]
   Lv05CatfishsMaw_07D: [1, 2]
   Lv05CatfishsMaw_07E: [4, 5]
   Lv05CatfishsMaw_06F: [0, 1, 2]
   Lv05CatfishsMaw_03C: [1, 2, 3]
-  Lv05CatfishsMaw_02F: [1, 2]
+  Lv05CatfishsMaw_02F: [1, 2, 3]
+  Lv05CatfishsMaw_01E: [0, 1, 2] # kill room but can reset
   Lv06FaceShrine_08B: [1, 2, 3]
   Lv06FaceShrine_08C: [1, 2, 3]
   Lv06FaceShrine_07G: [1, 2, 3, 4]
+  Lv06FaceShrine_06D: [2, 3, 4, 5] # maybe not an issue, but lets leave the vaccuum room vanilla just in case
   Lv06FaceShrine_06E: [1]
   Lv06FaceShrine_05A: [2, 3, 4]
   Lv06FaceShrine_05C: [1, 2, 3, 4]
   Lv06FaceShrine_04H: [1, 2, 3]
   Lv06FaceShrine_03D: [1, 2]
+  Lv06FaceShrine_03H: [1, 2] # an armos spawning in this room blocks the path if the player cannot kill it
   Lv07EagleTower_08D: [0, 1]
   Lv07EagleTower_04B: [0, 1, 2]
   Lv07EagleTower_01B: [0, 1, 2]
+  Lv08TurtleRock_08A: [0, 1, 2] # kill room but can reset
   Lv08TurtleRock_08E: [0, 1]
+  Lv08TurtleRock_08H: [0, 1, 2, 3]
   Lv08TurtleRock_07C: [0, 1, 2]
   Lv08TurtleRock_07D: [0]
   Lv08TurtleRock_07G: [1, 2]

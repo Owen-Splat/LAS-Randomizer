@@ -1355,30 +1355,30 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        # #################################################################################################################################
-        # ### CranePrize datasheet
-        # if self.thread_active:
-        #     sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
-        #     crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
-        #     # print(oead_tools.parseStructArray(sheet['values']))
+        #################################################################################################################################
+        ### CranePrize datasheet
+        if self.thread_active:
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
+            crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
+            # print(oead_tools.parseStructArray(sheet['values']))
 
-        #     if self.thread_active:
-        #         oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
-        #         self.progress_value += 1 # update progress bar
-        #         self.progress_update.emit(self.progress_value)
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrize.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
-        # #################################################################################################################################
-        # ### Prize Groups
-        # group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        #################################################################################################################################
+        ### Prize Groups
+        group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
         # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
 
-        # crane_prizes.changePrizeGroups(group1, group2)
+        crane_prizes.changePrizeGroups(group1)
 
-        # if self.thread_active:
-        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
-        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
-        #     self.progress_value += 2 # update progress bar
-        #     self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
+            # oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### GlobalFlags datasheet
@@ -1395,10 +1395,11 @@ class ModsProcess(QtCore.QThread):
         ### FishingFish datasheet: Remove the instrument requirements
         if self.placements['settings']['fast-fishing'] and self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/FishingFish.gsheet')
+
             for fish in sheet['values']:
                 if self.thread_active:
-                    if fish['mOpenItem']:
-                        fish['mOpenItem'] = ''
+                    if len(fish['mOpenItem']) > 0:
+                        fish['mOpenItem'] = 'ClothesGreen'
                 else: break
             
             if self.thread_active:
@@ -1523,16 +1524,16 @@ class ModsProcess(QtCore.QThread):
         # Open up the already modded SinkingSword eventflow to make new events
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
         
-        # sunken = [
-        #     'taltal-east-drop',
-        #     'south-bay-sunken',
-        #     'bay-passage-sunken',
-        #     'river-crossing-cave',
-        #     'kanalet-moat-south'
-        # ]
-        # non_sunken = (x for x in data.HEART_ROOMS if x not in sunken)
+        sunken = [
+            'taltal-east-drop',
+            'south-bay-sunken',
+            'bay-passage-sunken',
+            'river-crossing-cave',
+            'kanalet-moat-south'
+        ]
+        non_sunken = (x for x in data.HEART_ROOMS if x not in sunken)
         
-        for room in data.HEART_ROOMS:
+        for room in non_sunken:
             if self.thread_active:
                 dirname = re.match('(.+)_\\d\\d[A-P]', data.HEART_ROOMS[room]).group(1)
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
@@ -2040,7 +2041,10 @@ class ModsProcess(QtCore.QThread):
                                 if enemy_type == 'land':
                                     act.type = random.choice([*land_ids, *air_ids])
                                 elif enemy_type == 'air':
-                                    act.type = random.choice(air_ids)
+                                    if folder == 'Field':
+                                        act.type = random.choice(list(air_ids[:]).remove(0x26)) # remove vires from overworld
+                                    else:
+                                        act.type = random.choice(air_ids)
                                 elif enemy_type == 'water':
                                     act.type = random.choice([*water_ids, *air_ids])
                                 elif enemy_type == 'water2D':
@@ -2090,4 +2094,4 @@ class ModsProcess(QtCore.QThread):
                                     self.progress_update.emit(self.progress_value)
                                     num_of_mods += 1
         
-        print(num_of_mods)
+        # print(num_of_mods)

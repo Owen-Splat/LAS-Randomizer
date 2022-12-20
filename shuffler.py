@@ -53,17 +53,17 @@ class ItemShuffler(QtCore.QThread):
                             and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
         # vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
-        vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
+        # vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
         vanilla_locations.append('trendy-prize-2')
         vanilla_locations.append('trendy-prize-3')
         vanilla_locations.append('trendy-prize-4')
         vanilla_locations.append('trendy-prize-5')
         vanilla_locations.append('trendy-prize-6')
-        vanilla_locations.remove('bay-passage-sunken')
-        vanilla_locations.remove('river-crossing-cave')
-        vanilla_locations.remove('kanalet-moat-south')
-        vanilla_locations.remove('south-bay-sunken')
-        vanilla_locations.remove('taltal-east-drop')
+        # vanilla_locations.remove('bay-passage-sunken')
+        # vanilla_locations.remove('river-crossing-cave')
+        # vanilla_locations.remove('kanalet-moat-south')
+        # vanilla_locations.remove('south-bay-sunken')
+        # vanilla_locations.remove('taltal-east-drop')
         
         # vanilla_locations.remove('shop-slot3-1st')
         # vanilla_locations.remove('shop-slot3-2nd')
@@ -98,8 +98,15 @@ class ItemShuffler(QtCore.QThread):
             for i in range(self.settings['starting-instruments']):
                 inst = instruments.pop(0)
                 start_instruments.append(self.logic_defs[inst]['content'])
-            for i in start_instruments:
-                self.item_defs[i]['quantity'] = 0
+            for e, i in enumerate(start_instruments):
+                self.logic_defs[f'starting-instrument-{e+1}'] = {
+                    'type': 'item',
+                    'subtype': 'npc',
+                    'content': i,
+                    'region': 'mabe',
+                    'spoiler-region': 'mabe-village'
+                }
+                vanilla_locations.append(f'starting-instrument-{e+1}')
                 self.item_defs['rupee-50']['quantity'] += 1
 
         if not self.settings['shuffle-instruments']:
@@ -413,6 +420,9 @@ class ItemShuffler(QtCore.QThread):
         placements['moblin-cave'] = 'bow-wow'
         placements['rooster-statue'] = 'rooster'
 
+        # Force a red rupee over trendy yoshi doll (for now)
+        placements['trendy-prize-1'] = 'rupee-20'
+        
         # Shuffle item and location lists
         random.shuffle(important_items)
         random.shuffle(seashell_items)

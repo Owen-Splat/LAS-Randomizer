@@ -16,10 +16,11 @@ def makeDatasheetChanges(sheet, placements, item_defs):
     # type 1 is the lower level, index 0 on the left and index 2 on the right
     # type 2 is upper level, index 0 on the left and index 1 on the right
 
-    symbols = []
+    # symbols = []
+    sheet['values'].pop(7) # remove yoshi doll
     for prize in sheet['values']:
 
-        symbols.append(prize['symbol'])
+        # symbols.append(prize['symbol'])
 
         # Bombs should not be obtainable until you have bombs if shuffled bombs is on
         if prize['symbol'] == 'Bomb' and placements['settings']['shuffle-bombs']:
@@ -46,6 +47,19 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!TradeYoshiDollGet'})
             continue
         
+        # get rid of the instrument requirements if fast-trendy is on
+        if prize['symbol'] == 'HeartPiece' and placements['settings']['fast-trendy']:
+            prize['layouts'][1]['conditions'].pop(0)
+            continue
+        
+        if prize['symbol'] == 'SecretSeashell' and placements['settings']['fast-trendy']:
+            prize['layouts'][1]['conditions'].pop(0)
+            continue
+        
+        if prize['symbol'] == 'PanelDungeonPiece' and placements['settings']['fast-trendy']:
+            prize['layouts'][1]['conditions'].pop(0)
+            continue
+
         # SmallBowWow (Ciao Ciao): Remove the condition of HintYosshi. It's unnecessary and can lead to a softlock
         if prize['symbol'] == 'SmallBowWow':
             prize['layouts'][0]['conditions'].pop(0)
@@ -263,26 +277,28 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
 
 
-# def changePrizeGroups(sheet1, sheet2):
-#     # print(prizes_dict)
+def changePrizeGroups(sheet1):
+    # print(prizes_dict)
     
-#     sheet1['values'][0]['cranePrizeId'] = prizes_dict['prize1']['cranePrizeId']
-#     sheet1['values'][0]['layoutIndex'] = prizes_dict['prize1']['layoutIndex']
+    sheet1['values'].pop(0) # remove yoshi doll
     
-#     sheet2['values'][0]['cranePrizeId'] = prizes_dict['prize2']['cranePrizeId']
-#     sheet2['values'][0]['layoutIndex'] = prizes_dict['prize2']['layoutIndex']
+    # sheet1['values'][0]['cranePrizeId'] = prizes_dict['prize1']['cranePrizeId']
+    # sheet1['values'][0]['layoutIndex'] = prizes_dict['prize1']['layoutIndex']
+    
+    # sheet2['values'][0]['cranePrizeId'] = prizes_dict['prize2']['cranePrizeId']
+    # sheet2['values'][0]['layoutIndex'] = prizes_dict['prize2']['layoutIndex']
 
-#     sheet2['values'][1]['cranePrizeId'] = prizes_dict['prize3']['cranePrizeId']
-#     sheet2['values'][1]['layoutIndex'] = prizes_dict['prize3']['layoutIndex']
+    # sheet2['values'][1]['cranePrizeId'] = prizes_dict['prize3']['cranePrizeId']
+    # sheet2['values'][1]['layoutIndex'] = prizes_dict['prize3']['layoutIndex']
 
-#     sheet2['values'][2]['cranePrizeId'] = prizes_dict['prize4']['cranePrizeId']
-#     sheet2['values'][2]['layoutIndex'] = prizes_dict['prize4']['layoutIndex']
+    # sheet2['values'][2]['cranePrizeId'] = prizes_dict['prize4']['cranePrizeId']
+    # sheet2['values'][2]['layoutIndex'] = prizes_dict['prize4']['layoutIndex']
 
-#     sheet2['values'][3]['cranePrizeId'] = prizes_dict['prize5']['cranePrizeId']
-#     sheet2['values'][3]['layoutIndex'] = prizes_dict['prize5']['layoutIndex']
+    # sheet2['values'][3]['cranePrizeId'] = prizes_dict['prize5']['cranePrizeId']
+    # sheet2['values'][3]['layoutIndex'] = prizes_dict['prize5']['layoutIndex']
 
-#     sheet2['values'][4]['cranePrizeId'] = prizes_dict['prize6']['cranePrizeId']
-#     sheet2['values'][4]['layoutIndex'] = prizes_dict['prize6']['layoutIndex']
+    # sheet2['values'][4]['cranePrizeId'] = prizes_dict['prize6']['cranePrizeId']
+    # sheet2['values'][4]['layoutIndex'] = prizes_dict['prize6']['layoutIndex']
 
 
 
@@ -291,25 +307,24 @@ def makeEventChanges(flowchart, settings):
     if settings['fast-trendy']:
         event_tools.findEvent(flowchart, 'Event5').data.params.data['prizeType'] = 10
     
-    yoshi_lens_get = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
-        ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
-        ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
-        ('Inventory', 'AddItem', {'itemType': 44, 'count': 1})
-    ], None)
-    yoshi_get = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
-        ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})
-    ], None)
-    lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': data.LENS_FOUND_FLAG}, {0: yoshi_get, 1: yoshi_lens_get})
-    yoshi_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 30, 'count': 1}, {0: None, 1: lens_flag_check})
+    # yoshi_lens_get = event_tools.createActionChain(flowchart, None, [
+    #     ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
+    #     ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
+    #     ('Inventory', 'SetWarashibeItem', {'itemType': 15})
+    # ], None)
+    # yoshi_get = event_tools.createActionChain(flowchart, None, [
+    #     ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
+    #     ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})
+    # ], None)
+    # lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+    #     {'symbol': data.LENS_FOUND_FLAG}, {0: yoshi_get, 1: yoshi_lens_get})
+    # yoshi_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+    #     {'itemType': 30, 'count': 1}, {0: None, 1: lens_flag_check})
 
-    ### CONNECT LENS CHECK TO EVENTS
-    event_tools.insertEventAfter(flowchart, 'Event3', yoshi_check)
-    event_tools.insertEventAfter(flowchart, 'Event7', yoshi_check)
-    event_tools.insertEventAfter(flowchart, 'Event9', yoshi_check)
+    # ### CONNECT LENS CHECK TO EVENTS
+    # event_tools.insertEventAfter(flowchart, 'Event3', yoshi_check)
+    # event_tools.insertEventAfter(flowchart, 'Event7', yoshi_check)
+    # event_tools.insertEventAfter(flowchart, 'Event9', yoshi_check)
 
 
 

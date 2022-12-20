@@ -674,8 +674,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 seed = random.getrandbits(32)
             else:
                 try:
-                    seed = int(seed)
-                except TypeError:
+                    seed = int(seed, base=0)
+                except (TypeError, ValueError):
                     pass
             
             outdir = f"{self.ui.lineEdit_2.text()}/{seed}"

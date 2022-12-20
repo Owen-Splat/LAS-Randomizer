@@ -92,7 +92,7 @@ def kikiChanges(flowchart, placements, item_defs, rom_path):
         fork.data.forks.pop(0)
 
         kiki_gone = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-        {'symbol': 'kiki_gone', 'value': True}, get_event)
+        {'symbol': 'KikiGone', 'value': True}, get_event)
 
         event_tools.insertEventAfter(flowchart, 'Event89', kiki_gone)
     else:

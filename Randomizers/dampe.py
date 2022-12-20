@@ -21,25 +21,25 @@ def makeEventChanges(flowchart):
         {'itemType': 0}, 'Event39')
     sword2_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 1, 'count': 1}, {0: sword_remove, 1: 'Event39'})
-    sword_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 0, 'count': 1}, {0: 'Event39', 1: sword2_check})
+    sword_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SWORD_FOUND_FLAG}, {0: 'Event39', 1: sword2_check})
     
     shield_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
-        {'itemType': 2}, sword_check),
+        {'itemType': 2}, sword_flag_check)
     shield2_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 3, 'count': 1}, {0: shield_remove, 1: sword_check})
-    shield_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 2, 'count': 1}, {0: sword_check, 1: shield2_check})
-    
+        {'itemType': 3, 'count': 1}, {0: shield_remove, 1: sword_flag_check})
+    shield_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.SHIELD_FOUND_FLAG}, {0: sword_flag_check, 1: shield2_check})
+
     bracelet_remove = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
-        {'itemType': 14}, shield_check)
+        {'itemType': 14}, shield_flag_check)
     bracelet2_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 15, 'count': 1}, {0: bracelet_remove, 1: shield_check})
-    bracelet_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 14, 'count': 1}, {0: shield_check, 1: bracelet2_check})
+        {'itemType': 15, 'count': 1}, {0: bracelet_remove, 1: shield_flag_check})
+    bracelet_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': data.BRACELET_FOUND_FLAG}, {0: shield_flag_check, 1: bracelet2_check})
     
-    event_tools.insertEventAfter(flowchart, 'Event43', bracelet_check)
-    afterRewardEvents(flowchart, bracelet_check)
+    event_tools.insertEventAfter(flowchart, 'Event43', bracelet_flag_check)
+    afterRewardEvents(flowchart, bracelet_flag_check)
 
 
 
@@ -50,10 +50,8 @@ def afterRewardEvents(flowchart, loop_event):
 
     sword2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
         {'itemType': 1, 'count': 1}, 'Event42')
-    sword1_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'AddItem', {'itemType': 0, 'count': 1}),
-        ('EventFlags', 'SetFlag', {'symbol': data.SWORD_FOUND_FLAG, 'value': True})
-    ], 'Event42')
+    sword1_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
+        {'itemType': 0, 'count': 1}, 'Event42')
     sword1_flag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': data.SWORD_FOUND_FLAG, 'value': True}, 'Event42')
     first_sword_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
@@ -65,10 +63,8 @@ def afterRewardEvents(flowchart, loop_event):
     
     shield2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
         {'itemType': 3, 'count': 1}, sword_flag_check)
-    shield1_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'AddItem', {'itemType': 2, 'count': 1}),
-        ('EventFlags', 'SetFlag', {'symbol': data.SHIELD_FOUND_FLAG, 'value': True})
-    ], sword_flag_check)
+    shield1_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
+        {'itemType': 2, 'count': 1}, sword_flag_check)
     shield1_flag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': data.SHIELD_FOUND_FLAG, 'value': True}, sword_flag_check)
     first_shield_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
@@ -80,10 +76,8 @@ def afterRewardEvents(flowchart, loop_event):
     
     bracelet2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
         {'itemType': 15, 'count': 1}, shield_flag_check)
-    bracelet1_give = event_tools.createActionChain(flowchart, None, [
-        ('Inventory', 'AddItem', {'itemType': 14, 'count': 1}),
-        ('EventFlags', 'SetFlag', {'symbol': data.BRACELET_FOUND_FLAG, 'value': True})
-    ], shield_flag_check)
+    bracelet1_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
+        {'itemType': 14, 'count': 1}, shield_flag_check)
     bracelet1_flag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': data.BRACELET_FOUND_FLAG, 'value': True}, shield_flag_check)
     first_bracelet_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
@@ -115,14 +109,16 @@ def afterRewardEvents(flowchart, loop_event):
         ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
     ], cello_check)
     harp_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 48, 'count': 1}, {0: bomb_check, 1: harp_flags})
+        {'itemType': 48, 'count': 1}, {0: cello_check, 1: harp_flags})
     
-    lens_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 44, 'count': 1}, harp_check)
+    lens_flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+        {'symbol': data.LENS_FOUND_FLAG, 'value': True}, harp_check)
+    lens_give = event_tools.createActionEvent(flowchart, 'Inventory', 'SetWarashibeItem',
+        {'itemType': 15}, harp_check)
     lens_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': data.LENS_FOUND_FLAG}, {0: harp_check, 1: lens_give})
     lens_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 44, 'count': 1}, {0: lens_flag_check, 1: harp_check})
+        {'itemType': 44, 'count': 1}, {0: lens_flag_check, 1: lens_flag_set})
     
     scale_give = event_tools.createActionChain(flowchart, None, [
         ('Inventory', 'SetWarashibeItem', {'itemType': 0}),
