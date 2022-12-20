@@ -1043,7 +1043,7 @@ trendy-prize-4:
   index: 3
   region: trendy
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (conch-horn | fast-trendy)
+  condition-basic: can-farm-rupees & conch-horn # (conch-horn | fast-trendy)
 trendy-prize-5:
   type: item
   subtype: standing
@@ -1051,7 +1051,7 @@ trendy-prize-5:
   index: 26
   region: trendy
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (sea-lilys-bell | fast-trendy)
+  condition-basic: can-farm-rupees & sea-lilys-bell # (sea-lilys-bell | fast-trendy)
 trendy-prize-6:
   type: item
   subtype: standing
@@ -1059,7 +1059,7 @@ trendy-prize-6:
   index: 43
   region: trendy
   spoiler-region: mabe-village
-  condition-basic: can-farm-rupees & (surf-harp | fast-trendy)
+  condition-basic: can-farm-rupees & surf-harp # (surf-harp | fast-trendy)
 trendy-prize-final:
   type: item
   subtype: npc

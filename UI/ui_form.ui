@@ -982,7 +982,7 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Removes instrument requirements and gives the final Trendy reward from getting the CiaoCiao Figure</string>
+         <string>Gives the final Trendy reward from getting the CiaoCiao Figure</string>
         </property>
         <property name="text">
          <string>Fast Trendy</string>

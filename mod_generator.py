@@ -1367,18 +1367,18 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
-        ### Prize Groups
-        group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
-        # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
+        # #################################################################################################################################
+        # ### Prize Groups
+        # group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        # # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
 
-        crane_prizes.changePrizeGroups(group1)
+        # crane_prizes.changePrizeGroups(group1)
 
-        if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
-            # oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+        # if self.thread_active:
+        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
+        #     # oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
+        #     self.progress_value += 1 # update progress bar
+        #     self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### GlobalFlags datasheet

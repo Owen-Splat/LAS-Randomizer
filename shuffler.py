@@ -24,6 +24,7 @@ class ItemShuffler(QtCore.QThread):
         self.rom_path = rom_path
         self.out_dir = out_dir
         self.seed = seed
+        random.seed(self.seed)
         self.logic = logic
         self.settings = settings
         self.item_defs = item_defs
@@ -53,7 +54,7 @@ class ItemShuffler(QtCore.QThread):
                             and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
         # vanilla_locations.append('pothole-final')
         vanilla_locations.append('kanalet-kill-room')
-        # vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
+        vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
         vanilla_locations.append('trendy-prize-2')
         vanilla_locations.append('trendy-prize-3')
         vanilla_locations.append('trendy-prize-4')
@@ -356,8 +357,6 @@ class ItemShuffler(QtCore.QThread):
         
         """
         
-        random.seed(self.seed)
-
         if not set(force_junk).isdisjoint(force_vanilla):
             print('Warning! Some locations set as disabled are unrandomized. These locations will not actually be considered out of logic.')
             force_junk = [l for l in force_junk if l not in force_vanilla]
@@ -419,9 +418,6 @@ class ItemShuffler(QtCore.QThread):
         # Force the followers to be vanilla (for now)
         placements['moblin-cave'] = 'bow-wow'
         placements['rooster-statue'] = 'rooster'
-
-        # Force a red rupee over trendy yoshi doll (for now)
-        placements['trendy-prize-1'] = 'rupee-20'
         
         # Shuffle item and location lists
         random.shuffle(important_items)

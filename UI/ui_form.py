@@ -701,7 +701,7 @@ class Ui_MainWindow(object):
         self.fastTrendyCheck.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(whatsthis)
-        self.fastTrendyCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Removes instrument requirements and gives the final Trendy reward from getting the CiaoCiao Figure", None))
+        self.fastTrendyCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Gives the final Trendy reward from getting the CiaoCiao Figure", None))
 #endif // QT_CONFIG(whatsthis)
         self.fastTrendyCheck.setText(QCoreApplication.translate("MainWindow", u"Fast Trendy", None))
 #if QT_CONFIG(tooltip)
