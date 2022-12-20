@@ -32,15 +32,15 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': data.SHIELD_FOUND_FLAG})
             continue
 
-        # Now because the 2 non featured prizes in this slot have conditions, the shield is in by default if they aren't met?
-        # Lets fix this by adding RupeeRed prizes to the slot that will be met automatically
-        if prize['symbol'] == 'RupeeRed':
-            prize['layouts'].append(oead_tools.dictToStruct({
-                'itemIndex': -1,
-                'conditions': [],
-                'place': {'type': 2, 'index': 1}
-            }))
-            continue
+        # # Now because the 2 non featured prizes in this slot have conditions, the shield is in by default if they aren't met?
+        # # Lets fix this by adding RupeeRed prizes to the slot that will be met automatically
+        # if prize['symbol'] == 'RupeeRed':
+        #     prize['layouts'].append(oead_tools.dictToStruct({
+        #         'itemIndex': -1,
+        #         'conditions': [],
+        #         'place': {'type': 2, 'index': 1}
+        #     }))
+        #     continue
         
         # Make the YoshiDoll prize go away once you get it since we don't actually keep the item
         if prize['symbol'] == 'YoshiDoll':
