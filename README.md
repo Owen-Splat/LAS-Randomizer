@@ -1,7 +1,7 @@
 # LAS-Randomizer
 A randomizer for The Legend of Zelda: Link's Awakening remake. Currently still very early in development.
 
-This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and heart pieces. More work will come soon.
+This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and standing heart pieces. More work will come soon.
 
 Several extra options, including Zapsanity, Blupsanity, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk!
 
@@ -56,7 +56,7 @@ Applying this mod will not in any way affect your save data, so don't delete any
 - Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
 
 ### Special Thanks:
-- Glan: For creating the earlier builds of this randomizer and always helping answer any questions I have
+- Glan: For creating the earlier builds of this randomizer and always helping answer any questions
 - Br00ty: For always playtesting early dev builds and having full blown conversations regarding feedback and suggestions
-- EDL666: For being an awesome friend and thoroughly reporting on bugs
+- EDL666: For being an awesome friend who has been thoroughly reporting on bugs and feedback
 - And everyone who has played this randomizer: Seeing people enjoy themselves playing this makes the time I've spent working on this feel worth it :)
