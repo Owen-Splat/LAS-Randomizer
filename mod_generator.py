@@ -2042,7 +2042,7 @@ class ModsProcess(QtCore.QThread):
                                     act.type = random.choice([*land_ids, *air_ids])
                                 elif enemy_type == 'air':
                                     if folder == 'Field':
-                                        act.type = random.choice(list(air_ids[:]).remove(0x26)) # remove vires from overworld
+                                        act.type = random.choice(list(air_ids[:].remove(0x26))) # remove vires from overworld
                                     else:
                                         act.type = random.choice(air_ids)
                                 elif enemy_type == 'water':
