@@ -2001,7 +2001,9 @@ class ModsProcess(QtCore.QThread):
             elif value['type'] == 'hole':
                 hole_ids.append(value['id'])
         enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *tree_ids, *hole_ids)
-        
+        no_vire = list(air_ids[:])
+        no_vire.remove(0x26)
+
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
 
@@ -2042,7 +2044,7 @@ class ModsProcess(QtCore.QThread):
                                     act.type = random.choice([*land_ids, *air_ids])
                                 elif enemy_type == 'air':
                                     if folder == 'Field':
-                                        act.type = random.choice(list(air_ids[:].remove(0x26))) # remove vires from overworld
+                                        act.type = random.choice(no_vire) # remove vires from overworld
                                     else:
                                         act.type = random.choice(air_ids)
                                 elif enemy_type == 'water':
