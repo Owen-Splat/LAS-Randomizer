@@ -1367,18 +1367,18 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        # #################################################################################################################################
-        # ### Prize Groups
-        # group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
-        # # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
+        #################################################################################################################################
+        ### Prize Groups
+        group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
+        # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
 
-        # crane_prizes.changePrizeGroups(group1)
+        crane_prizes.changePrizeGroups(group1)
 
-        # if self.thread_active:
-        #     oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
-        #     # oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
-        #     self.progress_value += 1 # update progress bar
-        #     self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet', group1)
+            # oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet', group2)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
 
         #################################################################################################################################
         ### GlobalFlags datasheet
@@ -1442,7 +1442,7 @@ class ModsProcess(QtCore.QThread):
                 if track in data.MUSIC_FILES:
                     song = random.choice(new_music)
                     new_music.remove(song)
-                    shutil.copy(f'{source}\\{file}', f'{dest}\\{song}{data.MUSIC_SUFFIX}')
+                    shutil.copy(f'{source}/{file}', f'{dest}/{song}{data.MUSIC_SUFFIX}')
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
     
@@ -2003,6 +2003,7 @@ class ModsProcess(QtCore.QThread):
         enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *tree_ids, *hole_ids)
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
+        restrictions = [-1, 0x3, 0x15, 0x16, 0x3D]
 
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
@@ -2012,7 +2013,7 @@ class ModsProcess(QtCore.QThread):
         #     included_folders = [s for s in included_folders if not s.startswith('Panel')]
         
         folders = [f for f in os.listdir(levels_path) if f in included_folders]
-
+        
         num_of_mods = 0
         random.seed(self.seed) # restart the rng so that enemies will be the same regardless of settings
 
@@ -2039,51 +2040,59 @@ class ModsProcess(QtCore.QThread):
                             if act.type in enemy_ids and e not in excluded_actors: # check for enemy actors
 
                                 enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
+                                new_enemy = -1
+                                
+                                restr = list(restrictions[:])
+                                if act.type in restrictions:
+                                    restr.remove(act.type)
+                                
+                                while new_enemy in restr:
+                                    if enemy_type == 'land':
+                                        new_enemy = random.choice(land_ids)
+                                    elif enemy_type == 'air':
+                                        if folder == 'Field':
+                                            new_enemy = random.choice(no_vire) # remove vires from overworld
+                                        else:
+                                            new_enemy = random.choice(air_ids)
+                                    elif enemy_type == 'water':
+                                        new_enemy = random.choice(water_ids)
+                                    elif enemy_type == 'water2D':
+                                        new_enemy = random.choice(water2D_ids)
+                                    elif enemy_type == 'tree':
+                                        new_enemy = random.choice(tree_ids)
+                                    elif enemy_type == 'hole':
+                                        new_enemy = random.choice(hole_ids)
+                                
+                                if act.type != new_enemy:
+                                    act.type = new_enemy
+                                    try:
+                                        params = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['parameters']
+                                        for i in range(8):
+                                            try:
+                                                if isinstance(params[i], list):
+                                                    param = random.choice(params[i])
+                                                else:
+                                                    param = params[i]
+                                                if isinstance(param, str):
+                                                    param = bytes(param, 'utf-8')
+                                                act.parameters[i] = param
+                                            except IndexError:
+                                                act.parameters[i] = b''
+                                    except KeyError:
+                                        act.parameters = [b'', b'', b'', b'', b'', b'', b'', b'']
 
-                                if enemy_type == 'land':
-                                    act.type = random.choice([*land_ids, *air_ids])
-                                elif enemy_type == 'air':
-                                    if folder == 'Field':
-                                        act.type = random.choice(no_vire) # remove vires from overworld
+                                    if act.type == 0x1E2:
+                                        act.scaleX = 4.5
+                                        act.scaleY = 3.0
+                                        act.scaleZ = 4.5
                                     else:
-                                        act.type = random.choice(air_ids)
-                                elif enemy_type == 'water':
-                                    act.type = random.choice([*water_ids, *air_ids])
-                                elif enemy_type == 'water2D':
-                                    act.type = random.choice(water2D_ids)
-                                elif enemy_type == 'tree':
-                                    act.type = random.choice(tree_ids)
-                                elif enemy_type == 'hole':
-                                    act.type = random.choice(hole_ids)
-                                
-                                try:
-                                    params = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['parameters']
-                                    for i in range(8):
-                                        try:
-                                            if isinstance(params[i], list):
-                                                param = random.choice(params[i])
-                                            else:
-                                                param = params[i]
-                                            if isinstance(param, str):
-                                                param = bytes(param, 'utf-8')
-                                            act.parameters[i] = param
-                                        except IndexError:
-                                            act.parameters[i] = b''
-                                except KeyError:
-                                    act.parameters = [b'', b'', b'', b'', b'', b'', b'', b'']
+                                        act.scaleX = 1.0
+                                        act.scaleY = 1.0
+                                        act.scaleZ = 1.0
+                                    
+                                    act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
 
-                                if act.type == 0x1E2:
-                                    act.scaleX = 4.5
-                                    act.scaleY = 3.0
-                                    act.scaleZ = 4.5
-                                else:
-                                    act.scaleX = 1.0
-                                    act.scaleY = 1.0
-                                    act.scaleZ = 1.0
-                                
-                                act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
-
-                                edited_room = True
+                                    edited_room = True
 
                         if edited_room:
                             if not os.path.exists(f'{out_levels}/{folder}'):

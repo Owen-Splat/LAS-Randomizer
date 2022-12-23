@@ -239,7 +239,7 @@ Actors:
   EnemySpark:
     id: 0x3D
     type: land
-    parameters: [0, 0, 0, 0]
+    # parameters: [0, 0, 0, 0]
     # parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 1045220557]] # not sure why the kanalet spark has this oddity
     enemy: True
   EnemyCreepee: # zirro / bomb fairy

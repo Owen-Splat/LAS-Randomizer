@@ -227,6 +227,9 @@ class Actor:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param + b'\x00'
+			elif isinstance(param, float):
+				packed += struct.pack('<f', param)
+				packed += (2).to_bytes(4, 'little')
 			else:
 				packed += param.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
@@ -259,85 +262,6 @@ class Actor:
 		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
 		
 		return packed
-
-
-
-# class Point:
-# 	def __init__(self, data):
-# 			self.posX = readFloat(data, 0x0, 4)
-# 			self.posY = readFloat(data, 0x4, 4)
-# 			self.posZ = readFloat(data, 0x8, 4)
-# 			self.xC = data[0xC:]
-	
-# 	def pack(self):
-# 		packed = b''
-# 		packed += struct.pack('<f', self.posX)
-# 		packed += struct.pack('<f', self.posY)
-# 		packed += struct.pack('<f', self.posZ)
-# 		packed += self.xC
-
-# 		return packed
-
-
-
-# class Rail:
-# 	def __init__(self, data=None, points=None):
-# 		if data is not None:
-# 			self.x0 = data[0x0:0xC]
-
-# 			self.xC = []
-# 			for i in range(4):
-# 				param = readBytes(data, 0xC + (0x8 * i), 4)
-# 				# paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
-
-# 				# if paramType == 0xFFFFFF04:
-# 				# 	self.xC.append(readString(names, param))
-# 				# else:
-# 				# 	self.xC.append(param)
-				
-# 				self.xC.append(param)
-			
-# 			self.num_entries = readBytes(data, 0x2C, 2)
-# 			self.num_indexes = readBytes(data, 0x2E, 2)
-
-# 			self.points = []
-# 			for i in range(self.num_entries):
-# 				self.points.append(readBytes(data, (0x30 + (0x2 * i)), 2))
-		
-# 		else:
-# 			self.x0 = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-# 			self.xC = [25, 25, 25, 25]
-# 			self.num_entries = len(points)
-# 			self.num_indexes = 0x1
-# 			self.points = points
-
-
-# 	def pack(self):
-# 		packed = b''
-# 		packed += self.x0
-		
-# 		# nameRepr = b'' + b'\x00'
-
-# 		for i in range(4):
-# 			param = self.xC[i]
-# 			# if isinstance(param, bytes):
-# 			# 	packed += (len(nameRepr) + 0x1).to_bytes(4, 'little')
-# 			# 	packed += (0xFFFFFF04).to_bytes(4, 'little')
-# 			# 	nameRepr += param + b'\x00'
-# 			# else:
-# 			# 	packed += param.to_bytes(4, 'little')
-# 			# 	packed += (3).to_bytes(4, 'little')
-
-# 			packed += param.to_bytes(4, 'little')
-# 			packed += (0xFFFFFF04).to_bytes(4, 'little')
-
-# 		packed += self.num_entries.to_bytes(2, 'little')
-# 		packed += self.num_indexes.to_bytes(2, 'little')
-
-# 		for i in range(self.num_entries):
-# 			packed += self.points[i].to_bytes(2, 'little')
-		
-# 		return packed
 
 
 
@@ -417,7 +341,7 @@ class Room:
 					entry.data.entries.append(Entry(0xFFF0, b'', 0xFFFFFFFF, actor.pack(len(new_names))))
 
 					new_names += actor.name + b'\x00'
-
+					
 					for param in actor.parameters:
 						if isinstance(param, bytes):
 							new_names += param + b'\x00'
@@ -464,7 +388,7 @@ class Relationship:
 		self.z = readBytes(data, 0x89, 1)
 
 		self.null = data[0x8A:0x90]
-		
+
 		self.section_1 = []
 		self.section_2 = []
 		self.section_3 = []
@@ -533,14 +457,21 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param1 + b'\x00'
+			elif isinstance(param1, float):
+				packed += struct.pack('<f', param1)
+				packed += (2).to_bytes(4, 'little')
 			else:
 				packed += param1.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
+			
 			
 			if isinstance(param2, bytes):
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param2 + b'\x00'
+			elif isinstance(param2, float):
+				packed += struct.pack('<f', param2)
+				packed += (2).to_bytes(4, 'little')
 			else:
 				packed += param2.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
@@ -557,6 +488,9 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param1 + b'\x00'
+			elif isinstance(param1, float):
+				packed += struct.pack('<f', param1)
+				packed += (2).to_bytes(4, 'little')
 			else:
 				packed += param1.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
@@ -565,6 +499,9 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param2 + b'\x00'
+			elif isinstance(param2, float):
+				packed += struct.pack('<f', param2)
+				packed += (2).to_bytes(4, 'little')
 			else:
 				packed += param2.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
@@ -579,133 +516,80 @@ class Relationship:
 
 
 
-
-### COMPANION TEST STUFF - bunch of experiment code I did, leaving it here in case I need to reference
-
-	# # chest companions
-	# def addChestRooster(self, chest_index=0):
-	# 	chests = [a for a in self.actors if a.type == 0xF7]
-
-	# 	if len(chests) > chest_index:
-	# 		chest = chests[chest_index]
-	# 		new_actor = copy.deepcopy(chest)
-
-	# 		chest.relationships.x += 1
-	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-	# 		name_hex = f'A1000{chest_index}005D1D906E'
-	# 		new_actor.key = int(name_hex, 16)
-	# 		new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-	# 		new_actor.type = 0x181
-	# 		new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
-	# 		new_actor.relationships.y += 1
-	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
-	# 		self.actors.append(new_actor)
+# EXPERIMENTAL POINT AND RAIL SECTIONS
+# class Point:
+# 	def __init__(self, data):
+# 			self.posX = readFloat(data, 0x0, 4)
+# 			self.posY = readFloat(data, 0x4, 4)
+# 			self.posZ = readFloat(data, 0x8, 4)
+# 			self.xC = data[0xC:]
 	
+# 	def pack(self):
+# 		packed = b''
+# 		packed += struct.pack('<f', self.posX)
+# 		packed += struct.pack('<f', self.posY)
+# 		packed += struct.pack('<f', self.posZ)
+# 		packed += self.xC
 
-	# def addChestBowWow(self, chest_index=0):
-	# 	chests = [a for a in self.actors if a.type == 0xF7]
+# 		return packed
 
-	# 	if len(chests) > chest_index:
-	# 		chest = chests[chest_index]
-	# 		new_actor = copy.deepcopy(chest)
 
-	# 		chest.relationships.x += 1
-	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
 
-	# 		name_hex = f'720133{chest_index}15CFF3744'
-	# 		new_actor.key = int(name_hex, 16)
-	# 		new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-	# 		new_actor.type = 0x14D
-	# 		new_actor.parameters = [1, b'', b'', b'', b'', b'', b'', b'']
-	# 		new_actor.relationships.y += 1
-	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
-	# 		self.actors.append(new_actor)
-	
+# class Rail:
+# 	def __init__(self, data=None, points=None):
+# 		if data is not None:
+# 			self.x0 = data[0x0:0xC]
 
-	# # telephone companions
-	# def addTelephoneRooster(self, id):
-	# 	tel = [a for a in self.actors if a.type == 0x13A][0]
+# 			self.xC = []
+# 			for i in range(4):
+# 				param = readBytes(data, 0xC + (0x8 * i), 4)
+# 				# paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
+
+# 				# if paramType == 0xFFFFFF04:
+# 				# 	self.xC.append(readString(names, param))
+# 				# else:
+# 				# 	self.xC.append(param)
+				
+# 				self.xC.append(param)
+			
+# 			self.num_entries = readBytes(data, 0x2C, 2)
+# 			self.num_indexes = readBytes(data, 0x2E, 2)
+
+# 			self.points = []
+# 			for i in range(self.num_entries):
+# 				self.points.append(readBytes(data, (0x30 + (0x2 * i)), 2))
 		
-	# 	doll = copy.deepcopy(tel)
-	# 	doll.relationships.x += 1
-	# 	doll.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
-	# 	name_hex = f'720133{id}05CFF3744'
-	# 	doll.key = int(name_hex, 16)
-	# 	doll.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
-	# 	doll.type = 0x8E # ItemYoshiDoll
-	# 	doll.posX = 9.5
-	# 	doll.posY = 0
-	# 	doll.posZ = 4.15
-	# 	doll.parameters[0] = bytes('NpcFlyingCucco.bfres', 'utf-8')
-	# 	doll.parameters[1] = bytes('FlyingCucco', 'utf-8')
-	# 	doll.parameters[2] = bytes('GiveBackRooster', 'utf-8')
-	# 	doll.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
-	# 	self.actors.append(doll)
+# 		else:
+# 			self.x0 = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+# 			self.xC = [25, 25, 25, 25]
+# 			self.num_entries = len(points)
+# 			self.num_indexes = 0x1
+# 			self.points = points
 
-	# 	rooster = copy.deepcopy(tel)
-	# 	name_hex = f'A1000{id}005D1D906E'
-	# 	rooster.key = int(name_hex, 16)
-	# 	rooster.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-	# 	rooster.type = 0x181 # rooster
-	# 	rooster.posX = 9.5
-	# 	rooster.posY = 0
-	# 	rooster.posZ = 4.15
-	# 	rooster.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
-	# 	rooster.relationships.y += 1
-	# 	rooster.relationships.section_3.append(self.actors.index(doll))
-	# 	self.actors.append(rooster)
-	
 
-	# def addTelephoneBowWow(self, id):
-	# 	tel = [a for a in self.actors if a.type == 0x13A][0]
+# 	def pack(self):
+# 		packed = b''
+# 		packed += self.x0
 		
-	# 	doll = copy.deepcopy(tel)
-	# 	doll.relationships.x += 1
-	# 	doll.relationships.section_1.append([[b'', b''], int(len(self.actors) + 1)])
-	# 	name_hex = f'720133{id}15CFF3744'
-	# 	doll.key = int(name_hex, 16)
-	# 	doll.name = bytes(f'ObjSinkingSw-{name_hex}', 'utf-8')
-	# 	doll.type = 0x8E # ItemYoshiDoll
-	# 	doll.posX = 5.5
-	# 	doll.posY = 0
-	# 	doll.posZ = 4.15
-	# 	doll.parameters[0] = bytes('NpcBowWow.bfres', 'utf-8')
-	# 	doll.parameters[1] = bytes('BowWow', 'utf-8')
-	# 	doll.parameters[2] = bytes('GiveBackBowWow', 'utf-8')
-	# 	doll.parameters[3] = bytes('False', 'utf-8') # category 1 custom flag to appear
-	# 	self.actors.append(doll)
+# 		# nameRepr = b'' + b'\x00'
 
-	# 	bowwow = copy.deepcopy(tel)
-	# 	name_hex = f'610441{id}05BA1BB98'
-	# 	bowwow.key = int(name_hex, 16)
-	# 	bowwow.name = bytes(f'NpcBowWow-{name_hex}', 'utf-8')
-	# 	bowwow.type = 0x14D # bowwow
-	# 	bowwow.posX = 5.5
-	# 	bowwow.posY = 0
-	# 	bowwow.posZ = 4.15
-	# 	bowwow.parameters = [1, b'', b'', b'', b'', b'', b'', b'']
-	# 	bowwow.relationships.y += 1
-	# 	bowwow.relationships.section_3.append(self.actors.index(doll))
-	# 	self.actors.append(bowwow)
+# 		for i in range(4):
+# 			param = self.xC[i]
+# 			# if isinstance(param, bytes):
+# 			# 	packed += (len(nameRepr) + 0x1).to_bytes(4, 'little')
+# 			# 	packed += (0xFFFFFF04).to_bytes(4, 'little')
+# 			# 	nameRepr += param + b'\x00'
+# 			# else:
+# 			# 	packed += param.to_bytes(4, 'little')
+# 			# 	packed += (3).to_bytes(4, 'little')
 
+# 			packed += param.to_bytes(4, 'little')
+# 			packed += (0xFFFFFF04).to_bytes(4, 'little')
 
-	# def addShadowTrap(self, chest_index=0):
-	# 	chests = [a for a in self.actors if a.type == 0xF7]
+# 		packed += self.num_entries.to_bytes(2, 'little')
+# 		packed += self.num_indexes.to_bytes(2, 'little')
 
-	# 	if len(chests) > chest_index:
-	# 		chest = chests[chest_index]
-	# 		new_actor = copy.deepcopy(chest)
-
-	# 		chest.relationships.x += 1
-	# 		chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-	# 		name_hex = f'A1000{chest_index}006E2E017F'
-	# 		new_actor.key = int(name_hex, 16)
-	# 		new_actor.name = bytes(f'PanelShadowLink-{name_hex}', 'utf-8')
-	# 		new_actor.type = 0x21E
-	# 		# new_actor.posZ += 3 # move 2 tiles south of chest to appear behind the player
-	# 		new_actor.parameters = [b'Appear', b'', b'', b'', b'', b'', b'', b'']
-	# 		new_actor.relationships.y += 1
-	# 		new_actor.relationships.section_3.append(self.actors.index(chest))
-	# 		self.actors.append(new_actor)
+# 		for i in range(self.num_entries):
+# 			packed += self.points[i].to_bytes(2, 'little')
+		
+# 		return packed

@@ -32,19 +32,31 @@ def makeDatasheetChanges(sheet, placements, item_defs):
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': data.SHIELD_FOUND_FLAG})
             continue
 
-        # # Now because the 2 non featured prizes in this slot have conditions, the shield is in by default if they aren't met?
-        # # Lets fix this by adding RupeeRed prizes to the slot that will be met automatically
-        # if prize['symbol'] == 'RupeeRed':
-        #     prize['layouts'].append(oead_tools.dictToStruct({
-        #         'itemIndex': -1,
-        #         'conditions': [],
-        #         'place': {'type': 2, 'index': 1}
-        #     }))
-        #     continue
+        if prize['symbol'] == 'RupeeRed':
+            # Now because the 2 non featured prizes in this slot have conditions, nothing will be in this slot
+            # Lets fix this by adding RupeeRed prizes to the slot that will be met automatically
+            prize['layouts'].append(oead_tools.dictToStruct({
+                'itemIndex': -1,
+                'conditions': [],
+                'place': {'type': 2, 'index': 1}
+            }))
+
+            if placements['settings']['shuffle-bombs']:
+                prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}'})
+            else:
+                prize['layouts'][2]['conditions'].append({'category': 2, 'parameter': '!SurfHarp'})
+            
+            prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!{data.SHIELD_FOUND_FLAG}'})
+
+            # We are removing Yoshi from being considered as a featured prize
+            # So we want to make the red rupee that would otherwise replace it require the yoshi gotten flag
+            prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': 'TradeYoshiDollGet'})
+            continue
         
         # Make the YoshiDoll prize go away once you get it since we don't actually keep the item
         if prize['symbol'] == 'YoshiDoll':
             prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': '!TradeYoshiDollGet'})
+            prize['options']['isFeatured'] = False
             continue
         
         # # get rid of the instrument requirements if fast-trendy is on
@@ -277,28 +289,28 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
 
 
-# def changePrizeGroups(sheet1):
-#     # print(prizes_dict)
+def changePrizeGroups(sheet1):
+    # print(prizes_dict)
     
-#     sheet1['values'].pop(0) # remove yoshi doll
+    sheet1['values'].pop(0) # remove yoshi doll
     
-#     # sheet1['values'][0]['cranePrizeId'] = prizes_dict['prize1']['cranePrizeId']
-#     # sheet1['values'][0]['layoutIndex'] = prizes_dict['prize1']['layoutIndex']
+    # sheet1['values'][0]['cranePrizeId'] = prizes_dict['prize1']['cranePrizeId']
+    # sheet1['values'][0]['layoutIndex'] = prizes_dict['prize1']['layoutIndex']
     
-#     # sheet2['values'][0]['cranePrizeId'] = prizes_dict['prize2']['cranePrizeId']
-#     # sheet2['values'][0]['layoutIndex'] = prizes_dict['prize2']['layoutIndex']
+    # sheet2['values'][0]['cranePrizeId'] = prizes_dict['prize2']['cranePrizeId']
+    # sheet2['values'][0]['layoutIndex'] = prizes_dict['prize2']['layoutIndex']
 
-#     # sheet2['values'][1]['cranePrizeId'] = prizes_dict['prize3']['cranePrizeId']
-#     # sheet2['values'][1]['layoutIndex'] = prizes_dict['prize3']['layoutIndex']
+    # sheet2['values'][1]['cranePrizeId'] = prizes_dict['prize3']['cranePrizeId']
+    # sheet2['values'][1]['layoutIndex'] = prizes_dict['prize3']['layoutIndex']
 
-#     # sheet2['values'][2]['cranePrizeId'] = prizes_dict['prize4']['cranePrizeId']
-#     # sheet2['values'][2]['layoutIndex'] = prizes_dict['prize4']['layoutIndex']
+    # sheet2['values'][2]['cranePrizeId'] = prizes_dict['prize4']['cranePrizeId']
+    # sheet2['values'][2]['layoutIndex'] = prizes_dict['prize4']['layoutIndex']
 
-#     # sheet2['values'][3]['cranePrizeId'] = prizes_dict['prize5']['cranePrizeId']
-#     # sheet2['values'][3]['layoutIndex'] = prizes_dict['prize5']['layoutIndex']
+    # sheet2['values'][3]['cranePrizeId'] = prizes_dict['prize5']['cranePrizeId']
+    # sheet2['values'][3]['layoutIndex'] = prizes_dict['prize5']['layoutIndex']
 
-#     # sheet2['values'][4]['cranePrizeId'] = prizes_dict['prize6']['cranePrizeId']
-#     # sheet2['values'][4]['layoutIndex'] = prizes_dict['prize6']['layoutIndex']
+    # sheet2['values'][4]['cranePrizeId'] = prizes_dict['prize6']['cranePrizeId']
+    # sheet2['values'][4]['layoutIndex'] = prizes_dict['prize6']['layoutIndex']
 
 
 

@@ -2,7 +2,6 @@ __pycache__
 .qt_for_python
 /build
 /dist
-/issues.txt
 /Models
 /output
 /romfs
@@ -10,8 +9,7 @@ __pycache__
 /Tools/levels.py
 /Tools/msbt.py
 /Test
-/room_data_viewer.py
 text_tests.py
-event_checker.py
-fun_mods.py
+tests.py
+issues.txt
 settings.txt

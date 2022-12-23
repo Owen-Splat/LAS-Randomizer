@@ -30,7 +30,23 @@ def makeFieldChanges(flowchart, placements, item_defs):
             {'symbol': k}, {0: flag_set, 1: None})
         
         event_tools.insertEventAfter(flowchart, v, flag_check)
-
+    
+    # Now lets prevent Link from backing up. This is what causes the get item animation to sometimes not play
+    dist_evs = (
+        'Event17',
+        'Event41',
+        'Event42',
+        'Event43',
+        'Event44',
+        'Event45',
+        'Event46',
+        'Event47',
+        'Event48'
+    )
+    for ev in dist_evs:
+        dist_ev = event_tools.findEvent(flowchart, ev)
+        dist_ev.data.params.data['keepPersonalSpace'] = False
+        
 
 
 
@@ -103,3 +119,7 @@ def makeDungeonChanges(flowchart, placements, item_defs):
             {'symbol': k}, {0: flag_set, 1: None})
         
         event_tools.insertEventAfter(flowchart, v, flag_check)
+    
+    # I dont know if the get item animation breaks in dungeons but same thing here as we did with the overworld ones
+    fork = event_tools.findEvent(flowchart, 'Event50')
+    fork.data.forks.pop(5)
