@@ -1,11 +1,9 @@
 # LAS-Randomizer
 A randomizer for The Legend of Zelda: Link's Awakening remake. Currently still very early in development.
 
-This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and heart pieces, with the sunken ones left vanilla due to issues with them. More work will come soon.
+This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and standing heart pieces. More work will come soon.
 
-Several extra options, including Zapsanity, Blupsanity, Randomized Music, and more! Don't like checking a specific location? You can toggle it to always be junk!
-
-You can get early access to features just by running the randomizer code yourself (see below). There is an experimental tab, those settings either do not work at all or may be extremely broken.
+Several extra options, including Zapsanity, Blupsanity, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk!
 
 This GUI is dark mode by default, but can be toggled with ctrl + L
 
@@ -53,5 +51,12 @@ Applying this mod will not in any way affect your save data, so don't delete any
 - Getting a capacity upgrade will display the item with no text
 - Choosing Shuffled Bombs sets bomb drops to 0. This will not change even after finding your bombs until I figure out how to change it
 - Zap traps in Seashell Mansion gives a green rupee for some reason
-- Dampe is very broken currently, would recommend to leave off until fixed
+- Dampe does not have proper logic for instrument shuffle, and may result in unbeatable seeds
 - While Trading Quest items work, they will not be displayed in the inventory
+- Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
+
+### Special Thanks:
+- Glan: For creating the earlier builds of this randomizer and always helping answer any questions
+- Br00ty: For always playtesting early dev builds and having full blown conversations regarding feedback and suggestions
+- EDL666: For being an awesome friend who has been thoroughly reporting on bugs and feedback
+- And everyone who has played this randomizer: Seeing people enjoy themselves playing this makes the time I've spent working on this feel worth it :)

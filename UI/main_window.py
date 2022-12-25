@@ -59,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.fishingCheck.clicked.connect(self.fishingCheck_Clicked)
         self.ui.rapidsCheck.clicked.connect(self.rapidsCheck_Clicked)
         self.ui.dampeCheck.clicked.connect(self.dampeCheck_Clicked)
+        # self.ui.trendyCheck.clicked.connect(self.trendyCheck_Clicked)
         self.ui.giftsCheck.clicked.connect(self.giftsCheck_Clicked)
         self.ui.tradeGiftsCheck.clicked.connect(self.tradeQuest_Clicked)
         self.ui.bossCheck.clicked.connect(self.bossCheck_Clicked)
@@ -79,6 +80,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
+        self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
         self.show()
 
         if IS_RUNNING_FROM_SOURCE:
@@ -134,6 +136,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.dampeCheck.setChecked(False)
         self.excluded_checks.update(DAMPE_REWARDS)
 
+        # self.ui.trendyCheck.setChecked(False)
+        self.excluded_checks.update(TRENDY_REWARDS)
+
         self.ui.giftsCheck.setChecked(True)
         self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
 
@@ -166,15 +171,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.farmingCheck.setChecked(True)
         self.ui.vanillaCheck.setChecked(True)
         self.ui.musicCheck.setChecked(False)
+        self.ui.enemyCheck.setChecked(False)
         self.ui.spoilerCheck.setChecked(True)
         self.ui.kanaletCheck.setChecked(True)
         self.ui.tunicsCheck.setChecked(True)
         self.ui.zapsCheck.setChecked(False)
         self.ui.rupCheck.setChecked(False)
+        self.ui.bridgeCheck.setChecked(True)
+        self.ui.mazeCheck.setChecked(True)
+        self.ui.swampCheck.setChecked(False)
+        self.ui.fastMSCheck.setChecked(False)
+        self.ui.songsCheck.setChecked(False)
+        self.ui.enemyCheck.setChecked(False)
         self.ui.owlsComboBox.setCurrentIndex(0)
-
-        self.excluded_checks.update(TRENDY_REWARDS)
-        self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
 
         self.tab_Changed() # just call the same event as when changing the tab to refresh the list
 
@@ -192,6 +201,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fishing': self.ui.fishingCheck.isChecked(),
             'Rapids': self.ui.rapidsCheck.isChecked(),
             'Dampe': self.ui.dampeCheck.isChecked(),
+            # 'Trendy': self.ui.trendyCheck.isChecked(),
             'Free_Gifts': self.ui.giftsCheck.isChecked(),
             'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
             'Boss_Drops': self.ui.bossCheck.isChecked(),
@@ -207,7 +217,8 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fast_Fishing': self.ui.fastFishingCheck.isChecked(),
             'Fast_Stealing': self.ui.stealingCheck.isChecked(),
             'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
-            # 'Fast_Songs': self.ui.songsCheck.isChecked(),
+            'Fast_Songs': self.ui.songsCheck.isChecked(),
+            'Fast_Master_Stalfos': self.ui.fastMSCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
             'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
@@ -217,8 +228,10 @@ class MainWindow(QtWidgets.QMainWindow):
             'Blupsanity': self.ui.rupCheck.isChecked(),
             'Classic_D2': self.ui.swampCheck.isChecked(),
             'Owl_Statues': OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()],
+            # 'Shuffled_Companions': self.ui.companionCheck.isChecked(),
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
+            'Randomize_Enemies': self.ui.enemyCheck.isChecked(),
             'Excluded_Locations': list(self.excluded_checks)
         }
         
@@ -288,6 +301,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.dampeCheck.setChecked(SETTINGS['Dampe'])
         except (KeyError, TypeError):
             self.ui.dampeCheck.setChecked(False)
+        
+        # # trendy
+        # try:
+        #     self.ui.trendyCheck.setChecked(SETTINGS['Trendy'])
+        # except (KeyError, TypeError):
+        #     self.ui.trendyCheck.setChecked(True)
         
         # free gifts
         try:
@@ -374,12 +393,18 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.stealingCheck.setChecked(True)
         
-        # # fast songs
-        # try:
-        #     self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
-        # except (KeyError, TypeError):
-        #     self.ui.songsCheck.setChecked(False)
-
+        # fast songs
+        try:
+            self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
+        except (KeyError, TypeError):
+            self.ui.songsCheck.setChecked(False)
+        
+        # fast master stalfos
+        try:
+            self.ui.fastMSCheck.setChecked(SETTINGS['Fast_Master_Stalfos'])
+        except (KeyError, TypeError):
+            self.ui.fastMSCheck.setChecked(False)
+        
         # reduced farming
         try:
             self.ui.farmingCheck.setChecked(SETTINGS['Reduced_Farming'])
@@ -437,8 +462,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # owl statues
         try:
             self.ui.owlsComboBox.setCurrentIndex(OWLS_SETTINGS.index(SETTINGS['Owl_Statues'].lower().strip()))
-        except (KeyError, TypeError, IndexError):
+        except (KeyError, TypeError, IndexError, ValueError):
             self.ui.owlsComboBox.setCurrentIndex(0)
+        
+        # # companions
+        # try:
+        #     self.ui.companionCheck.setChecked(SETTINGS['Shuffled_Companions'])
+        # except (KeyError, TypeError):
+        #     self.ui.companionCheck.setChecked(True)
 
         # # randomize entances
         # try:
@@ -451,7 +482,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.musicCheck.setChecked(SETTINGS['Randomize_Music'])
         except (KeyError, TypeError):
             self.ui.musicCheck.setChecked(False)
-
+        
+        # randomize enemies
+        try:
+            self.ui.enemyCheck.setChecked(SETTINGS['Randomize_Enemies'])
+        except (KeyError, TypeError):
+            self.ui.enemyCheck.setChecked(False)
+        
         # spoiler log
         try:
             self.ui.spoilerCheck.setChecked(SETTINGS['Create_Spoiler'])
@@ -546,6 +583,15 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
+    # Trendy Check Changed
+    def trendyCheck_Clicked(self):
+        if self.ui.trendyCheck.isChecked():
+            self.excluded_checks.difference_update(TRENDY_REWARDS)
+        else:
+            self.excluded_checks.update(TRENDY_REWARDS)
+
+
+
     # Gifts Check Changed
     def giftsCheck_Clicked(self):
         if self.ui.giftsCheck.isChecked():
@@ -555,7 +601,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
-    # Lens Check Changed
+    # Trade Quest Check Changed
     def tradeQuest_Clicked(self):
         if self.ui.tradeGiftsCheck.isChecked():
             self.excluded_checks.difference_update(TRADE_GIFT_LOCATIONS)
@@ -620,12 +666,17 @@ class MainWindow(QtWidgets.QMainWindow):
         if os.path.exists(self.ui.lineEdit.text()) and os.path.exists(self.ui.lineEdit_2.text()):
             
             # get needed params
-            romPath = self.ui.lineEdit.text()
+            rom_path = self.ui.lineEdit.text()
             
             seed = self.ui.lineEdit_3.text()
             if seed == "" or seed.lower() == "random":
                 random.seed()
                 seed = random.getrandbits(32)
+            else:
+                try:
+                    seed = int(seed, base=0)
+                except (TypeError, ValueError):
+                    pass
             
             outdir = f"{self.ui.lineEdit_2.text()}/{seed}"
             
@@ -641,7 +692,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 'fast-fishing': self.ui.fastFishingCheck.isChecked(),
                 'fast-stealing': self.ui.stealingCheck.isChecked(),
                 'fast-trendy': self.ui.fastTrendyCheck.isChecked(),
-                # 'fast-songs': self.ui.songsCheck.isChecked(),
+                'fast-songs': self.ui.songsCheck.isChecked(),
                 'shuffle-instruments': self.ui.instrumentCheck.isChecked(),
                 'starting-instruments': self.ui.instrumentsComboBox.currentIndex(),
                 'shuffle-tunics': self.ui.tunicsCheck.isChecked(),
@@ -653,12 +704,16 @@ class MainWindow(QtWidgets.QMainWindow):
                 'classic-d2': self.ui.swampCheck.isChecked(),
                 'owl-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['gifts', 'hybrid'] else False,
                 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
+                'fast-master-stalfos': self.ui.fastMSCheck.isChecked(),
+                # 'shuffle-companions': self.ui.companionCheck.isChecked(),
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
+                'randomize-enemies': self.ui.enemyCheck.isChecked(),
+                'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
                 'excluded-locations': self.excluded_checks
             }
             
-            self.progress_window = ProgressWindow(romPath, outdir, seed, logic, ITEM_DEFS, LOGIC_DEFS, settings)
+            self.progress_window = ProgressWindow(rom_path, outdir, seed, logic, ITEM_DEFS, LOGIC_DEFS, settings)
             self.progress_window.setFixedSize(472, 125)
             self.progress_window.setWindowTitle(f"{seed}")
 
@@ -688,10 +743,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # Include Button Clicked
     def includeButton_Clicked(self):
-        
-        selectedItems = self.ui.listWidget_2.selectedItems()
-        
-        for i in selectedItems:
+        for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
             self.excluded_checks.remove(self.listToCheck(i.text()))
             self.ui.listWidget.addItem(i.text())
@@ -700,10 +752,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # Exclude Button Clicked
     def excludeButton_Clicked(self):
-        
-        selectedItems = self.ui.listWidget.selectedItems()
-        
-        for i in selectedItems:
+        for i in self.ui.listWidget.selectedItems():
             self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
             self.ui.listWidget_2.addItem(i.text())
             self.excluded_checks.add(self.listToCheck(i.text()))

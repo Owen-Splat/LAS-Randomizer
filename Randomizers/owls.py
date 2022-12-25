@@ -20,7 +20,33 @@ def makeFieldChanges(flowchart, placements, item_defs):
     for k,v in field_owls.items():
         item = placements[k]
         item_index = placements['indexes'][k] if k in placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, v, None)
+        
+        gift_event = item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, None, None)
+
+        flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': k, 'value': True}, gift_event)
+        
+        flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': k}, {0: flag_set, 1: None})
+        
+        event_tools.insertEventAfter(flowchart, v, flag_check)
+    
+    # Now lets prevent Link from backing up. This is what causes the get item animation to sometimes not play
+    dist_evs = (
+        'Event17',
+        'Event41',
+        'Event42',
+        'Event43',
+        'Event44',
+        'Event45',
+        'Event46',
+        'Event47',
+        'Event48'
+    )
+    for ev in dist_evs:
+        dist_ev = event_tools.findEvent(flowchart, ev)
+        dist_ev.data.params.data['keepPersonalSpace'] = False
+        
 
 
 
@@ -40,6 +66,19 @@ def makeDungeonChanges(flowchart, placements, item_defs):
 
     subflow_b = event_tools.createSubFlowEvent(flowchart, '', 'examine_TailShared', {})
     event_tools.insertEventAfter(flowchart, 'examine_Tail04B05F', subflow_b)
+
+    ### all 3 owl statues in Color Dungeon use the same entrypoint, so same thing here
+    event_tools.addEntryPoint(flowchart, 'examine_Color06C') # left
+    subflow_c = event_tools.createSubFlowEvent(flowchart, '', 'examine_Color', {})
+    event_tools.insertEventAfter(flowchart, 'examine_Color06C', subflow_c)
+
+    event_tools.addEntryPoint(flowchart, 'examine_Color07D') # center
+    subflow_d = event_tools.createSubFlowEvent(flowchart, '', 'examine_Color', {})
+    event_tools.insertEventAfter(flowchart, 'examine_Color07D', subflow_d)
+
+    event_tools.addEntryPoint(flowchart, 'examine_Color05F') # right
+    subflow_e = event_tools.createSubFlowEvent(flowchart, '', 'examine_Color', {})
+    event_tools.insertEventAfter(flowchart, 'examine_Color05F', subflow_e)
 
     dungeon_owls = {
         'D1-owl-statue-spinies': subflow_a,
@@ -63,9 +102,24 @@ def makeDungeonChanges(flowchart, placements, item_defs):
         'D8-owl-statue-above-smasher': 'Event39',
         'D8-owl-statue-below-gibdos': 'Event109',
         'D8-owl-statue-eye-statue': 'Event112',
-        'D0-owl-statue': 'Event115'
+        'D0-owl-statue-left': subflow_c,
+        'D0-owl-statue-center': subflow_d,
+        'D0-owl-statue-right': subflow_e
     }
     for k,v in dungeon_owls.items():
         item = placements[k]
         item_index = placements['indexes'][k] if k in placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, v, None)
+
+        gift_event = item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, None, None)
+
+        flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': k, 'value': True}, gift_event)
+
+        flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': k}, {0: flag_set, 1: None})
+        
+        event_tools.insertEventAfter(flowchart, v, flag_check)
+    
+    # I dont know if the get item animation breaks in dungeons but same thing here as we did with the overworld ones
+    fork = event_tools.findEvent(flowchart, 'Event50')
+    fork.data.forks.pop(5)

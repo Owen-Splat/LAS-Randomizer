@@ -351,7 +351,7 @@ chamber-stone:
   model-name: PanelDungeonPiece
 rupee-20:
   type: junk
-  quantity: 36 # 5 without owl statues
+  quantity: 5
   item-key: Rupee20
   model-path: ItemRupeeRed.bfres
   model-name: RupeeRed

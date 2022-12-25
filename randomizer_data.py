@@ -7,7 +7,7 @@ import os
 
 ### define constants
 with open(os.path.join(ROOT_PATH, 'version.txt'), 'r') as f:
-    VERSION = f.read()
+    VERSION = f.read().strip()
 
 DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
 
@@ -20,6 +20,9 @@ with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
 with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
     LOGIC_DEFS = yaml.safe_load(f)
     TRICKS = [k for k, v in LOGIC_DEFS.items() if v['type'] == 'trick']
+
+with open(os.path.join(DATA_PATH, 'enemies.yml'), 'r') as f:
+    ENEMY_DATA = yaml.safe_load(f)
 
 with open(os.path.join(DATA_PATH, 'locations.yml'), 'r') as f:
     LOCATIONS = yaml.safe_load(f)
@@ -42,12 +45,12 @@ MISCELLANEOUS_CHESTS = LOCATIONS['Chest_Locations']
 FISHING_REWARDS = LOCATIONS['Fishing_Rewards']
 RAPIDS_REWARDS = LOCATIONS['Rapids_Rewards']
 DAMPE_REWARDS = LOCATIONS['Dampe_Rewards']
+TRENDY_REWARDS = LOCATIONS['Trendy_Rewards']
 FREE_GIFT_LOCATIONS = LOCATIONS['Free_Gifts']
 TRADE_GIFT_LOCATIONS = LOCATIONS['Trade_Gifts']
 BOSS_LOCATIONS = LOCATIONS['Boss_Locations']
 MISC_LOCATIONS = LOCATIONS['Misc_Items']
 SEASHELL_REWARDS = LOCATIONS['Mansion']
-TRENDY_REWARDS = LOCATIONS['Trendy_Rewards']
 HEART_PIECE_LOCATIONS = LOCATIONS['Heart_Pieces']
 
 # keep track of all game locations
@@ -62,4 +65,4 @@ SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
 
 LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'death', 'none')
 
-OWLS_SETTINGS = ('vanilla', 'hints', 'gifts', 'hybrid')
+OWLS_SETTINGS = ('vanilla', 'gifts') # ('vanilla', 'hints', 'gifts', 'hybrid')

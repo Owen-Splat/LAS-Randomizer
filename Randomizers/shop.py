@@ -9,17 +9,19 @@ def makeDatasheetChanges(sheet, placements, item_defs):
 
     for slot in sheet['values']:
         if slot['mIndex'] == 2: # shovel/bow/arrows
-            item = placements['shop-slot3-1st']
+            item = placements['shop-slot3-1st'] # shovel
             itemIndex = placements['indexes']['shop-slot3-1st'] if 'shop-slot3-1st' in placements['indexes'] else -1
             slot['mGoods'][0]['mItem'] = item_defs[item]['item-key']
             slot['mGoods'][0]['mModelPath'] = f"actor/{item_defs[item]['model-path']}"
             slot['mGoods'][0]['mModelName'] = item_defs[item]['model-name']
             slot['mGoods'][0]['mIndex'] = itemIndex
 
-            slot['mGoods'][1]['mCondition'] = 'ShopShovelGet'
-
-            slot['mGoods'][2]['mCondition'] = 'ShopBowGet'
-
+            item = placements['shop-slot3-2nd'] # bow
+            itemIndex = placements['indexes']['shop-slot3-2nd'] if 'shop-slot3-2nd' in placements['indexes'] else -1
+            slot['mGoods'][1]['mItem'] = item_defs[item]['item-key']
+            slot['mGoods'][1]['mModelPath'] = f"actor/{item_defs[item]['model-path']}"
+            slot['mGoods'][1]['mModelName'] = item_defs[item]['model-name']
+            slot['mGoods'][1]['mIndex'] = itemIndex
 
 
 def makeEventChanges(flowchart, placements, item_defs):
@@ -33,5 +35,3 @@ def makeEventChanges(flowchart, placements, item_defs):
     event_tools.setSwitchEventCase(flowchart, 'Event50', 1, 'Event52')
     event_tools.insertEventAfter(flowchart, 'Event52', 'Event61')
     item_get.insertItemGetAnimation(flowchart, itemKey, itemIndex, 'Event53', 'Event43')
-    gotFlag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': 'ShopShovelGet', 'value': True})
-    event_tools.insertEventAfter(flowchart, 'Event43', gotFlag)

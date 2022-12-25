@@ -1,5 +1,4 @@
 import struct
-import copy
 import re
 
 
@@ -7,7 +6,7 @@ def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
 
 def readFloat(bytes, start, length):
-	return struct.unpack('<f', bytes[start : start + length])[0]
+	return float(struct.unpack('<f', bytes[start : start + length])[0])
 
 def readString(data, start):
 	result = b''
@@ -197,12 +196,12 @@ class Actor:
 			(readBytes(data, 0x7B, 1), readBytes(data, 0x82, 2))
 		]
 		
-		self.x84 = data[0x84:]
-		# self.relationships = Relationship(data, names)
+		# self.x84 = data[0x84:]
+		self.relationships = Relationship(data, names)
 
 	def __repr__(self):
 		return f'Actor: {self.name}'
-
+		
 	def pack(self, nameOffset):
 		packed = b''
 		nameRepr = self.name + b'\x00'
@@ -228,6 +227,9 @@ class Actor:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param + b'\x00'
+			elif isinstance(param, float):
+				packed += struct.pack('<f', param)
+				packed += (2).to_bytes(4, 'little')
 			else:
 				packed += param.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
@@ -238,67 +240,8 @@ class Actor:
 			switches += self.switches[i][1].to_bytes(2, 'little')
 		packed += switches
 		
-		packed += self.x84 # relationship data but it's unfinished so we just keep the data as is for now
-
-		# packed += self.relationships.e.to_bytes(1, 'little')
-		# packed += self.relationships.k.to_bytes(1, 'little')
-		# packed += self.relationships.b.to_bytes(1, 'little')
-		# packed += self.relationships.x.to_bytes(1, 'little')
-		# packed += self.relationships.y.to_bytes(1, 'little')
-		# packed += self.relationships.z.to_bytes(1, 'little')
-		# packed += self.relationships.null
-
-		# for i in range(self.relationships.x):
-		# 	param1 = self.relationships.section_1[i][0][0]
-		# 	param2 = self.relationships.section_1[i][0][1]
-		# 	act_index = self.relationships.section_1[i][1]
-
-		# 	if isinstance(param1, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param1 + b'\x00'
-		# 	else:
-		# 		packed += param1.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
-			
-		# 	if isinstance(param2, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param2 + b'\x00'
-		# 	else:
-		# 		packed += param2.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
-			
-		# 	packed += act_index.to_bytes(4, 'little')
-		
-		# for i in range(self.relationships.z):
-		# 	param1 = self.relationships.section_2[i][0][0]
-		# 	param2 = self.relationships.section_2[i][0][1]
-		# 	rail = self.relationships.section_2[i][1]
-		# 	point = self.relationships.section_2[i][2]
-
-		# 	if isinstance(param1, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param1 + b'\x00'
-		# 	else:
-		# 		packed += param1.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
-			
-		# 	if isinstance(param2, bytes):
-		# 		packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
-		# 		packed += (4).to_bytes(4, 'little')
-		# 		nameRepr += param2 + b'\x00'
-		# 	else:
-		# 		packed += param2.to_bytes(4, 'little')
-		# 		packed += (3).to_bytes(4, 'little')
-			
-		# 	packed += rail.to_bytes(4, 'little')
-		# 	packed += point.to_bytes(4, 'little')
-		
-		# if self.relationships.y > 0:
-		# 	for i in range(self.relationships.y):
-		# 		packed += self.relationships.section_3[i].to_bytes(4, 'little')
+		# packed += self.x84 # relationship data but it's unfinished so we just keep the data as is for now
+		packed += self.relationships.pack(nameRepr, nameOffset)
 
 		return packed
 
@@ -309,6 +252,16 @@ class Actor:
 		print(f'Room ID: {self.roomID}')
 		print(f'Coordinates: {self.posX}, {self.posY}, {self.posZ}')
 		print(f'Parameters: {self.parameters}')
+	
+
+	def positionToPoint(self, position):
+		packed = b''
+		packed += struct.pack('<f', position[0])
+		packed += struct.pack('<f', position[1])
+		packed += struct.pack('<f', position[2])
+		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+		
+		return packed
 
 
 
@@ -320,6 +273,16 @@ class Room:
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
+
+		# self.points = []
+		# point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
+		# for entry in point_entry.data.entries:
+		# 	self.points.append(Point(entry.data))
+		
+		# self.rails = []
+		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
+		# for entry in rail_entry.data.entries:
+		# 	self.rails.append(Rail(entry.data))
 		
 		# grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
 		# self.grid = Grid(grid_entry)
@@ -333,47 +296,6 @@ class Room:
 			chest.parameters[1] = bytes(new_content, 'utf-8')
 			chest.parameters[2] = item_index if item_index != -1 else b''
 	
-
-	def addChestRooster(self, chest_index=0):
-		chests = [a for a in self.actors if a.type == 0xF7]
-
-		if len(chests) > chest_index:
-			chest = chests[chest_index]
-			new_actor = copy.deepcopy(chest)
-
-			chest.relationships.x += 1
-			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-			name_hex = f'A1000{chest_index}005D1D906E'
-			new_actor.key = int(name_hex, 16)
-			new_actor.name = bytes(f'NpcFlyingCucco-{name_hex}', 'utf-8')
-			new_actor.type = 0x181
-			new_actor.parameters = [0, b'FlyCocco', b'', b'', b'', b'', b'', b'']
-			new_actor.relationships.y += 1
-			new_actor.relationships.section_3.append(self.actors.index(chest))
-			self.actors.append(new_actor)
-	
-
-	def addShadowTrap(self, chest_index=0):
-		chests = [a for a in self.actors if a.type == 0xF7]
-
-		if len(chests) > chest_index:
-			chest = chests[chest_index]
-			new_actor = copy.deepcopy(chest)
-
-			chest.relationships.x += 1
-			chest.relationships.section_1.append([[b'', b''], len(self.actors)])
-
-			name_hex = f'A1000{chest_index}006E2E017F'
-			new_actor.key = int(name_hex, 16)
-			new_actor.name = bytes(f'PanelShadowLink-{name_hex}', 'utf-8')
-			new_actor.type = 0x21E
-			# new_actor.posZ += 3 # move 2 tiles south of chest to appear behind the player
-			new_actor.parameters = [b'Appear', b'', b'', b'', b'', b'', b'', b'']
-			new_actor.relationships.y += 1
-			new_actor.relationships.section_3.append(self.actors.index(chest))
-			self.actors.append(new_actor)
-
 
 	def setSmallKeyParams(self, model_path, model_name, room, key_index=0):
 		keys = [a for a in self.actors if a.type == 0xA9]
@@ -419,11 +341,35 @@ class Room:
 					entry.data.entries.append(Entry(0xFFF0, b'', 0xFFFFFFFF, actor.pack(len(new_names))))
 
 					new_names += actor.name + b'\x00'
-
+					
 					for param in actor.parameters:
 						if isinstance(param, bytes):
 							new_names += param + b'\x00'
-
+					
+					for s1 in actor.relationships.section_1:
+						if isinstance(s1[0][0], bytes):
+							new_names += s1[0][0] + b'\x00'
+						if isinstance(s1[0][1], bytes):
+							new_names += s1[0][1] + b'\x00'
+					
+					for s2 in actor.relationships.section_2:
+						if isinstance(s2[0][0], bytes):
+							new_names += s2[0][0] + b'\x00'
+						if isinstance(s2[0][1], bytes):
+							new_names += s2[0][1] + b'\x00'
+			
+			# if entry.name == b'point':
+			# 	entry.data.entries = []
+			# 	for point in self.points:
+			# 		# Create a new point entry for actors to use
+			# 		entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
+			
+			# if entry.name == b'rail':
+			# 	entry.data.entries = []
+			# 	for rail in self.rails:
+			# 		# Create a new rail entry to reference point indexes per rail
+			# 		entry.data.entries.append(Entry(0xFFF2, b'', 0xFFFFFFFF, rail.pack()))
+			
 			new_names += entry.name + b'\x00'
 
 		self.fixed_hash.namesSection = new_names
@@ -442,54 +388,208 @@ class Relationship:
 		self.z = readBytes(data, 0x89, 1)
 
 		self.null = data[0x8A:0x90]
-		
+
 		self.section_1 = []
 		self.section_2 = []
 		self.section_3 = []
 
 		pos = 0x90
 		
-		if self.x > 0x00:
-			for i in range(self.x):
-				acts = []
-				seq = []
+		for i in range(self.x):
+			acts = []
+			seq = []
 
-				for b in range(2):
-					param = readBytes(data, pos + (0x8 * b), 4)
-					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
-					if paramType == 0x4:
-						seq.append(readString(names, param))
-					else:
-						seq.append(param)
-				
-				act_index = readBytes(data, pos + 0x10, 4)
-				acts.append(seq)
-				acts.append(act_index)
-				self.section_1.append(acts)
-				pos += 20
+			for b in range(2):
+				param = readBytes(data, pos + (0x8 * b), 4)
+				paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+				if paramType == 0x4:
+					seq.append(readString(names, param))
+				else:
+					seq.append(param)
+			
+			act_index = readBytes(data, pos + 0x10, 4)
+			acts.append(seq)
+			acts.append(act_index)
+			self.section_1.append(acts)
+			pos += 20
 		
-		if self.z > 0x00:
-			for i in range(self.z):
-				acts = []
-				seq = []
+		for i in range(self.z):
+			acts = []
+			seq = []
 
-				for b in range(2):
-					param = readBytes(data, pos + (0x8 * b), 4)
-					paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
-					if paramType == 0x4:
-						seq.append(readString(names, param))
-					else:
-						seq.append(param)
-				
-				rail = readBytes(data, pos + 0x10, 4)
-				point = readBytes(data, pos + 0x14, 4)
-				acts.append(seq)
-				acts.append(rail)
-				acts.append(point)
-				self.section_2.append(acts)
-				pos += 24
+			for b in range(2):
+				param = readBytes(data, pos + (0x8 * b), 4)
+				paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+				if paramType == 0x4:
+					seq.append(readString(names, param))
+				else:
+					seq.append(param)
+			
+			rail = readBytes(data, pos + 0x10, 4)
+			point = readBytes(data, pos + 0x14, 4)
+			acts.append(seq)
+			acts.append(rail)
+			acts.append(point)
+			self.section_2.append(acts)
+			pos += 24
 		
-		if self.y > 0x00:
-			for i in range(self.y):
-				id = readBytes(data, pos + (0x8 * i), 4)
-				self.section_3.append(id)
+		for i in range(self.y):
+			id = readBytes(data, pos + (0x4 * i), 4)
+			self.section_3.append(id)
+	
+
+	def pack(self, nameRepr, nameOffset):
+		packed = b''
+		packed += self.e.to_bytes(1, 'little')
+		packed += self.k.to_bytes(1, 'little')
+		packed += self.b.to_bytes(1, 'little')
+		packed += self.x.to_bytes(1, 'little')
+		packed += self.y.to_bytes(1, 'little')
+		packed += self.z.to_bytes(1, 'little')
+		packed += self.null
+
+		for i in range(self.x):
+			param1 = self.section_1[i][0][0]
+			param2 = self.section_1[i][0][1]
+			act_index = self.section_1[i][1]
+
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			elif isinstance(param1, float):
+				packed += struct.pack('<f', param1)
+				packed += (2).to_bytes(4, 'little')
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			elif isinstance(param2, float):
+				packed += struct.pack('<f', param2)
+				packed += (2).to_bytes(4, 'little')
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			packed += act_index.to_bytes(4, 'little')
+		
+		for i in range(self.z):
+			param1 = self.section_2[i][0][0]
+			param2 = self.section_2[i][0][1]
+			rail = self.section_2[i][1]
+			point = self.section_2[i][2]
+
+			if isinstance(param1, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param1 + b'\x00'
+			elif isinstance(param1, float):
+				packed += struct.pack('<f', param1)
+				packed += (2).to_bytes(4, 'little')
+			else:
+				packed += param1.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			if isinstance(param2, bytes):
+				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+				packed += (4).to_bytes(4, 'little')
+				nameRepr += param2 + b'\x00'
+			elif isinstance(param2, float):
+				packed += struct.pack('<f', param2)
+				packed += (2).to_bytes(4, 'little')
+			else:
+				packed += param2.to_bytes(4, 'little')
+				packed += (3).to_bytes(4, 'little')
+			
+			packed += rail.to_bytes(4, 'little')
+			packed += point.to_bytes(4, 'little')
+		
+		for i in range(self.y):
+			packed += self.section_3[i].to_bytes(4, 'little')
+		
+		return packed
+
+
+
+# EXPERIMENTAL POINT AND RAIL SECTIONS
+# class Point:
+# 	def __init__(self, data):
+# 			self.posX = readFloat(data, 0x0, 4)
+# 			self.posY = readFloat(data, 0x4, 4)
+# 			self.posZ = readFloat(data, 0x8, 4)
+# 			self.xC = data[0xC:]
+	
+# 	def pack(self):
+# 		packed = b''
+# 		packed += struct.pack('<f', self.posX)
+# 		packed += struct.pack('<f', self.posY)
+# 		packed += struct.pack('<f', self.posZ)
+# 		packed += self.xC
+
+# 		return packed
+
+
+
+# class Rail:
+# 	def __init__(self, data=None, points=None):
+# 		if data is not None:
+# 			self.x0 = data[0x0:0xC]
+
+# 			self.xC = []
+# 			for i in range(4):
+# 				param = readBytes(data, 0xC + (0x8 * i), 4)
+# 				# paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
+
+# 				# if paramType == 0xFFFFFF04:
+# 				# 	self.xC.append(readString(names, param))
+# 				# else:
+# 				# 	self.xC.append(param)
+				
+# 				self.xC.append(param)
+			
+# 			self.num_entries = readBytes(data, 0x2C, 2)
+# 			self.num_indexes = readBytes(data, 0x2E, 2)
+
+# 			self.points = []
+# 			for i in range(self.num_entries):
+# 				self.points.append(readBytes(data, (0x30 + (0x2 * i)), 2))
+		
+# 		else:
+# 			self.x0 = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+# 			self.xC = [25, 25, 25, 25]
+# 			self.num_entries = len(points)
+# 			self.num_indexes = 0x1
+# 			self.points = points
+
+
+# 	def pack(self):
+# 		packed = b''
+# 		packed += self.x0
+		
+# 		# nameRepr = b'' + b'\x00'
+
+# 		for i in range(4):
+# 			param = self.xC[i]
+# 			# if isinstance(param, bytes):
+# 			# 	packed += (len(nameRepr) + 0x1).to_bytes(4, 'little')
+# 			# 	packed += (0xFFFFFF04).to_bytes(4, 'little')
+# 			# 	nameRepr += param + b'\x00'
+# 			# else:
+# 			# 	packed += param.to_bytes(4, 'little')
+# 			# 	packed += (3).to_bytes(4, 'little')
+
+# 			packed += param.to_bytes(4, 'little')
+# 			packed += (0xFFFFFF04).to_bytes(4, 'little')
+
+# 		packed += self.num_entries.to_bytes(2, 'little')
+# 		packed += self.num_indexes.to_bytes(2, 'little')
+
+# 		for i in range(self.num_entries):
+# 			packed += self.points[i].to_bytes(2, 'little')
+		
+# 		return packed

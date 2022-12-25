@@ -1,7 +1,7 @@
 SWORD_FOUND_FLAG        = 'unused0357'
-SWORD2_FOUND_FLAG       = 'unused0358'
-SHIELD_FOUND_FLAG       = 'unused0359'
-BRACELET_FOUND_FLAG     = 'unused0360'
+SHIELD_FOUND_FLAG       = 'unused0358'
+BRACELET_FOUND_FLAG     = 'unused0359'
+LENS_FOUND_FLAG         = 'unused0360'
 
 RED_TUNIC_FOUND_FLAG    = 'unused0361'
 BLUE_TUNIC_FOUND_FLAG   = 'unused0362'
@@ -17,8 +17,10 @@ MERMAID_CAVE_FLAG       = 'TradeLensGet'
 POTHOLE_FLAG            = 'PotholeGet'
 
 BOMBS_FOUND_FLAG        = 'BombsFound'
-BOMB_BAG_FOUND_FLAG     = 'BombBagFound'
+# BOMB_BAG_FOUND_FLAG     = 'BombBagFound'
 
+ROOSTER_FOUND_FLAG      = 'RoosterFound'
+BOWWOW_FOUND_FLAG       = 'BowWowFound'
 
 INSTRUMENT_FLAGS = {
     'D1-instrument': 'TailCaveInstrumentGet',
@@ -327,7 +329,7 @@ ITEM_MODELS = {
     'MagicRod': 'ItemMagicRod.bfres',
     # 'Shovel': 'ItemShovel.bfres',
     'SleepyMushroom': 'ItemSleepyMushroom.bfres',
-    'MagicPowder': 'ItemMagicPowder.bfres',
+    # 'MagicPowder': 'ItemMagicPowder.bfres',
     'RocsFeather': 'ItemRocsFeather.bfres',
     'PowerBraceletLv1': 'ItemPowerBraceletLv1.bfres',
     # 'PowerBraceletLv2': 'ItemPowerBraceletLv2.bfres',
