@@ -443,9 +443,10 @@ Actors:
 
 
 Excluded_Actors: # rooms each with a list of actors to not modify
+  Field_12P: [0] # armos
   Field_10G: [0] # villa skip pincer
-  Field_06I: [0]
-  Field_06K: [0]
+  Field_06I: [0] # kanalet crow
+  Field_06K: [0] # kanalet mad bomber
   Field_04B: [1] # bowwow skip like like
   Field_04I: [3] # ak skip boarblin
   KanaletCastle_01D: [0]

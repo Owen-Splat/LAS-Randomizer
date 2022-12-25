@@ -1084,7 +1084,7 @@ pothole-north:
   region: pothole
   spoiler-region: pothole-field
   condition-basic: ((rooster | feather) & (boomerang | rod)) | (feather & sword)
-  condition-advanced: (feather | rooster) & (bombs | powder | sword)
+  # condition-advanced: (feather | rooster) & (bombs | powder | sword)
 pothole-final:
   type: item
   subtype: dig
