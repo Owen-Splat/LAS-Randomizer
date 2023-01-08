@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2021 la-switch
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 from PySide6 import QtCore
 
 import spoiler
@@ -30,30 +52,37 @@ class ItemShuffler(QtCore.QThread):
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         
-        self.force_chests = ['zol-trap', 'zap-trap', 'stalfos-note']
-        # self.force_out_trendy = ['rupee-20', 'rupee-50', 'rupee-100', 'zap-trap']
+        self.force_chests = ['zol-trap', 'stalfos-note']
         # self.force_out_shop = ['zap-trap']
+
         self.progress_value = 0
         self.thread_active = True
     
     
     # thread automatically starts the run method
     def run(self):
-        if not self.settings['owl-gifts']:
+        if not self.settings['owl-overworld-gifts']:
             owls = [k for k, v in self.logic_defs.items()
                    if v['type'] == 'item'
-                   and v['subtype'] == 'statue']
+                   and v['subtype'] == 'overworld-statue']
             for owl in owls:
                 del self.logic_defs[owl]
         else:
-            self.item_defs['rupee-20']['quantity'] += 33 # 33 total owl statues
+            self.item_defs['rupee-20']['quantity'] += 9 # 33 total owl statues
         
+        if not self.settings['owl-dungeon-gifts']:
+            owls = [k for k, v in self.logic_defs.items()
+                   if v['type'] == 'item'
+                   and v['subtype'] == 'dungeon-statue']
+            for owl in owls:
+                del self.logic_defs[owl]
+        else:
+            self.item_defs['rupee-20']['quantity'] += 24 # 33 total owl statues
+
         # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
         vanilla_locations = [k for k, v in self.logic_defs.items()
                             if v['type'] == 'item'
-                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'statue')]
-        # vanilla_locations.append('pothole-final')
-        vanilla_locations.append('kanalet-kill-room')
+                            and v['subtype'] not in ('chest', 'boss', 'drop', 'npc', 'standing', 'overworld-statue', 'dungeon-statue')]
         vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
         vanilla_locations.append('trendy-prize-2')
         vanilla_locations.append('trendy-prize-3')
@@ -66,9 +95,6 @@ class ItemShuffler(QtCore.QThread):
         # vanilla_locations.remove('south-bay-sunken')
         # vanilla_locations.remove('taltal-east-drop')
         
-        # vanilla_locations.remove('shop-slot3-1st')
-        # vanilla_locations.remove('shop-slot3-2nd')
-
         # if not self.settings['shuffle-companions']:
         # vanilla_locations.append('moblin-cave')
         # vanilla_locations.append('rooster-statue')
@@ -123,7 +149,8 @@ class ItemShuffler(QtCore.QThread):
         
         if self.settings['shuffle-bombs']:
             self.item_defs['bomb']['type'] = 'important'
-            self.logic_defs['bombs']['condition-basic'] = '(can-shop | (can-farm-rupees & color-dungeon)) & bomb'
+            self.logic_defs['bombs']['condition-basic'] =\
+                '(can-shop | (can-farm-rupees & color-dungeon) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & bomb'
         
         if not self.settings['shuffle-tunics']:
             self.item_defs['red-tunic']['quantity'] = 0
@@ -131,23 +158,25 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['rupee-50']['quantity'] += 2 # +100 rupees
         
         if self.settings['zap-sanity']:
-            self.force_chests.remove('zap-trap')
-
             if self.settings['blup-sanity']:
                 self.item_defs['rupee-5']['quantity'] -= 14 # replace half of the blue rupees with zap traps because fun :D
                 self.item_defs['zap-trap']['quantity'] += 14
             
-            if self.settings['owl-gifts']:
-                self.item_defs['rupee-20']['quantity'] -= 11 # replace a third of the owl 20 rupees with zap traps because fun :D
-                self.item_defs['zap-trap']['quantity'] += 11
+            if self.settings['owl-overworld-gifts']:
+                self.item_defs['rupee-20']['quantity'] -= 3 # replace a third of the owl 20 rupees with zap traps because fun :D
+                self.item_defs['zap-trap']['quantity'] += 3
             
-            # self.item_defs['heart-piece']['quantity'] -= 20 # leaves 12 heart pieces
+            if self.settings['owl-dungeon-gifts']:
+                self.item_defs['rupee-20']['quantity'] -= 8 # replace a third of the owl 20 rupees with zap traps because fun :D
+                self.item_defs['zap-trap']['quantity'] += 8
+            
             self.item_defs['rupee-50']['quantity'] -= 18 # -900 rupees
-            self.item_defs['rupee-100']['quantity'] += 4 # +400 rupees
+            self.item_defs['rupee-100']['quantity'] += 5 # +500 rupees
             self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
-            # self.item_defs['chamber-stone']['quantity'] -= 5 # leaves the shop and trendy ones since they are not shuffled
-            self.item_defs['zap-trap']['quantity'] += 13
+            self.item_defs['zol-trap']['quantity'] -= 3
+            self.item_defs['zap-trap']['quantity'] += 15
         
+        placements = None
         try:
             # Create a placement, spoiler log, and game mod.
             if self.thread_active:
@@ -157,9 +186,8 @@ class ItemShuffler(QtCore.QThread):
             if self.thread_active:
                 self.give_placements.emit(placements)
         
-        except (AttributeError, IndexError, KeyError, ValueError):
-            print(traceback.format_exc())
-            self.error.emit()
+        except (AttributeError, IndexError, KeyError, ValueError, TypeError):
+            self.error.emit(placements, traceback.format_exc())
         
         self.is_done.emit()
     

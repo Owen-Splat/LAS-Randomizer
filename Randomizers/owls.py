@@ -3,6 +3,19 @@ from Randomizers import item_get
 
 
 
+def addSlimeKeyCheck(flowchart):
+    '''Places an item on the owl in front of the slime key regardless if owl gifts are on or not'''
+
+    key_drop = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+        {'symbol': 'PotholeKeySpawn', 'value': True}, 'Event21')
+    shovel_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
+        {'itemType': 10, 'count': 1}, {0: 'Event21', 1: key_drop})
+    chest_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': 'PotholeKeySpawn'}, {0: shovel_check, 1: 'Event21'})
+    event_tools.insertEventAfter(flowchart, 'examine_anaboko', chest_check)
+
+
+
 def makeFieldChanges(flowchart, placements, item_defs):
     '''Places items on the field owls. Hint system not implemented'''
 

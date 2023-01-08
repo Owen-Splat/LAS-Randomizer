@@ -363,11 +363,11 @@ rupee-5:
   model-name: RupeeBlue
 zol-trap:
   type: junk
-  quantity: 1
+  quantity: 4
   item-key: $ENEMY
 zap-trap:
   type: junk
-  quantity: 3
+  quantity: 0
   item-key: ZapTrap
 bomb:
   type: junk

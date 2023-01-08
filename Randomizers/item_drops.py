@@ -9,14 +9,9 @@ def makeDatasheetChanges(sheet, placements):
     
     for i in range(len(sheet['values'])):
 
-        # sheet['values'][i]['conditions'] = oead.gsheet.StructArray()
-
+        # sheet['values'][i]['condition'] = ''
         # if sheet['values'][i]['mKey'] == 'Bomb' and placements['settings']['shuffle-bombs']:
-        #     sheet['values'][i]['conditions'].append({'category': 1, 'parameter': data.BOMBS_FOUND_FLAG})
-        # elif sheet['values'][i]['mKey'] == 'None':
-        #     sheet['values'][i]['conditions'].append({'category': 9, 'parameter': 'false'})
-        # else:
-        #     sheet['values'][i]['conditions'].append({'category': 9, 'parameter': 'true'})
+        #     sheet['values'][i]['condition'] = data.BOMBS_FOUND_FLAG
         
         if sheet['values'][i]['mKey'] == 'HeartContainer0':
             first_heart_index = i
@@ -49,10 +44,11 @@ def makeDatasheetChanges(sheet, placements):
 
 
 # def createDatasheetConditions(sheet):
+#     # {name: gettingFlag, type_name: GlobalFlags, type: 4, flags: 9, fields: null}
 #     sheet['root_fields'].append(oead_tools.createField(
-#     name='conditions',
-#     type_name='__inline_struct_ItemDrop_conditions',
-#     type=oead.gsheet.Field.Type.Struct,
-#     flags=oead.gsheet.Field.Flag.IsArray,
+#     name='mCondition',
+#     type_name='Conditions',
+#     type=oead.gsheet.Field.Type.String,
+#     flags=oead.gsheet.Field.Flag.IsNullable,
 #     offset=28
 # ))

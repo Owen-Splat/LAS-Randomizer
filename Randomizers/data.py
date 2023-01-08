@@ -13,7 +13,7 @@ MANBO_FLAG              = 'unused0434'
 ROOSTER_CAVE_FLAG       = 'unused0707'
 DREAM_SHRINE_FLAG       = 'unused0708'
 WOODS_LOOSE_FLAG        = 'unused0709'
-MERMAID_CAVE_FLAG       = 'TradeLensGet'
+MERMAID_CAVE_FLAG       = 'MermaidCaveItemGet'
 POTHOLE_FLAG            = 'PotholeGet'
 
 BOMBS_FOUND_FLAG        = 'BombsFound'
@@ -197,7 +197,17 @@ SMALL_KEY_ROOMS = {
  'D8-west-vire': 'Lv08TurtleRock_06A',
  'D8-east-roomba': 'Lv08TurtleRock_07G',
  'D0-north-orbs': 'Lv10ClothesDungeon_05E',
- 'D0-east-color-puzzle': 'Lv10ClothesDungeon_05F'
+ 'D0-east-color-puzzle': 'Lv10ClothesDungeon_05F',
+ 'pothole-final': 'Field_13G'
+}
+
+
+GOLDEN_LEAF_ROOMS = {
+    'kanalet-crow': 'Field_06I',
+    'kanalet-mad-bomber': 'Field_06K',
+    'kanalet-kill-room': 'KanaletCastle_02A',
+    'kanalet-bombed-guard': 'KanaletCastle_01C',
+    'kanalet-final-guard': 'KanaletCastle_01D'
 }
 
 
@@ -339,7 +349,7 @@ ITEM_MODELS = {
     'SecretMedicine': 'ItemSecretMedicine.bfres',
     'SecretSeashell': 'ItemSecretSeashell.bfres',
     'TailKey': 'ItemTailKey.bfres',
-    # 'SlimeKey': 'ItemSlimeKey.bfres',
+    'SlimeKey': 'ItemSlimeKey.bfres',
     'AnglerKey': 'ItemAnglerKey.bfres',
     'FaceKey': 'ItemFaceKey.bfres',
     'BirdKey': 'ItemBirdKey.bfres',
@@ -417,4 +427,21 @@ ENTRANCE_ROOMS = {
         '12F': 0,
         '14D': 0,
     }
+}
+
+
+CHEST_SIZES = {
+    'important': 1.2,
+    'seashell': 1.0,
+    'good': 1.0,
+    'junk': 0.8,
+    'D1': 1.0,
+    'D2': 1.0,
+    'D3': 1.0,
+    'D4': 1.0,
+    'D5': 1.0,
+    'D6': 1.0,
+    'D7': 1.0,
+    'D8': 1.0,
+    'D0': 1.0
 }

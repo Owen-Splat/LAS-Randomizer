@@ -20,7 +20,7 @@ class UpdateProcess(QtCore.QThread):
         try:
             update_file =\
                 lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/experimental/version.txt")
-            web_version = float(update_file.read())
+            web_version = float(update_file.read().strip())
             
             if web_version > VERSION:
                 self.can_update.emit(True)

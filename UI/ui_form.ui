@@ -1041,7 +1041,7 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>369</x>
           <y>224</y>
           <width>173</width>
           <height>21</height>
@@ -1198,8 +1198,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>548</x>
-          <y>184</y>
+          <x>189</x>
+          <y>224</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1356,20 +1356,30 @@
         </property>
         <item>
          <property name="text">
-          <string>Owl Statues: Vanilla</string>
+          <string>Owl Gifts: None</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Owl Statues: Gifts</string>
+          <string>Owl Gifts: Overworld</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Owl Gifts: Dungeons</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Owl Gifts: All</string>
          </property>
         </item>
        </widget>
        <widget class="QCheckBox" name="raceCheck">
         <property name="geometry">
          <rect>
-          <x>369</x>
-          <y>224</y>
+          <x>548</x>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1399,8 +1409,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>369</x>
-          <y>184</y>
+          <x>10</x>
+          <y>224</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1450,6 +1460,37 @@
         </property>
         <property name="text">
          <string>Fast Master Stalfos</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="chestSizesCheck">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>369</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>false</strikeout>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Sets chest sizes to match the importance of the item</string>
+        </property>
+        <property name="text">
+         <string>Scaled Chests</string>
         </property>
         <property name="checkable">
          <bool>true</bool>

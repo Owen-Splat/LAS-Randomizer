@@ -1,5 +1,6 @@
 import struct
 import re
+import ctypes
 
 
 def readBytes(bytes, start, length, endianness='little'):
@@ -181,11 +182,15 @@ class Actor:
 
 		self.parameters = []
 		for i in range(8):
-			param = readBytes(data, 0x38 + (0x8 * i), 4)
-			paramType = readBytes(data, 0x38 + (0x8 * i) + 0x4, 4)
+			param_type = readBytes(data, 0x38 + (0x8 * i) + 0x4, 4)
 
-			if paramType == 0x4:
-				self.parameters.append(readString(names, param))
+			if param_type == 0x2:
+				param = readFloat(data, 0x38 + (0x8 * i), 4)
+			else:
+				param = readBytes(data, 0x38 + (0x8 * i), 4)
+			
+			if param_type == 0x4:
+				self.parameters.append(readString(names, param))				
 			else:
 				self.parameters.append(param)
 
@@ -196,7 +201,6 @@ class Actor:
 			(readBytes(data, 0x7B, 1), readBytes(data, 0x82, 2))
 		]
 		
-		# self.x84 = data[0x84:]
 		self.relationships = Relationship(data, names)
 
 	def __repr__(self):
@@ -240,7 +244,6 @@ class Actor:
 			switches += self.switches[i][1].to_bytes(2, 'little')
 		packed += switches
 		
-		# packed += self.x84 # relationship data but it's unfinished so we just keep the data as is for now
 		packed += self.relationships.pack(nameRepr, nameOffset)
 
 		return packed
@@ -254,11 +257,11 @@ class Actor:
 		print(f'Parameters: {self.parameters}')
 	
 
-	def positionToPoint(self, position):
+	def positionToPoint(self):
 		packed = b''
-		packed += struct.pack('<f', position[0])
-		packed += struct.pack('<f', position[1])
-		packed += struct.pack('<f', position[2])
+		packed += struct.pack('<f', self.posX)
+		packed += struct.pack('<f', self.posY)
+		packed += struct.pack('<f', self.posZ)
 		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
 		
 		return packed
@@ -269,11 +272,6 @@ class Room:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
 
-		self.actors = []
-		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
-		for entry in actor_entry.data.entries:
-			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
-
 		# self.points = []
 		# point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
 		# for entry in point_entry.data.entries:
@@ -282,19 +280,31 @@ class Room:
 		# self.rails = []
 		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
 		# for entry in rail_entry.data.entries:
-		# 	self.rails.append(Rail(entry.data))
+		# 	self.rails.append(Rail(data=entry.data, names=self.fixed_hash.namesSection))
+
+		self.actors = []
+		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
+		for entry in actor_entry.data.entries:
+			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
 		
-		# grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
-		# self.grid = Grid(grid_entry)
+		# try:
+		# 	grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
+		# 	self.grid = Grid(grid_entry)
+		# except IndexError:
+		# 	self.grid = None
 
 
-	def setChestContent(self, new_content, item_index, chest_index=0):
+	def setChestContent(self, new_content, item_index, chest_index=0, chest_size=1.0):
 		chests = [a for a in self.actors if a.type == 0xF7]
 
 		if len(chests) > chest_index:
 			chest = chests[chest_index]
 			chest.parameters[1] = bytes(new_content, 'utf-8')
 			chest.parameters[2] = item_index if item_index != -1 else b''
+
+			chest.scaleX = chest_size
+			chest.scaleY = chest_size
+			chest.scaleZ = chest_size
 	
 
 	def setSmallKeyParams(self, model_path, model_name, room, key_index=0):
@@ -334,6 +344,22 @@ class Room:
 		new_names = b''
 
 		for entry in self.fixed_hash.entries:
+			# if entry.name == b'point':
+			# 	entry.data.entries = []
+			# 	for point in self.points:
+			# 		# Create a new point entry for actors to use
+			# 		entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
+			
+			# if entry.name == b'rail':
+			# 	entry.data.entries = []
+			# 	for rail in self.rails:
+			# 		# Create a new rail entry to reference point indexes per rail
+			# 		entry.data.entries.append(Entry(0xFFF2, b'', 0xFFFFFFFF, rail.pack(len(new_names))))
+
+			# 		for param in rail.xC:
+			# 			if isinstance(param, bytes):
+			# 				new_names += param + b'\x00'
+			
 			if entry.name == b'actor':
 				entry.data.entries = []
 				for actor in self.actors:
@@ -358,17 +384,16 @@ class Room:
 						if isinstance(s2[0][1], bytes):
 							new_names += s2[0][1] + b'\x00'
 			
-			# if entry.name == b'point':
+			# if entry.name == b'grid':
 			# 	entry.data.entries = []
-			# 	for point in self.points:
-			# 		# Create a new point entry for actors to use
-			# 		entry.data.entries.append(Entry(0xFFF3, b'', 0xFFFFFFFF, point.pack()))
-			
-			# if entry.name == b'rail':
-			# 	entry.data.entries = []
-			# 	for rail in self.rails:
-			# 		# Create a new rail entry to reference point indexes per rail
-			# 		entry.data.entries.append(Entry(0xFFF2, b'', 0xFFFFFFFF, rail.pack()))
+			# 	entry.data.entries.append(Entry(0xFFF0, b'data', 0xFFFFFFFF, self.grid.pack()))
+			# 	new_names += b'data' + b'\x00'
+
+			# 	if self.grid.chain_entry is not None:
+			# 		entry.data.entries.append(Entry(0xFFF0, b'chain', 0xFFFFFFFF, self.grid.chain_entry.data))
+				
+			# 	entry.data.entries.append(Entry(0xFFF0, b'info', 0x0, self.grid.info.pack()))
+			# 	new_names += b'info' + b'\x00'
 			
 			new_names += entry.name + b'\x00'
 
@@ -400,10 +425,15 @@ class Relationship:
 			seq = []
 
 			for b in range(2):
-				param = readBytes(data, pos + (0x8 * b), 4)
-				paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
-				if paramType == 0x4:
-					seq.append(readString(names, param))
+				param_type = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+
+				if param_type == 0x2:
+					param = readFloat(data, pos + (0x8 * b), 4)
+				else:
+					param = readBytes(data, pos + (0x8 * b), 4)
+				
+				if param_type == 0x4:
+					seq.append(readString(names, param))				
 				else:
 					seq.append(param)
 			
@@ -418,10 +448,15 @@ class Relationship:
 			seq = []
 
 			for b in range(2):
-				param = readBytes(data, pos + (0x8 * b), 4)
-				paramType = readBytes(data, pos + (0x8 * b) + 0x4, 4)
-				if paramType == 0x4:
-					seq.append(readString(names, param))
+				param_type = readBytes(data, pos + (0x8 * b) + 0x4, 4)
+
+				if param_type == 0x2:
+					param = readFloat(data, pos + (0x8 * b), 4)
+				else:
+					param = readBytes(data, pos + (0x8 * b), 4)
+				
+				if param_type == 0x4:
+					seq.append(readString(names, param))				
 				else:
 					seq.append(param)
 			
@@ -463,7 +498,6 @@ class Relationship:
 			else:
 				packed += param1.to_bytes(4, 'little')
 				packed += (3).to_bytes(4, 'little')
-			
 			
 			if isinstance(param2, bytes):
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
@@ -516,7 +550,7 @@ class Relationship:
 
 
 
-# EXPERIMENTAL POINT AND RAIL SECTIONS
+# # EXPERIMENTAL POINT AND RAIL SECTIONS
 # class Point:
 # 	def __init__(self, data):
 # 			self.posX = readFloat(data, 0x0, 4)
@@ -536,21 +570,23 @@ class Relationship:
 
 
 # class Rail:
-# 	def __init__(self, data=None, points=None):
+# 	def __init__(self, data=None, points=None, names=None):
 # 		if data is not None:
 # 			self.x0 = data[0x0:0xC]
 
 # 			self.xC = []
 # 			for i in range(4):
-# 				param = readBytes(data, 0xC + (0x8 * i), 4)
-# 				# paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
+# 				paramType = readBytes(data, 0xC + (0x8 * i) + 0x4, 4)
 
-# 				# if paramType == 0xFFFFFF04:
-# 				# 	self.xC.append(readString(names, param))
-# 				# else:
-# 				# 	self.xC.append(param)
+# 				if paramType == 0x2:
+# 					param = readFloat(data, 0xC + (0x8 * i), 4)
+# 				else:
+# 					param = readBytes(data, 0xC + (0x8 * i), 4)
 				
-# 				self.xC.append(param)
+# 				if paramType == 0xFFFFFF04:
+# 					self.xC.append(readString(names, param))
+# 				else:
+# 					self.xC.append(param)
 			
 # 			self.num_entries = readBytes(data, 0x2C, 2)
 # 			self.num_indexes = readBytes(data, 0x2E, 2)
@@ -567,24 +603,24 @@ class Relationship:
 # 			self.points = points
 
 
-# 	def pack(self):
+# 	def pack(self, nameOffset):
 # 		packed = b''
 # 		packed += self.x0
 		
-# 		# nameRepr = b'' + b'\x00'
+# 		nameRepr = b'' # + b'\x00'
 
 # 		for i in range(4):
 # 			param = self.xC[i]
-# 			# if isinstance(param, bytes):
-# 			# 	packed += (len(nameRepr) + 0x1).to_bytes(4, 'little')
-# 			# 	packed += (0xFFFFFF04).to_bytes(4, 'little')
-# 			# 	nameRepr += param + b'\x00'
-# 			# else:
-# 			# 	packed += param.to_bytes(4, 'little')
-# 			# 	packed += (3).to_bytes(4, 'little')
-
-# 			packed += param.to_bytes(4, 'little')
-# 			packed += (0xFFFFFF04).to_bytes(4, 'little')
+# 			if isinstance(param, bytes):
+# 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
+# 				packed += (0xFFFFFF04).to_bytes(4, 'little')
+# 				nameRepr += param + b'\x00'
+# 			elif isinstance(param, float):
+# 				packed += struct.pack('<f', param)
+# 				packed += (2).to_bytes(4, 'little')
+# 			else:
+# 				packed += param.to_bytes(4, 'little')
+# 				packed += (3).to_bytes(4, 'little')
 
 # 		packed += self.num_entries.to_bytes(2, 'little')
 # 		packed += self.num_indexes.to_bytes(2, 'little')
@@ -593,3 +629,163 @@ class Relationship:
 # 			packed += self.points[i].to_bytes(2, 'little')
 		
 # 		return packed
+
+
+
+# # EXPERIMENTAL GRID SECTION
+# class Grid:
+# 	def __init__(self, entry):
+# 		self.chain_entry = None
+
+# 		for e in entry.data.entries:
+# 			if e.name == b'data':
+# 				self.data_entry = e
+# 				continue
+# 			if e.name == b'chain':
+# 				self.chain_entry = e
+# 				continue
+# 			if e.name == b'info':
+# 				self.info = self.InfoBlock(e.data)
+		
+# 		if self.info.room_height not in [8, 2]:
+# 			raise ValueError('Cannot determine room type')
+		
+# 		self.tilesdata = []
+# 		if self.info.room_height == 8:
+# 			for i in range(80): # top-down room
+# 				start_addr = (0x10 * i)
+# 				self.tilesdata.append(self.TileData(self.data_entry.data[start_addr : (start_addr + 0x10)]))
+# 		else:
+# 			for i in range(20): # sidescroller room
+# 				start_addr = (0x10 * i)
+# 				self.tilesdata.append(self.TileData(self.data_entry.data[start_addr : (start_addr + 0x10)]))
+	
+
+# 	def pack(self):
+# 		packed = b''
+# 		for tile in self.tilesdata:
+# 			packed += tile.pack()
+		
+# 		return packed
+	
+	
+
+# 	class TileData:
+# 		def __init__(self, data):
+# 			self.flags1 = Flags1()
+# 			self.flags1.asbyte = readBytes(data, 0x0, 1)
+# 			self.flags2 = Flags2()
+# 			self.flags2.asbyte = readBytes(data, 0x1, 1)
+# 			self.flags3 = Flags3()
+# 			self.flags3.asbyte = readBytes(data, 0x2, 1)
+# 			self.flags4 = Flags4()
+# 			self.flags4.asbyte = readBytes(data, 0x3, 1)
+# 			self.unknown = data[0x4:0x8]
+# 			self.chain_index = readBytes(data, 0x8, 4)
+# 			self.elevation = readFloat(data, 0xC, 4)
+		
+# 		def pack(self):
+# 			packed = b''
+# 			packed += self.flags1.asbyte.to_bytes(1, 'little')
+# 			packed += self.flags2.asbyte.to_bytes(1, 'little')
+# 			packed += self.flags3.asbyte.to_bytes(1, 'little')
+# 			packed += self.flags4.asbyte.to_bytes(1, 'little')
+# 			packed += self.unknown
+# 			packed += self.chain_index.to_bytes(4, 'little')
+# 			packed += struct.pack('<f', self.elevation)
+
+# 			return packed
+	
+
+
+# 	class InfoBlock:
+# 		def __init__(self, data):
+# 			self.room_height = readBytes(data, 0x0, 2)
+# 			self.room_width = readBytes(data, 0x2, 2)
+# 			self.tile_size = readFloat(data, 0x4, 4)
+# 			self.x_coord = readFloat(data, 0x8, 4)
+# 			self.z_coord = readFloat(data, 0xC, 4)
+		
+# 		def pack(self):
+# 			packed = b''
+# 			packed += self.room_height.to_bytes(2, 'little')
+# 			packed += self.room_width.to_bytes(2, 'little')
+# 			packed += struct.pack('<f', self.tile_size)
+# 			packed += struct.pack('<f', self.x_coord)
+# 			packed += struct.pack('<f', self.z_coord)
+
+# 			return packed
+
+
+
+# class Flags_bits1(ctypes.LittleEndianStructure):
+# 	_fields_ = [
+# 		('deepwaterlava', ctypes.c_uint8, 1),
+# 		('containscollision', ctypes.c_uint8, 1),
+# 		('unused2', ctypes.c_uint8, 1),
+# 		('northcollision', ctypes.c_uint8, 1),
+# 		('unused4', ctypes.c_uint8, 1),
+# 		('eastcollision', ctypes.c_uint8, 1),
+# 		('unused6', ctypes.c_uint8, 1),
+# 		('southcollision', ctypes.c_uint8, 1)
+# 	]
+
+# class Flags_bits2(ctypes.LittleEndianStructure):
+# 	_fields_ = [
+# 		('unused0', ctypes.c_uint8, 1),
+# 		('westcollision', ctypes.c_uint8, 1),
+# 		('unused2', ctypes.c_uint8, 1),
+# 		('unused3', ctypes.c_uint8, 1),
+# 		('unused4', ctypes.c_uint8, 1),
+# 		('unused5', ctypes.c_uint8, 1),
+# 		('unused6', ctypes.c_uint8, 1),
+# 		('unused7', ctypes.c_uint8, 1)
+# 	]
+
+# class Flags_bits3(ctypes.LittleEndianStructure):
+# 	_fields_ = [
+# 		('isdigspot', ctypes.c_uint8, 1),
+# 		('unused1', ctypes.c_uint8, 1),
+# 		('iswaterlava', ctypes.c_uint8, 1),
+# 		('respawnvoid', ctypes.c_uint8, 1),
+# 		('respawnload', ctypes.c_uint8, 1),
+# 		('canrefresh', ctypes.c_uint8, 1),
+# 		('unknown6', ctypes.c_uint8, 1),
+# 		('unused7', ctypes.c_uint8, 1)
+# 	]
+
+# class Flags_bits4(ctypes.LittleEndianStructure):
+# 	_fields_ = [
+# 		('unused0', ctypes.c_uint8, 1),
+# 		('unused1', ctypes.c_uint8, 1),
+# 		('unused2', ctypes.c_uint8, 1),
+# 		('unused3', ctypes.c_uint8, 1),
+# 		('unused4', ctypes.c_uint8, 1),
+# 		('unused5', ctypes.c_uint8, 1),
+# 		('unused6', ctypes.c_uint8, 1),
+# 		('unused7', ctypes.c_uint8, 1)
+# 	]
+
+# class Flags1(ctypes.Union):
+# 	_fields_ = [
+# 		('b', Flags_bits1),
+# 		('asbyte', ctypes.c_uint8)
+# 	]
+
+# class Flags2(ctypes.Union):
+# 	_fields_ = [
+# 		('b', Flags_bits2),
+# 		('asbyte', ctypes.c_uint8)
+# 	]
+
+# class Flags3(ctypes.Union):
+# 	_fields_ = [
+# 		('b', Flags_bits3),
+# 		('asbyte', ctypes.c_uint8)
+# 	]
+
+# class Flags4(ctypes.Union):
+# 	_fields_ = [
+# 		('b', Flags_bits4),
+# 		('asbyte', ctypes.c_uint8)
+# 	]

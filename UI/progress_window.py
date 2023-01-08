@@ -26,10 +26,10 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = settings
         
         self.valid_placements = 187 - len(self.settings['excluded-locations'])
-        self.num_of_mod_files = 248
+        self.num_of_mod_files = 254
         
-        if settings['shuffle-bombs']:
-            self.num_of_mod_files -= 1
+        # if settings['shuffle-bombs']:
+        #     self.num_of_mod_files -= 1
         
         if not settings['blup-sanity']:
             self.num_of_mod_files -= 1
@@ -37,14 +37,14 @@ class ProgressWindow(QtWidgets.QMainWindow):
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
         
-        if settings['owl-gifts']:
-            self.num_of_mod_files += 4
+        if settings['owl-dungeon-gifts']:
+            self.num_of_mod_files += 4 # 4 extra room modifications
         
         if settings['randomize-music']:
             self.num_of_mod_files += 69
         
         if settings['randomize-enemies']:
-            self.num_of_mod_files += 348
+            self.num_of_mod_files += 347
         
         self.done = False
         self.cancel = False
@@ -85,8 +85,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.placements = placements
     
 
-    def shufflerError(self):
+    def shufflerError(self, placements, er_message=str):
         self.shuffle_error = True
+        from randomizer_paths import ROOT_PATH
+        with open(os.path.join(ROOT_PATH, 'log.txt'), 'w') as f:
+            f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
+            f.write(f'\n{er_message}')
+            f.write(f'\n{placements}')
 
 
     # receive signals when threads are done
@@ -114,8 +119,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.mods_process.start() # start the modgenerator
 
     
-    def modsError(self):
+    def modsError(self, er_message=str):
         self.mods_error = True
+        from randomizer_paths import ROOT_PATH
+        with open(os.path.join(ROOT_PATH, 'log.txt'), 'w') as f:
+            f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
+            f.write(f'\n{er_message}')
+            f.write(f'\n{self.placements}')
 
 
     def modsDone(self):
