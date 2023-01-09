@@ -131,6 +131,7 @@ def makeFlags(sheet):
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1223})
     # sheet['values'].append({'symbol': 'ShopBowGet', 'index': 1224})
     # sheet['values'].append({'symbol': 'ShopHeartGet', 'index': 1225})
+
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})

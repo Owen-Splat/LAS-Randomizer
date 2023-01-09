@@ -286,6 +286,16 @@ class Room:
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
+
+		# self.points = []
+		# point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
+		# for entry in point_entry.data.entries:
+		# 	self.points.append(Point(entry.data))
+		
+		# self.rails = []
+		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
+		# for entry in rail_entry.data.entries:
+		# 	self.rails.append(Rail(entry.data))
 		
 		# try:
 		# 	grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
