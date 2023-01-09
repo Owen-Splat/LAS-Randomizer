@@ -72,11 +72,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.excludeButton.clicked.connect(self.excludeButton_Clicked)
         
         ### DESCRIPTIONS
-        self.checkBoxes = self.ui.tab.findChildren(QtWidgets.QCheckBox)
-        self.checkBoxes.extend([self.ui.seashellsComboBox])
-        self.checkBoxes.extend([self.ui.tricksComboBox])
-        for check in self.checkBoxes:
-            check.installEventFilter(self)
+        self.descItems = self.ui.tab.findChildren(QtWidgets.QCheckBox)
+        self.descItems.extend([self.ui.seashellsComboBox,
+                                self.ui.tricksComboBox,
+                                self.ui.instrumentsComboBox,
+                                self.ui.owlsComboBox])
+        for item in self.descItems:
+            item.installEventFilter(self)
         
         ### show and check for updates
         self.setFixedSize(780, 640)
@@ -181,8 +183,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.mazeCheck.setChecked(True)
         self.ui.swampCheck.setChecked(False)
         self.ui.fastMSCheck.setChecked(False)
+        self.ui.chestSizesCheck.setChecked(False)
         self.ui.songsCheck.setChecked(False)
-        self.ui.enemyCheck.setChecked(False)
+        self.ui.fastFishingCheck.setChecked(True)
         self.ui.owlsComboBox.setCurrentIndex(0)
 
         self.tab_Changed() # just call the same event as when changing the tab to refresh the list
@@ -219,6 +222,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
             'Fast_Songs': self.ui.songsCheck.isChecked(),
             'Fast_Master_Stalfos': self.ui.fastMSCheck.isChecked(),
+            'Scaled_Chest_Sizes': self.ui.chestSizesCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
             'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
@@ -404,6 +408,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.fastMSCheck.setChecked(SETTINGS['Fast_Master_Stalfos'])
         except (KeyError, TypeError):
             self.ui.fastMSCheck.setChecked(False)
+        
+        # scaled chest sizes
+        try:
+            self.ui.chestSizesCheck.setChecked(SETTINGS['Scaled_Chest_Sizes'])
+        except (KeyError, TypeError):
+            self.ui.chestSizesCheck.setChecked(False)
         
         # reduced farming
         try:
@@ -702,10 +712,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 'zap-sanity': self.ui.zapsCheck.isChecked(),
                 'blup-sanity': self.ui.rupCheck.isChecked(),
                 'classic-d2': self.ui.swampCheck.isChecked(),
-                'owl-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['gifts', 'hybrid'] else False,
-                'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
+                'owl-overworld-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('overworld', 'all') else False,
+                'owl-dungeon-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('dungeons', 'all') else False,
+                # 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
                 'fast-master-stalfos': self.ui.fastMSCheck.isChecked(),
+                'scaled-chest-sizes': self.ui.chestSizesCheck.isChecked(),
                 # 'shuffle-companions': self.ui.companionCheck.isChecked(),
+                'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in self.excluded_checks]) > 0 else False,
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
                 'randomize-enemies': self.ui.enemyCheck.isChecked(),

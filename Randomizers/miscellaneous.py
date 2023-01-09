@@ -114,24 +114,3 @@ def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
     room.actors[7].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[7].parameters[2] = bytes('MermaidCave', 'utf-8')
     room.actors[7].parameters[3] = bytes(data.MERMAID_CAVE_FLAG, 'utf-8')
-
-
-
-# def changeSlimeKey(flowchart, item_key, item_index, model_path, model_name, room):
-#     slimeKeyItemGet = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
-
-#     event_tools.addEntryPoint(flowchart, 'Pothole')
-#     event_tools.createActionChain(flowchart, 'Pothole', [
-#         ('SinkingSword', 'Destroy', {}),
-#         ('EventFlags', 'SetFlag', {'symbol': data.POTHOLE_FLAG, 'value': True})
-#     ], slimeKeyItemGet)
-
-#     room.actors[42].type = 0x194 # sinking sword
-#     room.actors[42].parameters[0] = bytes(model_path, 'utf-8')
-#     room.actors[42].parameters[1] = bytes(model_name, 'utf-8')
-#     room.actors[42].parameters[2] = bytes('Pothole', 'utf-8')
-#     # room.actors[42].parameters[3] = bytes('false', 'utf-8') # do not let the player grab by pressing A
-#     # room.actors[42].parameters[4] = bytes(data.POTHOLE_FLAG, 'utf-8')
-#     room.actors[42].parameters[3] = bytes('!Shovel', 'utf-8')
-    
-#     room.actors[42].Z += int(393216)

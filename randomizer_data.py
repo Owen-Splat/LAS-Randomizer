@@ -7,7 +7,7 @@ import os
 
 ### define constants
 with open(os.path.join(ROOT_PATH, 'version.txt'), 'r') as f:
-    VERSION = f.read().strip()
+    VERSION = float(f.read().strip())
 
 DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
 
@@ -65,4 +65,4 @@ SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
 
 LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'death', 'none')
 
-OWLS_SETTINGS = ('vanilla', 'gifts') # ('vanilla', 'hints', 'gifts', 'hybrid')
+OWLS_SETTINGS = ('none', 'overworld', 'dungeons', 'all') # ('vanilla', 'hints', 'gifts', 'hybrid')

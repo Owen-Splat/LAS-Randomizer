@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2021 la-switch
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 from PySide6 import QtCore
 
 import os
@@ -5,17 +27,15 @@ import re
 import copy
 import random
 import shutil
-import tempfile
 import traceback
 
 import Tools.leb as leb
-import Tools.event_tools as event_tools
 import Tools.oead_tools as oead_tools
-# from pymsyt import Msbt
+import Tools.event_tools as event_tools
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, golden_leaves
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -26,7 +46,7 @@ class ModsProcess(QtCore.QThread):
     
     progress_update = QtCore.Signal(int)
     is_done = QtCore.Signal()
-    error = QtCore.Signal()
+    error = QtCore.Signal(str)
 
     
     def __init__(self, placements, rom_path, out_dir, items, seed, parent=None):
@@ -71,7 +91,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeEventContentChanges()
             if self.thread_active: self.makeTradeQuestChanges()
 
-            if self.thread_active: self.makeSmallKeyChanges()
+            if self.thread_active: self.makeSmallKeyChanges() # also handles the golden leaves
             if self.thread_active: self.makeHeartPieceChanges()
             if self.thread_active: self.makeInstrumentChanges()
             # if self.thread_active: self.makeShopChanges()
@@ -97,8 +117,7 @@ class ModsProcess(QtCore.QThread):
                 self.randomizeEnemies()
         
         except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError, OverflowError, UnboundLocalError):
-            print(traceback.format_exc())
-            self.error.emit()
+            self.error.emit(traceback.format_exc())
         
         # print(self.progress_value)
         self.is_done.emit()
@@ -112,6 +131,14 @@ class ModsProcess(QtCore.QThread):
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level'):
             os.makedirs(f'{self.out_dir}/Romfs/region_common/level')
         
+        chest_sizes = copy.deepcopy(data.CHEST_SIZES)
+        if self.placements['settings']['scaled-chest-sizes']:
+            if not self.placements['settings']['seashells-important']:
+                chest_sizes['seashell'] = 0.8 # if seashell mansion is complete junk, set seashell chests to be small
+        else:
+            for k in chest_sizes:
+                chest_sizes[k] = 1.0 # if scaled chest sizes is off, set every value to normal size
+        
         for room in data.CHEST_ROOMS:
             if self.thread_active:
                 dirname = re.match('(.+)_\\d\\d[A-P]', data.CHEST_ROOMS[room]).group(1)
@@ -123,12 +150,14 @@ class ModsProcess(QtCore.QThread):
 
                 item_key = self.item_defs[self.placements[room]]['item-key']
                 item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
+                item_type = self.item_defs[self.placements[room]]['type']
+                size = chest_sizes[item_type]
                 
                 if room == 'taltal-5-chest-puzzle':
                     for i in range(5):
-                        room_data.setChestContent(item_key, item_index, i)
+                        room_data.setChestContent(item_key, item_index, i, size)
                 else:
-                    room_data.setChestContent(item_key, item_index)
+                    room_data.setChestContent(item_key, item_index, chest_size=size)
                 
                 if item_key == 'BowWow':
                     pass
@@ -146,7 +175,7 @@ class ModsProcess(QtCore.QThread):
                     with open(f'{self.rom_path}/region_common/level/Lv07EagleTower/Lv07EagleTower_06H.leb', 'rb') as roomfile:
                         room_data = leb.Room(roomfile.read())
 
-                    room_data.setChestContent(item_key, item_index)
+                    room_data.setChestContent(item_key, item_index, chest_size=size)
                     
                     if item_key == 'BowWow':
                         pass
@@ -163,7 +192,7 @@ class ModsProcess(QtCore.QThread):
                     with open(f'{self.rom_path}/region_common/level/Lv07EagleTower/Lv07EagleTower_05G.leb', 'rb') as roomfile:
                         room_data = leb.Room(roomfile.read())
 
-                    room_data.setChestContent(item_key, item_index)
+                    room_data.setChestContent(item_key, item_index, chest_size=size)
                     
                     if item_key == 'BowWow':
                         pass
@@ -227,6 +256,14 @@ class ModsProcess(QtCore.QThread):
                     model_name = random.choice(list(trap_models))
                     model_path = trap_models[model_name]
                 
+                if room == 'pothole-final': # change slime key into a small key
+                    act = room_data.actors[42]
+                    act.type = 0xa9 # small key
+                    act.posX += 1.5 # move right one tile
+                    act.posZ -= 1.5 # move up one tile
+                    act.switches[0] = (1, 1217) # PotholeKeySpawn
+                    act.switches[1] = (1, 1169) # PotholeGet
+                
                 small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
                 room_data.setSmallKeyParams(model_path, model_name, room)
 
@@ -251,10 +288,58 @@ class ModsProcess(QtCore.QThread):
             else: break
         
         if self.thread_active:
+            self.makeGoldenLeafChanges(flow)
+        
+
+
+    def makeGoldenLeafChanges(self, flow):
+        '''Make small key actors spawn for the golden leaf checks'''
+
+        trap_models = copy.deepcopy(data.ITEM_MODELS)
+        if self.placements['settings']['shuffle-instruments']:
+            for inst in self.placements['starting-instruments']:
+                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
+        else:
+            for inst in self.instruments:
+                del trap_models[inst]
+        
+        for room in data.GOLDEN_LEAF_ROOMS:
+            if self.thread_active:
+                dirname = re.match('(.+)_\\d\\d[A-P]', data.GOLDEN_LEAF_ROOMS[room]).group(1)
+
+                with open(f'{self.rom_path}/region_common/level/{dirname}/{data.GOLDEN_LEAF_ROOMS[room]}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+                
+                item = self.placements[room]
+                item_key = self.item_defs[item]['item-key']
+                item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
+
+                if item_key != 'ZapTrap':
+                    model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
+                    model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
+                else:
+                    model_name = random.choice(list(trap_models))
+                    model_path = trap_models[model_name]
+                
+                golden_leaves.createRoomKey(room, room_data)
+                small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
+                room_data.setSmallKeyParams(model_path, model_name, room)
+
+                if self.thread_active:
+                    if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
+                        os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{dirname}')
+                    with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.GOLDEN_LEAF_ROOMS[room]}.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+            
+            else: break
+        
+        if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SmallKey.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-    
+
 
 
     def makeEventContentChanges(self):
@@ -402,9 +487,6 @@ class ModsProcess(QtCore.QThread):
         
         ##########################################################################################################################
         # Woods (mushroom)
-        if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field'):
-            os.makedirs(f'{self.out_dir}/Romfs/region_common/level/Field')
-
         with open(f'{self.rom_path}/region_common/level/Field/Field_06A.leb', 'rb') as file:
             room = leb.Room(file.read())
         
@@ -454,9 +536,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        # #########################################################################################################################
-        # # Slime Key - Field_13G - pothole-final
-
         #########################################################################################################################
         # Done!
         if self.thread_active:
@@ -1075,8 +1154,9 @@ class ModsProcess(QtCore.QThread):
                     self.progress_update.emit(self.progress_value)
 
         ### Make Honeycomb show new graphics in tree
-        with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
-            room_data = leb.Room(f.read())
+        if self.thread_active:
+            with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
+                room_data = leb.Room(f.read())
         
             item = self.placements['tarin-ukuku']
             item_key = self.item_defs[item]['item-key']
@@ -1097,14 +1177,42 @@ class ModsProcess(QtCore.QThread):
                 model_name = random.choice(list(trap_models))
                 model_path = trap_models[model_name]
 
-        room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
-        room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
+            room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
+            room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
 
-        if self.thread_active:
-            with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
-                    f.write(room_data.repack())
-                    self.progress_value += 1 # update progress bar
-                    self.progress_update.emit(self.progress_value)
+            if self.thread_active:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_09H.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+        
+        # # Add a loading zone (AreaLevelOpen - 0x190) actor to 0,0,0 in the overworld
+        # if self.thread_active:
+        #     with open(f'{self.rom_path}/region_common/level/Field/Field_01A.leb', 'rb') as f:
+        #         room_data = leb.Room(f.read())
+            
+        #     act = copy.deepcopy(room_data.actors[0])
+        #     act.key = int('8D0002005D036AB9', 16)
+        #     act.name = bytes('AreaLevelOpen-8D0002005D036AB9', 'utf-8')
+        #     act.type = 0x190
+        #     act.posX = 0.0
+        #     act.posY = 0.0
+        #     act.posZ = 0.0
+        #     act.scaleX = 10.0
+        #     act.scaleY = 10.0
+        #     act.scaleZ = 10.0
+        #     act.parameters[0] = bytes('Field', 'utf-8')
+        #     act.parameters[1] = bytes('Field_11C', 'utf-8')
+        #     act.parameters[2] = bytes('RunOut', 'utf-8')
+        #     act.parameters[3] = 1
+        #     act.switches[0] = (2, 1) # hardcoded 1 means active by default
+        #     room_data.actors.append(act)
+            
+        #     if self.thread_active:
+        #         with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_01A.leb', 'wb') as f:
+        #                 f.write(room_data.repack())
+        #                 self.progress_value += 1 # update progress bar
+        #                 self.progress_update.emit(self.progress_value)
 
 
 
@@ -1163,15 +1271,15 @@ class ModsProcess(QtCore.QThread):
             
             event_tools.addEntryPoint(flow.flowchart, 'MagicPowder_MaxUp')
             event_tools.createActionChain(flow.flowchart, 'MagicPowder_MaxUp', [
-                ('Dialog', 'Show', {'message': 'Randomizer:GetBombMaxUp'})
+                ('Dialog', 'Show', {'message': 'SubEvent:ByebyeMadBatter'})
             ])
             event_tools.addEntryPoint(flow.flowchart, 'Bomb_MaxUp')
             event_tools.createActionChain(flow.flowchart, 'Bomb_MaxUp', [
-                ('Dialog', 'Show', {'message': 'Randomizer:GetArrowMaxUp'})
+                ('Dialog', 'Show', {'message': 'SubEvent:ByebyeMadBatter'})
             ])
             event_tools.addEntryPoint(flow.flowchart, 'Arrow_MaxUp')
             event_tools.createActionChain(flow.flowchart, 'Arrow_MaxUp', [
-                ('Dialog', 'Show', {'message': 'Randomizer:GetMagicPowderMaxUp'})
+                ('Dialog', 'Show', {'message': 'SubEvent:ByebyeMadBatter'})
             ])
             
             event_tools.findEntryPoint(flow.flowchart, 'GreenClothes').name = 'ClothesGreen'
@@ -1245,7 +1353,7 @@ class ModsProcess(QtCore.QThread):
 
             event_tools.setSwitchEventCase(flow.flowchart, 'Event64', 1,
                 event_tools.createActionEvent(flow.flowchart, 'GameControl', 'RequestLevelJump',
-                    {'level': 'MarinTarinHouse', 'locator': 'MarinTarinHouse_01A', 'offsetX': 0.0, 'offsetZ': 0.0},
+                    {'level': 'Field', 'locator': 'Field_11C', 'offsetX': 0.0, 'offsetZ': 0.0},
                     'Event67'))
 
             if self.thread_active:
@@ -1307,6 +1415,7 @@ class ModsProcess(QtCore.QThread):
         ### Items datasheet: Set npcKeys so certain items will show something when you get them.
         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
 
+        trap = None
         for item in sheet['values']:
             if self.thread_active:
                 # if item['symbol'] == 'MagicPowder_MaxUp':
@@ -1326,12 +1435,18 @@ class ModsProcess(QtCore.QThread):
                 
                 if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                     item['npcKey'] = 'ItemClothesRed'
+                    trap = copy.deepcopy(oead_tools.parseStruct(item))
                     continue
                 
-                if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npc value for correct get graphics
+                if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
                     item['npcKey'] = 'PatchHoneycomb'
                 
             else: break
+        
+        if trap is not None: # create entry for traps, seashell mansion gives a green rupee if the item isn't in this
+            trap['symbol'] = 'ZapTrap'
+            trap['itemID'] = 118
+            sheet['values'].append(oead_tools.dictToStruct(trap))
         
         if self.thread_active:
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', sheet)
@@ -1452,7 +1567,6 @@ class ModsProcess(QtCore.QThread):
         """Replaces the Title Screen logo with the Randomizer logo"""
 
         try:
-            # with open(, 'rb') as arcFile:
             writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
             
             with open(os.path.join(RESOURCE_PATH, '__Combined.bntx'), 'rb') as f: # will eventually manually edit the bntx file to replace the texture, library I was using was causing the game to crash
@@ -1539,10 +1653,15 @@ class ModsProcess(QtCore.QThread):
                 if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
                     os.makedirs(f'{self.out_dir}/Romfs/region_common/level/{dirname}')
                 
-                if data.HEART_ROOMS[room] in data.CHEST_ROOMS.values():
-                    path = f'{self.out_dir}/Romfs'
-                else:
+                if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.HEART_ROOMS[room]}.leb'):
                     path = self.rom_path
+                else:
+                    path = f'{self.out_dir}/Romfs'
+                
+                # if data.HEART_ROOMS[room] in data.CHEST_ROOMS.values():
+                #     path = f'{self.out_dir}/Romfs'
+                # else:
+                #     path = self.rom_path
                 
                 with open(f'{path}/region_common/level/{dirname}/{data.HEART_ROOMS[room]}.leb', 'rb') as roomfile:
                     room_data = leb.Room(roomfile.read())
@@ -1865,23 +1984,29 @@ class ModsProcess(QtCore.QThread):
     def makeOwlStatueChanges(self):
         '''Edits the eventflows for the owl statues to give items, as well as one extra level file'''
 
-        if self.thread_active and self.placements['settings']['owl-gifts']:
+        if self.thread_active: # put the slime key check on the owl for now
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldOwlStatue.bfevfl')
             actors.addNeededActors(flow.flowchart, self.rom_path)
-            owls.makeFieldChanges(flow.flowchart, self.placements, self.item_defs)
+            owls.addSlimeKeyCheck(flow.flowchart)
+
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldOwlStatue.bfevfl', flow)
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
-            
+        
+        if self.thread_active and self.placements['settings']['owl-overworld-gifts']:
+            owls.makeFieldChanges(flow.flowchart, self.placements, self.item_defs)
             if self.thread_active:
-                flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DungeonOwlStatue.bfevfl')
-                actors.addNeededActors(flow.flowchart, self.rom_path)
-                owls.makeDungeonChanges(flow.flowchart, self.placements, self.item_defs)
-                if self.thread_active:
-                    event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DungeonOwlStatue.bfevfl', flow)
-                    self.progress_value += 1 # update progress bar
-                    self.progress_update.emit(self.progress_value)
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldOwlStatue.bfevfl', flow)
+            
+        if self.thread_active and self.placements['settings']['owl-dungeon-gifts']:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DungeonOwlStatue.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            owls.makeDungeonChanges(flow.flowchart, self.placements, self.item_defs)
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DungeonOwlStatue.bfevfl', flow)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
             
             if self.thread_active:
                 with open(f'{self.rom_path}/region_common/level/Lv01TailCave/Lv01TailCave_04B.leb', 'rb') as f:
@@ -1922,36 +2047,7 @@ class ModsProcess(QtCore.QThread):
                         f.write(room_data.repack())
                         self.progress_value += 1 # update progress bar
                         self.progress_update.emit(self.progress_value)
-
-
     
-    # def makeItemTextBoxes(self):
-    #     """Creates an MSBT file to make custom item textboxes for the Randomizer
-    #     Currently used for the capacity upgrades since they do no have textboxes"""
-        
-    #     msbt_dict = {
-    #         'group_count': 3,
-    #         'entries': {
-    #             'GetBombMaxUp': {
-    #                 'contents': [{'text': 'You can now carry more Bombs!\b\b\b\0'}]
-    #             },
-    #             'GetArrowMaxUp': {
-    #                 'contents': [{'text': 'You can now carry more Arrows!\b\b\b\0'}]
-    #             },
-    #             'GetMagicPowderMaxUp': {
-    #                 'contents': [{'text': 'You can now carry more Magic Powder!\b\b\b\0'}]
-    #             }
-    #         }
-    #     }
-
-    #     if not os.path.exists(f'{self.out_dir}/Romfs/regionUS/USen/message'):
-    #         os.makedirs(f'{self.out_dir}/Romfs/regionUS/USen/message')
-
-    #     with open(f'{self.out_dir}/Romfs/regionUS/USen/message/Randomizer.msbt', 'wb') as file:
-    #         file.write(Msbt.from_dict(msbt_dict).to_binary(big_endian=False))
-    #         self.progress_value += 1 # update progress bar
-    #         self.progress_update.emit(self.progress_value)
-
 
 
     # def makeItemModelFixes(self):
@@ -1977,7 +2073,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def randomizeEnemies(self):
-        """Randomizes enemy actors in the overworld and in caves that do not affect logic"""
+        """Randomizes enemy actors that do not affect logic
+        Needed kills are left vanilla and potentially problematic enemies are excluded"""
 
         from randomizer_data import ENEMY_DATA
 
@@ -2081,7 +2178,9 @@ class ModsProcess(QtCore.QThread):
                                     except KeyError:
                                         act.parameters = [b'', b'', b'', b'', b'', b'', b'', b'']
 
-                                    if act.type == 0x1E2:
+                                    act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
+
+                                    if act.type == 0x1E2: # EnemyZoroZoro spawner
                                         act.scaleX = 4.5
                                         act.scaleY = 3.0
                                         act.scaleZ = 4.5
@@ -2089,9 +2188,12 @@ class ModsProcess(QtCore.QThread):
                                         act.scaleX = 1.0
                                         act.scaleY = 1.0
                                         act.scaleZ = 1.0
-                                    
-                                    act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
 
+                                        if act.type == 0x4A: # StretchyGhosts - only includes one color in pool so it will be 1/3 likely now
+                                            act.type = random.choice((0x4A, 0x4B, 0x4C)) # decide color
+                                        elif act.type == 0x4D: # ColorDungeon Orbs - same thing as above
+                                            act.type = random.choice((0x4D, 0x4E, 0x4F))
+                                    
                                     edited_room = True
 
                         if edited_room:

@@ -1,3 +1,25 @@
+# MIT License
+
+# Copyright (c) 2021 la-switch
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 ---
 
 # a few things will have glitched logic filled in. glitched logic is far from complete but I want a few things to have it to test how the shuffler makes use of the logic
@@ -275,7 +297,7 @@ taltal-heights-hole:
   condition-basic: bombs
 kanalet-crow:
   type: item
-  subtype: enemy
+  subtype: drop # enemy
   content: golden-leaf
   index: 1
   region: kanalet-outside
@@ -283,7 +305,7 @@ kanalet-crow:
   condition-basic: kill-crow & (bombs | bracelet)
 kanalet-mad-bomber:
   type: item
-  subtype: enemy
+  subtype: drop # enemy
   content: golden-leaf
   index: 0
   region: kanalet-outside
@@ -299,7 +321,7 @@ kanalet-kill-room:
   condition-basic: kill-darknut-spear & kill-zol-red
 kanalet-bombed-guard:
   type: item
-  subtype: enemy
+  subtype: drop # enemy
   content: golden-leaf
   index: 3
   region: kanalet-inside
@@ -307,7 +329,7 @@ kanalet-bombed-guard:
   condition-basic: bombs & kill-darknut-shield
 kanalet-final-guard:
   type: item
-  subtype: enemy
+  subtype: drop # enemy
   content: golden-leaf
   index: 4
   region: kanalet-inside
@@ -1087,7 +1109,7 @@ pothole-north:
   # condition-advanced: (feather | rooster) & (bombs | powder | sword)
 pothole-final:
   type: item
-  subtype: dig
+  subtype: drop # dig
   content: slime-key
   region: pothole
   spoiler-region: pothole-field
@@ -1265,21 +1287,21 @@ D1-beetles:
   condition-basic: D1-8D & kill-hardhat-beetle[pit]
 D1-owl-statue-long-hallway:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: tail-cave
   spoiler-region: tail-cave
   condition-basic: D1-8D & key-D1:3 & stone-beak-D1
 D1-owl-statue-spinies:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: tail-cave
   spoiler-region: tail-cave
   condition-basic: D1-8D & key-D1:3 & stone-beak-D1
 D1-owl-statue-3-of-a-kind:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: tail-cave
   spoiler-region: tail-cave
@@ -1387,21 +1409,21 @@ D2-button-chest:
   condition-basic: D2-7D & feather & hit-crystal-switch
 D2-owl-statue-first:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-7D & stone-beak-D2
 D2-owl-statue-second:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-7D & feather & hit-crystal-switch & key-D2:3 & stone-beak-D2
 D2-owl-statue-third:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: bottle-grotto
   spoiler-region: bottle-grotto
@@ -1544,21 +1566,21 @@ D3-vacuum-mouth:
   condition-basic: D3-8B & (boots | hookshot)
 D3-owl-statue-basement-north:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: key-cavern
   spoiler-region: key-cavern
   condition-basic: D3-3G & stone-beak-D3
 D3-owl-statue-arrow:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: key-cavern
   spoiler-region: key-cavern
   condition-basic: D3-4C & stone-beak-D3
 D3-owl-statue-northwest:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: key-cavern
   spoiler-region: key-cavern
@@ -1675,7 +1697,7 @@ D4-crystals:
   condition-basic: D4-8D & kill-spiny & kill-zol-red & break-crystal & kill-water-tektite
 D4-owl-statue:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: angler-tunnel
   spoiler-region: angler-tunnel
@@ -1785,14 +1807,14 @@ D5-near-entrance:
   condition-basic: D5-8H & hookshot
 D5-owl-statue-south:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: catfish-maw
   spoiler-region: catfish-maw
   condition-basic: D5-7F & stone-beak-D5
 D5-owl-statue-north:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: catfish-maw
   spoiler-region: catfish-maw
@@ -1908,21 +1930,21 @@ D6-wizzrobes-ledge:
   condition-basic: D6-8D & bracelet:2 & kill-wizzrobe
 D6-owl-statue-ledge:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: face-shrine
   spoiler-region: face-shrine
   condition-basic: D6-8D & stone-beak-D6
 D6-owl-statue-southeast:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: face-shrine
   spoiler-region: face-shrine
   condition-basic: D6-8D & bracelet:2 & kill-wizzrobe & stone-beak-D6
 D6-owl-statue-canal:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: face-shrine
   spoiler-region: face-shrine
@@ -2024,21 +2046,21 @@ D7-grim-creeper:
   condition-basic: D7-2D & hit-crystal-switch & kill-battle-bat
 D7-owl-statue-ball:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: eagle-tower
   spoiler-region: eagle-tower
   condition-basic: D7-2D & stone-beak-D7
 D7-owl-statue-kirbys:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: eagle-tower
   spoiler-region: eagle-tower
   condition-basic: D7-2D & stone-beak-D7
 D7-owl-statue-4th-pillar:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: eagle-tower
   spoiler-region: eagle-tower
@@ -2181,7 +2203,7 @@ D8-far-southeast:
   condition-basic: D8-8D & feather & kill-smasher & (bombs | break-pot)
 D8-owl-statue-above-smasher:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
@@ -2189,14 +2211,14 @@ D8-owl-statue-above-smasher:
   condition-advanced: D8-8D & dash-jump & kill-smasher & stone-beak-D8
 D8-owl-statue-below-gibdos:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
   condition-basic: D8-8D & feather & key-D8:2 & stone-beak-D8
 D8-owl-statue-eye-statue:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
@@ -2267,21 +2289,21 @@ D0-fairy-2:
   condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
 D0-owl-statue-left:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-6D & key-D0:2 & stone-beak-D0
 D0-owl-statue-center:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-8C & kill-goblin[heavy] & stone-beak-D0
 D0-owl-statue-right:
   type: item
-  subtype: statue
+  subtype: dungeon-statue
   content: rupee-20
   region: color-dungeon
   spoiler-region: color-dungeon
@@ -2486,58 +2508,58 @@ D0-rupee-28:
 # Owl Statues
 owl-statue-below-D8:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: mr-write-house
   spoiler-region: goponga-swamp
 owl-statue-moblin-cave:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: wasteland
   spoiler-region: taltal-heights
 owl-statue-pothole:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: pothole
   spoiler-region: pothole-field
   condition-basic: break-bush
 owl-statue-above-cave:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: plains
   spoiler-region: marthas-bay
   condition-basic: bombs & (feather | rooster)
 owl-statue-south-bay:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: animal-village
   spoiler-region: marthas-bay
 owl-statue-desert:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: desert
   spoiler-region: yarna-desert
 owl-statue-maze:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: armos-maze
   spoiler-region: ancient-ruins
   condition-basic: bracelet
 owl-statue-rapids:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: rapids
   spoiler-region: rapids-ride
 owl-statue-taltal-east:
   type: item
-  subtype: statue
+  subtype: overworld-statue
   content: rupee-20
   region: taltal-east-2
   spoiler-region: taltal-mountains-east
@@ -2872,10 +2894,10 @@ bombs:
   condition-basic: (mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))
 powder:
   type: interaction
-  condition-basic: (woods & mushroom) | (color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))
+  condition-basic: (woods & mushroom) | (color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang)) | powder-capacity
 shoot-arrows:
   type: interaction
-  condition-basic: bow & (can-shop | (armos-maze & break-pot) | (D5-7F & kill-helmasaur & feather) | (D6-8D & break-pot) | (D8-4C & (feather | break-pot)) | (D8-8D & feather & key-D8:2))
+  condition-basic: bow & (can-shop | (armos-maze & break-pot) | (D5-7F & kill-helmasaur & feather) | (D6-8D & break-pot) | (D8-4C & (feather | break-pot)) | (D8-8D & feather & key-D8:2) | arrow-capacity)
 can-shop:
   type: interaction
   condition-basic: can-farm-rupees | sword
@@ -3059,6 +3081,7 @@ kill-zol-red:
 kill-armos-knight:
   type: enemy
   condition-basic: (sword | shoot-arrows) & feather
+  condition-advanced: sword | shoot-arrows
 kill-blaino:
   type: enemy
   condition-basic: sword
@@ -3094,7 +3117,8 @@ kill-smasher:
   condition-basic: 'True'
 kill-stone-hinox:
   type: enemy
-  condition-basic: sword | shoot-arrows | bombs | rod | boomerang
+  condition-basic: (sword | shoot-arrows | bombs | rod | boomerang) & feather
+  condition-advanced: sword | shoot-arrows | bombs | rod | boomerang
 kill-turtle-rock:
   type: enemy
   condition-basic: bombs

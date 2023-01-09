@@ -47,7 +47,7 @@ def makeFlags(sheet):
     sheet['values'].append({'symbol': 'TradeFishingHookGet', 'index': 1160})
     sheet['values'].append({'symbol': 'TradeNecklaceGet', 'index': 1161})
     sheet['values'].append({'symbol': 'TradeMermaidsScaleGet', 'index': 1162})
-    sheet['values'].append({'symbol': 'TradeLensGet', 'index': 1163})
+    sheet['values'].append({'symbol': 'MermaidCaveItemGet', 'index': 1163})
 
     sheet['values'].append({'symbol': 'KikiGone', 'index': 1164})
 
@@ -115,16 +115,23 @@ def makeFlags(sheet):
     sheet['values'].append({'symbol': 'RoosterFound', 'index': 1211})
     sheet['values'].append({'symbol': 'BowWowFound', 'index': 1212})
 
-    # sheet['values'].append({'symbol': 'Shield2Get', 'index': 1213})
-    # sheet['values'].append({'symbol': 'Bracelet2Get', 'index': 1214})
     sheet['values'].append({'symbol': 'DampeSword', 'index': 1213})
     sheet['values'].append({'symbol': 'DampeShield', 'index': 1214})
     sheet['values'].append({'symbol': 'DampeBracelet', 'index': 1215})
     sheet['values'].append({'symbol': 'DampeLens', 'index': 1216})
 
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
-    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
+    sheet['values'].append({'symbol': 'PotholeKeySpawn', 'index': 1217})
+
+    sheet['values'].append({'symbol': 'KeyGetField06I', 'index': 1218})
+    sheet['values'].append({'symbol': 'KeyGetField06K', 'index': 1219})
+    sheet['values'].append({'symbol': 'KeyGetKanalet02A', 'index': 1220})
+    sheet['values'].append({'symbol': 'KeyGetKanalet01C', 'index': 1221})
+    sheet['values'].append({'symbol': 'KeyGetKanalet01D', 'index': 1222})
+    
+    # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1223})
+    # sheet['values'].append({'symbol': 'ShopBowGet', 'index': 1224})
+    # sheet['values'].append({'symbol': 'ShopHeartGet', 'index': 1225})
+
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1200})
