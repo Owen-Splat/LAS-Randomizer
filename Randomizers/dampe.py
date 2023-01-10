@@ -49,9 +49,9 @@ def afterRewardEvents(flowchart, loop_event):
     # 0 for HasItem means you do not have the item, 1 means you do
 
     sword2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 1, 'count': 1}, 'Event42')
+        {'itemType': 1, 'count': 1, 'autoEquip': False}, 'Event42')
     sword1_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 0, 'count': 1}, 'Event42')
+        {'itemType': 0, 'count': 1, 'autoEquip': False}, 'Event42')
     sword1_flag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': data.SWORD_FOUND_FLAG, 'value': True}, 'Event42')
     first_sword_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
@@ -62,9 +62,9 @@ def afterRewardEvents(flowchart, loop_event):
         {'symbol': data.SWORD_FOUND_FLAG}, {0: first_sword_check, 1: sword_check})
     
     shield2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 3, 'count': 1}, sword_flag_check)
+        {'itemType': 3, 'count': 1, 'autoEquip': False}, sword_flag_check)
     shield1_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 2, 'count': 1}, sword_flag_check)
+        {'itemType': 2, 'count': 1, 'autoEquip': False}, sword_flag_check)
     shield1_flag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': data.SHIELD_FOUND_FLAG, 'value': True}, sword_flag_check)
     first_shield_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
@@ -75,9 +75,9 @@ def afterRewardEvents(flowchart, loop_event):
         {'symbol': data.SHIELD_FOUND_FLAG}, {0: first_shield_check, 1: shield_check})
     
     bracelet2_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 15, 'count': 1}, shield_flag_check)
+        {'itemType': 15, 'count': 1, 'autoEquip': False}, shield_flag_check)
     bracelet1_give = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItem',
-        {'itemType': 14, 'count': 1}, shield_flag_check)
+        {'itemType': 14, 'count': 1, 'autoEquip': False}, shield_flag_check)
     bracelet1_flag = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': data.BRACELET_FOUND_FLAG, 'value': True}, shield_flag_check)
     first_bracelet_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
@@ -89,7 +89,7 @@ def afterRewardEvents(flowchart, loop_event):
     
     bomb_flag = event_tools.createActionChain(flowchart, None, [
         ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
-        ('Inventory', 'AddItem', {'itemType': 4, 'count': 20})
+        ('Inventory', 'AddItem', {'itemType': 4, 'count': 20, 'autoEquip': False})
     ], bracelet_flag_check)
     bomb_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
         {'itemType': 4, 'count': 1}, {0: bracelet_flag_check, 1: bomb_flag})
@@ -99,8 +99,10 @@ def afterRewardEvents(flowchart, loop_event):
         ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
         ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False})
     ], bomb_check)
+    cello_flag_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': 'BowWowEvent'}, {0: cello_flags, 1: bomb_check})
     cello_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'itemType': 45, 'count': 1}, {0: bomb_check, 1: cello_flags})
+        {'itemType': 45, 'count': 1}, {0: bomb_check, 1: cello_flag_check})
 
     harp_flags = event_tools.createActionChain(flowchart, None, [
         ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),

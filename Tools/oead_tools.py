@@ -1,4 +1,3 @@
-from array import array
 from oead import Sarc, SarcWriter
 import oead
 

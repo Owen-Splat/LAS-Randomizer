@@ -1,6 +1,6 @@
 import struct
 import re
-import ctypes
+# from ctypes import LittleEndianStructure, Union, c_uint8
 
 
 def readBytes(bytes, start, length, endianness='little'):
