@@ -323,8 +323,6 @@ class Ui_MainWindow(object):
         self.owlsComboBox = QComboBox(self.tab_5)
         self.owlsComboBox.addItem("")
         self.owlsComboBox.addItem("")
-        self.owlsComboBox.addItem("")
-        self.owlsComboBox.addItem("")
         self.owlsComboBox.setObjectName(u"owlsComboBox")
         self.owlsComboBox.setGeometry(QRect(10, 184, 161, 22))
         self.raceCheck = QCheckBox(self.tab_5)
