@@ -20,9 +20,9 @@ signal.signal(signal.SIGINT, interruptHandler)
 try:
     from sys import _MEIPASS
 except ImportError:
-    import ctypes
+    from ctypes import windll
     try:
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("Link's_Awakening_Switch_Randomizer")
+        windll.shell32.SetCurrentProcessExplicitAppUserModelID("Link's_Awakening_Switch_Randomizer")
     except AttributeError:
         pass # Ignore for versions of Windows before Windows 7
 

@@ -353,7 +353,7 @@ ITEM_MODELS = {
     'AnglerKey': 'ItemAnglerKey.bfres',
     'FaceKey': 'ItemFaceKey.bfres',
     'BirdKey': 'ItemBirdKey.bfres',
-    'YoshiDoll': 'ItemYoshiDoll.bfres',
+    # 'YoshiDoll': 'ItemYoshiDoll.bfres',
     'Ribbon': 'ItemRibbon.bfres',
     'DogFood': 'ItemDogFood.bfres',
     'Bananas': 'ItemBananas.bfres',
@@ -383,7 +383,8 @@ ITEM_MODELS = {
     'RupeeSilver': 'ItemRupeeSilver.bfres',
     'RupeeGold': 'ItemRupeeGold.bfres',
     'Bottle': 'ItemBottle.bfres',
-    'ShellRader': 'ItemShellRader.bfres'
+    'ShellRader': 'ItemShellRader.bfres',
+    'GoldenLeaf': 'ItemGoldenLeaf.bfres'
 }
 
 
