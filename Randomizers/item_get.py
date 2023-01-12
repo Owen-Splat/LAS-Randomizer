@@ -94,9 +94,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         
         return event_tools.createForkEvent(flowchart, before, forks, stopEvent)[0]
     
-    # if item == 'ShadowLink':
-    #     return event_tools.createSubFlowEvent(flowchart, 'ShadowLink', 'Appear', {}, None)
-    
     ############################################################################################################################################
     ### Instrument flags
     if item == 'FullMoonCello':
@@ -108,7 +105,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    if item == 'SurfHarp': # set flags before giving harp, otherwise ghost requirements will be met during the itemget animation, leaving the player with a ghost that can only be rid of by getting another follower
+    if item == 'SurfHarp': # set flags before giving harp, otherwise ghost requirements will be met during the itemget animation
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
             ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
@@ -161,7 +158,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    # #####################################################################################################################################
+    # ######################################################################################################################################
     # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     # if item == 'Bottle' and index == 1:
     #     return event_tools.createActionChain(flowchart, before, [

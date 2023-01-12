@@ -65,7 +65,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.progressBar.setMaximum(self.valid_placements)
         self.ui.label.setText(f'Shuffling item placements...')
         self.shuffler_process =\
-            ItemShuffler(self.rom_path, f'{self.out_dir}/01006BB00C6F0000',
+            ItemShuffler(self.rom_path, f'{self.out_dir}',
                 self.seed, self.logic, self.settings, self.item_defs, self.logic_defs)
         self.shuffler_process.setParent(self)
         self.shuffler_process.progress_update.connect(self.updateProgress)
@@ -111,7 +111,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.progressBar.setValue(0)
         self.ui.progressBar.setMaximum(self.num_of_mod_files)
         self.ui.label.setText(f'Generating mod files...')
-        self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}/01006BB00C6F0000', self.item_defs, self.seed)
+        self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed)
         self.mods_process.setParent(self)
         self.mods_process.progress_update.connect(self.updateProgress)
         self.mods_process.is_done.connect(self.modsDone)
