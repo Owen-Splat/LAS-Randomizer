@@ -728,74 +728,74 @@ class Relationship:
 
 
 
-# class Flags_bits1(ctypes.LittleEndianStructure):
+# class Flags_bits1(LittleEndianStructure):
 # 	_fields_ = [
-# 		('deepwaterlava', ctypes.c_uint8, 1),
-# 		('containscollision', ctypes.c_uint8, 1),
-# 		('unused2', ctypes.c_uint8, 1),
-# 		('northcollision', ctypes.c_uint8, 1),
-# 		('unused4', ctypes.c_uint8, 1),
-# 		('eastcollision', ctypes.c_uint8, 1),
-# 		('unused6', ctypes.c_uint8, 1),
-# 		('southcollision', ctypes.c_uint8, 1)
+# 		('deepwaterlava', c_uint8, 1),
+# 		('containscollision', c_uint8, 1),
+# 		('unused2', c_uint8, 1),
+# 		('northcollision', c_uint8, 1),
+# 		('unused4', c_uint8, 1),
+# 		('eastcollision', c_uint8, 1),
+# 		('unused6', c_uint8, 1),
+# 		('southcollision', c_uint8, 1)
 # 	]
 
-# class Flags_bits2(ctypes.LittleEndianStructure):
+# class Flags_bits2(LittleEndianStructure):
 # 	_fields_ = [
-# 		('unused0', ctypes.c_uint8, 1),
-# 		('westcollision', ctypes.c_uint8, 1),
-# 		('unused2', ctypes.c_uint8, 1),
-# 		('unused3', ctypes.c_uint8, 1),
-# 		('unused4', ctypes.c_uint8, 1),
-# 		('unused5', ctypes.c_uint8, 1),
-# 		('unused6', ctypes.c_uint8, 1),
-# 		('unused7', ctypes.c_uint8, 1)
+# 		('unused0', c_uint8, 1),
+# 		('westcollision', c_uint8, 1),
+# 		('unused2', c_uint8, 1),
+# 		('unused3', c_uint8, 1),
+# 		('unused4', c_uint8, 1),
+# 		('unused5', c_uint8, 1),
+# 		('unused6', c_uint8, 1),
+# 		('unused7', c_uint8, 1)
 # 	]
 
-# class Flags_bits3(ctypes.LittleEndianStructure):
+# class Flags_bits3(LittleEndianStructure):
 # 	_fields_ = [
-# 		('isdigspot', ctypes.c_uint8, 1),
-# 		('unused1', ctypes.c_uint8, 1),
-# 		('iswaterlava', ctypes.c_uint8, 1),
-# 		('respawnvoid', ctypes.c_uint8, 1),
-# 		('respawnload', ctypes.c_uint8, 1),
-# 		('canrefresh', ctypes.c_uint8, 1),
-# 		('unknown6', ctypes.c_uint8, 1),
-# 		('unused7', ctypes.c_uint8, 1)
+# 		('isdigspot', c_uint8, 1),
+# 		('unused1', c_uint8, 1),
+# 		('iswaterlava', c_uint8, 1),
+# 		('respawnvoid', c_uint8, 1),
+# 		('respawnload', c_uint8, 1),
+# 		('canrefresh', c_uint8, 1),
+# 		('unknown6', c_uint8, 1),
+# 		('unused7', c_uint8, 1)
 # 	]
 
-# class Flags_bits4(ctypes.LittleEndianStructure):
+# class Flags_bits4(LittleEndianStructure):
 # 	_fields_ = [
-# 		('unused0', ctypes.c_uint8, 1),
-# 		('unused1', ctypes.c_uint8, 1),
-# 		('unused2', ctypes.c_uint8, 1),
-# 		('unused3', ctypes.c_uint8, 1),
-# 		('unused4', ctypes.c_uint8, 1),
-# 		('unused5', ctypes.c_uint8, 1),
-# 		('unused6', ctypes.c_uint8, 1),
-# 		('unused7', ctypes.c_uint8, 1)
+# 		('unused0', c_uint8, 1),
+# 		('unused1', c_uint8, 1),
+# 		('unused2', c_uint8, 1),
+# 		('unused3', c_uint8, 1),
+# 		('unused4', c_uint8, 1),
+# 		('unused5', c_uint8, 1),
+# 		('unused6', c_uint8, 1),
+# 		('unused7', c_uint8, 1)
 # 	]
 
-# class Flags1(ctypes.Union):
+# class Flags1(Union):
 # 	_fields_ = [
 # 		('b', Flags_bits1),
-# 		('asbyte', ctypes.c_uint8)
+# 		('asbyte', c_uint8)
 # 	]
 
-# class Flags2(ctypes.Union):
+# class Flags2(Union):
 # 	_fields_ = [
 # 		('b', Flags_bits2),
-# 		('asbyte', ctypes.c_uint8)
+# 		('asbyte', c_uint8)
 # 	]
 
-# class Flags3(ctypes.Union):
+# class Flags3(Union):
 # 	_fields_ = [
 # 		('b', Flags_bits3),
-# 		('asbyte', ctypes.c_uint8)
+# 		('asbyte', c_uint8)
 # 	]
 
-# class Flags4(ctypes.Union):
+# class Flags4(Union):
 # 	_fields_ = [
 # 		('b', Flags_bits4),
-# 		('asbyte', ctypes.c_uint8)
+# 		('asbyte', c_uint8)
 # 	]

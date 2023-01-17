@@ -17,7 +17,7 @@ class Patcher:
         
         address += self.nso_header_offset
 
-        if address > 0x1cdb73f:
+        if address > 0xFFFFFFFF:
             raise ValueError('Patch address is not valid')
         else:
             self.patches.append((address, instruction))
@@ -29,10 +29,9 @@ class Patcher:
         result = bytearray('IPS32', 'ascii')
 
         for patch in self.patches:
-
             address = patch[0]
             instruction = bytearray(self.ks.asm(patch[1])[0])
-
+            
             result += address.to_bytes(4, 'big')
             result += len(instruction).to_bytes(2, 'big')
             result += instruction

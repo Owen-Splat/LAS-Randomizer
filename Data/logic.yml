@@ -275,7 +275,7 @@ taltal-heights-hole:
   condition-basic: bombs
 kanalet-crow:
   type: item
-  subtype: drop # enemy
+  subtype: enemy
   content: golden-leaf
   index: 1
   region: kanalet-outside
@@ -283,7 +283,7 @@ kanalet-crow:
   condition-basic: kill-crow & (bombs | bracelet)
 kanalet-mad-bomber:
   type: item
-  subtype: drop # enemy
+  subtype: enemy
   content: golden-leaf
   index: 0
   region: kanalet-outside
@@ -299,7 +299,7 @@ kanalet-kill-room:
   condition-basic: kill-darknut-spear & kill-zol-red
 kanalet-bombed-guard:
   type: item
-  subtype: drop # enemy
+  subtype: enemy
   content: golden-leaf
   index: 3
   region: kanalet-inside
@@ -307,7 +307,7 @@ kanalet-bombed-guard:
   condition-basic: bombs & kill-darknut-shield
 kanalet-final-guard:
   type: item
-  subtype: drop # enemy
+  subtype: enemy
   content: golden-leaf
   index: 4
   region: kanalet-inside

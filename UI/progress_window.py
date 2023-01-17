@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = settings
         
         self.valid_placements = 187 - len(self.settings['excluded-locations'])
-        self.num_of_mod_files = 254
+        self.num_of_mod_files = 252
         
         # if settings['shuffle-bombs']:
         #     self.num_of_mod_files -= 1
@@ -85,13 +85,12 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.placements = placements
     
 
-    def shufflerError(self, placements, er_message=str):
+    def shufflerError(self, er_message=str):
         self.shuffle_error = True
         from randomizer_paths import ROOT_PATH
         with open(os.path.join(ROOT_PATH, 'log.txt'), 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
-            f.write(f'\n{er_message}')
-            f.write(f'\n{placements}')
+            f.write(f'\n\n{er_message}')
 
 
     # receive signals when threads are done
@@ -124,8 +123,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         from randomizer_paths import ROOT_PATH
         with open(os.path.join(ROOT_PATH, 'log.txt'), 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
-            f.write(f'\n{er_message}')
-            f.write(f'\n{self.placements}')
+            f.write(f'\n\n{er_message}')
+            f.write(f'\n\n{self.placements}')
 
 
     def modsDone(self):

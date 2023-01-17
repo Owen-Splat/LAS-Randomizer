@@ -10,10 +10,11 @@ import traceback
 import Tools.leb as leb
 import Tools.oead_tools as oead_tools
 import Tools.event_tools as event_tools
+# from Tools.patcher import Patcher
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, golden_leaves
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, golden_leaves, patches
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -94,10 +95,11 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['randomize-enemies'] and self.thread_active:
                 self.randomizeEnemies()
             
-            if self.thread_active:
-                os.mkdir(f'{self.out_dir}/01006BB00C6F0000')
+            # if self.thread_active: self.makeExefsPatches()
+
+            if self.thread_active: os.mkdir(f'{self.out_dir}/01006BB00C6F0000')
         
-        except (FileNotFoundError, KeyError, TypeError, ValueError, IndexError, AttributeError, OverflowError, UnboundLocalError):
+        except Exception:
             self.error.emit(traceback.format_exc())
         
         # print(self.progress_value)
@@ -1344,16 +1346,17 @@ class ModsProcess(QtCore.QThread):
         
         #################################################################################################################################
         ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on, as well as needed changes for randomized prizes
-        prize = event_tools.readFlow(f'{self.rom_path}/region_common/event/PrizeCommon.bfevfl')
-        actors.addNeededActors(prize.flowchart, self.rom_path)
-        prize.flowchart.actors.append(flow_control_actor)
-        
-        crane_prizes.makeEventChanges(prize.flowchart, self.placements['settings'])
-
         if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PrizeCommon.bfevfl', prize)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            prize = event_tools.readFlow(f'{self.rom_path}/region_common/event/PrizeCommon.bfevfl')
+            actors.addNeededActors(prize.flowchart, self.rom_path)
+            prize.flowchart.actors.append(flow_control_actor)
+            
+            crane_prizes.makeEventChanges(prize.flowchart, self.placements['settings'])
+
+            if self.thread_active:
+                event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PrizeCommon.bfevfl', prize)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
 
 
@@ -1541,6 +1544,26 @@ class ModsProcess(QtCore.QThread):
                     shutil.copy(f'{source}/{file}', f'{dest}/{song}{data.MUSIC_SUFFIX}')
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
+    
+
+
+    # def makeExefsPatches(self):
+    #     """Creates the necessary exefs_patches for the Randomizer to work correctly"""
+
+    #     # initialize the patcher object and hand off individual patches to separate functions to make it easier to track & read
+    #     patcher = Patcher()
+    #     if self.placements['settings']['randomize-music'] and self.thread_active:
+    #         patches.shuffleBGM(patcher, self.seed)
+        
+    #     # create and write in binary to an ips file with the build id of version as the name
+    #     if self.thread_active:
+    #         if not os.path.exists(f'{self.out_dir}/exefs_patches/las_randomizer'):
+    #             os.makedirs(f'{self.out_dir}/exefs_patches/las_randomizer')
+            
+    #         with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.UPD_BUILD_ID}.ips', 'wb') as f:
+    #             f.write(patcher.generatePatch())
+    #             self.progress_value += 1 # update progress bar
+    #             self.progress_update.emit(self.progress_value)
     
 
 
