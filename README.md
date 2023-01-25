@@ -1,9 +1,11 @@
 # LAS-Randomizer
 A randomizer for The Legend of Zelda: Link's Awakening remake. Currently still very early in development.
 
+Based on the original randomizer here: https://github.com/la-switch/LAS-Randomizer
+
 This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and standing heart pieces. More work will come soon.
 
-Several extra options, including Zapsanity, Blupsanity, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk!
+Several extra options, including Trapsanity, Blupsanity, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk!
 
 This GUI is dark mode by default, but can be toggled with ctrl + L
 
@@ -45,12 +47,10 @@ On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` f
 Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or you can launch the game holding L
 
 ### Known Issues:
-- Seeds can sometimes take a very long time to generate. If it's taking too long you can cancel it and try another seed
-- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory
+- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory. This is not left vanilla since it is an early check
+- The existence of the Ball & Chain Soldier depends on whether you have the 5th Golden Leaf in your inventory. This is left vanilla
 - Small key drops, despite giving different items, are still technically speaking small key objects and will trigger the compass ringtone regardless of what they are
-- Getting a capacity upgrade will display the item with no text
 - Choosing Shuffled Bombs sets bomb drops to 0. This will not change even after finding your bombs until I figure out how to change it
-- Zap traps in Seashell Mansion gives a green rupee for some reason
 - Dampe does not have proper logic for instrument shuffle, and may result in unbeatable seeds
 - While Trading Quest items work, they will not be displayed in the inventory
 - Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
