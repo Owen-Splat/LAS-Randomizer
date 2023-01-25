@@ -2613,7 +2613,7 @@ heights:
   condition-glitched: taltal-east-1 & rooster
 kanalet-outside:
   type: region
-  condition-basic: (bridge & break-bush & feather) | open-kanalet
+  condition-basic: (bridge & break-bush & feather) | (plains & open-kanalet & break-bush)
   condition-glitched: wasteland & feather & bracelet
 kanalet-inside:
   type: region

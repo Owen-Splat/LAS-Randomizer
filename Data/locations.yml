@@ -133,4 +133,11 @@ Heart_Pieces:
   - woods-crossing-cave-loose
   - woods-north-cave-loose
   - diamond-island
+
+Golden_Leaves:
+  - kanalet-crow
+  - kanalet-mad-bomber
+  - kanalet-kill-room
+  - kanalet-bombed-guard
+  # - kanalet-final-guard
 ...

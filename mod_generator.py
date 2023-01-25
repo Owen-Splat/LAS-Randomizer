@@ -102,8 +102,9 @@ class ModsProcess(QtCore.QThread):
         except Exception:
             self.error.emit(traceback.format_exc())
         
-        # print(self.progress_value)
-        self.is_done.emit()
+        finally: # regardless if there was an error or not, we want to tell the progress window that this thread has finished
+            # print(self.progress_value)
+            self.is_done.emit()
     
 
 

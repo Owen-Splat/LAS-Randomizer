@@ -516,7 +516,7 @@
          </rect>
         </property>
         <property name="whatsThis">
-         <string>This controls whether the miscellaneous standing items (sword, mushroom, ocarina, bird key, lens) can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
+         <string>This controls whether miscellaneous standing items (sword, mushroom, ocarina, slime key, bird key, lens) can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
         </property>
         <property name="text">
          <string>Miscellaneous</string>
@@ -650,9 +650,9 @@
         <property name="geometry">
          <rect>
           <x>-1</x>
-          <y>190</y>
+          <y>230</y>
           <width>731</width>
-          <height>161</height>
+          <height>121</height>
          </rect>
         </property>
         <property name="font">
@@ -907,6 +907,22 @@
          <bool>false</bool>
         </property>
        </widget>
+       <widget class="QCheckBox" name="leavesCheck">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="whatsThis">
+         <string>This controls whether the Golden Leaves can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
+        </property>
+        <property name="text">
+         <string>Golden Leaves</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -982,7 +998,7 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Gives the final Trendy reward from getting the CiaoCiao Figure</string>
+         <string>Gives the final Trendy reward from getting the CiaoCiao Figure&lt;br&gt;&lt;/br&gt;This check does not change whether the final prize is included or not</string>
         </property>
         <property name="text">
          <string>Fast Trendy</string>

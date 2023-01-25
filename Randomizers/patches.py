@@ -25,3 +25,9 @@ def shuffleBGM(patcher=Patcher, seed=str):
         page_offset = hex(str_page - addr_page)
         patcher.addPatch(k, f'adrp {v[1]}, {page_offset}')
         patcher.addPatch(k+4, f'add {v[1]}, {v[1]}, #0x{str_suffix}')
+
+
+def fixBallChainSoldier(patcher=Patcher):
+    """Fixes the EnemySoldierIronBall actor to always appear even if the player has GoldenLeaf:4"""
+    
+    pass

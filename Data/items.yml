@@ -320,7 +320,7 @@ blue-tunic:
   quantity: 1
   item-key: ClothesBlue
 rupee-300:
-  type: good
+  type: junk
   quantity: 2
   item-key: Rupee300
   model-path: ItemRupeeGold.bfres

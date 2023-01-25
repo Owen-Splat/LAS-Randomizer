@@ -66,6 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.miscellaneousCheck.clicked.connect(self.miscellaneousCheck_Clicked)
         self.ui.heartsCheck.clicked.connect(self.heartsCheck_Clicked)
         self.ui.seashellsComboBox.currentIndexChanged.connect(self.updateSeashells)
+        self.ui.leavesCheck.clicked.connect(self.leavesCheck_Clicked)
         # locations tab
         self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
         self.ui.includeButton.clicked.connect(self.includeButton_Clicked)
@@ -139,7 +140,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excluded_checks.update(DAMPE_REWARDS)
 
         # self.ui.trendyCheck.setChecked(False)
-        self.excluded_checks.update(TRENDY_REWARDS)
+        # self.excluded_checks.update(TRENDY_REWARDS)
 
         self.ui.giftsCheck.setChecked(True)
         self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
@@ -162,6 +163,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.seashellsComboBox.setCurrentIndex(2)
         self.excluded_checks.difference_update(set(['5-seashell-reward', '15-seashell-reward']))
         self.excluded_checks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
+
+        self.ui.leavesCheck.setChecked(True)
+        self.excluded_checks.difference_update(LEAF_LOCATIONS)
 
         self.ui.tricksComboBox.setCurrentIndex(0)
 
@@ -210,6 +214,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Boss_Drops': self.ui.bossCheck.isChecked(),
             'Miscellaneous': self.ui.miscellaneousCheck.isChecked(),
             'Heart_Pieces': self.ui.heartsCheck.isChecked(),
+            'Golden_Leaves': self.ui.leavesCheck.isChecked(),
             'Instruments': self.ui.instrumentCheck.isChecked(),
             'Starting_Instruments': self.ui.instrumentsComboBox.currentIndex(),
             'Seashells': SEASHELL_VALUES[self.ui.seashellsComboBox.currentIndex()],
@@ -348,6 +353,12 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.instrumentCheck.setChecked(True)
         
+        # golden leaves
+        try:
+            self.ui.leavesCheck.setChecked(SETTINGS['Golden_Leaves'])
+        except (KeyError, TypeError):
+            self.ui.leavesCheck.setChecked(True)
+
         # starting instruments
         try:
             self.ui.instrumentsComboBox.setCurrentIndex(SETTINGS['Starting_Instruments'])
@@ -527,8 +538,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.excluded_checks.update(BOSS_LOCATIONS)
             if not self.ui.miscellaneousCheck.isChecked():
                 self.excluded_checks.update(MISC_LOCATIONS)
-            if not self.ui.trendyCheck.isChecked():
-                self.excluded_checks.update(TRENDY_REWARDS)
+            if not self.ui.heartsCheck.isChecked():
+                self.excluded_checks.update(HEART_PIECE_LOCATIONS)
+            if not self.ui.leavesCheck.isChecked():
+                self.excluded_checks.update(LEAF_LOCATIONS)
+            # if not self.ui.trendyCheck.isChecked():
+            #     self.excluded_checks.update(TRENDY_REWARDS)
 
 
     
@@ -593,12 +608,12 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
-    # Trendy Check Changed
-    def trendyCheck_Clicked(self):
-        if self.ui.trendyCheck.isChecked():
-            self.excluded_checks.difference_update(TRENDY_REWARDS)
-        else:
-            self.excluded_checks.update(TRENDY_REWARDS)
+    # # Trendy Check Changed
+    # def trendyCheck_Clicked(self):
+    #     if self.ui.trendyCheck.isChecked():
+    #         self.excluded_checks.difference_update(TRENDY_REWARDS)
+    #     else:
+    #         self.excluded_checks.update(TRENDY_REWARDS)
 
 
 
@@ -644,7 +659,15 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
         else:
             self.excluded_checks.update(HEART_PIECE_LOCATIONS)
+    
 
+
+    def leavesCheck_Clicked(self):
+        if self.ui.leavesCheck.isChecked():
+            self.excluded_checks.difference_update(LEAF_LOCATIONS)
+        else:
+            self.excluded_checks.update(LEAF_LOCATIONS)
+    
 
 
     # Update Number of Max Seashells
