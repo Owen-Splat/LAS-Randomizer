@@ -129,10 +129,20 @@ def writeChestEvent(flowchart):
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ZapTrap'},
         {0: zap_get, 1: scale_check})
     
+    drown_get = item_get.insertItemGetAnimation(flowchart, 'DrownTrap', -1, None, auto_save)
+    drown_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'DrownTrap'},
+        {0: drown_get, 1: zap_check})
+    
+    squish_get = item_get.insertItemGetAnimation(flowchart, 'SquishTrap', -1, None, auto_save)
+    squish_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SquishTrap'},
+        {0: squish_get, 1: drown_check})
+
     bomb_get = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, auto_save)
     bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'},
-        {0: bomb_get, 1: zap_check})
+        {0: bomb_get, 1: squish_check})
 
     medicine_get = item_get.insertItemGetAnimation(flowchart, 'SecretMedicine', -1, None, auto_save)
     box_close = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)

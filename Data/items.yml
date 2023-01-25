@@ -369,6 +369,14 @@ zap-trap:
   type: junk
   quantity: 0
   item-key: ZapTrap
+drown-trap:
+  type: junk
+  quantity: 0
+  item-key: DrownTrap
+squish-trap:
+  type: junk
+  quantity: 0
+  item-key: SquishTrap
 bomb:
   type: junk
   quantity: 1

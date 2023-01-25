@@ -79,7 +79,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     ######################################################################################################################################
     ### traps
     if item == 'ZapTrap':
-        stopEvent = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
+        stop_event = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
             {'channel': 'toolshopkeeper_dmg', 'index': 0}, after)
 
         forks = [
@@ -92,8 +92,34 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6}))
         
-        return event_tools.createForkEvent(flowchart, before, forks, stopEvent)[0]
+        return event_tools.createForkEvent(flowchart, before, forks, stop_event)[0]
     
+    if item == 'DrownTrap':
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_water'}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True})
+        ]
+        if can_hurt_player:
+            forks.append(event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 1.5}),
+                ('Link', 'Damage', {'amount': 2})
+            ]))
+        else:
+            forks.append(event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}))
+        
+        return event_tools.createForkEvent(flowchart, before, forks, after)[0]
+    
+    if item == 'SquishTrap':
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_fallmaster_st'}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.0})
+        ]
+        if can_hurt_player:
+            forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4}))
+                
+        return event_tools.createForkEvent(flowchart, before, forks, after)[0]
+            
     ############################################################################################################################################
     ### Instrument flags
     if item == 'FullMoonCello':

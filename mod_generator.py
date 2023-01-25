@@ -233,7 +233,7 @@ class ModsProcess(QtCore.QThread):
                 item_key = self.item_defs[item]['item-key']
                 item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
 
-                if item_key != 'ZapTrap':
+                if item_key[-4:] != 'Trap':
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:
@@ -298,7 +298,7 @@ class ModsProcess(QtCore.QThread):
                 item_key = self.item_defs[item]['item-key']
                 item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
 
-                if item_key != 'ZapTrap':
+                if item_key[-4:] != 'Trap':
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:
@@ -400,7 +400,7 @@ class ModsProcess(QtCore.QThread):
             for inst in self.instruments:
                 del trap_models[inst]
 
-        if item_key != 'ZapTrap':
+        if item_key[-4:] != 'Trap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
@@ -427,7 +427,7 @@ class ModsProcess(QtCore.QThread):
         item_key = self.item_defs[item]['item-key']
         item_index = self.placements['indexes']['taltal-rooster-cave'] if 'taltal-rooster-cave' in self.placements['indexes'] else -1
 
-        if item_key != 'ZapTrap':
+        if item_key[-4:] != 'Trap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
@@ -454,7 +454,7 @@ class ModsProcess(QtCore.QThread):
         item_key = self.item_defs[item]['item-key']
         item_index = self.placements['indexes']['dream-shrine-left'] if 'dream-shrine-left' in self.placements['indexes'] else -1
 
-        if item_key != 'ZapTrap':
+        if item_key[-4:] != 'Trap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
@@ -478,7 +478,7 @@ class ModsProcess(QtCore.QThread):
         item_key = self.item_defs[item]['item-key']
         item_index = self.placements['indexes']['woods-loose'] if 'woods-loose' in self.placements['indexes'] else -1
 
-        if item_key != 'ZapTrap':
+        if item_key[-4:] != 'Trap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
@@ -505,7 +505,7 @@ class ModsProcess(QtCore.QThread):
         item_key = self.item_defs[item]['item-key']
         item_index = self.placements['indexes']['mermaid-cave'] if 'mermaid-cave' in self.placements['indexes'] else -1
 
-        if item_key != 'ZapTrap':
+        if item_key[-4:] != 'Trap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
             model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
         else:
@@ -1145,7 +1145,7 @@ class ModsProcess(QtCore.QThread):
             item = self.placements['tarin-ukuku']
             item_key = self.item_defs[item]['item-key']
 
-            if item_key != 'ZapTrap':
+            if item_key[-4:] != 'Trap':
                 model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                 model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
             else:
@@ -1420,7 +1420,7 @@ class ModsProcess(QtCore.QThread):
                 
                 if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                     item['npcKey'] = 'ItemClothesRed'
-                    trap = copy.deepcopy(oead_tools.parseStruct(item))
+                    trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
                     continue
                 
                 if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
@@ -1428,9 +1428,15 @@ class ModsProcess(QtCore.QThread):
                 
             else: break
         
-        if trap is not None: # create entry for traps, seashell mansion gives a green rupee if the item isn't in this
+        if trap is not None: # create entries for traps, seashell mansion gives a green rupee if the item isn't in this
             trap['symbol'] = 'ZapTrap'
-            trap['itemID'] = 118
+            trap['itemID'] = 127
+            sheet['values'].append(oead_tools.dictToStruct(trap))
+            trap['symbol'] = 'DrownTrap'
+            trap['itemID'] = 128
+            sheet['values'].append(oead_tools.dictToStruct(trap))
+            trap['symbol'] = 'SquishTrap'
+            trap['itemID'] = 129
             sheet['values'].append(oead_tools.dictToStruct(trap))
         
         if self.thread_active:
@@ -1608,7 +1614,7 @@ class ModsProcess(QtCore.QThread):
                 item_key = self.item_defs[item]['item-key']
                 item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
 
-                if item_key != 'ZapTrap':
+                if item_key[-4:] != 'Trap':
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:
@@ -1675,7 +1681,7 @@ class ModsProcess(QtCore.QThread):
                 item_key = self.item_defs[item]['item-key']
                 item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
 
-                if item_key != 'ZapTrap':
+                if item_key[-4:] != 'Trap':
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:
@@ -1824,7 +1830,7 @@ class ModsProcess(QtCore.QThread):
                 item_key = self.item_defs[item]['item-key']
                 item_index = self.placements['indexes'][f'D0-rupee-{i + 1}'] if f'D0-rupee-{i + 1}' in self.placements['indexes'] else -1
 
-                if item_key != 'ZapTrap':
+                if item_key[-4:] != 'Trap':
                     model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
                     model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
                 else:

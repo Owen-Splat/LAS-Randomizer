@@ -181,7 +181,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.spoilerCheck.setChecked(True)
         self.ui.kanaletCheck.setChecked(True)
         self.ui.tunicsCheck.setChecked(True)
-        self.ui.zapsCheck.setChecked(False)
+        self.ui.trapsCheck.setChecked(False)
         self.ui.rupCheck.setChecked(False)
         self.ui.bridgeCheck.setChecked(True)
         self.ui.mazeCheck.setChecked(True)
@@ -233,7 +233,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
             'Open_Bridge': self.ui.bridgeCheck.isChecked(),
             'Open_Mamu': self.ui.mazeCheck.isChecked(),
-            'Zapsanity': self.ui.zapsCheck.isChecked(),
+            'Trapsanity': self.ui.trapsCheck.isChecked(),
             'Blupsanity': self.ui.rupCheck.isChecked(),
             'Classic_D2': self.ui.swampCheck.isChecked(),
             'Owl_Statues': OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()],
@@ -462,11 +462,11 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.tunicsCheck.setChecked(True)
 
-        # zap sanity
+        # trapsanity
         try:
-            self.ui.zapsCheck.setChecked(SETTINGS['Zapsanity'])
+            self.ui.trapsCheck.setChecked(SETTINGS['Trapsanity'])
         except (KeyError, TypeError):
-            self.ui.zapsCheck.setChecked(False)
+            self.ui.trapsCheck.setChecked(False)
         
         # color dungeon rupees
         try:
@@ -727,7 +727,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 'open-kanalet': self.ui.kanaletCheck.isChecked(),
                 'open-bridge': self.ui.bridgeCheck.isChecked(),
                 'open-mamu': self.ui.mazeCheck.isChecked(),
-                'zap-sanity': self.ui.zapsCheck.isChecked(),
+                'trap-sanity': self.ui.trapsCheck.isChecked(),
                 'blup-sanity': self.ui.rupCheck.isChecked(),
                 'classic-d2': self.ui.swampCheck.isChecked(),
                 'owl-overworld-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('overworld', 'all') else False,

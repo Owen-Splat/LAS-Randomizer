@@ -1189,7 +1189,7 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QCheckBox" name="zapsCheck">
+       <widget class="QCheckBox" name="trapsCheck">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1202,10 +1202,10 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Increases the number of potential zap traps over tenfold&lt;br&gt;&lt;/br&gt;This also allows them to be placed anywhere, not just in chests</string>
+         <string>Adds various traps to the item pool, which can be disguised as other items</string>
         </property>
         <property name="text">
-         <string>Zapsanity</string>
+         <string>Trapsanity</string>
         </property>
        </widget>
        <widget class="QCheckBox" name="musicCheck">

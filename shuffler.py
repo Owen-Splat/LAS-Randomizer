@@ -138,25 +138,37 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['blue-tunic']['quantity'] = 0
             self.item_defs['rupee-50']['quantity'] += 2 # +100 rupees
         
-        # add zap traps to the item pool, with the amount varying depending on other settings
-        if self.settings['zap-sanity']:
+        # add traps to the item pool, with the amount varying depending on other settings
+        if self.settings['trap-sanity']:
+            traps = [k for k in self.item_defs # get all non zol-traps, not optimal but can add traps without editing the shuffler
+                    if k[-4:] == 'trap'
+                    and k[:3] != 'zol']
+            
             if self.settings['blup-sanity']:
-                self.item_defs['rupee-5']['quantity'] -= 14 # replace half of the blue rupees with zap traps :D
-                self.item_defs['zap-trap']['quantity'] += 14
+                self.item_defs['rupee-5']['quantity'] -= 14 # replace half of the blue rupees with traps :D
+                for i in range(14):
+                    trap = random.choice(traps)
+                    self.item_defs[trap]['quantity'] += 1
             
             if self.settings['owl-overworld-gifts']:
-                self.item_defs['rupee-20']['quantity'] -= 3 # replace a third of these 20 rupees with zap traps :D
-                self.item_defs['zap-trap']['quantity'] += 3
+                self.item_defs['rupee-20']['quantity'] -= 3 # replace a third of these 20 rupees with traps :D
+                for i in range(3):
+                    trap = random.choice(traps)
+                    self.item_defs[trap]['quantity'] += 1
             
             if self.settings['owl-dungeon-gifts']:
-                self.item_defs['rupee-20']['quantity'] -= 8 # replace a third of these 20 rupees with zap traps :D
-                self.item_defs['zap-trap']['quantity'] += 8
+                self.item_defs['rupee-20']['quantity'] -= 8 # replace a third of these 20 rupees with traps :D
+                for i in range(8):
+                    trap = random.choice(traps)
+                    self.item_defs[trap]['quantity'] += 1
             
             self.item_defs['rupee-50']['quantity'] -= 18 # -900 rupees
             self.item_defs['rupee-100']['quantity'] += 5 # +500 rupees
             self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
             self.item_defs['zol-trap']['quantity'] -= 3 # we still leave 1 zol-trap :)
-            self.item_defs['zap-trap']['quantity'] += 15
+            for i in range(15):
+                trap = random.choice(traps)
+                self.item_defs[trap]['quantity'] += 1
         
         try:
             # Create a placement and spoiler log
