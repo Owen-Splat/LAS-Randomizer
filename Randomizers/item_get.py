@@ -111,9 +111,9 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     if item == 'SquishTrap':
         forks = [
-            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_fallmaster_st'}),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
-            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.0})
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 2.0})
         ]
         if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4}))
