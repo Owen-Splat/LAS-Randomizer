@@ -47,8 +47,8 @@ On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` f
 Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or you can launch the game holding L
 
 ### Known Issues:
-- Seeds can sometimes take a very long time to generate. If it's taking too long you can cancel it and try another seed
-- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory
+- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory. This is not left vanilla since it is an early check
+- The existence of the Ball & Chain Soldier depends on whether you have the 5th Golden Leaf in your inventory. This is left vanilla
 - Small key drops, despite giving different items, are still technically speaking small key objects and will trigger the compass ringtone regardless of what they are
 - Choosing Shuffled Bombs sets bomb drops to 0. This will not change even after finding your bombs until I figure out how to change it
 - Dampe does not have proper logic for instrument shuffle, and may result in unbeatable seeds
