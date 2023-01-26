@@ -397,7 +397,8 @@ class ItemShuffler(QtCore.QThread):
         placements = {}
         
         vanilla_seashells = 0 # Keep track of how many seashells were forced into their vanilla locations. This is important for ensuring there is enough room to place the random ones.
-        
+        vanilla_leaves = 0 # Keep track of how many golden leaves were forced into their vanilla locations. This is important for ensuring there is enough room to place the random ones
+
         placements['settings'] = settings
         placements['force-junk'] = force_junk
         placements['force-vanilla'] = force_vanilla
@@ -461,6 +462,8 @@ class ItemShuffler(QtCore.QThread):
                 
                 if self.logic_defs[loc]['content'] == 'seashell':
                     vanilla_seashells += 1
+                if self.logic_defs[loc]['content'] == 'golden-leaf':
+                    vanilla_leaves += 1
                 
                 # If the item is one that needs an index, assign it its vanilla item index and remove that from the available indexes
                 if self.logic_defs[loc]['content'] in indexes_available:
@@ -551,11 +554,11 @@ class ItemShuffler(QtCore.QThread):
                 placements['tarin'] = items[0]
                 success = (self.canReachLocation('can-shop', placements, settings_access, logic)
                         or self.canReachLocation('tail-cave', placements, settings_access, logic)
-                        or self.canReachLocation('beach', placements, settings_access, logic))
-                        # or self.canReachLocation('mamasha', placements, settings_access, logic)
-                        # or self.canReachLocation('ciao-ciao', placements, settings_access, logic)
-                        # or self.canReachLocation('marin', placements, settings_access, logic)
-                        # or self.canReachLocation('trendy', placements, settings_access, logic))
+                        or self.canReachLocation('beach', placements, settings_access, logic)
+                        or self.canReachLocation('mamasha', placements, settings_access, logic)
+                        or self.canReachLocation('ciao-ciao', placements, settings_access, logic)
+                        or self.canReachLocation('marin', placements, settings_access, logic)
+                        or self.canReachLocation('trendy', placements, settings_access, logic))
                 
                 if not success:
                     items.insert(items.index('seashell'), items[0])
@@ -619,7 +622,8 @@ class ItemShuffler(QtCore.QThread):
                 
                 # If the item is one that needs an index, give it the next available one
                 if placed_item in indexes_available:
-                    placements['indexes'][locations[0]] = indexes_available[placed_item].pop(0)
+                    last_index = indexes_available[placed_item].pop(0)
+                    placements['indexes'][locations[0]] = last_index
                 
                 placement_tracker.append(locations.pop(0))
                 
@@ -639,6 +643,9 @@ class ItemShuffler(QtCore.QThread):
                         random.shuffle(locations)
                         items.insert(0, placements[undo_location])
                         access = self.addAccess(access, placements[undo_location])
+                        # if the last important item needed an index (golden leaves), put its index back in the list of available indexes
+                        if placements[undo_location] in indexes_available:
+                            indexes_available[placements[undo_location]].append(last_index)
                         placements[undo_location] = None
                     else:
                         self.progress_value += 1 # update progress bar
