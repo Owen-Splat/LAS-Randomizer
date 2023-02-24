@@ -49,3 +49,8 @@ def changeHeartPiece(flowchart, item_key, item_index, model_path, model_name, ro
     act.parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     act.parameters[2] = bytes(room, 'utf-8') # entry point
     act.parameters[3] = bytes(data.HEART_FLAGS[room], 'utf-8') # flag which controls if the heart piece appears or not
+
+    if item_key == 'Seashell':
+        act.parameters[4] = bytes('true', 'utf-8')
+    else:
+        act.parameters[4] = bytes('false', 'utf-8')

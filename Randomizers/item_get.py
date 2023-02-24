@@ -27,7 +27,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     if item == 'PowerBraceletLv1':
         return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2',
-            data.BRACELET_FOUND_FLAG, None, before, after)
+            data.BRACELET_FOUND_FLAG, before, after)
 
     if item == 'SwordLv1':
         if play_extra_anim:
@@ -38,24 +38,27 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
                 ], None),
             ], after)[0]
             return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
-                data.SWORD_FOUND_FLAG, None, before, spinAnim)
+                data.SWORD_FOUND_FLAG, before, spinAnim)
         else:
             return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
-                data.SWORD_FOUND_FLAG, None, before, after)
+                data.SWORD_FOUND_FLAG, before, after)
 
     if item == 'Shield':
         return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield',
-            data.SHIELD_FOUND_FLAG, None, before, after)
+            data.SHIELD_FOUND_FLAG, before, after)
     
-    ###############################################################################################################################################
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
+        give_powder = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}, after)
+        
+        powder_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': 'GetMagicPowder'}, {0: after, 1: give_powder})
+        
         return event_tools.createActionChain(flowchart, before, [
-            ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder', 'keepCarry': False, 'messageEntry': item})
-        ], after)
+        ], powder_check)
 
     if item == 'Bomb_MaxUp':
         giveBombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
@@ -76,7 +79,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': item})
         ], after)
     
-    ######################################################################################################################################
     ### traps
     if item == 'ZapTrap':
         stop_event = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
@@ -120,7 +122,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
                 
         return event_tools.createForkEvent(flowchart, before, forks, after)[0]
             
-    ############################################################################################################################################
     ### Instrument flags
     if item == 'FullMoonCello':
         return event_tools.createActionChain(flowchart, before, [
@@ -141,7 +142,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    ############################################################################################################################################
     ### tunics
     if item == 'ClothesRed':
         return event_tools.createActionChain(flowchart, before, [
@@ -166,7 +166,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesGreen'})
         ], after)
     
-    ######################################################################################################################################
     ### Medicine
     if item == 'SecretMedicine':
         return event_tools.createActionChain(flowchart, before, [
@@ -175,7 +174,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'Heal', {'amount': 99})
         ], after)
 
-    ######################################################################################################################################
     ### Bomb for Shuffled Bombs
     if item == 'Bomb':
         return event_tools.createActionChain(flowchart, before, [
@@ -184,7 +182,13 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    # ######################################################################################################################################
+    ### Powder for Shuffled Powder
+    if item == 'MagicPowder':
+        return event_tools.createActionChain(flowchart, before, [
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
+        ], after)
+    
     # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     # if item == 'Bottle' and index == 1:
     #     return event_tools.createActionChain(flowchart, before, [
@@ -193,7 +197,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     #         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
     #     ], after)
 
-    ######################################################################################################################################
     ### Trade Quest items
     if item == 'YoshiDoll':
         return event_tools.createActionChain(flowchart, before, [
@@ -280,9 +283,140 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    ######################################################################################################################################
     ### everything else
     return event_tools.createActionChain(flowchart, before, [
         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item})
     ], after)
+
+
+
+def insertItemWithoutAnimation(item, index):
+    """Same as insertItemGetAnimation but without the Generic ItemGet animation"""
+    
+    if item == 'PowerBraceletLv1':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': data.BRACELET_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+    
+    if item == 'SwordLv1':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': data.SWORD_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+    
+    if item == 'Shield':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': data.SHIELD_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+        
+    ### Capacity upgrades
+    if item == 'MagicPowder_MaxUp':
+        return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
+
+    if item == 'Bomb_MaxUp':
+        return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
+
+    if item == 'Arrow_MaxUp':
+        return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
+    
+    ### Instrument flags
+    if item == 'FullMoonCello':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': 'BowWowEvent', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
+            ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+    
+    if item == 'SurfHarp': # set flags before giving harp, otherwise ghost requirements will be met during the itemget animation
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+    
+    ### tunics
+    if item == 'ClothesRed':
+        return [('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True})]
+    
+    if item == 'ClothesBlue':
+        return [('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True})]
+    
+    ### Medicine
+    if item == 'SecretMedicine':
+        return [
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Link', 'Heal', {'amount': 99})
+        ]
+
+    ### Bomb for Shuffled Bombs
+    if item == 'Bomb':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 60, 'index': index, 'autoEquip': False})
+        ]
+    
+    ### Powder for Shuffled Powder
+    if item == 'MagicPowder':
+        return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False})]
+    
+    # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
+    # if item == 'Bottle' and index == 1:
+    #     return event_tools.createActionChain(flowchart, before, [
+    #         ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
+    #         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+    #     ], after)
+
+    ### Trade Quest items
+    if item == 'YoshiDoll':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})]
+
+    if item == 'Ribbon':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True})]
+
+    if item == 'DogFood':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True})]
+
+    if item == 'Bananas':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True})]
+
+    if item == 'Stick':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True})]
+
+    if item == 'Honeycomb':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True})]
+
+    if item == 'Pineapple':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True})]
+
+    if item == 'Hibiscus':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True})]
+
+    if item == 'Letter':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True})]
+
+    if item == 'Broom':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True})]
+
+    if item == 'FishingHook':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True})]
+
+    if item == 'PinkBra':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True})]
+
+    if item == 'MermaidsScale':
+        return [('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True})]
+    
+    if item == 'MagnifyingLens':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'SetWarashibeItem', {'itemType': 15})
+        ]
+    
+    ### everything else
+    return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]

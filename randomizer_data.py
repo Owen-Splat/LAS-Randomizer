@@ -15,7 +15,9 @@ LIGHT_STYLESHEET = qdarktheme.load_stylesheet('light')
 DARK_STYLESHEET = qdarktheme.load_stylesheet('dark')
 
 with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
-    ITEM_DEFS = yaml.safe_load(f)
+    items = yaml.safe_load(f)
+    ITEM_DEFS = items['Item_Pool']
+    STARTING_ITEMS = list(items['Starting_Items'])
 
 with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
     LOGIC_DEFS = yaml.safe_load(f)

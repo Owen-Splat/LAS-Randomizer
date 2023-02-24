@@ -29,6 +29,11 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
     room.actors[4].parameters[2] = bytes('examine', 'utf-8')
     room.actors[4].parameters[3] = bytes('SwordGet', 'utf-8')
 
+    if item_key == 'Seashell':
+        room.actors[4].parameters[4] = bytes('true', 'utf-8')
+    else:
+        room.actors[4].parameters[4] = bytes('false', 'utf-8')
+
 
 
 def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room):
@@ -50,6 +55,11 @@ def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room)
     room.actors[0].parameters[2] = bytes('TalTal', 'utf-8')
     room.actors[0].parameters[3] = bytes(data.ROOSTER_CAVE_FLAG, 'utf-8')
 
+    if item_key == 'Seashell':
+        room.actors[0].parameters[4] = bytes('true', 'utf-8')
+    else:
+        room.actors[0].parameters[4] = bytes('false', 'utf-8')
+
 
 
 def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room):
@@ -70,7 +80,11 @@ def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room)
     room.actors[5].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[5].parameters[2] = bytes('DreamShrine', 'utf-8')
     room.actors[5].parameters[3] = bytes(data.DREAM_SHRINE_FLAG, 'utf-8') # category 1
-    # room.actors[5].parameters[4] = bytes('None', 'utf-8') # category 3 for telephone rooster bones, other ItemYoshiDoll actors use None
+
+    if item_key == 'Seashell':
+        room.actors[5].parameters[4] = bytes('true', 'utf-8')
+    else:
+        room.actors[5].parameters[4] = bytes('false', 'utf-8')
 
 
 
@@ -93,6 +107,11 @@ def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room
     room.actors[3].parameters[2] = bytes('Woods', 'utf-8')
     room.actors[3].parameters[3] = bytes(data.WOODS_LOOSE_FLAG, 'utf-8')
 
+    if item_key == 'Seashell':
+        room.actors[3].parameters[4] = bytes('true', 'utf-8')
+    else:
+        room.actors[3].parameters[4] = bytes('false', 'utf-8')
+
 
 
 def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
@@ -114,3 +133,8 @@ def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
     room.actors[7].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
     room.actors[7].parameters[2] = bytes('MermaidCave', 'utf-8')
     room.actors[7].parameters[3] = bytes(data.MERMAID_CAVE_FLAG, 'utf-8')
+
+    if item_key == 'Seashell':
+        room.actors[7].parameters[4] = bytes('true', 'utf-8')
+    else:
+        room.actors[7].parameters[4] = bytes('false', 'utf-8')

@@ -92,15 +92,23 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['randomize-music'] and self.thread_active:
                 self.randomizeMusic()
             
+            if self.placements['settings']['bad-pets'] and self.thread_active:
+                self.changeLevelConfigs()
+            
             if self.placements['settings']['randomize-enemies'] and self.thread_active:
                 self.randomizeEnemies()
+            
+            if self.placements['settings']['shuffled-dungeons'] and self.thread_active:
+                self.shuffleDungeons()
             
             # if self.thread_active: self.makeExefsPatches()
 
             if self.thread_active: os.mkdir(f'{self.out_dir}/01006BB00C6F0000')
         
         except Exception:
-            self.error.emit(traceback.format_exc())
+            er = traceback.format_exc()
+            print(er)
+            self.error.emit(er)
         
         finally: # regardless if there was an error or not, we want to tell the progress window that this thread has finished
             # print(self.progress_value)
@@ -117,8 +125,11 @@ class ModsProcess(QtCore.QThread):
         
         chest_sizes = copy.deepcopy(data.CHEST_SIZES)
         if self.placements['settings']['scaled-chest-sizes']:
+            # if all seashell and trade gift locations are set to junk, set chests that contain them to be small, otherwise big
             if not self.placements['settings']['seashells-important']:
-                chest_sizes['seashell'] = 0.8 # if seashell mansion is complete junk, set seashell chests to be small
+                chest_sizes['seashell'] = 0.8
+            if not self.placements['settings']['trade-important']:
+                chest_sizes['trade'] = 0.8
         else:
             for k in chest_sizes:
                 chest_sizes[k] = 1.0 # if scaled chest sizes is off, set every value to normal size
@@ -213,12 +224,19 @@ class ModsProcess(QtCore.QThread):
             'DungeonMap': 'ItemDungeonMap.bfres'
         })
         
-        if self.placements['settings']['shuffle-instruments']:
-            for inst in self.placements['starting-instruments']:
-                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-        else:
-            for inst in self.instruments:
-                del trap_models[inst]
+        for i in self.placements['starting-items']:
+            i = self.item_defs[i]['item-key']
+            if i == 'SwordLv1':
+                i = 'SinkingSword'
+            if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                if self.placements['starting-items'].count(i) < 2:
+                    continue
+            del trap_models[i]
+        
+        if not self.placements['settings']['shuffle-instruments']:
+            for i in self.instruments:
+                if i in trap_models:
+                    del trap_models[i]
 
         for room in data.SMALL_KEY_ROOMS:
             if self.thread_active:
@@ -249,7 +267,7 @@ class ModsProcess(QtCore.QThread):
                     act.switches[1] = (1, 1169) # PotholeGet
                 
                 small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
-                room_data.setSmallKeyParams(model_path, model_name, room)
+                room_data.setSmallKeyParams(model_path, model_name, room, item_key)
 
                 if self.thread_active:
                     with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.SMALL_KEY_ROOMS[room]}.leb', 'wb') as outfile:
@@ -261,7 +279,7 @@ class ModsProcess(QtCore.QThread):
                     with open(f'{self.rom_path}/region_common/level/Lv04AnglersTunnel/Lv04AnglersTunnel_06A.leb', 'rb') as roomfile:
                         room_data = leb.Room(roomfile.read())
                 
-                    room_data.setSmallKeyParams(model_path, model_name, room)
+                    room_data.setSmallKeyParams(model_path, model_name, room, item_key)
                     
                     if self.thread_active:
                         with open(f'{self.out_dir}/Romfs/region_common/level/Lv04AnglersTunnel/Lv04AnglersTunnel_06A.leb', 'wb') as outfile:
@@ -280,12 +298,20 @@ class ModsProcess(QtCore.QThread):
         '''Make small key actors spawn for the golden leaf checks'''
 
         trap_models = copy.deepcopy(data.ITEM_MODELS)
-        if self.placements['settings']['shuffle-instruments']:
-            for inst in self.placements['starting-instruments']:
-                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-        else:
+        
+        for i in self.placements['starting-items']:
+            i = self.item_defs[i]['item-key']
+            if i == 'SwordLv1':
+                i = 'SinkingSword'
+            if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                if self.placements['starting-items'].count(i) < 2:
+                    continue
+            del trap_models[i]
+        
+        if not self.placements['settings']['shuffle-instruments']:
             for inst in self.instruments:
-                del trap_models[inst]
+                if inst in trap_models:
+                    del trap_models[inst]
         
         for room in data.GOLDEN_LEAF_ROOMS:
             if self.thread_active:
@@ -307,7 +333,7 @@ class ModsProcess(QtCore.QThread):
                 
                 golden_leaves.createRoomKey(room, room_data)
                 small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
-                room_data.setSmallKeyParams(model_path, model_name, room)
+                room_data.setSmallKeyParams(model_path, model_name, room, item_key)
 
                 if self.thread_active:
                     if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/{dirname}'):
@@ -359,6 +385,7 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active: self.lanmolaChanges()
         if self.thread_active: self.armosKnightChanges()
         if self.thread_active: self.masterStalfosChanges()
+        if self.thread_active: self.syrupChanges()
     
 
 
@@ -393,12 +420,19 @@ class ModsProcess(QtCore.QThread):
 
         trap_models = copy.deepcopy(data.ITEM_MODELS)
         
-        if self.placements['settings']['shuffle-instruments']:
-            for inst in self.placements['starting-instruments']:
-                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-        else:
+        for i in self.placements['starting-items']:
+            i = self.item_defs[i]['item-key']
+            if i == 'SwordLv1':
+                i = 'SinkingSword'
+            if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                if self.placements['starting-items'].count(i) < 2:
+                    continue
+            del trap_models[i]
+        
+        if not self.placements['settings']['shuffle-instruments']:
             for inst in self.instruments:
-                del trap_models[inst]
+                if inst in trap_models:
+                    del trap_models[inst]
 
         if item_key[-4:] != 'Trap':
             model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
@@ -581,14 +615,18 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         if self.placements['settings']['fast-songs']: # skip the cutscene if fast-songs is enabled
-
+            
+            # Remove Link holding the ocarina and make him sad that you chose to skip such a beautiful song :(
+            sad_face = event_tools.createActionEvent(flow.flowchart, 'Link', 'SetFacialExpression',
+                {'expression': 'sad'}, None)
+            
             flag_set = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
-                {'symbol': 'MarinsongGet', 'value': True}, None)
-            event_tools.insertEventAfter(flow.flowchart, 'Event86', flag_set)
+                {'symbol': 'MarinsongGet', 'value': True}, sad_face)
+            event_tools.insertEventAfter(flow.flowchart, 'Event92', flag_set)
 
             item_index = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
             item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['marin']]['item-key'],
-                item_index, flag_set, 'Event666')
+                item_index, sad_face, 'Event666')
         
         else:
             item_index = self.placements['indexes']['marin'] if 'marin' in self.placements['indexes'] else -1
@@ -635,6 +673,16 @@ class ModsProcess(QtCore.QThread):
 
         event_tools.insertEventAfter(flow.flowchart, 'Event128', 'Event58')
 
+        # make the fairy queen send the player to the proper exit if Shuffled Dungeons is on
+        if self.placements['settings']['shuffled-dungeons']:
+            ent_keys = list(self.placements['dungeon-entrances'].keys())
+            ent_values = list(self.placements['dungeon-entrances'].values())
+            d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index('color-dungeon')]]
+            destin = d[2] + d[3]
+            warp_event = event_tools.findEvent(flow.flowchart, 'Event37')
+            warp_event.data.params.data['level'] = re.match('(.+)_\\d\\d[A-Z]', destin).group(1)
+            warp_event.data.params.data['locator'] = destin
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FairyQueen.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -866,6 +914,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def moldormChanges(self):
+        '''Edits Moldorm to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguTail.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -880,6 +930,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def genieChanges(self):
+        '''Edits Genie to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PotDemonKing.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -894,6 +946,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def slimeEyeChanges(self):
+        '''Edits Slime Eye to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguZol.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -908,6 +962,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def anglerChanges(self):
+        '''Edits Angler Fish to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Angler.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -922,6 +978,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def slimeEelChanges(self):
+        '''Edits Slime Eel to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Hooker.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -936,6 +994,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def facadeChanges(self):
+        '''Edits Facade to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MatFace.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -950,6 +1010,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def eagleChanges(self):
+        '''Edits Evil Eagle to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Albatoss.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -964,6 +1026,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def hotheadChanges(self):
+        '''Edits HotHead to give the randomized item over spawning the Heart Container'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguFlame.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -978,6 +1042,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def lanmolaChanges(self):
+        '''Edits Lanmola to give the randomized item over dropping the Angler Key'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Lanmola.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
@@ -992,6 +1058,8 @@ class ModsProcess(QtCore.QThread):
 
 
     def armosKnightChanges(self):
+        '''Edits Armos Knight to open the doors before giving the randomized item'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DeguArmos.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
         event_tools.removeEventAfter(flow.flowchart, 'Event2')
@@ -1009,17 +1077,37 @@ class ModsProcess(QtCore.QThread):
 
 
     def masterStalfosChanges(self):
+        '''Edits Master Stalfos to give the randomized item over dropping the Hookshot'''
+
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MasterStalfon.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
 
         item_index = self.placements['indexes']['D5-master-stalfos'] if 'D5-master-stalfos' in self.placements['indexes'] else -1
-        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-master-stalfos']]['item-key'], item_index, 'Event37', 'Event194')
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-master-stalfos']]['item-key'],
+            item_index, 'Event37', 'Event194')
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MasterStalfon.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
+    
 
+
+    def syrupChanges(self):
+        '''Edits the witch to give the randomized item instead of Magic Powder'''
+
+        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Syrup.bfevfl')
+        actors.addNeededActors(flow.flowchart, self.rom_path)
+
+        item_index = self.placements['indexes']['syrup'] if 'syrup' in self.placements['indexes'] else -1
+        item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['syrup']]['item-key'],
+            item_index, 'Event93', None)
+        
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Syrup.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+    
 
 
     def makeGeneralLEBChanges(self):
@@ -1137,7 +1225,7 @@ class ModsProcess(QtCore.QThread):
                     self.progress_value += 1 # update progress bar
                     self.progress_update.emit(self.progress_value)
 
-        ### Make Honeycomb show new graphics in tree
+        ### Make Honeycomb show new graphics in tree, a different NPC key is used for when the player obtains the item
         if self.thread_active:
             with open(f'{self.rom_path}/region_common/level/Field/Field_09H.leb', 'rb') as f:
                 room_data = leb.Room(f.read())
@@ -1151,12 +1239,19 @@ class ModsProcess(QtCore.QThread):
             else:
                 trap_models = copy.deepcopy(data.ITEM_MODELS)
                 
-                if self.placements['settings']['shuffle-instruments']:
-                    for inst in self.placements['starting-instruments']:
-                        del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-                else:
+                for i in self.placements['starting-items']:
+                    i = self.item_defs[i]['item-key']
+                    if i == 'SwordLv1':
+                        i = 'SinkingSword'
+                    if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                        if self.placements['starting-items'].count(i) < 2:
+                            continue
+                    del trap_models[i]
+                
+                if not self.placements['settings']['shuffle-instruments']:
                     for inst in self.instruments:
-                        del trap_models[inst]
+                        if inst in trap_models:
+                            del trap_models[inst]
 
                 model_name = random.choice(list(trap_models))
                 model_path = trap_models[model_name]
@@ -1169,35 +1264,7 @@ class ModsProcess(QtCore.QThread):
                         f.write(room_data.repack())
                         self.progress_value += 1 # update progress bar
                         self.progress_update.emit(self.progress_value)
-        
-        # # Add a loading zone (AreaLevelOpen - 0x190) actor to 0,0,0 in the overworld
-        # if self.thread_active:
-        #     with open(f'{self.rom_path}/region_common/level/Field/Field_01A.leb', 'rb') as f:
-        #         room_data = leb.Room(f.read())
-            
-        #     act = copy.deepcopy(room_data.actors[0])
-        #     act.key = int('8D0002005D036AB9', 16)
-        #     act.name = bytes('AreaLevelOpen-8D0002005D036AB9', 'utf-8')
-        #     act.type = 0x190
-        #     act.posX = 0.0
-        #     act.posY = 0.0
-        #     act.posZ = 0.0
-        #     act.scaleX = 10.0
-        #     act.scaleY = 10.0
-        #     act.scaleZ = 10.0
-        #     act.parameters[0] = bytes('Field', 'utf-8')
-        #     act.parameters[1] = bytes('Field_11C', 'utf-8')
-        #     act.parameters[2] = bytes('RunOut', 'utf-8')
-        #     act.parameters[3] = 1
-        #     act.switches[0] = (2, 1) # hardcoded 1 means active by default
-        #     room_data.actors.append(act)
-            
-        #     if self.thread_active:
-        #         with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_01A.leb', 'wb') as f:
-        #                 f.write(room_data.repack())
-        #                 self.progress_value += 1 # update progress bar
-        #                 self.progress_update.emit(self.progress_value)
-
+    
 
 
     def makeGeneralEventChanges(self):
@@ -1206,7 +1273,6 @@ class ModsProcess(QtCore.QThread):
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/event'):
             os.makedirs(f'{self.out_dir}/Romfs/region_common/event')
 
-        #################################################################################################################################
         ### PlayerStart event: Sets a bunch of flags for cutscenes being watched/triggered to prevent them from ever happening.
         ### First check if FirstClear is already set, to not do the work more than once and slightly slow down loading zones.
         if self.thread_active:
@@ -1219,8 +1285,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        # ### TreasureBox event: Adds in events to make certain items be progressive.
+        # ### TreasureBox event: Adds in events to make certain items be progressive as well as custom events for other items.
         if self.thread_active:
             treasure_flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TreasureBox.bfevfl')
             actors.addNeededActors(treasure_flow.flowchart, self.rom_path)
@@ -1233,8 +1298,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### ShellMansionPresent event: Similar to TreasureBox, must make some items progressive.
+        ### ShellMansionPresent event: Similar to TreasureBox, must make some items progressive and add custom events for other items.
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ShellMansionPresent.bfevfl')
             actors.addNeededActors(flow.flowchart, self.rom_path)
@@ -1247,7 +1311,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
         ### Item: Add and fix some entry points for the ItemGetSequence
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Item.bfevfl')
@@ -1276,7 +1339,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
         ### MadamMeowMeow: Change her behaviour to always take back BowWow if you have him, and not do anything based on having the Horn
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MadamMeowMeow.bfevfl')
@@ -1298,8 +1360,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### WindFishsEgg: Add and fix some entry points for the ItemGetSequence for capcity upgrades and tunics.
+        ### WindFishsEgg: Removes the Owl cutscene after opening the egg
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/WindFishsEgg.bfevfl')
             event_tools.insertEventAfter(flow.flowchart, 'Event142', None)
@@ -1309,7 +1370,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
         ### SkeletalGuardBlue: Make him sell 20 bombs in addition to the 20 powder
         if self.placements['settings']['reduce-farming'] and self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SkeletalGuardBlue.bfevfl')
@@ -1329,8 +1389,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### Make Save&Quit after getting a GameOver send you back to house
+        ### Make Save&Quit after getting a GameOver send you back to Marin's house
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Common.bfevfl')
             actors.addNeededActors(flow.flowchart, self.rom_path)
@@ -1345,8 +1404,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
-        ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on, as well as needed changes for randomized prizes
+        ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on, and makes Yoshi not replace Lens
         if self.thread_active:
             prize = event_tools.readFlow(f'{self.rom_path}/region_common/event/PrizeCommon.bfevfl')
             actors.addNeededActors(prize.flowchart, self.rom_path)
@@ -1363,10 +1421,10 @@ class ModsProcess(QtCore.QThread):
 
     def makeGeneralDatasheetChanges(self):
         """Make changes to some datasheets that are general in nature and not tied to specific item placements"""
+
         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/datasheets'):
             os.makedirs(f'{self.out_dir}/Romfs/region_common/datasheets')
 
-        #################################################################################################################################
         ### Npc datasheet: Change MadBatter to use actor parameter $2 as its event entry point.
         ### Also change ItemSmallKey and ObjSinkingSword to use custom models/entry points.
         ### Change ItemClothesGreen to have the small key model, which we'll kinda hack in the Items datasheet so small keys are visible 
@@ -1385,7 +1443,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
         ### ItemDrop datasheet: remove HeartContainer drops 0-7, HookShot drop, AnglerKey and FaceKey drops.
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ItemDrop.gsheet')
@@ -1396,7 +1453,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
         ### Items datasheet: Set npcKeys so certain items will show something when you get them.
         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
 
@@ -1444,8 +1500,7 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
-        ### Conditions datasheet
+        ### Conditions datasheet: Makes needed changes to conditions, as well as creating new ones for seashell sensor
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Conditions.gsheet')
 
@@ -1461,8 +1516,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### CranePrize datasheet
+        ### CranePrize datasheet: Makes general changes to prize conditions that are necessary
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrize.gsheet')
             crane_prizes.makeDatasheetChanges(sheet, self.placements, self.item_defs)
@@ -1473,8 +1527,7 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
-        ### Prize Groups
+        ### Prize Groups: Removes Yoshi Doll from being a featured prize. This lets use control it by a flag instead of inventory
         group1 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup1.gsheet')
         # group2 = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/CranePrizeFeaturedPrizeGroup2.gsheet')
 
@@ -1486,8 +1539,7 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
-        #################################################################################################################################
-        ### GlobalFlags datasheet
+        ### GlobalFlags datasheet: Add new flags to use
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
             flags.makeFlags(sheet)
@@ -1497,7 +1549,6 @@ class ModsProcess(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-        #################################################################################################################################
         ### FishingFish datasheet: Remove the instrument requirements
         if self.placements['settings']['fast-fishing'] and self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/FishingFish.gsheet')
@@ -1532,25 +1583,78 @@ class ModsProcess(QtCore.QThread):
     def randomizeMusic(self):
         """Iterates through the music files in the RomFS and copies them to the output directory with shuffled names"""
 
-        source = f'{self.rom_path}/region_common/audio/stream'
-        dest = f'{self.out_dir}/Romfs/region_common/audio/stream'
-        files = os.listdir(source)
-        new_music = list(data.MUSIC_FILES[:])
+        # ### Shuffle music files that are played through events (i don't feel like editing each boss event lol)
+        # source = f'{self.rom_path}/region_common/audio/stream'
+        # dest = f'{self.out_dir}/Romfs/region_common/audio/stream'
+        # files = os.listdir(source)
+        # new_music = list(data.MUSIC_NAMES[:])
 
-        if not os.path.exists(dest):
-            os.makedirs(dest)
+        # if not os.path.exists(dest):
+        #     os.makedirs(dest)
         
-        random.seed(self.seed) # restart the rng so that music will be the same regardless of settings
+        # random.seed(self.seed) # restart the RNG so that music will be the same regardless of settings
 
-        for file in files:
-            if self.thread_active:
-                track = file[:-len(data.MUSIC_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
-                if track in data.MUSIC_FILES:
-                    song = random.choice(new_music)
-                    new_music.remove(song)
-                    shutil.copy(f'{source}/{file}', f'{dest}/{song}{data.MUSIC_SUFFIX}')
-                    self.progress_value += 1 # update progress bar
-                    self.progress_update.emit(self.progress_value)
+        # for file in files:
+        #     if self.thread_active:
+        #         track = file[:-len(data.MUSIC_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
+        #         if track in data.MUSIC_FILES:
+        #             song = random.choice(new_music)
+        #             new_music.remove(song)
+        #             shutil.copy(f'{source}/{file}', f'{dest}/{song}{data.MUSIC_SUFFIX}')
+        #             self.progress_value += 1 # update progress bar
+        #             self.progress_update.emit(self.progress_value)
+        
+        ### Change the BGM entry in the level info files (.lvb) to a new BGM
+        bgms = list(copy.deepcopy(data.BGM_TRACKS)) # make a duplicate list of the tracks tuple and shuffle it
+        random.seed(self.seed) # restart the RNG so that music will be the same regardless of settings
+        random.shuffle(bgms)
+
+        songs_dict = {} # map each track to a new track using the duplicate list
+        for i in data.BGM_TRACKS:
+            ind = bgms.index(random.choice(bgms))
+            songs_dict[i] = bgms.pop(ind)
+        
+        levels_path = f'{self.rom_path}/region_common/level'
+        out_path = f'{self.out_dir}/Romfs/region_common/level'
+
+        folders = [f for f in os.listdir(levels_path) if not f.endswith('.ldb')]
+
+        for folder in folders:
+            with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
+                f_data = f.read()
+            
+            # Although we do not yet understand how to properly repack LVB files, we can still parse and edit the raw data
+            level = leb.Level(f_data)
+            
+            for entry in level.fixed_hash.entries:
+                if entry.name == b'zone':
+                    for e in entry.data.entries:
+
+                        bgm = leb.readString(e.data, 0x3C)
+
+                        if bgm.startswith(b'BGM_'): # only make edits if it is a valid bgm, else we might edit some other data by mistake
+
+                            new_bgm = bytes(songs_dict[str(bgm, 'utf-8')], 'utf-8') # get the new track to replace the old one with
+
+                            # the bgms are aligned to 32 bytes, and as such will need padding to fit
+                            for b in range(32-len(bgm)):
+                                bgm += b'\x00'
+                            
+                            for b in range(32-len(new_bgm)):
+                                new_bgm += b'\x00'
+                            
+                            ent_data = e.data.replace(bgm, new_bgm) # store the entry data with the song replaced
+                            f_data = f_data.replace(e.data, ent_data) # now we replace all instances of the data with the new data
+
+            if not os.path.exists(f'{out_path}/{folder}'): # make the output folder if it does not already exist
+                os.makedirs(f'{out_path}/{folder}')
+
+            with open(f'{out_path}/{folder}/{folder}.lvb', 'wb') as f: # write the new data to the output
+                f.write(f_data)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
+        
+        ### edit bgms that are played through events
     
 
 
@@ -1580,7 +1684,7 @@ class ModsProcess(QtCore.QThread):
         try:
             writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
             
-            with open(os.path.join(RESOURCE_PATH, '__Combined.bntx'), 'rb') as f: # will eventually manually edit the bntx file to replace the texture, library I was using was causing the game to crash
+            with open(os.path.join(RESOURCE_PATH, '__Combined.bntx'), 'rb') as f: # will eventually manually replace the texture
                 writer.files['timg/__Combined.bntx'] = f.read()
 
             if not os.path.exists(f'{self.out_dir}/Romfs/region_common/ui'):
@@ -1590,7 +1694,7 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        except (FileNotFoundError):
+        except (FileNotFoundError): # just return if the user does not have the file, this is not important
             return
     
 
@@ -1620,17 +1724,36 @@ class ModsProcess(QtCore.QThread):
                 else:
                     trap_models = copy.deepcopy(data.ITEM_MODELS)
                     
-                    if self.placements['settings']['shuffle-instruments']:
-                        for inst in self.placements['starting-instruments']:
-                            del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-                    else:
+                    for i in self.placements['starting-items']:
+                        i = self.item_defs[i]['item-key']
+                        if i == 'SwordLv1':
+                            i = 'SinkingSword'
+                        if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                            if self.placements['starting-items'].count(i) < 2:
+                                continue
+                        del trap_models[i]
+                    
+                    if not self.placements['settings']['shuffle-instruments']:
                         for inst in self.instruments:
-                            del trap_models[inst]
+                            if inst in trap_models:
+                                del trap_models[inst]
                     
                     model_name = random.choice(list(trap_models))
                     model_path = trap_models[model_name]
-                    
-                instruments.changeInstrument(flow.flowchart, item_key, item_index, model_path, model_name, room, room_data)
+                
+                if self.placements['settings']['shuffled-dungeons']:
+                    cur_dun = re.match('(.+)_\\d\\d[A-Z]', data.INSTRUMENT_ROOMS[room]).group(1)
+                    for k,v in data.DUNGEON_ENTRANCES.items():
+                        dun = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
+                        if dun == cur_dun:
+                            ent_keys = list(self.placements['dungeon-entrances'].keys())
+                            ent_values = list(self.placements['dungeon-entrances'].values())
+                            d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
+                            destination = d[2] + d[3]
+                else:
+                    destination = None
+                
+                instruments.changeInstrument(flow.flowchart, item_key, item_index, model_path, model_name, room, room_data, destination)
                 
                 if self.thread_active:
                     with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.INSTRUMENT_ROOMS[room]}.leb', 'wb') as outFile:
@@ -1687,12 +1810,19 @@ class ModsProcess(QtCore.QThread):
                 else:
                     trap_models = copy.deepcopy(data.ITEM_MODELS)
 
-                    if self.placements['settings']['shuffle-instruments']:
-                        for inst in self.placements['starting-instruments']:
-                            del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-                    else:
+                    for i in self.placements['starting-items']:
+                        i = self.item_defs[i]['item-key']
+                        if i == 'SwordLv1':
+                            i = 'SinkingSword'
+                        if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                            if self.placements['starting-items'].count(i) < 2:
+                                continue
+                        del trap_models[i]
+                    
+                    if not self.placements['settings']['shuffle-instruments']:
                         for inst in self.instruments:
-                            del trap_models[inst]
+                            if inst in trap_models:
+                                del trap_models[inst]
 
                     model_name = random.choice(list(trap_models))
                     model_path = trap_models[model_name]
@@ -1817,12 +1947,19 @@ class ModsProcess(QtCore.QThread):
             'DungeonMap': 'ItemDungeonMap.bfres'
         })
         
-        if self.placements['settings']['shuffle-instruments']:
-            for inst in self.placements['starting-instruments']:
-                del trap_models[re.sub(' ', '', re.sub('-', ' ', inst).title())]
-        else:
+        for i in self.placements['starting-items']:
+            i = self.item_defs[i]['item-key']
+            if i == 'SwordLv1':
+                i = 'SinkingSword'
+            if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                if self.placements['starting-items'].count(i) < 2:
+                    continue
+            del trap_models[i]
+        
+        if not self.placements['settings']['shuffle-instruments']:
             for inst in self.instruments:
-                del trap_models[inst]
+                if inst in trap_models:
+                    del trap_models[inst]
 
         for i in range(28):
             if self.thread_active:
@@ -1837,7 +1974,7 @@ class ModsProcess(QtCore.QThread):
                     model_name = random.choice(list(trap_models))
                     model_path = trap_models[model_name]
 
-                room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', i)
+                room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', item_key, i)
                 rupees.makeEventChanges(flow.flowchart, i, item_key, item_index)
             else: break
         
@@ -2219,3 +2356,98 @@ class ModsProcess(QtCore.QThread):
                                     num_of_mods += 1
         
         # print(num_of_mods)
+    
+
+
+    def shuffleDungeons(self):
+        """Shuffles the entrances of each dungeon"""
+
+        levels_path = f'{self.rom_path}/region_common/level'
+        out_levels = f'{self.out_dir}/Romfs/region_common/level'
+
+        for k,v in data.DUNGEON_ENTRANCES.items():
+
+            ### dungeon in
+            if self.thread_active:
+                folder = re.match('(.+)_\\d\\d[A-Z]', v[2]).group(1)
+                file = v[2]
+
+                if not os.path.exists(f'{out_levels}/{folder}/{file}.leb'):
+                    with open(f'{levels_path}/{folder}/{file}.leb', 'rb') as f:
+                        room_data = leb.Room(f.read())
+                else:
+                    with open(f'{out_levels}/{folder}/{file}.leb', 'rb') as f:
+                        room_data = leb.Room(f.read())
+                
+                if not os.path.exists(f'{out_levels}/{folder}'):
+                    os.makedirs(f'{out_levels}/{folder}')
+                
+                d = data.DUNGEON_ENTRANCES[self.placements['dungeon-entrances'][k]]
+                destin = d[0] + d[1]
+                room_data.setLoadingZoneTarget(destin, v[4])
+
+                if self.thread_active:
+                    with open(f'{out_levels}/{folder}/{file}.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+            
+            ### dungeon out
+            if self.thread_active:
+                folder = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
+
+                if not os.path.exists(f'{out_levels}/{folder}/{v[0]}.leb'):
+                    with open(f'{levels_path}/{folder}/{v[0]}.leb', 'rb') as f:
+                        room_data = leb.Room(f.read())
+                else:
+                    with open(f'{out_levels}/{folder}/{v[0]}.leb', 'rb') as f:
+                        room_data = leb.Room(f.read())
+                
+                if not os.path.exists(f'{out_levels}/{folder}'):
+                    os.makedirs(f'{out_levels}/{folder}')
+                
+                ent_keys = list(self.placements['dungeon-entrances'].keys())
+                ent_values = list(self.placements['dungeon-entrances'].values())
+                d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
+                destin = d[2] + d[3]
+                room_data.setLoadingZoneTarget(destin, 0)
+
+                if self.thread_active:
+                    with open(f'{out_levels}/{folder}/{v[0]}.leb', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+            
+            else: break
+    
+
+
+    def changeLevelConfigs(self):
+        '''Edits the config of the lvb files for dungeons to allow companions'''
+
+        levels_path = f'{self.rom_path}/region_common/level'
+        out_levels = f'{self.out_dir}/Romfs/region_common/level'
+
+        folders = [f for f in os.listdir(levels_path) if f.startswith('Lv')]
+
+        for folder in folders:
+            if not os.path.exists(f'{out_levels}/{folder}/{folder}.lvb'):
+                with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
+                    level_data = f.read()
+                    level = leb.Level(level_data)
+            else:
+                with open(f'{out_levels}/{folder}/{folder}.lvb', 'rb') as f:
+                    level_data = f.read()
+                    level = leb.Level(level_data)
+            
+            config_data = [e for e in level.fixed_hash.entries if e.name == b'config'][0].data
+            config = leb.LevelConfig(config_data) # parse the config entry data into an object
+            config.attr_2 = 1 # set the second byte in the config to be True to allow companions
+
+            if not os.path.exists(f'{out_levels}/{folder}'):
+                os.makedirs(f'{out_levels}/{folder}')
+            
+            with open(f'{out_levels}/{folder}/{folder}.lvb', 'wb') as f:
+                f.write(level_data.replace(config_data, config.pack())) # replaces the data and writes it to the file
+                self.progress_value += 1
+                self.progress_update.emit(self.progress_value)

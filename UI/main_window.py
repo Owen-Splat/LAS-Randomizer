@@ -31,6 +31,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Keep track of stuff
         self.excluded_checks = set()
+        self.starting_gear = list()
         self.mode = str('dark')
 
         # Load User Settings
@@ -71,7 +72,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
         self.ui.includeButton.clicked.connect(self.includeButton_Clicked)
         self.ui.excludeButton.clicked.connect(self.excludeButton_Clicked)
-        
+        self.ui.includeButton_3.clicked.connect(self.includeButton_3_Clicked)
+        self.ui.excludeButton_3.clicked.connect(self.excludeButton_3_Clicked)
         ### DESCRIPTIONS
         self.descItems = self.ui.tab.findChildren(QtWidgets.QCheckBox)
         self.descItems.extend([self.ui.seashellsComboBox,
@@ -83,7 +85,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
-        self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
+        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha') # {VERSION}')
         self.show()
 
         if IS_RUNNING_FROM_SOURCE:
@@ -175,12 +177,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.fastTrendyCheck.setChecked(False)
         self.ui.stealingCheck.setChecked(True)
         self.ui.farmingCheck.setChecked(True)
-        self.ui.vanillaCheck.setChecked(True)
+        self.ui.shuffledPowderCheck.setChecked(False)
         self.ui.musicCheck.setChecked(False)
         self.ui.enemyCheck.setChecked(False)
         self.ui.spoilerCheck.setChecked(True)
         self.ui.kanaletCheck.setChecked(True)
-        self.ui.tunicsCheck.setChecked(True)
+        self.ui.badPetsCheck.setChecked(False)
         self.ui.trapsCheck.setChecked(False)
         self.ui.rupCheck.setChecked(False)
         self.ui.bridgeCheck.setChecked(True)
@@ -191,6 +193,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.songsCheck.setChecked(False)
         self.ui.fastFishingCheck.setChecked(True)
         self.ui.owlsComboBox.setCurrentIndex(0)
+        self.ui.dungeonsCheck.setChecked(False)
+
+        self.starting_gear = list() # fully reset starting items
 
         self.tab_Changed() # just call the same event as when changing the tab to refresh the list
 
@@ -221,7 +226,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Free_Book': self.ui.bookCheck.isChecked(),
             'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
             'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
-            'Shuffled_Tunics': self.ui.tunicsCheck.isChecked(),
+            'Bad_Pets': self.ui.badPetsCheck.isChecked(),
             'Fast_Fishing': self.ui.fastFishingCheck.isChecked(),
             'Fast_Stealing': self.ui.stealingCheck.isChecked(),
             'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
@@ -229,7 +234,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fast_Master_Stalfos': self.ui.fastMSCheck.isChecked(),
             'Scaled_Chest_Sizes': self.ui.chestSizesCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
-            'Vanilla_Start': self.ui.vanillaCheck.isChecked(),
+            'Shuffled_Powder': self.ui.shuffledPowderCheck.isChecked(),
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
             'Open_Bridge': self.ui.bridgeCheck.isChecked(),
             'Open_Mamu': self.ui.mazeCheck.isChecked(),
@@ -241,6 +246,8 @@ class MainWindow(QtWidgets.QMainWindow):
             # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
             'Randomize_Music': self.ui.musicCheck.isChecked(),
             'Randomize_Enemies': self.ui.enemyCheck.isChecked(),
+            'Shuffled_Dungeons': self.ui.dungeonsCheck.isChecked(),
+            'Starting_Items': self.starting_gear,
             'Excluded_Locations': list(self.excluded_checks)
         }
         
@@ -432,11 +439,11 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.farmingCheck.setChecked(True)
         
-        # vanilla start
+        # shuffled powder
         try:
-            self.ui.vanillaCheck.setChecked(SETTINGS['Vanilla_Start'])
+            self.ui.shuffledPowderCheck.setChecked(SETTINGS['Shuffled_Powder'])
         except (KeyError, TypeError):
-            self.ui.vanillaCheck.setChecked(True)
+            self.ui.shuffledPowderCheck.setChecked(False)
         
         # open kanalet
         try:
@@ -456,11 +463,11 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.mazeCheck.setChecked(True)
         
-        # shuffled tunics
+        # bad pets - companions follow inside dungeons
         try:
-            self.ui.tunicsCheck.setChecked(SETTINGS['Shuffled_Tunics'])
+            self.ui.badPetsCheck.setChecked(SETTINGS['Bad_Pets'])
         except (KeyError, TypeError):
-            self.ui.tunicsCheck.setChecked(True)
+            self.ui.badPetsCheck.setChecked(False)
 
         # trapsanity
         try:
@@ -510,6 +517,12 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.enemyCheck.setChecked(False)
         
+        # shuffled dungeons
+        try:
+            self.ui.dungeonsCheck.setChecked(SETTINGS['Shuffled_Dungeons'])
+        except (KeyError, TypeError):
+            self.ui.dungeonsCheck.setChecked(False)
+        
         # spoiler log
         try:
             self.ui.spoilerCheck.setChecked(SETTINGS['Create_Spoiler'])
@@ -544,6 +557,16 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.excluded_checks.update(LEAF_LOCATIONS)
             # if not self.ui.trendyCheck.isChecked():
             #     self.excluded_checks.update(TRENDY_REWARDS)
+        
+        # starting items
+        try:
+            for item in SETTINGS['Starting_Items']:
+                if item in STARTING_ITEMS:
+                    if self.starting_gear.count(item) < STARTING_ITEMS.count(item):
+                        self.starting_gear.append(item)
+        
+        except (KeyError, TypeError):
+            self.starting_gear = list() # reset starting gear to default if error
 
 
     
@@ -715,15 +738,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 'free-book': self.ui.bookCheck.isChecked(),
                 'unlocked-bombs': self.ui.unlockedBombsCheck.isChecked(),
                 'shuffle-bombs': self.ui.shuffledBombsCheck.isChecked(),
+                'shuffle-powder': self.ui.shuffledPowderCheck.isChecked(),
                 'reduce-farming': self.ui.farmingCheck.isChecked(),
-                'assured-sword-shield': self.ui.vanillaCheck.isChecked(),
                 'fast-fishing': self.ui.fastFishingCheck.isChecked(),
                 'fast-stealing': self.ui.stealingCheck.isChecked(),
                 'fast-trendy': self.ui.fastTrendyCheck.isChecked(),
                 'fast-songs': self.ui.songsCheck.isChecked(),
                 'shuffle-instruments': self.ui.instrumentCheck.isChecked(),
                 'starting-instruments': self.ui.instrumentsComboBox.currentIndex(),
-                'shuffle-tunics': self.ui.tunicsCheck.isChecked(),
+                'bad-pets': self.ui.badPetsCheck.isChecked(),
                 'open-kanalet': self.ui.kanaletCheck.isChecked(),
                 'open-bridge': self.ui.bridgeCheck.isChecked(),
                 'open-mamu': self.ui.mazeCheck.isChecked(),
@@ -735,12 +758,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 # 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
                 'fast-master-stalfos': self.ui.fastMSCheck.isChecked(),
                 'scaled-chest-sizes': self.ui.chestSizesCheck.isChecked(),
-                # 'shuffle-companions': self.ui.companionCheck.isChecked(),
                 'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in self.excluded_checks]) > 0 else False,
+                'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in self.excluded_checks]) > 0 else False,
+                # 'shuffle-companions': self.ui.companionCheck.isChecked(),
                 # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
                 'randomize-music': self.ui.musicCheck.isChecked(),
                 'randomize-enemies': self.ui.enemyCheck.isChecked(),
                 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
+                'shuffled-dungeons': self.ui.dungeonsCheck.isChecked(),
+                'starting-items': self.starting_gear,
                 'excluded-locations': self.excluded_checks
             }
             
@@ -760,8 +786,18 @@ class MainWindow(QtWidgets.QMainWindow):
     # Tab changed
     def tab_Changed(self):
         
-        if self.ui.tabWidget.currentIndex() == 1:
+        if self.ui.tabWidget.currentIndex() == 1: # starting items
+            self.ui.listWidget_5.clear()
+            for item in [x for x in STARTING_ITEMS if x not in self.starting_gear]:
+                self.ui.listWidget_5.addItem(self.checkToList(str(item)))
             
+            self.ui.listWidget_6.clear()
+            for item in self.starting_gear:
+                self.ui.listWidget_6.addItem(self.checkToList(str(item)))
+            
+            return
+
+        if self.ui.tabWidget.currentIndex() == 2: # locations
             self.ui.listWidget.clear()
             for check in TOTAL_CHECKS.difference(self.excluded_checks):
                 self.ui.listWidget.addItem(self.checkToList(str(check)))
@@ -769,10 +805,15 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.listWidget_2.clear()
             for check in self.excluded_checks:
                 self.ui.listWidget_2.addItem(self.checkToList(str(check)))
+            
+            return
+        
+        if self.ui.tabWidget.currentIndex() == 3: # logic tricks
+            return
     
     
     
-    # Include Button Clicked
+    # Locations Include Button Clicked
     def includeButton_Clicked(self):
         for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
@@ -781,7 +822,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
-    # Exclude Button Clicked
+    # Locations Exclude Button Clicked
     def excludeButton_Clicked(self):
         for i in self.ui.listWidget.selectedItems():
             self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
@@ -790,6 +831,24 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
+    # Starting Items Include Button Clicked - 'including' is moving starting items into the randomized pool
+    def includeButton_3_Clicked(self):
+        for i in self.ui.listWidget_6.selectedItems():
+            self.ui.listWidget_6.takeItem(self.ui.listWidget_6.row(i))
+            self.starting_gear.remove(self.listToItem(i.text()))
+            self.ui.listWidget_5.addItem(i.text())
+
+
+
+    # Starting Items Exclude Button Clicked - 'excluding' is moving randomized items into starting items
+    def excludeButton_3_Clicked(self):
+        for i in self.ui.listWidget_5.selectedItems():
+            self.ui.listWidget_5.takeItem(self.ui.listWidget_5.row(i))
+            self.ui.listWidget_6.addItem(i.text())
+            self.starting_gear.append(self.listToItem(i.text()))
+
+
+
     # some-check to Some Check
     def checkToList(self, check):
         s = sub("-", " ", check).title()
@@ -799,7 +858,6 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # Some Check to some-check
     def listToCheck(self, check):
-        
         stayUpper = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
         
         s = sub(" ", "-", check).lower()
@@ -808,7 +866,18 @@ class MainWindow(QtWidgets.QMainWindow):
             s = s.replace('d', 'D', 1)
         
         return s
+    
 
+
+    # Starting Item to starting-item and also converts names that were changed to look nicer
+    def listToItem(self, item):
+        s = sub(" ", "-", item).lower()
+
+        # if s in ITEM_NAMES and convert:
+        #     s = ITEM_NAMES[s]
+        
+        return s
+    
 
 
     # Override key press event to change theme

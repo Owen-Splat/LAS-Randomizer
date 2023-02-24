@@ -1,0 +1,29 @@
+change color dungeon guards to be compatible new shuffled powder setting
+
+change BGMs that play through events
+
+add logics to the README
+
+add owl statues to the locations toggles
+
+Enemizer tweaks
+
+double check that objsinkingsword, itemyoshidoll, and itemsmallkey actors properly trigger the seashell sensor
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+make randomizer essentials pack so that the randomizer repo does not contain any copyrighted assets
+
+fix sunken heart pieces (needs asm patches?)
+
+randomize seashells (needs asm patches)
+
+turn small key actors into golden leaf actors to remove compass ringing (needs asm patches)
+
+trendy (including changing fast trendy?)
+
+fix dampe logic for instrument shuffle sometime (i refuse to do this myself lol)
+
+fix fishing bottle (tried sneakily adding and removing the bottle from inventory, but Inventory.RemoveItem cannot handle indexes)
+
+fix ball and chain soldier not spawning if the player has the leaf (likely needs asm patches)

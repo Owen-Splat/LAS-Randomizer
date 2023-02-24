@@ -6,11 +6,9 @@ __pycache__
 /output
 /romfs
 /Resources/Dev Resources
-/Tools/levels.py
 /Tools/msbt.py
 /Test
 text_tests.py
 tests.py
-issues.txt
 settings.txt
 log.txt

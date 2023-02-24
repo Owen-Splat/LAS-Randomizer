@@ -501,6 +501,7 @@ Excluded_Actors: # rooms each with a list of actors to not modify
   Lv05CatfishsMaw_01E: [0, 1, 2] # kill room but can reset
   Lv06FaceShrine_08B: [1, 2, 3]
   Lv06FaceShrine_08C: [1, 2, 3]
+  Lv06FaceShrine_08G: [1, 2] # kill room but can reset, or leave if switch is right and player has feather
   Lv06FaceShrine_07G: [1, 2, 3, 4]
   Lv06FaceShrine_06D: [2, 3, 4, 5] # maybe not an issue, but lets leave the vaccuum room vanilla just in case
   Lv06FaceShrine_06E: [1]

@@ -1,27 +1,36 @@
 import Tools.event_tools as event_tools
 from Randomizers import item_get
 from Randomizers import data
+import re
 
 
 
-def changeInstrument(flowchart, item_key, item_index, model_path, model_name, room, room_data):
+def changeInstrument(flowchart, item_key, item_index, model_path, model_name, room, room_data, destination=None):
     """Applies changes to both the Instrument actor and the event flowchart"""
     
     if room == 'D6-instrument':
         act = room_data.actors[1]
     else:
         act = room_data.actors[0]
-
-    # store the level and location for the leveljump event since we will overwrite these parameters
-    level = str(act.parameters[0], 'utf-8')
-    location = str(act.parameters[1], 'utf-8')
+    
+    if destination is None:
+        # store the level and location for the leveljump event since we will overwrite these parameters
+        level = str(act.parameters[0], 'utf-8')
+        location = str(act.parameters[1], 'utf-8')
+    else:
+        level = re.match('(.+)_\\d\\d[A-Z]', destination).group(1)
+        location = destination
 
     act.type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
     act.parameters[0] = bytes(model_path, 'utf-8')
     act.parameters[1] = bytes(model_name, 'utf-8')
     act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow
     act.parameters[3] = bytes(data.INSTRUMENT_FLAGS[room], 'utf-8') # flag for if item appears
-    # act.parameters[4] = bytes('None', 'utf-8') # category 3 for telephone rooster bones, other ItemYoshiDoll actors use None
+
+    if item_key == 'Seashell':
+        act.parameters[4] = bytes('true', 'utf-8')
+    else:
+        act.parameters[4] = bytes('false', 'utf-8')
 
     fade_event = insertInstrumentFadeEvent(flowchart, level, location)
     instrument_get = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, fade_event)

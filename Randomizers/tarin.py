@@ -1,5 +1,5 @@
 import Tools.event_tools as event_tools
-from Randomizers import actors, item_get
+from Randomizers import item_get
 
 
 
@@ -22,45 +22,30 @@ def makeEventChanges(flowchart, placements, item_defs):
     event0.data.actor_query = event78.data.actor_query
     event0.data.params = event78.data.params
     
-    if len(placements['starting-instruments']) > 0:
-        event_defs = []
-        for inst in placements['starting-instruments']:
-            event_defs.append(('Inventory', 'AddItemByKey', {'itemKey': item_defs[inst]['item-key'], 'count': 1, 'index': -1, 'autoEquip': False}))
+    event_defs = []
+    sword_num = 0
+    shield_num = 0
+    bracelet_num = 0
 
-            if inst == 'surf-harp': # set ghost clear flags if getting harp
-                event_defs += [
-                    ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
-                    ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
-                    ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
-                    ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True})
-                ]
-                continue
+    for i in placements['starting-items']:
+        item_key = item_defs[i]['item-key']
 
-            if inst == 'full-moon-cello': # close the moblin cave doors so the moblins appear
-                event_defs += [
-                    ('EventFlags', 'SetFlag', {'symbol': 'BowWowEvent', 'value': True}),
-                    ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
-                    ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False})
-                ]
-        event_tools.createActionChain(flowchart, 'Event36', event_defs, 'Event52')
+        if item_key == 'SwordLv1':
+            sword_num += 1
+            if sword_num == 2:
+                item_key = 'SwordLv2'
+        
+        elif item_key == 'Shield':
+            shield_num += 1
+            if shield_num == 2:
+                item_key = 'MirrorShield'
+        
+        elif item_key == 'PowerBraceletLv1':
+            bracelet_num += 1
+            if bracelet_num == 2:
+                item_key = 'PowerBraceletLv2'
+        
+        event_defs += item_get.insertItemWithoutAnimation(item_key, -1)
     
-    # event_tools.createActionChain(flowchart, 'Event36', [
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'SwordLv1', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Shield', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'PegasusBoots', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'PowerBraceletLv1', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'PowerBraceletLv2', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Song_Soul', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Song_WindFish', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Ocarina', 'count': 1, 'index': -1, 'autoEquip': True}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'RocsFeather', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'HookShot', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Boomerang', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Flippers', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'TailKey', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     #('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 30, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 10, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'Rupee300', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('Inventory', 'AddItemByKey', {'itemKey': 'ShellRader', 'count': 1, 'index': -1, 'autoEquip': False}),
-    #     ('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True})
-    #     ], 'Event52')
+    if len(event_defs) > 0:
+        event_tools.createActionChain(flowchart, 'Event36', event_defs, 'Event52')

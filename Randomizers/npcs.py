@@ -26,6 +26,7 @@ def makeNpcChanges(npc, placements):
         npc['graphics']['path'] = '$1'
         npc['graphics']['model'] = '$2'
         npc['eventTriggers'][2]['entryPoint'] = '$3'
+        npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific smallkey actors trigger the shell sensor
         return
     
     if npc['symbol'] == 'ItemYoshiDoll': # This is for Ocarina and Instruments since I still want the player to press A to get them
@@ -35,10 +36,10 @@ def makeNpcChanges(npc, placements):
         npc['eventTriggers'][0]['entryPoint'] = '$2'
         npc['doAction'] = {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.2999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
         npc['layoutConditions'].append({'category': 1, 'parameter': '$3', 'layoutID': -1})
-        # npc['layoutConditions'].append({'category': 3, 'parameter': '$4', 'layoutID': -1}) # for telephone rooster bones
         npc['collision']['traits'] = ''
         npc['collision']['isStatic'] = True
         npc['collision']['filter'] = 5
+        npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific yoshidoll actors trigger the shell sensor
         return
     
     if npc['symbol'] == 'ItemClothesGreen':
@@ -76,6 +77,7 @@ def makeNpcChanges(npc, placements):
         npc['collision']['isStatic'] = False
         npc['collision']['filter'] = 7
         npc['collision']['offset']['y'] = 0.25
+        npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific sinkingsword actors trigger the shell sensor
         return
     
     if npc['symbol'] == 'ObjRoosterBones':
@@ -90,8 +92,12 @@ def makeNpcChanges(npc, placements):
     if npc['symbol'] == 'ItemFeatherBomb' and placements['settings']['shuffle-bombs']:
         npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
         return
-
-
+    
+    # make the flying powder refills not appear until you find your powder
+    if npc['symbol'] == 'ItemFeatherPowder' and placements['settings']['shuffle-powder']:
+        npc['layoutConditions'].append({'category': 1, 'parameter': '!GetMagicPowder', 'layoutID': -1})
+        return
+    
     # Adjustments to NPC layouts and shell sensor trigger conditions
     if npc['symbol'] == 'NpcBowWow':
         npc['layoutConditions'][2] = {'category': 3, 'parameter': 'BowWow', 'layoutID': -1}

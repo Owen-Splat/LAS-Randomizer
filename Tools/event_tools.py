@@ -157,22 +157,23 @@ def createActionChain(flowchart, before, eventDefs, after=None):
 	return first
 
 
-def createProgressiveItemSwitch(flowchart, item1, item2, flag, flag2=None, before=None, after=None):
+def createProgressiveItemSwitch(flowchart, item1, item2, flag, before=None, after=None):
 	"""Create a switch event leading to getting one of two options depending on whether a flag was set beforehand"""
 
-	item1GetSeqEvent = createActionEvent(flowchart, 'Link', 'GenericItemGetSequenceByKey', {'itemKey': item1, 'keepCarry': False, 'messageEntry': ''}, after)
-	item1AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey', {'itemKey': item1, 'count': 1, 'index': -1, 'autoEquip': False}, item1GetSeqEvent)
+	item1GetSeqEvent = createActionEvent(flowchart, 'Link', 'GenericItemGetSequenceByKey',
+		{'itemKey': item1, 'keepCarry': False, 'messageEntry': ''}, after)
+	item1AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+		{'itemKey': item1, 'count': 1, 'index': -1, 'autoEquip': False}, item1GetSeqEvent)
 
-	item2GetSeqEvent = createActionEvent(flowchart, 'Link', 'GenericItemGetSequenceByKey', {'itemKey': item2, 'keepCarry': False, 'messageEntry': ''}, after)
-	item2AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey', {'itemKey': item2, 'count': 1, 'index': -1, 'autoEquip': False}, item2GetSeqEvent)
-
-	flagSetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': flag, 'value': True}, item1AddEvent)
-
-	if flag2:
-		flag2SetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': flag2, 'value': True}, item2AddEvent)
-		flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: flag2SetEvent})
-	else:
-		flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag', {'symbol': flag}, {0: flagSetEvent, 1: item2AddEvent})
+	item2GetSeqEvent = createActionEvent(flowchart, 'Link', 'GenericItemGetSequenceByKey',
+		{'itemKey': item2, 'keepCarry': False, 'messageEntry': ''}, after)
+	item2AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+		{'itemKey': item2, 'count': 1, 'index': -1, 'autoEquip': False}, item2GetSeqEvent)
+	
+	flagSetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+		{'symbol': flag, 'value': True}, item1AddEvent)
+	flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+		{'symbol': flag}, {0: flagSetEvent, 1: item2AddEvent})
 
 	insertEventAfter(flowchart, before, flagCheckEvent)
 

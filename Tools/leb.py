@@ -268,6 +268,37 @@ class Actor:
 
 
 
+class Level:
+	def __init__(self, data):
+		self.fixed_hash = FixedHash(data)
+		# self.config = LevelConfig([e for e in self.fixed_hash.entries if e.name == b'config'][0].data)
+
+
+
+class LevelConfig:
+	def __init__(self, data):
+		self.attr_1 = readBytes(data, 0x0, 1)
+		self.attr_2 = readBytes(data, 0x1, 1)
+		self.attr_3 = readBytes(data, 0x2, 1)
+		self.attr_4 = readBytes(data, 0x3, 1)
+		self.attr_5 = readBytes(data, 0x4, 1)
+		self.attr_6 = readBytes(data, 0x5, 1)
+		self.padding = b'\xFF'
+	
+	def pack(self):
+		packed = b''
+		packed += self.attr_1.to_bytes(1, 'little')
+		packed += self.attr_2.to_bytes(1, 'little')
+		packed += self.attr_3.to_bytes(1, 'little')
+		packed += self.attr_4.to_bytes(1, 'little')
+		packed += self.attr_5.to_bytes(1, 'little')
+		packed += self.attr_6.to_bytes(1, 'little')
+		packed += self.padding
+
+		return packed
+
+
+
 class Room:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
@@ -281,22 +312,12 @@ class Room:
 		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
 		# for entry in rail_entry.data.entries:
 		# 	self.rails.append(Rail(data=entry.data, names=self.fixed_hash.namesSection))
-
+		
 		self.actors = []
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
-
-		# self.points = []
-		# point_entry = [e for e in self.fixed_hash.entries if e.name == b'point'][0]
-		# for entry in point_entry.data.entries:
-		# 	self.points.append(Point(entry.data))
-		
-		# self.rails = []
-		# rail_entry = [e for e in self.fixed_hash.entries if e.name == b'rail'][0]
-		# for entry in rail_entry.data.entries:
-		# 	self.rails.append(Rail(entry.data))
-		
+				
 		# try:
 		# 	grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
 		# 	self.grid = Grid(grid_entry)
@@ -317,7 +338,7 @@ class Room:
 			chest.scaleZ = chest_size
 	
 
-	def setSmallKeyParams(self, model_path, model_name, room, key_index=0):
+	def setSmallKeyParams(self, model_path, model_name, room, item_key, key_index=0):
 		keys = [a for a in self.actors if a.type == 0xA9]
 
 		if len(keys) > key_index:
@@ -327,9 +348,14 @@ class Room:
 			key.parameters[1] = bytes(model_path, 'utf-8')
 			key.parameters[2] = bytes(model_name, 'utf-8')
 			key.parameters[3] = bytes(room, 'utf-8')
+
+			if item_key == 'Seashell':
+				key.parameters[4] = bytes('true', 'utf-8')
+			else:
+				key.parameters[4] = bytes('false', 'utf-8')
 	
 
-	def setRupeeParams(self, model_path, model_name, entry_point, rup_index=0):
+	def setRupeeParams(self, model_path, model_name, entry_point, item_key, rup_index=0):
 		rups = [a for a in self.actors if a.type == 0xAB]
 
 		if len(rups) > 0:
@@ -339,6 +365,11 @@ class Room:
 			rup.parameters[1] = bytes(model_name, 'utf-8')
 			rup.parameters[2] = bytes(entry_point, 'utf-8')
 			rup.parameters[3] = bytes('Lv10RupeeGet' if rup_index == 0 else f'Lv10RupeeGet_{rup_index + 1}', 'utf-8')
+
+			if item_key == 'Seashell':
+				rup.parameters[4] = bytes('true', 'utf-8')
+			else:
+				rup.parameters[4] = bytes('false', 'utf-8')
 	
 
 	def setLoadingZoneTarget(self, new_destination, index=0):
@@ -346,8 +377,8 @@ class Room:
 
 		if len(zones) > index:
 			zone = zones[index]
-			zone.parameters[0] = re.match(b'(.+)_\\d\\d[A-Z]', new_destination).group(1)
-			zone.parameters[1] = new_destination
+			zone.parameters[0] = bytes(re.match('(.+)_\\d\\d[A-Z]', new_destination).group(1), 'utf-8')
+			zone.parameters[1] = bytes(new_destination, 'utf-8')
 	
 
 	def repack(self):
@@ -401,6 +432,7 @@ class Room:
 
 			# 	if self.grid.chain_entry is not None:
 			# 		entry.data.entries.append(Entry(0xFFF0, b'chain', 0xFFFFFFFF, self.grid.chain_entry.data))
+			# 		new_names += b'chain' + b'\x00'
 				
 			# 	entry.data.entries.append(Entry(0xFFF0, b'info', 0x0, self.grid.info.pack()))
 			# 	new_names += b'info' + b'\x00'
@@ -799,3 +831,83 @@ class Relationship:
 # 		('b', Flags_bits4),
 # 		('asbyte', c_uint8)
 # 	]
+
+
+
+# class Level:
+# 	def __init__(self, data):
+# 		self.fixed_hash = FixedHash(data)
+
+# 		self.zones = []
+# 		zones_entry = [e for e in self.fixed_hash.entries if e.name == b'zone'][0]
+# 		for entry in zones_entry.data.entries:
+# 			self.zones.append(Zone(entry.data))
+	
+	
+# 	def repack(self):
+# 		new_names = b''
+		
+# 		for entry in self.fixed_hash.entries:
+# 			if entry.name == b'zone':
+# 				entry.data.entries = []
+# 				for zone in self.zones:
+# 					entry.data.entries.append(Entry(0xFFF0, b'', 0xFFFFFFFF, zone.pack()))
+			
+# 			new_names += entry.name + b'\x00'
+		
+# 		self.fixed_hash.namesSection = new_names
+
+# 		return self.fixed_hash.toBinary()
+
+
+
+# class Zone:
+# 	def __init__(self, data):
+# 		self.room_ID = readBytes(data, 0x0, 4)
+# 		self.unknown_1 = data[0x4:0x3C]
+# 		self.bgm = readString(data, 0x3C)
+# 		self.padding_1 = data[0x3C+len(self.bgm):0x5C]
+# 		self.se_amb = readString(data, 0x5C)
+# 		self.padding_2 = data[0x5C+len(self.se_amb):0x7C]
+# 		self.group_amb = readString(data, 0x7C)
+# 		self.padding_3 = data[0x7C+len(self.group_amb):0x9C]
+# 		self.unknown_2 = data[0x9C:0xB0]
+# 		self.room_type = readString(data, 0xB0)
+# 		self.padding_4 = data[0xB0+len(self.room_type):]
+	
+
+# 	def pack(self):
+# 		packed = b''
+# 		packed += self.room_ID.to_bytes(4, 'little')
+# 		packed += self.unknown_1
+# 		packed += self.bgm
+
+# 		self.padding_1 = b''
+# 		for i in range(32-len(self.bgm)):
+# 			self.padding_1 += b'\x00'
+		
+# 		packed += self.padding_1
+# 		packed += self.se_amb
+
+# 		self.padding_2 = b''
+# 		for i in range(32-len(self.se_amb)):
+# 			self.padding_2 += b'\x00'
+		
+# 		packed += self.padding_2
+# 		packed += self.group_amb
+
+# 		self.padding_3 = b''
+# 		for i in range(32-len(self.group_amb)):
+# 			self.padding_3 += b'\x00'
+		
+# 		packed += self.padding_3
+# 		packed += self.unknown_2
+# 		packed += self.room_type
+
+# 		self.padding_4 = b''
+# 		for i in range(32-len(self.room_type)):
+# 			self.padding_4 += b'\x00'
+		
+# 		packed += self.padding_4
+		
+# 		return packed

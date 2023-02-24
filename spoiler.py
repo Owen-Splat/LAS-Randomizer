@@ -1,18 +1,18 @@
 import os
 
 
-def generateSpoilerLog(placements, logicDefs, outputDir, seedName):
+def generateSpoilerLog(placements, logic_defs, out_dir, seed):
     # Make the output directory if it doesnt exist
-    if not os.path.exists(outputDir):
-        os.makedirs(outputDir)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
     
     regions = {'mabe-village': [], 'toronbo-shores': [], 'mysterious-woods': [], 'koholint-prairie': [], 'tabahl-wasteland': [], 'ukuku-prairie': [], 'sign-maze': [], 'goponga-swamp': [], 'taltal-heights': [], 'marthas-bay': [], 'kanalet-castle': [], 'pothole-field': [], 'animal-village': [], 'yarna-desert': [], 'ancient-ruins': [], 'rapids-ride': [], 'taltal-mountains-east': [], 'taltal-mountains-west': [], 'color-dungeon': [], 'tail-cave': [], 'bottle-grotto': [], 'key-cavern': [], 'angler-tunnel': [], 'catfish-maw': [], 'face-shrine': [], 'eagle-tower': [], 'turtle-rock': []}
     
-    for key in logicDefs:
-        if logicDefs[key]['type'] in ['item', 'follower']:
-            regions[logicDefs[key]['spoiler-region']].append(key)
+    for key in logic_defs:
+        if logic_defs[key]['type'] in ['item', 'follower']:
+            regions[logic_defs[key]['spoiler-region']].append(key)
     
-    with open(f'{outputDir}/spoiler_{seedName}.txt', 'w') as output:
+    with open(f'{out_dir}/spoiler_{seed}.txt', 'w') as output:
         for key in regions:
             output.write(f'{key}:\n')
             for location in regions[key]:
@@ -23,13 +23,14 @@ def generateSpoilerLog(placements, logicDefs, outputDir, seedName):
             if setting != 'excluded-locations':
                 output.write(f'  {setting}: {placements["settings"][setting]}\n')
         
-        output.write('\nstarting-instruments:\n')
-        if len(placements['starting-instruments']) > 0:
-            for inst in placements['starting-instruments']:
-                output.write(f'  {inst}\n')
-        else:
-            output.write('  None\n')
+        output.write('\nstarting-items:\n')
+        for i in placements['starting-items']:
+            output.write(f'  {i}\n')
         
+        output.write('\ndungeon-entrances:\n')
+        for dun in placements['dungeon-entrances']:
+            output.write(f'  {dun} -> {placements["dungeon-entrances"][dun]}\n')
+
         output.write('\nexcluded-locations:\n')
         for location in placements['force-junk']:
             output.write(f'  {location}\n')

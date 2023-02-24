@@ -251,82 +251,171 @@ HEART_ROOMS = {
 
 
 # music files
-MUSIC_FILES = (
-    '03_NameInput',
-    '04_House_First',
-    '06_Field_First',
-    '07_Owl.ry',
-    '07_OwlLast',
-    '09_Field_Normal_Intro',
-    '10_Field_Normal',
-    '11_Meve',
-    '12_StrangeForest',
-    '15_Shop',
-    '15_Shop_Fast',
-    '16_Fairy',
-    '18_GameShop',
-    '19_House',
-    '20_MarineSing',
-    '22_Cave',
-    '23_Dangeon1_TailCave',
-    '24_Dangeon_2DCave',
-    '25_Dangeon_BossMiddle',
-    '26_Dangeon_Boss',
-    '30_Event_RescueBowwow',
-    '31_Event_RescueBowwow_intro',
-    '32_Wright',
-    '34_Dangeon2_PotCave',
-    '36_Richard',
-    '38_Dangeon_Castle',
-    '39_Dangeon_Key',
-    '42_AnimalVillage',
-    '43_GoatHouse',
-    '44_DreamShrine_Entrance',
-    '46_DreamShrine',
-    '50_TaruTaru',
-    '50_TaruTaru_AfterRescue',
-    '52_Dangeon4_BasinAngler',
-    '55_GhostHouse',
-    '56_FishingMan',
-    '57_Dangeon5_CatFish',
-    '62_Dangeon6_TempleOfFace',
-    '64_Dangeon_Clothes',
-    '66_ChikenHut',
-    '67_Dangeon7_TowerOfEagle',
-    '72_Dangeon7_TurtleRock',
-    '74_RapidsFallGameOfRaft',
-    '76_Dangeon_HolyEgg',
-    '77_LastBoss_DemoText',
-    '78_LastBoss_Appear-Battle',
-    '79_LastBossWin',
-    '84_Title_NoIntro',
-    '85_TotakekeSong',
-    '86_ZeldaName',
-    '87_Richard2.30',
-    'crane_pond',
-    'FishingHit',
-    'Koakumakun',
-    'LastBossFinal',
-    'MarineName',
-    'PanelDanjeonResult',
-    'PanelDanjeonStrings_Wind_Timpani',
-    'PanelDanjeonStrings5',
-    'PanelDanjeonWind',
-    'PanelDanpeiEdit',
-    'PanelDanpeiHouse',
-    'PanelShadowLink',
-    'RapidTimeAttack',
-    'RecorderField_FushigiNoMori',
-    'RecorderField_Main',
-    'RecorderField_MainNormal',
-    'RecorderField_TaruTaru',
-    'ShellHouse',
-    'Title_OP'
+# MUSIC_FILES = (
+#     '07_Owl.ry',
+#     '07_OwlLast',
+#     '15_Shop_Fast',
+#     '25_Dangeon_BossMiddle',
+#     '26_Dangeon_Boss',
+#     '77_LastBoss_DemoText',
+#     '78_LastBoss_Appear-Battle',
+#     '79_LastBossWin',
+#     '84_Title_NoIntro',
+#     'FishingHit',
+#     'Koakumakun',
+#     'LastBossFinal',
+#     'PanelDanjeonResult',
+#     'PanelDanjeonStrings_Wind_Timpani',
+#     'PanelDanjeonStrings5',
+#     'PanelDanjeonWind',
+#     'PanelDanpeiEdit',
+#     'PanelShadowLink',
+#     'RapidTimeAttack',
+#     'Title_OP'
+# )
+# MUSIC_NAMES = (
+#     '03_NameInput',
+#     '04_House_First',
+#     '06_Field_First',
+#     '07_Owl.ry',
+#     '07_OwlLast',
+#     '09_Field_Normal_Intro',
+#     '10_Field_Normal',
+#     '11_Meve',
+#     '12_StrangeForest',
+#     '15_Shop',
+#     '15_Shop_Fast',
+#     '16_Fairy',
+#     '18_GameShop',
+#     '19_House',
+#     '20_MarineSing',
+#     '22_Cave',
+#     '23_Dangeon1_TailCave',
+#     '24_Dangeon_2DCave',
+#     '25_Dangeon_BossMiddle',
+#     '26_Dangeon_Boss',
+#     '30_Event_RescueBowwow',
+#     '31_Event_RescueBowwow_intro',
+#     '32_Wright',
+#     '34_Dangeon2_PotCave',
+#     '36_Richard',
+#     '38_Dangeon_Castle',
+#     '39_Dangeon_Key',
+#     '42_AnimalVillage',
+#     '43_GoatHouse',
+#     '44_DreamShrine_Entrance',
+#     '46_DreamShrine',
+#     '50_TaruTaru',
+#     '50_TaruTaru_AfterRescue',
+#     '52_Dangeon4_BasinAngler',
+#     '55_GhostHouse',
+#     '56_FishingMan',
+#     '57_Dangeon5_CatFish',
+#     '62_Dangeon6_TempleOfFace',
+#     '64_Dangeon_Clothes',
+#     '66_ChikenHut',
+#     '67_Dangeon7_TowerOfEagle',
+#     '72_Dangeon7_TurtleRock',
+#     '74_RapidsFallGameOfRaft',
+#     '76_Dangeon_HolyEgg',
+#     '77_LastBoss_DemoText',
+#     '78_LastBoss_Appear-Battle',
+#     '79_LastBossWin',
+#     '84_Title_NoIntro',
+#     '85_TotakekeSong',
+#     '86_ZeldaName',
+#     '87_Richard2.30',
+#     'crane_pond',
+#     'FishingHit',
+#     'Koakumakun',
+#     'LastBossFinal',
+#     'MarineName',
+#     'PanelDanjeonResult',
+#     'PanelDanjeonStrings_Wind_Timpani',
+#     'PanelDanjeonStrings5',
+#     'PanelDanjeonWind',
+#     'PanelDanpeiEdit',
+#     'PanelDanpeiHouse',
+#     'PanelShadowLink',
+#     'RapidTimeAttack',
+#     'RecorderField_FushigiNoMori',
+#     'RecorderField_Main',
+#     'RecorderField_MainNormal',
+#     'RecorderField_TaruTaru',
+#     'ShellHouse',
+#     'Title_OP'
+# )
+# MUSIC_SUFFIX = '.ry.48.dspadpcm.bfstm'
+
+BGM_TRACKS = (
+    'BGM_DUNGEON_LV6_FACE',
+    'BGM_DUNGEON_LV4_ANGLER',
+    'BGM_CHICKEN_HURT',
+    'BGM_GHOST_HOUSE',
+    'BGM_ANIMAL_VILLAGE',
+    'BGM_DUNGEON_LV1_TAIL',
+    'BGM_DUNGEON_2D_SIDEVIEW',
+    'BGM_DUGEON_CASTLE',
+    'BGM_DUNGEON_LV3_KEY',
+    'BGM_CAVE',
+    'BGM_TARUTARU',
+    'BGM_HOUSE',
+    'BGM_MEVE',
+    'BGM_FISHINGMAN',
+    'BGM_DUNGEON_LV2_POT',
+    'BGM_STRANGE_FOREST',
+    'BGM_DUNGEON_HOLY_EGG',
+    'BGM_SEASHELL_HOUSE',
+    'BGM_TELEPHONE',
+    'BGM_DANPEI',
+    'BGM_SHOP',
+    'BGM_SHOP_FAST',
+    'BGM_GAME_SHOP',
+    'BGM_GOAT_HOUSE',
+    'BGM_DREAMSHRINE',
+    'BGM_WRIGHT',
+    'BGM_GAME_SHOP_FOR_POND',
+    'BGM_RICHARD',
+    'BGM_EVENT_RESCUE_BOWBOW',
+    'BGM_DUNGEON_LV10_CLOTH',
+    'BGM_DREAMSHRINE_ENT',
+    'BGM_PLACE_OF_FACE_KEY',
+    'BGM_DUNGEON_LV5_CATFISH',
+    'BGM_FAIRY',
+    'BGM_DUNGEON_LV7_TOWER',
+    'BGM_DUNGEON_LV8_TURTLE',
+    'BGM_FIELD_NORMAL',
+    'BGM_FIELD_MARINE_NORMAL',
+    'BGM_LASTBOSS_APPEAR',
+    'BGM_LASTBOSS_BATTLE',
+    'BGM_MARINE_NAME',
+    'BGM_MARINE_SING',
+    'BGM_MINIGAME_FISHING',
+    'BGM_PANEL_DUNG_BEGINNER',
+    'BGM_PANEL_DUNG_DIFFICULT',
+    'BGM_PANEL_DUNG_MEDIUM',
+    'BGM_PANEL_EDIT_MODE',
+    'BGM_NAME_INPUT',
+    'BGM_DUNGEON_BOSS_MIDDLE',
+    'BGM_DUNGEON_LV8_ENT_BATTLE',
+    'BGM_EVENT_MARINE_IN_BEACH',
+    'BGM_EVENT_RESCUE_BOWBOW_INTRO',
+    'BGM_FIELD_FIRST',
+    'BGM_FIELD_NORMAL_INTRO',
+    'BGM_GAME_OF_RAFT',
+    'BGM_NAZOTOKI_SEIKAI',
+    'BGM_PANEL_SHADOW_LINK',
+    'BGM_RAFTING_TIMEATTACK',
+    'BGM_RICHARD_230',
+    'BGM_STRANGE_FOREST_MARINE',
+    'BGM_TARUTARU2_AFTER_THE_RESCUE',
+    'BGM_TARUTARU_MARINE',
+    'BGM_TOTAKEKE_SONG',
+    'BGM_ZELDA_NAME'
 )
-MUSIC_SUFFIX = '.ry.48.dspadpcm.bfstm'
 
 
-# item models so that zap traps can be disguised as other items
+# item models so that traps can be disguised as other items
 ITEM_MODELS = {
     'SinkingSword': 'ObjSinkingSword.bfres',
     # 'SwordLv2': 'ItemSwordLv2.bfres',
@@ -339,7 +428,7 @@ ITEM_MODELS = {
     'MagicRod': 'ItemMagicRod.bfres',
     # 'Shovel': 'ItemShovel.bfres',
     'SleepyMushroom': 'ItemSleepyMushroom.bfres',
-    # 'MagicPowder': 'ItemMagicPowder.bfres',
+    'MagicPowder': 'ItemMagicPowder.bfres',
     'RocsFeather': 'ItemRocsFeather.bfres',
     'PowerBraceletLv1': 'ItemPowerBraceletLv1.bfres',
     # 'PowerBraceletLv2': 'ItemPowerBraceletLv2.bfres',
@@ -388,52 +477,20 @@ ITEM_MODELS = {
 }
 
 
-CUSTOM_MODELS = (
-    # 'ItemBallad',
-    # 'ItemMambo',
-    # 'ItemSoul',
-    # 'ObjBombBag',
-    # 'ObjArrowBag'
-)
-MODELS_SUFFIX = '.bfres'
-
-
-ENTRANCE_ROOMS = {
-    'Lv01TailCave': {
-        '08D': {
-            'Actor': 2,
-            'Target': 'Field_14D'
-        }
-    },
-    'Lv02BottleGrotto': {
-        '08C': {
-            'Actor': 3,
-            'Target': 'Field_03E'
-        }
-    },
-    'Lv03KeyCavern': {
-        '08B': {
-            'Actor': 2,
-            'Target': 'Field_12F',
-        }
-    },
-    'Lv04AnglersTunnel': {
-        '08D': {
-            'Actor': 2,
-            'Target': 'Field_03L_a',
-        }
-    },
-    'Field': {
-        '03E': 0,
-        '12F': 0,
-        '14D': 0,
-    }
-}
+# CUSTOM_MODELS = (
+#     'ItemBallad',
+#     'ItemMambo',
+#     'ItemSoul',
+#     'ObjBombBag',
+#     'ObjArrowBag'
+# )
+# MODELS_SUFFIX = '.bfres'
 
 
 CHEST_SIZES = {
     'important': 1.2,
-    'seashell': 1.0,
+    'trade': 1.2,
+    'seashell': 1.2,
     'good': 1.0,
     'junk': 0.8,
     'D1': 1.0,
@@ -448,77 +505,18 @@ CHEST_SIZES = {
 }
 
 
+DUNGEON_ENTRANCES = {
+    'tail-cave':        ('Lv01TailCave_08D',        '',     'Field_14D', '',     0),
+    'bottle-grotto':    ('Lv02BottleGrotto_08C',    '',     'Field_03E', '',     0),
+    'key-cavern':       ('Lv03KeyCavern_08B',       '',     'Field_12F', '',     0),
+    'angler-tunnel':    ('Lv04AnglersTunnel_08D',   '',     'Field_03L', '_a',   1),
+    'catfish-maw':      ('Lv05CatfishsMaw_08H',     '',     'Field_14J', '_b',   0),
+    'face-shrine':      ('Lv06FaceShrine_08D',      '',     'Field_09M', '',     0),
+    'eagle-tower':      ('Lv07EagleTower_08B',      '_b',   'Field_01O', '',     0),
+    'turtle-rock':      ('Lv08TurtleRock_08D',      '_b',   'Field_02A', '',     0),
+    'color-dungeon':    ('Lv10ClothesDungeon_08C',  '',     'Field_08H', '',     0)
+}
+
+
 # BASE_BUILD_ID = 'AE16F71E002AF8CB059A9A74C4D90F34BA984892' # version 1.0.0
 # UPD_BUILD_ID = '909E904AF78AC1B8DEEFE97AB2CCDB51968f0EC7' # version 1.0.1
-
-# # instruction addr: [string addr, operand]
-# BGM_OFFSETS = {
-#     0x009e6b78: [0x016c9c83, 'x8'], # BGM_ANIMAL_VILLAGE
-#     0x000ae578: [0x016e4733, 'x8'], # BGM_DUNGEON_2D_SIDEVIEW
-#     0x00ce8d28: [0x016d5d3f, 'x8'], # BGM_DUNGEON_BOSS_MIDDLE
-#     0x000ae858: [0x016d5d3f, 'x22'], # BGM_DUNGEON_BOSS_MIDDLE
-#     0x000b2e04: [0x016bed50, 'x8'], # BGM_DUNGEON_LV8_ENT_BATTLE
-#     0x000ae8e4: [0x016bed50, 'x21'], # BGM_DUNGEON_LV8_ENT_BATTLE
-#     0x000afc44: [0x016dbcc3, 'x9'], # BGM_ENSEMBLE_ALL
-#     0x000afc9c: [0x016b9845, 'x8'], # BGM_ENSEMBLE_DUET
-#     0x000afe24: [0x016e7d02, 'x8'], # BGM_ENSEMBLE_INST
-#     0x009f3b84: [0x016ba1ab, 'x8'], # BGM_EVENT_MARINE_IN_BEACH
-#     0x009f35d4: [0x016ba1ab, 'x8'], # BGM_EVENT_MARINE_IN_BEACH
-#     0x009e6bc8: [0x016d8e72, 'x8'], # BGM_EVENT_RESCUE_BOWBOW
-#     0x000ae784: [0x016d8e72, 'x21'], # BGM_EVENT_RESCUE_BOWBOW
-#     0x000a70d0: [0x016d8e72, 'x8'], # BGM_EVENT_RESCUE_BOWBOW
-#     0x000a6544: [0x016d8e72, 'x8'], # BGM_EVENT_RESCUE_BOWBOW
-#     0x009e6ba0: [0x016c296f, 'x8'], # BGM_EVENT_RESCUE_BOWBOW_INTRO
-#     0x0009d734: [0x016ddb98, 'x9'], # BGM_FANFARE_BOSS_HEART_GET
-#     0x000ae510: [0x016b7d98, 'x8'], # BGM_FIELD_FIRST
-#     0x000ae87c: [0x016c5e26, 'x21'], # BGM_FIELD_MARINE
-#     0x00df24a4: [0x016bf7f2, 'x8'], # BGM_FIELD_NORMAL
-#     0x000ae694: [0x016bf7f2, 'x11'], # BGM_FIELD_NORMAL
-#     0x000ae7e8: [0x016d6ba4, 'x22'], # BGM_FIELD_NORMAL_INTRO
-#     0x00df286c: [0x016d43a0, 'x19'], # BGM_GAME_OF_RAFT
-#     0x00dee7f4: [0x016d43a0, 'x8'], # BGM_GAME_OF_RAFT
-#     0x000ae80c: [0x016d43a0, 'x22'], # BGM_GAME_OF_RAFT
-#     0x000ae478: [0x016eb6a0, 'x10'], # BGM_HOUSE
-#     0x0082e264: [0x016b9d8b, 'x8'], # BGM_NAME_INPUT
-#     0x00b05804: [0x016c4ac9, 'x8'], # BGM_NAZOTOKI_SEIKAI
-#     0x00a92664: [0x016c4ac9, 'x8'], # BGM_NAZOTOKI_SEIKAI
-#     0x008f4504: [0x016c4ac9, 'x8'], # BGM_NAZOTOKI_SEIKAI
-#     0x00ce9048: [0x016c0eb7, 'x20'], # BGM_PANEL_SHADOW_LINK
-#     0x00ce8f34: [0x016c0eb7, 'x8'], # BGM_PANEL_SHADOW_LINK
-#     0x00ce8d54: [0x016c0eb7, 'x8'], # BGM_PANEL_SHADOW_LINK
-#     0x00dee860: [0x016c0f38, 'x8'], # BGM_RAFTING_TIMEATTACK
-#     0x000ae830: [0x016c0f38, 'x8'], # BGM_RAFTING_TIMEATTACK
-#     0x00a25dc0: [0x016b8579, 'x22'], # BGM_RICHARD_230
-#     0x000ae6fc: [0x016d02e3, 'x11'], # BGM_STRANGE_FOREST
-#     0x000aea38: [0x016caecb, 'x8'], # BGM_STRANGE_FOREST_MARINE
-#     0x000ae6c8: [0x016c1ffa, 'x11'], # BGM_TARUTARU
-#     0x000ae944: [0x016ddbb3, 'x8'], # BGM_TARUTARU2_AFTER_THE_RESCUE
-#     0x000ae984: [0x016c78e4, 'x8'], # BGM_TARUTARU_MARINE
-#     0x00eb06e4: [0x016bbe3e, 'x8'], # BGM_TOTAKEKE_SONG
-#     0x00eb0644: [0x016e87f6, 'x8'], # BGM_ZELDA_NAME
-# }
-
-# # String addr: instruction addr
-#     # 0x016b8548, # BGM_FAIRY
-#     # 0x016d52f1, # BGM_FIELD_MARINE_NORMAL
-#     # 0x016c041c, # BGM_GAMEOVER
-#     # 0x016b9ce8, # BGM_INST_BELL
-#     # 0x016df9dc, # BGM_INST_DRUM
-#     # 0x016c45f9, # BGM_INST_HARP
-#     # 0x016c08eb, # BGM_INST_HORN
-#     # 0x016e802a, # BGM_INST_MARIMBA
-#     # 0x016dc116, # BGM_INST_ORGAN
-#     # 0x016c255d, # BGM_INST_TRIANGLE
-#     # 0x016d20b7, # BGM_INST_VIOLIN
-#     # 0x016d0608, # BGM_LASTBOSS_APPEAR
-#     # 0x016e2f72, # BGM_LASTBOSS_BATTLE
-#     # 0x016b8941, # BGM_MARINE_NAME
-#     # 0x016ebe06, # BGM_MARINE_SING
-#     # 0x016ba1a2, # BGM_MEVE
-#     # 0x016e355f, # BGM_MINIGAME_FISHING
-#     # 0x016caefd, # BGM_NUTS
-#     # 0x016c40cb, # BGM_NUTS_INTRO
-#     # 0x016caee5, # BGM_PANEL_DUNG_BEGINNER
-#     # 0x016bb251, # BGM_PANEL_DUNG_DIFFICULT
-#     # 0x016d6bbb, # BGM_PANEL_DUNG_MEDIUM
-#     # 0x016e1439, # BGM_PANEL_EDIT_MODE

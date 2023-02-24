@@ -672,10 +672,10 @@ mad-batter-bay:
   content: bomb-capacity
   region: plains
   spoiler-region: marthas-bay
-  condition-basic: (((rooster | feather) & (boomerang | rod)) | (feather & sword)) & cross-water & powder
-  condition-advanced: (feather | rooster) & cross-water & powder
-  condition-glitched: plains & rooster & powder & ocarina & song-mambo
-  condition-death: plains & rooster & powder
+  condition-basic: (((rooster | feather) & (boomerang | rod)) | (feather & sword)) & cross-water & powders
+  condition-advanced: (feather | rooster) & cross-water & powders
+  condition-glitched: plains & rooster & powders & ocarina & song-mambo
+  condition-death: plains & rooster & powders
 bay-passage-sunken:
   type: item
   subtype: underwater
@@ -684,7 +684,7 @@ bay-passage-sunken:
   region: plains
   spoiler-region: marthas-bay
   condition-basic: (((rooster | feather) & (boomerang | rod)) | (feather & sword)) & flippers
-  condition-advanced: ((feather | rooster) & (bombs | powder | sword)) & flippers
+  condition-advanced: ((feather | rooster) & (bombs | powders | sword)) & flippers
 river-crossing-cave:
   type: item
   subtype: underwater
@@ -981,7 +981,7 @@ mad-batter-taltal:
   content: arrow-capacity
   region: taltal-west-0
   spoiler-region: taltal-mountains-west
-  condition-basic: bracelet & powder
+  condition-basic: bracelet & powders
 taltal-west-rock:
   type: item
   subtype: hidden
@@ -1084,7 +1084,7 @@ pothole-north:
   region: pothole
   spoiler-region: pothole-field
   condition-basic: ((rooster | feather) & (boomerang | rod)) | (feather & sword)
-  # condition-advanced: (feather | rooster) & (bombs | powder | sword)
+  # condition-advanced: (feather | rooster) & (bombs | powders | sword)
 pothole-final:
   type: item
   subtype: drop # dig
@@ -1125,10 +1125,10 @@ woods-north-cave-loose:
 mad-batter-woods:
   type: item
   subtype: npc
-  content: powder-capacity
+  content: powders-capacity
   region: woods
   spoiler-region: mysterious-woods
-  condition-basic: bracelet & powder
+  condition-basic: bracelet & powders
 woods-south-chest:
   type: item
   subtype: chest
@@ -1144,7 +1144,7 @@ woods-north-chest:
   content: tail-key
   region: woods
   spoiler-region: mysterious-woods
-  condition-basic: (powder | rooster | feather) & break-bush
+  condition-basic: (powders | rooster | feather) & break-bush
   condition-advanced: hookshot & (sword | shovel | boots) & break-bush
 woods-west-dig:
   type: item
@@ -1176,6 +1176,13 @@ diamond-island:
   region: woods
   spoiler-region: koholint-prairie
   condition-basic: feather | rooster | hookshot
+syrup:
+  type: item
+  subtype: npc
+  content: powder
+  region: woods
+  spoiler-region: koholint-prairie
+  condition-basic: mushroom
 
 D1-instrument:
   type: item
@@ -1307,7 +1314,7 @@ D2-boos:
   content: bracelet
   region: bottle-grotto
   spoiler-region: bottle-grotto
-  condition-basic: D2-4C & key-D2:5 & (powder | rod | shoot-arrows | sword:2)
+  condition-basic: D2-4C & key-D2:5 & (powders | rod | shoot-arrows | sword:2)
 D2-long-room-west:
   type: item
   subtype: chest
@@ -1534,7 +1541,7 @@ D3-hallway-1:
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-7B & (sword | powder | bombs | shoot-arrows | hookshot | rod | boomerang)
+  condition-basic: D3-7B & (sword | powders | bombs | shoot-arrows | hookshot | rod | boomerang)
 D3-vacuum-mouth:
   type: item
   subtype: chest
@@ -2560,7 +2567,7 @@ rooster-statue:
 angler-tunnel:
   type: region
   condition-basic: (heights & angler-key & taltal-east-0) | (taltal-river & cross-water)
-  # condition-glitched: heights & bracelet & feather & sword
+  condition-glitched: heights & bracelet & feather & sword & (shield | boots)
 animal-village:
   type: region
   condition-basic: (plains & (hookshot | break-obstacle)) | (river & cross-water)
@@ -2572,7 +2579,7 @@ beach:
   condition-basic: mabe & (kill-urchin | shield | break-bush)
 bottle-grotto:
   type: region
-  condition-basic: swamp & (kill-flower | bracelet)
+  condition-basic: swamp & (kill-flower | (bracelet & ! classic-d2))
   condition-death: mabe & swamp & feather
 bridge:
   type: region
@@ -2653,7 +2660,7 @@ sign-maze:
   condition-death: mabe & swamp & dash-jump
 swamp:
   type: region
-  condition-basic: (woods & break-bush & (powder | feather | rooster)) | (wasteland & bracelet) | (mr-write-house & (feather | rooster | hookshot))
+  condition-basic: (woods & break-bush & (powders | feather | rooster)) | (wasteland & bracelet) | (mr-write-house & (feather | rooster | hookshot))
   condition-advanced: woods & hookshot & (sword | shovel | boots) & break-bush
 tail-cave:
   type: region
@@ -2720,7 +2727,7 @@ D2-4G:
   condition-basic: D2-2F & key-D2:5 & nightmare-key-D2 & (bracelet | (boots & feather)) & break-pot & kill-zol-red[heavy] & kill-pols-voice[heavy]
 D2-7D:
   type: room
-  condition-basic: D2-8C & (rod | powder)
+  condition-basic: D2-8C & (rod | powders)
 D2-8C:
   type: room
   condition-basic: bottle-grotto
@@ -2834,7 +2841,7 @@ D0-6D:
 # Common combos/interactions
 break-bush:
   type: interaction
-  condition-basic: sword | powder | bracelet | bombs | rod | boomerang
+  condition-basic: sword | powders | bracelet | bombs | rod | boomerang
 break-crystal:
   type: interaction
   condition-basic: sword | bombs
@@ -2869,10 +2876,10 @@ bomb-arrows:
   condition-basic: bombs & shoot-arrows
 bombs:
   type: interaction
-  condition-basic: (mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))
-powder:
+  condition-basic: ((mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | ! shuffle-bombs)
+powders:
   type: interaction
-  condition-basic: (woods & mushroom) | (color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang)) | powder-capacity
+  condition-basic: ((color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))) & (powder | ! shuffle-powder)
 shoot-arrows:
   type: interaction
   condition-basic: bow & (can-shop | (armos-maze & break-pot) | (D5-7F & kill-helmasaur & feather) | (D6-8D & break-pot) | (D8-4C & (feather | break-pot)) | (D8-8D & feather & key-D8:2) | arrow-capacity)
@@ -2935,7 +2942,7 @@ kill-battle-bat:
   condition-basic: sword | shoot-arrows | bombs | rod | boomerang
 kill-bombite-red:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | hookshot | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | hookshot | rod | boomerang
 kill-bombite-green:
   type: enemy
   condition-basic: sword | shield | shoot-arrows | bombs | rod
@@ -2953,7 +2960,7 @@ kill-darknut-flail:
   condition-basic: sword | shoot-arrows | bombs | rod | boomerang
 kill-flower:
   type: enemy
-  condition-basic: (hookshot & (sword | powder | shoot-arrows | bombs)) | rod | boomerang | bow-wow
+  condition-basic: (hookshot & (sword | powders | shoot-arrows | bombs)) | rod | boomerang | bow-wow
 kill-big-flower:
   type: enemy
   condition-basic: (hookshot & (sword | shoot-arrows | bombs)) | rod | boomerang | bow-wow
@@ -2962,7 +2969,7 @@ kill-gibdo:
   condition-basic: sword | shoot-arrows | bombs | boomerang
 kill-goblin:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
   condition-heavy: bracelet
 kill-hardhat-beetle:
   type: enemy
@@ -2970,30 +2977,30 @@ kill-hardhat-beetle:
   condition-pit: sword | shield | hookshot | boomerang
 kill-helmasaur:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
   condition-heavy: bracelet
 kill-keese:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
   condition-heavy: bracelet
 kill-like-like:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-mad-bomber:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | rod | boomerang
 kill-minimoldorm:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-moblin-spear:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang | shield:2
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang | shield:2
 kill-moblin-shield:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-octorok:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-orb:
   type: enemy
   condition-basic: sword | hookshot | shoot-arrows | bombs | rod | boomerang
@@ -3006,53 +3013,53 @@ kill-pols-voice:
   condition-heavy: bracelet
 kill-rope:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
   condition-heavy: bracelet
 kill-shy-guy:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | rod | boomerang
 kill-spiny:
   type: enemy
-  condition-basic: shield & (sword | powder | shoot-arrows | bombs | rod | boomerang)
+  condition-basic: shield & (sword | powders | shoot-arrows | bombs | rod | boomerang)
   condition-pit: shield
 kill-stalfos:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | boomerang
-  condition-pit: powder | hookshot | rod | bottle | shovel
+  condition-pit: powders | hookshot | rod | bottle | shovel
 kill-stalfos-yellow:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | boomerang
 kill-stalfos-red:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | boomerang | shield:2
-  condition-pit: powder | hookshot | rod | bottle | shovel
+  condition-pit: powders | hookshot | rod | bottle | shovel
 kill-stalfos-spear:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang | shield:2
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang | shield:2
   condition-heavy: bracelet
 kill-star:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-urchin:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-vire:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-water-tektite:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
 kill-wizzrobe:
   type: enemy
   condition-basic: shoot-arrows | bombs | rod | boomerang
   condition-pit: hookshot | boomerang | sword | shield
 kill-zol-green:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
   condition-heavy: bracelet
 kill-zol-red:
   type: enemy
-  condition-basic: sword | powder | shoot-arrows | bombs | rod | boomerang
+  condition-basic: sword | powders | shoot-arrows | bombs | rod | boomerang
   condition-heavy: bracelet
   condition-pit: shield
 
@@ -3065,7 +3072,7 @@ kill-blaino:
   condition-basic: sword
 kill-blob-boss:
   type: enemy
-  condition-basic: powder & sword
+  condition-basic: powders & sword
 kill-cueball:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | boomerang
@@ -3130,7 +3137,7 @@ kill-hothead:
   condition-basic: rod
 kill-nightmare-zol:
   type: enemy
-  condition-basic: powder
+  condition-basic: powders
 kill-nightmare-agahnim:
   type: enemy
   condition-basic: sword | bottle
@@ -3183,7 +3190,7 @@ like-like-launch:
   condition-basic: mabe
 villa-skip:
   type: trick
-  condition-basic: prairie & feather & sword & powder
+  condition-basic: prairie & feather & sword & powders
 tracey-boost:
   type: trick
   condition-basic: tracey & can-farm-rupees & mabe & sword & bracelet & bombs

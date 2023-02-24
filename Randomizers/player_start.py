@@ -27,7 +27,10 @@ def makeStartChanges(flowchart, settings):
         ('EventFlags', 'SetFlag', {'symbol': 'FourteenClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'FiveteenClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'WalrusAwaked', 'value': True}),
-        ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True})
+        ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True}),
+        # ('Inventory', 'AddItemByKey', {'itemKey': 'SwordLv1', 'count': 1, 'index': -1, 'autoEquip': False}),
+        # ('Inventory', 'AddItemByKey', {'itemKey': 'PowerBraceletLv1', 'count': 1, 'index': -1, 'autoEquip': False}),
+        # ('Inventory', 'AddItemByKey', {'itemKey': 'RocsFeather', 'count': 1, 'index': -1, 'autoEquip': False})
     ]
 
     if settings['open-kanalet']:
@@ -39,13 +42,13 @@ def makeStartChanges(flowchart, settings):
     if settings['open-mamu']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'MamuMazeClear', 'value': True}))
     
-    if not settings['shuffle-tunics']:
-        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))
-        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}))
+    # if not settings['shuffle-tunics']:
+    #     player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}))
+    #     player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}))
     
     if not settings['shuffle-bombs'] and settings['unlocked-bombs']:
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}))
-        
+    
     if settings['randomize-enemies']: # special case where we need stairs under armos to be visible and open
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld10N', 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld11O', 'value': True}))

@@ -29,9 +29,13 @@ def makeDatasheetChanges(sheet, placements):
             if placements['settings']['shuffle-bombs']:
                 sheet['values'][i]['mLotTable'][0]['mCookie'] = 0
         
+        if sheet['values'][i]['mKey'] == 'MagicPowder':
+            if placements['settings']['reduce-farming']:
+                sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
+            if placements['settings']['shuffle-powder']:
+                sheet['values'][i]['mLotTable'][0]['mCookie'] = 0
+        
         if sheet['values'][i]['mKey'] == 'Arrow' and placements['settings']['reduce-farming']:
-            sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-        if sheet['values'][i]['mKey'] == 'MagicPowder' and placements['settings']['reduce-farming']:
             sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
         if sheet['values'][i]['mKey'] == 'Grass' and placements['settings']['reduce-farming']:
             sheet['values'][i]['mLotTable'][1]['mWeight'] = 18

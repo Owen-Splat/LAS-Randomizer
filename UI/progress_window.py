@@ -17,34 +17,43 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui = Ui_ProgressWindow()
         self.ui.setupUi(self)
         
-        self.rom_path = rom_path
-        self.out_dir = out_dir
-        self.seed = seed
-        self.logic = logic
+        self.rom_path : str = rom_path
+        self.out_dir : str = out_dir
+        self.seed : str = seed
+        self.logic : str = logic
         self.item_defs = copy.deepcopy(item_defs)
         self.logic_defs = copy.deepcopy(logic_defs)
-        self.settings = settings
+        self.settings = copy.deepcopy(settings)
         
-        self.valid_placements = 145 # 288 total, but junk gets placed quick, so just count non-junk items
-        self.num_of_mod_files = 252
+        self.valid_placements = 200 # 145 - # 288 total, but junk gets placed quick, so just count non-junk items
+        self.num_of_mod_tasks = 242
         
         # if settings['shuffle-bombs']:
         #     self.num_of_mod_files -= 1
         
         if not settings['blup-sanity']:
-            self.num_of_mod_files -= 1
+            self.num_of_mod_tasks -= 1
         
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
         
         if settings['owl-dungeon-gifts']:
-            self.num_of_mod_files += 4 # 4 extra room modifications
+            self.num_of_mod_tasks += 4 # 4 extra room modifications
         
         if settings['randomize-music']:
-            self.num_of_mod_files += 69
+            self.num_of_mod_tasks += 102 # MUSIC_FILES + all .lvb files
+        
+        if settings['bad-pets']:
+            self.num_of_mod_tasks += 10
         
         if settings['randomize-enemies']:
-            self.num_of_mod_files += 347
+            self.num_of_mod_tasks += 347
+        
+        if settings['shuffled-dungeons']:
+            self.num_of_mod_tasks += 18
+        
+        if settings['classic-d2']:
+            self.num_of_mod_tasks += 1
         
         self.done = False
         self.cancel = False
@@ -108,7 +117,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         # initialize the modgenerator thread
         self.current_job = 'modgenerator'
         self.ui.progressBar.setValue(0)
-        self.ui.progressBar.setMaximum(self.num_of_mod_files)
+        self.ui.progressBar.setMaximum(self.num_of_mod_tasks)
         self.ui.label.setText(f'Generating mod files...')
         self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed)
         self.mods_process.setParent(self)
@@ -143,7 +152,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.close()
             return
         
-        self.ui.progressBar.setValue(self.num_of_mod_files)
+        self.ui.progressBar.setValue(self.num_of_mod_tasks)
         self.ui.label.setText("All done! Check the Github page for instructions on how to play!")
         self.done = True
 

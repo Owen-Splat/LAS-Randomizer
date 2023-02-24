@@ -579,73 +579,6 @@
          <string>Rapids</string>
         </property>
        </widget>
-       <widget class="QComboBox" name="instrumentsComboBox">
-        <property name="geometry">
-         <rect>
-          <x>548</x>
-          <y>104</y>
-          <width>161</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="whatsThis">
-         <string>This lets you choose a number of random instruments to start with</string>
-        </property>
-        <property name="editable">
-         <bool>false</bool>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  0</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  2</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  3</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  4</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  5</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  6</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  7</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Starting Instruments:  8</string>
-         </property>
-        </item>
-       </widget>
        <widget class="QGroupBox" name="groupBox">
         <property name="geometry">
          <rect>
@@ -690,6 +623,30 @@
           <string>Dampé</string>
          </property>
         </widget>
+        <widget class="QCheckBox" name="dungeonsCheck">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>64</y>
+           <width>173</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Dungeon Entrances will be randomized. Back entrances are vanilla&lt;br&gt;&lt;/br&gt;Currently only has Basic Logic</string>
+         </property>
+         <property name="text">
+          <string>Shuffled Dungeons</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QComboBox" name="seashellsComboBox">
         <property name="geometry">
@@ -714,32 +671,32 @@
         </property>
         <item>
          <property name="text">
-          <string>Max Seashells: 0</string>
+          <string>Max Seashells:  0</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Max Seashells: 5</string>
+          <string>Max Seashells:  5</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Max Seashells: 15</string>
+          <string>Max Seashells:  15</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Max Seashells: 30</string>
+          <string>Max Seashells:  30</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Max Seashells: 40</string>
+          <string>Max Seashells:  40</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Max Seashells: 50</string>
+          <string>Max Seashells:  50</string>
          </property>
         </item>
        </widget>
@@ -923,6 +880,76 @@
          <string>Golden Leaves</string>
         </property>
        </widget>
+       <widget class="QComboBox" name="goalComboBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>548</x>
+          <y>104</y>
+          <width>161</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="whatsThis">
+         <string>This controls how many Instruments are required to open the egg&lt;br&gt;&lt;/br&gt;You will still need Ocarina and Ballad of the Wind Fish</string>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="currentIndex">
+         <number>8</number>
+        </property>
+        <property name="placeholderText">
+         <string/>
+        </property>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Required Instruments:  8</string>
+         </property>
+        </item>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -931,8 +958,8 @@
        <widget class="QCheckBox" name="shuffledBombsCheck">
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>64</y>
+          <x>10</x>
+          <y>224</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -950,8 +977,8 @@
        <widget class="QCheckBox" name="rupCheck">
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>144</y>
+          <x>369</x>
+          <y>104</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -969,7 +996,7 @@
        <widget class="QCheckBox" name="farmingCheck">
         <property name="geometry">
          <rect>
-          <x>369</x>
+          <x>189</x>
           <y>24</y>
           <width>173</width>
           <height>21</height>
@@ -1004,11 +1031,11 @@
          <string>Fast Trendy</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="tunicsCheck">
+       <widget class="QCheckBox" name="badPetsCheck">
         <property name="geometry">
          <rect>
-          <x>369</x>
-          <y>144</y>
+          <x>548</x>
+          <y>24</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1023,10 +1050,10 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Tunics will appear as checks&lt;br&gt;&lt;/br&gt;You can only swap between tunics you have obtained</string>
+         <string>Companions will follow you into dungeons&lt;br&gt;&lt;/br&gt;There is currently no logic for this setting</string>
         </property>
         <property name="text">
-         <string>Shuffled Tunics</string>
+         <string>Bad Pets</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -1035,7 +1062,7 @@
        <widget class="QCheckBox" name="stealingCheck">
         <property name="geometry">
          <rect>
-          <x>369</x>
+          <x>189</x>
           <y>64</y>
           <width>173</width>
           <height>21</height>
@@ -1088,8 +1115,8 @@
        <widget class="QCheckBox" name="kanaletCheck">
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>104</y>
+          <x>10</x>
+          <y>144</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1107,8 +1134,8 @@
        <widget class="QCheckBox" name="unlockedBombsCheck">
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>24</y>
+          <x>10</x>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1142,30 +1169,11 @@
          <string>Free Book</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="vanillaCheck">
-        <property name="geometry">
-         <rect>
-          <x>548</x>
-          <y>24</y>
-          <width>173</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>Shield on Tarin and Sword at beach. Beginner friendly</string>
-        </property>
-        <property name="text">
-         <string>Vanilla Start</string>
-        </property>
-       </widget>
        <widget class="QCheckBox" name="songsCheck">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>104</y>
+          <x>548</x>
+          <y>64</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1192,8 +1200,8 @@
        <widget class="QCheckBox" name="trapsCheck">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>144</y>
+          <x>189</x>
+          <y>104</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1214,8 +1222,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>224</y>
+          <x>369</x>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1264,7 +1272,7 @@
        <widget class="QCheckBox" name="fastFishingCheck">
         <property name="geometry">
          <rect>
-          <x>548</x>
+          <x>369</x>
           <y>64</y>
           <width>173</width>
           <height>21</height>
@@ -1283,8 +1291,8 @@
        <widget class="QCheckBox" name="mazeCheck">
         <property name="geometry">
          <rect>
-          <x>548</x>
-          <y>104</y>
+          <x>369</x>
+          <y>144</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1311,8 +1319,8 @@
        <widget class="QCheckBox" name="bridgeCheck">
         <property name="geometry">
          <rect>
-          <x>369</x>
-          <y>104</y>
+          <x>189</x>
+          <y>144</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1358,8 +1366,8 @@
        <widget class="QComboBox" name="owlsComboBox">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>184</y>
+          <x>189</x>
+          <y>224</y>
           <width>161</width>
           <height>22</height>
          </rect>
@@ -1395,7 +1403,7 @@
         <property name="geometry">
          <rect>
           <x>548</x>
-          <y>184</y>
+          <y>104</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1425,8 +1433,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>224</y>
+          <x>548</x>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1456,8 +1464,8 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>184</y>
+          <x>10</x>
+          <y>104</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1488,7 +1496,7 @@
         <property name="geometry">
          <rect>
           <x>369</x>
-          <y>184</y>
+          <y>24</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1512,6 +1520,25 @@
          <bool>true</bool>
         </property>
        </widget>
+       <widget class="QCheckBox" name="shuffledPowderCheck">
+        <property name="geometry">
+         <rect>
+          <x>189</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>You need to find your Powder before you can obtain any from other means</string>
+        </property>
+        <property name="text">
+         <string>Shuffled Powder</string>
+        </property>
+       </widget>
       </widget>
      </widget>
      <zorder>tabWidget_2</zorder>
@@ -1524,6 +1551,329 @@
      <zorder>lineEdit_3</zorder>
      <zorder>seedButton</zorder>
      <zorder>label_3</zorder>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>Starting Items</string>
+     </attribute>
+     <widget class="QListWidget" name="listWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>41</y>
+        <width>256</width>
+        <height>430</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <property name="uniformItemSizes">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>5</y>
+        <width>256</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>75</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="text">
+       <string>Randomized Items</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="includeButton_3">
+      <property name="geometry">
+       <rect>
+        <x>325</x>
+        <y>265</y>
+        <width>101</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(218, 218, 218);</string>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>475</x>
+        <y>5</y>
+        <width>256</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>75</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="text">
+       <string>Starting Items</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="excludeButton_3">
+      <property name="geometry">
+       <rect>
+        <x>325</x>
+        <y>165</y>
+        <width>101</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(218, 218, 218);</string>
+      </property>
+      <property name="text">
+       <string>-&gt;</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listWidget_6">
+      <property name="geometry">
+       <rect>
+        <x>475</x>
+        <y>41</y>
+        <width>256</width>
+        <height>430</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+      <property name="uniformItemSizes">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="instrumentsComboBox">
+      <property name="geometry">
+       <rect>
+        <x>288</x>
+        <y>81</y>
+        <width>171</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="whatsThis">
+       <string>This lets you choose a number of random instruments to start with&lt;br&gt;&lt;/br&gt;Manually selected instruments will be placed in the random selection</string>
+      </property>
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  0</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  3</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  5</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  6</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  7</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Starting Instruments:  8</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>295</x>
+        <y>380</y>
+        <width>161</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>75</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="text">
+       <string>Not fully tested&lt;br&gt;&lt;/br&gt;&lt;br&gt;&lt;/br&gt;Mainly functional, may have some issues</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::RichText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <property name="autoFillBackground">
@@ -1962,29 +2312,76 @@
       </property>
       <item>
        <property name="text">
-        <string>Preset: Basic</string>
+        <string>Logic:  Basic</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Preset: Advanced</string>
+        <string>Logic:  Advanced</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Preset: Glitched</string>
+        <string>Logic:  Glitched</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Preset: Death</string>
+        <string>Logic:  Death</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Preset: None</string>
+        <string>Logic:  None</string>
        </property>
       </item>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>295</x>
+        <y>380</y>
+        <width>161</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>75</width>
+        <height>23</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="text">
+       <string>Not complete&lt;br&gt;&lt;/br&gt;&lt;br&gt;&lt;/br&gt;Refer to the README for info on the current logic</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::RichText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
    </widget>
