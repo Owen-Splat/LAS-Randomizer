@@ -231,7 +231,8 @@ class ModsProcess(QtCore.QThread):
             if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                 if self.placements['starting-items'].count(i) < 2:
                     continue
-            del trap_models[i]
+            if i in trap_models:
+                del trap_models[i]
         
         if not self.placements['settings']['shuffle-instruments']:
             for i in self.instruments:
@@ -306,7 +307,8 @@ class ModsProcess(QtCore.QThread):
             if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                 if self.placements['starting-items'].count(i) < 2:
                     continue
-            del trap_models[i]
+            if i in trap_models:
+                del trap_models[i]
         
         if not self.placements['settings']['shuffle-instruments']:
             for inst in self.instruments:
@@ -427,7 +429,8 @@ class ModsProcess(QtCore.QThread):
             if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                 if self.placements['starting-items'].count(i) < 2:
                     continue
-            del trap_models[i]
+            if i in trap_models:
+                del trap_models[i]
         
         if not self.placements['settings']['shuffle-instruments']:
             for inst in self.instruments:
@@ -1246,7 +1249,8 @@ class ModsProcess(QtCore.QThread):
                     if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                         if self.placements['starting-items'].count(i) < 2:
                             continue
-                    del trap_models[i]
+                    if i in trap_models:
+                        del trap_models[i]
                 
                 if not self.placements['settings']['shuffle-instruments']:
                     for inst in self.instruments:
@@ -1731,7 +1735,8 @@ class ModsProcess(QtCore.QThread):
                         if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                             if self.placements['starting-items'].count(i) < 2:
                                 continue
-                        del trap_models[i]
+                        if i in trap_models:
+                            del trap_models[i]
                     
                     if not self.placements['settings']['shuffle-instruments']:
                         for inst in self.instruments:
@@ -1817,7 +1822,8 @@ class ModsProcess(QtCore.QThread):
                         if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                             if self.placements['starting-items'].count(i) < 2:
                                 continue
-                        del trap_models[i]
+                        if i in trap_models:
+                            del trap_models[i]
                     
                     if not self.placements['settings']['shuffle-instruments']:
                         for inst in self.instruments:
@@ -1954,7 +1960,8 @@ class ModsProcess(QtCore.QThread):
             if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
                 if self.placements['starting-items'].count(i) < 2:
                     continue
-            del trap_models[i]
+            if i in trap_models:
+                del trap_models[i]
         
         if not self.placements['settings']['shuffle-instruments']:
             for inst in self.instruments:

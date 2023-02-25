@@ -85,7 +85,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
-        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha') # {VERSION}')
+        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha-2') # {VERSION}')
         self.show()
 
         if IS_RUNNING_FROM_SOURCE:
