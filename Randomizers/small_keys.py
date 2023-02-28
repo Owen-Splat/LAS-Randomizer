@@ -24,6 +24,18 @@ def writeKeyEvent(flowchart, item_key, item_index, room):
 
 
 
+def makeKeysFaster(flowchart):
+    '''Gives control back to the player after triggering the key to fall'''
+    
+    event_tools.insertEventAfter(flowchart, 'pop', 'Event5')
+    event_tools.insertEventAfter(flowchart, 'Event2', None)
+
+    # removed due to the possibility of collecting this key before it falls with the use of glitches
+    # event_tools.insertEventAfter(flowchart, 'Lv4_04E_pop', 'Event7')
+    # event_tools.insertEventAfter(flowchart, 'Event1', None)
+
+
+
 # def writeSunkenKeyEvent(flowchart):
 #     event_tools.addEntryPoint(flowchart, 'Lv4_04E_pop')
 

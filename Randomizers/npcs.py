@@ -94,7 +94,7 @@ def makeNpcChanges(npc, placements):
         return
     
     # make the flying powder refills not appear until you find your powder
-    if npc['symbol'] == 'ItemFeatherPowder' and placements['settings']['shuffle-powder']:
+    if npc['symbol'] == 'ItemFeatherMagicPowder' and placements['settings']['shuffle-powder']:
         npc['layoutConditions'].append({'category': 1, 'parameter': '!GetMagicPowder', 'layoutID': -1})
         return
     

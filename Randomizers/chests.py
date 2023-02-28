@@ -198,3 +198,20 @@ def writeChestEvent(flowchart):
 
     event_tools.insertEventAfter(flowchart, 'Event32', medicine_check)
     event_tools.insertEventAfter(flowchart, 'Event28', medicine_check) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest
+
+
+
+def makeChestsFaster(flowchart):
+    '''Speeds up the animation of Link moving out of the way, and gives control back to the player a bit sooner'''
+
+    # remove the cameraLookAt event and the secret unlocked music
+    del event_tools.findEvent(flowchart, 'Event44').data.forks[0]
+    event_tools.insertEventAfter(flowchart, 'Event52', None)
+
+    # now edit Link to move 3x faster if he is in the way of the chest
+    event_tools.findEvent(flowchart, 'Event46').data.params.data = {
+        'speed': 3,
+        'distance': 1.5,
+        'actor': 'TreasureBox',
+        'timeOut': 1 # idk if there is any instance where timeOut: 7 actually matters but just in case we set it to 1
+    }

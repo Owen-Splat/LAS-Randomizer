@@ -22,11 +22,7 @@ def generateSpoilerLog(placements, logic_defs, out_dir, seed):
         for setting in placements['settings']:
             if setting != 'excluded-locations':
                 output.write(f'  {setting}: {placements["settings"][setting]}\n')
-        
-        output.write('\nstarting-items:\n')
-        for i in placements['starting-items']:
-            output.write(f'  {i}\n')
-        
+                
         output.write('\ndungeon-entrances:\n')
         for dun in placements['dungeon-entrances']:
             output.write(f'  {dun} -> {placements["dungeon-entrances"][dun]}\n')

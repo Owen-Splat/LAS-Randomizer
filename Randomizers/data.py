@@ -476,15 +476,11 @@ ITEM_MODELS = {
     'GoldenLeaf': 'ItemGoldenLeaf.bfres'
 }
 
-
-# CUSTOM_MODELS = (
-#     'ItemBallad',
-#     'ItemMambo',
-#     'ItemSoul',
-#     'ObjBombBag',
-#     'ObjArrowBag'
-# )
-# MODELS_SUFFIX = '.bfres'
+# CUSTOM_MODELS = {
+#     'Bomb_MaxUp': 'ObjBombBag.bfres',
+#     'Arrow_MaxUp': 'ObjArrowBag.bfres',
+#     'MagicPowder_MaxUp': 'ObjPowderBag.bfres'
+# }
 
 
 CHEST_SIZES = {

@@ -213,6 +213,7 @@ class ModsProcess(QtCore.QThread):
         # Open up the SmallKey event to be ready to edit
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SmallKey.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
+        small_keys.makeKeysFaster(flow.flowchart)
         # small_keys.writeSunkenKeyEvent(flow.flowchart)
 
         trap_models = copy.deepcopy(data.ITEM_MODELS)
@@ -1295,6 +1296,7 @@ class ModsProcess(QtCore.QThread):
             actors.addNeededActors(treasure_flow.flowchart, self.rom_path)
             # actors.addCompanionActors(treasure_flow.flowchart, self.rom_path)
             chests.writeChestEvent(treasure_flow.flowchart)
+            chests.makeChestsFaster(treasure_flow.flowchart)
             flow_control_actor = event_tools.findActor(treasure_flow.flowchart, 'FlowControl') # store this to add to ShellMansionPresent
 
             if self.thread_active:
