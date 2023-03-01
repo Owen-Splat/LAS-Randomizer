@@ -14,7 +14,7 @@ import Tools.event_tools as event_tools
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
 from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, golden_leaves, patches
+from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, golden_leaves, music
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -1588,27 +1588,6 @@ class ModsProcess(QtCore.QThread):
 
     def randomizeMusic(self):
         """Iterates through the music files in the RomFS and copies them to the output directory with shuffled names"""
-
-        # ### Shuffle music files that are played through events (i don't feel like editing each boss event lol)
-        # source = f'{self.rom_path}/region_common/audio/stream'
-        # dest = f'{self.out_dir}/Romfs/region_common/audio/stream'
-        # files = os.listdir(source)
-        # new_music = list(data.MUSIC_NAMES[:])
-
-        # if not os.path.exists(dest):
-        #     os.makedirs(dest)
-        
-        # random.seed(self.seed) # restart the RNG so that music will be the same regardless of settings
-
-        # for file in files:
-        #     if self.thread_active:
-        #         track = file[:-len(data.MUSIC_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
-        #         if track in data.MUSIC_FILES:
-        #             song = random.choice(new_music)
-        #             new_music.remove(song)
-        #             shutil.copy(f'{source}/{file}', f'{dest}/{song}{data.MUSIC_SUFFIX}')
-        #             self.progress_value += 1 # update progress bar
-        #             self.progress_update.emit(self.progress_value)
         
         ### Change the BGM entry in the level info files (.lvb) to a new BGM
         bgms = list(copy.deepcopy(data.BGM_TRACKS)) # make a duplicate list of the tracks tuple and shuffle it
@@ -1629,29 +1608,8 @@ class ModsProcess(QtCore.QThread):
             with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
                 f_data = f.read()
             
-            # Although we do not yet understand how to properly repack LVB files, we can still parse and edit the raw data
-            level = leb.Level(f_data)
+            f_data = music.shuffleLevelBGMS(f_data, songs_dict)
             
-            for entry in level.fixed_hash.entries:
-                if entry.name == b'zone':
-                    for e in entry.data.entries:
-
-                        bgm = leb.readString(e.data, 0x3C)
-
-                        if bgm.startswith(b'BGM_'): # only make edits if it is a valid bgm, else we might edit some other data by mistake
-
-                            new_bgm = bytes(songs_dict[str(bgm, 'utf-8')], 'utf-8') # get the new track to replace the old one with
-
-                            # the bgms are aligned to 32 bytes, and as such will need padding to fit
-                            for b in range(32-len(bgm)):
-                                bgm += b'\x00'
-                            
-                            for b in range(32-len(new_bgm)):
-                                new_bgm += b'\x00'
-                            
-                            ent_data = e.data.replace(bgm, new_bgm) # store the entry data with the song replaced
-                            f_data = f_data.replace(e.data, ent_data) # now we replace all instances of the data with the new data
-
             if not os.path.exists(f'{out_path}/{folder}'): # make the output folder if it does not already exist
                 os.makedirs(f'{out_path}/{folder}')
 
@@ -2289,11 +2247,13 @@ class ModsProcess(QtCore.QThread):
                                 room_data = leb.Room(f.read())
                         
                         edited_room = False
-                        excluded_actors = []
 
+                        excluded_actors = []
                         if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
                             excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
                         
+                        restr = list(restrictions[:])
+
                         # iterate through each actor
                         for e, act in enumerate(room_data.actors):
                             if act.type in enemy_ids and e not in excluded_actors: # check for enemy actors
@@ -2301,8 +2261,7 @@ class ModsProcess(QtCore.QThread):
                                 enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
                                 new_enemy = -1
                                 
-                                restr = list(restrictions[:])
-                                if act.type in restrictions:
+                                if act.type in restr:
                                     restr.remove(act.type)
                                 
                                 # keep shuffling each actor until it is a valid enemy
