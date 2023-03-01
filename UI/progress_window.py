@@ -41,7 +41,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_tasks += 4 # 4 extra room modifications
         
         if settings['randomize-music']:
-            self.num_of_mod_tasks += 102 # MUSIC_FILES + all .lvb files
+            self.num_of_mod_tasks += (102 + 18) # all .lvb files + extra events
         
         if settings['bad-pets']:
             self.num_of_mod_tasks += 10
@@ -96,8 +96,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     def shufflerError(self, er_message=str):
         self.shuffle_error = True
-        from randomizer_paths import ROOT_PATH
-        with open(os.path.join(ROOT_PATH, 'log.txt'), 'w') as f:
+        from randomizer_paths import LOGS_PATH
+        with open(LOGS_PATH, 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
             f.write(f'\n\n{er_message}')
 
@@ -129,8 +129,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
     
     def modsError(self, er_message=str):
         self.mods_error = True
-        from randomizer_paths import ROOT_PATH
-        with open(os.path.join(ROOT_PATH, 'log.txt'), 'w') as f:
+        from randomizer_paths import LOGS_PATH
+        with open(LOGS_PATH, 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
             f.write(f'\n\n{er_message}')
             f.write(f'\n\n{self.placements}')

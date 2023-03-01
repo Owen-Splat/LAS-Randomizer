@@ -3,13 +3,19 @@ from Randomizers import item_get, data
 
 
 
-def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, room):
+def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, room, music_shuffled):
+    if music_shuffled:
+        end_ev = None
+        del event_tools.findEvent(flowchart, 'Event0').data.forks[0]
+    else:
+        end_ev = 'Event8'
+    
     if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
         rup_collect = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False}, 'Event8')
+            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False}, end_ev)
         event_tools.insertEventAfter(flowchart, 'Event5', rup_collect)
     else:
-        item_get.insertItemGetAnimation(flowchart, item_key, item_index, 'Event5', 'Event8')
+        item_get.insertItemGetAnimation(flowchart, item_key, item_index, 'Event5', end_ev)
 
     fork = event_tools.findEvent(flowchart, 'Event0')
     fork.data.forks.pop(0) # remove the itemget animation event

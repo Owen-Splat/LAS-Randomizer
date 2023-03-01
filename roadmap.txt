@@ -1,16 +1,11 @@
 change color dungeon guards to be compatible new shuffled powder setting
 
-change BGMs that play through events
-
 add logics to the README
 
 add owl statues to the locations toggles
 
-Enemizer tweaks
-
-double check that objsinkingsword, itemyoshidoll, and itemsmallkey actors properly trigger the seashell sensor
-
 -------------------------------------------------------------------------------------------------------------------------------------
+FUTURE
 
 make randomizer essentials pack so that the randomizer repo does not contain any copyrighted assets
 

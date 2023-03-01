@@ -2876,10 +2876,10 @@ bomb-arrows:
   condition-basic: bombs & shoot-arrows
 bombs:
   type: interaction
-  condition-basic: ((mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | ! shuffle-bombs)
+  condition-basic: ((mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & ! shuffle-bombs & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | ! shuffle-bombs)
 powders:
   type: interaction
-  condition-basic: ((color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))) & (powder | ! shuffle-powder)
+  condition-basic: ((color-dungeon & (can-farm-rupees | break-pot & ! shuffle-powder)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot & ! shuffle-powder) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))) & (powder | ! shuffle-powder)
 shoot-arrows:
   type: interaction
   condition-basic: bow & (can-shop | (armos-maze & break-pot) | (D5-7F & kill-helmasaur & feather) | (D6-8D & break-pot) | (D8-4C & (feather | break-pot)) | (D8-8D & feather & key-D8:2) | arrow-capacity)

@@ -48,6 +48,8 @@ class ModsProcess(QtCore.QThread):
         self.seed = seed
         random.seed(seed)
 
+        self.songs_dict = {} 
+
         self.progress_value = 0
         self.thread_active = True
     
@@ -62,6 +64,9 @@ class ModsProcess(QtCore.QThread):
     # automatically called when this thread is started
     def run(self):
         try:
+            if self.placements['settings']['randomize-music'] and self.thread_active:
+                self.randomizeMusic() # map new music at the beginning so that it is the same by seed, regardless of settings
+            
             if self.thread_active: self.makeGeneralLEBChanges()
             if self.thread_active: self.makeGeneralDatasheetChanges()
             if self.thread_active: self.makeGeneralEventChanges()
@@ -90,7 +95,7 @@ class ModsProcess(QtCore.QThread):
                 self.makeLv10RupeeChanges()
             
             if self.placements['settings']['randomize-music'] and self.thread_active:
-                self.randomizeMusic()
+                self.makeMusicChanges()
             
             if self.placements['settings']['bad-pets'] and self.thread_active:
                 self.changeLevelConfigs()
@@ -445,7 +450,8 @@ class ModsProcess(QtCore.QThread):
             model_name = random.choice(list(trap_models))
             model_path = trap_models[model_name]
         
-        miscellaneous.changeSunkenSword(flow.flowchart, item_key, item_index, model_path, model_name, room)
+        music_shuffled = self.placements['settings']['randomize-music'] # remove some music that would get cut off
+        miscellaneous.changeSunkenSword(flow.flowchart, item_key, item_index, model_path, model_name, room, music_shuffled)
 
         if self.thread_active:
             with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_16C.leb', 'wb') as file:
@@ -852,6 +858,10 @@ class ModsProcess(QtCore.QThread):
 
         mad_batter.writeEvents(flow, item1, item2, item3)
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event18').data.params.data['label'] = self.songs_dict['BGM_MADBATTER']
+            event_tools.findEvent(flow.flowchart, 'Event150').data.params.data['label'] = self.songs_dict['BGM_MADBATTER'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MadBatter.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -926,6 +936,13 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D1-moldorm'] if 'D1-moldorm' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D1-moldorm']]['item-key'], item_index, 'Event8', 'Event45')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event16').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event35').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event65').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguTail.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -942,6 +959,13 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D2-genie'] if 'D2-genie' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D2-genie']]['item-key'], item_index, 'Event29', 'Event56')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event25').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event53').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event50').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PotDemonKing.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -958,6 +982,12 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D3-slime-eye'] if 'D3-slime-eye' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D3-slime-eye']]['item-key'], item_index, 'Event29', 'Event43')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event17').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event36').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event32').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguZol.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -974,6 +1004,13 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D4-angler'] if 'D4-angler' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D4-angler']]['item-key'], item_index, 'Event25', 'Event50')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event24').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event51').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Angler.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -990,6 +1027,15 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D5-slime-eel'] if 'D5-slime-eel' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-slime-eel']]['item-key'], item_index, 'Event28', 'Event13')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event14').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP']
+            event_tools.findEvent(flow.flowchart, 'Event24').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event26').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event33').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event49').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event73').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Hooker.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1006,6 +1052,15 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D6-facade'] if 'D6-facade' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D6-facade']]['item-key'], item_index, 'Event8', 'Event35')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP']
+            event_tools.findEvent(flow.flowchart, 'Event7').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event22').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event78').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MatFace.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1021,7 +1076,13 @@ class ModsProcess(QtCore.QThread):
 
         item_index = self.placements['indexes']['D7-eagle'] if 'D7-eagle' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D7-eagle']]['item-key'], item_index, 'Event40', 'Event51')
-
+        
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event15').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_LV7_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event39').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event66').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Albatoss.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1038,6 +1099,16 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D8-hothead'] if 'D8-hothead' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D8-hothead']]['item-key'], item_index, 'Event13', 'Event15')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event12').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event18').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP']
+            event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event40').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event63').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event17').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event70').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguFlame.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1054,6 +1125,11 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['lanmola'] if 'lanmola' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['lanmola']]['item-key'], item_index, 'Event34', 'Event9')
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event2').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event18').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event22').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Lanmola.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1073,6 +1149,10 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['armos-knight'] if 'armos-knight' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['armos-knight']]['item-key'], item_index, 'Event47', None)
 
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event4').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event23').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DeguArmos.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1089,7 +1169,18 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['D5-master-stalfos'] if 'D5-master-stalfos' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-master-stalfos']]['item-key'],
             item_index, 'Event37', 'Event194')
-
+        
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event0').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event3').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event132').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event157').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event2').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event4').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event10').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event23').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MasterStalfon.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1106,6 +1197,10 @@ class ModsProcess(QtCore.QThread):
         item_index = self.placements['indexes']['syrup'] if 'syrup' in self.placements['indexes'] else -1
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['syrup']]['item-key'],
             item_index, 'Event93', None)
+        
+        if self.placements['settings']['randomize-music']:
+            event_tools.findEvent(flow.flowchart, 'Event56').data.params.data['label'] = self.songs_dict['BGM_SHOP_FAST']
+            event_tools.findEvent(flow.flowchart, 'Event13').data.params.data['label'] = self.songs_dict['BGM_SHOP_FAST'] # StopBGM
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Syrup.bfevfl', flow)
@@ -1285,6 +1380,10 @@ class ModsProcess(QtCore.QThread):
             actors.addNeededActors(flow.flowchart, self.rom_path)
             player_start.makeStartChanges(flow.flowchart, self.placements['settings'])
 
+            # skip over BGM_HOUSE_FIRST when Link wakes up because it overlaps with the shuffled zone BGM
+            if self.placements['settings']['randomize-music']:
+                event_tools.insertEventAfter(flow.flowchart, 'Event150', 'Event151')
+            
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl', flow)
                 self.progress_value += 1 # update progress bar
@@ -1404,6 +1503,10 @@ class ModsProcess(QtCore.QThread):
                 event_tools.createActionEvent(flow.flowchart, 'GameControl', 'RequestLevelJump',
                     {'level': 'Field', 'locator': 'Field_11C', 'offsetX': 0.0, 'offsetZ': 0.0},
                     'Event67'))
+            
+            # shuffle Rapids race music
+            if self.placements['settings']['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event78').data.params.data['label'] = self.songs_dict['BGM_RAFTING_TIMEATTACK']
 
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Common.bfevfl', flow)
@@ -1587,38 +1690,250 @@ class ModsProcess(QtCore.QThread):
 
 
     def randomizeMusic(self):
-        """Iterates through the music files in the RomFS and copies them to the output directory with shuffled names"""
+        """Maps each BGM track to a new track
+        
+        This mapping is used in a couple places throughout when changing music"""
         
         ### Change the BGM entry in the level info files (.lvb) to a new BGM
         bgms = list(copy.deepcopy(data.BGM_TRACKS)) # make a duplicate list of the tracks tuple and shuffle it
-        random.seed(self.seed) # restart the RNG so that music will be the same regardless of settings
         random.shuffle(bgms)
 
-        songs_dict = {} # map each track to a new track using the duplicate list
+        # map each track to a new track using the duplicate list
         for i in data.BGM_TRACKS:
             ind = bgms.index(random.choice(bgms))
-            songs_dict[i] = bgms.pop(ind)
-        
+            self.songs_dict[i] = bgms.pop(ind)
+    
+
+
+    def makeMusicChanges(self):
+        """Iterates through the music files in the RomFS and copies them to the output directory with shuffled names"""
+
         levels_path = f'{self.rom_path}/region_common/level'
         out_path = f'{self.out_dir}/Romfs/region_common/level'
 
         folders = [f for f in os.listdir(levels_path) if not f.endswith('.ldb')]
 
         for folder in folders:
-            with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
-                f_data = f.read()
+            if self.thread_active:
+                with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
+                    f_data = f.read()
+                
+                f_data = music.shuffleLevelBGMS(f_data, self.songs_dict)
+                
+                if not os.path.exists(f'{out_path}/{folder}'): # make the output folder if it does not already exist
+                    os.makedirs(f'{out_path}/{folder}')
             
-            f_data = music.shuffleLevelBGMS(f_data, songs_dict)
-            
-            if not os.path.exists(f'{out_path}/{folder}'): # make the output folder if it does not already exist
-                os.makedirs(f'{out_path}/{folder}')
-
-            with open(f'{out_path}/{folder}/{folder}.lvb', 'wb') as f: # write the new data to the output
-                f.write(f_data)
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+            if self.thread_active:
+                with open(f'{out_path}/{folder}/{folder}.lvb', 'wb') as f: # write the new data to the output
+                    f.write(f_data)
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
         
         ### edit bgms that are played through events
+        if self.thread_active:
+            self.makeEventMusicChanges()
+    
+
+
+    def makeEventMusicChanges(self):
+        '''Goes through and randomizes the music controlled by events
+
+        Also skips over some music that either would overlap or cut out otherwise
+        
+        Some were already handled when editing items. This focuses on the rest'''
+
+        ### Bossblin - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Bossblin.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event64').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event68').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Bossblin.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### BossBlob - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/BossBlob.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event12').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/BossBlob.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### Dodongo - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Dodongo.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event43').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event3').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Dodongo.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### DonPawn - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DonPawn.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event8').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
+            event_tools.findEvent(flow.flowchart, 'Event21').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+            event_tools.findEvent(flow.flowchart, 'Event38').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/DonPawn.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### FieldObject - shuffles BGM of opening D4
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldObject.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event16').data.params.data['label'] = self.songs_dict['BGM_EVENT_BASIN_ANGLER_OPEN']
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldObject.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### Gohma - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Gohma.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event0').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Gohma.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### Hinox - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Hinox.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event37').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event55').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Hinox.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### HiploopHover - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/HiploopHover.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event38').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event7').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/HiploopHover.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### Jacky - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Jacky.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event37').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Jacky.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### MightPunch - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/MightPunch.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event56').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/MightPunch.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### PiccoloMaster - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PiccoloMaster.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event48').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event53').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event3').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PiccoloMaster.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+
+        ### Rola - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Rola.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Rola.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### RoosterBones - shuffles rooster resurrection music
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RoosterBones.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event9').data.params.data['label'] = self.songs_dict['BGM_RESUSCITATION_OF_CHICKEN']
+            event_tools.findEvent(flow.flowchart, 'Event11').data.params.data['label'] = self.songs_dict['BGM_RESUSCITATION_OF_CHICKEN'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RoosterBones.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### Shadow - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Shadow.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT']
+            event_tools.findEvent(flow.flowchart, 'Event37').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_WIN']
+            event_tools.findEvent(flow.flowchart, 'Event60').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
+            event_tools.findEvent(flow.flowchart, 'Event71').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
+            event_tools.findEvent(flow.flowchart, 'Event44').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Shadow.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### StoneHinox - shuffles boss BGMs
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/StoneHinox.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event4').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event35').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+            event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/StoneHinox.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### ToolShopkeeper - shuffles music when the ToolShopkeeper kills you after stealing
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event87').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### TurtleRock - shuffles Turtle Rock battle music
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/TurtleRock.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_LV8_ENT_BATTLE']
+            event_tools.findEvent(flow.flowchart, 'Event26').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_LV8_ENT_BATTLE']
+            event_tools.findEvent(flow.flowchart, 'Event11').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_LV8_ENT_BATTLE'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/TurtleRock.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        ### WindFish - shuffles ending music
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/WindFish.bfevfl')
+            event_tools.findEvent(flow.flowchart, 'Event73').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS']
+            event_tools.findEvent(flow.flowchart, 'Event101').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS_WIND_FISH']
+            event_tools.findEvent(flow.flowchart, 'Event74').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event93').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_WIN'] # StopBGM
+            event_tools.findEvent(flow.flowchart, 'Event118').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS_WIND_FISH'] # StopBGM
+        if self.thread_active:
+            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/WindFish.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
     
 
 
@@ -2012,6 +2327,11 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Kiki.bfevfl')
             trade_quest.kikiChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+
+            # shuffle bridge building music
+            if self.placements['settings']['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event114').data.params.data['label'] = self.songs_dict['BGM_EVENT_MONKEY']
+            
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Kiki.bfevfl', flow)
                 self.progress_value += 1 # update progress bar
@@ -2021,6 +2341,11 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl')
             trade_quest.tarinChanges(flow.flowchart, self.placements, self.item_defs)
+
+            # shuffle bees music
+            if self.placements['settings']['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event113').data.params.data['label'] = self.songs_dict['BGM_EVENT_BEE']
+            
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
         

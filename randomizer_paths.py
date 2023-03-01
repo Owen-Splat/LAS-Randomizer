@@ -35,11 +35,14 @@ try:
         if not os.path.isdir(userdata_path):
             os.mkdir(userdata_path)
         SETTINGS_PATH = os.path.join(userdata_path, 'settings.txt')
+        LOGS_PATH = os.path.join(userdata_path, 'log.txt')
     else:
         SETTINGS_PATH = os.path.join('.', 'settings.txt')
+        LOGS_PATH = os.path.join('.', 'log.txt')
 except ImportError:
     ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
     SETTINGS_PATH = os.path.join(ROOT_PATH, 'settings.txt')
+    LOGS_PATH = os.path.join(ROOT_PATH, 'log.txt')
     IS_RUNNING_FROM_SOURCE = True
 
 DATA_PATH = os.path.join(ROOT_PATH, 'Data')

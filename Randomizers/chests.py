@@ -213,5 +213,5 @@ def makeChestsFaster(flowchart):
         'speed': 3,
         'distance': 1.5,
         'actor': 'TreasureBox',
-        'timeOut': 1 # idk if there is any instance where timeOut: 7 actually matters but just in case we set it to 1
+        'timeOut': 1.0 # idk if there is any instance where timeOut: 7.0 actually matters but just in case we set it to 1.0
     }

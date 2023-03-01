@@ -29,8 +29,3 @@ def shuffleLevelBGMS(f_data: bytes, songs_dict: dict) -> bytes:
                     f_data = f_data.replace(e.data, ent_data) # now we replace all instances of the data with the new data
     
     return f_data
-
-
-
-def shuffleEventBGM(flowchart, play_event, stop_event):
-    pass
