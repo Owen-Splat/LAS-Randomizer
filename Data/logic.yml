@@ -1746,7 +1746,7 @@ D5-right-side-middle:
   content: rupee-50
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-5G & hookshot
+  condition-basic: D5-5G & (hookshot | dash-jump)
 D5-right-side-east:
   type: item
   subtype: chest
