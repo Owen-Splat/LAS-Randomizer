@@ -2239,6 +2239,7 @@ class ModsProcess(QtCore.QThread):
         air_ids = []
         water_ids = []
         water2D_ids = []
+        water_shallow_ids = []
         tree_ids = []
         hole_ids = []
         for value in ENEMY_DATA['Actors'].values():
@@ -2250,11 +2251,13 @@ class ModsProcess(QtCore.QThread):
                 water_ids.append(value['id'])
             elif value['type'] == 'water2D':
                 water2D_ids.append(value['id'])
+            elif value['type'] == 'water-shallow':
+                water_shallow_ids.append(value['id'])
             elif value['type'] == 'tree':
                 tree_ids.append(value['id'])
             elif value['type'] == 'hole':
                 hole_ids.append(value['id'])
-        enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *tree_ids, *hole_ids)
+        enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *water_shallow_ids, *tree_ids, *hole_ids)
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
         restrictions = [-1, 0x3, 0x15, 0x16, 0x3D]
@@ -2277,6 +2280,7 @@ class ModsProcess(QtCore.QThread):
 
                 for file in files:
                     if self.thread_active:
+                        # get the path of the room file from either the romfs or the output if one has already been made
                         if not os.path.exists(f'{out_levels}/{folder}/{file}'):
                             with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
                                 room_data = leb.Room(f.read())
@@ -2290,6 +2294,7 @@ class ModsProcess(QtCore.QThread):
                         if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
                             excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
                         
+                        # iterate through each actor
                         for e, act in enumerate(room_data.actors):
                             if act.type in enemy_ids and e not in excluded_actors: # check for enemy actors
 
@@ -2300,6 +2305,7 @@ class ModsProcess(QtCore.QThread):
                                 if act.type in restrictions:
                                     restr.remove(act.type)
                                 
+                                # keep shuffling each actor until it is a valid enemy
                                 while new_enemy in restr:
                                     if enemy_type == 'land':
                                         new_enemy = random.choice(land_ids)
@@ -2309,14 +2315,27 @@ class ModsProcess(QtCore.QThread):
                                         else:
                                             new_enemy = random.choice(air_ids)
                                     elif enemy_type == 'water':
-                                        new_enemy = random.choice(water_ids)
+                                        waters = (*water_ids, *water_shallow_ids)
+                                        new_enemy = random.choice(waters)
                                     elif enemy_type == 'water2D':
                                         new_enemy = random.choice(water2D_ids)
+                                    elif enemy_type == 'water-shallow':
+                                        new_enemy = random.choice(water_shallow_ids)
                                     elif enemy_type == 'tree':
                                         new_enemy = random.choice(tree_ids)
                                     elif enemy_type == 'hole':
                                         new_enemy = random.choice(hole_ids)
                                 
+                                # restrict certain enemies to one per room
+                                if new_enemy in (0x26, 0x3E, 0x48, 0x49, 0x4D): # vires, zirros, bone-putters, color dungeon orbs
+                                    restr.append(new_enemy)
+                                
+                                # next, if a shield/spear enemy has been placed, restrict all of them to not be overwhelming
+                                shielded_enems = (0x8, 0x9, 0x13, 0x14, 0x2E, 0x2F, 0x35, 0x36)
+                                if new_enemy in shielded_enems:
+                                    restr += shielded_enems
+                                
+                                # change the enemy data into the new enemy
                                 if act.type != new_enemy:
                                     act.type = new_enemy
                                     try:
@@ -2351,6 +2370,8 @@ class ModsProcess(QtCore.QThread):
                                         elif act.type == 0x4D: # ColorDungeon Orbs - same thing as above
                                             act.type = random.choice((0x4D, 0x4E, 0x4F))
                                     
+                                    act.rotY = 0 # change each enemy to be facing the screen, some will stay sideways if we don't
+
                                     edited_room = True
 
                         if edited_room:

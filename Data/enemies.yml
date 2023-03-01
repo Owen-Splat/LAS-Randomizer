@@ -50,7 +50,7 @@ Actors:
     enemy: True
   EnemyPiranha: # the fish, not the plant
     id: 0xD
-    type: water
+    type: water-shallow
     enemy: True
   # EnemyMonea:
   #    id: 0xE
@@ -236,12 +236,12 @@ Actors:
     id: 0x3C
     type: land
     enemy: True
-  EnemySpark:
-    id: 0x3D
-    type: land
-    # parameters: [0, 0, 0, 0]
-    # parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 0.20000000298023224]] # not sure why the kanalet spark has this oddity
-    enemy: True
+  # EnemySpark:
+  #   id: 0x3D
+  #   type: land
+  #   # parameters: [0, 0, 0, 0]
+  #   # parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 0.20000000298023224]] # not sure why the kanalet spark has this oddity
+  #   enemy: True
   EnemyCreepee: # zirro / bomb fairy
     id: 0x3E
     type: air
@@ -264,7 +264,7 @@ Actors:
     enemy: True
   EnemyHover:
     id: 0x43
-    type: water
+    type: water-shallow
     enemy: True
   EnemyBallerine: # star
     id: 0x44
@@ -303,7 +303,7 @@ Actors:
   #   id: 0x4C
   #   type: land
   #   enemy: True
-  EnemyKarakoroGreen:
+  EnemyKarakoroGreen: # color dungeon orb
     id: 0x4D
     type: land
     enemy: True
@@ -465,7 +465,7 @@ Excluded_Actors: # rooms each with a list of actors to not modify
   Lv02BottleGrotto_07B: [4, 5]
   Lv02BottleGrotto_07D: [0, 1]
   Lv02BottleGrotto_07F: [0, 1]
-  Lv02BottleGrotto_06B: [0]
+  Lv02BottleGrotto_06B: [0] # kill room but can reset
   Lv02BottleGrotto_03F: [0, 1, 2]
   Lv02BottleGrotto_02B: [0, 1]
   Lv02BottleGrotto_02G: [0, 1, 2]
