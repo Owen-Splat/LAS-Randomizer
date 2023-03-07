@@ -30,15 +30,19 @@ class MainWindow(QtWidgets.QMainWindow):
                             "QPushButton:pressed {background-color: rgb(175, 175, 175)}")
 
         # Keep track of stuff
+        self.mode = str('dark')
         self.excluded_checks = set()
         self.starting_gear = list()
-        self.mode = str('dark')
+        self.overworld_owls = bool(False)
+        self.dungeon_owls = bool(False)
 
         # Load User Settings
         if not DEFAULTS:
             self.loadSettings()
         else:
             self.applyDefaults()
+        
+        self.updateOwls()
         
         if self.mode == 'light':
             self.setStyleSheet(qdarktheme.load_stylesheet('light'))
@@ -68,6 +72,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.heartsCheck.clicked.connect(self.heartsCheck_Clicked)
         self.ui.seashellsComboBox.currentIndexChanged.connect(self.updateSeashells)
         self.ui.leavesCheck.clicked.connect(self.leavesCheck_Clicked)
+        self.ui.owlsComboBox.currentIndexChanged.connect(self.updateOwls)
         # locations tab
         self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
         self.ui.includeButton.clicked.connect(self.includeButton_Clicked)
@@ -712,6 +717,29 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(['50-seashell-reward'])
         else:
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
+    
+
+
+    # Update which owls show up in the locations tab
+    def updateOwls(self):
+        value = self.ui.owlsComboBox.currentIndex()
+
+        if value == 0:
+            self.overworld_owls = False
+            self.excluded_checks.difference_update(OVERWORLD_OWLS)
+            self.dungeon_owls = False
+            self.excluded_checks.difference_update(DUNGEON_OWLS)
+        elif value == 1:
+            self.overworld_owls = True
+            self.dungeon_owls = False
+            self.excluded_checks.difference_update(DUNGEON_OWLS)
+        elif value == 2:
+            self.overworld_owls = False
+            self.excluded_checks.difference_update(OVERWORLD_OWLS)
+            self.dungeon_owls = True
+        else:
+            self.overworld_owls = True
+            self.dungeon_owls = True
 
 
 
@@ -784,8 +812,9 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # Tab changed
     def tab_Changed(self):
-        
-        if self.ui.tabWidget.currentIndex() == 1: # starting items
+
+        # starting items
+        if self.ui.tabWidget.currentIndex() == 1:
             randomized_gear = STARTING_ITEMS[:]
             for x in self.starting_gear:
                 randomized_gear.remove(x)
@@ -799,19 +828,29 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.listWidget_6.addItem(self.checkToList(str(item)))
             
             return
-
-        if self.ui.tabWidget.currentIndex() == 2: # locations
+        
+        # locations
+        if self.ui.tabWidget.currentIndex() == 2:
             self.ui.listWidget.clear()
             for check in TOTAL_CHECKS.difference(self.excluded_checks):
+                if check in DUNGEON_OWLS and not self.dungeon_owls:
+                    continue
+                if check in OVERWORLD_OWLS and not self.overworld_owls:
+                    continue
                 self.ui.listWidget.addItem(self.checkToList(str(check)))
             
             self.ui.listWidget_2.clear()
             for check in self.excluded_checks:
+                if check in DUNGEON_OWLS and not self.dungeon_owls:
+                    continue
+                if check in OVERWORLD_OWLS and not self.overworld_owls:
+                    continue
                 self.ui.listWidget_2.addItem(self.checkToList(str(check)))
             
             return
         
-        if self.ui.tabWidget.currentIndex() == 3: # logic tricks
+        # logic tricks
+        if self.ui.tabWidget.currentIndex() == 3:
             return
     
     

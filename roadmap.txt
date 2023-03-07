@@ -2,8 +2,6 @@ v0.3
 
 change color dungeon guards to be compatible new shuffled powder setting
 
-add owl statues to the locations toggles
-
 -------------------------------------------------------------------------------------------------------------------------------------
 v0.4
 
@@ -13,7 +11,7 @@ shop
 
 individual tricks toggles
 
-make separete repo containing custom models, so if that gets copyright claimed for some reason, rando repo is unaffected
+make separete repo containing custom models to be used optionally with rando
 
 -------------------------------------------------------------------------------------------------------------------------------------
 GENERAL FUTURE STUFF TO LOOK INTO
