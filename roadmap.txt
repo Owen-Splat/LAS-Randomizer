@@ -1,21 +1,28 @@
-change color dungeon guards to be compatible new shuffled powder setting
+v0.3
 
-add logics to the README
+change color dungeon guards to be compatible new shuffled powder setting
 
 add owl statues to the locations toggles
 
 -------------------------------------------------------------------------------------------------------------------------------------
-FUTURE
+v0.4
 
-make randomizer essentials pack so that the randomizer repo does not contain any copyrighted assets
+trendy
 
-fix sunken heart pieces (needs asm patches?)
+shop
+
+individual tricks toggles
+
+make separete repo containing custom models, so if that gets copyright claimed for some reason, rando repo is unaffected
+
+-------------------------------------------------------------------------------------------------------------------------------------
+GENERAL FUTURE STUFF TO LOOK INTO
+
+fix sunken heart pieces (likely needs asm patches)
 
 randomize seashells (needs asm patches)
 
 turn small key actors into golden leaf actors to remove compass ringing (needs asm patches)
-
-trendy (including changing fast trendy?)
 
 fix dampe logic for instrument shuffle sometime (i refuse to do this myself lol)
 

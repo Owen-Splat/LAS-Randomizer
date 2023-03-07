@@ -1392,21 +1392,21 @@ D2-button-chest:
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-7D & feather & hit-crystal-switch
-D2-owl-statue-first:
+D2-owl-statue-first-switch:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-7D & stone-beak-D2
-D2-owl-statue-second:
+D2-owl-statue-push-puzzle:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: bottle-grotto
   spoiler-region: bottle-grotto
   condition-basic: D2-7D & feather & hit-crystal-switch & key-D2:3 & stone-beak-D2
-D2-owl-statue-third:
+D2-owl-statue-past-hinox:
   type: item
   subtype: dungeon-statue
   content: rupee-20
@@ -1790,14 +1790,14 @@ D5-near-entrance:
   region: catfish-maw
   spoiler-region: catfish-maw
   condition-basic: D5-8H & hookshot
-D5-owl-statue-south:
+D5-owl-statue-triple-stalfos:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: catfish-maw
   spoiler-region: catfish-maw
   condition-basic: D5-7F & stone-beak-D5
-D5-owl-statue-north:
+D5-owl-statue-before-boss:
   type: item
   subtype: dungeon-statue
   content: rupee-20
@@ -2043,7 +2043,7 @@ D7-owl-statue-kirbys:
   region: eagle-tower
   spoiler-region: eagle-tower
   condition-basic: D7-2D & stone-beak-D7
-D7-owl-statue-4th-pillar:
+D7-owl-statue-3ofakind-south:
   type: item
   subtype: dungeon-statue
   content: rupee-20
@@ -2272,21 +2272,21 @@ D0-fairy-2:
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
-D0-owl-statue-left:
+D0-owl-statue-nine-switches:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-6D & key-D0:2 & stone-beak-D0
-D0-owl-statue-center:
+D0-owl-statue-first-switches:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: color-dungeon
   spoiler-region: color-dungeon
   condition-basic: D0-8C & kill-goblin[heavy] & stone-beak-D0
-D0-owl-statue-right:
+D0-owl-statue-before-mini-boss:
   type: item
   subtype: dungeon-statue
   content: rupee-20

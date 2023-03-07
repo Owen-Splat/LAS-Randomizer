@@ -4,7 +4,6 @@ import os
 import re
 import copy
 import random
-import shutil
 import traceback
 
 import Tools.leb as leb
@@ -12,9 +11,9 @@ import Tools.oead_tools as oead_tools
 import Tools.event_tools as event_tools
 # from Tools.patcher import Patcher
 
-from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, flags, heart_pieces, instruments
-from Randomizers import item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, seashell_mansion
-from Randomizers import small_keys, tarin, trade_quest, tunic_swap, rupees, rapids, fishing, owls, golden_leaves, music
+from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves, heart_pieces
+from Randomizers import instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, player_start
+from Randomizers import rapids, seashell_mansion, small_keys, tarin, trade_quest, tunic_swap
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -778,7 +777,8 @@ class ModsProcess(QtCore.QThread):
 
     def rapidsChanges(self):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RaftShopMan.bfevfl')
-        rapids.makePrizesStack(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+        actors.addNeededActors(flow.flowchart, self.rom_path)
+        rapids.makePrizesStack(flow.flowchart, self.placements, self.item_defs)
 
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RaftShopMan.bfevfl', flow)
@@ -1198,9 +1198,9 @@ class ModsProcess(QtCore.QThread):
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['syrup']]['item-key'],
             item_index, 'Event93', None)
         
-        if self.placements['settings']['randomize-music']:
-            event_tools.findEvent(flow.flowchart, 'Event56').data.params.data['label'] = self.songs_dict['BGM_SHOP_FAST']
-            event_tools.findEvent(flow.flowchart, 'Event13').data.params.data['label'] = self.songs_dict['BGM_SHOP_FAST'] # StopBGM
+        # if self.placements['settings']['randomize-music']:
+        #     event_tools.findEvent(flow.flowchart, 'Event56').data.params.data['label'] = self.songs_dict['BGM_SHOP_FAST']
+        #     event_tools.findEvent(flow.flowchart, 'Event13').data.params.data['label'] = self.songs_dict['BGM_SHOP_FAST'] # StopBGM
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Syrup.bfevfl', flow)
@@ -1479,15 +1479,21 @@ class ModsProcess(QtCore.QThread):
         if self.placements['settings']['reduce-farming'] and self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SkeletalGuardBlue.bfevfl')
 
-            addBombs = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItem',
-            {'itemType': 4, 'count': 20, 'autoEquip': False})
+            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['count'] = 40 # still gives 20 w/o capacity upgrade
+            
+            add_bombs = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItem',
+                {'itemType': 4, 'count': 60, 'autoEquip': False})
 
             if self.placements['settings']['shuffle-bombs']:
-                checkBombs = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-                    {'symbol': data.BOMBS_FOUND_FLAG}, {0: None, 1: addBombs})
-                event_tools.insertEventAfter(flow.flowchart, 'Event19', checkBombs)
+                check_bombs = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
+                    {'symbol': data.BOMBS_FOUND_FLAG}, {0: None, 1: add_bombs})
+                event_tools.insertEventAfter(flow.flowchart, 'Event19', check_bombs)
             else:
-                event_tools.insertEventAfter(flow.flowchart, 'Event19', addBombs)
+                event_tools.insertEventAfter(flow.flowchart, 'Event19', add_bombs)
+            
+            # if self.placements['settings']['shuffle-powder']:
+            #     check_powder = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
+            #         {'symbol': 'GetMagicPowder'}, {0: None, 1: })
 
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SkeletalGuardBlue.bfevfl', flow)
@@ -1506,7 +1512,10 @@ class ModsProcess(QtCore.QThread):
             
             # shuffle Rapids race music
             if self.placements['settings']['randomize-music']:
-                event_tools.findEvent(flow.flowchart, 'Event78').data.params.data['label'] = self.songs_dict['BGM_RAFTING_TIMEATTACK']
+                # remove the music for now since it gets cut off due to something with setting the new BGM in the lvb file
+                event_tools.insertEventAfter(flow.flowchart, 'Event167', None)
+                #
+                # event_tools.findEvent(flow.flowchart, 'Event78').data.params.data['label'] = self.songs_dict['BGM_RAFTING_TIMEATTACK']
 
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Common.bfevfl', flow)
@@ -1708,6 +1717,8 @@ class ModsProcess(QtCore.QThread):
     def makeMusicChanges(self):
         """Iterates through the music files in the RomFS and copies them to the output directory with shuffled names"""
 
+        from Randomizers import music
+        
         levels_path = f'{self.rom_path}/region_common/level'
         out_path = f'{self.out_dir}/Romfs/region_common/level'
 
@@ -2214,6 +2225,8 @@ class ModsProcess(QtCore.QThread):
     def makeLv10RupeeChanges(self):
         """Edits the room data for the 28 free standing rupees in Color Dungeon so they are randomized"""
 
+        from Randomizers import rupees
+
         flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/SinkingSword.bfevfl')
 
         with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_08D.leb', 'rb') as file:
@@ -2342,9 +2355,9 @@ class ModsProcess(QtCore.QThread):
             flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl')
             trade_quest.tarinChanges(flow.flowchart, self.placements, self.item_defs)
 
-            # shuffle bees music
-            if self.placements['settings']['randomize-music']:
-                event_tools.findEvent(flow.flowchart, 'Event113').data.params.data['label'] = self.songs_dict['BGM_EVENT_BEE']
+            # # shuffle bees music
+            # if self.placements['settings']['randomize-music']:
+            #     event_tools.findEvent(flow.flowchart, 'Event113').data.params.data['label'] = self.songs_dict['BGM_EVENT_BEE']
             
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Tarin.bfevfl', flow)
@@ -2516,6 +2529,7 @@ class ModsProcess(QtCore.QThread):
         """Randomizes enemy actors that do not affect logic
         Needed kills are left vanilla and potentially problematic enemies are excluded"""
 
+        from Randomizers import enemies
         from randomizer_data import ENEMY_DATA
 
         land_ids = []
@@ -2540,10 +2554,22 @@ class ModsProcess(QtCore.QThread):
                 tree_ids.append(value['id'])
             elif value['type'] == 'hole':
                 hole_ids.append(value['id'])
-        enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *water_shallow_ids, *tree_ids, *hole_ids)
+        # enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *water_shallow_ids, *tree_ids, *hole_ids)
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
         restrictions = [-1, 0x3, 0x15, 0x16, 0x3D]
+
+        enemy_ids = {
+            'land': land_ids,
+            'air': air_ids,
+            'no_vire': no_vire,
+            'water': water_ids,
+            'water2D': water2D_ids,
+            'water_shallow': water_shallow_ids,
+            'tree': tree_ids,
+            'hole': hole_ids,
+            'restr': restrictions
+        }
 
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
@@ -2571,92 +2597,10 @@ class ModsProcess(QtCore.QThread):
                             with open(f'{out_levels}/{folder}/{file}', 'rb') as f:
                                 room_data = leb.Room(f.read())
                         
-                        edited_room = False
-
-                        excluded_actors = []
-                        if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
-                            excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
+                        rand_state, edited_room =\
+                            enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, random.getstate())
                         
-                        restr = list(restrictions[:])
-
-                        # iterate through each actor
-                        for e, act in enumerate(room_data.actors):
-                            if act.type in enemy_ids and e not in excluded_actors: # check for enemy actors
-
-                                enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
-                                new_enemy = -1
-                                
-                                if act.type in restr:
-                                    restr.remove(act.type)
-                                
-                                # keep shuffling each actor until it is a valid enemy
-                                while new_enemy in restr:
-                                    if enemy_type == 'land':
-                                        new_enemy = random.choice(land_ids)
-                                    elif enemy_type == 'air':
-                                        if folder == 'Field':
-                                            new_enemy = random.choice(no_vire) # remove vires from overworld
-                                        else:
-                                            new_enemy = random.choice(air_ids)
-                                    elif enemy_type == 'water':
-                                        waters = (*water_ids, *water_shallow_ids)
-                                        new_enemy = random.choice(waters)
-                                    elif enemy_type == 'water2D':
-                                        new_enemy = random.choice(water2D_ids)
-                                    elif enemy_type == 'water-shallow':
-                                        new_enemy = random.choice(water_shallow_ids)
-                                    elif enemy_type == 'tree':
-                                        new_enemy = random.choice(tree_ids)
-                                    elif enemy_type == 'hole':
-                                        new_enemy = random.choice(hole_ids)
-                                
-                                # restrict certain enemies to one per room
-                                if new_enemy in (0x26, 0x3E, 0x48, 0x49, 0x4D): # vires, zirros, bone-putters, color dungeon orbs
-                                    restr.append(new_enemy)
-                                
-                                # next, if a shield/spear enemy has been placed, restrict all of them to not be overwhelming
-                                shielded_enems = (0x8, 0x9, 0x13, 0x14, 0x2E, 0x2F, 0x35, 0x36)
-                                if new_enemy in shielded_enems:
-                                    restr += shielded_enems
-                                
-                                # change the enemy data into the new enemy
-                                if act.type != new_enemy:
-                                    act.type = new_enemy
-                                    try:
-                                        params = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['parameters']
-                                        for i in range(8):
-                                            try:
-                                                if isinstance(params[i], list):
-                                                    param = random.choice(params[i])
-                                                else:
-                                                    param = params[i]
-                                                if isinstance(param, str):
-                                                    param = bytes(param, 'utf-8')
-                                                act.parameters[i] = param
-                                            except IndexError:
-                                                act.parameters[i] = b''
-                                    except KeyError:
-                                        act.parameters = [b'', b'', b'', b'', b'', b'', b'', b'']
-
-                                    act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
-
-                                    if act.type == 0x1E2: # EnemyZoroZoro spawner
-                                        act.scaleX = 4.5
-                                        act.scaleY = 3.0
-                                        act.scaleZ = 4.5
-                                    else:
-                                        act.scaleX = 1.0
-                                        act.scaleY = 1.0
-                                        act.scaleZ = 1.0
-
-                                        if act.type == 0x4A: # StretchyGhosts - only includes one color in pool so it will be 1/3 likely now
-                                            act.type = random.choice((0x4A, 0x4B, 0x4C)) # decide color
-                                        elif act.type == 0x4D: # ColorDungeon Orbs - same thing as above
-                                            act.type = random.choice((0x4D, 0x4E, 0x4F))
-                                    
-                                    act.rotY = 0 # change each enemy to be facing the screen, some will stay sideways if we don't
-
-                                    edited_room = True
+                        random.setstate(rand_state)
 
                         if edited_room:
                             if not os.path.exists(f'{out_levels}/{folder}'):
@@ -2668,6 +2612,10 @@ class ModsProcess(QtCore.QThread):
                                     self.progress_value += 1 # update progress bar
                                     self.progress_update.emit(self.progress_value)
                                     num_of_mods += 1
+                    
+                    else: break
+            
+            else: break
         
         # print(num_of_mods)
     
@@ -2754,14 +2702,12 @@ class ModsProcess(QtCore.QThread):
                     level_data = f.read()
                     level = leb.Level(level_data)
             
-            config_data = [e for e in level.fixed_hash.entries if e.name == b'config'][0].data
-            config = leb.LevelConfig(config_data) # parse the config entry data into an object
-            config.attr_2 = 1 # set the second byte in the config to be True to allow companions
+            level.config.attr_2 = 1 # set the companion flag to True
 
             if not os.path.exists(f'{out_levels}/{folder}'):
                 os.makedirs(f'{out_levels}/{folder}')
             
             with open(f'{out_levels}/{folder}/{folder}.lvb', 'wb') as f:
-                f.write(level_data.replace(config_data, config.pack())) # replaces the data and writes it to the file
+                f.write(level_data.replace(level.config.data, level.config.pack())) # replaces the data and writes it to the file
                 self.progress_value += 1
                 self.progress_update.emit(self.progress_value)

@@ -140,4 +140,41 @@ Golden_Leaves:
   - kanalet-kill-room
   - kanalet-bombed-guard
   # - kanalet-final-guard
+
+Dungeon_Owl_Statues:
+  - D1-owl-statue-long-hallway
+  - D1-owl-statue-spinies
+  - D1-owl-statue-3-of-a-kind
+  - D2-owl-statue-first-switch
+  - D2-owl-statue-push-puzzle
+  - D2-owl-statue-past-hinox
+  - D3-owl-statue-basement-north
+  - D3-owl-statue-arrow
+  - D3-owl-statue-northwest
+  - D4-owl-statue
+  - D5-owl-statue-triple-stalfos
+  - D5-owl-statue-before-boss
+  - D6-owl-statue-ledge
+  - D6-owl-statue-southeast
+  - D6-owl-statue-canal
+  - D7-owl-statue-ball
+  - D7-owl-statue-kirbys
+  - D7-owl-statue-3ofakind-south
+  - D8-owl-statue-above-smasher
+  - D8-owl-statue-below-gibdos
+  - D8-owl-statue-eye-statue
+  - D0-owl-statue-nine-switches
+  - D0-owl-statue-first-switches
+  - D0-owl-statue-before-mini-boss
+
+Overworld_Owl_Statues:
+  - owl-statue-below-D8
+  - owl-statue-moblin-cave
+  - owl-statue-pothole
+  - owl-statue-above-cave
+  - owl-statue-south-bay
+  - owl-statue-desert
+  - owl-statue-maze
+  - owl-statue-rapids
+  - owl-statue-taltal-east
 ...

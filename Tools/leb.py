@@ -271,12 +271,13 @@ class Actor:
 class Level:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
-		# self.config = LevelConfig([e for e in self.fixed_hash.entries if e.name == b'config'][0].data)
+		self.config = LevelConfig([e for e in self.fixed_hash.entries if e.name == b'config'][0].data)
 
 
 
 class LevelConfig:
 	def __init__(self, data):
+		self.data = data
 		self.attr_1 = readBytes(data, 0x0, 1)
 		self.attr_2 = readBytes(data, 0x1, 1)
 		self.attr_3 = readBytes(data, 0x2, 1)

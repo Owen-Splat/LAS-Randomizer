@@ -149,19 +149,6 @@ def writeChestEvent(flowchart):
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'},
         {0: bomb_get, 1: squish_check})
 
-    medicine_get = item_get.insertItemGetAnimation(flowchart, 'SecretMedicine', -1, None, auto_save)
-    box_close = event_tools.createSubFlowEvent(flowchart, '', 'BoxClose', {}, None)
-    medicine2_get = event_tools.createActionChain(flowchart, None, [
-        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'SecretMedicine', 'keepCarry': False, 'messageEntry': 'SecretMedicine2'}),
-        ('Link', 'Heal', {'amount': 99}),
-        ('TreasureBox', 'SetActorSwitch', {'switchIndex': 1, 'value': False})
-    ], box_close)
-    check_dup = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-        {'count': 1, 'itemType': 22}, {0: medicine_get, 1: medicine2_get})
-    medicine_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
-        {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'SecretMedicine'},
-        {0: check_dup, 1: bomb_check})
-
     # rooster_fork = event_tools.createForkEvent(flowchart, None, [
     #     event_tools.createActionChain(flowchart, None, [
     #         ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
@@ -196,8 +183,13 @@ def writeChestEvent(flowchart):
     # {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'ShadowLink'},
     # {0: shadow_get, 1: rooster_check})
 
-    event_tools.insertEventAfter(flowchart, 'Event32', medicine_check)
-    event_tools.insertEventAfter(flowchart, 'Event28', medicine_check) # add this chain to TreasureBox_ShockOpen for the D6 Pot Chest
+    # add this chain to TreasureBox_Open and TreasureBox_ShockOpen
+    event_tools.insertEventAfter(flowchart, 'Event32', bomb_check)
+    event_tools.insertEventAfter(flowchart, 'Event28', bomb_check)
+    
+    # now make the rest of the items also request an autosave
+    event_tools.insertEventAfter(flowchart, 'Event40', auto_save)
+    event_tools.insertEventAfter(flowchart, 'Event5', auto_save)
 
 
 

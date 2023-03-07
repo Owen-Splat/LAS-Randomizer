@@ -287,10 +287,10 @@ Actors:
     id: 0x48
     type: air
     enemy: True
-  EnemyBonePutterBounce:
-    id: 0x49
-    type: land
-    enemy: True
+  # EnemyBonePutterBounce:
+  #   id: 0x49
+  #   type: land
+  #   enemy: True
   EnemyStretchyGhostGreen:
     id: 0x4A
     type: land

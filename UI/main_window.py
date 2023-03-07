@@ -263,9 +263,9 @@ class MainWindow(QtWidgets.QMainWindow):
             if SETTINGS['Theme'].lower() in ['light', 'dark']:
                 self.mode = str(SETTINGS['Theme'].lower())
             else:
-                self.mode = str('light')
+                self.mode = str('dark')
         except (KeyError, AttributeError, TypeError):
-            self.mode = str('light')
+            self.mode = str('dark')
 
         # romfs folder
         try:
@@ -564,7 +564,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 if item in STARTING_ITEMS:
                     if self.starting_gear.count(item) < STARTING_ITEMS.count(item):
                         self.starting_gear.append(item)
-        
         except (KeyError, TypeError):
             self.starting_gear = list() # reset starting gear to default if error
 
@@ -725,7 +724,7 @@ class MainWindow(QtWidgets.QMainWindow):
             rom_path = self.ui.lineEdit.text()
             
             seed = self.ui.lineEdit_3.text()
-            if seed == "" or seed.lower() == "random":
+            if seed.lower().strip() in ("", "random"):
                 random.seed()
                 seed = str(random.getrandbits(32))
             
@@ -787,8 +786,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def tab_Changed(self):
         
         if self.ui.tabWidget.currentIndex() == 1: # starting items
+            randomized_gear = STARTING_ITEMS[:]
+            for x in self.starting_gear:
+                randomized_gear.remove(x)
+            
             self.ui.listWidget_5.clear()
-            for item in [x for x in STARTING_ITEMS if x not in self.starting_gear]:
+            for item in randomized_gear:
                 self.ui.listWidget_5.addItem(self.checkToList(str(item)))
             
             self.ui.listWidget_6.clear()

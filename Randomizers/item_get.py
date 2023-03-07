@@ -81,8 +81,9 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     ### traps
     if item == 'ZapTrap':
+        invincible_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         stop_event = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
-            {'channel': 'toolshopkeeper_dmg', 'index': 0}, after)
+            {'channel': 'toolshopkeeper_dmg', 'index': 0}, invincible_event)
 
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
@@ -97,6 +98,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         return event_tools.createForkEvent(flowchart, before, forks, stop_event)[0]
     
     if item == 'DrownTrap':
+        invincible_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_water'}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True})
@@ -109,9 +111,10 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         else:
             forks.append(event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}))
         
-        return event_tools.createForkEvent(flowchart, before, forks, after)[0]
+        return event_tools.createForkEvent(flowchart, before, forks, invincible_event)[0]
     
     if item == 'SquishTrap':
+        invincible_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
@@ -120,7 +123,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4}))
                 
-        return event_tools.createForkEvent(flowchart, before, forks, after)[0]
+        return event_tools.createForkEvent(flowchart, before, forks, invincible_event)[0]
             
     ### Instrument flags
     if item == 'FullMoonCello':
@@ -173,19 +176,26 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''}),
             ('Link', 'Heal', {'amount': 99})
         ], after)
+    
+    ### Fix message boxes saying you completed Heart Pieces or Golden Leaves when 1 short
+    if item in ('HeartPiece', 'GoldenLeaf'):
+        subflow_event = event_tools.createSubFlowEvent(flowchart, 'ItemCommon', 'get',
+        {'itemKey': item, 'itemIndex': index, 'itemCount': 1}, after)
+        event_tools.insertEventAfter(flowchart, before, subflow_event)
+        return subflow_event
 
     ### Bomb for Shuffled Bombs
     if item == 'Bomb':
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 60, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
     ### Powder for Shuffled Powder
     if item == 'MagicPowder':
         return event_tools.createActionChain(flowchart, before, [
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
         ], after)
     
