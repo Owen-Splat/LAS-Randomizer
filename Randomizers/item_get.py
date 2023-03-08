@@ -177,13 +177,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'Heal', {'amount': 99})
         ], after)
     
-    ### Fix message boxes saying you completed Heart Pieces or Golden Leaves when 1 short
-    if item in ('HeartPiece', 'GoldenLeaf'):
-        subflow_event = event_tools.createSubFlowEvent(flowchart, 'ItemCommon', 'get',
-        {'itemKey': item, 'itemIndex': index, 'itemCount': 1}, after)
-        event_tools.insertEventAfter(flowchart, before, subflow_event)
-        return subflow_event
-
     ### Bomb for Shuffled Bombs
     if item == 'Bomb':
         return event_tools.createActionChain(flowchart, before, [
@@ -293,10 +286,10 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    ### everything else
+    ### everything else - play the get event before the message, otherwise it messes with index related messages
     return event_tools.createActionChain(flowchart, before, [
-        ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item})
+        ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item}),
+        ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
     ], after)
 
 

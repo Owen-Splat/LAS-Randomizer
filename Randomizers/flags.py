@@ -2,11 +2,17 @@ class GlobalFlags:
     def __init__(self, sheet: dict, start_index: int):
         self.sheet = sheet
         self.index = start_index
+        self.flags = {}
     
 
     def addFlag(self, name):
         self.sheet['values'].append({'symbol': name, 'index': self.index})
+        self.flags[name] = self.index
         self.index += 1
+    
+    
+    def give_flags(self):
+        return self.sheet, self.flags
 
 
 
@@ -15,29 +21,75 @@ def makeFlags(sheet):
     
     global_flags = GlobalFlags(sheet, start_index=1119)
 
+    global_flags.addFlag('AnimalVillageHeartDrop')
     global_flags.addFlag('AnimalVillageHeartGet')
+
+    global_flags.addFlag('AnimalVillageCaveHeartDrop')
     global_flags.addFlag('AnimalVillageCaveHeartGet')
+
+    global_flags.addFlag('TaltalEntranceBlocksHeartDrop')
     global_flags.addFlag('TaltalEntranceBlocksHeartGet')
+
+    global_flags.addFlag('NorthWastelandHeartDrop')
     global_flags.addFlag('NorthWastelandHeartGet')
+
+    global_flags.addFlag('DesertCaveHeartDrop')
     global_flags.addFlag('DesertCaveHeartGet')
+
+    global_flags.addFlag('GraveyardCaveHeartDrop')
     global_flags.addFlag('GraveyardCaveHeartGet')
+
+    global_flags.addFlag('MabeWellHeartDrop')
     global_flags.addFlag('MabeWellHeartGet')
+
+    global_flags.addFlag('UkukuCaveWestHeartDrop')
     global_flags.addFlag('UkukuCaveWestHeartGet')
+
+    global_flags.addFlag('UkukuCaveEastHeartDrop')
     global_flags.addFlag('UkukuCaveEastHeartGet')
+
+    global_flags.addFlag('BayPassageHeartDrop')
     global_flags.addFlag('BayPassageHeartGet')
+
+    global_flags.addFlag('RiverCrossingHeartDrop')
     global_flags.addFlag('RiverCrossingHeartGet')
+
+    global_flags.addFlag('RapidsWestHeartDrop')
     global_flags.addFlag('RapidsWestHeartGet')
+
+    global_flags.addFlag('RapidsAscentHeartDrop')
     global_flags.addFlag('RapidsAscentHeartGet')
+
+    global_flags.addFlag('KanaletMoatHeartDrop')
     global_flags.addFlag('KanaletMoatHeartGet')
+
+    global_flags.addFlag('SouthBayHeartDrop')
     global_flags.addFlag('SouthBayHeartGet')
+
+    global_flags.addFlag('TaltalCrossingHeartDrop')
     global_flags.addFlag('TaltalCrossingHeartGet')
+
+    global_flags.addFlag('TaltalEastHeartDrop')
     global_flags.addFlag('TaltalEastHeartGet')
+
+    global_flags.addFlag('TaltalWestHeartDrop')
     global_flags.addFlag('TaltalWestHeartGet')
+
+    global_flags.addFlag('TurtleRockHeartDrop')
     global_flags.addFlag('TurtleRockHeartGet')
+
+    global_flags.addFlag('PotholeHeartDrop')
     global_flags.addFlag('PotholeHeartGet')
+
+    global_flags.addFlag('WoodsCrossingHeartDrop')
     global_flags.addFlag('WoodsCrossingHeartGet')
+
+    global_flags.addFlag('WoodsNorthCaveHeartDrop')
     global_flags.addFlag('WoodsNorthCaveHeartGet')
+
+    global_flags.addFlag('DiamondIslandHeartDrop')
     global_flags.addFlag('DiamondIslandHeartGet')
+
 
     global_flags.addFlag('TailCaveInstrumentGet')
     global_flags.addFlag('BottleGrottoInstrumentGet')
@@ -131,6 +183,8 @@ def makeFlags(sheet):
     global_flags.addFlag('KeyGetKanalet02A')
     global_flags.addFlag('KeyGetKanalet01C')
     global_flags.addFlag('KeyGetKanalet01D')
+
+    return global_flags.give_flags()
 
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1223})
     # sheet['values'].append({'symbol': 'ShopBowGet', 'index': 1224})

@@ -1,7 +1,7 @@
 import copy
 
 
-def addCrowKey(room_data):
+def addCrowKey(room_data, global_flags: dict):
     crow = room_data.actors[0]
     crow.parameters[1] = b''
     crow.relationships.y = 1
@@ -12,7 +12,7 @@ def addCrowKey(room_data):
     leaf.posX = 131.25
     leaf.posZ = 60.75
     leaf.switches[0] = (1, 37) # FieldKanaletCrowlyDead
-    leaf.switches[1] = (1, 1218) # KeyGetField06I
+    leaf.switches[1] = (1, global_flags['KeyGetField06I']) # index of KeyGetField06I
 
     checker = copy.deepcopy(room_data.actors[7])
     checker.key = int('A1002A105CF0F2E8', 16)
@@ -28,7 +28,7 @@ def addCrowKey(room_data):
 
 
 
-def addBomberKey(room_data):
+def addBomberKey(room_data, global_flags: dict):
     bomber = room_data.actors[0]
     bomber.relationships.y = 1
     bomber.relationships.section_3 = [3]
@@ -39,7 +39,7 @@ def addBomberKey(room_data):
     leaf.posY -= 0.5
     leaf.posZ -= 6.0
     leaf.switches[0] = (1, 36) # FieldKanaletBombKnuckleDead
-    leaf.switches[1] = (1, 1219) # KeyGetField06K
+    leaf.switches[1] = (1, global_flags['KeyGetField06K']) # index of KeyGetField06K
 
     checker = copy.deepcopy(leaf)
     checker.key = int('A1002A205CF0F2E8', 16)
@@ -55,14 +55,14 @@ def addBomberKey(room_data):
 
 
 
-def addKillRoomKey(room_data):
+def addKillRoomKey(room_data, global_flags: dict):
     leaf = room_data.actors[5]
     leaf.type = 0xa9 # small key
-    leaf.switches[1] = (1, 1220) # KeyGetKanalet02A
+    leaf.switches[1] = (1, global_flags['KeyGetKanalet02A']) # index of KeyGetKanalet02A
 
 
 
-def addCrackedWallKey(room_data):
+def addCrackedWallKey(room_data, global_flags: dict):
     enemy = room_data.actors[0]
     enemy.parameters[0] = b'' # makes it so it does not drop a golden leaf at all
     enemy.relationships.y = 1
@@ -73,7 +73,7 @@ def addCrackedWallKey(room_data):
     leaf.posX = 71.25
     leaf.posY = 1.5
     leaf.posZ = 1.75
-    leaf.switches[1] = (1, 1221) # KeyGetKanalet01C
+    leaf.switches[1] = (1, global_flags['KeyGetKanalet01C']) # index of KeyGetKanalet01C
 
     checker = copy.deepcopy(leaf)
     checker.key = int('A1002A305CF0F2E8', 16)
@@ -89,7 +89,7 @@ def addCrackedWallKey(room_data):
 
 
 
-def addBallChainKey(room_data):
+def addBallChainKey(room_data, global_flags: dict):
     key = copy.deepcopy(room_data.actors[0])
     key.key = int('A1002A405CF0F2E8', 16)
     key.name = bytes('ItemSmallKey-A1002A405CF0F2E8', 'utf-8')
@@ -97,13 +97,13 @@ def addBallChainKey(room_data):
     key.posX -= 1.5
     key.posZ -= 1.5
     key.switches[0] = (1, 650) # GoldenLeafPop_Btl_KanaletCastle_01D
-    key.switches[1] = (1, 1222) # KeyGetKanalet01D
+    key.switches[1] = (1, global_flags['KeyGetKanalet01D']) # index of KeyGetKanalet01D
     room_data.actors.append(key)
 
 
 
-def createRoomKey(room, room_data):
-    funcs[room](room_data)
+def createRoomKey(room_data, room: str, global_flags: dict):
+    funcs[room](room_data, global_flags)
 
 
 

@@ -1,6 +1,6 @@
 import Tools.event_tools as event_tools
 from Randomizers import item_get
-from Randomizers import data
+# from Randomizers import data
 
 
 
@@ -201,9 +201,10 @@ def makeChestsFaster(flowchart):
     event_tools.insertEventAfter(flowchart, 'Event52', None)
 
     # now edit Link to move 3x faster if he is in the way of the chest
-    event_tools.findEvent(flowchart, 'Event46').data.params.data = {
-        'speed': 3,
-        'distance': 1.5,
-        'actor': 'TreasureBox',
-        'timeOut': 1.0 # idk if there is any instance where timeOut: 7.0 actually matters but just in case we set it to 1.0
-    }
+    event_tools.findEvent(flowchart, 'Event46').data.params.data['speed'] = 3
+    # event_tools.findEvent(flowchart, 'Event46').data.params.data = {
+    #     'speed': 3,
+    #     'distance': 1.5,
+    #     'actor': 'TreasureBox',
+    #     'timeOut': 1.0 # idk if there is any instance where timeOut: 7.0 actually matters but just in case we set it to 1.0
+    # }

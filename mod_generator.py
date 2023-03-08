@@ -47,6 +47,7 @@ class ModsProcess(QtCore.QThread):
         self.seed = seed
         random.seed(seed)
 
+        self.global_flags = {}
         self.songs_dict = {} 
 
         self.progress_value = 0
@@ -338,7 +339,7 @@ class ModsProcess(QtCore.QThread):
                     model_name = random.choice(list(trap_models))
                     model_path = trap_models[model_name]
                 
-                golden_leaves.createRoomKey(room, room_data)
+                golden_leaves.createRoomKey(room_data, room, self.global_flags)
                 small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
                 room_data.setSmallKeyParams(model_path, model_name, room, item_key)
 
@@ -1660,7 +1661,7 @@ class ModsProcess(QtCore.QThread):
         ### GlobalFlags datasheet: Add new flags to use
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/GlobalFlags.gsheet')
-            flags.makeFlags(sheet)
+            sheet, self.global_flags = flags.makeFlags(sheet)
 
             if self.thread_active:
                 oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/GlobalFlags.gsheet', sheet)
