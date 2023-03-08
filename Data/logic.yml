@@ -2043,7 +2043,7 @@ D7-owl-statue-kirbys:
   region: eagle-tower
   spoiler-region: eagle-tower
   condition-basic: D7-2D & stone-beak-D7
-D7-owl-statue-3ofakind-south:
+D7-owl-statue-3-of-a-kind-south:
   type: item
   subtype: dungeon-statue
   content: rupee-20

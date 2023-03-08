@@ -17,7 +17,6 @@ MERMAID_CAVE_FLAG       = 'MermaidCaveItemGet'
 POTHOLE_FLAG            = 'PotholeGet'
 
 BOMBS_FOUND_FLAG        = 'BombsFound'
-# BOMB_BAG_FOUND_FLAG     = 'BombBagFound'
 
 ROOSTER_FOUND_FLAG      = 'RoosterFound'
 BOWWOW_FOUND_FLAG       = 'BowWowFound'
