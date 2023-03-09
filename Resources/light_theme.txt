@@ -1,0 +1,97 @@
+QMainWindow::separator {
+    width: 4px;
+    height: 4px;
+    background: rgb(60, 65, 70);
+}
+QMainWindow::separator:hover,
+QMainWindow::separator:pressed {
+    background: rgb(120, 180, 250);
+}
+QCheckBox {
+    border: 1px solid transparent;
+    spacing: 8px;
+}
+QCheckBox:hover {
+    border-bottom: 2px solid rgb(120, 180, 250);
+}
+QCheckBox::indicator {
+    height: 18px;
+    width: 18px;
+}
+QMenuBar {
+    padding: 2px;
+    border-bottom: 1px solid rgb(190, 195, 200);
+}
+QMenuBar::item {
+    background: transparent;
+    padding: 4px;
+}
+QMenuBar::item:selected {
+    padding: 4px;
+    background: rgba(40, 70, 100, 0.15);
+    border-radius: 4px;
+}
+QMenuBar::item:pressed {
+    padding: 4px;
+}
+QProgressBar {
+    border: 1px solid rgb(190, 195, 200);
+    text-align: center;
+    border-radius: 4px;
+}
+QProgressBar::chunk {
+    background: rgb(120, 180, 250);
+}
+QProgressBar::chunk:disabled {
+    background: rgb(80, 85, 90);
+}
+QComboBox {
+    border: 1px solid rgb(50, 55, 60);
+    min-height: 1.5em;
+    padding: 0 4px;
+    border-radius: 4px;
+}
+QComboBox:focus,
+QComboBox:open {
+    border: 1px solid rgb(120, 180, 250);
+}
+QComboBox::drop-down {
+    padding-right: 4px;
+}
+QComboBox::item:selected {
+    border: none;
+    background: rgb(0, 75, 125);
+    color: white;
+}
+QComboBox::indicator:checked {
+    width: 18px;
+}
+QTabWidget::pane {
+    border: 1px solid rgb(190, 195, 200);
+    border-radius: 4px;
+}
+QTabBar::tab {
+    padding: 3px;
+}
+QTabBar::tab:hover {
+    background: rgba(40, 70, 100, 0.1);
+}
+QTabBar::tab:selected {
+    background: rgba(40, 70, 100, 0.15);
+}
+QTabBar::tab:top {
+    border-bottom: 2px solid rgb(120, 180, 250);
+    margin-left: 4px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+QTabBar::tab:top:selected {
+    border-bottom: 2px solid rgb(0, 75, 125);
+}
+QTabBar::tab:top:hover {
+    border-color: rgb(0, 75, 125);
+}
+QPushButton {
+    background-color: rgb(200, 205, 210);
+    color: black;
+}

@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>780</width>
-    <height>639</height>
+    <height>640</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>760</width>
-      <height>513</height>
+      <height>491</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -365,7 +365,7 @@
         <x>10</x>
         <y>104</y>
         <width>733</width>
-        <height>372</height>
+        <height>350</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -579,75 +579,6 @@
          <string>Rapids</string>
         </property>
        </widget>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="geometry">
-         <rect>
-          <x>-1</x>
-          <y>230</y>
-          <width>731</width>
-          <height>121</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>16</pointsize>
-         </font>
-        </property>
-        <property name="title">
-         <string>Experimental</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <widget class="QCheckBox" name="dampeCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>64</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;This is still likely broken,&lt;/u&gt; no logic for instrument shuffle and progressive items may not work</string>
-         </property>
-         <property name="text">
-          <string>Dampé</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="dungeonsCheck">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>64</y>
-           <width>173</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Dungeon Entrances will be randomized. Back entrances are vanilla&lt;br&gt;&lt;/br&gt;Currently only has Basic Logic</string>
-         </property>
-         <property name="text">
-          <string>Shuffled Dungeons</string>
-         </property>
-        </widget>
-       </widget>
        <widget class="QComboBox" name="seashellsComboBox">
         <property name="geometry">
          <rect>
@@ -700,7 +631,7 @@
          </property>
         </item>
        </widget>
-       <widget class="QCheckBox" name="dampeTEMPCheck">
+       <widget class="QCheckBox" name="dampeCheck">
         <property name="geometry">
          <rect>
           <x>189</x>
@@ -712,23 +643,20 @@
         <property name="font">
          <font>
           <pointsize>9</pointsize>
-          <strikeout>true</strikeout>
+          <strikeout>false</strikeout>
          </font>
         </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
-         <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic is not written to work with instrument shuffle,&lt;/u&gt; and may result in unbeatable seeds</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(80, 80, 80);</string>
+         <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic is not written to work with instrument shuffle,&lt;/u&gt; and may still remove items from inventory</string>
         </property>
         <property name="text">
          <string>Dampé</string>
         </property>
         <property name="checkable">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QCheckBox" name="trendyCheck">
@@ -892,6 +820,12 @@
           <height>22</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <strikeout>true</strikeout>
+         </font>
+        </property>
         <property name="whatsThis">
          <string>This controls how many Instruments are required to open the egg&lt;br&gt;&lt;/br&gt;You will still need Ocarina and Ballad of the Wind Fish</string>
         </property>
@@ -950,35 +884,47 @@
          </property>
         </item>
        </widget>
-      </widget>
-      <widget class="QWidget" name="tab_5">
-       <attribute name="title">
-        <string>Extra Settings</string>
-       </attribute>
-       <widget class="QCheckBox" name="shuffledBombsCheck">
+       <widget class="QComboBox" name="owlsComboBox">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>224</y>
-          <width>173</width>
-          <height>21</height>
+          <x>548</x>
+          <y>184</y>
+          <width>161</width>
+          <height>22</height>
          </rect>
         </property>
-        <property name="toolTip">
-         <string/>
-        </property>
         <property name="whatsThis">
-         <string>You need to find your bombs before you can obtain any from other means&lt;br&gt;&lt;/br&gt;This overrides Unlocked Bombs</string>
+         <string>This determines if Owl Statues will give items or not</string>
         </property>
-        <property name="text">
-         <string>Shuffled Bombs</string>
+        <property name="currentIndex">
+         <number>0</number>
         </property>
+        <item>
+         <property name="text">
+          <string>Owl Gifts: None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Owl Gifts: Overworld</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Owl Gifts: Dungeons</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Owl Gifts: All</string>
+         </property>
+        </item>
        </widget>
        <widget class="QCheckBox" name="rupCheck">
         <property name="geometry">
          <rect>
           <x>369</x>
-          <y>104</y>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -991,6 +937,49 @@
         </property>
         <property name="text">
          <string>Blupsanity</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="trapsCheck">
+        <property name="geometry">
+         <rect>
+          <x>189</x>
+          <y>184</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Adds various traps to the item pool, which can be disguised as other items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked,&lt;/u&gt; only the vanilla zol traps are included</string>
+        </property>
+        <property name="text">
+         <string>Trapsanity</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Extra Settings</string>
+       </attribute>
+       <widget class="QCheckBox" name="shuffledBombsCheck">
+        <property name="geometry">
+         <rect>
+          <x>369</x>
+          <y>104</y>
+          <width>173</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>You need to find your bombs before you can obtain any from other means&lt;br&gt;&lt;/br&gt;This overrides Unlocked Bombs</string>
+        </property>
+        <property name="text">
+         <string>Shuffled Bombs</string>
         </property>
        </widget>
        <widget class="QCheckBox" name="farmingCheck">
@@ -1078,14 +1067,14 @@
          <string>Fast Stealing</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="loadingCheck">
+       <widget class="QCheckBox" name="dungeonsCheck">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="geometry">
          <rect>
           <x>369</x>
-          <y>224</y>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1093,23 +1082,20 @@
         <property name="font">
          <font>
           <pointsize>9</pointsize>
-          <strikeout>true</strikeout>
+          <strikeout>false</strikeout>
          </font>
         </property>
         <property name="toolTip">
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Randomizes loading zones&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(80, 80, 80);</string>
+         <string>Randomizes Dungeons&lt;br&gt;&lt;/br&gt;&lt;u&gt;Only front entrances are randomized,&lt;/u&gt; and only handles non-glitched logics</string>
         </property>
         <property name="text">
-         <string>Randomize Entrances</string>
+         <string>Shuffled Dungeons</string>
         </property>
         <property name="checkable">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
        <widget class="QCheckBox" name="kanaletCheck">
@@ -1134,8 +1120,8 @@
        <widget class="QCheckBox" name="unlockedBombsCheck">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>184</y>
+          <x>189</x>
+          <y>104</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1197,32 +1183,13 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QCheckBox" name="trapsCheck">
-        <property name="geometry">
-         <rect>
-          <x>189</x>
-          <y>104</y>
-          <width>173</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="whatsThis">
-         <string>Adds various traps to the item pool, which can be disguised as other items</string>
-        </property>
-        <property name="text">
-         <string>Trapsanity</string>
-        </property>
-       </widget>
        <widget class="QCheckBox" name="musicCheck">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="geometry">
          <rect>
-          <x>369</x>
+          <x>10</x>
           <y>184</y>
           <width>173</width>
           <height>21</height>
@@ -1363,47 +1330,11 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QComboBox" name="owlsComboBox">
-        <property name="geometry">
-         <rect>
-          <x>189</x>
-          <y>224</y>
-          <width>161</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="whatsThis">
-         <string>This determines if Owl Statues will give items or not</string>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Owl Gifts: None</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Owl Gifts: Overworld</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Owl Gifts: Dungeons</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Owl Gifts: All</string>
-         </property>
-        </item>
-       </widget>
        <widget class="QCheckBox" name="raceCheck">
         <property name="geometry">
          <rect>
           <x>548</x>
-          <y>104</y>
+          <y>184</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1433,7 +1364,7 @@
         </property>
         <property name="geometry">
          <rect>
-          <x>548</x>
+          <x>189</x>
           <y>184</y>
           <width>173</width>
           <height>21</height>
@@ -1449,7 +1380,7 @@
          <string/>
         </property>
         <property name="whatsThis">
-         <string>Randomizes enemy actors. Currently no logic, needed kills are left vanilla&lt;br&gt;&lt;/br&gt;&lt;u&gt;This is in the very early stages,&lt;/u&gt; and as such things may break</string>
+         <string>Randomizes enemies that do not affect logic. Needed kills are left vanilla</string>
         </property>
         <property name="text">
          <string>Randomize Enemies</string>
@@ -1523,8 +1454,8 @@
        <widget class="QCheckBox" name="shuffledPowderCheck">
         <property name="geometry">
          <rect>
-          <x>189</x>
-          <y>184</y>
+          <x>548</x>
+          <y>104</y>
           <width>173</width>
           <height>21</height>
          </rect>
@@ -1562,7 +1493,7 @@
         <x>20</x>
         <y>41</y>
         <width>256</width>
-        <height>430</height>
+        <height>408</height>
        </rect>
       </property>
       <property name="font">
@@ -1640,7 +1571,7 @@
       <property name="geometry">
        <rect>
         <x>325</x>
-        <y>265</y>
+        <y>243</y>
         <width>101</width>
         <height>81</height>
        </rect>
@@ -1712,7 +1643,7 @@
       <property name="geometry">
        <rect>
         <x>325</x>
-        <y>165</y>
+        <y>143</y>
         <width>101</width>
         <height>81</height>
        </rect>
@@ -1739,7 +1670,7 @@
         <x>475</x>
         <y>41</y>
         <width>256</width>
-        <height>430</height>
+        <height>408</height>
        </rect>
       </property>
       <property name="font">
@@ -1764,7 +1695,7 @@
       <property name="geometry">
        <rect>
         <x>288</x>
-        <y>81</y>
+        <y>59</y>
         <width>171</width>
         <height>22</height>
        </rect>
@@ -1831,7 +1762,7 @@
       <property name="geometry">
        <rect>
         <x>295</x>
-        <y>380</y>
+        <y>358</y>
         <width>161</width>
         <height>81</height>
        </rect>
@@ -1980,7 +1911,7 @@
       <property name="geometry">
        <rect>
         <x>325</x>
-        <y>165</y>
+        <y>143</y>
         <width>101</width>
         <height>81</height>
        </rect>
@@ -2005,7 +1936,7 @@
       <property name="geometry">
        <rect>
         <x>325</x>
-        <y>265</y>
+        <y>243</y>
         <width>101</width>
         <height>81</height>
        </rect>
@@ -2032,7 +1963,7 @@
         <x>20</x>
         <y>41</y>
         <width>256</width>
-        <height>430</height>
+        <height>408</height>
        </rect>
       </property>
       <property name="font">
@@ -2065,7 +1996,7 @@
         <x>475</x>
         <y>41</y>
         <width>256</width>
-        <height>430</height>
+        <height>408</height>
        </rect>
       </property>
       <property name="font">
@@ -2097,7 +2028,7 @@
         <x>475</x>
         <y>41</y>
         <width>256</width>
-        <height>430</height>
+        <height>408</height>
        </rect>
       </property>
       <property name="font">
@@ -2122,7 +2053,7 @@
       <property name="geometry">
        <rect>
         <x>325</x>
-        <y>265</y>
+        <y>243</y>
         <width>101</width>
         <height>81</height>
        </rect>
@@ -2147,7 +2078,7 @@
       <property name="geometry">
        <rect>
         <x>325</x>
-        <y>165</y>
+        <y>143</y>
         <width>101</width>
         <height>81</height>
        </rect>
@@ -2174,7 +2105,7 @@
         <x>20</x>
         <y>41</y>
         <width>256</width>
-        <height>430</height>
+        <height>408</height>
        </rect>
       </property>
       <property name="font">
@@ -2299,7 +2230,7 @@
       <property name="geometry">
        <rect>
         <x>288</x>
-        <y>81</y>
+        <y>59</y>
         <width>171</width>
         <height>22</height>
        </rect>
@@ -2340,7 +2271,7 @@
       <property name="geometry">
        <rect>
         <x>295</x>
-        <y>380</y>
+        <y>358</y>
         <width>161</width>
         <height>81</height>
        </rect>
@@ -2389,7 +2320,7 @@
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>583</y>
+      <y>561</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -2420,7 +2351,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>583</y>
+      <y>561</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -2454,7 +2385,7 @@
     <property name="geometry">
      <rect>
       <x>179</x>
-      <y>583</y>
+      <y>561</y>
       <width>421</width>
       <height>41</height>
      </rect>
@@ -2478,7 +2409,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>531</y>
+      <y>509</y>
       <width>721</width>
       <height>41</height>
      </rect>
@@ -2524,6 +2455,88 @@
     </property>
    </widget>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>780</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>Language</string>
+    </property>
+    <addaction name="actionEnglish"/>
+    <addaction name="separator"/>
+    <addaction name="actionfran_ais"/>
+    <addaction name="separator"/>
+    <addaction name="action"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionChangelog"/>
+    <addaction name="separator"/>
+    <addaction name="actionHelp"/>
+   </widget>
+   <widget class="QMenu" name="menuTheme">
+    <property name="title">
+     <string>Theme</string>
+    </property>
+    <addaction name="actionLight"/>
+    <addaction name="separator"/>
+    <addaction name="actionDark"/>
+   </widget>
+   <addaction name="menuLanguage"/>
+   <addaction name="menuTheme"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionfran_ais">
+   <property name="text">
+    <string>Français</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>中文</string>
+   </property>
+  </action>
+  <action name="actionLight">
+   <property name="text">
+    <string>Light</string>
+   </property>
+  </action>
+  <action name="actionDark">
+   <property name="text">
+    <string>Dark</string>
+   </property>
+  </action>
+  <action name="actionChangelog">
+   <property name="text">
+    <string>Changelog</string>
+   </property>
+  </action>
+  <action name="actionPlanned_Features">
+   <property name="text">
+    <string>Future</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

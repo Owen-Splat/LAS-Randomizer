@@ -1,6 +1,5 @@
-from randomizer_paths import DATA_PATH, ROOT_PATH, SETTINGS_PATH
+from randomizer_paths import DATA_PATH, RESOURCE_PATH, ROOT_PATH, SETTINGS_PATH
 
-import qdarktheme
 import yaml
 import os
 
@@ -11,8 +10,11 @@ with open(os.path.join(ROOT_PATH, 'version.txt'), 'r') as f:
 
 DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
 
-LIGHT_STYLESHEET = qdarktheme.load_stylesheet('light')
-DARK_STYLESHEET = qdarktheme.load_stylesheet('dark')
+with open(os.path.join(RESOURCE_PATH, 'light_theme.txt'), 'r') as f:
+    LIGHT_STYLESHEET = f.read()
+
+with open(os.path.join(RESOURCE_PATH, 'dark_theme.txt'), 'r') as f:
+    DARK_STYLESHEET = f.read()
 
 with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     items = yaml.safe_load(f)

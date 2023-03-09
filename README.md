@@ -7,8 +7,6 @@ This release version allows for shuffling chests, NPC gifts including the Tradin
 
 Several extra options, including Trapsanity, Shuffled Dungeons, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk!
 
-This GUI is dark mode by default, but can be toggled with ctrl + L
-
 Please note that while most things are functional, there is a definite possibility of the logic resulting in softlocks. This will be especially true with the glitched logics. If this does happen, dying and selecting the Save + Quit option will respawn you back at Marin's house.
 
 **Logic**:

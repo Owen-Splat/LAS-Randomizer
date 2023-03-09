@@ -1,4 +1,4 @@
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
 from update import UpdateProcess
@@ -18,19 +18,14 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def __init__(self):
         super (MainWindow, self).__init__()
+        # self.trans = QtCore.QTranslator(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # Styling
-        for b in self.findChildren(QtWidgets.QPushButton):
-            b.setStyleSheet("QPushButton {background-color: rgb(218, 218, 218)}"
-                            "QPushButton {border: 1px solid black}"
-                            "QPushButton {color: black}"
-                            "QPushButton:hover {background-color: rgb(200, 200, 200)}"
-                            "QPushButton:pressed {background-color: rgb(175, 175, 175)}")
+        # self.options = ([('English', ''), ('Français', 'eng-fr' ), ('中文', 'eng-chs'), ])
 
         # Keep track of stuff
-        self.mode = str('dark')
+        self.mode = str('light')
         self.excluded_checks = set()
         self.starting_gear = list()
         self.overworld_owls = bool(False)
@@ -45,14 +40,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.updateOwls()
         
         if self.mode == 'light':
-            self.setStyleSheet(qdarktheme.load_stylesheet('light'))
+            self.setStyleSheet(LIGHT_STYLESHEET)
+            # self.fixDisabledWidgets()
             self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
         else:
-            self.setStyleSheet(qdarktheme.load_stylesheet('dark'))
+            self.setStyleSheet(DARK_STYLESHEET)
+            # self.fixDisabledWidgets()
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
 
         ### SUBSCRIBE TO EVENTS
         
+        # menu bar items
+        self.ui.actionLight.triggered.connect(self.setLightMode)
+        self.ui.actionDark.triggered.connect(self.setDarkMode)
         # folder browsing, seed generation, and randomize button
         self.ui.browseButton1.clicked.connect(self.romBrowse)
         self.ui.browseButton2.clicked.connect(self.outBrowse)
@@ -91,6 +91,9 @@ class MainWindow(QtWidgets.QMainWindow):
         ### show and check for updates
         self.setFixedSize(780, 640)
         self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha-2') # {VERSION}')
+
+        # self.ui.retranslateUi(self)
+
         self.show()
 
         if IS_RUNNING_FROM_SOURCE:
@@ -268,9 +271,9 @@ class MainWindow(QtWidgets.QMainWindow):
             if SETTINGS['Theme'].lower() in ['light', 'dark']:
                 self.mode = str(SETTINGS['Theme'].lower())
             else:
-                self.mode = str('dark')
+                self.mode = str('light')
         except (KeyError, AttributeError, TypeError):
-            self.mode = str('dark')
+            self.mode = str('light')
 
         # romfs folder
         try:
@@ -914,35 +917,28 @@ class MainWindow(QtWidgets.QMainWindow):
     # Starting Item to starting-item and also converts names that were changed to look nicer
     def listToItem(self, item):
         s = sub(" ", "-", item).lower()
-
-        # if s in ITEM_NAMES and convert:
-        #     s = ITEM_NAMES[s]
         
         return s
     
 
 
-    # Override key press event to change theme
-    def keyPressEvent(self, event):
+    def setLightMode(self):
+        self.mode = str('light')
+        self.setStyleSheet(LIGHT_STYLESHEET)
+        if self.ui.explainationLabel.text() == 'Hover over an option to see what it does':
+            self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
+        else:
+            self.ui.explainationLabel.setStyleSheet('color: black;')
+    
 
-        modifiers = QtWidgets.QApplication.keyboardModifiers()
-        self._ctrl_is_active = modifiers == QtCore.Qt.KeyboardModifier.ControlModifier
 
-        if event.key() == QtCore.Qt.Key.Key_L and self._ctrl_is_active:
-            if self.mode == 'light':
-                self.mode = str('dark')
-                self.setStyleSheet(DARK_STYLESHEET)
-                if self.ui.explainationLabel.text() == 'Hover over an option to see what it does':
-                    self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-                else:
-                    self.ui.explainationLabel.setStyleSheet('color: white;')
-            else:
-                self.mode = str('light')
-                self.setStyleSheet(LIGHT_STYLESHEET)
-                if self.ui.explainationLabel.text() == 'Hover over an option to see what it does':
-                    self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
-                else:
-                    self.ui.explainationLabel.setStyleSheet('color: black;')
+    def setDarkMode(self):
+        self.mode = str('dark')
+        self.setStyleSheet(DARK_STYLESHEET)
+        if self.ui.explainationLabel.text() == 'Hover over an option to see what it does':
+            self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
+        else:
+            self.ui.explainationLabel.setStyleSheet('color: white;')
     
 
 
