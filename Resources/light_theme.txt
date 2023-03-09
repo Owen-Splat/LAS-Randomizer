@@ -1,3 +1,30 @@
+/*
+MIT License
+
+Copyright (c) 2021-2022 Yunosuke Ohsugi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
+/* Modified from PyQtDarkTheme */
+
 QMainWindow::separator {
     width: 4px;
     height: 4px;
@@ -94,4 +121,35 @@ QTabBar::tab:top:hover {
 QPushButton {
     background-color: rgb(200, 205, 210);
     color: black;
+}
+QScrollBar:vertical {
+    background-color: rgb(200, 205, 210);
+    width: 15px;
+    margin: 15px 3px 15px 3px;
+    border: 1px transparent rgb(200, 205, 210);
+    border-radius: 2px;
+}
+QScrollBar::handle:vertical {
+    background-color: rgba(120, 180, 250, 0.333);
+    border-radius: 2px;
+}
+QScrollBar::sub-line:vertical {
+    margin: 3px 0px 3px 0px;
+    height: 12px;
+    width: 15px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical {
+    margin: 3px 0px 3px 0px;
+    height: 12px;
+    width: 15px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
 }

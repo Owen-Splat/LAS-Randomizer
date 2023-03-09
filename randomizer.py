@@ -27,7 +27,7 @@ except ImportError:
         pass # Ignore for versions of Windows before Windows 7
 
 app = QtWidgets.QApplication([])
-app.setStyle('Fusion')
+app.setStyle('cleanlooks')
 app.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, 'LASR_Icon.ico')))
 
 m = window.MainWindow()

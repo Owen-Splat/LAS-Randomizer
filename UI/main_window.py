@@ -41,11 +41,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
         if self.mode == 'light':
             self.setStyleSheet(LIGHT_STYLESHEET)
-            # self.fixDisabledWidgets()
             self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
         else:
             self.setStyleSheet(DARK_STYLESHEET)
-            # self.fixDisabledWidgets()
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
 
         ### SUBSCRIBE TO EVENTS
@@ -80,12 +78,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.includeButton_3.clicked.connect(self.includeButton_3_Clicked)
         self.ui.excludeButton_3.clicked.connect(self.excludeButton_3_Clicked)
         ### DESCRIPTIONS
-        self.descItems = self.ui.tab.findChildren(QtWidgets.QCheckBox)
-        self.descItems.extend([self.ui.seashellsComboBox,
-                                self.ui.tricksComboBox,
-                                self.ui.instrumentsComboBox,
-                                self.ui.owlsComboBox])
-        for item in self.descItems:
+        desc_items = self.ui.tab.findChildren(QtWidgets.QCheckBox)
+        desc_items.extend([
+            self.ui.seashellsComboBox,
+            self.ui.tricksComboBox,
+            self.ui.instrumentsComboBox,
+            self.ui.owlsComboBox
+        ])
+        for item in desc_items:
             item.installEventFilter(self)
         
         ### show and check for updates
