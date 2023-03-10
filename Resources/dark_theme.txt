@@ -85,11 +85,9 @@ QProgressBar::chunk:disabled {
     background: rgb(80, 85, 90);
 }
 QComboBox {
-    border: 1px solid rgb(50, 55, 60);
-    min-height: 1.5em;
-    padding: 0 4px;
-    background: rgb(60, 65, 70);
-    border-radius: 4px;
+    border: 1px solid rgb(60, 65, 70);
+    background: rgb(50, 55, 60);
+    border-radius: 1px;
 }
 QComboBox:focus,
 QComboBox:open {

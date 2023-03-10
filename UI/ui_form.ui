@@ -827,7 +827,7 @@
          </font>
         </property>
         <property name="whatsThis">
-         <string>This controls how many Instruments are required to open the egg&lt;br&gt;&lt;/br&gt;You will still need Ocarina and Ballad of the Wind Fish</string>
+         <string>This controls how many Instruments are required to open the egg&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
         </property>
         <property name="editable">
          <bool>false</bool>

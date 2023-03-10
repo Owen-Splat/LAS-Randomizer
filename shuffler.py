@@ -70,6 +70,7 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.append('trendy-prize-5')
         vanilla_locations.append('trendy-prize-6')
         vanilla_locations.append('kanalet-final-guard')
+        vanilla_locations.append('fishing-loose')
         # vanilla_locations.remove('bay-passage-sunken')
         # vanilla_locations.remove('river-crossing-cave')
         # vanilla_locations.remove('kanalet-moat-south')

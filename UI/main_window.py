@@ -1,4 +1,4 @@
-from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6 import QtCore, QtWidgets
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
 from update import UpdateProcess
@@ -51,6 +51,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # menu bar items
         self.ui.actionLight.triggered.connect(self.setLightMode)
         self.ui.actionDark.triggered.connect(self.setDarkMode)
+        self.ui.actionChangelog.triggered.connect(self.showChangelog)
         # folder browsing, seed generation, and randomize button
         self.ui.browseButton1.clicked.connect(self.romBrowse)
         self.ui.browseButton2.clicked.connect(self.outBrowse)
@@ -83,7 +84,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.seashellsComboBox,
             self.ui.tricksComboBox,
             self.ui.instrumentsComboBox,
-            self.ui.owlsComboBox
+            self.ui.owlsComboBox,
+            self.ui.goalComboBox
         ])
         for item in desc_items:
             item.installEventFilter(self)
@@ -108,20 +110,20 @@ class MainWindow(QtWidgets.QMainWindow):
     # event filter for showing option info onto label
     def eventFilter(self, source, event):
         
-        if event.type() == QtCore.QEvent.Type.HoverEnter:
+        if event.type() == QtCore.QEvent.Type.HoverEnter: # Display description text of items when hovered over
             self.ui.explainationLabel.setText(source.whatsThis())
             if self.mode == 'light':
                 self.ui.explainationLabel.setStyleSheet('color: black;')
             else:
                 self.ui.explainationLabel.setStyleSheet('color: white;')
         
-        elif event.type() == QtCore.QEvent.Type.HoverLeave:
+        elif event.type() == QtCore.QEvent.Type.HoverLeave: # Display default text when item is no longer hovered over
             self.ui.explainationLabel.setText('Hover over an option to see what it does')
             if self.mode == 'light':
                 self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
             else:
                 self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-
+        
         return QtWidgets.QWidget.eventFilter(self, source, event)
     
     
@@ -939,6 +941,20 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
         else:
             self.ui.explainationLabel.setStyleSheet('color: white;')
+    
+
+
+    def showChangelog(self):
+        message = QtWidgets.QMessageBox()
+        message.setWindowTitle('Changelog')
+        message.setText(CHANGE_LOG)
+
+        if self.mode == 'light':
+            message.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            message.setStyleSheet(DARK_STYLESHEET)
+        
+        message.exec()
     
 
 

@@ -818,7 +818,7 @@ class Ui_MainWindow(object):
         self.goalComboBox.setItemText(8, QCoreApplication.translate("MainWindow", u"Required Instruments:  8", None))
 
 #if QT_CONFIG(whatsthis)
-        self.goalComboBox.setWhatsThis(QCoreApplication.translate("MainWindow", u"This controls how many Instruments are required to open the egg<br></br>You will still need Ocarina and Ballad of the Wind Fish", None))
+        self.goalComboBox.setWhatsThis(QCoreApplication.translate("MainWindow", u"This controls how many Instruments are required to open the egg<br></br><u>Not yet implemented</u>", None))
 #endif // QT_CONFIG(whatsthis)
         self.goalComboBox.setPlaceholderText("")
         self.owlsComboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Owl Gifts: None", None))

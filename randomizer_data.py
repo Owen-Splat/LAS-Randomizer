@@ -16,6 +16,9 @@ with open(os.path.join(RESOURCE_PATH, 'light_theme.txt'), 'r') as f:
 with open(os.path.join(RESOURCE_PATH, 'dark_theme.txt'), 'r') as f:
     DARK_STYLESHEET = f.read()
 
+with open(os.path.join(RESOURCE_PATH, 'changelog.txt'), 'r') as f:
+    CHANGE_LOG = f.read()
+
 with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     items = yaml.safe_load(f)
     ITEM_DEFS = items['Item_Pool']

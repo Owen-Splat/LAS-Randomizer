@@ -24,7 +24,7 @@ Chest_Locations:
 Fishing_Rewards:
   - fishing-50
   - fishing-orange
-  - fishing-loose
+  # - fishing-loose
   - fishing-100
   - fishing-150
   - fishing-cheep-cheep
