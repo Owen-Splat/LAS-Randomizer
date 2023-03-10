@@ -1,6 +1,7 @@
 <b>New:</b><br></br>
 - New GUI makeover!<br></br>
 - Starting Items toggle<br></br>
+- Shuffled Dungeons (only randomizes front entrances, glitches not included)<br></br>
 - Witch is now randomized<br></br>
 - Shuffled Powder (This setting behaves like Shuffled Bombs)<br></br>
 - Bad Pets (Companions will follow you inside dungeons, no logic currently)<br></br>
@@ -12,7 +13,7 @@
 <br></br>
 
 <b>Bug Fixes:</b><br></br>
-- Fixes duplicate Golden Leaf indexes<br></br>
+- Fixes duplicate Golden Leaves<br></br>
 - Fixes message text on Heart Pieces and Golden Leaves<br></br>
 <br></br>
 
