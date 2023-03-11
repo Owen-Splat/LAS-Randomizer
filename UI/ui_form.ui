@@ -1136,7 +1136,7 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>Sets the Sign Maze to be automatically comleted</string>
+          <string>Sets the Sign Maze to be automatically completed</string>
          </property>
          <property name="text">
           <string>Open Mamu</string>

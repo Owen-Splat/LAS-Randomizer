@@ -895,7 +895,7 @@ class Ui_MainWindow(object):
         self.mazeCheck.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(whatsthis)
-        self.mazeCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Sets the Sign Maze to be automatically comleted", None))
+        self.mazeCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Sets the Sign Maze to be automatically completed", None))
 #endif // QT_CONFIG(whatsthis)
         self.mazeCheck.setText(QCoreApplication.translate("MainWindow", u"Open Mamu", None))
 #if QT_CONFIG(tooltip)
