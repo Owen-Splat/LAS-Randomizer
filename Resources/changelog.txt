@@ -1,28 +1,32 @@
-<b>New:</b><br></br>
-- New GUI makeover!<br></br>
-- Starting Items toggle<br></br>
-- Shuffled Dungeons (only randomizes front entrances, glitches not included)<br></br>
-- Witch is now randomized<br></br>
-- Shuffled Powder (This setting behaves like Shuffled Bombs)<br></br>
-- Bad Pets (Companions will follow you inside dungeons, no logic currently)<br></br>
-- New implementation of Randomized Music, resulting in smaller output sizes<br></br>
-- Owl Statue locations added to the toggleable locations tab<br></br>
-- Visible items will now trigger the Seashell Sensor, disguised traps will not<br></br>
-- Chest Sizes tweaks<br></br>
-- Enemizer tweaks<br></br>
-<br></br>
+<b>New:</b>
+<br></br><br></br>
+- GUI makeover! Better on the eyes and easier to find settings
+<br></br><br></br>
+- Added a Starting Items tab to toggle which items to start with
+<br></br><br></br>
+- Witch is now randomized
+<br></br><br></br>
+- Shuffled Powder (This setting behaves like Shuffled Bombs)
+<br></br><br></br>
+- Shuffled Dungeons (only randomizes front entrances, glitches not included)
+<br></br><br></br>
+- Bad Pets (Companions will follow you inside dungeons, no logic currently)
+<br></br><br></br>
+- New implementation of Randomized Music, results in smaller output sizes
+<br></br><br></br>
+- Owl Statue locations added to the toggleable locations tab
+<br></br><br></br>
+- Color Dungeon Blue Rupees added to the toggleable locations tab
+<br></br><br></br>
+- Visible items will now trigger the Seashell Sensor, disguised traps will not
+<br></br><br></br>
+- Chest Sizes tweaks
+<br></br><br></br>
+- Enemizer tweaks
+<br></br><br></br><br></br>
 
-<b>Bug Fixes:</b><br></br>
-- Fixes duplicate Golden Leaves<br></br>
-- Fixes message text on Heart Pieces and Golden Leaves<br></br>
-<br></br>
-
-<b>Known Issues:</b><br></br>
-- Color Dungeon guards still sell Magic Powder with Shuffled Powder on<br></br>
-- Starting with Cello results in Mabe not being cleared on the map<br></br>
-- The fishing bottle check is left vanilla<br></br>
-- The Ball & Chain Soldier check is left vanilla<br></br>
-- Small key drops will trigger the compass ringtone regardless of what they are<br></br>
-- Choosing Shuffled Bombs/Powder sets drops to 0<br></br>
-- While Trading Quest items work, they will not be displayed in the inventory<br></br>
-- Dampe lacks logic for instrument shuffle, and may permanently remove items
+<b>Bug Fixes:</b>
+<br></br><br></br>
+- Fixes duplicate Golden Leaves
+<br></br><br></br>
+- Fixes message text on Heart Pieces and Golden Leaves

@@ -19,6 +19,9 @@ with open(os.path.join(RESOURCE_PATH, 'dark_theme.txt'), 'r') as f:
 with open(os.path.join(RESOURCE_PATH, 'changelog.txt'), 'r') as f:
     CHANGE_LOG = f.read()
 
+with open(os.path.join(RESOURCE_PATH, 'issues.txt'), 'r') as f:
+    KNOWN_ISSUES = f.read()
+
 with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     items = yaml.safe_load(f)
     ITEM_DEFS = items['Item_Pool']
@@ -62,6 +65,7 @@ HEART_PIECE_LOCATIONS = LOCATIONS['Heart_Pieces']
 LEAF_LOCATIONS = LOCATIONS['Golden_Leaves']
 DUNGEON_OWLS = LOCATIONS['Dungeon_Owl_Statues']
 OVERWORLD_OWLS = LOCATIONS['Overworld_Owl_Statues']
+BLUE_RUPEES = LOCATIONS['Blue_Rupees']
 
 # keep track of all game locations
 TOTAL_CHECKS = set([
@@ -69,7 +73,7 @@ TOTAL_CHECKS = set([
     *DAMPE_REWARDS, *FREE_GIFT_LOCATIONS, *TRADE_GIFT_LOCATIONS,
     *BOSS_LOCATIONS, *MISC_LOCATIONS, *SEASHELL_REWARDS,
     *HEART_PIECE_LOCATIONS, *TRENDY_REWARDS, *LEAF_LOCATIONS,
-    *DUNGEON_OWLS, *OVERWORLD_OWLS
+    *DUNGEON_OWLS, *OVERWORLD_OWLS, *BLUE_RUPEES
 ])
 
 SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)

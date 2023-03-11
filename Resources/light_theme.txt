@@ -77,7 +77,9 @@ QComboBox {
     padding: 0 4px;
     border-radius: 1px;
 }
-QComboBox:focus,
+QComboBox:hover {
+    border: 1px solid rgb(120, 180, 250);
+}
 QComboBox:open {
     border: 1px solid rgb(120, 180, 250);
 }
@@ -91,6 +93,9 @@ QComboBox::item:selected {
 }
 QComboBox::indicator:checked {
     width: 18px;
+}
+QLineEdit:hover {
+    border: 1px solid rgb(120, 180, 250);
 }
 QTabWidget::pane {
     border: 1px solid rgb(190, 195, 200);
@@ -122,7 +127,14 @@ QTabBar::tab:top:hover {
 }
 QPushButton {
     background-color: rgb(200, 205, 210);
+    border: 1px solid rgb(60, 65, 70);
     color: black;
+    min-width: 75px;
+    min-height: 23px;
+    font-size:calc(12px + 1.5vw); /* cool hack to set minimum font size */
+}
+QPushButton:hover {
+    border-color: rgb(120, 180, 250);
 }
 QScrollBar:vertical {
     background-color: rgb(200, 205, 210);
@@ -154,4 +166,16 @@ QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
 }
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;
+}
+QGroupBox {
+    border: 2px solid rgb(190, 195, 200);
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 1ex;
+}
+QGroupBox::title {
+    padding: 0 3px;
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
 }

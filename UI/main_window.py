@@ -52,6 +52,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionLight.triggered.connect(self.setLightMode)
         self.ui.actionDark.triggered.connect(self.setDarkMode)
         self.ui.actionChangelog.triggered.connect(self.showChangelog)
+        self.ui.actionKnown_Issues.triggered.connect(self.showIssues)
         # folder browsing, seed generation, and randomize button
         self.ui.browseButton1.clicked.connect(self.romBrowse)
         self.ui.browseButton2.clicked.connect(self.outBrowse)
@@ -69,6 +70,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.bossCheck.clicked.connect(self.bossCheck_Clicked)
         self.ui.miscellaneousCheck.clicked.connect(self.miscellaneousCheck_Clicked)
         self.ui.heartsCheck.clicked.connect(self.heartsCheck_Clicked)
+        self.ui.rupCheck.clicked.connect(self.rupCheck_Clicked)
         self.ui.seashellsComboBox.currentIndexChanged.connect(self.updateSeashells)
         self.ui.leavesCheck.clicked.connect(self.leavesCheck_Clicked)
         self.ui.owlsComboBox.currentIndexChanged.connect(self.updateOwls)
@@ -106,7 +108,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.process.start() # start the thread
 
 
-    
+
     # event filter for showing option info onto label
     def eventFilter(self, source, event):
         
@@ -123,11 +125,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
             else:
                 self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-        
+            
+            # if isinstance(source, QtWidgets.QComboBox) and source.hasFocus():
+            #     source.clearFocus()
+                
         return QtWidgets.QWidget.eventFilter(self, source, event)
     
-    
-    
+
+
     # show update if there is one
     def showUpdate(self, update):
         if update:
@@ -135,8 +140,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.ui.updateChecker.setText('No updates available')
     
-    
-    
+
+
     # apply defaults
     def applyDefaults(self):
         self.ui.chestsCheck.setChecked(True)
@@ -702,6 +707,11 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
 
+    def rupCheck_Clicked(self):
+        self.excluded_checks.difference_update(BLUE_RUPEES) # regardless of if it's checked or not, reset blue rupees
+    
+
+
     # Update Number of Max Seashells
     def updateSeashells(self):
         value = self.ui.seashellsComboBox.currentIndex()
@@ -842,6 +852,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     continue
                 if check in OVERWORLD_OWLS and not self.overworld_owls:
                     continue
+                if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
+                    continue
                 self.ui.listWidget.addItem(self.checkToList(str(check)))
             
             self.ui.listWidget_2.clear()
@@ -849,6 +861,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 if check in DUNGEON_OWLS and not self.dungeon_owls:
                     continue
                 if check in OVERWORLD_OWLS and not self.overworld_owls:
+                    continue
+                if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
                     continue
                 self.ui.listWidget_2.addItem(self.checkToList(str(check)))
             
@@ -924,6 +938,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
 
+    # Sets the app to Light Mode
     def setLightMode(self):
         self.mode = str('light')
         self.setStyleSheet(LIGHT_STYLESHEET)
@@ -934,6 +949,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
 
+    # Sets the app to Dark Mode
     def setDarkMode(self):
         self.mode = str('dark')
         self.setStyleSheet(DARK_STYLESHEET)
@@ -944,9 +960,10 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
 
+    # Display new window listing the new features and bug fixes
     def showChangelog(self):
         message = QtWidgets.QMessageBox()
-        message.setWindowTitle('Changelog')
+        message.setWindowTitle("What's New")
         message.setText(CHANGE_LOG)
 
         if self.mode == 'light':
@@ -955,6 +972,29 @@ class MainWindow(QtWidgets.QMainWindow):
             message.setStyleSheet(DARK_STYLESHEET)
         
         message.exec()
+    
+
+
+    # Display new window listing the currently known issues
+    def showIssues(self):
+        message = QtWidgets.QMessageBox()
+        message.setWindowTitle("Known Issues")
+        message.setText(KNOWN_ISSUES)
+
+        if self.mode == 'light':
+            message.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            message.setStyleSheet(DARK_STYLESHEET)
+        
+        message.exec()
+    
+
+
+    # Override mouse click event to make certain stuff lose focus
+    def mousePressEvent(self, event):
+        focused_widget = self.focusWidget()
+        if isinstance(focused_widget, QtWidgets.QLineEdit):
+            focused_widget.clearFocus()
     
 
 

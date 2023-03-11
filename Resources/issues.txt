@@ -1,0 +1,15 @@
+- Color Dungeon guards still sell Magic Powder with Shuffled Powder on
+<br></br><br></br>
+- Starting with Cello results in Mabe not being cleared on the map
+<br></br><br></br>
+- The fishing bottle check is left vanilla
+<br></br><br></br>
+- The Ball & Chain Soldier check is left vanilla
+<br></br><br></br>
+- Small key drops will trigger the compass ringtone regardless of what they are
+<br></br><br></br>
+- Choosing Shuffled Bombs/Powder sets drops to 0
+<br></br><br></br>
+- While Trading Quest items work, they will not be displayed in the inventory
+<br></br><br></br>
+- Dampe lacks logic for instrument shuffle, and may permanently remove items
