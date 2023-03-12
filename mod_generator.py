@@ -270,8 +270,8 @@ class ModsProcess(QtCore.QThread):
                     act.type = 0xa9 # small key
                     act.posX += 1.5 # move right one tile
                     act.posZ -= 1.5 # move up one tile
-                    act.switches[0] = (1, 1217) # PotholeKeySpawn
-                    act.switches[1] = (1, 1169) # PotholeGet
+                    act.switches[0] = (1, self.global_flags['PotholeKeySpawn']) # index of PotholeKeySpawn
+                    act.switches[1] = (1, self.global_flags['PotholeGet']) # index of PotholeGet
                 
                 small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
                 room_data.setSmallKeyParams(model_path, model_name, room, item_key)
@@ -1799,15 +1799,6 @@ class ModsProcess(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
-        ### FieldObject - shuffles BGM of opening D4
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/FieldObject.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event16').data.params.data['label'] = self.songs_dict['BGM_EVENT_BASIN_ANGLER_OPEN']
-        if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/FieldObject.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
-
         ### Gohma - shuffles boss BGMs
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Gohma.bfevfl')
@@ -1877,16 +1868,6 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Rola.bfevfl', flow)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
-        
-        ### RoosterBones - shuffles rooster resurrection music
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RoosterBones.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event9').data.params.data['label'] = self.songs_dict['BGM_RESUSCITATION_OF_CHICKEN']
-            event_tools.findEvent(flow.flowchart, 'Event11').data.params.data['label'] = self.songs_dict['BGM_RESUSCITATION_OF_CHICKEN'] # StopBGM
-        if self.thread_active:
-            event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RoosterBones.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
@@ -2559,7 +2540,7 @@ class ModsProcess(QtCore.QThread):
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
         restrictions = (-1, 0x3, 0x15, 0x16, 0x3D)
-        
+
         enemy_ids = {
             'land': land_ids,
             'air': air_ids,

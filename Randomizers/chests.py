@@ -201,7 +201,7 @@ def makeChestsFaster(flowchart):
     event_tools.insertEventAfter(flowchart, 'Event52', None)
 
     # now edit Link to move 3x faster if he is in the way of the chest
-    event_tools.findEvent(flowchart, 'Event46').data.params.data['speed'] = 3
+    # event_tools.findEvent(flowchart, 'Event46').data.params.data['speed'] = 3
     # event_tools.findEvent(flowchart, 'Event46').data.params.data = {
     #     'speed': 3,
     #     'distance': 1.5,
