@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 200 # 145 - # 288 total, but junk gets placed quick, so just count non-junk items
-        self.num_of_mod_tasks = 242
+        self.num_of_mod_tasks = 243
         
         # if settings['shuffle-bombs']:
         #     self.num_of_mod_files -= 1

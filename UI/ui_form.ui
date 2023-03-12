@@ -683,7 +683,7 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>This controls whether bosses can drop progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
+          <string>This controls whether bosses can drop progress items. This includes non dungeon bosses&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will still be randomized,&lt;/u&gt; but will only contain optional items</string>
          </property>
          <property name="text">
           <string>Boss Drops</string>
@@ -743,7 +743,7 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic is not written to work with instrument shuffle,&lt;/u&gt; and may still remove items from inventory</string>
+          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic does not work with instrument shuffle,&lt;/u&gt; and may permanently remove items</string>
          </property>
          <property name="text">
           <string>Dampé</string>
@@ -1346,7 +1346,7 @@
           <string>Fast Fishing</string>
          </property>
         </widget>
-        <widget class="QCheckBox" name="fastMSCheck">
+        <widget class="QCheckBox" name="stalfosCheck">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1371,7 +1371,7 @@
           <string>Makes it so that you only need to fight the last iteration of Master Stalfos</string>
          </property>
          <property name="text">
-          <string>Fast Master Stalfos</string>
+          <string>Fast Stalfos</string>
          </property>
          <property name="checkable">
           <bool>true</bool>

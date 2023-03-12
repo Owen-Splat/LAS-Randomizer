@@ -81,9 +81,6 @@ QProgressBar {
 QProgressBar::chunk {
     background: rgb(120, 180, 250);
 }
-QProgressBar::chunk:disabled {
-    background: rgb(80, 85, 90);
-}
 QComboBox {
     border: 1px solid rgb(60, 65, 70);
     background: rgb(50, 55, 60);

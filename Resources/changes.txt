@@ -1,0 +1,35 @@
+<b>New Features:</b>
+<br></br><br></br>
+- Starting Items tab to toggle which items to start with
+<br></br><br></br>
+- Witch is now randomized instead of always giving Powder
+<br></br><br></br>
+- Shuffled Powder: Behaves exactly the same as Shuffled Bombs
+<br></br><br></br>
+- Shuffled Dungeons: Only includes front entrances, glitched logic not written
+<br></br><br></br>
+- Bad Pets: Companions will follow you inside dungeons, no logic currently
+<br></br><br></br><br></br>
+
+<b>Changes:</b>
+<br></br><br></br>
+- GUI makeover! Better on the eyes and easier to find settings
+<br></br><br></br>
+- Owl Statue locations added to the Locations tab
+<br></br><br></br>
+- Color Dungeon Blue Rupees added to the Locations tab
+<br></br><br></br>
+- Visible items will now trigger the Seashell Sensor, disguised traps will not
+<br></br><br></br>
+- New implementation of Randomized Music, results in smaller output sizes
+<br></br><br></br>
+- Chest Sizes tweaks: Fixes Trade Quest items always being in big chests
+<br></br><br></br>
+- Enemizer tweaks: Fixes sideways enemies and prevents some enemy spam
+<br></br><br></br><br></br>
+
+<b>Bug Fixes:</b>
+<br></br><br></br>
+- Duplicate Golden Leaves
+<br></br><br></br>
+- Collection complete messages displaying early

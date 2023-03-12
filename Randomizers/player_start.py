@@ -53,7 +53,7 @@ def makeStartChanges(flowchart, settings):
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld10N', 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'AppearStairsFld11O', 'value': True}))
     
-    if settings['fast-master-stalfos']: # set the door open flags for the first 3 master stalfos fights to be true
+    if settings['fast-stalfos']: # set the door open flags for the first 3 master stalfos fights to be true
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl1_L05_05F', 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl2_L05_04H', 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl3_L05_01F', 'value': True}))

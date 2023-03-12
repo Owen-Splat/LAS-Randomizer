@@ -69,9 +69,6 @@ QProgressBar {
 QProgressBar::chunk {
     background: rgb(120, 180, 250);
 }
-QProgressBar::chunk:disabled {
-    background: rgb(80, 85, 90);
-}
 QComboBox {
     border: 1px solid rgb(50, 55, 60);
     padding: 0 4px;
@@ -178,4 +175,7 @@ QGroupBox::title {
     padding: 0 3px;
     subcontrol-origin: margin;
     subcontrol-position: top center;
+}
+QMessageBox {
+    background-color: rgb(240,240,240);
 }

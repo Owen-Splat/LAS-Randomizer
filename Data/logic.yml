@@ -1797,7 +1797,7 @@ D5-owl-statue-triple-stalfos:
   region: catfish-maw
   spoiler-region: catfish-maw
   condition-basic: D5-7F & stone-beak-D5
-D5-owl-statue-before-boss:
+D5-owl-statue-before-slime-eel:
   type: item
   subtype: dungeon-statue
   content: rupee-20
@@ -2043,7 +2043,7 @@ D7-owl-statue-kirbys:
   region: eagle-tower
   spoiler-region: eagle-tower
   condition-basic: D7-2D & stone-beak-D7
-D7-owl-statue-3-of-a-kind-south:
+D7-owl-statue-hookshot-chest:
   type: item
   subtype: dungeon-statue
   content: rupee-20

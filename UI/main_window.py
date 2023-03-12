@@ -38,6 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.applyDefaults()
         
         self.updateOwls()
+        self.updateSeashells()
         
         if self.mode == 'light':
             self.setStyleSheet(LIGHT_STYLESHEET)
@@ -174,12 +175,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.heartsCheck.setChecked(True)
         self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
 
+        self.ui.rupCheck.setChecked(False)
+        self.excluded_checks.difference_update(BLUE_RUPEES)
+
         self.ui.instrumentCheck.setChecked(True)
         self.ui.instrumentsComboBox.setCurrentIndex(0)
 
         self.ui.seashellsComboBox.setCurrentIndex(2)
-        self.excluded_checks.difference_update(set(['5-seashell-reward', '15-seashell-reward']))
-        self.excluded_checks.update(set(['30-seashell-reward', '40-seashell-reward', '50-seashell-reward']))
+        self.updateSeashells()
+
+        self.ui.owlsComboBox.setCurrentIndex(0)
+        self.updateOwls()
 
         self.ui.leavesCheck.setChecked(True)
         self.excluded_checks.difference_update(LEAF_LOCATIONS)
@@ -199,15 +205,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.kanaletCheck.setChecked(True)
         self.ui.badPetsCheck.setChecked(False)
         self.ui.trapsCheck.setChecked(False)
-        self.ui.rupCheck.setChecked(False)
         self.ui.bridgeCheck.setChecked(True)
         self.ui.mazeCheck.setChecked(True)
         self.ui.swampCheck.setChecked(False)
-        self.ui.fastMSCheck.setChecked(False)
+        self.ui.stalfosCheck.setChecked(False)
         self.ui.chestSizesCheck.setChecked(False)
         self.ui.songsCheck.setChecked(False)
         self.ui.fastFishingCheck.setChecked(True)
-        self.ui.owlsComboBox.setCurrentIndex(0)
         self.ui.dungeonsCheck.setChecked(False)
 
         self.starting_gear = list() # fully reset starting items
@@ -246,7 +250,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Fast_Stealing': self.ui.stealingCheck.isChecked(),
             'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
             'Fast_Songs': self.ui.songsCheck.isChecked(),
-            'Fast_Master_Stalfos': self.ui.fastMSCheck.isChecked(),
+            'Fast_Stalfos': self.ui.stalfosCheck.isChecked(),
             'Scaled_Chest_Sizes': self.ui.chestSizesCheck.isChecked(),
             'Reduced_Farming': self.ui.farmingCheck.isChecked(),
             'Shuffled_Powder': self.ui.shuffledPowderCheck.isChecked(),
@@ -390,8 +394,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # seashells
         try:
             self.ui.seashellsComboBox.setCurrentIndex(SEASHELL_VALUES.index(SETTINGS['Seashells']))
-        except (KeyError, TypeError, IndexError) as e:
-            print(e.args)
+        except (KeyError, TypeError, IndexError):
             self.ui.seashellsComboBox.setCurrentIndex(2)
         
         # logic
@@ -438,9 +441,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # fast master stalfos
         try:
-            self.ui.fastMSCheck.setChecked(SETTINGS['Fast_Master_Stalfos'])
+            self.ui.stalfosCheck.setChecked(SETTINGS['Fast_Stalfos'])
         except (KeyError, TypeError):
-            self.ui.fastMSCheck.setChecked(False)
+            self.ui.stalfosCheck.setChecked(False)
         
         # scaled chest sizes
         try:
@@ -798,7 +801,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 'owl-overworld-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('overworld', 'all') else False,
                 'owl-dungeon-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('dungeons', 'all') else False,
                 # 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
-                'fast-master-stalfos': self.ui.fastMSCheck.isChecked(),
+                'fast-stalfos': self.ui.stalfosCheck.isChecked(),
                 'scaled-chest-sizes': self.ui.chestSizesCheck.isChecked(),
                 'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in self.excluded_checks]) > 0 else False,
                 'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in self.excluded_checks]) > 0 else False,
@@ -1008,46 +1011,42 @@ class MainWindow(QtWidgets.QMainWindow):
 # Create custom QListWidgetItem to sort locations alphanumerically
 class NumericalListWidget(QtWidgets.QListWidgetItem):
     def __lt__(self, other):
-        locations = [self.text(), other.text()]
-        locations.sort()
-
         try:
+            dungeon_checks = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
+
             nums_a = []
             for c in self.text():
                 if c.isdigit():
                     nums_a.append(c)
-            if self.text()[0] == 'D':
+            if self.text().startswith(dungeon_checks):
                 del nums_a[0]
             
             nums_b = []
             for c in other.text():
                 if c.isdigit():
                     nums_b.append(c)
-            if other.text()[0] == 'D':
+            if other.text().startswith(dungeon_checks):
                 del nums_b[0]
             
-            if len(nums_a) < 1 and len(nums_b) < 1:
-                if self.text() == locations[0]:
-                    return True
-                else:
-                    return False
+            if (len(nums_a) < 1) and (len(nums_b) < 1):
+                raise ValueError('')
             
             a = int("".join(nums_a))
             b = int("".join(nums_b))
             
-            if (self.text()[0] == 'D') and (other.text()[0] == 'D'):
+            if (self.text().startswith(dungeon_checks)) and (other.text().startswith(dungeon_checks)):
                 if not len(nums_a) == len(nums_b):
                     return len(nums_a) < len(nums_b)
             
             if (self.text()[0] == 'D') or (other.text()[0] == 'D'):
-                if self.text() == locations[0]:
-                    return True
-                else:
-                    return False
+                raise TypeError('')
                         
             return a < b
         
         except (IndexError, TypeError, ValueError):
+            locations = [self.text(), other.text()]
+            locations.sort()
+
             if self.text() == locations[0]:
                 return True
             else:

@@ -16,7 +16,7 @@ with open(os.path.join(RESOURCE_PATH, 'light_theme.txt'), 'r') as f:
 with open(os.path.join(RESOURCE_PATH, 'dark_theme.txt'), 'r') as f:
     DARK_STYLESHEET = f.read()
 
-with open(os.path.join(RESOURCE_PATH, 'changelog.txt'), 'r') as f:
+with open(os.path.join(RESOURCE_PATH, 'changes.txt'), 'r') as f:
     CHANGE_LOG = f.read()
 
 with open(os.path.join(RESOURCE_PATH, 'issues.txt'), 'r') as f:
