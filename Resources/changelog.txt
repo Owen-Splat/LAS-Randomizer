@@ -4,6 +4,8 @@
 <br></br><br></br>
 - Added a Starting Items tab to toggle which items to start with
 <br></br><br></br>
+- Locations tab now sorts better
+<br></br><br></br>
 - Witch is now randomized
 <br></br><br></br>
 - Shuffled Powder (This setting behaves like Shuffled Bombs)

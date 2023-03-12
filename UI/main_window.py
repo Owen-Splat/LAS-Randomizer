@@ -10,7 +10,7 @@ from indentation import MyDumper
 
 import os
 import random
-from re import sub
+from re import findall, sub
 
 
 
@@ -854,7 +854,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     continue
                 if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
                     continue
-                self.ui.listWidget.addItem(self.checkToList(str(check)))
+                self.ui.listWidget.addItem(NumericalListWidget(self.checkToList(str(check))))
             
             self.ui.listWidget_2.clear()
             for check in self.excluded_checks:
@@ -864,7 +864,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     continue
                 if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
                     continue
-                self.ui.listWidget_2.addItem(self.checkToList(str(check)))
+                self.ui.listWidget_2.addItem(NumericalListWidget(self.checkToList(str(check))))
             
             return
         
@@ -879,7 +879,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
             self.excluded_checks.remove(self.listToCheck(i.text()))
-            self.ui.listWidget.addItem(i.text())
+            self.ui.listWidget.addItem(NumericalListWidget(i.text()))
     
     
     
@@ -887,7 +887,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def excludeButton_Clicked(self):
         for i in self.ui.listWidget.selectedItems():
             self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
-            self.ui.listWidget_2.addItem(i.text())
+            self.ui.listWidget_2.addItem(NumericalListWidget(i.text()))
             self.excluded_checks.add(self.listToCheck(i.text()))
     
     
@@ -1002,3 +1002,53 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.saveSettings()
         event.accept()
+
+
+
+# Create custom QListWidgetItem to sort locations alphanumerically
+class NumericalListWidget(QtWidgets.QListWidgetItem):
+    def __lt__(self, other):
+        locations = [self.text(), other.text()]
+        locations.sort()
+
+        try:
+            nums_a = []
+            for c in self.text():
+                if c.isdigit():
+                    nums_a.append(c)
+            if self.text()[0] == 'D':
+                del nums_a[0]
+            
+            nums_b = []
+            for c in other.text():
+                if c.isdigit():
+                    nums_b.append(c)
+            if other.text()[0] == 'D':
+                del nums_b[0]
+            
+            if len(nums_a) < 1 and len(nums_b) < 1:
+                if self.text() == locations[0]:
+                    return True
+                else:
+                    return False
+            
+            a = int("".join(nums_a))
+            b = int("".join(nums_b))
+            
+            if (self.text()[0] == 'D') and (other.text()[0] == 'D'):
+                if not len(nums_a) == len(nums_b):
+                    return len(nums_a) < len(nums_b)
+            
+            if (self.text()[0] == 'D') or (other.text()[0] == 'D'):
+                if self.text() == locations[0]:
+                    return True
+                else:
+                    return False
+                        
+            return a < b
+        
+        except (IndexError, TypeError, ValueError):
+            if self.text() == locations[0]:
+                return True
+            else:
+                return False
