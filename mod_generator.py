@@ -2558,8 +2558,8 @@ class ModsProcess(QtCore.QThread):
         # enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *water_shallow_ids, *tree_ids, *hole_ids)
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
-        restrictions = [-1, 0x3, 0x15, 0x16, 0x3D]
-
+        restrictions = (-1, 0x3, 0x15, 0x16, 0x3D)
+        
         enemy_ids = {
             'land': land_ids,
             'air': air_ids,

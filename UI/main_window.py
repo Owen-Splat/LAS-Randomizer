@@ -1012,7 +1012,7 @@ class MainWindow(QtWidgets.QMainWindow):
 class NumericalListWidget(QtWidgets.QListWidgetItem):
     def __lt__(self, other):
         try:
-            dungeon_checks = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
+            dungeon_checks = ('D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8')
 
             nums_a = []
             for c in self.text():
@@ -1031,16 +1031,27 @@ class NumericalListWidget(QtWidgets.QListWidgetItem):
             if (len(nums_a) < 1) and (len(nums_b) < 1):
                 raise ValueError('')
             
+            nums_a = "".join(nums_a)
+            nums_b = "".join(nums_b)
+
             a = int("".join(nums_a))
             b = int("".join(nums_b))
             
-            if (self.text().startswith(dungeon_checks)) and (other.text().startswith(dungeon_checks)):
+            if self.text().startswith(dungeon_checks) and other.text().startswith(dungeon_checks):
                 if not len(nums_a) == len(nums_b):
                     return len(nums_a) < len(nums_b)
             
-            if (self.text()[0] == 'D') or (other.text()[0] == 'D'):
+            if self.text().startswith(dungeon_checks) or other.text().startswith(dungeon_checks):
                 raise TypeError('')
-                        
+            
+            if self.text().startswith(nums_a) and not other.text().startswith(nums_b):
+                return True
+            elif other.text().startswith(nums_b) and not self.text().startswith(nums_a):
+                return False
+            
+            if not self.text().startswith(nums_a) and not self.text().endswith(nums_a):
+                raise TypeError('')
+            
             return a < b
         
         except (IndexError, TypeError, ValueError):

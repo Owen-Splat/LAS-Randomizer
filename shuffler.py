@@ -126,17 +126,10 @@ class ItemShuffler(QtCore.QThread):
                 vanilla_locations.append(inst)
         
         # add the starting instruments to the list of starting items since we are done with them
-        self.settings['starting-items'] += start_instruments
+        self.settings['starting-items'].extend(start_instruments)
         
         # do the same for the remaining starting items
         for e, item in enumerate(self.settings['starting-items']):
-            # # add the item as a setting so that the logic knows we have the item
-            # if item in self.settings:
-            #     self.settings[f'{item}:2'] = True
-            # else:
-            #     self.settings[item] = True
-            
-            # self.item_defs[item]['quantity'] -= 1 # remove the item from the item pool
             self.logic_defs[f'starting-item-{e+1}'] = { # add a location for each starting item
                 'type': 'item',
                 'subtype': 'npc',
@@ -146,15 +139,6 @@ class ItemShuffler(QtCore.QThread):
             }
             vanilla_locations.append(f'starting-item-{e+1}')
             self.item_defs['rupee-50']['quantity'] += 1 # since we add a location for each item, add a 50 rupee in the pool for each
-            
-            # # now for each location in the logic that has this item, we want to change it so it won't be added to access later
-            # places = [k for k,v in self.logic_defs.items()
-            #          if v['type'] == 'item'
-            #          and v['content'] == item
-            # ]
-            # for i in places:
-            #     print(i)
-            #     self.logic_defs[i]['content'] = 'rupee-50'
         
         # if shuffled bombs or powder is on, we want to consider them important instead of junk
         if self.settings['shuffle-bombs']:

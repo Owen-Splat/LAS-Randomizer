@@ -14,7 +14,7 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, rand_
     if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
         excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
     
-    restr = list(*enemy_ids['restr'])
+    restr = list(enemy_ids['restr'])
 
     total_ids = (
         *enemy_ids['land'],
