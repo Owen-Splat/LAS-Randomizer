@@ -1,6 +1,8 @@
 v0.3
 
-change color dungeon guards to be compatible new shuffled powder setting
+stress test everything before a stable release
+
+touch up on the GUI a bit more
 
 -------------------------------------------------------------------------------------------------------------------------------------
 v0.4

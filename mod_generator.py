@@ -1484,7 +1484,16 @@ class ModsProcess(QtCore.QThread):
             
             add_bombs = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItem',
                 {'itemType': 4, 'count': 60, 'autoEquip': False})
-
+            
+            # check GetMagicPowder flag before buying
+            # these guards will no longer be a source for getting your main powder, and cannot sell bombs until the player can buy powder
+            if self.placements['settings']['shuffle-powder']:
+                check_powder = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
+                    {'symbol': 'GetMagicPowder'}, {0: 'Event54', 1: 'Event46'})
+                event_tools.setSwitchEventCase(flow.flowchart, 'Event7', 1, check_powder)
+            
+            # check BombsFound flag when buying powder so we can give some additional resources if available
+            # these guards are not a source for getting your main bombs
             if self.placements['settings']['shuffle-bombs']:
                 check_bombs = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
                     {'symbol': data.BOMBS_FOUND_FLAG}, {0: None, 1: add_bombs})
@@ -1492,10 +1501,7 @@ class ModsProcess(QtCore.QThread):
             else:
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', add_bombs)
             
-            # if self.placements['settings']['shuffle-powder']:
-            #     check_powder = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-            #         {'symbol': 'GetMagicPowder'}, {0: None, 1: })
-
+            ###################
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/SkeletalGuardBlue.bfevfl', flow)
                 self.progress_value += 1 # update progress bar
@@ -1573,51 +1579,41 @@ class ModsProcess(QtCore.QThread):
                 self.progress_update.emit(self.progress_value)
 
         ### Items datasheet: Set npcKeys so certain items will show something when you get them.
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
-
-        trap = None
-        for item in sheet['values']:
-            if self.thread_active:
-                # if item['symbol'] == 'MagicPowder_MaxUp':
-                #     item['actorID'] = 124
-                
-                # if item['symbol'] == 'Bomb_MaxUp':
-                #     item['actorID'] = 117
-                #     item['npcKey'] = 'ObjBombBag'
-                
-                # if item['symbol'] == 'Arrow_MaxUp':
-                #     item['actorID'] = 180
-                #     item['npcKey'] = 'ObjArrowBag'
-                
-                if item['symbol'] == 'SmallKey':
-                    item['npcKey'] = 'ItemClothesGreen'
-                    continue
-                
-                if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
-                    item['npcKey'] = 'ItemClothesRed'
-                    trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
-                    continue
-                
-                if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
-                    item['npcKey'] = 'PatchHoneycomb'
-                
-            else: break
-        
-        if trap is not None: # create entries for traps, seashell mansion gives a green rupee if the item isn't in this
-            trap['symbol'] = 'ZapTrap'
-            trap['itemID'] = 127
-            sheet['values'].append(oead_tools.dictToStruct(trap))
-            trap['symbol'] = 'DrownTrap'
-            trap['itemID'] = 128
-            sheet['values'].append(oead_tools.dictToStruct(trap))
-            trap['symbol'] = 'SquishTrap'
-            trap['itemID'] = 129
-            sheet['values'].append(oead_tools.dictToStruct(trap))
-        
         if self.thread_active:
-            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', sheet)
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
+
+            trap = None
+            for item in sheet['values']:
+                if self.thread_active:
+                    if item['symbol'] == 'SmallKey':
+                        item['npcKey'] = 'ItemClothesGreen'
+                        continue
+                    
+                    if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
+                        item['npcKey'] = 'ItemClothesRed'
+                        trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
+                        continue
+                    
+                    if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
+                        item['npcKey'] = 'PatchHoneycomb'
+                    
+                else: break
+            
+            if trap is not None: # create entries for traps, seashell mansion gives a green rupee if the item isn't in this
+                trap['symbol'] = 'ZapTrap'
+                trap['itemID'] = 127
+                sheet['values'].append(oead_tools.dictToStruct(trap))
+                trap['symbol'] = 'DrownTrap'
+                trap['itemID'] = 128
+                sheet['values'].append(oead_tools.dictToStruct(trap))
+                trap['symbol'] = 'SquishTrap'
+                trap['itemID'] = 129
+                sheet['values'].append(oead_tools.dictToStruct(trap))
+            
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
         
         ### Conditions datasheet: Makes needed changes to conditions, as well as creating new ones for seashell sensor
         if self.thread_active:

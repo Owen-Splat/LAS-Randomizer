@@ -1028,12 +1028,12 @@ class NumericalListWidget(QtWidgets.QListWidgetItem):
             if other.text().startswith(dungeon_checks):
                 del nums_b[0]
             
+            nums_a = "".join(nums_a)
+            nums_b = "".join(nums_b)
+            
             if (len(nums_a) < 1) and (len(nums_b) < 1):
                 raise ValueError('')
             
-            nums_a = "".join(nums_a)
-            nums_b = "".join(nums_b)
-
             a = int("".join(nums_a))
             b = int("".join(nums_b))
             
@@ -1051,13 +1051,15 @@ class NumericalListWidget(QtWidgets.QListWidgetItem):
             
             if not self.text().startswith(nums_a) and not self.text().endswith(nums_a):
                 raise TypeError('')
+            if not other.text().startswith(nums_b) and not other.text().endswith(nums_b):
+                raise TypeError('')
             
             return a < b
         
         except (IndexError, TypeError, ValueError):
             locations = [self.text(), other.text()]
             locations.sort()
-
+            
             if self.text() == locations[0]:
                 return True
             else:
