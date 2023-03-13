@@ -52,9 +52,11 @@ def makeNpcChanges(npc, placements):
         npc['graphics']['model'] = 'YoshiDoll'
         return
     
-    if npc['symbol'] == 'ItemHoneycomb':
+    if npc['symbol'] == 'ItemHoneycomb': # Make the Honeycomb object ring the sensor instead of Tarin
         npc['graphics']['path'] = '$0'
         npc['graphics']['model'] = '$1'
+        if placements['tarin-ukuku'] == 'seashell':
+            npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin-ukuku']}"})
         return
     
     if npc['symbol'] == 'ObjClothBag': # Make it so Papahl's bag appear with him when you get the Pineapple
@@ -129,9 +131,6 @@ def makeNpcChanges(npc, placements):
         npc['eventTriggers'][1]['additionalConditions'][0] = {'category': 4, 'parameter': '3'} # Only the instance of Tarin-Ukuku should trigger the trade event
         npc['layoutConditions'][2] = {'category': 1, 'parameter': 'HoneycombDrop', 'layoutID': -1}
         npc['layoutConditions'][4] = {'category': 1, 'parameter': 'TradeStickGet', 'layoutID': 3} # Make Tarin-ukuku appear when you get the stick
-        if placements['tarin-ukuku'] == 'seashell':
-            npc['shellSensor'].append({'category': 4, 'parameter': '3'}) # Only the instance of Tarin-Ukuku should ring the sensor
-            npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin-ukuku']}"})
         return
     
     if npc['symbol'] == 'NpcPapahl':
