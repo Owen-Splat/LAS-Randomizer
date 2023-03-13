@@ -33,3 +33,5 @@
 - Duplicate Golden Leaves
 <br></br><br></br>
 - Collection complete messages displaying early
+<br></br><br></br>
+- Issues with Lens when obtained through a chest

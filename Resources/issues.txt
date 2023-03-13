@@ -1,5 +1,3 @@
-- Color Dungeon guards still sell Magic Powder with Shuffled Powder on
-
 - Starting with Cello results in Mabe not being cleared on the map
 
 - The fishing bottle check is left vanilla

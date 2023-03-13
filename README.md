@@ -59,11 +59,12 @@ Emulator: Open up the mods folder and create a new directory named `01006BB00C6F
 Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or you can launch the game holding L
 
 ### Known Issues:
-- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory. This is not left vanilla since it is an early check
+- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory. This is left vanilla
 - The existence of the Ball & Chain Soldier depends on whether you have the 5th Golden Leaf in your inventory. This is left vanilla
-- Small key drops, despite giving different items, are still technically speaking small key objects and will trigger the compass ringtone regardless of what they are
+- Dampe lacks logic for instrument shuffle, and may permanently remove items from your inventory
+- Starting with Cello results in Mabe not being cleared on the map until BowWow is rescued
+- Small key drops are still technically small key objects and will trigger the compass ringtone regardless of what they are
 - Choosing Shuffled Bombs or Shuffled Powder sets drops of that item to 0. This will not change even after finding it
-- Dampe does not have proper logic for instrument shuffle, and may result in unbeatable seeds
 - While Trading Quest items work, they will not be displayed in the inventory
 - Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
 
