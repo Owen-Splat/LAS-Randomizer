@@ -20,7 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# Pokemon Brilliant Diamond Shining Pearl Randomizer
+# by Aldo796, Copycat, SanGawku, XLuma, and Red.#9015
+
+
 # from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN # - pip install keystone-engine
+
 
 
 class Patcher:
@@ -48,7 +53,8 @@ class Patcher:
     def generatePatch(self):
         """Writes and outputs the IPS32 patch"""
 
-        result = bytearray('IPS32', 'ascii')
+        result = b''
+        result += bytearray('IPS32', 'ascii')
 
         for patch in self.patches:
             address = patch[0]

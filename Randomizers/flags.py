@@ -184,6 +184,8 @@ def makeFlags(sheet):
     global_flags.addFlag('KeyGetKanalet01C')
     global_flags.addFlag('KeyGetKanalet01D')
 
+    global_flags.addFlag('FlippersFound')
+    
     return global_flags.give_flags()
 
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1223})

@@ -25,23 +25,24 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = copy.deepcopy(settings)
         
-        self.valid_placements = 180 # 145 - # 288 total, but junk gets placed quick, so just count non-junk items
-        self.num_of_mod_tasks = 241
-        
-        # if settings['shuffle-bombs']:
-        #     self.num_of_mod_files -= 1
-        
-        if not settings['blup-sanity']:
-            self.num_of_mod_tasks -= 1
+        self.valid_placements = 165 - len(settings['excluded-locations'])
+        self.num_of_mod_tasks = 247
         
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
+
+        if settings['blup-sanity']:
+            self.num_of_mod_tasks += 1
+        
+        if settings['owl-overworld-gifts']:
+            self.valid_placements += 9
         
         if settings['owl-dungeon-gifts']:
+            self.valid_placements += 24
             self.num_of_mod_tasks += 4 # 4 extra room modifications
         
         if settings['randomize-music']:
-            self.num_of_mod_tasks += (102 + 18) # all .lvb files + extra events
+            self.num_of_mod_tasks += (102 + 13) # all .lvb files + extra events
         
         if settings['bad-pets']:
             self.num_of_mod_tasks += 10
@@ -78,17 +79,23 @@ class ProgressWindow(QtWidgets.QMainWindow):
                 self.seed, self.logic, self.settings, self.item_defs, self.logic_defs)
         self.shuffler_process.setParent(self)
         self.shuffler_process.progress_update.connect(self.updateProgress)
+        self.shuffler_process.progress_adjustment.connect(self.adjustProgress)
         self.shuffler_process.give_placements.connect(self.receivePlacements)
         self.shuffler_process.is_done.connect(self.shufflerDone)
         self.shuffler_process.error.connect(self.shufflerError)
-        self.shuffler_process.start() # start the item shuffler        
-
+        self.shuffler_process.start() # start the item shuffler
+    
 
     # receives the int signal as a parameter named progress
     def updateProgress(self, progress):
         self.ui.progressBar.setValue(progress)
     
+
+    # if an item has to be reshuffled, adjust the progress bar accordingly
+    def adjustProgress(self):
+        self.valid_placements += 2
     
+
     # receive the placements from the shuffler thread to the modgenerator
     def receivePlacements(self, placements):
         self.placements = placements
@@ -100,7 +107,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         with open(LOGS_PATH, 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
             f.write(f'\n\n{er_message}')
-
+    
 
     # receive signals when threads are done
     def shufflerDone(self):

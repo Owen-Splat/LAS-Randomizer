@@ -13,6 +13,7 @@ class ItemShuffler(QtCore.QThread):
     
     # sends signals to main thread when emitted
     progress_update = QtCore.Signal(int)
+    progress_adjustment = QtCore.Signal()
     give_placements = QtCore.Signal(dict)
     is_done = QtCore.Signal()
     error = QtCore.Signal(str)
@@ -653,6 +654,9 @@ class ItemShuffler(QtCore.QThread):
                         items.insert(0, placements[undo_location])
                         access = self.addAccess(access, placements[undo_location])
                         placements[undo_location] = None
+                        self.progress_value += 1 # update progress bar
+                        self.progress_adjustment.emit()
+                        self.progress_update.emit(self.progress_value)
                         if verbose: print("can't place")
                         break
             
@@ -686,17 +690,14 @@ class ItemShuffler(QtCore.QThread):
                         items.insert(0, placements[undo_location])
                         access = self.addAccess(access, placements[undo_location])
                         placements[undo_location] = None
-                #     else:
-                #         self.progress_value += 1 # update progress bar
-                #         self.progress_update.emit(self.progress_value)
-                # else:
-                #     self.progress_value += 1 # update progress bar
-                #     self.progress_update.emit(self.progress_value)
+                        self.progress_value += 1 # update progress bar
+                        self.progress_adjustment.emit()
+                        self.progress_update.emit(self.progress_value)
                 
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
-
         
+
         # Now assign indexes to golden leaves since they were probably moved from seashells
         leaves = [p for p in placement_tracker if placements[p] == 'golden-leaf']
         for leaf in leaves:

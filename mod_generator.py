@@ -9,11 +9,11 @@ import traceback
 import Tools.leb as leb
 import Tools.oead_tools as oead_tools
 import Tools.event_tools as event_tools
-# from Tools.patcher import Patcher
+from Tools.patcher import Patcher
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves, heart_pieces
-from Randomizers import instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, player_start
-from Randomizers import rapids, seashell_mansion, small_keys, tarin, trade_quest, tunic_swap
+from Randomizers import instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches
+from Randomizers import player_start, rapids, seashell_mansion, small_keys, tarin, trade_quest, tunic_swap
 
 from randomizer_paths import RESOURCE_PATH
 
@@ -106,6 +106,7 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['shuffled-dungeons'] and self.thread_active:
                 self.shuffleDungeons()
             
+            # if self.thread_active: self.fixWaterLoadingZones()
             # if self.thread_active: self.makeExefsPatches()
 
             if self.thread_active: os.mkdir(f'{self.out_dir}/01006BB00C6F0000')
@@ -1585,6 +1586,10 @@ class ModsProcess(QtCore.QThread):
             trap = None
             for item in sheet['values']:
                 if self.thread_active:
+                    if item['symbol'] == 'Flippers': # Make getting Flippers set this custom flag for water loading zones to use
+                        item['gettingFlag'] == 'FlippersFound'
+                        continue
+                    
                     if item['symbol'] == 'SmallKey':
                         item['npcKey'] = 'ItemClothesGreen'
                         continue
@@ -1708,11 +1713,12 @@ class ModsProcess(QtCore.QThread):
         for i in data.BGM_TRACKS:
             ind = bgms.index(random.choice(bgms))
             self.songs_dict[i] = bgms.pop(ind)
+            # print(i, self.songs_dict[i])
     
 
 
     def makeMusicChanges(self):
-        """Iterates through the music files in the RomFS and copies them to the output directory with shuffled names"""
+        """Replaces the BGM info in the lvb files with the shuffled songs"""
 
         from Randomizers import music
         
@@ -1870,11 +1876,11 @@ class ModsProcess(QtCore.QThread):
         ### Shadow - shuffles boss BGMs
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Shadow.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT']
+            # event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT']
             event_tools.findEvent(flow.flowchart, 'Event37').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_WIN']
             event_tools.findEvent(flow.flowchart, 'Event60').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
             event_tools.findEvent(flow.flowchart, 'Event71').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
-            event_tools.findEvent(flow.flowchart, 'Event44').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT'] # StopBGM
+            # event_tools.findEvent(flow.flowchart, 'Event44').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT'] # StopBGM
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Shadow.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1915,35 +1921,15 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/WindFish.bfevfl')
             event_tools.findEvent(flow.flowchart, 'Event73').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS']
-            event_tools.findEvent(flow.flowchart, 'Event101').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS_WIND_FISH']
+            # event_tools.findEvent(flow.flowchart, 'Event101').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS_WIND_FISH']
             event_tools.findEvent(flow.flowchart, 'Event74').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event93').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_WIN'] # StopBGM
-            event_tools.findEvent(flow.flowchart, 'Event118').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS_WIND_FISH'] # StopBGM
+            # event_tools.findEvent(flow.flowchart, 'Event118').data.params.data['label'] = self.songs_dict['BGM_DEMO_AFTER_LASTBOSS_WIND_FISH'] # StopBGM
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/WindFish.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-    
-
-
-    # def makeExefsPatches(self):
-    #     """Creates the necessary exefs_patches for the Randomizer to work correctly"""
-
-    #     # initialize the patcher object and hand off individual patches to separate functions to make it easier to track & read
-    #     patcher = Patcher()
-    #     if self.placements['settings']['randomize-music'] and self.thread_active:
-    #         patches.shuffleBGM(patcher, self.seed)
         
-    #     # create and write in binary to an ips file with the build id of version as the name
-    #     if self.thread_active:
-    #         if not os.path.exists(f'{self.out_dir}/exefs_patches/las_randomizer'):
-    #             os.makedirs(f'{self.out_dir}/exefs_patches/las_randomizer')
-            
-    #         with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.UPD_BUILD_ID}.ips', 'wb') as f:
-    #             f.write(patcher.generatePatch())
-    #             self.progress_value += 1 # update progress bar
-    #             self.progress_update.emit(self.progress_value)
-    
 
 
     def makeGeneralARCChanges(self):
@@ -2668,24 +2654,79 @@ class ModsProcess(QtCore.QThread):
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
 
-        folders = [f for f in os.listdir(levels_path) if f.startswith('Lv')]
+        # prevent companions inside the Egg since they can block Nightmare and cause a softlock easily
+        folders = [f for f in os.listdir(levels_path) if f.startswith('Lv') and not f.startswith('Lv09')]
 
         for folder in folders:
-            if not os.path.exists(f'{out_levels}/{folder}/{folder}.lvb'):
-                with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
-                    level_data = f.read()
-                    level = leb.Level(level_data)
-            else:
-                with open(f'{out_levels}/{folder}/{folder}.lvb', 'rb') as f:
-                    level_data = f.read()
-                    level = leb.Level(level_data)
-            
-            level.config.attr_2 = 1 # set the companion flag to True
+            if self.thread_active:
+                if not os.path.exists(f'{out_levels}/{folder}/{folder}.lvb'):
+                    with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
+                        level_data = f.read()
+                        level = leb.Level(level_data)
+                else:
+                    with open(f'{out_levels}/{folder}/{folder}.lvb', 'rb') as f:
+                        level_data = f.read()
+                        level = leb.Level(level_data)
+                
+                level.config.attr_2 = 1 # set the companion flag to True
 
-            if not os.path.exists(f'{out_levels}/{folder}'):
-                os.makedirs(f'{out_levels}/{folder}')
+                if not os.path.exists(f'{out_levels}/{folder}'):
+                    os.makedirs(f'{out_levels}/{folder}')
+                
+                with open(f'{out_levels}/{folder}/{folder}.lvb', 'wb') as f:
+                    f.write(level_data.replace(level.config.data, level.config.pack())) # replaces the data and writes it to the file
+                    self.progress_value += 1
+                    self.progress_update.emit(self.progress_value)
             
-            with open(f'{out_levels}/{folder}/{folder}.lvb', 'wb') as f:
-                f.write(level_data.replace(level.config.data, level.config.pack())) # replaces the data and writes it to the file
-                self.progress_value += 1
-                self.progress_update.emit(self.progress_value)
+            else: break
+    
+
+
+    # def makeExefsPatches(self):
+    #     """Creates the necessary exefs_patches for the Randomizer to work correctly"""
+
+    #     # initialize the patcher object and hand off jobs to separate functions for easier tracking
+    #     patcher = Patcher()
+    #     patches.changeVanillaBehavior(patcher)
+    #     if self.placements['settings']['randomize-music'] and self.thread_active:
+    #         patches.makeMusicPatches(patcher)
+        
+    #     # create and write in binary to an ips file with the build id of version as the name
+    #     if self.thread_active:
+    #         if not os.path.exists(f'{self.out_dir}/exefs_patches/las_randomizer'):
+    #             os.makedirs(f'{self.out_dir}/exefs_patches/las_randomizer')
+            
+    #         with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.BASE_BUILD_ID}.ips', 'wb') as f:
+    #             f.write(patcher.generatePatch())
+    #             self.progress_value += 1 # update progress bar
+    #             self.progress_update.emit(self.progress_value)
+            
+    #         with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.UPD_BUILD_ID}.ips', 'wb') as f:
+    #             f.write(patcher.generatePatch())
+    #             self.progress_value += 1 # update progress bar
+    #             self.progress_update.emit(self.progress_value)
+    
+
+
+    # def fixWaterLoadingZones(self):
+    #     """Changes each water loading zone to be deactivated until the player has flippers"""
+
+    #     for room in data.WATER_LOADING_ZONES:
+    #         if self.thread_active:
+    #             if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb'):
+    #                 with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
+    #                     room_data = leb.Room(f.read())
+    #             else:
+    #                 with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'rb') as f:
+    #                     room_data = leb.Room(f.read())
+                
+    #             for actor in data.WATER_LOADING_ZONES[room]:
+    #                 room_data.actors[actor].switches[0] = (1, self.global_flags['FlippersFound'])
+                
+    #             if self.thread_active:
+    #                 with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'wb') as f:
+    #                     f.write(room_data.repack())
+    #                     self.progress_value += 1 # update progress bar
+    #                     self.progress_update.emit(self.progress_value)
+            
+    #         else: break
