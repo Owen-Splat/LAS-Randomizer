@@ -1,3 +1,4 @@
+import numpy as np
 import struct
 import re
 # from ctypes import LittleEndianStructure, Union, c_uint8
@@ -7,7 +8,7 @@ def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
 
 def readFloat(bytes, start, length):
-	return float(struct.unpack('<f', bytes[start : start + length])[0])
+	return np.float32(struct.unpack('<f', bytes[start : start + length])[0])
 
 def readString(data, start):
 	result = b''
@@ -224,7 +225,7 @@ class Actor:
 		packed += struct.pack('<f', self.scaleX)
 		packed += struct.pack('<f', self.scaleY)
 		packed += struct.pack('<f', self.scaleZ)
-
+		
 		for i in range(8):
 			param = self.parameters[i]
 			if isinstance(param, bytes):
