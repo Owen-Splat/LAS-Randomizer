@@ -72,13 +72,13 @@ def kikiChanges(flowchart, placements, item_defs, rom_path):
     {'symbol': 'TradeBananasGet'}, {0: 'Event118', 1: 'Event32'})
 
     event_tools.insertEventAfter(flowchart, 'Event91', bananas_check)
+    event_tools.insertEventAfter(flowchart, 'Event84', 'Event15') # skip over setting the trade quest slot to be empty
     event_tools.insertEventAfter(flowchart, 'Event29', 'Event88')
     fork = event_tools.findEvent(flowchart, 'Event88')
     fork.data.forks.pop(0)
 
     if placements['settings']['open-bridge']:
         event_tools.insertEventAfter(flowchart, 'Event9', 'Event31')
-        event_tools.insertEventAfter(flowchart, 'Event84', 'Event15')
         event_tools.insertEventAfter(flowchart, 'Event10', 'Event31')
 
         fork = event_tools.findEvent(flowchart, 'Event28')

@@ -61,16 +61,16 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         ], powder_check)
 
     if item == 'Bomb_MaxUp':
-        giveBombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+        give_bombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
             {'itemKey': 'Bomb', 'count': 60, 'index': -1, 'autoEquip': False}, after)
 
-        bombsCheck = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': data.BOMBS_FOUND_FLAG}, {0: after, 1: giveBombs})
+        bombs_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': data.BOMBS_FOUND_FLAG}, {0: after, 1: give_bombs})
 
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Bomb', 'keepCarry': False, 'messageEntry': item})
-        ], bombsCheck)
+        ], bombs_check)
 
     if item == 'Arrow_MaxUp':
         return event_tools.createActionChain(flowchart, before, [
@@ -282,7 +282,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     if item == 'MagnifyingLens':
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
-            ('Inventory', 'SetWarashibeItem', {'itemType': 15}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
