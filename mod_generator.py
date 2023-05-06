@@ -265,6 +265,10 @@ class ModsProcess(QtCore.QThread):
                 else:
                     model_name = random.choice(list(trap_models))
                     model_path = trap_models[model_name]
+                    if room == 'pothole-final': # reroll the trap model if it's a dungeon item
+                        while model_name in ('SmallKey', 'NightmareKey', 'StoneBeak', 'Compass', 'DungeonMap'):
+                            model_name = random.choice(list(trap_models))
+                            model_path = trap_models[model_name]
                 
                 if room == 'pothole-final': # change slime key into a small key
                     act = room_data.actors[42]
@@ -1929,7 +1933,7 @@ class ModsProcess(QtCore.QThread):
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/WindFish.bfevfl', flow)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-        
+
 
 
     def makeGeneralARCChanges(self):
@@ -1945,12 +1949,11 @@ class ModsProcess(QtCore.QThread):
                 os.makedirs(f'{self.out_dir}/Romfs/region_common/ui')
 
             oead_tools.writeSarc(writer, f'{self.out_dir}/Romfs/region_common/ui/StartUp.arc')
+        
+        finally: # regardless if the user had the file or not, just consider this task done, the logo is not needed to play
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-        
-        except (FileNotFoundError): # just return if the user does not have the file, this is not important
-            return
-    
+
 
 
     def makeInstrumentChanges(self):

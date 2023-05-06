@@ -3173,6 +3173,9 @@ dash-skewing:
 obstacle-skip:
   type: trick
   condition-basic: feather
+2-tile-jumps:
+  type: trick
+  condition-basic: feather
 early-ocarina:
   type: trick
   condition-basic: kill-arm-mimic & feather
@@ -3188,10 +3191,10 @@ seam-walking:
 like-like-launch:
   type: trick
   condition-basic: mabe
-villa-skip:
+pincer-villa-skip:
   type: trick
   condition-basic: prairie & feather & sword & powders
 tracey-boost:
   type: trick
-  condition-basic: tracey & can-farm-rupees & mabe & sword & bracelet & bombs
+  condition-basic: tracey & can-farm-rupees & mabe & sword & bracelet & bombs & feather
 ...

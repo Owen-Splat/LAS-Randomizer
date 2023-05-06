@@ -9,6 +9,7 @@ __pycache__
 /Tools/lvb.py
 /Tools/message_tools.py
 /Tools/msbt.py
+/Tools/texture_tools.py
 /Test
 text_tests.py
 tests.py
