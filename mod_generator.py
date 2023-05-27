@@ -105,9 +105,12 @@ class ModsProcess(QtCore.QThread):
             
             if self.placements['settings']['shuffled-dungeons'] and self.thread_active:
                 self.shuffleDungeons()
+                self.shuffleDungeonIcons()
             
             # if self.thread_active: self.fixWaterLoadingZones()
-            # if self.thread_active: self.makeExefsPatches()
+
+            # current asm does not appear to break anything, can finally include :)
+            if self.thread_active: self.makeExefsPatches()
 
             if self.thread_active: os.mkdir(f'{self.out_dir}/01006BB00C6F0000')
         
@@ -2593,6 +2596,8 @@ class ModsProcess(QtCore.QThread):
 
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
+        ent_keys = list(self.placements['dungeon-entrances'].keys())
+        ent_values = list(self.placements['dungeon-entrances'].values())
 
         for k,v in data.DUNGEON_ENTRANCES.items():
 
@@ -2635,8 +2640,6 @@ class ModsProcess(QtCore.QThread):
                 if not os.path.exists(f'{out_levels}/{folder}'):
                     os.makedirs(f'{out_levels}/{folder}')
                 
-                ent_keys = list(self.placements['dungeon-entrances'].keys())
-                ent_values = list(self.placements['dungeon-entrances'].values())
                 d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
                 destin = d[2] + d[3]
                 room_data.setLoadingZoneTarget(destin, 0)
@@ -2648,7 +2651,28 @@ class ModsProcess(QtCore.QThread):
                         self.progress_update.emit(self.progress_value)
             
             else: break
-    
+
+
+
+    def shuffleDungeonIcons(self):
+        ### UiFieldMapIcons datasheet: shuffle the dungeon icons so that players can use the map to track dungeon entrances
+        if self.thread_active:
+            icon_keys = list(data.DUNGEON_MAP_ICONS.keys())
+            icon_values = list(data.DUNGEON_MAP_ICONS.values())
+            maps = [i[0] for i in icon_values]
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/UiFieldMapIcons.gsheet')
+            for icon in sheet['values']:
+                if icon['mNameLabel'] in maps:
+                    k = icon_keys[maps.index(icon['mNameLabel'])]
+                    new_k = self.placements['dungeon-entrances'][k]
+                    icon['mNameLabel'] = data.DUNGEON_MAP_ICONS[new_k][0]
+                    icon['mFirstShowFlagName'] = data.DUNGEON_MAP_ICONS[new_k][1]
+
+            if self.thread_active:
+                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/UiFieldMapIcons.gsheet', sheet)
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
+
 
 
     def changeLevelConfigs(self):
@@ -2685,29 +2709,29 @@ class ModsProcess(QtCore.QThread):
     
 
 
-    # def makeExefsPatches(self):
-    #     """Creates the necessary exefs_patches for the Randomizer to work correctly"""
+    def makeExefsPatches(self):
+        """Creates the necessary exefs_patches for the Randomizer to work correctly"""
 
-    #     # initialize the patcher object and hand off jobs to separate functions for easier tracking
-    #     patcher = Patcher()
-    #     patches.changeVanillaBehavior(patcher)
-    #     if self.placements['settings']['randomize-music'] and self.thread_active:
-    #         patches.makeMusicPatches(patcher)
+        # initialize the patcher object and hand off jobs to separate functions for easier tracking
+        patcher = Patcher()
+        patches.changeVanillaBehavior(patcher)
+        # if self.placements['settings']['randomize-music'] and self.thread_active:
+        #     patches.makeMusicPatches(patcher)
         
-    #     # create and write in binary to an ips file with the build id of version as the name
-    #     if self.thread_active:
-    #         if not os.path.exists(f'{self.out_dir}/exefs_patches/las_randomizer'):
-    #             os.makedirs(f'{self.out_dir}/exefs_patches/las_randomizer')
+        # create and write in binary to an ips file with the build id of version as the name
+        if self.thread_active:
+            if not os.path.exists(f'{self.out_dir}/exefs_patches/las_randomizer'):
+                os.makedirs(f'{self.out_dir}/exefs_patches/las_randomizer')
             
-    #         with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.BASE_BUILD_ID}.ips', 'wb') as f:
-    #             f.write(patcher.generatePatch())
-    #             self.progress_value += 1 # update progress bar
-    #             self.progress_update.emit(self.progress_value)
+            with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.BASE_BUILD_ID}.ips', 'wb') as f:
+                f.write(patcher.generatePatch())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
             
-    #         with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.UPD_BUILD_ID}.ips', 'wb') as f:
-    #             f.write(patcher.generatePatch())
-    #             self.progress_value += 1 # update progress bar
-    #             self.progress_update.emit(self.progress_value)
+            with open(f'{self.out_dir}/exefs_patches/las_randomizer/{data.UPD_BUILD_ID}.ips', 'wb') as f:
+                f.write(patcher.generatePatch())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
     
 
 

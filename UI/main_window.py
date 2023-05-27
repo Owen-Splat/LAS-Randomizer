@@ -321,7 +321,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # fast fishing
         try:
-            self.ui.fastFishingCheck.setChecked(SETTINGS['Fast-Fishing'])
+            self.ui.fastFishingCheck.setChecked(SETTINGS['Fast_Fishing'])
         except (KeyError, TypeError):
             self.ui.fastFishingCheck.setChecked(True)
         

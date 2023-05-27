@@ -13,11 +13,11 @@ def changeVanillaBehavior(patcher: Patcher):
 
 
 
-def fixZoneMusic(patcher: Patcher):
-    """Allows event music to keep playing when transitioning into another zone"""
+# def fixZoneMusic(patcher: Patcher):
+#     """Allows event music to keep playing when transitioning into another zone"""
     
-    # Makes the randomized rapids music continue to play by changing the hardcoded field BGM
-    patcher.addPatch(0xae694, f'adrp x11, ')
-    patcher.addPatch(0xae698, f'add x11, x11, #')
-    patcher.addPatch(0xae6a0, f'adrp x13, ')
-    patcher.addPatch(0xae6a4, f'add x13, x13, #')
+#     # Makes the randomized rapids music continue to play by changing the hardcoded field BGM
+#     patcher.addPatch(0xae694, f'adrp x11, ')
+#     patcher.addPatch(0xae698, f'add x11, x11, #')
+#     patcher.addPatch(0xae6a0, f'adrp x13, ')
+#     patcher.addPatch(0xae6a4, f'add x13, x13, #')

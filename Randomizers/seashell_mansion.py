@@ -152,15 +152,15 @@ def changeRewards(flowchart, treasure_flowchart):
         {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'MagicPowder'},
         {0: powder_get, 1: bomb_check})
     
-    heart_get = item_get.insertItemGetAnimation(flowchart, 'HeartPiece', -1, None, 'Event0')
-    heart_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
-        {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'HeartPiece'},
-        {0: heart_get, 1: powder_check})
+    # heart_get = item_get.insertItemGetAnimation(flowchart, 'HeartPiece', -1, None, 'Event0')
+    # heart_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+    #     {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'HeartPiece'},
+    #     {0: heart_get, 1: powder_check})
 
     leaf_get = item_get.insertItemGetAnimation(flowchart, 'GoldenLeaf', -1, None, 'Event0')
     leaf_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'GoldenLeaf'},
-        {0: leaf_get, 1: heart_check})
+        {0: leaf_get, 1: powder_check})
     
     event_tools.insertEventAfter(flowchart, 'Event3', 'Event4')
     event_tools.insertEventAfter(flowchart, 'Event4', 'Event14')

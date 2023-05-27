@@ -3176,6 +3176,9 @@ obstacle-skip:
 2-tile-jumps:
   type: trick
   condition-basic: feather
+water-dash-jumps:
+  type: trick
+  condition-basic: dash-jump
 early-ocarina:
   type: trick
   condition-basic: kill-arm-mimic & feather
@@ -3197,4 +3200,10 @@ pincer-villa-skip:
 tracey-boost:
   type: trick
   condition-basic: tracey & can-farm-rupees & mabe & sword & bracelet & bombs & feather
+hootshotless-sign-maze:
+  type: trick
+  condition-basic: dash-jump & bombs & bracelet
+coyote-airclimb:
+  type: trick
+  condition-basic: sword & feather & (shield | pegasus-boots)
 ...

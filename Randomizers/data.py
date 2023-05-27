@@ -532,6 +532,19 @@ DUNGEON_ENTRANCES = {
 }
 
 
+DUNGEON_MAP_ICONS = {
+    'tail-cave': ('Lv1Dungeon_map', 'UI_FieldMapIcon_Lv01Dungeon'),
+    'bottle-grotto': ('Lv2Dungeon_map', 'UI_FieldMapIcon_Lv02Dungeon'),
+    'key-cavern': ('Lv3Dungeon_map', 'UI_FieldMapIcon_Lv03Dungeon'),
+    'angler-tunnel': ('Lv4Dungeon_map', 'UI_FieldMapIcon_Lv04Dungeon'),
+    'catfish-maw': ('Lv5Dungeon_map', 'UI_FieldMapIcon_Lv05Dungeon'),
+    'face-shrine': ('Lv6Dungeon_map', 'UI_FieldMapIcon_Lv06Dungeon'),
+    'eagle-tower': ('Lv7Dungeon_map', 'UI_FieldMapIcon_Lv07Dungeon'),
+    'turtle-rock': ('Lv8Dungeon_map', 'UI_FieldMapIcon_Lv08Dungeon'),
+    'color-dungeon': ('ClothesDungeon_map', 'UI_FieldMapIcon_Lv10Dungeon')
+}
+
+
 # WATER_LOADING_ZONES = {
 #     'Field_02O': [10],
 #     'Field_03K': [3],
@@ -541,8 +554,8 @@ DUNGEON_ENTRANCES = {
 # }
 
 
-# BASE_BUILD_ID = 'AE16F71E002AF8CB059A9A74C4D90F34BA984892' # version 1.0.0
-# UPD_BUILD_ID = '909E904AF78AC1B8DEEFE97AB2CCDB51968f0EC7' # version 1.0.1
+BASE_BUILD_ID = 'AE16F71E002AF8CB059A9A74C4D90F34BA984892' # version 1.0.0
+UPD_BUILD_ID = '909E904AF78AC1B8DEEFE97AB2CCDB51968f0EC7' # version 1.0.1
 
 
 # BGM_ADDRESSES = {}

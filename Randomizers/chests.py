@@ -148,7 +148,12 @@ def writeChestEvent(flowchart):
     bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'},
         {0: bomb_get, 1: squish_check})
-
+    
+    powder_get = item_get.insertItemGetAnimation(flowchart, 'MagicPowder', -1, None, auto_save)
+    powder_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'MagicPowder'},
+        {0: powder_get, 1: bomb_check})
+    
     # rooster_fork = event_tools.createForkEvent(flowchart, None, [
     #     event_tools.createActionChain(flowchart, None, [
     #         ('Dialog', 'Show', {'message': 'Scenario:GetFlyingCocco'}),
@@ -184,8 +189,8 @@ def writeChestEvent(flowchart):
     # {0: shadow_get, 1: rooster_check})
 
     # add this chain to TreasureBox_Open and TreasureBox_ShockOpen
-    event_tools.insertEventAfter(flowchart, 'Event32', bomb_check)
-    event_tools.insertEventAfter(flowchart, 'Event28', bomb_check)
+    event_tools.insertEventAfter(flowchart, 'Event32', powder_check)
+    event_tools.insertEventAfter(flowchart, 'Event28', powder_check)
     
     # now make the rest of the items also request an autosave
     event_tools.insertEventAfter(flowchart, 'Event40', auto_save)
@@ -194,7 +199,7 @@ def writeChestEvent(flowchart):
 
 
 def makeChestsFaster(flowchart):
-    '''Speeds up the animation of Link moving out of the way, and gives control back to the player a bit sooner'''
+    '''Speeds up the animation and gives control back to the player a bit sooner'''
 
     # remove the cameraLookAt event and the secret unlocked music
     del event_tools.findEvent(flowchart, 'Event44').data.forks[0]

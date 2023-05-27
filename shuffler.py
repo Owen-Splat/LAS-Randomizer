@@ -516,8 +516,8 @@ class ItemShuffler(QtCore.QThread):
         
         # Next, assign dungeon items into their own dungeons
         # Some may have been placed already because of forceVanilla so we need to factor that in
-        dungeon_entrances = ['color-dungeon', 'tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel', 'catfish-maw', 'face-shrine', 'eagle-tower', 'turtle-rock']
-        for i in range(len(dungeon_entrances)):
+        dungeons = ['color-dungeon', 'tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel', 'catfish-maw', 'face-shrine', 'eagle-tower', 'turtle-rock']
+        for i in range(len(dungeons)):
             if self.thread_active:
                 item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
                 location_pool = [s for s in locations if len(s) >= 2 and s[:2] == f'D{i}']
@@ -596,7 +596,8 @@ class ItemShuffler(QtCore.QThread):
             while not success and self.thread_active:
                 placements['tarin'] = items[0]
                 success = (self.canReachLocation('can-shop', placements, settings_access, logic)
-                        or self.canReachLocation('tail-cave', placements, settings_access, logic)
+                        # make Tarin check if you can reach whatever region is over tail-cave, since it could be another dungeon
+                        or self.canReachLocation(dungeon_entrances['tail-cave'], placements, settings_access, logic)
                         or self.canReachLocation('beach', placements, settings_access, logic)
                         # or self.canReachLocation('mamasha', placements, settings_access, logic)
                         or self.canReachLocation('ciao-ciao', placements, settings_access, logic)
@@ -634,6 +635,9 @@ class ItemShuffler(QtCore.QThread):
                 if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('standing', 'hidden', 'dig', 'drop', 'underwater', 'shop', 'enemy'):
                     valid_placement = False
                 elif item in self.force_chests and self.logic_defs[locations[0]]['subtype'] != 'chest':
+                    valid_placement = False
+                # special case where if the actual check on the 5 chests room is a zol-trap, nothing happens with the 5th chest
+                elif item == 'zol-trap' and locations[0] == 'taltal-5-chest-puzzle':
                     valid_placement = False
                 elif self.item_defs[item]['type'] in ('important', 'trade', 'seashell'):
                     # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic

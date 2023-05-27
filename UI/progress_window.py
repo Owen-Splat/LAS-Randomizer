@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 165 - len(settings['excluded-locations'])
-        self.num_of_mod_tasks = 247
+        self.num_of_mod_tasks = 250
         
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
@@ -51,7 +51,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_tasks += 347
         
         if settings['shuffled-dungeons']:
-            self.num_of_mod_tasks += 18
+            self.num_of_mod_tasks += 19
         
         if settings['classic-d2']:
             self.num_of_mod_tasks += 1

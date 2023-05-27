@@ -24,7 +24,7 @@
 # by Aldo796, Copycat, SanGawku, XLuma, and Red.#9015
 
 
-# from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN # - pip install keystone-engine
+from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN # - pip install keystone-engine
 
 
 
@@ -33,9 +33,9 @@ class Patcher:
         """Initializes a patcher object to convert and write patches"""
 
         self.nso_header_offset = 0x100
-        self.ks = None # Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
+        self.ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
         self.patches = []
-    
+
 
     def addPatch(self, address: int, instruction):
         """Adds the patch to a list if the address offset is valid, raises ValueError if not
@@ -48,7 +48,7 @@ class Patcher:
             raise ValueError('Patch address is not valid')
         else:
             self.patches.append((address, instruction))
-        
+
 
     def generatePatch(self):
         """Writes and outputs the IPS32 patch"""

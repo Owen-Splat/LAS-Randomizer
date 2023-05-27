@@ -232,7 +232,7 @@ class Actor:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param + b'\x00'
-			elif isinstance(param, float):
+			elif isinstance(param, np.float32):
 				packed += struct.pack('<f', param)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -536,7 +536,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param1 + b'\x00'
-			elif isinstance(param1, float):
+			elif isinstance(param1, np.float32):
 				packed += struct.pack('<f', param1)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -547,7 +547,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param2 + b'\x00'
-			elif isinstance(param2, float):
+			elif isinstance(param2, np.float32):
 				packed += struct.pack('<f', param2)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -566,7 +566,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param1 + b'\x00'
-			elif isinstance(param1, float):
+			elif isinstance(param1, np.float32):
 				packed += struct.pack('<f', param1)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -577,7 +577,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param2 + b'\x00'
-			elif isinstance(param2, float):
+			elif isinstance(param2, np.float32):
 				packed += struct.pack('<f', param2)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -659,7 +659,7 @@ class Relationship:
 # 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 # 				packed += (0xFFFFFF04).to_bytes(4, 'little')
 # 				nameRepr += param + b'\x00'
-# 			elif isinstance(param, float):
+# 			elif isinstance(param, np.float32):
 # 				packed += struct.pack('<f', param)
 # 				packed += (2).to_bytes(4, 'little')
 # 			else:
