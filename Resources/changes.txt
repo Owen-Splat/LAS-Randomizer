@@ -15,3 +15,5 @@
 - Fixes issue where Kiki would remove the Lens from the inventory
 <br></br><br></br>
 - Fixes issue where the "Fast Fishing" setting would not get saved
+<br></br><br></br>
+- Fixes issue where slayed enemies could drop bombs and powder out of logic

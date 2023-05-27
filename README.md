@@ -52,9 +52,9 @@ The randomizer does not provide a second copy of the game to use, but rather mak
 
 (See also: [Switch game modding](https://nh-server.github.io/switch-guide/extras/game_modding/))
 
-Switch: On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` folder and create a new directory named `01006BB00C6F0000`. Copy and paste the `Romfs` folder from the randomizer output into this new folder. That is, the folder structure here should look like `Atmosphere/contents/01006BB00C6F0000/Romfs/...`. After this, relaunch CFW and simply start up Link's Awakening to play the randomizer!
+Switch: On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` folder and create a new directory named `01006BB00C6F0000`. Copy and paste the `Romfs` folder from the randomizer output into this new folder. That is, the folder structure here should look like `Atmosphere/contents/01006BB00C6F0000/Romfs/...`. Next, copy and paste the `exefs_patches` folder from the randomizer output into the `Atmosphere` folder. It should look like `Atmosphere/exefs_patches/las_randomizer/...` with 2 ips files inside. After this, relaunch CFW and simply start up Link's Awakening to play the randomizer!
 
-Emulator: Open up the mods folder and create a new directory named `01006BB00C6F0000`. Enter it and create a new folder named whatever you want. Inside that should be the `Romfs` folder from the randomizer output. It should look something like `%ModsDir%/01006BB00C6F0000/LASRando/Romfs/...`
+Emulator: Open up the mods folder and create a new directory named `01006BB00C6F0000`. Enter it and create a new folder named whatever you want. Inside that should be the `Romfs` and `exefs_patches` folders from the randomizer output. It should look something like `%ModsDir%/01006BB00C6F0000/LASRando/Romfs/...`
 
 Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or you can launch the game holding L
 
@@ -70,6 +70,6 @@ Applying this mod will not in any way affect your save data, so don't delete any
 
 ### Special Thanks:
 - Glan: For creating the earlier builds of this randomizer and always helping answer any questions
-- Br00ty: For always playtesting early dev builds and having full blown conversations regarding feedback and suggestions
+- Br00ty: For always playtesting early dev builds and for work on maptracker for newer rando versions
 - EDL666: For being an awesome friend who has been thoroughly reporting on bugs and feedback
 - And everyone who has played this randomizer: Seeing people enjoy themselves playing this makes the time I've spent working on this feel worth it :)
