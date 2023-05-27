@@ -29,6 +29,15 @@ def makeDatasheetChanges(sheet, placements):
             if placements['settings']['shuffle-bombs']:
                 sheet['values'][i]['mLotTable'][0]['mCookie'] = 0
         
+        if sheet['values'][i]['mKey'] == 'GhiniBomb' and placements['settings']['shuffle-bombs']:
+            sheet['values'][i]['mLotTable'][3]['mCookie'] = 0 # set bomb drops to 0
+        
+        if sheet['values'][i]['mKey'] == 'ShadowLink':
+            if placements['settings']['shuffle-bombs']:
+                sheet['values'][i]['mLotTable'][7]['mCookie'] = 0 # set bomb drops to 0
+            if placements['settings']['shuffle-powder']:
+                sheet['values'][i]['mLotTable'][8]['mCookie'] = 0 # set powder drops to 0
+        
         if sheet['values'][i]['mKey'] == 'MagicPowder':
             if placements['settings']['reduce-farming']:
                 sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
