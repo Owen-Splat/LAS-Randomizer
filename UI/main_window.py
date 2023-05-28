@@ -95,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
-        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha-2-hotfix-1') # {VERSION}')
+        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha-3') # {VERSION}')
 
         # self.ui.retranslateUi(self)
 
