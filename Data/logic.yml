@@ -3066,7 +3066,7 @@ kill-zol-red:
 kill-armos-knight:
   type: enemy
   condition-basic: (sword | shoot-arrows) & feather
-  condition-advanced: sword | shoot-arrows
+  # condition-advanced: sword | shoot-arrows
 kill-blaino:
   type: enemy
   condition-basic: sword
