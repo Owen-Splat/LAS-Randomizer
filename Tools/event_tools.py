@@ -143,8 +143,9 @@ def createActionChain(flowchart, before, eventDefs, after=None):
 	Return the name of the first event in the chain"""
 	if len(eventDefs) == 0:
 		return
-
-	first = createActionEvent(flowchart, eventDefs[0][0], eventDefs[0][1], eventDefs[0][2])
+	
+	next = after if len(eventDefs) == 1 else None
+	first = createActionEvent(flowchart, eventDefs[0][0], eventDefs[0][1], eventDefs[0][2], next)
 	current = first
 	insertEventAfter(flowchart, before, current)
 

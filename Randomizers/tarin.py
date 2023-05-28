@@ -13,7 +13,7 @@ def makeEventChanges(flowchart, placements, item_defs):
     # and not placements['settings']['shuffle-bombs']
     if placements['tarin'] == 'boots' and placements['settings']['reduce-farming']:
         event_tools.createActionChain(flowchart, 'Event31', [
-            ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 20, 'index': -1, 'autoEquip': False})
+            ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 30, 'index': -1, 'autoEquip': False})
         ], 'Event2')
 
     event0 = event_tools.findEvent(flowchart, 'Event0')
