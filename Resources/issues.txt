@@ -1,12 +1,10 @@
-- Starting with Cello results in Mabe not being cleared on the map
-
 - The fishing bottle check is left vanilla
 
 - The Ball & Chain Soldier check is left vanilla
 
 - Small key drops will trigger the compass ringtone regardless of what they are
 
-- Choosing Shuffled Bombs/Powder sets drops to 0
+- Choosing Shuffled Bombs/Powder permanently sets drops to 0
 
 - While Trading Quest items work, they will not be displayed in the inventory
 

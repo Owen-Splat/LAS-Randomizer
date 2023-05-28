@@ -1,19 +1,25 @@
 <b>New Features:</b>
 <br></br><br></br>
 - ASM Patches: Currently just allows opening Color Dungeon with companions
+<br></br><br></br>
+- Shuffled Dungeons: The in-game map now displays the shuffled dungeon names
 <br></br><br></br><br></br>
 
 <b>Changes:</b>
 <br></br><br></br>
-- Shuffled Dungeons: The in-game map now correctly displays the dungeon names
-<br></br><br></br>
 - Removed zol-traps from being on the 5-chest puzzle room to remove confusion
+<br></br><br></br>
+- Removed featherless Armos Knight from Advanced logic
 <br></br><br></br><br></br>
 
 <b>Bug Fixes:</b>
 <br></br><br></br>
-- Fixes issue where Kiki would remove the Lens from the inventory
+- Fixed issue where Kiki would remove the Lens from the inventory
 <br></br><br></br>
-- Fixes issue where the "Fast Fishing" setting would not get saved
+- Fixed issue where the "Fast Fishing" setting would not get saved
 <br></br><br></br>
-- Fixes issue where slayed enemies could drop bombs and powder out of logic
+- Fixed issue where slayed enemies could drop bombs and powder out of logic
+<br></br><br></br>
+- Fixed issue where you could not leave the house if you only chose one starting item
+<br></br><br></br>
+- Fixed issue where Mabe Village would not show on the map when starting with Cello

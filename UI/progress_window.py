@@ -93,7 +93,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     # if an item has to be reshuffled, adjust the progress bar accordingly
     def adjustProgress(self):
-        self.valid_placements += 2
+        self.valid_placements += 1
     
 
     # receive the placements from the shuffler thread to the modgenerator
