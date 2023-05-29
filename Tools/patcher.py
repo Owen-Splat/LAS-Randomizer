@@ -24,7 +24,7 @@
 # by Aldo796, Copycat, SanGawku, XLuma, and Red.#9015
 
 
-from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN # - pip install keystone-engine
+# from keystone import Ks, KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN # - pip install keystone-engine
 
 
 
@@ -33,7 +33,7 @@ class Patcher:
         """Initializes a patcher object to convert and write patches"""
 
         self.nso_header_offset = 0x100
-        self.ks = Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
+        self.ks = None # Ks(KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN)
         self.patches = []
 
 
@@ -58,8 +58,8 @@ class Patcher:
 
         for patch in self.patches:
             address = patch[0]
-            instruction = bytearray(self.ks.asm(patch[1])[0])
-            
+            # instruction = bytearray(self.ks.asm(patch[1])[0])
+            instruction = bytearray(patch[1])
             result += address.to_bytes(4, 'big')
             result += len(instruction).to_bytes(2, 'big')
             result += instruction

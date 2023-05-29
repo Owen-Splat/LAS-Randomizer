@@ -6,7 +6,8 @@ def changeVanillaBehavior(patcher: Patcher):
     """Makes needed changes to hardcoded behavior"""
     
     # Ignore companions when trying to open Color Dungeon
-    patcher.addPatch(0xc868d4, 'ccmp w9, #0, #4, ne')
+    # patcher.addPatch(0xc868d4, 'ccmp w9, #0, #4, ne')
+    patcher.addPatch(0xc868d4, [36, 25, 64, 122])
 
     # Will eventually write a patch to make item actors load even if you have the item
     # Ball & Chain Solder fix will be among this
