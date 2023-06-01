@@ -2876,7 +2876,7 @@ bomb-arrows:
   condition-basic: bombs & shoot-arrows
 bombs:
   type: interaction
-  condition-basic: ((mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & ! shuffle-bombs & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming & powders) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | ! shuffle-bombs)
+  condition-basic: ((mabe & boots & ! shuffle-bombs) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & ! shuffle-bombs & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming & powders) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | ! shuffle-bombs)
 powders:
   type: interaction
   condition-basic: ((color-dungeon & (can-farm-rupees | break-pot & ! shuffle-powder)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot & ! shuffle-powder) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))) & (powder | ! shuffle-powder)
@@ -2888,7 +2888,7 @@ can-shop:
   condition-basic: can-farm-rupees | sword
 can-farm-rupees:
   type: interaction
-  condition-basic: bracelet | sword | rod | boomerang | kill-octorok | shovel
+  condition-basic: bracelet | sword | rod | boomerang | shovel # | kill-octorok: removed because it sucks + enemy rando is a thing now
 dash-jump:
   type: interaction
   condition-basic: feather & boots
