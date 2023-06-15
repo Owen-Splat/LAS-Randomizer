@@ -62,7 +62,6 @@ Applying this mod will not in any way affect your save data, so don't delete any
 - The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory. This is left vanilla
 - The existence of the Ball & Chain Soldier depends on whether you have the 5th Golden Leaf in your inventory. This is left vanilla
 - Dampe lacks logic for instrument shuffle, and may permanently remove items from your inventory
-- Starting with Cello results in Mabe not being cleared on the map until BowWow is rescued
 - Small key drops are still technically small key objects and will trigger the compass ringtone regardless of what they are
 - Choosing Shuffled Bombs or Shuffled Powder sets drops of that item to 0. This will not change even after finding it
 - While Trading Quest items work, they will not be displayed in the inventory

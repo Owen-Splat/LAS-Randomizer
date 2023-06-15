@@ -114,6 +114,9 @@
       <property name="text">
        <string/>
       </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="label">
       <property name="geometry">
@@ -149,7 +152,7 @@
        <enum>QFrame::Plain</enum>
       </property>
       <property name="text">
-       <string>Romfs Dump</string>
+       <string>Romfs Path</string>
       </property>
       <property name="textFormat">
        <enum>Qt::PlainText</enum>
@@ -221,6 +224,9 @@
         <pointsize>9</pointsize>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QPushButton" name="browseButton2">
@@ -2078,7 +2084,7 @@
         <x>475</x>
         <y>41</y>
         <width>256</width>
-        <height>408</height>
+        <height>301</height>
        </rect>
       </property>
       <property name="font">
@@ -2125,6 +2131,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="excludeButton_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>325</x>
@@ -2155,7 +2164,7 @@
         <x>20</x>
         <y>41</y>
         <width>256</width>
-        <height>408</height>
+        <height>301</height>
        </rect>
       </property>
       <property name="font">
@@ -2321,7 +2330,7 @@
       <property name="geometry">
        <rect>
         <x>295</x>
-        <y>358</y>
+        <y>248</y>
         <width>161</width>
         <height>81</height>
        </rect>
@@ -2363,6 +2372,161 @@
       <property name="wordWrap">
        <bool>true</bool>
       </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>350</y>
+        <width>711</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Custom Logic</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <widget class="QCheckBox" name="logicCheck">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>24</y>
+         <width>151</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>This controls whether instruments will be randomized&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked, it will not be randomized,&lt;/u&gt; except for the instruments you start with</string>
+       </property>
+       <property name="text">
+        <string>Use Custom Logic</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEdit_4">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>64</y>
+         <width>501</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="browseButton3">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>626</x>
+         <y>64</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(218, 218, 218);</string>
+       </property>
+       <property name="text">
+        <string>Browse</string>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_4">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>64</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>23</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="text">
+        <string>Logic File Path</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -2545,7 +2709,16 @@
     <addaction name="separator"/>
     <addaction name="actionDark"/>
    </widget>
+   <widget class="QMenu" name="menuLogic">
+    <property name="title">
+     <string>Logic</string>
+    </property>
+    <addaction name="actionUpdate"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport"/>
+   </widget>
    <addaction name="menuLanguage"/>
+   <addaction name="menuLogic"/>
    <addaction name="menuTheme"/>
    <addaction name="menuAbout"/>
   </widget>
@@ -2592,6 +2765,16 @@
   <action name="actionKnown_Issues">
    <property name="text">
     <string>Known Issues</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export Logic</string>
+   </property>
+  </action>
+  <action name="actionUpdate">
+   <property name="text">
+    <string>Update Logic</string>
    </property>
   </action>
  </widget>

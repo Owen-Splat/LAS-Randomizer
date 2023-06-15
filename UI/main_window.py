@@ -2,6 +2,7 @@ from PySide6 import QtCore, QtWidgets
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
 from update import UpdateProcess
+from logic_update import LogicUpdateProcess
 from randomizer_paths import IS_RUNNING_FROM_SOURCE
 from randomizer_data import *
 
@@ -9,8 +10,9 @@ import yaml
 from indentation import MyDumper
 
 import os
+import yaml
 import random
-from re import findall, sub
+from re import sub
 
 
 
@@ -21,11 +23,15 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.trans = QtCore.QTranslator(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
+        self.ui.includeButton_2.setVisible(False)
+        self.ui.excludeButton_2.setVisible(False)
         # self.options = ([('English', ''), ('Français', 'eng-fr' ), ('中文', 'eng-chs'), ])
 
         # Keep track of stuff
         self.mode = str('light')
+        self.update_pending = bool(False)
+        self.logic_version = LOGIC_VERSION
+        self.logic_defs = LOGIC_RAW
         self.excluded_checks = set()
         self.starting_gear = list()
         self.overworld_owls = bool(False)
@@ -39,6 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.updateOwls()
         self.updateSeashells()
+        self.toggleCustomLogic()
         
         if self.mode == 'light':
             self.setStyleSheet(LIGHT_STYLESHEET)
@@ -50,6 +57,8 @@ class MainWindow(QtWidgets.QMainWindow):
         ### SUBSCRIBE TO EVENTS
         
         # menu bar items
+        self.ui.actionUpdate.triggered.connect(self.checkLogic)
+        self.ui.actionExport.triggered.connect(self.exportLogic)
         self.ui.actionLight.triggered.connect(self.setLightMode)
         self.ui.actionDark.triggered.connect(self.setDarkMode)
         self.ui.actionChangelog.triggered.connect(self.showChangelog)
@@ -75,12 +84,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.seashellsComboBox.currentIndexChanged.connect(self.updateSeashells)
         self.ui.leavesCheck.clicked.connect(self.leavesCheck_Clicked)
         self.ui.owlsComboBox.currentIndexChanged.connect(self.updateOwls)
-        # locations tab
+        # tabs
         self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
         self.ui.includeButton.clicked.connect(self.includeButton_Clicked)
         self.ui.excludeButton.clicked.connect(self.excludeButton_Clicked)
         self.ui.includeButton_3.clicked.connect(self.includeButton_3_Clicked)
         self.ui.excludeButton_3.clicked.connect(self.excludeButton_3_Clicked)
+        # self.ui.includeButton_2.clicked.connect(self.includeButton_2_Clicked)
+        # self.ui.excludeButton_2.clicked.connect(self.excludeButton_2_Clicked)
+        self.ui.logicCheck.clicked.connect(self.toggleCustomLogic)
+        self.ui.browseButton3.clicked.connect(self.logicBrowse)
         ### DESCRIPTIONS
         desc_items = self.ui.tab.findChildren(QtWidgets.QCheckBox)
         desc_items.extend([
@@ -105,7 +118,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.updateChecker.setText('Running from source. No updates will be checked')
         else:
             self.process = UpdateProcess() # initialize a new QThread class
-            self.process.can_update.connect(self.showUpdate) # connect a boolean signal to ShowUpdate()
+            self.process.can_update.connect(self.showUpdate) # connect a boolean signal to showUpdate()
             self.process.start() # start the thread
 
 
@@ -137,10 +150,59 @@ class MainWindow(QtWidgets.QMainWindow):
     # show update if there is one
     def showUpdate(self, update):
         if update:
+            self.update_pending = True
             self.ui.updateChecker.setText(f"<a href='{DOWNLOAD_PAGE}'>Update found!</a>")
         else:
             self.ui.updateChecker.setText('No updates available')
     
+
+
+    def checkLogic(self):
+        if self.update_pending: # ignore logic changes if there is an app update
+            self.showLogicUpdate(False)
+            return
+        
+        self.logic_process = LogicUpdateProcess() # initialize a new QThread class
+        self.logic_process.can_update.connect(self.showLogicUpdate) # connect a boolean signal to showLogicUpdate()
+        self.logic_process.give_logic.connect(self.obtainLogic) # connect a tuple signal to obtainLogic()
+        self.logic_process.start() # start the thread
+        self.logic_process.exec() # wait on updater
+    
+
+
+    def obtainLogic(self, version_and_logic):
+        self.logic_version = version_and_logic[0]
+        self.logic_defs = version_and_logic[1]
+        with open(os.path.join(DATA_PATH, 'logic.yml'), 'w+') as f:
+            f.write(self.logic_defs)
+
+
+
+    def showLogicUpdate(self, update):
+        message = QtWidgets.QMessageBox()
+        message.setWindowTitle("Logic Update Status")
+
+        if self.mode == 'light':
+            message.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            message.setStyleSheet(DARK_STYLESHEET)
+        
+        if update:
+            message.setText('Logic has updated')
+        else:
+            message.setText('No updates found')
+        
+        message.exec()
+
+
+
+    def exportLogic(self):
+        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save As', '.', "YAML (*.yml);;TEXT (*.txt)")
+        if filename[0] != '':
+            with open(filename[0], 'w') as f:
+                f.write(self.logic_defs)
+                # yaml.dump(yaml.safe_load(self.logic_defs), f, Dumper=MyDumper, sort_keys=False, width=float('inf'))
+
 
 
     # apply defaults
@@ -226,6 +288,8 @@ class MainWindow(QtWidgets.QMainWindow):
             'Romfs_Folder': self.ui.lineEdit.text(),
             'Output_Folder': self.ui.lineEdit_2.text(),
             'Seed': self.ui.lineEdit_3.text(),
+            'Custom_Logic': self.ui.logicCheck.isChecked(),
+            'Logic_Path': self.ui.lineEdit_4.text(),
             'Logic': LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()],
             'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
             'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
@@ -306,6 +370,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.lineEdit_3.setText(SETTINGS['Seed'])
         except (KeyError, TypeError):
             pass
+        
+        # custom logic
+        try:
+            if SETTINGS['Logic_Path'] != "":
+                self.ui.lineEdit_4.setText(SETTINGS['Logic_Path'])
+        except (KeyError, TypeError):
+            pass
+
+        # custom logic toggle
+        try:
+            self.ui.logicCheck.setChecked(SETTINGS['Custom_Logic'])
+        except (KeyError, TypeError):
+            self.ui.logicCheck.setChecked(False)
         
         # nondungeon chests
         try:
@@ -612,6 +689,25 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
+    # Logic File Browse
+    def logicBrowse(self):
+        filepath = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File', '.', 'Logic Files (*.yml *.txt)')[0]
+        if filepath != "":
+            self.ui.lineEdit_4.setText(filepath)
+    
+    
+    
+    # Custom Logic Toggle
+    def toggleCustomLogic(self):
+        if self.ui.logicCheck.isChecked():
+            self.ui.lineEdit_4.setEnabled(True)
+            self.ui.browseButton3.setEnabled(True)
+        else:
+            self.ui.lineEdit_4.setEnabled(False)
+            self.ui.browseButton3.setEnabled(False)
+    
+    
+    
     # Chests Check Changed
     def chestsCheck_Clicked(self):
         if self.ui.chestsCheck.isChecked():
@@ -764,67 +860,86 @@ class MainWindow(QtWidgets.QMainWindow):
     # Randomize Button Clicked
     def randomizeButton_Clicked(self):
         
-        if os.path.exists(self.ui.lineEdit.text()) and os.path.exists(self.ui.lineEdit_2.text()):
-            
-            # get needed params
-            rom_path = self.ui.lineEdit.text()
-            
-            seed = self.ui.lineEdit_3.text()
-            if seed.lower().strip() in ("", "random"):
-                random.seed()
-                seed = str(random.getrandbits(32))
-            
-            outdir = f"{self.ui.lineEdit_2.text()}/{seed}"
-            
-            logic = LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()]
+        if not os.path.exists(self.ui.lineEdit.text()):
+            self.showUserError('Romfs path does not exist!')
+            return
+        
+        if not os.path.exists(self.ui.lineEdit_2.text()):
+            self.showUserError('Output path does not exist!')
+            return
+        
+        if self.ui.logicCheck.isChecked():
+            if not os.path.exists(self.ui.lineEdit_4.text()):
+                self.showUserError('Custom logic path does not exist!')
+                return
+            try:
+                with open(self.ui.lineEdit_4.text(), 'r') as f:
+                    logic_file = yaml.safe_load(f)
+            except yaml.YAMLError as exc:
+                self.showUserError(exc.args[0])
+                return
+        else:
+            logic_file = yaml.safe_load(self.logic_defs)
+        
+        # get needed params
+        rom_path = self.ui.lineEdit.text()
+        
+        seed = self.ui.lineEdit_3.text()
+        if seed.lower().strip() in ("", "random"):
+            random.seed()
+            seed = str(random.getrandbits(32))
+        
+        outdir = f"{self.ui.lineEdit_2.text()}/{seed}"
+        
+        logic = LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()]
 
-            settings = {
-                'create-spoiler': self.ui.spoilerCheck.isChecked(),
-                'free-book': self.ui.bookCheck.isChecked(),
-                'unlocked-bombs': self.ui.unlockedBombsCheck.isChecked(),
-                'shuffle-bombs': self.ui.shuffledBombsCheck.isChecked(),
-                'shuffle-powder': self.ui.shuffledPowderCheck.isChecked(),
-                'reduce-farming': self.ui.farmingCheck.isChecked(),
-                'fast-fishing': self.ui.fastFishingCheck.isChecked(),
-                'fast-stealing': self.ui.stealingCheck.isChecked(),
-                'fast-trendy': self.ui.fastTrendyCheck.isChecked(),
-                'fast-songs': self.ui.songsCheck.isChecked(),
-                'shuffle-instruments': self.ui.instrumentCheck.isChecked(),
-                'starting-instruments': self.ui.instrumentsComboBox.currentIndex(),
-                'bad-pets': self.ui.badPetsCheck.isChecked(),
-                'open-kanalet': self.ui.kanaletCheck.isChecked(),
-                'open-bridge': self.ui.bridgeCheck.isChecked(),
-                'open-mamu': self.ui.mazeCheck.isChecked(),
-                'trap-sanity': self.ui.trapsCheck.isChecked(),
-                'blup-sanity': self.ui.rupCheck.isChecked(),
-                'classic-d2': self.ui.swampCheck.isChecked(),
-                'owl-overworld-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('overworld', 'all') else False,
-                'owl-dungeon-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('dungeons', 'all') else False,
-                # 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
-                'fast-stalfos': self.ui.stalfosCheck.isChecked(),
-                'scaled-chest-sizes': self.ui.chestSizesCheck.isChecked(),
-                'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in self.excluded_checks]) > 0 else False,
-                'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in self.excluded_checks]) > 0 else False,
-                # 'shuffle-companions': self.ui.companionCheck.isChecked(),
-                # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
-                'randomize-music': self.ui.musicCheck.isChecked(),
-                'randomize-enemies': self.ui.enemyCheck.isChecked(),
-                'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
-                'shuffled-dungeons': self.ui.dungeonsCheck.isChecked(),
-                'starting-items': self.starting_gear,
-                'excluded-locations': self.excluded_checks
-            }
-            
-            self.progress_window = ProgressWindow(rom_path, outdir, seed, logic, ITEM_DEFS, LOGIC_DEFS, settings)
-            self.progress_window.setFixedSize(472, 125)
-            self.progress_window.setWindowTitle(f"{seed}")
+        settings = {
+            'create-spoiler': self.ui.spoilerCheck.isChecked(),
+            'free-book': self.ui.bookCheck.isChecked(),
+            'unlocked-bombs': self.ui.unlockedBombsCheck.isChecked(),
+            'shuffle-bombs': self.ui.shuffledBombsCheck.isChecked(),
+            'shuffle-powder': self.ui.shuffledPowderCheck.isChecked(),
+            'reduce-farming': self.ui.farmingCheck.isChecked(),
+            'fast-fishing': self.ui.fastFishingCheck.isChecked(),
+            'fast-stealing': self.ui.stealingCheck.isChecked(),
+            'fast-trendy': self.ui.fastTrendyCheck.isChecked(),
+            'fast-songs': self.ui.songsCheck.isChecked(),
+            'shuffle-instruments': self.ui.instrumentCheck.isChecked(),
+            'starting-instruments': self.ui.instrumentsComboBox.currentIndex(),
+            'bad-pets': self.ui.badPetsCheck.isChecked(),
+            'open-kanalet': self.ui.kanaletCheck.isChecked(),
+            'open-bridge': self.ui.bridgeCheck.isChecked(),
+            'open-mamu': self.ui.mazeCheck.isChecked(),
+            'trap-sanity': self.ui.trapsCheck.isChecked(),
+            'blup-sanity': self.ui.rupCheck.isChecked(),
+            'classic-d2': self.ui.swampCheck.isChecked(),
+            'owl-overworld-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('overworld', 'all') else False,
+            'owl-dungeon-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('dungeons', 'all') else False,
+            # 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
+            'fast-stalfos': self.ui.stalfosCheck.isChecked(),
+            'scaled-chest-sizes': self.ui.chestSizesCheck.isChecked(),
+            'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in self.excluded_checks]) > 0 else False,
+            'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in self.excluded_checks]) > 0 else False,
+            # 'shuffle-companions': self.ui.companionCheck.isChecked(),
+            # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
+            'randomize-music': self.ui.musicCheck.isChecked(),
+            'randomize-enemies': self.ui.enemyCheck.isChecked(),
+            'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
+            'shuffled-dungeons': self.ui.dungeonsCheck.isChecked(),
+            'starting-items': self.starting_gear,
+            'excluded-locations': self.excluded_checks
+        }
+        
+        self.progress_window = ProgressWindow(rom_path, outdir, seed, logic, ITEM_DEFS, logic_file, settings)
+        self.progress_window.setFixedSize(472, 125)
+        self.progress_window.setWindowTitle(f"{seed}")
 
-            if self.mode == 'light':
-                self.progress_window.setStyleSheet(LIGHT_STYLESHEET)
-            else:
-                self.progress_window.setStyleSheet(DARK_STYLESHEET)
-            
-            self.progress_window.show()
+        if self.mode == 'light':
+            self.progress_window.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            self.progress_window.setStyleSheet(DARK_STYLESHEET)
+        
+        self.progress_window.show()
     
     
     
@@ -968,6 +1083,20 @@ class MainWindow(QtWidgets.QMainWindow):
         message = QtWidgets.QMessageBox()
         message.setWindowTitle("What's New")
         message.setText(CHANGE_LOG)
+
+        if self.mode == 'light':
+            message.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            message.setStyleSheet(DARK_STYLESHEET)
+        
+        message.exec()
+    
+
+
+    def showUserError(self, msg):
+        message = QtWidgets.QMessageBox()
+        message.setWindowTitle("Error")
+        message.setText(msg)
 
         if self.mode == 'light':
             message.setStyleSheet(LIGHT_STYLESHEET)

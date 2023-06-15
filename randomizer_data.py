@@ -28,6 +28,9 @@ with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     STARTING_ITEMS = list(items['Starting_Items'])
 
 with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
+    LOGIC_RAW = f.read()
+    f.seek(0)
+    LOGIC_VERSION = float(f.readline().strip('#'))
     LOGIC_DEFS = yaml.safe_load(f)
     TRICKS = [k for k, v in LOGIC_DEFS.items() if v['type'] == 'trick']
 

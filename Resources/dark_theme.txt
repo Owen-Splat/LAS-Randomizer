@@ -114,6 +114,10 @@ QLineEdit:hover {
 QLineEdit:focus {
     border: 1px solid rgb(120, 180, 250);
 }
+QLineEdit:disabled {
+    background: rgb(30, 35, 40);
+    border: 1px solid rgb(40, 45, 50);
+}
 QTabWidget::pane {
     border: 1px solid rgb(60, 65, 70);
     border-radius: 4px;
