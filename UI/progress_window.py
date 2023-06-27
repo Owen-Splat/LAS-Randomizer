@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 165 - len(settings['excluded-locations'])
-        self.num_of_mod_tasks = 250
+        self.num_of_mod_tasks = 254
         
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
@@ -160,7 +160,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             return
         
         self.ui.progressBar.setValue(self.num_of_mod_tasks)
-        self.ui.label.setText("All done! Check the Github page for instructions on how to play!")
+        self.ui.label.setText("All done! Check the README for instructions on how to play!")
         self.done = True
 
 

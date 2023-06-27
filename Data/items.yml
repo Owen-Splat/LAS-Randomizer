@@ -378,6 +378,14 @@ Item_Pool:
     type: junk
     quantity: 0
     item-key: SquishTrap
+  deathball-trap:
+    type: junk
+    quantity: 0
+    item-key: DeathballTrap
+  quake-trap:
+    type: junk
+    quantity: 0
+    item-key: QuakeTrap
   bomb:
     type: junk
     quantity: 1

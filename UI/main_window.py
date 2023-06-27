@@ -220,7 +220,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excluded_checks.update(DAMPE_REWARDS)
 
         # self.ui.trendyCheck.setChecked(False)
-        # self.excluded_checks.update(TRENDY_REWARDS)
+        self.excluded_checks.update(TRENDY_REWARDS)
 
         self.ui.giftsCheck.setChecked(True)
         self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)

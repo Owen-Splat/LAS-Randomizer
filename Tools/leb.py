@@ -1,7 +1,6 @@
 import numpy as np
 import struct
 import re
-# from ctypes import LittleEndianStructure, Union, c_uint8
 
 
 def readBytes(bytes, start, length, endianness='little'):
@@ -62,7 +61,7 @@ class FixedHash:
 		namesSectionOffset = ((dataSectionOffset + readBytes(data, dataSectionOffset - 8, 8) + 3) & -4) + 4
 		namesSize = readBytes(data, namesSectionOffset - 4, 4)
 		self.namesSection = data[namesSectionOffset : namesSectionOffset + namesSize]
-
+		
 		self.entries = []
 		for i in range(numEntries):
 			currentOffset = entriesOffset + (i * 0x10)
@@ -302,7 +301,7 @@ class LevelConfig:
 
 
 class Room:
-	def __init__(self, data):
+	def __init__(self, data, edit_grid=False):
 		self.fixed_hash = FixedHash(data)
 
 		# self.points = []
@@ -319,12 +318,15 @@ class Room:
 		actor_entry = [e for e in self.fixed_hash.entries if e.name == b'actor'][0]
 		for entry in actor_entry.data.entries:
 			self.actors.append(Actor(entry.data, self.fixed_hash.namesSection))
-				
-		# try:
-		# 	grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
-		# 	self.grid = Grid(grid_entry)
-		# except IndexError:
-		# 	self.grid = None
+		
+		if edit_grid:
+			try:
+				grid_entry = [e for e in self.fixed_hash.entries if e.name == b'grid'][0]
+				self.grid = Grid(grid_entry)
+			except IndexError:
+				self.grid = None
+		else:
+			self.grid = None
 
 
 	def setChestContent(self, new_content, item_index, chest_index=0, chest_size=1.0):
@@ -427,17 +429,17 @@ class Room:
 						if isinstance(s2[0][1], bytes):
 							new_names += s2[0][1] + b'\x00'
 			
-			# if entry.name == b'grid':
-			# 	entry.data.entries = []
-			# 	entry.data.entries.append(Entry(0xFFF0, b'data', 0xFFFFFFFF, self.grid.pack()))
-			# 	new_names += b'data' + b'\x00'
+			if entry.name == b'grid' and self.grid != None:
+				entry.data.entries = []
+				entry.data.entries.append(Entry(0xFFF0, b'data', 0xFFFFFFFF, self.grid.pack()))
+				# new_names += b'data' + b'\x00'
 
-			# 	if self.grid.chain_entry is not None:
-			# 		entry.data.entries.append(Entry(0xFFF0, b'chain', 0xFFFFFFFF, self.grid.chain_entry.data))
-			# 		new_names += b'chain' + b'\x00'
+				if self.grid.chain_entry != None:
+					entry.data.entries.append(Entry(0xFFF0, b'chain', 0xFFFFFFFF, self.grid.chain_entry.data))
+					# new_names += b'chain' + b'\x00'
 				
-			# 	entry.data.entries.append(Entry(0xFFF0, b'info', 0x0, self.grid.info.pack()))
-			# 	new_names += b'info' + b'\x00'
+				entry.data.entries.append(Entry(0xFFF0, b'info', 0x0, self.grid.info.pack()))
+				# new_names += b'info' + b'\x00'
 			
 			new_names += entry.name + b'\x00'
 
@@ -676,240 +678,144 @@ class Relationship:
 
 
 
-# # EXPERIMENTAL GRID SECTION
-# class Grid:
-# 	def __init__(self, entry):
-# 		self.chain_entry = None
+# EXPERIMENTAL GRID SECTION
+class Grid:
+	def __init__(self, entry):
+		self.chain_entry = None
 
-# 		for e in entry.data.entries:
-# 			if e.name == b'data':
-# 				self.data_entry = e
-# 				continue
-# 			if e.name == b'chain':
-# 				self.chain_entry = e
-# 				continue
-# 			if e.name == b'info':
-# 				self.info = self.InfoBlock(e.data)
+		for e in entry.data.entries:
+			if e.name == b'data':
+				self.data_entry = e
+				continue
+			if e.name == b'chain':
+				self.chain_entry = e
+				continue
+			if e.name == b'info':
+				self.info = self.InfoBlock(e.data)
 		
-# 		if self.info.room_height not in [8, 2]:
-# 			raise ValueError('Cannot determine room type')
+		if self.info.room_height not in (8, 2):
+			raise ValueError('Cannot determine room type')
 		
-# 		self.tilesdata = []
-# 		if self.info.room_height == 8:
-# 			for i in range(80): # top-down room
-# 				start_addr = (0x10 * i)
-# 				self.tilesdata.append(self.TileData(self.data_entry.data[start_addr : (start_addr + 0x10)]))
-# 		else:
-# 			for i in range(20): # sidescroller room
-# 				start_addr = (0x10 * i)
-# 				self.tilesdata.append(self.TileData(self.data_entry.data[start_addr : (start_addr + 0x10)]))
+		self.tilesdata = []
+		if self.info.room_height == 8:
+			for i in range(80): # top-down room
+				start_addr = (0x10 * i)
+				self.tilesdata.append(self.TileData(self.data_entry.data[start_addr : (start_addr + 0x10)]))
+		else:
+			for i in range(20): # sidescroller room
+				start_addr = (0x10 * i)
+				self.tilesdata.append(self.TileData(self.data_entry.data[start_addr : (start_addr + 0x10)]))
 	
 
-# 	def pack(self):
-# 		packed = b''
-# 		for tile in self.tilesdata:
-# 			packed += tile.pack()
+	def pack(self): # this handles packing of just the data entry
+		packed = b''
+		for tile in self.tilesdata:
+			packed += tile.pack()
 		
-# 		return packed
+		return packed
 	
 	
 
-# 	class TileData:
-# 		def __init__(self, data):
-# 			self.flags1 = Flags1()
-# 			self.flags1.asbyte = readBytes(data, 0x0, 1)
-# 			self.flags2 = Flags2()
-# 			self.flags2.asbyte = readBytes(data, 0x1, 1)
-# 			self.flags3 = Flags3()
-# 			self.flags3.asbyte = readBytes(data, 0x2, 1)
-# 			self.flags4 = Flags4()
-# 			self.flags4.asbyte = readBytes(data, 0x3, 1)
-# 			self.unknown = data[0x4:0x8]
-# 			self.chain_index = readBytes(data, 0x8, 4)
-# 			self.elevation = readFloat(data, 0xC, 4)
-		
-# 		def pack(self):
-# 			packed = b''
-# 			packed += self.flags1.asbyte.to_bytes(1, 'little')
-# 			packed += self.flags2.asbyte.to_bytes(1, 'little')
-# 			packed += self.flags3.asbyte.to_bytes(1, 'little')
-# 			packed += self.flags4.asbyte.to_bytes(1, 'little')
-# 			packed += self.unknown
-# 			packed += self.chain_index.to_bytes(4, 'little')
-# 			packed += struct.pack('<f', self.elevation)
-
-# 			return packed
-	
-
-
-# 	class InfoBlock:
-# 		def __init__(self, data):
-# 			self.room_height = readBytes(data, 0x0, 2)
-# 			self.room_width = readBytes(data, 0x2, 2)
-# 			self.tile_size = readFloat(data, 0x4, 4)
-# 			self.x_coord = readFloat(data, 0x8, 4)
-# 			self.z_coord = readFloat(data, 0xC, 4)
-		
-# 		def pack(self):
-# 			packed = b''
-# 			packed += self.room_height.to_bytes(2, 'little')
-# 			packed += self.room_width.to_bytes(2, 'little')
-# 			packed += struct.pack('<f', self.tile_size)
-# 			packed += struct.pack('<f', self.x_coord)
-# 			packed += struct.pack('<f', self.z_coord)
-
-# 			return packed
-
-
-
-# class Flags_bits1(LittleEndianStructure):
-# 	_fields_ = [
-# 		('deepwaterlava', c_uint8, 1),
-# 		('containscollision', c_uint8, 1),
-# 		('unused2', c_uint8, 1),
-# 		('northcollision', c_uint8, 1),
-# 		('unused4', c_uint8, 1),
-# 		('eastcollision', c_uint8, 1),
-# 		('unused6', c_uint8, 1),
-# 		('southcollision', c_uint8, 1)
-# 	]
-
-# class Flags_bits2(LittleEndianStructure):
-# 	_fields_ = [
-# 		('unused0', c_uint8, 1),
-# 		('westcollision', c_uint8, 1),
-# 		('unused2', c_uint8, 1),
-# 		('unused3', c_uint8, 1),
-# 		('unused4', c_uint8, 1),
-# 		('unused5', c_uint8, 1),
-# 		('unused6', c_uint8, 1),
-# 		('unused7', c_uint8, 1)
-# 	]
-
-# class Flags_bits3(LittleEndianStructure):
-# 	_fields_ = [
-# 		('isdigspot', c_uint8, 1),
-# 		('unused1', c_uint8, 1),
-# 		('iswaterlava', c_uint8, 1),
-# 		('respawnvoid', c_uint8, 1),
-# 		('respawnload', c_uint8, 1),
-# 		('canrefresh', c_uint8, 1),
-# 		('unknown6', c_uint8, 1),
-# 		('unused7', c_uint8, 1)
-# 	]
-
-# class Flags_bits4(LittleEndianStructure):
-# 	_fields_ = [
-# 		('unused0', c_uint8, 1),
-# 		('unused1', c_uint8, 1),
-# 		('unused2', c_uint8, 1),
-# 		('unused3', c_uint8, 1),
-# 		('unused4', c_uint8, 1),
-# 		('unused5', c_uint8, 1),
-# 		('unused6', c_uint8, 1),
-# 		('unused7', c_uint8, 1)
-# 	]
-
-# class Flags1(Union):
-# 	_fields_ = [
-# 		('b', Flags_bits1),
-# 		('asbyte', c_uint8)
-# 	]
-
-# class Flags2(Union):
-# 	_fields_ = [
-# 		('b', Flags_bits2),
-# 		('asbyte', c_uint8)
-# 	]
-
-# class Flags3(Union):
-# 	_fields_ = [
-# 		('b', Flags_bits3),
-# 		('asbyte', c_uint8)
-# 	]
-
-# class Flags4(Union):
-# 	_fields_ = [
-# 		('b', Flags_bits4),
-# 		('asbyte', c_uint8)
-# 	]
-
-
-
-# class Level:
-# 	def __init__(self, data):
-# 		self.fixed_hash = FixedHash(data)
-
-# 		self.zones = []
-# 		zones_entry = [e for e in self.fixed_hash.entries if e.name == b'zone'][0]
-# 		for entry in zones_entry.data.entries:
-# 			self.zones.append(Zone(entry.data))
-	
-	
-# 	def repack(self):
-# 		new_names = b''
-		
-# 		for entry in self.fixed_hash.entries:
-# 			if entry.name == b'zone':
-# 				entry.data.entries = []
-# 				for zone in self.zones:
-# 					entry.data.entries.append(Entry(0xFFF0, b'', 0xFFFFFFFF, zone.pack()))
+	class TileData:
+		def __init__(self, data):
+			flags_byte = readBytes(data, 0x0, 1)
+			self.flags1 = {
+				'southcollision': 1 if flags_byte&128 != 0 else 0,
+				'unused6': 1 if flags_byte&64 != 0 else 0,
+				'eastcollision': 1 if flags_byte&32 != 0 else 0,
+				'unused4': 1 if flags_byte&16 != 0 else 0,
+				'northcollision': 1 if flags_byte&8 != 0 else 0,
+				'unused2': 1 if flags_byte&4 != 0 else 0,
+				'containscollision': 1 if flags_byte&2 != 0 else 0,
+				'deepwaterlava': 1 if flags_byte&1 != 0 else 0
+			}
 			
-# 			new_names += entry.name + b'\x00'
+			flags_byte = readBytes(data, 0x1, 1)
+			self.flags2 = {
+				'unused7': 1 if flags_byte&128 != 0 else 0,
+				'unused6': 1 if flags_byte&64 != 0 else 0,
+				'unused5': 1 if flags_byte&32 != 0 else 0,
+				'unused4': 1 if flags_byte&16 != 0 else 0,
+				'unused3': 1 if flags_byte&8 != 0 else 0,
+				'unused2': 1 if flags_byte&4 != 0 else 0,
+				'westcollision': 1 if flags_byte&2 != 0 else 0,
+				'unused0': 1 if flags_byte&1 != 0 else 0
+			}
+			
+			flags_byte = readBytes(data, 0x2, 1)
+			self.flags3 = {
+				'unused7': 1 if flags_byte&128 != 0 else 0,
+				'unknown6': 1 if flags_byte&64 != 0 else 0,
+				'canrefresh': 1 if flags_byte&32 != 0 else 0,
+				'respawnload': 1 if flags_byte&16 != 0 else 0,
+				'respawnvoid': 1 if flags_byte&8 != 0 else 0,
+				'iswaterlava': 1 if flags_byte&4 != 0 else 0,
+				'unused1': 1 if flags_byte&2 != 0 else 0,
+				'isdigspot': 1 if flags_byte&1 != 0 else 0
+			}
+			
+			flags_byte = readBytes(data, 0x3, 1)
+			self.flags4 = {
+				'unused7': 1 if flags_byte&128 != 0 else 0,
+				'unused6': 1 if flags_byte&64 != 0 else 0,
+				'unused5': 1 if flags_byte&32 != 0 else 0,
+				'unused4': 1 if flags_byte&16 != 0 else 0,
+				'unused3': 1 if flags_byte&8 != 0 else 0,
+				'unused2': 1 if flags_byte&4 != 0 else 0,
+				'unused1': 1 if flags_byte&2 != 0 else 0,
+				'unused0': 1 if flags_byte&1 != 0 else 0
+			}
+			
+			# self.unknown = data[0x4:0x8] # matches the first 4 bytes
+
+			self.chain_index = readBytes(data, 0x8, 4)
+			self.elevation = readFloat(data, 0xC, 4)
 		
-# 		self.fixed_hash.namesSection = new_names
 
-# 		return self.fixed_hash.toBinary()
+		def pack(self):
+			packed = b''
 
+			bin_str1 = ''.join(str(i) for i in list(self.flags1.values()))
+			packed += int(bin_str1, 2).to_bytes(1, 'little')
 
+			bin_str2 = ''.join(str(i) for i in list(self.flags2.values()))
+			packed += int(bin_str2, 2).to_bytes(1, 'little')
 
-# class Zone:
-# 	def __init__(self, data):
-# 		self.room_ID = readBytes(data, 0x0, 4)
-# 		self.unknown_1 = data[0x4:0x3C]
-# 		self.bgm = readString(data, 0x3C)
-# 		self.padding_1 = data[0x3C+len(self.bgm):0x5C]
-# 		self.se_amb = readString(data, 0x5C)
-# 		self.padding_2 = data[0x5C+len(self.se_amb):0x7C]
-# 		self.group_amb = readString(data, 0x7C)
-# 		self.padding_3 = data[0x7C+len(self.group_amb):0x9C]
-# 		self.unknown_2 = data[0x9C:0xB0]
-# 		self.room_type = readString(data, 0xB0)
-# 		self.padding_4 = data[0xB0+len(self.room_type):]
+			bin_str3 = ''.join(str(i) for i in list(self.flags3.values()))
+			packed += int(bin_str3, 2).to_bytes(1, 'little')
+
+			bin_str4 = ''.join(str(i) for i in list(self.flags4.values()))
+			packed += int(bin_str4, 2).to_bytes(1, 'little')
+
+			# packed += self.unknown
+			
+			# having this match the first 4 bytes is important for the tile properties to work properly
+			packed += int(bin_str1, 2).to_bytes(1, 'little')
+			packed += int(bin_str2, 2).to_bytes(1, 'little')
+			packed += int(bin_str3, 2).to_bytes(1, 'little')
+			packed += int(bin_str4, 2).to_bytes(1, 'little')
+
+			packed += self.chain_index.to_bytes(4, 'little')
+			packed += struct.pack('<f', self.elevation)
+
+			return packed
 	
 
-# 	def pack(self):
-# 		packed = b''
-# 		packed += self.room_ID.to_bytes(4, 'little')
-# 		packed += self.unknown_1
-# 		packed += self.bgm
 
-# 		self.padding_1 = b''
-# 		for i in range(32-len(self.bgm)):
-# 			self.padding_1 += b'\x00'
+	class InfoBlock:
+		def __init__(self, data):
+			self.room_height = readBytes(data, 0x0, 2)
+			self.room_width = readBytes(data, 0x2, 2)
+			self.tile_size = readFloat(data, 0x4, 4)
+			self.x_coord = readFloat(data, 0x8, 4)
+			self.z_coord = readFloat(data, 0xC, 4)
 		
-# 		packed += self.padding_1
-# 		packed += self.se_amb
+		def pack(self):
+			packed = b''
+			packed += self.room_height.to_bytes(2, 'little')
+			packed += self.room_width.to_bytes(2, 'little')
+			packed += struct.pack('<f', self.tile_size)
+			packed += struct.pack('<f', self.x_coord)
+			packed += struct.pack('<f', self.z_coord)
 
-# 		self.padding_2 = b''
-# 		for i in range(32-len(self.se_amb)):
-# 			self.padding_2 += b'\x00'
-		
-# 		packed += self.padding_2
-# 		packed += self.group_amb
-
-# 		self.padding_3 = b''
-# 		for i in range(32-len(self.group_amb)):
-# 			self.padding_3 += b'\x00'
-		
-# 		packed += self.padding_3
-# 		packed += self.unknown_2
-# 		packed += self.room_type
-
-# 		self.padding_4 = b''
-# 		for i in range(32-len(self.room_type)):
-# 			self.padding_4 += b'\x00'
-		
-# 		packed += self.padding_4
-		
-# 		return packed
+			return packed

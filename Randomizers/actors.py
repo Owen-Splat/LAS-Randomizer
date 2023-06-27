@@ -161,6 +161,11 @@ def addNeededActors(flowchart, rom_path):
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJump')
     
+    # try:
+    #     event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJumpInCurrentLevel')
+    # except ValueError:
+    #     event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJumpInCurrentLevel')
+    
     try:
         event_tools.findActor(flowchart, 'GameControl').find_action('RequestAutoSave')
     except ValueError:

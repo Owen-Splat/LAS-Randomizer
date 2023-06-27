@@ -42,24 +42,26 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         else:
             return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
                 data.SWORD_FOUND_FLAG, before, after)
-
+    
     if item == 'Shield':
         return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield',
             data.SHIELD_FOUND_FLAG, before, after)
     
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
-        give_powder = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}, after)
+        give_powder = event_tools.createActionChain(flowchart, before, [
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}),
+        ], after)
         
-        powder_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        upgrade_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
             {'symbol': 'GetMagicPowder'}, {0: after, 1: give_powder})
         
         return event_tools.createActionChain(flowchart, before, [
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('EventFlags', 'SetFlag', {'symbol': 'MagicPowderMaxUpFound', 'value': True}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder', 'keepCarry': False, 'messageEntry': item})
-        ], powder_check)
-
+        ], upgrade_check)
+    
     if item == 'Bomb_MaxUp':
         give_bombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
             {'itemKey': 'Bomb', 'count': 60, 'index': -1, 'autoEquip': False}, after)
@@ -71,7 +73,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Bomb', 'keepCarry': False, 'messageEntry': item})
         ], bombs_check)
-
+    
     if item == 'Arrow_MaxUp':
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
@@ -81,9 +83,9 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     ### traps
     if item == 'ZapTrap':
-        invincible_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         stop_event = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
-            {'channel': 'toolshopkeeper_dmg', 'index': 0}, invincible_event)
+            {'channel': 'toolshopkeeper_dmg', 'index': 0}, autosave_event)
 
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
@@ -98,7 +100,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         return event_tools.createForkEvent(flowchart, before, forks, stop_event)[0]
     
     if item == 'DrownTrap':
-        invincible_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_water'}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True})
@@ -111,20 +113,48 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         else:
             forks.append(event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}))
         
-        return event_tools.createForkEvent(flowchart, before, forks, invincible_event)[0]
+        return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
     if item == 'SquishTrap':
-        invincible_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         forks = [
-            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'}),
+            event_tools.createActionChain(flowchart, None, [
+                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_fallmaster_st'}),
+                # ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_fallmaster_lp'}),
+                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'})
+            ]),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
             event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 2.0})
         ]
         if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4}))
                 
-        return event_tools.createForkEvent(flowchart, before, forks, invincible_event)[0]
-            
+        return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
+    
+    if item == 'DeathballTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_deathball'}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True})
+        ]
+        if can_hurt_player:
+            forks.append(event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 1.5}),
+                ('Link', 'Damage', {'amount': 2})
+            ]))
+        else:
+            forks.append(event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}))
+        
+        return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
+    
+    if item == 'QuakeTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_quake'}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5})
+        ]
+        return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
+    
     ### Instrument flags
     if item == 'FullMoonCello':
         return event_tools.createActionChain(flowchart, before, [
@@ -187,10 +217,21 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     ### Powder for Shuffled Powder
     if item == 'MagicPowder':
-        return event_tools.createActionChain(flowchart, before, [
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
+        has_upgrade = event_tools.createActionChain(flowchart, before, [
+            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder_MaxUp', 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}),
         ], after)
+
+        no_upgrade = event_tools.createActionChain(flowchart, before, [
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False})
+        ], after)
+
+        upgrade_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': 'MagicPowderMaxUpFound'}, {0: no_upgrade, 1: has_upgrade})
+        
+        return event_tools.createActionChain(flowchart, before, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
+        ], upgrade_check)
     
     # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     # if item == 'Bottle' and index == 1:

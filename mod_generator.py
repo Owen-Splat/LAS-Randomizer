@@ -108,7 +108,8 @@ class ModsProcess(QtCore.QThread):
                 self.shuffleDungeonIcons()
             
             # if self.thread_active: self.fixWaterLoadingZones()
-
+            if self.thread_active: self.fixRapidsRespawn()
+            
             # current asm does not appear to break anything, can finally include :)
             if self.thread_active: self.makeExefsPatches()
 
@@ -1593,9 +1594,15 @@ class ModsProcess(QtCore.QThread):
             trap = None
             for item in sheet['values']:
                 if self.thread_active:
-                    if item['symbol'] == 'Flippers': # Make getting Flippers set this custom flag for water loading zones to use
-                        item['gettingFlag'] == 'FlippersFound'
-                        continue
+                    # MagicPowder_MaxUp uses this MagicPowder entry to actually display powder
+                    # we do not want this flag getting set when obtaining the capacity upgrade
+                    # so we remove the gettingflag and manually set it through events
+                    if item['symbol'] == 'MagicPowder':
+                        item['gettingFlag'] == ''
+                    
+                    # if item['symbol'] == 'Flippers': # Make getting Flippers set this custom flag for water loading zones to use
+                    #     item['gettingFlag'] == 'FlippersFound'
+                    #     continue
                     
                     if item['symbol'] == 'SmallKey':
                         item['npcKey'] = 'ItemClothesGreen'
@@ -1620,6 +1627,12 @@ class ModsProcess(QtCore.QThread):
                 sheet['values'].append(oead_tools.dictToStruct(trap))
                 trap['symbol'] = 'SquishTrap'
                 trap['itemID'] = 129
+                sheet['values'].append(oead_tools.dictToStruct(trap))
+                trap['symbol'] = 'DeathballTrap'
+                trap['itemID'] = 130
+                sheet['values'].append(oead_tools.dictToStruct(trap))
+                trap['symbol'] = 'QuakeTrap'
+                trap['itemID'] = 131
                 sheet['values'].append(oead_tools.dictToStruct(trap))
             
             if self.thread_active:
@@ -2434,44 +2447,50 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active:
                 with open(f'{self.rom_path}/region_common/level/Lv01TailCave/Lv01TailCave_04B.leb', 'rb') as f:
                     room_data = leb.Room(f.read())
+                
                 room_data.actors[0].parameters[0] = bytes('examine_Tail04B', 'utf-8')
-                if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv01TailCave/Lv01TailCave_04B.leb', 'wb') as f:
-                        f.write(room_data.repack())
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+
+                with open(f'{self.out_dir}/Romfs/region_common/level/Lv01TailCave/Lv01TailCave_04B.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
             
             if self.thread_active:
                 with open(f'{self.rom_path}/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_06C.leb', 'rb') as f:
                     room_data = leb.Room(f.read())
+                
                 room_data.actors[9].parameters[0] = bytes('examine_Color06C', 'utf-8')
-                if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_06C.leb', 'wb') as f:
-                        f.write(room_data.repack())
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+
+                with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_06C.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
             if self.thread_active:
                 with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'rb') as f:
                     room_data = leb.Room(f.read())
+                
                 room_data.actors[4].parameters[0] = bytes('examine_Color07D', 'utf-8')
-                if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'wb') as f:
-                        f.write(room_data.repack())
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+
+                with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_07D.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
 
             if self.thread_active:
                 with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'rb') as f:
                     room_data = leb.Room(f.read())
+                
                 room_data.actors[4].parameters[0] = bytes('examine_Color05F', 'utf-8')
-                if self.thread_active:
-                    with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'wb') as f:
-                        f.write(room_data.repack())
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+
+                with open(f'{self.out_dir}/Romfs/region_common/level/Lv10ClothesDungeon/Lv10ClothesDungeon_05F.leb', 'wb') as f:
+                    f.write(room_data.repack())
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
     
 
+
+# TRENDY GAME STUFF, DO NOT DELETE
 
     # def makeItemModelFixes(self):
     #     """Adds necessary model files needed for various different fixes"""
@@ -2509,6 +2528,7 @@ class ModsProcess(QtCore.QThread):
         water_shallow_ids = []
         tree_ids = []
         hole_ids = []
+
         for value in ENEMY_DATA['Actors'].values():
             if value['type'] == 'land':
                 land_ids.append(value['id'])
@@ -2524,11 +2544,11 @@ class ModsProcess(QtCore.QThread):
                 tree_ids.append(value['id'])
             elif value['type'] == 'hole':
                 hole_ids.append(value['id'])
-        # enemy_ids = (*land_ids, *air_ids, *water_ids, *water2D_ids, *water_shallow_ids, *tree_ids, *hole_ids)
+        
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
         restrictions = (-1, 0x3, 0x15, 0x16, 0x3D)
-
+        
         enemy_ids = {
             'land': land_ids,
             'air': air_ids,
@@ -2545,49 +2565,45 @@ class ModsProcess(QtCore.QThread):
         out_levels = f'{self.out_dir}/Romfs/region_common/level'
 
         included_folders = ENEMY_DATA['Included_Folders']
-        # if not self.placements['settings']['panel-enemies']:
-        #     included_folders = [s for s in included_folders if not s.startswith('Panel')]
-        
         folders = [f for f in os.listdir(levels_path) if f in included_folders]
         
-        num_of_mods = 0
+        # num_of_mods = 0
         random.seed(self.seed) # restart the rng so that enemies will be the same regardless of settings
 
         for folder in folders:
-            if self.thread_active:
-                files = [f for f in os.listdir(f'{levels_path}/{folder}') if f.endswith('.leb')]
+            if not self.thread_active:
+                break
 
-                for file in files:
-                    if self.thread_active:
-                        # get the path of the room file from either the romfs or the output if one has already been made
-                        if not os.path.exists(f'{out_levels}/{folder}/{file}'):
-                            with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
-                                room_data = leb.Room(f.read())
-                        else:
-                            with open(f'{out_levels}/{folder}/{file}', 'rb') as f:
-                                room_data = leb.Room(f.read())
-                        
-                        rand_state, edited_room =\
-                            enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, random.getstate())
-                        
-                        random.setstate(rand_state)
+            files = [f for f in os.listdir(f'{levels_path}/{folder}') if f.endswith('.leb')]
 
-                        if edited_room:
-                            if not os.path.exists(f'{out_levels}/{folder}'):
-                                os.makedirs(f'{out_levels}/{folder}')
-                            
-                            if self.thread_active:
-                                with open(f'{out_levels}/{folder}/{file}', 'wb') as f:
-                                    f.write(room_data.repack())
-                                    self.progress_value += 1 # update progress bar
-                                    self.progress_update.emit(self.progress_value)
-                                    num_of_mods += 1
+            for file in files:
+                if not self.thread_active:
+                    break
+
+                # get the path of the room file from either the romfs or the output if one has already been made
+                if not os.path.exists(f'{out_levels}/{folder}/{file}'):
+                    with open(f'{levels_path}/{folder}/{file}', 'rb') as f:
+                        room_data = leb.Room(f.read())
+                else:
+                    with open(f'{out_levels}/{folder}/{file}', 'rb') as f:
+                        room_data = leb.Room(f.read())
+                
+                rand_state, edited_room =\
+                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, random.getstate())
+                
+                random.setstate(rand_state)
+                
+                if edited_room and self.thread_active:
+                    if not os.path.exists(f'{out_levels}/{folder}'):
+                        os.makedirs(f'{out_levels}/{folder}')
                     
-                    else: break
-            
-            else: break
+                    with open(f'{out_levels}/{folder}/{file}', 'wb') as f:
+                        f.write(room_data.repack())
+                        self.progress_value += 1 # update progress bar
+                        self.progress_update.emit(self.progress_value)
+                        # num_of_mods += 1
         
-        # print(num_of_mods)
+        # print(f'Num of modded files for enemizer: {num_of_mods}')
     
 
 
@@ -2601,56 +2617,56 @@ class ModsProcess(QtCore.QThread):
 
         for k,v in data.DUNGEON_ENTRANCES.items():
 
-            ### dungeon in
-            if self.thread_active:
-                folder = re.match('(.+)_\\d\\d[A-Z]', v[2]).group(1)
-                file = v[2]
+            ######################################################################## - dungeon in
+            if not self.thread_active:
+                break
 
-                if not os.path.exists(f'{out_levels}/{folder}/{file}.leb'):
-                    with open(f'{levels_path}/{folder}/{file}.leb', 'rb') as f:
-                        room_data = leb.Room(f.read())
-                else:
-                    with open(f'{out_levels}/{folder}/{file}.leb', 'rb') as f:
-                        room_data = leb.Room(f.read())
-                
-                if not os.path.exists(f'{out_levels}/{folder}'):
-                    os.makedirs(f'{out_levels}/{folder}')
-                
-                d = data.DUNGEON_ENTRANCES[self.placements['dungeon-entrances'][k]]
-                destin = d[0] + d[1]
-                room_data.setLoadingZoneTarget(destin, v[4])
+            folder = re.match('(.+)_\\d\\d[A-Z]', v[2]).group(1)
+            file = v[2]
 
-                if self.thread_active:
-                    with open(f'{out_levels}/{folder}/{file}.leb', 'wb') as f:
-                        f.write(room_data.repack())
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{out_levels}/{folder}/{file}.leb'):
+                with open(f'{levels_path}/{folder}/{file}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+            else:
+                with open(f'{out_levels}/{folder}/{file}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
             
-            ### dungeon out
-            if self.thread_active:
-                folder = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
-
-                if not os.path.exists(f'{out_levels}/{folder}/{v[0]}.leb'):
-                    with open(f'{levels_path}/{folder}/{v[0]}.leb', 'rb') as f:
-                        room_data = leb.Room(f.read())
-                else:
-                    with open(f'{out_levels}/{folder}/{v[0]}.leb', 'rb') as f:
-                        room_data = leb.Room(f.read())
-                
-                if not os.path.exists(f'{out_levels}/{folder}'):
-                    os.makedirs(f'{out_levels}/{folder}')
-                
-                d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
-                destin = d[2] + d[3]
-                room_data.setLoadingZoneTarget(destin, 0)
-
-                if self.thread_active:
-                    with open(f'{out_levels}/{folder}/{v[0]}.leb', 'wb') as f:
-                        f.write(room_data.repack())
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{out_levels}/{folder}'):
+                os.makedirs(f'{out_levels}/{folder}')
             
-            else: break
+            d = data.DUNGEON_ENTRANCES[self.placements['dungeon-entrances'][k]]
+            destin = d[0] + d[1]
+            room_data.setLoadingZoneTarget(destin, v[4])
+
+            with open(f'{out_levels}/{folder}/{file}.leb', 'wb') as f:
+                f.write(room_data.repack())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
+            
+            ######################################################################## - dungeon out
+            if not self.thread_active:
+                break
+
+            folder = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
+
+            if not os.path.exists(f'{out_levels}/{folder}/{v[0]}.leb'):
+                with open(f'{levels_path}/{folder}/{v[0]}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+            else:
+                with open(f'{out_levels}/{folder}/{v[0]}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+            
+            if not os.path.exists(f'{out_levels}/{folder}'):
+                os.makedirs(f'{out_levels}/{folder}')
+            
+            d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
+            destin = d[2] + d[3]
+            room_data.setLoadingZoneTarget(destin, 0)
+
+            with open(f'{out_levels}/{folder}/{v[0]}.leb', 'wb') as f:
+                f.write(room_data.repack())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
 
 
@@ -2668,10 +2684,10 @@ class ModsProcess(QtCore.QThread):
                     icon['mNameLabel'] = data.DUNGEON_MAP_ICONS[new_k][0]
                     icon['mFirstShowFlagName'] = data.DUNGEON_MAP_ICONS[new_k][1]
 
-            if self.thread_active:
-                oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/UiFieldMapIcons.gsheet', sheet)
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
+        if self.thread_active:
+            oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/UiFieldMapIcons.gsheet', sheet)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
 
 
 
@@ -2685,27 +2701,27 @@ class ModsProcess(QtCore.QThread):
         folders = [f for f in os.listdir(levels_path) if f.startswith('Lv') and not f.startswith('Lv09')]
 
         for folder in folders:
-            if self.thread_active:
-                if not os.path.exists(f'{out_levels}/{folder}/{folder}.lvb'):
-                    with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
-                        level_data = f.read()
-                        level = leb.Level(level_data)
-                else:
-                    with open(f'{out_levels}/{folder}/{folder}.lvb', 'rb') as f:
-                        level_data = f.read()
-                        level = leb.Level(level_data)
-                
-                level.config.attr_2 = 1 # set the companion flag to True
+            if not self.thread_active:
+                break
 
-                if not os.path.exists(f'{out_levels}/{folder}'):
-                    os.makedirs(f'{out_levels}/{folder}')
-                
-                with open(f'{out_levels}/{folder}/{folder}.lvb', 'wb') as f:
-                    f.write(level_data.replace(level.config.data, level.config.pack())) # replaces the data and writes it to the file
-                    self.progress_value += 1
-                    self.progress_update.emit(self.progress_value)
+            if not os.path.exists(f'{out_levels}/{folder}/{folder}.lvb'):
+                with open(f'{levels_path}/{folder}/{folder}.lvb', 'rb') as f:
+                    level_data = f.read()
+                    level = leb.Level(level_data)
+            else:
+                with open(f'{out_levels}/{folder}/{folder}.lvb', 'rb') as f:
+                    level_data = f.read()
+                    level = leb.Level(level_data)
             
-            else: break
+            level.config.attr_2 = 1 # set the companion flag to True
+            
+            if not os.path.exists(f'{out_levels}/{folder}'):
+                os.makedirs(f'{out_levels}/{folder}')
+            
+            with open(f'{out_levels}/{folder}/{folder}.lvb', 'wb') as f:
+                f.write(level_data.replace(level.config.data, level.config.pack())) # replaces the data and writes it to the file
+                self.progress_value += 1
+                self.progress_update.emit(self.progress_value)
     
 
 
@@ -2715,8 +2731,6 @@ class ModsProcess(QtCore.QThread):
         # initialize the patcher object and hand off jobs to separate functions for easier tracking
         patcher = Patcher()
         patches.changeVanillaBehavior(patcher)
-        # if self.placements['settings']['randomize-music'] and self.thread_active:
-        #     patches.makeMusicPatches(patcher)
         
         # create and write in binary to an ips file with the build id of version as the name
         if self.thread_active:
@@ -2739,21 +2753,55 @@ class ModsProcess(QtCore.QThread):
     #     """Changes each water loading zone to be deactivated until the player has flippers"""
 
     #     for room in data.WATER_LOADING_ZONES:
-    #         if self.thread_active:
-    #             if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb'):
-    #                 with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
-    #                     room_data = leb.Room(f.read())
-    #             else:
-    #                 with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'rb') as f:
-    #                     room_data = leb.Room(f.read())
-                
-    #             for actor in data.WATER_LOADING_ZONES[room]:
-    #                 room_data.actors[actor].switches[0] = (1, self.global_flags['FlippersFound'])
-                
-    #             if self.thread_active:
-    #                 with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'wb') as f:
-    #                     f.write(room_data.repack())
-    #                     self.progress_value += 1 # update progress bar
-    #                     self.progress_update.emit(self.progress_value)
+    #         if not self.thread_active:
+    #             break
+
+    #         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb'):
+    #             with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
+    #                 room_data = leb.Room(f.read())
+    #         else:
+    #             with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'rb') as f:
+    #                 room_data = leb.Room(f.read())
             
-    #         else: break
+    #         for actor in data.WATER_LOADING_ZONES[room]:
+    #             room_data.actors[actor].switches[0] = (1, self.global_flags['FlippersFound'])
+            
+    #         with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'wb') as f:
+    #             f.write(room_data.repack())
+    #             self.progress_value += 1 # update progress bar
+    #             self.progress_update.emit(self.progress_value)
+
+
+
+    def fixRapidsRespawn(self):
+        '''If the player reloads an autosave after completing the Rapids Race without flippers,
+        they will drown and then be sent to 0,0,0 in an endless falling loop
+        
+        This is fixed by iterating over every touching water tile, and prevent reloading on them'''
+
+        rooms_to_fix = (
+            '09N',
+            '09O',
+            '09P',
+            '10P',
+        )
+        
+        for room in rooms_to_fix:
+            if not self.thread_active:
+                break
+
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field/Field_{room}.leb'):
+                with open(f'{self.rom_path}/region_common/level/Field/Field_{room}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read(), edit_grid=True)
+            else:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_{room}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read(), edit_grid=True)
+
+            for tile in room_data.grid.tilesdata:
+                if tile.flags3['iswaterlava']:
+                    tile.flags3['respawnload'] = 0
+            
+            with open(f'{self.out_dir}/Romfs/region_common/level/Field/Field_{room}.leb', 'wb') as f:
+                f.write(room_data.repack())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)

@@ -185,6 +185,7 @@ def makeFlags(sheet):
     global_flags.addFlag('KeyGetKanalet01D')
 
     global_flags.addFlag('FlippersFound')
+    global_flags.addFlag('MagicPowderMaxUpFound')
     
     return global_flags.give_flags()
 

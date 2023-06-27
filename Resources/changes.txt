@@ -1,25 +1,13 @@
 <b>New Features:</b>
 <br></br><br></br>
-- ASM Patches: Currently just allows opening Color Dungeon with companions
-<br></br><br></br>
-- Shuffled Dungeons: The in-game map now displays the shuffled dungeon names
-<br></br><br></br><br></br>
+- Added option to update logic
+- Added option to feed your own logic to the randomizer
+- 2 new traps have been added to the trap-sanity pool
 
 <b>Changes:</b>
 <br></br><br></br>
-- Removed zol-traps from being on the 5-chest puzzle room to remove confusion
-<br></br><br></br>
-- Removed featherless Armos Knight from Advanced logic
-<br></br><br></br><br></br>
+- The final Trendy prize is now set to junk by default
 
 <b>Bug Fixes:</b>
 <br></br><br></br>
-- Fixed issue where Kiki would remove the Lens from the inventory
-<br></br><br></br>
-- Fixed issue where the "Fast Fishing" setting would not get saved
-<br></br><br></br>
-- Fixed issue where slayed enemies could drop bombs and powder out of logic
-<br></br><br></br>
-- Fixed issue where you could not leave the house if you only chose one starting item
-<br></br><br></br>
-- Fixed issue where Mabe Village would not show on the map when starting with Cello
+- Fixed issue with reloading a save after completing the Rapids Race

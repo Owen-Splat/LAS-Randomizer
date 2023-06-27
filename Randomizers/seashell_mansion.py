@@ -142,10 +142,20 @@ def changeRewards(flowchart, treasure_flowchart):
         {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'SquishTrap'},
         {0: squish_get, 1: drown_check})
     
+    deathball_get = item_get.insertItemGetAnimation(flowchart, 'DeathballTrap', -1, None, 'Event0')
+    deathball_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'DeathballTrap'},
+        {0: deathball_get, 1: squish_check})
+    
+    quake_get = item_get.insertItemGetAnimation(flowchart, 'QuakeTrap', -1, None, 'Event0')
+    quake_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'QuakeTrap'},
+        {0: quake_get, 1: deathball_check})
+    
     bomb_get = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, 'Event0')
     bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'},
-        {0: bomb_get, 1: squish_check})
+        {0: bomb_get, 1: quake_check})
     
     powder_get = item_get.insertItemGetAnimation(flowchart, 'MagicPowder', -1, None, 'Event0')
     powder_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
