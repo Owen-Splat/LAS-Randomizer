@@ -545,13 +545,13 @@ DUNGEON_MAP_ICONS = {
 }
 
 
-# WATER_LOADING_ZONES = {
-#     'Field_02O': [10],
-#     'Field_03K': [3],
-#     'Field_03O': [1],
-#     'Field_14J': [5, 6],
-#     'Field_15K': [1]
-# }
+WATER_LOADING_ZONES = {
+    'Field_02O': [10],
+    'Field_03K': [3],
+    'Field_03O': [1],
+    'Field_14J': [5, 6],
+    'Field_15K': [1]
+}
 
 
 BASE_BUILD_ID = 'AE16F71E002AF8CB059A9A74C4D90F34BA984892' # version 1.0.0

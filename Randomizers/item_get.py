@@ -49,18 +49,16 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
-        give_powder = event_tools.createActionChain(flowchart, before, [
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}),
-        ], after)
+        give_powder = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}, after)
         
-        upgrade_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        powder_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
             {'symbol': 'GetMagicPowder'}, {0: after, 1: give_powder})
         
         return event_tools.createActionChain(flowchart, before, [
-            ('EventFlags', 'SetFlag', {'symbol': 'MagicPowderMaxUpFound', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder', 'keepCarry': False, 'messageEntry': item})
-        ], upgrade_check)
+        ], powder_check)
     
     if item == 'Bomb_MaxUp':
         give_bombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
@@ -118,11 +116,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     if item == 'SquishTrap':
         autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         forks = [
-            event_tools.createActionChain(flowchart, None, [
-                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_fallmaster_st'}),
-                # ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_fallmaster_lp'}),
-                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'})
-            ]),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
             event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 2.0})
         ]
@@ -217,21 +211,11 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     
     ### Powder for Shuffled Powder
     if item == 'MagicPowder':
-        has_upgrade = event_tools.createActionChain(flowchart, before, [
-            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder_MaxUp', 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Inventory', 'AddItemByKey', {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}),
-        ], after)
-
-        no_upgrade = event_tools.createActionChain(flowchart, before, [
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 20, 'index': index, 'autoEquip': False})
-        ], after)
-
-        upgrade_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': 'MagicPowderMaxUpFound'}, {0: no_upgrade, 1: has_upgrade})
-        
         return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
-        ], upgrade_check)
+        ], after)
     
     # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     # if item == 'Bottle' and index == 1:

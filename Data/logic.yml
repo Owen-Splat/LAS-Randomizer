@@ -2679,7 +2679,7 @@ taltal-east-2:
   condition-basic: taltal-east-1 & cross-water
 taltal-river:
   type: region
-  condition-basic: (cross-water & (rapids | heights | angler-tunnel)) | (flippers & taltal-east-1)
+  condition-basic: (cross-water & (rapids | heights)) | (flippers & taltal-east-1) # heights | angler-tunnel
 taltal-west-0:
   type: region
   condition-basic: taltal-east-1 & (hookshot | rooster) & break-bush

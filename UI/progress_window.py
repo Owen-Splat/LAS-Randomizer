@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 165 - len(settings['excluded-locations'])
-        self.num_of_mod_tasks = 254
+        self.num_of_mod_tasks = 259
         
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8

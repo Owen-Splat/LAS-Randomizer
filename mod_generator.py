@@ -1598,20 +1598,17 @@ class ModsProcess(QtCore.QThread):
                     # we do not want this flag getting set when obtaining the capacity upgrade
                     # so we remove the gettingflag and manually set it through events
                     if item['symbol'] == 'MagicPowder':
-                        item['gettingFlag'] == ''
+                        item['gettingFlag'] = ''
                     
-                    # if item['symbol'] == 'Flippers': # Make getting Flippers set this custom flag for water loading zones to use
-                    #     item['gettingFlag'] == 'FlippersFound'
-                    #     continue
+                    if item['symbol'] == 'Flippers': # Make getting Flippers set this custom flag for water loading zones to use
+                        item['gettingFlag'] = 'FlippersFound'
                     
                     if item['symbol'] == 'SmallKey':
                         item['npcKey'] = 'ItemClothesGreen'
-                        continue
                     
                     if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                         item['npcKey'] = 'ItemClothesRed'
                         trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
-                        continue
                     
                     if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
                         item['npcKey'] = 'PatchHoneycomb'
@@ -2749,27 +2746,27 @@ class ModsProcess(QtCore.QThread):
     
 
 
-    # def fixWaterLoadingZones(self):
-    #     """Changes each water loading zone to be deactivated until the player has flippers"""
+    def fixWaterLoadingZones(self):
+        """Changes each water loading zone to be deactivated until the player has flippers"""
 
-    #     for room in data.WATER_LOADING_ZONES:
-    #         if not self.thread_active:
-    #             break
+        for room in data.WATER_LOADING_ZONES:
+            if not self.thread_active:
+                break
 
-    #         if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb'):
-    #             with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
-    #                 room_data = leb.Room(f.read())
-    #         else:
-    #             with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'rb') as f:
-    #                 room_data = leb.Room(f.read())
+            if not os.path.exists(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb'):
+                with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
+            else:
+                with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read())
             
-    #         for actor in data.WATER_LOADING_ZONES[room]:
-    #             room_data.actors[actor].switches[0] = (1, self.global_flags['FlippersFound'])
+            for actor in data.WATER_LOADING_ZONES[room]:
+                room_data.actors[actor].switches[0] = (1, self.global_flags['FlippersFound'])
             
-    #         with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'wb') as f:
-    #             f.write(room_data.repack())
-    #             self.progress_value += 1 # update progress bar
-    #             self.progress_update.emit(self.progress_value)
+            with open(f'{self.out_dir}/Romfs/region_common/level/Field/{room}.leb', 'wb') as f:
+                f.write(room_data.repack())
+                self.progress_value += 1 # update progress bar
+                self.progress_update.emit(self.progress_value)
 
 
 
