@@ -16,7 +16,10 @@ def generateSpoilerLog(placements, logic_defs, out_dir, seed):
         for key in regions:
             output.write(f'{key}:\n')
             for location in regions[key]:
-                output.write('  {0}: {1}\n'.format(location, placements[location]))
+                item = placements[location]
+                if item.endswith('trap'):
+                    item = 'trap'
+                output.write('  {0}: {1}\n'.format(location, item))
         
         output.write('\nsettings:\n')
         for setting in placements['settings']:

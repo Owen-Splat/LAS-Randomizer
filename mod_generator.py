@@ -164,10 +164,10 @@ class ModsProcess(QtCore.QThread):
                 else:
                     room_data.setChestContent(item_key, item_index, chest_size=size)
                 
-                if item_key == 'BowWow':
-                    pass
-                elif item_key == 'Rooster':
-                    room_data.addChestRooster()
+                # if item_key == 'BowWow':
+                #     pass
+                # elif item_key == 'Rooster':
+                #     room_data.addChestRooster()
                 
                 if self.thread_active:
                     with open(f'{self.out_dir}/Romfs/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'wb') as outfile:

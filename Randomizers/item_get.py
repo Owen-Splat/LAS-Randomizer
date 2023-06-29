@@ -25,6 +25,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     canHurtPlayer : bool | True
         Determines if the item can hurt the player. Specifically used for traps"""
     
+    # progressive items
     if item == 'PowerBraceletLv1':
         return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2',
             data.BRACELET_FOUND_FLAG, before, after)
@@ -47,6 +48,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield',
             data.SHIELD_FOUND_FLAG, before, after)
     
+
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
         give_powder = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
@@ -79,6 +81,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': item})
         ], after)
     
+
     ### traps
     if item == 'ZapTrap':
         autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
@@ -89,7 +92,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
             event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
                 {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
-            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3.0}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
         ]
         if can_hurt_player:
@@ -122,17 +125,20 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         ]
         if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4}))
-                
+        
         return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
     if item == 'DeathballTrap':
         autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_deathball'}),
-            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True})
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+                {'channel': 'GreatFairy_Heal', 'index': 0, 'restart': False, 'time': 0.0}),
         ]
         if can_hurt_player:
             forks.append(event_tools.createActionChain(flowchart, None, [
+                ('Hud', 'SetHeartUpdateEnable', {'enable': True}),
                 ('Timer', 'Wait', {'time': 1.5}),
                 ('Link', 'Damage', {'amount': 2})
             ]))
@@ -149,6 +155,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         ]
         return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
+
     ### Instrument flags
     if item == 'FullMoonCello':
         return event_tools.createActionChain(flowchart, before, [
@@ -169,6 +176,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
+
     ### tunics
     if item == 'ClothesRed':
         return event_tools.createActionChain(flowchart, before, [
@@ -193,6 +201,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesGreen'})
         ], after)
     
+
     ### Medicine
     if item == 'SecretMedicine':
         return event_tools.createActionChain(flowchart, before, [
@@ -201,7 +210,8 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'Heal', {'amount': 99})
         ], after)
     
-    ### Bomb for Shuffled Bombs
+
+    ### Shuffled Bombs and Powder
     if item == 'Bomb':
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
@@ -209,7 +219,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    ### Powder for Shuffled Powder
     if item == 'MagicPowder':
         return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
@@ -217,6 +226,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
         ], after)
     
+
     # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     # if item == 'Bottle' and index == 1:
     #     return event_tools.createActionChain(flowchart, before, [
@@ -224,6 +234,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
     #         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
     #         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
     #     ], after)
+
 
     ### Trade Quest items
     if item == 'YoshiDoll':
@@ -311,7 +322,10 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-    ### everything else - play the get event before the message, otherwise it messes with index related messages
+
+    ### everything else - play the get event before giving the item, otherwise it messes with index related messages
+    # this is how the game normally does it, and so for the "just one more until you have them all" messages,
+    # the game actually checks for 2 heart pieces and 3 golden leaves respectively
     return event_tools.createActionChain(flowchart, before, [
         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item}),
         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})

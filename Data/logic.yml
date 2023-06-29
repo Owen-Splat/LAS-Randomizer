@@ -1191,7 +1191,7 @@ D1-instrument:
   content: full-moon-cello
   region: tail-cave
   spoiler-region: tail-cave
-  condition-basic: D1-6F & nightmare-key-D1 & feather & kill-rolling-bones & kill-moldorm
+  condition-basic: D1-6F & nightmare-key-D1 & (feather | (rooster & bad-pets)) & kill-rolling-bones & kill-moldorm
 D1-moldorm:
   type: item
   subtype: boss
@@ -1199,7 +1199,7 @@ D1-moldorm:
   index: 0
   region: tail-cave
   spoiler-region: tail-cave
-  condition-basic: D1-6F & nightmare-key-D1 & feather & kill-rolling-bones & kill-moldorm
+  condition-basic: D1-6F & nightmare-key-D1 & (feather | (rooster & bad-pets)) & kill-rolling-bones & kill-moldorm
 D1-west-hallway:
   type: item
   subtype: chest
@@ -1213,7 +1213,7 @@ D1-middle-ledge:
   content: nightmare-key-D1
   region: tail-cave
   spoiler-region: tail-cave
-  condition-basic: D1-8D & feather & key-D1:3
+  condition-basic: D1-8D & (feather | (rooster & bad-pets)) & key-D1:3
 D1-3-of-a-kind:
   type: item
   subtype: chest
@@ -1350,7 +1350,7 @@ D2-west-chest:
   content: stone-beak-D2
   region: bottle-grotto
   spoiler-region: bottle-grotto
-  condition-basic: D2-8C & key-D2:5 & (feather | hookshot) & kill-keese
+  condition-basic: D2-8C & key-D2:5 & (feather | (rooster & bad-pets) | hookshot) & kill-keese
 D2-double-stalfos:
   type: item
   subtype: drop
@@ -1364,7 +1364,7 @@ D2-double-shy-guys:
   content: key-D2
   region: bottle-grotto
   spoiler-region: bottle-grotto
-  condition-basic: D2-7D & feather & hit-crystal-switch & kill-shy-guy
+  condition-basic: D2-7D & (feather | (rooster & bad-pets)) & hit-crystal-switch & kill-shy-guy
 D2-entrance-chest:
   type: item
   subtype: chest
@@ -1392,7 +1392,7 @@ D2-button-chest:
   content: key-D2
   region: bottle-grotto
   spoiler-region: bottle-grotto
-  condition-basic: D2-7D & feather & hit-crystal-switch
+  condition-basic: D2-7D & (feather | (rooster & bad-pets)) & hit-crystal-switch
 D2-owl-statue-first-switch:
   type: item
   subtype: dungeon-statue
@@ -1406,7 +1406,7 @@ D2-owl-statue-push-puzzle:
   content: rupee-20
   region: bottle-grotto
   spoiler-region: bottle-grotto
-  condition-basic: D2-7D & feather & hit-crystal-switch & key-D2:3 & stone-beak-D2
+  condition-basic: D2-7D & (feather | (rooster & bad-pets)) & hit-crystal-switch & key-D2:3 & stone-beak-D2
 D2-owl-statue-past-hinox:
   type: item
   subtype: dungeon-statue
@@ -1471,7 +1471,7 @@ D3-east-ledge:
   content: nightmare-key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-4C & bombs & dash-jump
+  condition-basic: D3-4C & bombs & (dash-jump | (rooster & bad-pets))
   condition-advanced: D3-4C & bombs & hookshot
 D3-pairodds:
   type: item
@@ -1500,7 +1500,7 @@ D3-basement-west:
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-4B & key-D3:1 & kill-zol-green & kill-pairodd & feather
+  condition-basic: D3-4B & key-D3:1 & kill-zol-green & kill-pairodd & (feather | (rooster & bad-pets))
 D3-basement-south:
   type: item
   subtype: drop
@@ -1549,7 +1549,7 @@ D3-vacuum-mouth:
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-8B & (boots | hookshot)
+  condition-basic: D3-8B & (boots | hookshot) # (rooster & bad-pets) # maybe rooster works here?
 D3-owl-statue-basement-north:
   type: item
   subtype: dungeon-statue
@@ -1642,7 +1642,7 @@ D4-central-room:
   content: rupee-50
   region: angler-tunnel
   spoiler-region: angler-tunnel
-  condition-basic: D4-4E & (flippers | hookshot)
+  condition-basic: D4-4E & (flippers | hookshot | (rooster & bad-pets))
   condition-advanced: D4-4E & dash-jump
 D4-small-island:
   type: item
@@ -1650,7 +1650,7 @@ D4-small-island:
   content: rupee-50
   region: angler-tunnel
   spoiler-region: angler-tunnel
-  condition-basic: D4-8D & key-D4:2 & kill-spiny & kill-zol-red & flippers
+  condition-basic: D4-8D & key-D4:2 & kill-spiny & kill-zol-red & (flippers | (rooster & bad-pets))
   condition-advanced: D4-8D & key-D4:2 & kill-spiny & kill-zol-red & ((bomb-arrows & feather) | ((feather | boots | bombs | (shovel & sword)) & hookshot))
   condition-glitched: D4-8D & ((key-D4:2 & kill-spiny & kill-zol-red & feather & bracelet) | ((sword | shoot-arrows | rod) & bombs & dash-jump))
 D4-ledge-north:
@@ -1726,35 +1726,35 @@ D5-past-master-stalfos-3:
   content: map-D5
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-5G & break-pot & kill-zol-green & (feather | hookshot)
+  condition-basic: D5-5G & break-pot & kill-zol-green & (feather | (rooster & bad-pets) | hookshot)
 D5-water-tunnel:
   type: item
   subtype: chest
   content: nightmare-key-D5
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-5G & flippers & hookshot
+  condition-basic: D5-5G & flippers & (hookshot | (rooster & bad-pets))
 D5-right-side-north:
   type: item
   subtype: chest
   content: rupee-50
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-5G & hookshot
+  condition-basic: D5-5G & (hookshot | (rooster & bad-pets))
 D5-right-side-middle:
   type: item
   subtype: chest
   content: rupee-50
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-5G & (hookshot | dash-jump)
+  condition-basic: D5-5G & (hookshot | dash-jump | (rooster & bad-pets))
 D5-right-side-east:
   type: item
   subtype: chest
   content: key-D5
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-5G & hookshot
+  condition-basic: D5-5G & (hookshot | (rooster & bad-pets))
 D5-past-master-stalfos-1:
   type: item
   subtype: chest
@@ -1768,7 +1768,7 @@ D5-west-chest:
   content: key-D5
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-7F & kill-helmasaur & hookshot
+  condition-basic: D5-7F & kill-helmasaur & (hookshot | (rooster & bad-pets))
   condition-advanced: D5-7F & kill-helmasaur & dash-jump
 D5-helmasaurs:
   type: item
@@ -1790,7 +1790,7 @@ D5-near-entrance:
   content: rupee-100
   region: catfish-maw
   spoiler-region: catfish-maw
-  condition-basic: D5-8H & hookshot
+  condition-basic: D5-8H & (hookshot | (rooster & bad-pets))
 D5-owl-statue-triple-stalfos:
   type: item
   subtype: dungeon-statue
@@ -2008,7 +2008,7 @@ D7-3ofakind-south:
   content: bomb
   region: eagle-tower
   spoiler-region: eagle-tower
-  condition-basic: D7-2D & hit-crystal-switch & bombs & kill-3-of-a-kind & hookshot
+  condition-basic: D7-2D & hit-crystal-switch & bombs & kill-3-of-a-kind & (hookshot | (rooster & bad-pets))
 D7-blue-pegs-chest:
   type: item
   subtype: chest
@@ -2101,7 +2101,7 @@ D8-northern-ledge:
   content: medicine
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: (D8-4C & feather & hookshot) | (D8-8D & feather & hookshot & kill-zol-green & key-D8:2)
+  condition-basic: (D8-4C & (feather | (rooster & bad-pets)) & hookshot) | (D8-8D & (feather | (rooster & bad-pets)) & hookshot & kill-zol-green & key-D8:2)
 D8-gibdos:
   type: item
   subtype: drop
@@ -2150,28 +2150,28 @@ D8-surrounded-by-blocks:
   content: map-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather
+  condition-basic: D8-8D & (feather | (rooster & bad-pets))
 D8-sparks-chest:
   type: item
   subtype: chest
   content: rupee-50
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-6B & (feather | hookshot)
+  condition-basic: D8-6B & (feather | hookshot | (rooster & bad-pets))
 D8-east-of-pots:
   type: item
   subtype: chest
   content: zol-trap
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & (feather | (break-pot & kill-vire))
+  condition-basic: D8-8D & ((feather | (rooster & bad-pets)) | (break-pot & kill-vire))
 D8-east-roomba:
   type: item
   subtype: drop
   content: key-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & bombs
+  condition-basic: D8-8D & ((feather & bombs) | (rooster & bad-pets))
   condition-advanced: D8-8D & dash-jump
 D8-far-southwest:
   type: item
@@ -2186,14 +2186,14 @@ D8-far-southeast:
   content: stone-beak-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & kill-smasher & (bombs | break-pot)
+  condition-basic: D8-8D & (feather | (rooster & bad-pets)) & kill-smasher & (bombs | break-pot)
 D8-owl-statue-above-smasher:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & ((bombs & kill-smasher) | (break-pot & kill-arm-mimic)) & stone-beak-D8
+  condition-basic: D8-8D & (feather | (rooster & bad-pets)) & ((bombs & kill-smasher) | (break-pot & kill-arm-mimic)) & stone-beak-D8
   condition-advanced: D8-8D & dash-jump & kill-smasher & stone-beak-D8
 D8-owl-statue-below-gibdos:
   type: item
@@ -2201,7 +2201,7 @@ D8-owl-statue-below-gibdos:
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & key-D8:2 & stone-beak-D8
+  condition-basic: D8-8D & (feather | (rooster & bad-pets)) & key-D8:2 & stone-beak-D8
 D8-owl-statue-eye-statue:
   type: item
   subtype: dungeon-statue
@@ -2719,10 +2719,10 @@ D1-8D:
 
 D2-2F:
   type: room
-  condition-basic: D2-4C & break-pot & feather
+  condition-basic: D2-4C & break-pot & (feather | (rooster & bad-pets))
 D2-4C:
   type: room
-  condition-basic: D2-7D & key-D2:3 & hit-crystal-switch & feather & kill-hinox
+  condition-basic: D2-7D & key-D2:3 & hit-crystal-switch & (feather | (rooster & bad-pets)) & kill-hinox
 D2-4G:
   type: room
   condition-basic: D2-2F & key-D2:5 & nightmare-key-D2 & (bracelet | (boots & feather)) & break-pot & kill-zol-red[heavy] & kill-pols-voice[heavy]
@@ -2756,10 +2756,10 @@ D3-8G:
 
 D4-4C:
   type: room
-  condition-basic: D4-6C | (D4-4E & (flippers | feather | (key-D4:5 & kill-cueball & kill-zol-red)))
+  condition-basic: D4-6C | (D4-4E & (flippers | (feather | (rooster & bad-pets)) | (key-D4:5 & kill-cueball & kill-zol-red)))
 D4-4E:
   type: room
-  condition-basic: D4-8D & key-D4:3 & kill-spiny & kill-zol-red & dash-jump
+  condition-basic: D4-8D & key-D4:3 & kill-spiny & kill-zol-red & (dash-jump | (rooster & bad-pets))
   condition-advanced: D4-8D & key-D4:3 & kill-spiny & kill-zol-red & (feather | flippers) & ((feather | boots | bombs | (shovel & sword)) & hookshot)
   condition-glitched: D4-8D & (sword | shoot-arrows | rod) & bombs & dash-jump
 D4-5B:
@@ -2768,7 +2768,7 @@ D4-5B:
   condition-advanced: D4-4C & feather & (hookshot | sword:2 | bomb-arrows)
 D4-5G:
   type: room
-  condition-basic: D4-8D & dash-jump
+  condition-basic: D4-8D & (dash-jump | (rooster & bad-pets))
   condition-advanced: D4-8D & (feather | boots | bombs | (shovel & sword)) & hookshot
 D4-6C:
   type: room
@@ -2811,7 +2811,7 @@ D6-8D:
 
 D7-2F:
   type: room
-  condition-basic: D7-2D & kill-3-of-a-kind & hookshot & bombs & nightmare-key-D7
+  condition-basic: D7-2D & kill-3-of-a-kind & (hookshot | (rooster & bad-pets)) & bombs & nightmare-key-D7
 D7-2D:
   type: room
   condition-basic: D7-8B & key-D7
