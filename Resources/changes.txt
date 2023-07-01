@@ -3,7 +3,7 @@
 - Added option to update logic
 - Added option to feed your own logic to the randomizer
 - Added Rooster logic to dungeons when allowed inside
-- 2 new traps have been added to the trap-sanity pool
+- 3 new traps have been added to the trap-sanity pool
 
 <b>Changes:</b>
 <br></br><br></br>
@@ -12,6 +12,6 @@
 
 <b>Bug Fixes:</b>
 <br></br><br></br>
-- Fixed issue with reloading a save after completing the Rapids Race
 - Fixed issue where powder-capacity would directly give Magic Powder
+- Fixed issue with reloading a save after completing the Rapids Race
 - Fixed softlock from entering water caves early with the Rooster

@@ -95,6 +95,11 @@ def addNeededActors(flowchart, rom_path):
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'SetFacialExpression')
     
     try:
+        event_tools.findActor(flowchart, 'Link').find_action('SetGravityEnable')
+    except:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'SetGravityEnable')
+    
+    try:
         event_tools.findActor(flowchart, 'EventFlags')
     except ValueError:
         event_flags_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/PlayerStart.bfevfl').flowchart, 'EventFlags')

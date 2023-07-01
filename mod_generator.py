@@ -1594,7 +1594,7 @@ class ModsProcess(QtCore.QThread):
             trap = None
             for item in sheet['values']:
                 if self.thread_active:
-                    # MagicPowder_MaxUp uses this MagicPowder entry to actually display powder
+                    # MagicPowder_MaxUp uses this MagicPowder entry to display powder
                     # we do not want this flag getting set when obtaining the capacity upgrade
                     # so we remove the gettingflag and manually set it through events
                     if item['symbol'] == 'MagicPowder':
@@ -1608,14 +1608,16 @@ class ModsProcess(QtCore.QThread):
                     
                     if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                         item['npcKey'] = 'ItemClothesRed'
-                        trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
+                        if self.placements['settings']['trap-sanity']:
+                            trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
                     
                     if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
                         item['npcKey'] = 'PatchHoneycomb'
-                    
+                
                 else: break
             
-            if trap is not None: # create entries for traps, seashell mansion gives a green rupee if the item isn't in this
+            # create entries for traps, seashell mansion gives a green rupee if the item isn't in this
+            if trap is not None:
                 trap['symbol'] = 'ZapTrap'
                 trap['itemID'] = 127
                 sheet['values'].append(oead_tools.dictToStruct(trap))
@@ -1630,6 +1632,9 @@ class ModsProcess(QtCore.QThread):
                 sheet['values'].append(oead_tools.dictToStruct(trap))
                 trap['symbol'] = 'QuakeTrap'
                 trap['itemID'] = 131
+                sheet['values'].append(oead_tools.dictToStruct(trap))
+                trap['symbol'] = 'HydroTrap'
+                trap['itemID'] = 132
                 sheet['values'].append(oead_tools.dictToStruct(trap))
             
             if self.thread_active:

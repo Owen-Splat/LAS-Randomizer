@@ -386,6 +386,10 @@ Item_Pool:
     type: junk
     quantity: 0
     item-key: QuakeTrap
+  hydro-trap:
+    type: junk
+    quantity: 0
+    item-key: HydroTrap
   bomb:
     type: junk
     quantity: 1

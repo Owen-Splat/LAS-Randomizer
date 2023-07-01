@@ -154,10 +154,15 @@ def writeChestEvent(flowchart):
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'QuakeTrap'},
         {0: quake_get, 1: deathball_check})
     
+    hydro_get = item_get.insertItemGetAnimation(flowchart, 'HydroTrap', -1, None, auto_save)
+    hydro_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+        {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'HydroTrap'},
+        {0: hydro_get, 1: quake_check})
+    
     bomb_get = item_get.insertItemGetAnimation(flowchart, 'Bomb', -1, None, auto_save)
     bomb_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(flowchart, 'Event33').data.params.data['value1'], 'value2': 'Bomb'},
-        {0: bomb_get, 1: quake_check})
+        {0: bomb_get, 1: hydro_check})
     
     powder_get = item_get.insertItemGetAnimation(flowchart, 'MagicPowder', -1, None, auto_save)
     powder_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',

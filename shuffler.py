@@ -491,85 +491,86 @@ class ItemShuffler(QtCore.QThread):
 
         # Assign vanilla contents to forceVanilla locations
         for loc in force_vanilla:
-            if self.thread_active:
-                # If it's not a valid location name, or already used for forceJunk, just ignore it
-                if loc not in locations:
-                    continue
-                
-                # Place the defined vanilla content
-                placements[loc] = self.logic_defs[loc]['content']
-                
-                items.remove(self.logic_defs[loc]['content'])
-                access = self.removeAccess(access, self.logic_defs[loc]['content'])
-                locations.remove(loc)
-                
-                if self.logic_defs[loc]['content'] == 'seashell':
-                    vanilla_seashells += 1
-                if self.logic_defs[loc]['content'] == 'golden-leaf':
-                    vanilla_leaves += 1
-                
-                # If the item is one that needs an index, assign it its vanilla item index and remove that from the available indexes
-                if self.logic_defs[loc]['content'] in indexes_available:
-                    placements['indexes'][loc] = self.logic_defs[loc]['index']
-                    indexes_available[self.logic_defs[loc]['content']].remove(self.logic_defs[loc]['index'])
-            else: break
+            if not self.thread_active:
+                break
+
+            # If it's not a valid location name, or already used for forceJunk, just ignore it
+            if loc not in locations:
+                continue
+            
+            # Place the defined vanilla content
+            placements[loc] = self.logic_defs[loc]['content']
+            
+            items.remove(self.logic_defs[loc]['content'])
+            access = self.removeAccess(access, self.logic_defs[loc]['content'])
+            locations.remove(loc)
+            
+            if self.logic_defs[loc]['content'] == 'seashell':
+                vanilla_seashells += 1
+            if self.logic_defs[loc]['content'] == 'golden-leaf':
+                vanilla_leaves += 1
+            
+            # If the item is one that needs an index, assign it its vanilla item index and remove that from the available indexes
+            if self.logic_defs[loc]['content'] in indexes_available:
+                placements['indexes'][loc] = self.logic_defs[loc]['index']
+                indexes_available[self.logic_defs[loc]['content']].remove(self.logic_defs[loc]['index'])
         
         # Next, assign dungeon items into their own dungeons
         # Some may have been placed already because of forceVanilla so we need to factor that in
         dungeons = ['color-dungeon', 'tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel', 'catfish-maw', 'face-shrine', 'eagle-tower', 'turtle-rock']
         for i in range(len(dungeons)):
-            if self.thread_active:
-                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
-                location_pool = [s for s in locations if len(s) >= 2 and s[:2] == f'D{i}']
-                random.shuffle(location_pool)
-                
-                # Keep track of where we placed items. this is necessary to undo placements if we get stuck
-                placement_tracker = []
-                
-                # Iterate through the dungeon items for that dungeon (inherently in order of nightmare key, small keys, stone beak, compass, map)
-                while item_pool and self.thread_active:
-                    item = item_pool[0]
-                    if verbose: print(item+' -> ', end='')
-                    first_location_tried = location_pool[0]
-                    
-                    # Until we make a valid placement for this item
-                    valid_placement = False
-                    while not valid_placement and self.thread_active:
-                        # Try placing the first item in the list in the first location
-                        placements[location_pool[0]] = item
-                        access = self.removeAccess(access, item)
-                        
-                        # Check if it's reachable there
-                        valid_placement = self.canReachLocation(location_pool[0], placements, access, logic)
-                        if not valid_placement:
-                            # If it's not, take back the item and shift that location to the end of the list
-                            access = self.addAccess(access, item)
-                            placements[location_pool[0]] = None
-                            location_pool.append(location_pool.pop(0))
-                            if location_pool[0] == first_location_tried: 
-                                # If we tried every location and none work, undo the previous placement and try putting it somewhere else. Also rerandomize the location list to ensure things aren't placed back in the same spots
-                                undo_location = placement_tracker.pop(0)
-                                location_pool.append(undo_location)
-                                locations.append(undo_location)
-                                random.shuffle(location_pool)
-                                items.insert(0, placements[undo_location])
-                                item_pool.insert(0, placements[undo_location])
-                                access = self.addAccess(access, placements[undo_location])
-                                placements[undo_location] = None
-                                if verbose: print("can't place")
-                                break
-                    
-                    if valid_placement and self.thread_active:
-                        # After we successfully made a valid placement, remove the item and location from consideration
-                        items.remove(item)
-                        item_pool.remove(item)
-                        if verbose: print(location_pool[0])
-                        locations.remove(location_pool[0])
-                        placement_tracker.append(location_pool.pop(0))
-                        self.progress_value += 1 # update progress bar
-                        self.progress_update.emit(self.progress_value)
+            if not self.thread_active:
+                break
 
-            else: break
+            item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
+            location_pool = [s for s in locations if len(s) >= 2 and s[:2] == f'D{i}']
+            random.shuffle(location_pool)
+            
+            # Keep track of where we placed items. this is necessary to undo placements if we get stuck
+            placement_tracker = []
+            
+            # Iterate through the dungeon items for that dungeon (inherently in order of nightmare key, small keys, stone beak, compass, map)
+            while item_pool and self.thread_active:
+                item = item_pool[0]
+                if verbose: print(item+' -> ', end='')
+                first_location_tried = location_pool[0]
+                
+                # Until we make a valid placement for this item
+                valid_placement = False
+                while not valid_placement and self.thread_active:
+                    # Try placing the first item in the list in the first location
+                    placements[location_pool[0]] = item
+                    access = self.removeAccess(access, item)
+                    
+                    # Check if it's reachable there
+                    valid_placement = self.canReachLocation(location_pool[0], placements, access, logic)
+                    if not valid_placement:
+                        # If it's not, take back the item and shift that location to the end of the list
+                        access = self.addAccess(access, item)
+                        placements[location_pool[0]] = None
+                        location_pool.append(location_pool.pop(0))
+                        if location_pool[0] == first_location_tried: 
+                            # If we tried every location and none work, undo the previous placement and try putting it somewhere else. Also rerandomize the location list to ensure things aren't placed back in the same spots
+                            undo_location = placement_tracker.pop(0)
+                            location_pool.append(undo_location)
+                            locations.append(undo_location)
+                            random.shuffle(location_pool)
+                            items.insert(0, placements[undo_location])
+                            item_pool.insert(0, placements[undo_location])
+                            access = self.addAccess(access, placements[undo_location])
+                            placements[undo_location] = None
+                            if verbose: print("can't place")
+                            break
+                
+                if valid_placement and self.thread_active:
+                    # After we successfully made a valid placement, remove the item and location from consideration
+                    items.remove(item)
+                    item_pool.remove(item)
+                    if verbose: print(location_pool[0])
+                    locations.remove(location_pool[0])
+                    placement_tracker.append(location_pool.pop(0))
+                    self.progress_value += 1 # update progress bar
+                    self.progress_update.emit(self.progress_value)
         
         # Shuffle remaining locations
         random.shuffle(locations)
@@ -578,17 +579,24 @@ class ItemShuffler(QtCore.QThread):
         to_place = [s for s in items if s in self.force_chests]
         chests = [s for s in locations if self.logic_defs[s]['subtype'] == 'chest']
         for item in to_place:
-            if self.thread_active:
-                if verbose: print(item+' -> ', end='')
-                chest = chests.pop(0)
-                placements[chest] = item
-                items.remove(item)
-                locations.remove(chest)
-                if verbose: print(chests[0])
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
-            else: break
-                
+            if not self.thread_active:
+                break
+
+            if verbose: print(item+' -> ', end='')
+            chest = chests.pop(0)
+            placements[chest] = item
+            items.remove(item)
+            locations.remove(chest)
+            if verbose: print(chests[0])
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
+        
+        # # testing stuff on Tarin
+        # placements['tarin'] = 'hydro-trap'
+        # if placements['tarin'] != None and self.thread_active:
+        #     items.pop(items.index(placements['tarin']))
+        #     locations.remove('tarin')
+        
         # Next, place an item on Tarin. Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
         # Only do this if Tarin has no item placed, i.e. not forced to be vanilla
         if placements['tarin'] == None and self.thread_active:
@@ -614,7 +622,7 @@ class ItemShuffler(QtCore.QThread):
 
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-
+        
         # Keep track of where we placed items. this is necessary to undo placements if we get stuck
         placement_tracker = []
 

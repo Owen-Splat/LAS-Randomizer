@@ -1814,51 +1814,34 @@
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="label_14">
+     <widget class="QSpinBox" name="rupeesSpinBox">
       <property name="geometry">
        <rect>
-        <x>295</x>
-        <y>358</y>
-        <width>161</width>
-        <height>81</height>
+        <x>310</x>
+        <y>390</y>
+        <width>131</width>
+        <height>41</height>
        </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>75</width>
-        <height>23</height>
-       </size>
       </property>
       <property name="font">
        <font>
         <pointsize>10</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
        </font>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+      <property name="whatsThis">
+       <string>This lets you choose how many rupees to start with</string>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
+      <property name="suffix">
+       <string/>
       </property>
-      <property name="text">
-       <string>Not fully tested&lt;br&gt;&lt;/br&gt;&lt;br&gt;&lt;/br&gt;Mainly functional, may have some issues</string>
+      <property name="prefix">
+       <string>Rupees:  </string>
       </property>
-      <property name="textFormat">
-       <enum>Qt::RichText</enum>
+      <property name="maximum">
+       <number>9999</number>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignHCenter|Qt::AlignTop</set>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
+      <property name="value">
+       <number>0</number>
       </property>
      </widget>
     </widget>

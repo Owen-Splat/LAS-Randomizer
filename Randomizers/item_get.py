@@ -92,7 +92,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
             event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
                 {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
-            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 3.0}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
         ]
         if can_hurt_player:
@@ -132,9 +131,12 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         
         forks = [
-            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_deathball'}),
             event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
                 {'channel': 'GreatFairy_Heal', 'index': 0, 'restart': False, 'time': 0.0}),
+            event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 0.1}),
+                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_deathball'})
+            ])
         ]
         if can_hurt_player:
             forks.append(event_tools.createActionChain(flowchart, None, [
@@ -155,7 +157,29 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         ]
         return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
-
+    if item == 'HydroTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'SetGravityEnable', {'enable': False}),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+                {'channel': 'ev_hydrocannon', 'index': 0, 'restart': False, 'time': 0.333}),
+            event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 0.333}),
+                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_hydrocannon'})
+            ]),
+            event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 1.5}),
+                ('Link', 'StopTailorOtherChannel', {'channel': 'ev_hydrocannon', 'index': 0})
+            ]),
+            event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 2.0}),
+                ('Link', 'SetGravityEnable', {'enable': True}),
+                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_from_top'})
+            ])
+        ]
+        return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
+    
     ### Instrument flags
     if item == 'FullMoonCello':
         return event_tools.createActionChain(flowchart, before, [

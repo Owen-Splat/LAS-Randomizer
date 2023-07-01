@@ -1,8 +1,17 @@
 v0.3
 
-stress test everything before a stable release
+test logic updater and custom logic
 
-touch up on the GUI a bit more
+make sure to set the GetMagicPowder flag if the player got it from Dampe
+    and also just give Dampe some time in general to fix things up lol
+
+any potential GUI cleanup
+
+MAYBE look into text editing to make slime key not so confusing
+
+make a release candidate build, give it a few weeks
+
+probably release the randomizer on gamebanana when it is considered fully stable
 
 -------------------------------------------------------------------------------------------------------------------------------------
 v0.4
@@ -14,6 +23,7 @@ shop
 individual tricks toggles
 
 make separete repo containing custom models to be used optionally with rando
+    for songs, capacity upgrades, and even custom items
 
 -------------------------------------------------------------------------------------------------------------------------------------
 GENERAL FUTURE STUFF TO LOOK INTO

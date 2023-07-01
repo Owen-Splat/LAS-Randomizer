@@ -47,5 +47,11 @@ def makeEventChanges(flowchart, placements, item_defs):
         
         event_defs += item_get.insertItemWithoutAnimation(item_key, -1)
     
+    after = 'Event52'
+    starting_rupees = placements['settings']['starting-rupees']
+    if starting_rupees > 0:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AddRupee')
+        after = event_tools.createActionEvent(flowchart, 'Link', 'AddRupee', {'amount': starting_rupees}, 'Event52')
+    
     if len(event_defs) > 0:
-        event_tools.createActionChain(flowchart, 'Event36', event_defs, 'Event52')
+        event_tools.createActionChain(flowchart, 'Event36', event_defs, after)

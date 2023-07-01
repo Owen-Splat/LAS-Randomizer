@@ -101,7 +101,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.tricksComboBox,
             self.ui.instrumentsComboBox,
             self.ui.owlsComboBox,
-            self.ui.goalComboBox
+            self.ui.goalComboBox,
+            self.ui.rupeesSpinBox
         ])
         for item in desc_items:
             item.installEventFilter(self)
@@ -277,6 +278,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.dungeonsCheck.setChecked(False)
 
         self.starting_gear = list() # fully reset starting items
+        self.ui.rupeesSpinBox.setValue(0)
 
         self.tab_Changed() # just call the same event as when changing the tab to refresh the list
 
@@ -331,6 +333,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Randomize_Enemies': self.ui.enemyCheck.isChecked(),
             'Shuffled_Dungeons': self.ui.dungeonsCheck.isChecked(),
             'Starting_Items': self.starting_gear,
+            'Starting_Rupees': self.ui.rupeesSpinBox.value(),
             'Excluded_Locations': list(self.excluded_checks)
         }
         
@@ -661,6 +664,12 @@ class MainWindow(QtWidgets.QMainWindow):
                         self.starting_gear.append(item)
         except (KeyError, TypeError):
             self.starting_gear = list() # reset starting gear to default if error
+        
+        # starting rupees
+        try:
+            self.ui.rupeesSpinBox.setValue(SETTINGS['Starting_Rupees'])
+        except (KeyError, TypeError):
+            self.ui.rupeesSpinBox.setValue(0)
 
 
     
@@ -927,6 +936,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
             'shuffled-dungeons': self.ui.dungeonsCheck.isChecked(),
             'starting-items': self.starting_gear,
+            'starting-rupees': self.ui.rupeesSpinBox.value(),
             'excluded-locations': self.excluded_checks
         }
         
@@ -1125,8 +1135,10 @@ class MainWindow(QtWidgets.QMainWindow):
     # Override mouse click event to make certain stuff lose focus
     def mousePressEvent(self, event):
         focused_widget = self.focusWidget()
-        if isinstance(focused_widget, QtWidgets.QLineEdit):
-            focused_widget.clearFocus()
+        if isinstance(focused_widget, QtWidgets.QLineEdit) |\
+            isinstance(focused_widget, QtWidgets.QComboBox) |\
+            isinstance(focused_widget, QtWidgets.QSpinBox):
+                focused_widget.clearFocus()
     
 
 
