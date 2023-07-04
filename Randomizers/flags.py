@@ -186,6 +186,13 @@ def makeFlags(sheet):
 
     global_flags.addFlag('FlippersFound')
     
+    global_flags.addFlag('DampeChallenge1')
+    global_flags.addFlag('Dampe1')
+    global_flags.addFlag('DampeHeart')
+    global_flags.addFlag('Dampe2')
+    global_flags.addFlag('DampeBottle')
+    global_flags.addFlag('DampeFinal')
+
     return global_flags.give_flags()
 
     # sheet['values'].append({'symbol': 'ShopShovelGet', 'index': 1223})

@@ -209,24 +209,43 @@ def makeNpcChanges(npc, placements):
 
 
 def makeNewNpcs(npc_sheet):
-    """add new npcs so that we can properly show item models for items that normally cannot be standing items
-    unfortunately will not by itself make them show properly when obtaining the item, only the freestanding model"""
+    """add new npcs so that we can properly show item models"""
 
-    new_npc = copy.deepcopy(DUMMY_NPC)
-    new_npc['symbol'] = 'PatchHoneycomb'
-    new_npc['graphics']['path'] = 'ItemHoneycomb.bfres'
-    new_npc['graphics']['model'] = 'Honeycomb'
-    npc_sheet['values'].append(oead_tools.dictToStruct(new_npc))
+    honeycomb = copy.deepcopy(DUMMY_NPC)
+    honeycomb['symbol'] = 'PatchHoneycomb'
+    honeycomb['graphics']['path'] = 'ItemHoneycomb.bfres'
+    honeycomb['graphics']['model'] = 'Honeycomb'
+    npc_sheet['values'].append(oead_tools.dictToStruct(honeycomb))
 
-    # mambo = copy.deepcopy(DUMMY_NPC)
-    # mambo['symbol'] = 'ItemMambo'
-    # mambo['graphics']['path'] = 'ItemMambo.bfres'
-    # npc_sheet['values'].append(oead_tools.dictToStruct(mambo))
+    sold_out = copy.deepcopy(DUMMY_NPC)
+    sold_out['symbol'] = 'SoldOutPlate'
+    sold_out['graphics']['path'] = 'ObjSoldOutPlate.bfres'
+    sold_out['graphics']['model'] = 'SoldOutPlate'
+    npc_sheet['values'].append(oead_tools.dictToStruct(sold_out))
 
-    # soul = copy.deepcopy(DUMMY_NPC)
-    # soul['symbol'] = 'ItemSoul'
-    # soul['graphics']['path'] = 'ItemSoul.bfres'
-    # npc_sheet['values'].append(oead_tools.dictToStruct(soul))
+    drown = copy.deepcopy(DUMMY_NPC)
+    drown['symbol'] = 'SmallFish'
+    drown['graphics']['path'] = 'ObjSmallFish.bfres'
+    drown['graphics']['model'] = 'SmallFish'
+    npc_sheet['values'].append(oead_tools.dictToStruct(drown))
+
+    squish = copy.deepcopy(DUMMY_NPC)
+    squish['symbol'] = 'Koton'
+    squish['graphics']['path'] = 'ObjKoton.bfres'
+    squish['graphics']['model'] = 'Koton'
+    npc_sheet['values'].append(oead_tools.dictToStruct(squish))
+
+    deathball = copy.deepcopy(DUMMY_NPC)
+    deathball['symbol'] = 'Kirby'
+    deathball['graphics']['path'] = 'EnemyKirby.bfres'
+    deathball['graphics']['model'] = 'Kirby'
+    npc_sheet['values'].append(oead_tools.dictToStruct(deathball))
+
+    quake = copy.deepcopy(DUMMY_NPC)
+    quake['symbol'] = 'StoneHinoxRock'
+    quake['graphics']['path'] = 'ObjStoneHinoxRock.bfres'
+    quake['graphics']['model'] = 'StoneHinoxRock'
+    npc_sheet['values'].append(oead_tools.dictToStruct(quake))
 
     # bombBag = copy.deepcopy(DUMMY_NPC)
     # bombBag['symbol'] = 'ObjBombBag'

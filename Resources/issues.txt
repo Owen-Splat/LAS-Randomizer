@@ -8,4 +8,4 @@
 
 - While Trading Quest items work, they will not be displayed in the inventory
 
-- Dampe lacks logic for instrument shuffle, and may permanently remove items
+- Dampé lacks logic for instrument shuffle

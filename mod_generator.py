@@ -880,60 +880,30 @@ class ModsProcess(QtCore.QThread):
 
 
     def dampeChanges(self):
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceClearReward.gsheet')
-
-        # Page 1 reward
-        dampe.makeDatasheetChanges(sheet, 3,
-        self.item_defs[self.placements['dampe-page-1']]['item-key'],
-        self.placements['indexes']['dampe-page-1'] if 'dampe-page-1' in self.placements['indexes'] else -1,
-        'DampePage1')
-
-        # Page 2 reward
-        dampe.makeDatasheetChanges(sheet, 7,
-        self.item_defs[self.placements['dampe-page-2']]['item-key'],
-        self.placements['indexes']['dampe-page-2'] if 'dampe-page-2' in self.placements['indexes'] else -1,
-        'DampePage2')
-
-        # Final reward
-        dampe.makeDatasheetChanges(sheet, 12,
-        self.item_defs[self.placements['dampe-final']]['item-key'],
-        self.placements['indexes']['dampe-final'] if 'dampe-final' in self.placements['indexes'] else -1,
-        'DampeFinal')
-
         if self.thread_active:
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceClearReward.gsheet')
+            dampe.makeDatasheetChanges(sheet, 3, 'Dampe1')
+            dampe.makeDatasheetChanges(sheet, 7, 'Dampe2')
+            dampe.makeDatasheetChanges(sheet, 12, 'DampeFinal')
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/MapPieceClearReward.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-
-        #######
-
-        sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceTheme.gsheet')
-
-        # 1-4 reward - heart challenge
-        dampe.makeDatasheetChanges(sheet, 3,
-        self.item_defs[self.placements['dampe-heart-challenge']]['item-key'],
-        self.placements['indexes']['dampe-heart-challenge'] if 'dampe-heart-challenge' in self.placements['indexes'] else -1,
-        'DampeHeart')
-
-        # 3-2 reward - bottle challenge
-        dampe.makeDatasheetChanges(sheet, 9,
-        self.item_defs[self.placements['dampe-bottle-challenge']]['item-key'],
-        self.placements['indexes']['dampe-bottle-challenge'] if 'dampe-bottle-challenge' in self.placements['indexes'] else -1,
-        'DampeBottle')
-
+        
         if self.thread_active:
+            sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/MapPieceTheme.gsheet')
+            dampe.makeDatasheetChanges(sheet, 3, 'DampeHeart')
+            dampe.makeDatasheetChanges(sheet, 9, 'DampeBottle')
             oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/MapPieceTheme.gsheet', sheet)
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        #######
-
-        flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Danpei.bfevfl')
-        actors.addNeededActors(flow.flowchart, self.rom_path)
-        dampe.makeEventChanges(flow.flowchart)
-
         if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Danpei.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            dampe.makeEventChanges(flow.flowchart, self.item_defs, self.placements)
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Danpei.bfevfl', flow)
+            self.progress_value += 1 # update progress bar
+            self.progress_update.emit(self.progress_value)
 
 
 
@@ -1449,6 +1419,42 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEntryPoint(flow.flowchart, 'BlueClothes').name = 'ClothesBlue'
             event_tools.findEntryPoint(flow.flowchart, 'Necklace').name = 'PinkBra'
 
+            # now we need to add events for Dampe rewards
+            event_tools.addEntryPoint(flow.flowchart, 'Dampe1')
+            item_key = self.item_defs[self.placements['dampe-page-1']]['item-key']
+            if not item_key.endswith('Trap') and not item_key.startswith('Clothes'):
+                dialog_event = event_tools.createSubFlowEvent(flow.flowchart, '',
+                    item_key, {})
+                event_tools.insertEventAfter(flow.flowchart, 'Dampe1', dialog_event)
+
+            event_tools.addEntryPoint(flow.flowchart, 'DampeHeart')
+            item_key = self.item_defs[self.placements['dampe-heart-challenge']]['item-key']
+            if not item_key.endswith('Trap') and not item_key.startswith('Clothes'):
+                dialog_event = event_tools.createSubFlowEvent(flow.flowchart, '',
+                    item_key, {})
+                event_tools.insertEventAfter(flow.flowchart, 'DampeHeart', dialog_event)
+
+            event_tools.addEntryPoint(flow.flowchart, 'Dampe2')
+            item_key = self.item_defs[self.placements['dampe-page-2']]['item-key']
+            if not item_key.endswith('Trap') and not item_key.startswith('Clothes'):
+                dialog_event = event_tools.createSubFlowEvent(flow.flowchart, '',
+                    item_key, {})
+                event_tools.insertEventAfter(flow.flowchart, 'Dampe2', dialog_event)
+
+            event_tools.addEntryPoint(flow.flowchart, 'DampeBottle')
+            item_key = self.item_defs[self.placements['dampe-bottle-challenge']]['item-key']
+            if not item_key.endswith('Trap') and not item_key.startswith('Clothes'):
+                dialog_event = event_tools.createSubFlowEvent(flow.flowchart, '',
+                    item_key, {})
+                event_tools.insertEventAfter(flow.flowchart, 'DampeBottle', dialog_event)
+
+            event_tools.addEntryPoint(flow.flowchart, 'DampeFinal')
+            item_key = self.item_defs[self.placements['dampe-final']]['item-key']
+            if not item_key.endswith('Trap') and not item_key.startswith('Clothes'):
+                dialog_event = event_tools.createSubFlowEvent(flow.flowchart, '',
+                    item_key, {})
+                event_tools.insertEventAfter(flow.flowchart, 'DampeFinal', dialog_event)
+            
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Item.bfevfl', flow)
                 self.progress_value += 1 # update progress bar
@@ -1591,7 +1597,7 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/Items.gsheet')
 
-            trap = None
+            dummy = None
             for item in sheet['values']:
                 if self.thread_active:
                     # MagicPowder_MaxUp uses this MagicPowder entry to display powder
@@ -1608,34 +1614,58 @@ class ModsProcess(QtCore.QThread):
                     
                     if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
                         item['npcKey'] = 'ItemClothesRed'
-                        if self.placements['settings']['trap-sanity']:
-                            trap = oead_tools.parseStruct(item) # keep a dict of this to use as a base for traps
+                        dummy = oead_tools.parseStruct(item)
                     
                     if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
                         item['npcKey'] = 'PatchHoneycomb'
                 
                 else: break
             
-            # create entries for traps, seashell mansion gives a green rupee if the item isn't in this
-            if trap is not None:
-                trap['symbol'] = 'ZapTrap'
-                trap['itemID'] = 127
-                sheet['values'].append(oead_tools.dictToStruct(trap))
-                trap['symbol'] = 'DrownTrap'
-                trap['itemID'] = 128
-                sheet['values'].append(oead_tools.dictToStruct(trap))
-                trap['symbol'] = 'SquishTrap'
-                trap['itemID'] = 129
-                sheet['values'].append(oead_tools.dictToStruct(trap))
-                trap['symbol'] = 'DeathballTrap'
-                trap['itemID'] = 130
-                sheet['values'].append(oead_tools.dictToStruct(trap))
-                trap['symbol'] = 'QuakeTrap'
-                trap['itemID'] = 131
-                sheet['values'].append(oead_tools.dictToStruct(trap))
-                trap['symbol'] = 'HydroTrap'
-                trap['itemID'] = 132
-                sheet['values'].append(oead_tools.dictToStruct(trap))
+            # create new entries for Dampe, which we will use to set the gettingFlag
+            # traps as well, since seashell mansion gives a green rupee if the item isn't in this
+            if dummy is not None:
+                dummy['symbol'] = 'Dampe1'
+                dummy['itemID'] = 63
+                dummy['gettingFlag'] = 'Dampe1'
+                dummy['npcKey'] = self.item_defs[self.placements['dampe-page-1']]['npc-key']
+                sheet['values'].append(oead_tools.dictToStruct(dummy))
+                dummy['symbol'] = 'DampeHeart'
+                dummy['itemID'] = 64
+                dummy['gettingFlag'] = 'DampeHeart'
+                dummy['npcKey'] = self.item_defs[self.placements['dampe-heart-challenge']]['npc-key']
+                sheet['values'].append(oead_tools.dictToStruct(dummy))
+                dummy['symbol'] = 'Dampe2'
+                dummy['itemID'] = 65
+                dummy['gettingFlag'] = 'Dampe2'
+                dummy['npcKey'] = self.item_defs[self.placements['dampe-page-2']]['npc-key']
+                sheet['values'].append(oead_tools.dictToStruct(dummy))
+                dummy['symbol'] = 'DampeBottle'
+                dummy['itemID'] = 66
+                dummy['gettingFlag'] = 'DampeBottle'
+                dummy['npcKey'] = self.item_defs[self.placements['dampe-bottle-challenge']]['npc-key']
+                sheet['values'].append(oead_tools.dictToStruct(dummy))
+                dummy['symbol'] = 'DampeFinal'
+                dummy['itemID'] = 67
+                dummy['gettingFlag'] = 'DampeFinal'
+                dummy['npcKey'] = self.item_defs[self.placements['dampe-final']]['npc-key']
+                sheet['values'].append(oead_tools.dictToStruct(dummy))
+
+                if self.placements['settings']['trap-sanity']:
+                    dummy['symbol'] = 'ZapTrap'
+                    dummy['itemID'] = 127 # traps don't need unique IDs, they just have to be in this sheet for Seashell Mansion
+                    dummy['gettingFlag'] = ''
+                    dummy['npcKey'] = 'SoldOutPlate'
+                    sheet['values'].append(oead_tools.dictToStruct(dummy))
+                    dummy['symbol'] = 'DrownTrap'
+                    sheet['values'].append(oead_tools.dictToStruct(dummy))
+                    dummy['symbol'] = 'SquishTrap'
+                    sheet['values'].append(oead_tools.dictToStruct(dummy))
+                    dummy['symbol'] = 'DeathballTrap'
+                    sheet['values'].append(oead_tools.dictToStruct(dummy))
+                    dummy['symbol'] = 'QuakeTrap'
+                    sheet['values'].append(oead_tools.dictToStruct(dummy))
+                    dummy['symbol'] = 'HydroTrap'
+                    sheet['values'].append(oead_tools.dictToStruct(dummy))
             
             if self.thread_active:
                 oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', sheet)

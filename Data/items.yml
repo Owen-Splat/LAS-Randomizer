@@ -6,258 +6,302 @@ Item_Pool:
     item-key: SwordLv1
     model-path: ItemSwordLv1.bfres
     model-name: SwordLv1
+    npc-key: ItemSwordLv1
   shield:
     type: important
     quantity: 2
     item-key: Shield
     model-path: ItemShield.bfres
     model-name: Shield
+    npc-key: ItemShield
   bracelet:
     type: important
     quantity: 2
     item-key: PowerBraceletLv1
     model-path: ItemPowerBraceletLv1.bfres
     model-name: PowerBraceletLv1
+    npc-key: ItemPowerBraceletLv1
   boots:
     type: important
     quantity: 1
     item-key: PegasusBoots
     model-path: ItemPegasusBoots.bfres
     model-name: PegasusBoots
+    npc-key: ItemPegasusBoots
   flippers:
     type: important
     quantity: 1
     item-key: Flippers
     model-path: ItemFlippers.bfres
     model-name: Flippers
+    npc-key: ItemFlippers
   feather:
     type: important
     quantity: 1
     item-key: RocsFeather
     model-path: ItemRocsFeather.bfres
     model-name: RocsFeather
+    npc-key: ItemRocsFeather
   shovel:
     type: important
     quantity: 1
     item-key: Shovel
     model-path: ItemShovel.bfres
     model-name: Shovel
+    npc-key: ItemShovel
   hookshot:
     type: important
     quantity: 1
     item-key: HookShot
     model-path: ItemHookShot.bfres
     model-name: HookShot
+    npc-key: ItemHookShot
   bow:
     type: important
     quantity: 1
     item-key: Bow
     model-path: ItemBow.bfres
     model-name: Bow
+    npc-key: ItemBow
   rod:
     type: important
     quantity: 1
     item-key: MagicRod
     model-path: ItemMagicRod.bfres
     model-name: MagicRod
+    npc-key: ItemMagicRod
   boomerang:
     type: important
     quantity: 1
     item-key: Boomerang
     model-path: ItemBoomerang.bfres
     model-name: Boomerang
+    npc-key: ItemBoomerang
   ocarina:
     type: important
     quantity: 1
     item-key: Ocarina
     model-path: ItemOcarina.bfres
     model-name: Ocarina
+    npc-key: ItemOcarina
   song-ballad:
     type: important
     quantity: 1
     item-key: Song_WindFish
+    npc-key: NpcMarin
   song-mambo:
     type: important
     quantity: 1
     item-key: Song_Mambo
+    npc-key: NpcManboTamegoro
   song-soul:
     type: important
     quantity: 1
     item-key: Song_Soul
+    npc-key: NpcMamu
   yoshi-doll:
     type: trade
     quantity: 1
     item-key: YoshiDoll
     model-path: ItemYoshiDoll.bfres
     model-name: YoshiDoll
+    npc-key: ItemClothesRed
   ribbon:
     type: trade
     quantity: 1
     item-key: Ribbon
     model-path: ItemRibbon.bfres
     model-name: Ribbon
+    npc-key: ItemRibbon
   dog-food:
     type: trade
     quantity: 1
     item-key: DogFood
     model-path: ItemDogFood.bfres
     model-name: DogFood
+    npc-key: ItemDogFood
   bananas:
     type: trade
     quantity: 1
     item-key: Bananas
     model-path: ItemBananas.bfres
     model-name: Bananas
+    npc-key: ItemBananas
   stick:
     type: trade
     quantity: 1
     item-key: Stick
     model-path: ItemStick.bfres
     model-name: Stick
+    npc-key: ItemStick
   honeycomb:
     type: trade
     quantity: 1
     item-key: Honeycomb
     model-path: ItemHoneycomb.bfres
     model-name: Honeycomb
+    npc-key: PatchHoneycomb
   pineapple:
     type: trade
     quantity: 1
     item-key: Pineapple
     model-path: ItemPineapple.bfres
     model-name: Pineapple
+    npc-key: ItemPineapple
   hibiscus:
     type: trade
     quantity: 1
     item-key: Hibiscus
     model-path: ItemHibiscus.bfres
     model-name: Hibiscus
+    npc-key: ItemHibiscus
   letter:
     type: trade
     quantity: 1
     item-key: Letter
     model-path: ItemLetter.bfres
     model-name: Letter
+    npc-key: ItemLetter
   broom:
     type: trade
     quantity: 1
     item-key: Broom
     model-path: ItemBroom.bfres
     model-name: Broom
+    npc-key: ItemBroom
   fishing-hook:
     type: trade
     quantity: 1
     item-key: FishingHook
     model-path: ItemFishingHook.bfres
     model-name: FishingHook
+    npc-key: ItemFishingHook
   necklace:
     type: trade
     quantity: 1
     item-key: PinkBra
     model-path: ItemNecklace.bfres
     model-name: Necklace
+    npc-key: ItemPinkBra
   mermaid-scale:
     type: important
     quantity: 1
     item-key: MermaidsScale
     model-path: ItemMermaidsScale.bfres
     model-name: MermaidsScale
+    npc-key: ItemMermaidsScale
   magnifying-lens:
     type: important
     quantity: 1
     item-key: MagnifyingLens
     model-path: ItemMagnifyingLens.bfres
     model-name: MagnifyingLens
+    npc-key: ItemMagnifyingLens
   golden-leaf:
     type: important
     quantity: 5
     item-key: GoldenLeaf
     model-path: ItemGoldenLeaf.bfres
     model-name: GoldenLeaf
+    npc-key: ItemGoldenLeaf
   mushroom:
     type: important
     quantity: 1
     item-key: SleepyMushroom
     model-path: ItemSleepyMushroom.bfres
     model-name: SleepyMushroom
+    npc-key: ItemSleepyMushroom
   tail-key:
     type: important
     quantity: 1
     item-key: TailKey
     model-path: ItemTailKey.bfres
     model-name: TailKey
+    npc-key: ItemTailKey
   slime-key:
     type: important
     quantity: 1
     item-key: SlimeKey
     model-path: ItemSlimeKey.bfres
     model-name: SlimeKey
+    npc-key: ItemSlimeKey
   angler-key:
     type: important
     quantity: 1
     item-key: AnglerKey
     model-path: ItemAnglerKey.bfres
     model-name: AnglerKey
+    npc-key: ItemAnglerKey
   face-key:
     type: important
     quantity: 1
     item-key: FaceKey
     model-path: ItemFaceKey.bfres
     model-name: FaceKey
+    npc-key: ItemFaceKey
   bird-key:
     type: important
     quantity: 1
     item-key: BirdKey
     model-path: ItemBirdKey.bfres
     model-name: BirdKey
+    npc-key: ItemBirdKey
   full-moon-cello:
     type: important
     quantity: 1
     item-key: FullMoonCello
     model-path: ItemFullMoonCello.bfres
     model-name: FullMoonCello
+    npc-key: ItemFullMoonCello
   conch-horn:
     type: important
     quantity: 1
     item-key: ConchHorn
     model-path: ItemConchHorn.bfres
     model-name: ConchHorn
+    npc-key: ItemConchHorn
   sea-lilys-bell:
     type: important
     quantity: 1
     item-key: SeaLilysBell
     model-path: ItemSeaLilysBell.bfres
     model-name: SeaLilysBell
+    npc-key: ItemSeaLilysBell
   surf-harp:
     type: important
     quantity: 1
     item-key: SurfHarp
     model-path: ItemSurfHarp.bfres
     model-name: SurfHarp
+    npc-key: ItemSurfHarp
   wind-marimba:
     type: important
     quantity: 1
     item-key: WindMarimba
     model-path: ItemWindMarimba.bfres
     model-name: WindMarimba
+    npc-key: ItemWindMarimba
   coral-triangle:
     type: important
     quantity: 1
     item-key: CoralTriangle
     model-path: ItemCoralTriangle.bfres
     model-name: CoralTriangle
+    npc-key: ItemCoralTriangle
   evening-calm-organ:
     type: important
     quantity: 1
     item-key: EveningCalmOrgan
     model-path: ItemEveningCalmOrgan.bfres
     model-name: EveningCalmOrgan
+    npc-key: ItemEveningCalmOrgan
   thunder-drum:
     type: important
     quantity: 1
     item-key: ThunderDrum
     model-path: ItemThunderDrum.bfres
     model-name: ThunderDrum
+    npc-key: ItemThunderDrum
   # bow-wow:
   #   type: important
   #   quantity: 1
@@ -276,92 +320,109 @@ Item_Pool:
     item-key: Seashell
     model-path: ItemSecretSeashell.bfres
     model-name: SecretSeashell
+    npc-key: ItemSecretSeashell
   bottle:
     type: good
     quantity: 3
     item-key: Bottle
     model-path: ItemBottle.bfres
     model-name: Bottle
+    npc-key: ItemBottle
   heart-container:
     type: good
     quantity: 9
     item-key: HeartContainer
     model-path: ItemHeartContainer.bfres
     model-name: HeartContainer
+    npc-key: ItemHeartContainer
   bomb-capacity:
     type: good
     quantity: 1
     item-key: Bomb_MaxUp
+    npc-key: ItemBomb
   arrow-capacity:
     type: good
     quantity: 1
     item-key: Arrow_MaxUp
+    npc-key: ItemArrow
   powder-capacity:
     type: good
     quantity: 1
     item-key: MagicPowder_MaxUp
+    npc-key: ItemMagicPowder
   shell-sensor:
     type: good
     quantity: 1
     item-key: ShellRader
     model-path: ItemShellRader.bfres
     model-name: ShellRader
+    npc-key: ItemShellRader
   medicine:
     type: good
     quantity: 3
     item-key: SecretMedicine
     model-path: ItemSecretMedicine.bfres
     model-name: SecretMedicine
+    npc-key: ItemSecretMedicine
   red-tunic:
     type: good
     quantity: 1
     item-key: ClothesRed
+    npc-key: NpcFairyQueen
   blue-tunic:
     type: good
     quantity: 1
     item-key: ClothesBlue
+    npc-key: NpcGreatFairy
   rupee-300:
     type: junk
     quantity: 2
     item-key: Rupee300
     model-path: ItemRupeeGold.bfres
     model-name: RupeeGold
+    npc-key: ItemRupeeGold
   heart-piece:
     type: junk
     quantity: 32
     item-key: HeartPiece
     model-path: ItemHeartPiece.bfres
     model-name: HeartPiece
+    npc-key: ItemHeartPiece
   rupee-50:
     type: junk
     quantity: 19
     item-key: Rupee50
     model-path: ItemRupeePurple.bfres
     model-name: RupeePurple
+    npc-key: ItemRupeePurple
   rupee-100:
     type: junk
     quantity: 5
     item-key: Rupee100
     model-path: ItemRupeeSilver.bfres
     model-name: RupeeSilver
+    npc-key: ItemRupeeSilver
   chamber-stone:
     type: junk
     quantity: 14
     item-key: PanelDungeonPiece
     model-path: ItemPanelDungeonPiece.bfres
     model-name: PanelDungeonPiece
+    npc-key: ItemPanelDungeonPiece
   rupee-20:
     type: junk
     quantity: 5
     item-key: Rupee20
     model-path: ItemRupeeRed.bfres
     model-name: RupeeRed
+    npc-key: ItemRupeeRed
   rupee-5:
     type: junk
     quantity: 28
     item-key: Rupee5
     model-path: ItemRupeeBlue.bfres
     model-name: RupeeBlue
+    npc-key: ItemRupeeBlue
   zol-trap:
     type: junk
     quantity: 4
@@ -370,38 +431,46 @@ Item_Pool:
     type: junk
     quantity: 0
     item-key: ZapTrap
+    npc-key: NpcToolShopkeeper
   drown-trap:
     type: junk
     quantity: 0
     item-key: DrownTrap
+    npc-key: SmallFish
   squish-trap:
     type: junk
     quantity: 0
     item-key: SquishTrap
+    npc-key: Koton
   deathball-trap:
     type: junk
     quantity: 0
     item-key: DeathballTrap
+    npc-key: Kirby
   quake-trap:
     type: junk
     quantity: 0
     item-key: QuakeTrap
-  hydro-trap:
-    type: junk
-    quantity: 0
-    item-key: HydroTrap
+    npc-key: StoneHinoxRock
+  # hydro-trap:
+  #   type: junk
+  #   quantity: 0
+  #   item-key: HydroTrap
+  #   npc-key: SoldOutPlate
   bomb:
     type: junk
     quantity: 1
     item-key: Bomb
     model-path: ItemBomb.bfres
     model-name: Bomb
+    npc-key: ItemBomb
   powder:
     type: junk
     quantity: 1
     item-key: MagicPowder
     model-path: ItemMagicPowder.bfres
     model-name: MagicPowder
+    npc-key: ItemMagicPowder
   stalfos-note:
     type: junk
     quantity: 1
@@ -412,270 +481,315 @@ Item_Pool:
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D1:
     type: D1
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D1:
     type: D1
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D1:
     type: D1
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D1:
     type: D1
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D2:
     type: D2
     quantity: 5
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D2:
     type: D2
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D2:
     type: D2
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D2:
     type: D2
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D2:
     type: D2
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D3:
     type: D3
     quantity: 9
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D3:
     type: D3
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D3:
     type: D3
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D3:
     type: D3
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D3:
     type: D3
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D4:
     type: D4
     quantity: 5
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D4:
     type: D4
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D4:
     type: D4
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D4:
     type: D4
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D4:
     type: D4
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D5:
     type: D5
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D5:
     type: D5
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D5:
     type: D5
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D5:
     type: D5
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D5:
     type: D5
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D6:
     type: D6
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D6:
     type: D6
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D6:
     type: D6
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D6:
     type: D6
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D6:
     type: D6
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D7:
     type: D7
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D7:
     type: D7
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D7:
     type: D7
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D7:
     type: D7
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D7:
     type: D7
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D8:
     type: D8
     quantity: 7
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D8:
     type: D8
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D8:
     type: D8
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D8:
     type: D8
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D8:
     type: D8
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
   key-D0:
     type: D0
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
+    npc-key: ItemClothesGreen
   nightmare-key-D0:
     type: D0
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
+    npc-key: ItemNightmareKey
   stone-beak-D0:
     type: D0
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
+    npc-key: ItemStoneBeak
   compass-D0:
     type: D0
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
+    npc-key: ItemCompass
   map-D0:
     type: D0
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
+    npc-key: ItemDungeonMap
 
 Starting_Items:
   - sword

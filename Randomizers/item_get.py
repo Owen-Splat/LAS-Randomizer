@@ -153,32 +153,34 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         forks = [
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_quake'}),
-            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5})
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6})
         ]
         return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
-    if item == 'HydroTrap':
-        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+    # if item == 'HydroTrap':
+    #     autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
         
-        forks = [
-            event_tools.createActionEvent(flowchart, 'Link', 'SetGravityEnable', {'enable': False}),
-            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
-                {'channel': 'ev_hydrocannon', 'index': 0, 'restart': False, 'time': 0.333}),
-            event_tools.createActionChain(flowchart, None, [
-                ('Timer', 'Wait', {'time': 0.333}),
-                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_hydrocannon'})
-            ]),
-            event_tools.createActionChain(flowchart, None, [
-                ('Timer', 'Wait', {'time': 1.5}),
-                ('Link', 'StopTailorOtherChannel', {'channel': 'ev_hydrocannon', 'index': 0})
-            ]),
-            event_tools.createActionChain(flowchart, None, [
-                ('Timer', 'Wait', {'time': 2.0}),
-                ('Link', 'SetGravityEnable', {'enable': True}),
-                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_from_top'})
-            ])
-        ]
-        return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
+    #     forks = [
+    #         event_tools.createActionEvent(flowchart, 'Link', 'SetGravityEnable', {'enable': False}),
+    #         event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+    #             {'channel': 'ev_hydrocannon', 'index': 0, 'restart': False, 'time': 0.333}),
+    #         event_tools.createActionChain(flowchart, None, [
+    #             ('Timer', 'Wait', {'time': 0.333}),
+    #             ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_hydrocannon'})
+    #         ]),
+    #         event_tools.createActionChain(flowchart, None, [
+    #             ('Timer', 'Wait', {'time': 1.5}),
+    #             ('Link', 'StopTailorOtherChannel', {'channel': 'ev_hydrocannon', 'index': 0})
+    #         ]),
+    #         event_tools.createActionChain(flowchart, None, [
+    #             ('Timer', 'Wait', {'time': 2.0}),
+    #             ('Link', 'SetGravityEnable', {'enable': True}),
+    #             ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_from_top'})
+    #         ])
+    #     ]
+    #     return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
     ### Instrument flags
     if item == 'FullMoonCello':
@@ -377,7 +379,13 @@ def insertItemWithoutAnimation(item, index):
             ('EventFlags', 'SetFlag', {'symbol': data.SHIELD_FOUND_FLAG, 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
         ]
-        
+    
+    if item == 'Flippers':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': 'FlippersFound', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+    
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
         return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
@@ -429,7 +437,10 @@ def insertItemWithoutAnimation(item, index):
     
     ### Powder for Shuffled Powder
     if item == 'MagicPowder':
-        return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False})]
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False})
+        ]
     
     # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     # if item == 'Bottle' and index == 1:
@@ -486,3 +497,307 @@ def insertItemWithoutAnimation(item, index):
     
     ### everything else
     return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
+
+
+
+def insertDampeItemGet(flowchart, item, index, after=None):
+    # progressive items
+    if item == 'PowerBraceletLv1':
+        give_bracelet2 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'PowerBraceletLv2', 'count': 1, 'index': -1, 'autoEquip': False}, after)
+        give_bracelet1 = event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.BRACELET_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False})
+        ], after)
+        return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': data.BRACELET_FOUND_FLAG}, {0: give_bracelet1, 1: give_bracelet2})
+
+    if item == 'SwordLv1':
+        give_sword2 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'SwordLv2', 'count': 1, 'index': -1, 'autoEquip': False}, after)
+        give_sword1 = event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.SWORD_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False})
+        ], after)
+        return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': data.SWORD_FOUND_FLAG}, {0: give_sword1, 1: give_sword2})
+    
+    if item == 'Shield':
+        give_shield2 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'MirrorShield', 'count': 1, 'index': -1, 'autoEquip': False}, after)
+        give_shield1 = event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.SHIELD_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False})
+        ], after)
+        return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': data.SHIELD_FOUND_FLAG}, {0: give_shield1, 1: give_shield2})
+    
+    # Flippers needs to set a flag to make water loading zones active
+    if item == 'Flippers':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'FlippersFound', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False})
+        ], after)
+    
+
+    ### Capacity upgrades
+    if item == 'MagicPowder_MaxUp':
+        give_powder = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'MagicPowder', 'count': 40, 'index': -1, 'autoEquip': False}, after)
+        powder_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': 'GetMagicPowder'}, {0: after, 1: give_powder})
+        return event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}, powder_check)
+    
+    if item == 'Bomb_MaxUp':
+        give_bombs = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': 'Bomb', 'count': 60, 'index': -1, 'autoEquip': False}, after)
+        bombs_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': data.BOMBS_FOUND_FLAG}, {0: after, 1: give_bombs})
+        return event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+            {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}, bombs_check)
+    
+    if item == 'Arrow_MaxUp':
+        return event_tools.createActionChain(flowchart, None, [
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': 'Arrow', 'count': 60, 'index': -1, 'autoEquip': False}),
+        ], after)
+    
+
+    ### traps
+    if item == 'ZapTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        stop_event = event_tools.createActionEvent(flowchart, 'Link', 'StopTailorOtherChannel',
+            {'channel': 'toolshopkeeper_dmg', 'index': 0}, autosave_event)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_dmg_elec_lp'}),
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+                {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6})
+        ]
+        return event_tools.createForkEvent(flowchart, None, forks, stop_event)[0]
+    
+    if item == 'DrownTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_water'}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+            event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 1.5}),
+                ('Link', 'Damage', {'amount': 2})
+            ])
+        ]
+        return event_tools.createForkEvent(flowchart, None, forks, autosave_event)[0]
+    
+    if item == 'SquishTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_press'}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 2.0}),
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4})
+        ]
+        return event_tools.createForkEvent(flowchart, None, forks, autosave_event)[0]
+    
+    if item == 'DeathballTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+                {'channel': 'GreatFairy_Heal', 'index': 0, 'restart': False, 'time': 0.0}),
+            event_tools.createActionChain(flowchart, None, [
+                ('Timer', 'Wait', {'time': 0.1}),
+                ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_deathball'})
+            ]),
+            event_tools.createActionChain(flowchart, None, [
+                ('Hud', 'SetHeartUpdateEnable', {'enable': True}),
+                ('Timer', 'Wait', {'time': 1.5}),
+                ('Link', 'Damage', {'amount': 2})
+            ])
+        ]
+        return event_tools.createForkEvent(flowchart, None, forks, autosave_event)[0]
+    
+    if item == 'QuakeTrap':
+        autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        forks = [
+            event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_quake'}),
+            event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}),
+            event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6})
+        ]
+        return event_tools.createForkEvent(flowchart, None, forks, autosave_event)[0]
+    
+    # if item == 'HydroTrap':
+    #     autosave_event = event_tools.createActionEvent(flowchart, 'GameControl', 'RequestAutoSave', {}, after)
+        
+    #     forks = [
+    #         event_tools.createActionEvent(flowchart, 'Link', 'SetGravityEnable', {'enable': False}),
+    #         event_tools.createActionEvent(flowchart, 'Link', 'PlayTailorOtherChannelEx',
+    #             {'channel': 'ev_hydrocannon', 'index': 0, 'restart': False, 'time': 0.333}),
+    #         event_tools.createActionChain(flowchart, None, [
+    #             ('Timer', 'Wait', {'time': 0.333}),
+    #             ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'ev_hydrocannon'})
+    #         ]),
+    #         event_tools.createActionChain(flowchart, None, [
+    #             ('Timer', 'Wait', {'time': 1.5}),
+    #             ('Link', 'StopTailorOtherChannel', {'channel': 'ev_hydrocannon', 'index': 0})
+    #         ]),
+    #         event_tools.createActionChain(flowchart, None, [
+    #             ('Timer', 'Wait', {'time': 2.0}),
+    #             ('Link', 'SetGravityEnable', {'enable': True}),
+    #             ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_from_top'})
+    #         ])
+    #     ]
+    #     return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
+    
+    ### Instrument flags
+    if item == 'FullMoonCello':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'BowWowEvent', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_2A', 'value': False}),
+            ('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl_MoriblinCave_1A', 'value': False}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+    if item == 'SurfHarp': # set flags before giving harp, otherwise ghost requirements will be met during the itemget animation
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'GhostClear1', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost2_Clear', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost3_Clear', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'Ghost4_Clear', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+
+    ### tunics
+    if item == 'ClothesRed':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}),
+            ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Red_00', 'index': 0, 'restart': False, 'time': 3.58}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+    if item == 'ClothesBlue':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}),
+            ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Blue_00', 'index': 0, 'restart': False, 'time': 3.58}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+    if item == 'ClothesGreen':
+        return event_tools.createActionChain(flowchart, None, [
+            ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Green_00', 'index': 0, 'restart': False, 'time': 3.58}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+
+    ### Medicine
+    if item == 'SecretMedicine':
+        return event_tools.createActionChain(flowchart, None, [
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Link', 'Heal', {'amount': 99})
+        ], after)
+    
+
+    ### Shuffled Bombs and Powder
+    if item == 'Bomb':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 60, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+    if item == 'MagicPowder':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+
+    # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
+    # if item == 'Bottle' and index == 1:
+    #     return event_tools.createActionChain(flowchart, before, [
+    #         ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
+    #         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+    #         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+    #     ], after)
+
+
+    ### Trade Quest items
+    if item == 'YoshiDoll':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
+        ], after)
+
+    if item == 'Ribbon':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeRibbonGet', 'value': True}),
+        ], after)
+
+    if item == 'DogFood':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeDogFoodGet', 'value': True}),
+        ], after)
+
+    if item == 'Bananas':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeBananasGet', 'value': True}),
+        ], after)
+
+    if item == 'Stick':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeStickGet', 'value': True}),
+        ], after)
+
+    if item == 'Honeycomb':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeHoneycombGet', 'value': True}),
+        ], after)
+
+    if item == 'Pineapple':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradePineappleGet', 'value': True}),
+        ], after)
+
+    if item == 'Hibiscus':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeHibiscusGet', 'value': True}),
+        ], after)
+
+    if item == 'Letter':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeLetterGet', 'value': True}),
+        ], after)
+
+    if item == 'Broom':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeBroomGet', 'value': True}),
+        ], after)
+
+    if item == 'FishingHook':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeFishingHookGet', 'value': True}),
+        ], after)
+
+    if item == 'PinkBra':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeNecklaceGet', 'value': True}),
+        ], after)
+
+    if item == 'MermaidsScale':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'TradeMermaidsScaleGet', 'value': True}),
+        ], after)
+    
+    if item == 'MagnifyingLens':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': data.LENS_FOUND_FLAG, 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+    
+
+    ### everything else - play the get event before giving the item, otherwise it messes with index related messages
+    # this is how the game normally does it, and so for the "just one more until you have them all" messages,
+    # the game actually checks for 2 heart pieces and 3 golden leaves respectively
+    return event_tools.createActionChain(flowchart, None, [
+        ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+    ], after)

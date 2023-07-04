@@ -2,8 +2,9 @@
 <br></br><br></br>
 - Added option to update logic
 - Added option to feed your own logic to the randomizer
-- Added Rooster logic to dungeons when allowed inside
-- 3 new traps have been added to the trap-sanity pool
+- Added experimental logic for companions inside dungeons
+- Dampé is now fully fixed and working
+- 2 new traps have been added! (5 total)
 
 <b>Changes:</b>
 <br></br><br></br>
@@ -15,3 +16,4 @@
 - Fixed issue where powder-capacity would directly give Magic Powder
 - Fixed issue with reloading a save after completing the Rapids Race
 - Fixed softlock from entering water caves early with the Rooster
+- Fixed many issues with Dampé

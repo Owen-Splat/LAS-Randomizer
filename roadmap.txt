@@ -2,12 +2,12 @@ v0.3
 
 test logic updater and custom logic
 
-make sure to set the GetMagicPowder flag if the player got it from Dampe
-    and also just give Dampe some time in general to fix things up lol
+test rooster dungeon logic
+    maybe add some bowwow logic as well to some of the kill-enemy stuff
 
 any potential GUI cleanup
 
-MAYBE look into text editing to make slime key not so confusing
+look into making slime key not so confusing
 
 make a release candidate build, give it a few weeks
 
