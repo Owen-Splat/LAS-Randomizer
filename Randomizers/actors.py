@@ -17,7 +17,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Inventory').find_action('AddItemByKey')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Inventory'), 'AddItemByKey')
-    
+
     try:
         event_tools.findActor(flowchart, 'Inventory').find_action('AddItem')
     except ValueError:
@@ -32,7 +32,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Inventory').find_query('HasItem')
     except ValueError:
         event_tools.addActorQuery(event_tools.findActor(flowchart, 'Inventory'), 'HasItem')
-    
+
     try:
         event_tools.findActor(flowchart, 'Inventory').find_action('SetWarashibeItem')
     except ValueError:
@@ -48,7 +48,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Link').find_action('GenericItemGetSequenceByKey')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'GenericItemGetSequenceByKey')
-    
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayTailorOtherChannelNoWait')
     except:
@@ -78,7 +78,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Link').find_action('RequestSwordRolling')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'RequestSwordRolling')
-    
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayAnimation')
     except:
@@ -88,17 +88,17 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Link').find_action('PlayAnimationEx')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'PlayAnimationEx')
-    
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('SetFacialExpression')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'SetFacialExpression')
-    
+
     try:
         event_tools.findActor(flowchart, 'Link').find_action('SetGravityEnable')
     except:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'SetGravityEnable')
-    
+
     try:
         event_tools.findActor(flowchart, 'EventFlags')
     except ValueError:
@@ -114,7 +114,7 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'EventFlags').find_query('CheckFlag')
     except ValueError:
         event_tools.addActorQuery(event_tools.findActor(flowchart, 'EventFlags'), 'CheckFlag')
-            
+
     # hud event actors so the player's hearts update while getting zapped
     try:
         event_tools.findActor(flowchart, 'Hud')
@@ -126,13 +126,13 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'Hud').find_action('SetHeartUpdateEnable')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Hud'), 'SetHeartUpdateEnable')
-    
+
     # instrument fade event actors
     try:
         event_tools.findActor(flowchart, 'Link').find_action('PlayInstrumentShineEffect')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'PlayInstrumentShineEffect')
-    
+
     try:
         event_tools.findActor(flowchart, 'Audio')
     except ValueError:
@@ -150,11 +150,16 @@ def addNeededActors(flowchart, rom_path):
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Audio'), 'PlayOneshotSystemSE')
 
     try:
+        event_tools.findActor(flowchart, 'Audio').find_action('StopBGM')
+    except ValueError:
+        event_tools.addActorAction(event_tools.findActor(flowchart, 'Audio'), 'StopBGM')
+
+    try:
         event_tools.findActor(flowchart, 'Fade')
     except ValueError:
         fade_actor = event_tools.findActor(event_tools.readFlow(f'{rom_path}/region_common/event/MusicalInstrument.bfevfl').flowchart, 'Fade')
         flowchart.actors.append(fade_actor)
-    
+
     try:
         event_tools.findActor(flowchart, 'GameControl')
     except ValueError:
@@ -165,17 +170,17 @@ def addNeededActors(flowchart, rom_path):
         event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJump')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJump')
-    
+
     # try:
     #     event_tools.findActor(flowchart, 'GameControl').find_action('RequestLevelJumpInCurrentLevel')
     # except ValueError:
     #     event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestLevelJumpInCurrentLevel')
-    
+
     try:
         event_tools.findActor(flowchart, 'GameControl').find_action('RequestAutoSave')
     except ValueError:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'GameControl'), 'RequestAutoSave')
-    
+
     try:
         event_tools.findActor(flowchart, 'Timer')
     except ValueError:

@@ -790,6 +790,11 @@ class ModsProcess(QtCore.QThread):
         actors.addNeededActors(flow.flowchart, self.rom_path)
         rapids.makePrizesStack(flow.flowchart, self.placements, self.item_defs)
 
+        # removed rapids BGM because of it being broken in music rando, so remove the StopBGM events for it
+        if self.placements['settings']['randomize-music']:
+            event_tools.insertEventAfter(flow.flowchart, 'timeAttackGoal', 'Event27')
+            event_tools.insertEventAfter(flow.flowchart, 'normalGoal', 'Event20')
+        
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/RaftShopMan.bfevfl', flow)
             self.progress_value += 1 # update progress bar
@@ -1602,12 +1607,14 @@ class ModsProcess(QtCore.QThread):
                     item['npcKey'] = 'PatchSmallKey'
                 if item['symbol'] == 'Honeycomb':
                     item['npcKey'] = 'PatchHoneycomb'
-                if item['symbol'] == 'Song_WindFish':
-                    item['npcKey'] = 'NpcMarin'
-                if item['symbol'] == 'Song_Mambo':
-                    item['npcKey'] = 'NpcManboTamegoro'
-                if item['symbol'] == 'Song_Soul':
-                    item['npcKey'] = 'NpcMamu'
+                
+                # similar to the capacity upgrades, it seems like we don't have direct control over what shows?
+                # if item['symbol'] == 'Song_WindFish':
+                #     item['npcKey'] = 'NpcMarin'
+                # if item['symbol'] == 'Song_Mambo':
+                #     item['npcKey'] = 'NpcManboTamegoro'
+                # if item['symbol'] == 'Song_Soul':
+                #     item['npcKey'] = 'NpcMamu'
                 
                 if item['symbol'] == 'YoshiDoll': # ocarina and instruments are ItemYoshiDoll actors
                     item['npcKey'] = 'PatchYoshiDoll'
@@ -1761,6 +1768,9 @@ class ModsProcess(QtCore.QThread):
             ind = bgms.index(random.choice(bgms))
             self.songs_dict[i] = bgms.pop(ind)
             # print(i, self.songs_dict[i])
+        
+        # reset RNG so that other things that use it will be the same whether or not shuffled music is on
+        random.seed(self.seed)
     
 
 
@@ -2353,6 +2363,10 @@ class ModsProcess(QtCore.QThread):
             # shuffle bridge building music
             if self.placements['settings']['randomize-music']:
                 event_tools.findEvent(flow.flowchart, 'Event114').data.params.data['label'] = self.songs_dict['BGM_EVENT_MONKEY']
+                event_tools.addForkEventForks(flow.flowchart, 'Event102', [
+                    event_tools.createActionEvent(flow.flowchart, 'Audio', 'StopBGM',
+                        {'label': self.songs_dict['BGM_EVENT_MONKEY'], 'duration': 0.0})
+                ])
             
             if self.thread_active:
                 event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Kiki.bfevfl', flow)
