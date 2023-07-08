@@ -16,6 +16,12 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, rand_
     
     restr = list(enemy_ids['restr'])
 
+    # we want to exclude certain enemies from being in 2D rooms
+    # some can block your path, others might just be annoying
+    if file[:-4] in ENEMY_DATA['2D_Rooms']:
+        no_2D = (0x1E, 0x30, 0x37, 0x38, 0x3F, 0x41, 0x4A, 0x4D)
+        restr.extend(no_2D)
+
     total_ids = (
         *enemy_ids['land'],
         *enemy_ids['air'],
@@ -25,7 +31,9 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, rand_
         *enemy_ids['tree'],
         *enemy_ids['hole']
     )
-
+    fly_bombs = (0x26, 0x3E, 0x48) # vires, zirros, bone-putters
+    blocking = (0x8, 0x9, 0x13, 0x14, 0x2E, 0x2F, 0x30, 0x35, 0x36, 0x41, 0x4D) # shield/spear, mimics, color dungeon orbs
+    
     # iterate through each actor
     for e, act in enumerate(room_data.actors):
         if act.type in total_ids and e not in excluded_actors: # check for enemy actors
@@ -58,12 +66,9 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, rand_
                     new_enemy = random.choice(enemy_ids['hole'])
             
             ### restrict enemy groups to one per room
-            fly_bombs = (0x26, 0x3E, 0x48) # vires, zirros, bone-putters
             if new_enemy in fly_bombs:
                 restr.extend(fly_bombs)
-            
-            blocking = (0x8, 0x9, 0x13, 0x14, 0x2E, 0x2F, 0x35, 0x36, 0x4D) # shield/spear and color dungeon orbs
-            if new_enemy in blocking:
+            elif new_enemy in blocking:
                 restr.extend(blocking)
             
             # change the enemy data into the new enemy

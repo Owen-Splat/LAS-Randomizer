@@ -162,7 +162,7 @@ Actors:
   #    id: 0x2B
   #   EnemyPakkun: # piranha plant
   #    id: 0x2C
-  #         parameters: [[1069547520, 1077936128, 1086324736]] # not sure what this means
+  #         parameters: [[1.5, 3.0, 6.0]] # not sure what this means
   EnemyPincer:
     id: 0x2D
     type: hole
@@ -240,7 +240,7 @@ Actors:
   #   id: 0x3D
   #   type: land
   #   # parameters: [0, 0, 0, 0]
-  #   # parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 0.20000000298023224]] # not sure why the kanalet spark has this oddity
+  #   # parameters: [[0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3], [0, 1, 2, 3, 0.2]] # not sure why the kanalet spark has this oddity
   #   enemy: True
   EnemyCreepee: # zirro / bomb fairy
     id: 0x3E
@@ -530,6 +530,55 @@ Excluded_Actors: # rooms each with a list of actors to not modify
   Lv10ClothesDungeon_05D: [0, 1, 2, 3, 4, 5]
   Lv10ClothesDungeon_05E: [0, 1, 2, 3]
   Lv10ClothesDungeon_05G: [0, 1, 2]
+
+
+2D_Rooms:
+  - Lv01TailCave_01F
+  - Lv01TailCave_01G
+  - Lv01TailCave_02F
+  - Lv01TailCave_02G
+  - Lv02BottleGrotto_06D
+  - Lv02BottleGrotto_06E
+  - Lv02BottleGrotto_05D
+  - Lv02BottleGrotto_05E
+  - Lv02BottleGrotto_04D
+  - Lv02BottleGrotto_04E
+  - Lv03KeyCavern_01F
+  - Lv03KeyCavern_01G
+  - Lv04AnglersTunnel_08A
+  - Lv04AnglersTunnel_08B
+  - Lv04AnglersTunnel_07A
+  - Lv04AnglersTunnel_07B
+  - Lv04AnglersTunnel_06A
+  - Lv04AnglersTunnel_06B
+  - Lv05CatfishsMaw_08A
+  - Lv05CatfishsMaw_08B
+  - Lv05CatfishsMaw_07A
+  - Lv05CatfishsMaw_07B
+  - Lv05CatfishsMaw_06A
+  - Lv05CatfishsMaw_06B
+  - Lv05CatfishsMaw_05A
+  - Lv05CatfishsMaw_05B
+  - Lv06FaceShrine_01A
+  - Lv06FaceShrine_01B
+  - Lv06FaceShrine_01C
+  - Lv06FaceShrine_01D
+  - Lv06FaceShrine_01E
+  - Lv06FaceShrine_01F
+  - Lv08TurtleRock_08B
+  - Lv08TurtleRock_08C
+  - Lv08TurtleRock_08F
+  - Lv08TurtleRock_08G
+  - Lv08TurtleRock_02B
+  - Lv08TurtleRock_02C
+  - Lv08TurtleRock_02F
+  - Lv08TurtleRock_02G
+  - Lv08TurtleRock_01A
+  - Lv08TurtleRock_01B
+  - Lv08TurtleRock_01G
+  - Lv08TurtleRock_01H
+  - KanaletCastleEnter_01A
+  - KanaletCastleEnter_01B
 
 
 # Excluded_Rooms:

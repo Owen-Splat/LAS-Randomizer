@@ -919,7 +919,6 @@ class ModsProcess(QtCore.QThread):
         if self.placements['settings']['randomize-music']:
             event_tools.findEvent(flow.flowchart, 'Event16').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
-            event_tools.findEvent(flow.flowchart, 'Event35').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event65').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
         
@@ -942,7 +941,6 @@ class ModsProcess(QtCore.QThread):
         if self.placements['settings']['randomize-music']:
             event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event25').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event53').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event50').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
         
@@ -964,7 +962,6 @@ class ModsProcess(QtCore.QThread):
 
         if self.placements['settings']['randomize-music']:
             event_tools.findEvent(flow.flowchart, 'Event17').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event36').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event32').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
         
@@ -986,7 +983,6 @@ class ModsProcess(QtCore.QThread):
 
         if self.placements['settings']['randomize-music']:
             event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event24').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event51').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
@@ -1008,13 +1004,10 @@ class ModsProcess(QtCore.QThread):
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D5-slime-eel']]['item-key'], item_index, 'Event28', 'Event13')
 
         if self.placements['settings']['randomize-music']:
-            event_tools.findEvent(flow.flowchart, 'Event14').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP']
-            event_tools.findEvent(flow.flowchart, 'Event24').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event26').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event33').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event49').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-            event_tools.findEvent(flow.flowchart, 'Event73').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP'] # StopBGM
         
         if self.thread_active:
             event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/Hooker.bfevfl', flow)
@@ -1033,12 +1026,9 @@ class ModsProcess(QtCore.QThread):
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D6-facade']]['item-key'], item_index, 'Event8', 'Event35')
 
         if self.placements['settings']['randomize-music']:
-            event_tools.findEvent(flow.flowchart, 'Event5').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP']
-            event_tools.findEvent(flow.flowchart, 'Event7').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event22').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event78').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
         
         if self.thread_active:
@@ -1060,7 +1050,6 @@ class ModsProcess(QtCore.QThread):
         if self.placements['settings']['randomize-music']:
             event_tools.findEvent(flow.flowchart, 'Event15').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_LV7_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event39').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event66').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
         
         if self.thread_active:
@@ -1080,13 +1069,10 @@ class ModsProcess(QtCore.QThread):
         item_get.insertItemGetAnimation(flow.flowchart, self.item_defs[self.placements['D8-hothead']]['item-key'], item_index, 'Event13', 'Event15')
 
         if self.placements['settings']['randomize-music']:
-            event_tools.findEvent(flow.flowchart, 'Event12').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
-            event_tools.findEvent(flow.flowchart, 'Event18').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP']
             event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event40').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event63').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event17').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DEFEAT_LOOP'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event70').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
         
         if self.thread_active:
@@ -1599,30 +1585,39 @@ class ModsProcess(QtCore.QThread):
 
             dummy = None
             for item in sheet['values']:
-                if self.thread_active:
-                    # MagicPowder_MaxUp uses this MagicPowder entry to display powder
-                    # we do not want this flag getting set when obtaining the capacity upgrade
-                    # so we remove the gettingflag and manually set it through events
-                    if item['symbol'] == 'MagicPowder':
-                        item['gettingFlag'] = ''
-                    
-                    if item['symbol'] == 'Flippers': # Make getting Flippers set this custom flag for water loading zones to use
-                        item['gettingFlag'] = 'FlippersFound'
-                    
-                    if item['symbol'] == 'SmallKey':
-                        item['npcKey'] = 'ItemClothesGreen'
-                    
-                    if item['symbol'] == 'YoshiDoll': # this is for ocarina and instruments as they are ItemYoshiDoll actors
-                        item['npcKey'] = 'ItemClothesRed'
-                        dummy = oead_tools.parseStruct(item)
-                    
-                    if item['symbol'] == 'Honeycomb': # Honeycomb actor graphics are changed, so assign new npcKey for correct get graphics
-                        item['npcKey'] = 'PatchHoneycomb'
+                if not self.thread_active:
+                    break
+
+                # MagicPowder_MaxUp uses this MagicPowder entry to display powder
+                # we do not want this flag getting set when obtaining the capacity upgrade
+                # so we remove the gettingflag and manually set it through events
+                if item['symbol'] == 'MagicPowder':
+                    item['gettingFlag'] = ''
                 
-                else: break
+                if item['symbol'] == 'Flippers': # this custom flag is for water loading zones to use
+                    item['gettingFlag'] = 'FlippersFound'
+                
+                # Set new npcKeys for items to change how they appear when Link holds it up
+                if item['symbol'] == 'SmallKey':
+                    item['npcKey'] = 'PatchSmallKey'
+                if item['symbol'] == 'Honeycomb':
+                    item['npcKey'] = 'PatchHoneycomb'
+                if item['symbol'] == 'Song_WindFish':
+                    item['npcKey'] = 'NpcMarin'
+                if item['symbol'] == 'Song_Mambo':
+                    item['npcKey'] = 'NpcManboTamegoro'
+                if item['symbol'] == 'Song_Soul':
+                    item['npcKey'] = 'NpcMamu'
+                
+                if item['symbol'] == 'YoshiDoll': # ocarina and instruments are ItemYoshiDoll actors
+                    item['npcKey'] = 'PatchYoshiDoll'
+                    dummy = oead_tools.parseStruct(item) # create copy to use as a base for custom entries
             
             # create new entries for Dampe, which we will use to set the gettingFlag
-            # traps as well, since seashell mansion gives a green rupee if the item isn't in this
+            # can likely use this same method for trendy and shop in the future
+            # make entries for traps as well, since seashell mansion gives a green rupee if the item isn't in this
+            # honestly not sure what these IDs are used for, if at all
+            # game crashes when pulling an item from this sheet that has an ID above 127
             if dummy is not None:
                 dummy['symbol'] = 'Dampe1'
                 dummy['itemID'] = 63
@@ -1652,9 +1647,9 @@ class ModsProcess(QtCore.QThread):
 
                 if self.placements['settings']['trap-sanity']:
                     dummy['symbol'] = 'ZapTrap'
-                    dummy['itemID'] = 127 # traps don't need unique IDs, they just have to be in this sheet for Seashell Mansion
+                    dummy['itemID'] = 127 # traps do not need unique IDs as they do not get added to inventory
                     dummy['gettingFlag'] = ''
-                    dummy['npcKey'] = 'SoldOutPlate'
+                    dummy['npcKey'] = 'NpcToolShopkeeper'
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
                     dummy['symbol'] = 'DrownTrap'
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
@@ -1843,7 +1838,6 @@ class ModsProcess(QtCore.QThread):
         ### DonPawn - shuffles boss BGMs
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DonPawn.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event8').data.params.data['label'] = self.songs_dict['BGM_FANFARE_BOSS_HEART_GET']
             event_tools.findEvent(flow.flowchart, 'Event21').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event38').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
@@ -2579,7 +2573,7 @@ class ModsProcess(QtCore.QThread):
         
         no_vire = list(air_ids[:])
         no_vire.remove(0x26)
-        restrictions = (-1, 0x3, 0x15, 0x16, 0x3D)
+        restrictions = (-1, 0x3, 0x15, 0x16)
         
         enemy_ids = {
             'land': land_ids,

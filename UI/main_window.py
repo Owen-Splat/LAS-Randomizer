@@ -1,8 +1,7 @@
 from PySide6 import QtCore, QtWidgets
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
-from update import UpdateProcess
-from logic_update import LogicUpdateProcess
+from update import UpdateProcess, LogicUpdateProcess
 from randomizer_paths import IS_RUNNING_FROM_SOURCE
 from randomizer_data import *
 
@@ -45,7 +44,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.updateOwls()
         self.updateSeashells()
-        self.toggleCustomLogic()
         
         if self.mode == 'light':
             self.setStyleSheet(LIGHT_STYLESHEET)
@@ -92,8 +90,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.excludeButton_3.clicked.connect(self.excludeButton_3_Clicked)
         # self.ui.includeButton_2.clicked.connect(self.includeButton_2_Clicked)
         # self.ui.excludeButton_2.clicked.connect(self.excludeButton_2_Clicked)
-        self.ui.logicCheck.clicked.connect(self.toggleCustomLogic)
-        self.ui.browseButton3.clicked.connect(self.logicBrowse)
         ### DESCRIPTIONS
         desc_items = self.ui.tab.findChildren(QtWidgets.QCheckBox)
         desc_items.extend([
@@ -290,8 +286,6 @@ class MainWindow(QtWidgets.QMainWindow):
             'Romfs_Folder': self.ui.lineEdit.text(),
             'Output_Folder': self.ui.lineEdit_2.text(),
             'Seed': self.ui.lineEdit_3.text(),
-            'Custom_Logic': self.ui.logicCheck.isChecked(),
-            'Logic_Path': self.ui.lineEdit_4.text(),
             'Logic': LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()],
             'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
             'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
@@ -380,12 +374,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.lineEdit_4.setText(SETTINGS['Logic_Path'])
         except (KeyError, TypeError):
             pass
-
-        # custom logic toggle
-        try:
-            self.ui.logicCheck.setChecked(SETTINGS['Custom_Logic'])
-        except (KeyError, TypeError):
-            self.ui.logicCheck.setChecked(False)
         
         # nondungeon chests
         try:
@@ -698,25 +686,6 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     
-    # Logic File Browse
-    def logicBrowse(self):
-        filepath = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File', '.', 'Logic Files (*.yml *.txt)')[0]
-        if filepath != "":
-            self.ui.lineEdit_4.setText(filepath)
-    
-    
-    
-    # Custom Logic Toggle
-    def toggleCustomLogic(self):
-        if self.ui.logicCheck.isChecked():
-            self.ui.lineEdit_4.setEnabled(True)
-            self.ui.browseButton3.setEnabled(True)
-        else:
-            self.ui.lineEdit_4.setEnabled(False)
-            self.ui.browseButton3.setEnabled(False)
-    
-    
-    
     # Chests Check Changed
     def chestsCheck_Clicked(self):
         if self.ui.chestsCheck.isChecked():
@@ -877,18 +846,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.showUserError('Output path does not exist!')
             return
         
-        if self.ui.logicCheck.isChecked():
-            if not os.path.exists(self.ui.lineEdit_4.text()):
-                self.showUserError('Custom logic path does not exist!')
-                return
-            try:
-                with open(self.ui.lineEdit_4.text(), 'r') as f:
-                    logic_file = yaml.safe_load(f)
-            except yaml.YAMLError as exc:
-                self.showUserError(exc.args[0])
-                return
-        else:
-            logic_file = yaml.safe_load(self.logic_defs)
+        logic_file = yaml.safe_load(self.logic_defs)
         
         # get needed params
         rom_path = self.ui.lineEdit.text()
@@ -982,7 +940,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     continue
                 if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
                     continue
-                self.ui.listWidget.addItem(NumericalListWidget(self.checkToList(str(check))))
+                self.ui.listWidget.addItem(SmartListWidget(self.checkToList(str(check))))
             
             self.ui.listWidget_2.clear()
             for check in self.excluded_checks:
@@ -992,7 +950,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     continue
                 if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
                     continue
-                self.ui.listWidget_2.addItem(NumericalListWidget(self.checkToList(str(check))))
+                self.ui.listWidget_2.addItem(SmartListWidget(self.checkToList(str(check))))
             
             return
         
@@ -1007,7 +965,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
             self.excluded_checks.remove(self.listToCheck(i.text()))
-            self.ui.listWidget.addItem(NumericalListWidget(i.text()))
+            self.ui.listWidget.addItem(SmartListWidget(i.text()))
     
     
     
@@ -1015,7 +973,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def excludeButton_Clicked(self):
         for i in self.ui.listWidget.selectedItems():
             self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
-            self.ui.listWidget_2.addItem(NumericalListWidget(i.text()))
+            self.ui.listWidget_2.addItem(SmartListWidget(i.text()))
             self.excluded_checks.add(self.listToCheck(i.text()))
     
     
@@ -1150,7 +1108,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 # Create custom QListWidgetItem to sort locations alphanumerically
-class NumericalListWidget(QtWidgets.QListWidgetItem):
+class SmartListWidget(QtWidgets.QListWidgetItem):
     def __lt__(self, other):
         try:
             dungeon_checks = ('D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8')

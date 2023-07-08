@@ -1,9 +1,11 @@
 v0.3
 
-test logic updater and custom logic
+test logic updater
 
 test rooster dungeon logic
     maybe add some bowwow logic as well to some of the kill-enemy stuff
+
+make some enemizer tweaks
 
 any potential GUI cleanup
 

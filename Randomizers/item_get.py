@@ -380,12 +380,6 @@ def insertItemWithoutAnimation(item, index):
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
         ]
     
-    if item == 'Flippers':
-        return [
-            ('EventFlags', 'SetFlag', {'symbol': 'FlippersFound', 'value': True}),
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
-        ]
-    
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
         return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
@@ -532,14 +526,6 @@ def insertDampeItemGet(flowchart, item, index, after=None):
         return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
             {'symbol': data.SHIELD_FOUND_FLAG}, {0: give_shield1, 1: give_shield2})
     
-    # Flippers needs to set a flag to make water loading zones active
-    if item == 'Flippers':
-        return event_tools.createActionChain(flowchart, None, [
-            ('EventFlags', 'SetFlag', {'symbol': 'FlippersFound', 'value': True}),
-            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False})
-        ], after)
-    
-
     ### Capacity upgrades
     if item == 'MagicPowder_MaxUp':
         give_powder = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
@@ -794,10 +780,7 @@ def insertDampeItemGet(flowchart, item, index, after=None):
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
         ], after)
     
-
-    ### everything else - play the get event before giving the item, otherwise it messes with index related messages
-    # this is how the game normally does it, and so for the "just one more until you have them all" messages,
-    # the game actually checks for 2 heart pieces and 3 golden leaves respectively
+    ### everything else
     return event_tools.createActionChain(flowchart, None, [
         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
     ], after)

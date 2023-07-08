@@ -436,27 +436,27 @@ Item_Pool:
     type: junk
     quantity: 0
     item-key: DrownTrap
-    npc-key: SmallFish
+    npc-key: NpcToolShopkeeper
   squish-trap:
     type: junk
     quantity: 0
     item-key: SquishTrap
-    npc-key: Koton
+    npc-key: NpcToolShopkeeper
   deathball-trap:
     type: junk
     quantity: 0
     item-key: DeathballTrap
-    npc-key: Kirby
+    npc-key: NpcToolShopkeeper
   quake-trap:
     type: junk
     quantity: 0
     item-key: QuakeTrap
-    npc-key: StoneHinoxRock
+    npc-key: NpcToolShopkeeper
   # hydro-trap:
   #   type: junk
   #   quantity: 0
   #   item-key: HydroTrap
-  #   npc-key: SoldOutPlate
+  #   npc-key: NpcToolShopkeeper
   bomb:
     type: junk
     quantity: 1

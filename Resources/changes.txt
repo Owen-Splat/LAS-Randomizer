@@ -1,15 +1,15 @@
 <b>New Features:</b>
 <br></br><br></br>
 - Added option to update logic
-- Added option to feed your own logic to the randomizer
+- Added 2 new traps for trapsanity (5 total)
 - Added experimental logic for companions inside dungeons
 - Dampé is now fully fixed and working
-- 2 new traps have been added! (5 total)
 
 <b>Changes:</b>
 <br></br><br></br>
 - The final Trendy prize is now set to junk by default
 - The spoiler log now lists every trap as "trap"
+- Some music tweaks have been made
 
 <b>Bug Fixes:</b>
 <br></br><br></br>

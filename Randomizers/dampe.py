@@ -18,13 +18,13 @@ def makeEventChanges(flowchart, item_defs, placements):
     """Make Dampe perform inventory and flag checks before and after the reward event"""
 
     remove_final = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-        {'symbol': 'DampeFinal', 'value': False}, 'Event173')
+        {'symbol': 'DampeFinal', 'value': False}, 'Event42')
     give_final = item_get.insertDampeItemGet(flowchart,
         item_defs[placements['dampe-final']]['item-key'],
         placements['indexes']['dampe-final'] if 'dampe-final' in placements['indexes'] else -1,
         remove_final)
     check_final = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-        {'symbol': 'DampeFinal'}, {0: 'Event173', 1: give_final})
+        {'symbol': 'DampeFinal'}, {0: 'Event42', 1: give_final})
     
     remove_bottle = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
         {'symbol': 'DampeBottle', 'value': False}, check_final)
@@ -62,4 +62,4 @@ def makeEventChanges(flowchart, item_defs, placements):
     check_page1 = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': 'Dampe1'}, {0: check_heart, 1: give_page1})
     
-    event_tools.insertEventAfter(flowchart, 'Event15', check_page1)
+    event_tools.insertEventAfter(flowchart, 'Event39', check_page1)

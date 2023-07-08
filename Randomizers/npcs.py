@@ -41,17 +41,7 @@ def makeNpcChanges(npc, placements):
         npc['collision']['filter'] = 5
         npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific yoshidoll actors trigger the shell sensor
         return
-    
-    if npc['symbol'] == 'ItemClothesGreen':
-        npc['graphics']['path'] = 'ItemSmallKey.bfres'
-        npc['graphics']['model'] = 'SmallKey'
-        return
-    
-    if npc['symbol'] == 'ItemClothesRed':
-        npc['graphics']['path'] = 'ItemYoshiDoll.bfres'
-        npc['graphics']['model'] = 'YoshiDoll'
-        return
-    
+        
     if npc['symbol'] == 'ItemHoneycomb': # Make the Honeycomb object ring the sensor instead of Tarin
         npc['graphics']['path'] = '$0'
         npc['graphics']['model'] = '$1'
@@ -59,7 +49,7 @@ def makeNpcChanges(npc, placements):
             npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin-ukuku']}"})
         return
     
-    if npc['symbol'] == 'ObjClothBag': # Make it so Papahl's bag appear with him when you get the Pineapple
+    if npc['symbol'] == 'ObjClothBag': # Make it so Papahl's bag appears with him when you get the Pineapple
         npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 0}
         return
 
@@ -211,42 +201,22 @@ def makeNpcChanges(npc, placements):
 def makeNewNpcs(npc_sheet):
     """add new npcs so that we can properly show item models"""
 
-    honeycomb = copy.deepcopy(DUMMY_NPC)
-    honeycomb['symbol'] = 'PatchHoneycomb'
-    honeycomb['graphics']['path'] = 'ItemHoneycomb.bfres'
-    honeycomb['graphics']['model'] = 'Honeycomb'
-    npc_sheet['values'].append(oead_tools.dictToStruct(honeycomb))
+    dummy = copy.deepcopy(DUMMY_NPC)
+    dummy['symbol'] = 'PatchSmallKey'
+    dummy['graphics']['path'] = 'ItemSmallKey.bfres'
+    dummy['graphics']['model'] = 'SmallKey'
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+    
+    dummy['symbol'] = 'PatchYoshiDoll'
+    dummy['graphics']['path'] = 'ItemYoshiDoll.bfres'
+    dummy['graphics']['model'] = 'YoshiDoll'
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
 
-    sold_out = copy.deepcopy(DUMMY_NPC)
-    sold_out['symbol'] = 'SoldOutPlate'
-    sold_out['graphics']['path'] = 'ObjSoldOutPlate.bfres'
-    sold_out['graphics']['model'] = 'SoldOutPlate'
-    npc_sheet['values'].append(oead_tools.dictToStruct(sold_out))
-
-    drown = copy.deepcopy(DUMMY_NPC)
-    drown['symbol'] = 'SmallFish'
-    drown['graphics']['path'] = 'ObjSmallFish.bfres'
-    drown['graphics']['model'] = 'SmallFish'
-    npc_sheet['values'].append(oead_tools.dictToStruct(drown))
-
-    squish = copy.deepcopy(DUMMY_NPC)
-    squish['symbol'] = 'Koton'
-    squish['graphics']['path'] = 'ObjKoton.bfres'
-    squish['graphics']['model'] = 'Koton'
-    npc_sheet['values'].append(oead_tools.dictToStruct(squish))
-
-    deathball = copy.deepcopy(DUMMY_NPC)
-    deathball['symbol'] = 'Kirby'
-    deathball['graphics']['path'] = 'EnemyKirby.bfres'
-    deathball['graphics']['model'] = 'Kirby'
-    npc_sheet['values'].append(oead_tools.dictToStruct(deathball))
-
-    quake = copy.deepcopy(DUMMY_NPC)
-    quake['symbol'] = 'StoneHinoxRock'
-    quake['graphics']['path'] = 'ObjStoneHinoxRock.bfres'
-    quake['graphics']['model'] = 'StoneHinoxRock'
-    npc_sheet['values'].append(oead_tools.dictToStruct(quake))
-
+    dummy['symbol'] = 'PatchHoneycomb'
+    dummy['graphics']['path'] = 'ItemHoneycomb.bfres'
+    dummy['graphics']['model'] = 'Honeycomb'
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+    
     # bombBag = copy.deepcopy(DUMMY_NPC)
     # bombBag['symbol'] = 'ObjBombBag'
     # bombBag['graphics']['path'] = 'ObjBombBag.bfres'
