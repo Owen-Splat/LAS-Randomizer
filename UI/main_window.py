@@ -714,8 +714,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def rapidsCheck_Clicked(self):
         if self.ui.rapidsCheck.isChecked():
             self.excluded_checks.difference_update(RAPIDS_REWARDS)
+            if self.overworld_owls:
+                self.excluded_checks.difference_update(['owl-statue-rapids'])
         else:
             self.excluded_checks.update(RAPIDS_REWARDS)
+            if self.overworld_owls:
+                self.excluded_checks.update(['owl-statue-rapids'])
     
     
     
@@ -838,6 +842,9 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.overworld_owls = True
             self.dungeon_owls = True
+        
+        if not self.ui.rapidsCheck.isChecked():
+            self.excluded_checks.update(['owl-statue-rapids'])
 
 
 
@@ -898,8 +905,8 @@ class MainWindow(QtWidgets.QMainWindow):
             'trap-sanity': self.ui.trapsCheck.isChecked(),
             'blup-sanity': self.ui.rupCheck.isChecked(),
             'classic-d2': self.ui.swampCheck.isChecked(),
-            'owl-overworld-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('overworld', 'all') else False,
-            'owl-dungeon-gifts': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ('dungeons', 'all') else False,
+            'owl-overworld-gifts': self.overworld_owls,
+            'owl-dungeon-gifts': self.dungeon_owls,
             # 'owl-hints': True if OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
             'fast-stalfos': self.ui.stalfosCheck.isChecked(),
             'scaled-chest-sizes': self.ui.chestSizesCheck.isChecked(),

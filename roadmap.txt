@@ -2,10 +2,6 @@ v0.3
 
 sometimes the bloopers in the D5 room leading to NK chest just don't have any enemy show up
 
-make rapids owl statue excluded if overworld owl statues are on but rapids is not checked
-
-test logic updater
-
 test rooster dungeon logic
     maybe add some bowwow logic as well to some of the kill-enemy stuff
 
@@ -13,7 +9,7 @@ any potential GUI cleanup
 
 make a release candidate build, give it a few weeks
 
-probably release the randomizer on gamebanana when it is considered fully stable
+potentially release the randomizer on gamebanana, maybe will wait until 0.4
 
 -------------------------------------------------------------------------------------------------------------------------------------
 v0.4
