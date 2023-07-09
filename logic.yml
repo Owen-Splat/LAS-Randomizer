@@ -676,7 +676,7 @@ mad-batter-bay:
   condition-basic: (((rooster | feather) & (boomerang | rod)) | (feather & sword)) & cross-water & powders
   condition-advanced: (feather | rooster) & cross-water & powders
   condition-glitched: plains & rooster & powders & ocarina & song-mambo
-  condition-death: plains & rooster & powders
+  condition-hell: plains & rooster & powders
 bay-passage-sunken:
   type: item
   subtype: underwater
@@ -718,7 +718,7 @@ kanalet-south-cave:
   condition-basic: rooster | (hookshot & (flippers | (ocarina & song-mambo)))
   condition-advanced: hookshot & (feather | bombs)
   condition-glitched: wasteland & feather & bracelet & (flippers | (ocarina & song-mambo))
-  condition-death: wasteland & feather & bracelet
+  condition-hell: wasteland & feather & bracelet
 plains-rock-maze:
   type: item
   subtype: hidden
@@ -887,7 +887,7 @@ swamp-chest:
   spoiler-region: goponga-swamp
   condition-basic: kill-big-flower
   condition-glitched: mabe & ocarina & song-mambo
-  condition-death: mabe
+  condition-hell: mabe
 taltal-left-ascent-cave:
   type: item
   subtype: chest
@@ -1138,7 +1138,7 @@ woods-south-chest:
   region: woods
   spoiler-region: mysterious-woods
   condition-basic: bracelet
-  condition-death: mabe & swamp & feather
+  condition-hell: mabe & swamp & feather
 woods-north-chest:
   type: item
   subtype: chest
@@ -2581,14 +2581,14 @@ beach:
 bottle-grotto:
   type: region
   condition-basic: swamp & (kill-flower | (bracelet & ! classic-d2))
-  condition-death: mabe & swamp & feather
+  condition-hell: mabe & swamp & feather
 bridge:
   type: region
   condition-basic: (plains & (bananas | open-bridge)) | (river & cross-water)
 catfish-maw:
   type: region
   condition-basic: river & flippers
-  condition-death: river & rooster & feather
+  condition-hell: river & rooster & feather
 color-dungeon:
   type: region
   condition-basic: wasteland & bracelet
@@ -2598,7 +2598,7 @@ desert:
 dream-shrine:
   type: region
   condition-basic: mabe & bracelet
-  condition-death: mabe & swamp & feather # woods & break-bush & dash-jump & bombs
+  condition-hell: mabe & swamp & feather # woods & break-bush & dash-jump & bombs
 eagle-tower:
   type: region
   condition-basic: taltal-east-2 & ((feather & hookshot) | rooster) & bird-key & bracelet
@@ -2635,11 +2635,11 @@ mabe:
 mr-write-house:
   type: region
   condition-basic: (swamp & (feather | rooster | hookshot)) | taltal-west-1 | taltal-west-2
-  condition-death: mabe & swamp
+  condition-hell: mabe & swamp
 plains:
   type: region
   condition-basic: (mabe & bracelet) | river | (wasteland & bracelet)
-  condition-death: mabe & swamp & feather
+  condition-hell: mabe & swamp & feather
 pothole:
   type: region
   condition-basic: plains & golden-leaf:5
@@ -2647,7 +2647,7 @@ pothole:
 rapids:
   type: region
   condition-basic: (heights & hookshot) | ((river | (armos-maze & bracelet)) & cross-water)
-  condition-death: plains & dash-jump & hookshot
+  condition-hell: plains & dash-jump & hookshot
 river:
   type: region
   condition-basic: (cross-water & (plains | bridge | animal-village | rapids)) | (taltal-river & flippers)
@@ -2658,7 +2658,7 @@ sign-maze:
   type: region
   condition-basic: plains & (hookshot | rooster)
   condition-glitched: mabe & swamp & dash-jump & ocarina & song-mambo
-  condition-death: mabe & swamp & dash-jump
+  condition-hell: mabe & swamp & dash-jump
 swamp:
   type: region
   condition-basic: (woods & break-bush & (powders | feather | rooster)) | (wasteland & bracelet) | (mr-write-house & (feather | rooster | hookshot))
@@ -2807,7 +2807,7 @@ D6-8D:
   type: room
   condition-basic: (river & face-key & (hookshot | rooster)) | (D6-3A & ((ocarina & song-mambo) | bombs | shoot-arrows | boomerang | rod))
   condition-glitched: armos-maze & bracelet & feather & sword & boots & face-key & ocarina & song-mambo
-  condition-death: armos-maze & bracelet & feather & sword & boots & face-key
+  condition-hell: armos-maze & bracelet & feather & sword & boots & face-key
 
 D7-2F:
   type: room

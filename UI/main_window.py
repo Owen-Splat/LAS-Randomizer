@@ -105,12 +105,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
-        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-alpha-3') # {VERSION}')
-
+        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-RC') # {VERSION}')
+        
         # self.ui.retranslateUi(self)
-
+        
         self.show()
-
+        
         if IS_RUNNING_FROM_SOURCE:
             self.ui.updateChecker.setText('Running from source. No updates will be checked')
         else:
@@ -139,7 +139,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
             # if isinstance(source, QtWidgets.QComboBox) and source.hasFocus():
             #     source.clearFocus()
-                
+        
         return QtWidgets.QWidget.eventFilter(self, source, event)
     
 
@@ -170,15 +170,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def obtainLogic(self, version_and_logic):
         self.logic_version = version_and_logic[0]
         self.logic_defs = version_and_logic[1]
-        with open(os.path.join(DATA_PATH, 'logic.yml'), 'w+') as f:
+        with open(os.path.join(ROOT_PATH, 'logic.yml'), 'w+') as f:
+            f.write(f'# {self.logic_version}\n')
             f.write(self.logic_defs)
 
 
 
     def showLogicUpdate(self, update):
         message = QtWidgets.QMessageBox()
-        message.setWindowTitle("Logic Update Status")
-
+        message.setWindowTitle("Logic Updater")
+        
         if self.mode == 'light':
             message.setStyleSheet(LIGHT_STYLESHEET)
         else:
@@ -365,13 +366,6 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             if SETTINGS['Seed'] != "":
                 self.ui.lineEdit_3.setText(SETTINGS['Seed'])
-        except (KeyError, TypeError):
-            pass
-        
-        # custom logic
-        try:
-            if SETTINGS['Logic_Path'] != "":
-                self.ui.lineEdit_4.setText(SETTINGS['Logic_Path'])
         except (KeyError, TypeError):
             pass
         
@@ -842,14 +836,26 @@ class MainWindow(QtWidgets.QMainWindow):
             self.showUserError('Romfs path does not exist!')
             return
         
+        # verify RomFS before shuffling items
+        rom_path = self.ui.lineEdit.text()
+        
+        if rom_path.lower().endswith('romfs'):
+            pass
+        elif os.path.exists(os.path.join(rom_path, 'RomFS')):
+            rom_path = os.path.join(rom_path, 'RomFS')
+        else:
+            self.showUserError('RomFS path is not valid!')
+            return
+        
+        if not os.path.isfile(f'{rom_path}/region_common/event/PlayerStart.bfevfl'):
+            self.showUserError('RomFS path is not valid!')
+            return
+        
         if not os.path.exists(self.ui.lineEdit_2.text()):
             self.showUserError('Output path does not exist!')
             return
         
         logic_file = yaml.safe_load(self.logic_defs)
-        
-        # get needed params
-        rom_path = self.ui.lineEdit.text()
         
         seed = self.ui.lineEdit_3.text()
         if seed.lower().strip() in ("", "random"):

@@ -26,7 +26,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 150 - len(settings['starting-items'])
-        self.num_of_mod_tasks = 249
+        self.num_of_mod_tasks = 248
         
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files -= 8
@@ -54,6 +54,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_tasks += 19
         
         if settings['classic-d2']:
+            self.num_of_mod_tasks += 1
+        
+        if settings['free-book']:
             self.num_of_mod_tasks += 1
         
         self.done = False

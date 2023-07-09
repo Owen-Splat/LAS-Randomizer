@@ -27,7 +27,7 @@ with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     ITEM_DEFS = items['Item_Pool']
     STARTING_ITEMS = list(items['Starting_Items'])
 
-with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
+with open(os.path.join(ROOT_PATH, 'logic.yml'), 'r') as f:
     LOGIC_RAW = f.read()
     f.seek(0)
     LOGIC_VERSION = float(f.readline().strip('#'))
@@ -81,6 +81,6 @@ TOTAL_CHECKS = set([
 
 SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
 
-LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'death', 'none')
+LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'hell', 'none')
 
 OWLS_SETTINGS = ('none', 'overworld', 'dungeons', 'all') # ('vanilla', 'hints', 'gifts', 'hybrid')

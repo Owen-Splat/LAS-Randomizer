@@ -2300,7 +2300,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Logic:  Death</string>
+        <string>Logic:  Hell</string>
        </property>
       </item>
       <item>
@@ -2542,8 +2542,6 @@
      <string>Logic</string>
     </property>
     <addaction name="actionUpdate"/>
-    <addaction name="separator"/>
-    <addaction name="actionExport"/>
    </widget>
    <addaction name="menuLanguage"/>
    <addaction name="menuLogic"/>

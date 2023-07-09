@@ -264,10 +264,10 @@ class ItemShuffler(QtCore.QThread):
             # For item and follower checks, see if you have access to the region. Otherwise, check on the conditions, if they exist
             region_access = self.hasAccess(access, self.logic_defs[newCheck]['region']) if (self.logic_defs[newCheck]['type'] in ('item', 'follower')) else True
             basic        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-basic']))    if ('condition-basic' in self.logic_defs[newCheck]) else True
-            advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic in ('advanced', 'glitched', 'death'))) else False
-            glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic in ('glitched', 'death')) else False
-            death        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-death']))    if (('condition-death' in self.logic_defs[newCheck]) and logic == 'death') else False
-            return region_access and (basic or advanced or glitched or death)
+            advanced     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-advanced'])) if (('condition-advanced' in self.logic_defs[newCheck]) and (logic in ('advanced', 'glitched', 'hell'))) else False
+            glitched     = eval(self.parseCondition(self.logic_defs[newCheck]['condition-glitched'])) if (('condition-glitched' in self.logic_defs[newCheck]) and logic in ('glitched', 'hell')) else False
+            hell        = eval(self.parseCondition(self.logic_defs[newCheck]['condition-hell']))    if (('condition-hell' in self.logic_defs[newCheck]) and logic == 'hell') else False
+            return region_access and (basic or advanced or glitched or hell)
     
     
     def parseCondition(self, condition):
@@ -404,7 +404,7 @@ class ItemShuffler(QtCore.QThread):
         seed : int
             The seed to initialize the randomness.
         logic : str
-            The logic to use in verifying. 'basic', 'advanced', 'glitched', or 'death'
+            The logic to use in verifying. 'basic', 'advanced', 'glitched', or 'hell'
         forceJunk : list
             A list of strings as location names, which should be forced to hold junk items.
         forceVanilla : list
@@ -421,10 +421,6 @@ class ItemShuffler(QtCore.QThread):
         
         # Ensure all excluded locations are actually location names
         force_junk = [l for l in force_junk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
-        
-        # # Make sure logic is a valid value, default to basic
-        # if logic not in ['basic', 'advanced', 'glitched', 'death', 'none']:
-        #     logic = 'basic'
         
         # Initialize the item and location lists, and the structures for tracking placements and access
         access = {}

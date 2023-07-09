@@ -13,7 +13,7 @@ Please note that while most things are functional, there is a definite possibili
 - Basic: No glitches or advanced tricks, although 2 tile jumps are included. Recommended for beginners.
 - Advanced: Skews and bomb arrows will be added to logic.
 - Glitched: Adds some glitches to logic that will not result in being softlocked.
-- Death: Adds more glitches to logic that can result in softlocks.
+- Hell: Adds more glitches to logic that can result in softlocks.
 - None: Throws all logic out the window. Seeds will likely be unbeatable.
 
 **NOTE**: The randomizer may temporarily get stuck while placing items and will attempt to fix it. If this happens, just wait it out. If it's taking too long, just cancel and try another seed. Very rarely will it actually be fully stuck.

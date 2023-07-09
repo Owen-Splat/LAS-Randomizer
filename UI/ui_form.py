@@ -690,8 +690,6 @@ class Ui_MainWindow(object):
         self.menuTheme.addSeparator()
         self.menuTheme.addAction(self.actionDark)
         self.menuLogic.addAction(self.actionUpdate)
-        self.menuLogic.addSeparator()
-        self.menuLogic.addAction(self.actionExport)
 
         self.retranslateUi(MainWindow)
 
@@ -1054,7 +1052,7 @@ class Ui_MainWindow(object):
         self.tricksComboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Logic:  Basic", None))
         self.tricksComboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Logic:  Advanced", None))
         self.tricksComboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Logic:  Glitched", None))
-        self.tricksComboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"Logic:  Death", None))
+        self.tricksComboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"Logic:  Hell", None))
         self.tricksComboBox.setItemText(4, QCoreApplication.translate("MainWindow", u"Logic:  None", None))
 
 #if QT_CONFIG(whatsthis)
