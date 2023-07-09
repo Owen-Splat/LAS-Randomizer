@@ -35,12 +35,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.starting_gear = list()
         self.overworld_owls = bool(False)
         self.dungeon_owls = bool(False)
-
+        
         # Load User Settings
         if not DEFAULTS:
             self.loadSettings()
         else:
             self.applyDefaults()
+        
+        # if running a build, check and read updated/edited logic file
+        # if it doesn't exist, we just use the built-in logic for the build
+        if not IS_RUNNING_FROM_SOURCE:
+            if os.path.exists(os.path.join(ROOT_PATH, 'logic.yml')):
+                with open(os.path.join(ROOT_PATH, 'logic.yml'), 'r') as f:
+                    self.logic_defs = f.read()
+                    f.seek(0)
+                    try:
+                        self.logic_version = float(f.readline().strip('#'))
+                    except TypeError:
+                        self.logic_version = LOGIC_VERSION
         
         self.updateOwls()
         self.updateSeashells()
@@ -51,7 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.setStyleSheet(DARK_STYLESHEET)
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-
+        
         ### SUBSCRIBE TO EVENTS
         
         # menu bar items
