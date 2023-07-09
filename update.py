@@ -38,8 +38,9 @@ class LogicUpdateProcess(QtCore.QThread):
     give_logic = QtCore.Signal(tuple)
     
     # initialize
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, ver=LOGIC_VERSION):
         QtCore.QThread.__init__(self, parent)
+        self.ver = ver
     
     
     def run(self):
@@ -49,7 +50,7 @@ class LogicUpdateProcess(QtCore.QThread):
             web_version = float(update_file.readline().decode('utf-8').strip('#'))
             new_logic = update_file.read().decode('utf-8')
 
-            if web_version > LOGIC_VERSION:
+            if web_version > self.ver:
                 self.give_logic.emit((web_version, new_logic))
                 self.can_update.emit(True)
             else:

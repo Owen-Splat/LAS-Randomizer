@@ -45,8 +45,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # if running a build, check and read updated/edited logic file
         # if it doesn't exist, we just use the built-in logic for the build
         if not IS_RUNNING_FROM_SOURCE:
-            if os.path.exists(os.path.join(ROOT_PATH, 'logic.yml')):
-                with open(os.path.join(ROOT_PATH, 'logic.yml'), 'r') as f:
+            if os.path.isfile(LOGIC_PATH):
+                with open(LOGIC_PATH, 'r') as f:
                     self.logic_defs = f.read()
                     f.seek(0)
                     try:
@@ -171,7 +171,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.showLogicUpdate(False)
             return
         
-        self.logic_process = LogicUpdateProcess() # initialize a new QThread class
+        self.logic_process = LogicUpdateProcess(ver=self.logic_version) # initialize a new QThread class
         self.logic_process.can_update.connect(self.showLogicUpdate) # connect a boolean signal to showLogicUpdate()
         self.logic_process.give_logic.connect(self.obtainLogic) # connect a tuple signal to obtainLogic()
         self.logic_process.start() # start the thread
@@ -182,7 +182,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def obtainLogic(self, version_and_logic):
         self.logic_version = version_and_logic[0]
         self.logic_defs = version_and_logic[1]
-        with open(os.path.join(ROOT_PATH, 'logic.yml'), 'w+') as f:
+        with open(LOGIC_PATH, 'w+') as f:
             f.write(f'# {self.logic_version}\n')
             f.write(self.logic_defs)
 

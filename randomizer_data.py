@@ -1,4 +1,4 @@
-from randomizer_paths import DATA_PATH, RESOURCE_PATH, ROOT_PATH, SETTINGS_PATH
+from randomizer_paths import DATA_PATH, RESOURCE_PATH, ROOT_PATH, SETTINGS_PATH, LOGIC_PATH
 
 import yaml
 import os
@@ -27,7 +27,7 @@ with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     ITEM_DEFS = items['Item_Pool']
     STARTING_ITEMS = list(items['Starting_Items'])
 
-with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
+with open(LOGIC_PATH, 'r') as f:
     LOGIC_RAW = f.read()
     f.seek(0)
     LOGIC_VERSION = float(f.readline().strip('#'))
