@@ -25,7 +25,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = copy.deepcopy(settings)
         
-        self.valid_placements = 150 - len(settings['starting-items'])
+        self.valid_placements = 155 - len(settings['starting-items'])
         self.num_of_mod_tasks = 248
         
         # if not settings['shuffle-companions']:

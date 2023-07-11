@@ -2542,6 +2542,8 @@
      <string>Logic</string>
     </property>
     <addaction name="actionUpdate"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport"/>
    </widget>
    <addaction name="menuLanguage"/>
    <addaction name="menuLogic"/>
@@ -2578,11 +2580,6 @@
     <string>What's New</string>
    </property>
   </action>
-  <action name="actionPlanned_Features">
-   <property name="text">
-    <string>Future</string>
-   </property>
-  </action>
   <action name="actionHelp">
    <property name="text">
     <string>Help</string>
@@ -2593,14 +2590,14 @@
     <string>Known Issues</string>
    </property>
   </action>
-  <action name="actionExport">
-   <property name="text">
-    <string>Export Logic</string>
-   </property>
-  </action>
   <action name="actionUpdate">
    <property name="text">
     <string>Update Logic</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export Logic</string>
    </property>
   </action>
  </widget>

@@ -27,12 +27,11 @@ with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     ITEM_DEFS = items['Item_Pool']
     STARTING_ITEMS = list(items['Starting_Items'])
 
-with open(LOGIC_PATH, 'r') as f:
-    LOGIC_RAW = f.read()
-    f.seek(0)
+with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
     LOGIC_VERSION = float(f.readline().strip('#'))
-    LOGIC_DEFS = yaml.safe_load(f)
-    TRICKS = [k for k, v in LOGIC_DEFS.items() if v['type'] == 'trick']
+    LOGIC_RAW = f.read()
+    # LOGIC_DEFS = yaml.safe_load(f)
+    # TRICKS = [k for k, v in LOGIC_DEFS.items() if v['type'] == 'trick']
 
 with open(os.path.join(DATA_PATH, 'enemies.yml'), 'r') as f:
     ENEMY_DATA = yaml.safe_load(f)

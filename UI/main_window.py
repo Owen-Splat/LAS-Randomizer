@@ -207,7 +207,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def exportLogic(self):
-        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save As', '.', "YAML (*.yml);;TEXT (*.txt)")
+        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save As', '.', "YAML (*.yml)") # ;;TEXT (*.txt)")
         if filename[0] != '':
             with open(filename[0], 'w') as f:
                 f.write(self.logic_defs)
@@ -873,6 +873,11 @@ class MainWindow(QtWidgets.QMainWindow):
         if not os.path.exists(self.ui.lineEdit_2.text()):
             self.showUserError('Output path does not exist!')
             return
+        
+        # if user deleted the external logic file, reset to the built-in logic
+        if not os.path.isfile(LOGIC_PATH):
+            self.logic_defs = LOGIC_RAW
+            self.logic_version = LOGIC_VERSION
         
         logic_file = yaml.safe_load(self.logic_defs)
         

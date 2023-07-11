@@ -1,4 +1,9 @@
 # 0.222
+
+# The randomizer will use whatever logic is in the same directory as the program
+# Updating the logic will overwrite the existing file, so if using custom logic, rename it before updating and manually add the changes
+# Deleting the logic is also ok, there's built-in logic, which if out of date, can of course just be reupdated
+
 ---
 
 # a few things will have glitched logic filled in. glitched logic is far from complete but I want a few things to have it to test how the shuffler makes use of the logic

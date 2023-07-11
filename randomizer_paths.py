@@ -29,8 +29,6 @@ import appdirs
 import platform
 
 
-LOGIC_PATH = None
-
 # this is for bundling files into a single exe with pyinstaller
 try:
     from sys import _MEIPASS
@@ -55,5 +53,5 @@ except ImportError:
 
 DATA_PATH = os.path.join(ROOT_PATH, 'Data')
 RESOURCE_PATH = os.path.join(ROOT_PATH, 'Resources')
-if LOGIC_PATH == None:
-    LOGIC_PATH = os.path.join(DATA_PATH, 'Logic.yml')
+if IS_RUNNING_FROM_SOURCE:
+    LOGIC_PATH = os.path.join(DATA_PATH, 'logic.yml')
