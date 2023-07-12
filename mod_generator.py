@@ -94,20 +94,20 @@ class ModsProcess(QtCore.QThread):
             if self.placements['settings']['blup-sanity'] and self.thread_active:
                 self.makeLv10RupeeChanges()
             
-            if self.placements['settings']['randomize-music'] and self.thread_active:
-                self.makeMusicChanges()
-            
-            if self.placements['settings']['bad-pets'] and self.thread_active:
-                self.changeLevelConfigs()
-            
-            if self.placements['settings']['randomize-enemies'] and self.thread_active:
-                self.randomizeEnemies()
-            
             if self.placements['settings']['shuffled-dungeons'] and self.thread_active:
                 self.shuffleDungeons()
                 self.shuffleDungeonIcons()
             
-            # if self.thread_active: self.fixWaterLoadingZones()
+            if self.placements['settings']['bad-pets'] and self.thread_active:
+                self.changeLevelConfigs()
+            
+            if self.placements['settings']['randomize-music'] and self.thread_active:
+                self.makeMusicChanges()
+            
+            if self.placements['settings']['randomize-enemies'] and self.thread_active:
+                self.randomizeEnemies()
+            
+            if self.thread_active: self.fixWaterLoadingZones()
             if self.thread_active: self.fixRapidsRespawn()
             
             # current asm does not appear to break anything, can finally include :)
@@ -1652,22 +1652,30 @@ class ModsProcess(QtCore.QThread):
                 dummy['npcKey'] = self.item_defs[self.placements['dampe-final']]['npc-key']
                 sheet['values'].append(oead_tools.dictToStruct(dummy))
 
+                # seashell mansion presents need traps to be items entries each with an unique ID
+                # even though IDs 128+ cause a crash when they get added to the inventory, traps never will
+                # invalid IDs still work for seashell mansion
                 if self.placements['settings']['trap-sanity']:
                     dummy['symbol'] = 'ZapTrap'
-                    dummy['itemID'] = 127 # traps do not need unique IDs as they do not get added to inventory
+                    dummy['itemID'] = 127
                     dummy['gettingFlag'] = ''
                     dummy['npcKey'] = 'NpcToolShopkeeper'
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
                     dummy['symbol'] = 'DrownTrap'
+                    dummy['itemID'] = 128
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
                     dummy['symbol'] = 'SquishTrap'
+                    dummy['itemID'] = 129
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
                     dummy['symbol'] = 'DeathballTrap'
+                    dummy['itemID'] = 130
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
                     dummy['symbol'] = 'QuakeTrap'
+                    dummy['itemID'] = 131
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
-                    dummy['symbol'] = 'HydroTrap'
-                    sheet['values'].append(oead_tools.dictToStruct(dummy))
+                    # dummy['symbol'] = 'HydroTrap'
+                    # dummy['itemID'] = 132
+                    # sheet['values'].append(oead_tools.dictToStruct(dummy))
             
             if self.thread_active:
                 oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/Items.gsheet', sheet)

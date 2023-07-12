@@ -9,3 +9,5 @@
 - While Trading Quest items work, they will not be displayed in the inventory
 
 - Dampé lacks logic for instrument shuffle
+
+- Falling down the TalTal East Drop without Flippers can result in a softlock
