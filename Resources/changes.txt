@@ -1,19 +1,29 @@
 <b>New Features:</b>
 <br></br><br></br>
 - Added option to update logic
-- Added 2 new traps for trapsanity (5 total)
+<br></br><br></br>
 - Added experimental logic for companions inside dungeons
-- Dampé is now fully fixed and working
+<br></br><br></br>
+- Added 2 new traps for trapsanity (5 total)
+<br></br><br></br>
+- Damp&eacute; is now working properly
+<br></br><br></br>
 
 <b>Changes:</b>
 <br></br><br></br>
 - The final Trendy prize is now set to junk by default
+<br></br><br></br>
 - The spoiler log now lists every trap as "trap"
+<br></br><br></br>
 - Some music tweaks have been made
+<br></br><br></br>
 
 <b>Bug Fixes:</b>
 <br></br><br></br>
 - Fixed issue where powder-capacity would directly give Magic Powder
+<br></br><br></br>
 - Fixed issue with reloading a save after completing the Rapids Race
+<br></br><br></br>
 - Fixed softlock from entering water caves early with the Rooster
-- Fixed many issues with Dampé
+<br></br><br></br>
+- Fixed many issues with Damp&eacute;
