@@ -55,3 +55,5 @@ def makeEventChanges(flowchart, placements, item_defs):
     
     if len(event_defs) > 0:
         event_tools.createActionChain(flowchart, 'Event36', event_defs, after)
+    else:
+        event_tools.insertEventAfter(flowchart, 'Event36', after)
