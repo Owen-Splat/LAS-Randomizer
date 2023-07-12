@@ -10,7 +10,7 @@ def changeRewards(flowchart, treasure_flowchart):
     sword_get = item_get.insertItemGetAnimation(flowchart, 'SwordLv1', -1 , None, 'Event0')
     sword_content_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'SwordLv1'},
-        {0: sword_get, 1: 'Event3'})
+        {0: sword_get, 1: 'Event4'})
     
     shield_get = item_get.insertItemGetAnimation(flowchart, 'Shield', -1, None, 'Event0')
     shield_content_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
@@ -177,9 +177,9 @@ def changeRewards(flowchart, treasure_flowchart):
     #     {'value1': event_tools.findEvent(treasure_flowchart, 'Event33').data.params.data['value1'], 'value2': 'GoldenLeaf'},
     #     {0: leaf_get, 1: powder_check})
     
-    event_tools.insertEventAfter(flowchart, 'Event3', 'Event4')
-    event_tools.insertEventAfter(flowchart, 'Event4', 'Event14')
-    event_tools.insertEventAfter(flowchart, 'Event14', 'Event0')
+    # event_tools.insertEventAfter(flowchart, 'Event3', 'Event4')
+    # event_tools.insertEventAfter(flowchart, 'Event4', 'Event14')
+    # event_tools.insertEventAfter(flowchart, 'Event14', 'Event0')
     event_tools.insertEventAfter(flowchart, 'Event25', powder_check)
 
 
