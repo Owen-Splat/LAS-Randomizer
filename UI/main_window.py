@@ -85,6 +85,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.rapidsCheck.clicked.connect(self.rapidsCheck_Clicked)
         self.ui.dampeCheck.clicked.connect(self.dampeCheck_Clicked)
         # self.ui.trendyCheck.clicked.connect(self.trendyCheck_Clicked)
+        # self.ui.shopCheck.clicked.connect(self.shopCheck_Clicked)
         self.ui.giftsCheck.clicked.connect(self.giftsCheck_Clicked)
         self.ui.tradeGiftsCheck.clicked.connect(self.tradeQuest_Clicked)
         self.ui.bossCheck.clicked.connect(self.bossCheck_Clicked)
@@ -232,6 +233,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.ui.trendyCheck.setChecked(False)
         self.excluded_checks.update(TRENDY_REWARDS)
 
+        # self.ui.shopCheck.setChecked(True)
+        # self.excluded_checks.difference_update(SHOP_ITEMS)
+
         self.ui.giftsCheck.setChecked(True)
         self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
 
@@ -306,6 +310,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Rapids': self.ui.rapidsCheck.isChecked(),
             'Dampe': self.ui.dampeCheck.isChecked(),
             # 'Trendy': self.ui.trendyCheck.isChecked(),
+            # 'Shop': self.ui.shopCheck.isChecked(),
             'Free_Gifts': self.ui.giftsCheck.isChecked(),
             'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
             'Boss_Drops': self.ui.bossCheck.isChecked(),
@@ -416,6 +421,12 @@ class MainWindow(QtWidgets.QMainWindow):
         #     self.ui.trendyCheck.setChecked(SETTINGS['Trendy'])
         # except (KeyError, TypeError):
         #     self.ui.trendyCheck.setChecked(True)
+        
+        # # shop
+        # try:
+        #     self.ui.shopCheck.setChecked(SETTINGS['Shop'])
+        # except (KeyError, TypeError):
+        #     self.ui.shopCheck.setChecked(True)
         
         # free gifts
         try:
@@ -649,6 +660,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.excluded_checks.update(LEAF_LOCATIONS)
             # if not self.ui.trendyCheck.isChecked():
             #     self.excluded_checks.update(TRENDY_REWARDS)
+            # if not self.ui.shopCheck.isChecked():
+            #     self.excluded_checks.update(SHOP_ITEMS)
         
         # starting items
         try:
@@ -738,9 +751,18 @@ class MainWindow(QtWidgets.QMainWindow):
     #         self.excluded_checks.difference_update(TRENDY_REWARDS)
     #     else:
     #         self.excluded_checks.update(TRENDY_REWARDS)
-
-
-
+    
+    
+    
+    # # Shop Check Changed
+    # def shopCheck_Clicked(self):
+    #     if self.ui.shopCheck.isChecked():
+    #         self.excluded_checks.difference_update(SHOP_ITEMS)
+    #     else:
+    #         self.excluded_checks.update(SHOP_ITEMS)
+    
+    
+    
     # Gifts Check Changed
     def giftsCheck_Clicked(self):
         if self.ui.giftsCheck.isChecked():
@@ -1028,7 +1050,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # some-check to Some Check
     def checkToList(self, check):
+        # slots = ('1St', '2Nd', '3Rd', '4Th', '5Th', '6Th', '7Th')
+
         s = sub("-", " ", check).title()
+
+        # for slot in slots:
+        #     s = s.replace(slot, slot.lower())
+        
         return s
     
     
@@ -1168,8 +1196,7 @@ class SmartListWidget(QtWidgets.QListWidgetItem):
             
             if self.text().startswith(dungeon_checks) and other.text().startswith(dungeon_checks):
                 if not len(nums_a) == len(nums_b):
-                    return len(nums_a) < len(nums_b)
-            
+                    return len(nums_a) > len(nums_b)
             if self.text().startswith(dungeon_checks) or other.text().startswith(dungeon_checks):
                 raise TypeError('')
             
@@ -1182,6 +1209,9 @@ class SmartListWidget(QtWidgets.QListWidgetItem):
                 raise TypeError('')
             if not other.text().startswith(nums_b) and not other.text().endswith(nums_b):
                 raise TypeError('')
+            
+            # if self.text().startswith('Shop') or other.text().startswith('Shop'):
+            #     raise TypeError('')
             
             return a < b
         

@@ -72,6 +72,10 @@ class ItemShuffler(QtCore.QThread):
         vanilla_locations.append('trendy-prize-6')
         vanilla_locations.append('kanalet-final-guard')
         vanilla_locations.append('fishing-loose')
+        
+        # vanilla_locations.remove('shop-slot3-1st')
+        # vanilla_locations.remove('shop-slot3-2nd')
+        # vanilla_locations.remove('shop-slot6')
         # vanilla_locations.remove('bay-passage-sunken')
         # vanilla_locations.remove('river-crossing-cave')
         # vanilla_locations.remove('kanalet-moat-south')
@@ -636,7 +640,7 @@ class ItemShuffler(QtCore.QThread):
                 access = self.removeAccess(access, item)
                 
                 # Check for item type restrictions, i.e. songs can't be standing items
-                if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('standing', 'hidden', 'dig', 'drop', 'underwater', 'shop', 'enemy'):
+                if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('hidden', 'dig', 'underwater'):
                     valid_placement = False
                 elif item in self.force_chests and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     valid_placement = False

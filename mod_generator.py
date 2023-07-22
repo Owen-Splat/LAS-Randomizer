@@ -1652,13 +1652,26 @@ class ModsProcess(QtCore.QThread):
                 dummy['npcKey'] = self.item_defs[self.placements['dampe-final']]['npc-key']
                 sheet['values'].append(oead_tools.dictToStruct(dummy))
 
+                # dummy['symbol'] = 'ShopShovel'
+                # dummy['itemID'] = 68
+                # dummy['gettingFlag'] = ''
+                # sheet['values'].append(oead_tools.dictToStruct(dummy))
+                # dummy['symbol'] = 'ShopBow'
+                # dummy['itemID'] = 69
+                # # dummy['gettingFlag'] = 'ShopBowSteal'
+                # sheet['values'].append(oead_tools.dictToStruct(dummy))
+                # dummy['symbol'] = 'ShopHeart'
+                # dummy['itemID'] = 70
+                # # dummy['gettingFlag'] = 'ShopHeartSteal'
+                # sheet['values'].append(oead_tools.dictToStruct(dummy))
+
                 # seashell mansion presents need traps to be items entries each with an unique ID
                 # even though IDs 128+ cause a crash when they get added to the inventory, traps never will
                 # invalid IDs still work for seashell mansion
                 if self.placements['settings']['trap-sanity']:
                     dummy['symbol'] = 'ZapTrap'
                     dummy['itemID'] = 127
-                    dummy['gettingFlag'] = ''
+                    # dummy['gettingFlag'] = ''
                     dummy['npcKey'] = 'NpcToolShopkeeper'
                     sheet['values'].append(oead_tools.dictToStruct(dummy))
                     dummy['symbol'] = 'DrownTrap'
@@ -2311,26 +2324,34 @@ class ModsProcess(QtCore.QThread):
 
 
     # def makeShopChanges(self):
-    #     """Edits the ToolShopKeeper event file and the shop items datasheet"""
+    #     """Edits the shop items datasheet as well as event files relating to buying/stealing"""
 
-    #     flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
-    #     actors.addNeededActors(flow.flowchart, self.rom_path)
-    #     shop.makeEventChanges(flow.flowchart, self.placements, self.item_defs)
-
-    #     if self.thread_active:
-    #         event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
-    #         self.progress_value += 1 # update progress bar
-    #         self.progress_update.emit(self.progress_value)
-        
     #     ### ShopItem datasheet
-    #     sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
-    #     shop.makeDatasheetChanges(sheet, self.placements, self.item_defs)
-
     #     if self.thread_active:
+    #         sheet = oead_tools.readSheet(f'{self.rom_path}/region_common/datasheets/ShopItem.gsheet')
+    #         shop.makeDatasheetChanges(sheet, self.placements, self.item_defs)
     #         oead_tools.writeSheet(f'{self.out_dir}/Romfs/region_common/datasheets/ShopItem.gsheet', sheet)
     #         self.progress_value += 1 # update progress bar
     #         self.progress_update.emit(self.progress_value)
-
+        
+    #     ### ToolShopkeeper event - edit events related to manually buying items
+    #     if self.thread_active:
+    #         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
+    #         actors.addNeededActors(flow.flowchart, self.rom_path)
+    #         shop.makeBuyingEventChanges(flow.flowchart, self.placements, self.item_defs)
+    #         # event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
+    #         self.progress_value += 1 # update progress bar
+    #         self.progress_update.emit(self.progress_value)
+        
+    #     ### PlayerStart event - edit events related to stealing items
+    #     if self.thread_active:
+    #         # flow = event_tools.readFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl')
+    #         shop.makeStealingEventChanges(flow.flowchart, self.placements, self.item_defs)
+    #         event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/ToolShopkeeper.bfevfl', flow)
+    #         # event_tools.writeFlow(f'{self.out_dir}/Romfs/region_common/event/PlayerStart.bfevfl', flow)
+    #         self.progress_value += 1 # udate progress bar
+    #         self.progress_update.emit(self.progress_value)
+    
 
 
     def makeTradeQuestChanges(self):

@@ -101,6 +101,11 @@ Mansion:
   - 40-seashell-reward
   - 50-seashell-reward
 
+# Shop_Items:
+#   - shop-slot3-1st
+#   - shop-slot3-2nd
+#   - shop-slot6
+
 Trendy_Rewards:
   # - trendy-prize-1
   # - trendy-prize-2

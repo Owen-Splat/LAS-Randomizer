@@ -88,16 +88,22 @@ Item_Pool:
     type: important
     quantity: 1
     item-key: Song_WindFish
+    model-path: ItemOcarina.bfres
+    model-name: Ocarina
     npc-key: NpcMarin
   song-mambo:
     type: important
     quantity: 1
     item-key: Song_Mambo
+    model-path: ItemOcarina.bfres
+    model-name: Ocarina
     npc-key: NpcManboTamegoro
   song-soul:
     type: important
     quantity: 1
     item-key: Song_Soul
+    model-path: ItemOcarina.bfres
+    model-name: Ocarina
     npc-key: NpcMamu
   yoshi-doll:
     type: trade
@@ -339,16 +345,22 @@ Item_Pool:
     type: good
     quantity: 1
     item-key: Bomb_MaxUp
+    model-path: ItemBomb.bfres
+    model-name: Bomb
     npc-key: ItemBomb
   arrow-capacity:
     type: good
     quantity: 1
     item-key: Arrow_MaxUp
+    model-path: ItemArrow.bfres
+    model-name: Arrow
     npc-key: ItemArrow
   powder-capacity:
     type: good
     quantity: 1
     item-key: MagicPowder_MaxUp
+    model-path: ItemMagicPowder.bfres
+    model-name: MagicPowder
     npc-key: ItemMagicPowder
   shell-sensor:
     type: good
@@ -368,11 +380,15 @@ Item_Pool:
     type: good
     quantity: 1
     item-key: ClothesRed
+    model-path: NpcFairyQueen.bfres
+    model-name: FairyQueen
     npc-key: NpcFairyQueen
   blue-tunic:
     type: good
     quantity: 1
     item-key: ClothesBlue
+    model-path: NpcGreatFairy.bfres
+    model-name: GreatFairy
     npc-key: NpcGreatFairy
   rupee-300:
     type: junk
@@ -431,31 +447,43 @@ Item_Pool:
     type: junk
     quantity: 0
     item-key: ZapTrap
+    model-path: NpcToolShopkeeper.bfres
+    model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
   drown-trap:
     type: junk
     quantity: 0
     item-key: DrownTrap
+    model-path: NpcToolShopkeeper.bfres
+    model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
   squish-trap:
     type: junk
     quantity: 0
     item-key: SquishTrap
+    model-path: NpcToolShopkeeper.bfres
+    model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
   deathball-trap:
     type: junk
     quantity: 0
     item-key: DeathballTrap
+    model-path: NpcToolShopkeeper.bfres
+    model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
   quake-trap:
     type: junk
     quantity: 0
     item-key: QuakeTrap
+    model-path: NpcToolShopkeeper.bfres
+    model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
   # hydro-trap:
   #   type: junk
   #   quantity: 0
   #   item-key: HydroTrap
+  #   model-path: NpcToolShopkeeper.bfres
+  #   model-name: ToolShopkeeper
   #   npc-key: NpcToolShopkeeper
   bomb:
     type: junk

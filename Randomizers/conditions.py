@@ -56,26 +56,38 @@ def editConditions(condition, placements, item_defs):
     
     if condition['symbol'] == 'BowWowMissionStart': # Remove BoyA condition
         condition['conditions'].pop(0)
+        return
     
     if condition['symbol'] == 'BowWowMissionEnd': # Remove BoyA condition
         condition['conditions'].pop(0)
+        return
 
     # Make the shop not sell shields until you find one
     if condition['symbol'] == 'ShopShieldCondition':
         condition['conditions'][0] = {'category': 1, 'parameter': data.SHIELD_FOUND_FLAG}
         return
     
-    # Make the shop not sell bombs until you find some (flag automatically set with unlocked bombs on)
+    # Make the shop not sell bombs until you find some (flag automatically set with unlocked-bombs on)
+    # Condition stays as ConchHorn if neither unlocked-bombs or shuffled-bombs is on
     if condition['symbol'] == 'ShopBombCondition' and (placements['settings']['unlocked-bombs'] or placements['settings']['shuffle-bombs']):
         condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
         return
     
-    # # Edit the condition for the shovel since it is shuffled
+    # # Edit the shop conditions for the shovel, bow, and heart
     # if condition['symbol'] == 'ShopShovelCondition':
     #     condition['conditions'].pop(0)
-    #     condition['conditions'][0] = {'category': 11, 'parameter': f"!{item_defs[placements['shop-slot3-1st']]['item-key']}"}
+    #     condition['conditions'][0] = {'category': 1, 'parameter': '!ShopShovelGet'}
+    #     return
     
-    # # Edit the condition for the bow since it is shuffled
     # if condition['symbol'] == 'ShopBowCondition':
-    #     condition['conditions'][0] = {'category': 1, 'parameter': item_defs[placements['shop-slot3-1st']]['item-key']}
-    #     condition['conditions'][1] = {'category': 1, 'parameter': f"!{item_defs[placements['shop-slot3-2nd']]['item-key']}"}
+    #     condition['conditions'][0] = {'category': 1, 'parameter': 'ShopShovelGet'}
+    #     condition['conditions'][1] = {'category': 1, 'parameter': '!ShopBowGet'}
+    #     return
+    
+    # # if condition['symbol'] == 'ShopArrowCondition':
+    # #     condition['conditions'][0]['category'] = 2 # change Bow check to category 2 instead of the weird category 11
+    # #     condition['conditions'].append({'category': 1, 'parameter': 'ShopBowGet'})
+    # #     return
+    
+    # if condition['symbol'] == 'ShopHeartPieceCondition':
+    #     condition['conditions'][0] = {'category': 1, 'parameter': '!ShopHeartGet'}
