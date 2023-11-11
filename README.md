@@ -18,7 +18,7 @@ Please note that while most things are functional, there is a definite possibili
 
 **NOTE**: The randomizer may temporarily get stuck while placing items and will attempt to fix it. If this happens, just wait it out. If it's taking too long, just cancel and try another seed. Very rarely will it actually be fully stuck.
 
-In order to run the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through tools like [Hactool](https://github.com/SciresM/hactool). The RomFS is the component of the game package with all of the data files (i.e. non-executable files).
+In order to run the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through your choice of emulator, or with nxdumptool on a homebrewed Switch console. The RomFS is the component of the game package with all of the data files (i.e. non-executable files).
 
 Join the [Discord](https://discord.com/invite/rfBSCUfzj8) to talk about the randomizer or ask any questions you have!  
 The Discord also contains some more detailed information about the current state of the randomizer, including known issues and what is shuffled.
@@ -52,18 +52,17 @@ The randomizer does not provide a second copy of the game to use, but rather mak
 
 (See also: [Switch game modding](https://nh-server.github.io/switch-guide/extras/game_modding/))
 
-Switch: On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` folder and create a new directory named `01006BB00C6F0000`. Copy and paste the `Romfs` folder from the randomizer output into this new folder. That is, the folder structure here should look like `Atmosphere/contents/01006BB00C6F0000/Romfs/...`. Next, copy and paste the `exefs_patches` folder from the randomizer output into the `Atmosphere` folder. It should look like `Atmosphere/exefs_patches/las_randomizer/...` with 2 ips files inside. After this, relaunch CFW and simply start up Link's Awakening to play the randomizer!
+The number of files will differ depending on settings, so clear out any old files first.
 
-Emulator: Open up the mods folder and create a new directory named `01006BB00C6F0000`. Enter it and create a new folder named whatever you want. Inside that should be the `Romfs` and `exefs_patches` folders from the randomizer output. It should look something like `%ModsDir%/01006BB00C6F0000/LASRando/Romfs/...`
+Switch: On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` folder and create a new directory named `01006BB00C6F0000`. Copy and paste the `romfs` folder from the randomizer output into this new folder. That is, the folder structure here should look like `Atmosphere/contents/01006BB00C6F0000/romfs/...`. Next, copy and paste the `exefs_patches` folder from the randomizer output into the `Atmosphere` folder. It should look like `Atmosphere/exefs_patches/las_randomizer/...` with 2 ips files inside. After this, relaunch CFW and simply start up Link's Awakening to play the randomizer!
 
-Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or you can launch the game holding L
+Emulator: Open up the mods folder and create a new directory named `01006BB00C6F0000`. Enter it and create a new folder named whatever you want. Inside that should be the `romfs` and `exefs` folders from the randomizer output. It should look something like `%ModsDir%/01006BB00C6F0000/%OutputFolder/romfs/...` and `%ModsDir%/01006BB00C6F0000/LASRando/exefs/...`
+
+Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or launch the game holding L. Keep in mind that exefs patches are still applied even when holding L.
 
 ### Known Issues:
-- The existence of the fishing bottle depends on whether you have the 2nd bottle in your inventory. This is left vanilla
-- The existence of the Ball & Chain Soldier depends on whether you have the 5th Golden Leaf in your inventory. This is left vanilla
-- Dampe lacks logic for instrument shuffle, and may permanently remove items from your inventory
+- Dampe lacks logic for instrument shuffle
 - Small key drops are still technically small key objects and will trigger the compass ringtone regardless of what they are
-- Choosing Shuffled Bombs or Shuffled Powder sets drops of that item to 0. This will not change even after finding it
 - While Trading Quest items work, they will not be displayed in the inventory
 - Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
 

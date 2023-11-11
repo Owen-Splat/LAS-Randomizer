@@ -24,15 +24,7 @@ import os
 import platform
 import shutil
 
-from randomizer_data import VERSION
-
-base_name = "Links Awakening Randomizer"
-
-import struct
-if (struct.calcsize("P") * 8) == 64:
-	bitness_suffix = "_x64"
-else:
-	bitness_suffix = "_x32"
+base_name = "Links Awakening Switch Randomizer"
 
 exe_ext = ""
 if platform.system() == "Windows":
@@ -44,11 +36,11 @@ if platform.system() == "Darwin":
 if platform.system() == "Linux":
 	platform_name = "linux"
 
-exe_path = os.path.join(".", "dist", base_name + exe_ext)
-if not (os.path.isfile(exe_path) or os.path.isdir(exe_path)):
-	raise Exception("Executable not found: %s" % exe_path)
+# exe_path = os.path.join(".", "build/exe.win-amd64-3.8", base_name + exe_ext)
+# if not (os.path.isfile(exe_path) or os.path.isdir(exe_path)):
+# 	raise Exception("Executable not found: %s" % exe_path)
 
-release_archive_path = os.path.join(".", "dist", f"release_archive_0.3.0-RC1-hotfix-1{bitness_suffix}")
+release_archive_path = os.path.join(".", "build/exe.win-amd64-3.8")
 
 if os.path.exists(release_archive_path) and os.path.isdir(release_archive_path):
 	shutil.rmtree(release_archive_path)
@@ -57,7 +49,7 @@ os.mkdir(release_archive_path)
 shutil.copyfile("README.md", os.path.join(release_archive_path, "README.txt"))
 shutil.copyfile('Data/logic.yml', os.path.join(release_archive_path, 'logic.yml'))
 
-shutil.move(exe_path, os.path.join(release_archive_path, base_name + exe_ext))
+# shutil.move(exe_path, os.path.join(release_archive_path, base_name + exe_ext))
 
 if platform.system() == "Darwin":
 	shutil.make_archive(release_archive_path, "zip", release_archive_path)

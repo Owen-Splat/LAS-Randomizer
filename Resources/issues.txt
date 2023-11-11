@@ -1,12 +1,6 @@
 <b>Issues:</b>
 <br></br><br></br>
-- The fishing bottle check is left vanilla
-<br></br><br></br>
-- The Ball & Chain Soldier check is left vanilla
-<br></br><br></br>
 - Small key drops will trigger the compass ringtone regardless of what they are
-<br></br><br></br>
-- Choosing Shuffled Bombs/Powder permanently sets drops to 0
 <br></br><br></br>
 - While Trading Quest items work, they will not be displayed in the inventory
 <br></br><br></br>

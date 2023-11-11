@@ -386,7 +386,7 @@
          <rect>
           <x>10</x>
           <y>14</y>
-          <width>531</width>
+          <width>521</width>
           <height>141</height>
          </rect>
         </property>
@@ -442,7 +442,7 @@
           <rect>
            <x>369</x>
            <y>24</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -473,7 +473,7 @@
           <rect>
            <x>369</x>
            <y>64</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -496,42 +496,6 @@
           <bool>false</bool>
          </property>
         </widget>
-        <widget class="QComboBox" name="owlsComboBox">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>104</y>
-           <width>161</width>
-           <height>22</height>
-          </rect>
-         </property>
-         <property name="whatsThis">
-          <string>This determines if Owl Statues will give items or not</string>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <item>
-          <property name="text">
-           <string>Owl Gifts: None</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Owl Gifts: Overworld</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Owl Gifts: Dungeons</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Owl Gifts: All</string>
-          </property>
-         </item>
-        </widget>
         <widget class="QCheckBox" name="shopCheck">
          <property name="enabled">
           <bool>true</bool>
@@ -540,7 +504,7 @@
           <rect>
            <x>369</x>
            <y>104</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -629,13 +593,65 @@
           <bool>true</bool>
          </property>
         </widget>
+        <widget class="QComboBox" name="seashellsComboBox">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>104</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This controls the maximum number of seashells to be considered in logic for the Seashell Mansion prizes</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Seashell Mansion:  0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Seashell Mansion:  5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Seashell Mansion:  15</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Seashell Mansion:  30</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Seashell Mansion:  40</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Seashell Mansion:  50</string>
+          </property>
+         </item>
+        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="geometry">
          <rect>
-          <x>550</x>
-          <y>14</y>
-          <width>171</width>
+          <x>360</x>
+          <y>169</y>
+          <width>361</width>
           <height>141</height>
          </rect>
         </property>
@@ -714,13 +730,83 @@
           <string>Blupsanity</string>
          </property>
         </widget>
+        <widget class="QComboBox" name="owlsComboBox">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>64</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This determines if Owl Statues will give items or not</string>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Owl Gifts: None</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Owl Gifts: Overworld</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Owl Gifts: Dungeons</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Owl Gifts: All</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QComboBox" name="itemsComboBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>24</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This determines what dungeon items can be shuffled outside of their own dungeons</string>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Items: Standard</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Items: Keysanity</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Items: Keysanity + MCB</string>
+          </property>
+         </item>
+        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_3">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>169</y>
-          <width>351</width>
+          <width>341</width>
           <height>101</height>
          </rect>
         </property>
@@ -782,7 +868,7 @@
           <rect>
            <x>189</x>
            <y>24</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -804,7 +890,7 @@
           <rect>
            <x>189</x>
            <y>64</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -834,29 +920,51 @@
        <widget class="QGroupBox" name="groupBox_4">
         <property name="geometry">
          <rect>
-          <x>539</x>
-          <y>169</y>
+          <x>540</x>
+          <y>14</y>
           <width>181</width>
           <height>101</height>
          </rect>
         </property>
         <property name="title">
-         <string>Goals</string>
+         <string>Output Settings</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignHCenter|Qt::AlignTop</set>
         </property>
-        <widget class="QComboBox" name="seashellsComboBox">
+        <widget class="QCheckBox" name="spoilerCheck">
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Creates a spoiler log in case you get stuck</string>
+         </property>
+         <property name="text">
+          <string>Create Spoiler Log</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="platformComboBox">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>64</y>
            <width>161</width>
            <height>22</height>
           </rect>
          </property>
          <property name="whatsThis">
-          <string>This controls the maximum number of seashells to be considered in logic for the Seashell Mansion prizes</string>
+          <string>This sets the output according to the platform that the user is playing on</string>
          </property>
          <property name="editable">
           <bool>false</bool>
@@ -869,108 +977,12 @@
          </property>
          <item>
           <property name="text">
-           <string>Max Seashells:  0</string>
+           <string>Platform: Console</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Max Seashells:  5</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Max Seashells:  15</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Max Seashells:  30</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Max Seashells:  40</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Max Seashells:  50</string>
-          </property>
-         </item>
-        </widget>
-        <widget class="QComboBox" name="goalComboBox">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>64</y>
-           <width>161</width>
-           <height>22</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>true</strikeout>
-          </font>
-         </property>
-         <property name="whatsThis">
-          <string>This controls how many Instruments are required to open the egg&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
-         </property>
-         <property name="editable">
-          <bool>false</bool>
-         </property>
-         <property name="currentIndex">
-          <number>8</number>
-         </property>
-         <property name="placeholderText">
-          <string/>
-         </property>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  0</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  4</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  5</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  6</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  7</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Required Instruments:  8</string>
+           <string>Platform: Emulator</string>
           </property>
          </item>
         </widget>
@@ -1219,7 +1231,7 @@
          <rect>
           <x>10</x>
           <y>130</y>
-          <width>531</width>
+          <width>521</width>
           <height>141</height>
          </rect>
         </property>
@@ -1281,7 +1293,7 @@
           <rect>
            <x>369</x>
            <y>24</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -1300,7 +1312,7 @@
           <rect>
            <x>369</x>
            <y>64</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -1319,7 +1331,7 @@
           <rect>
            <x>369</x>
            <y>104</y>
-           <width>151</width>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -1425,10 +1437,10 @@
        <widget class="QGroupBox" name="groupBox_7">
         <property name="geometry">
          <rect>
-          <x>550</x>
+          <x>540</x>
           <y>130</y>
-          <width>171</width>
-          <height>181</height>
+          <width>181</width>
+          <height>141</height>
          </rect>
         </property>
         <property name="title">
@@ -1441,7 +1453,7 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>64</y>
+           <y>24</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1465,52 +1477,11 @@
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="trapsCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>144</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Adds various traps to the item pool, which can be disguised as other items&lt;br&gt;&lt;/br&gt;&lt;u&gt;If this is not checked,&lt;/u&gt; only the vanilla zol traps are included</string>
-         </property>
-         <property name="text">
-          <string>Trapsanity</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="spoilerCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Creates a spoiler log in case you get stuck</string>
-         </property>
-         <property name="text">
-          <string>Create Spoiler Log</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
         <widget class="QCheckBox" name="stealingCheck">
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>104</y>
+           <y>64</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1525,6 +1496,123 @@
           <string>Fast Stealing</string>
          </property>
         </widget>
+        <widget class="QComboBox" name="trapsComboBox">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>100</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This controls how many custom traps get added to the item pool</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Traps: None</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Traps: Few</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Traps: Several</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Traps: Many</string>
+          </property>
+         </item>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_7">
+       <attribute name="title">
+        <string>Patches</string>
+       </attribute>
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>14</y>
+          <width>711</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Gameplay</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <widget class="QCheckBox" name="ohkoCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Link will die in a single hit</string>
+         </property>
+         <property name="text">
+          <string>One Hit KO Mode</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="lv1BeamCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Allows you to beam slash with the Lv1 Sword. Still requires full health</string>
+         </property>
+         <property name="text">
+          <string>Sword Beam With Lv1</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>18</x>
+          <y>125</y>
+          <width>691</width>
+          <height>191</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Suggest ideas on GitHub or the Discord server!</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
        </widget>
       </widget>
      </widget>
@@ -2452,7 +2540,7 @@
      <rect>
       <x>30</x>
       <y>509</y>
-      <width>581</width>
+      <width>711</width>
       <height>41</height>
      </rect>
     </property>

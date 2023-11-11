@@ -1,4 +1,3 @@
-import numpy as np
 import struct
 import re
 
@@ -7,7 +6,7 @@ def readBytes(bytes, start, length, endianness='little'):
 	return int.from_bytes(bytes[start : start + length], endianness)
 
 def readFloat(bytes, start, length):
-	return np.float32(struct.unpack('<f', bytes[start : start + length])[0])
+	return float(struct.unpack('<f', bytes[start : start + length])[0])
 
 def readString(data, start):
 	result = b''
@@ -231,7 +230,7 @@ class Actor:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param + b'\x00'
-			elif isinstance(param, np.float32):
+			elif isinstance(param, float):
 				packed += struct.pack('<f', param)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -538,7 +537,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param1 + b'\x00'
-			elif isinstance(param1, np.float32):
+			elif isinstance(param1, float):
 				packed += struct.pack('<f', param1)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -549,7 +548,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param2 + b'\x00'
-			elif isinstance(param2, np.float32):
+			elif isinstance(param2, float):
 				packed += struct.pack('<f', param2)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -568,7 +567,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param1 + b'\x00'
-			elif isinstance(param1, np.float32):
+			elif isinstance(param1, float):
 				packed += struct.pack('<f', param1)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -579,7 +578,7 @@ class Relationship:
 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 				packed += (4).to_bytes(4, 'little')
 				nameRepr += param2 + b'\x00'
-			elif isinstance(param2, np.float32):
+			elif isinstance(param2, float):
 				packed += struct.pack('<f', param2)
 				packed += (2).to_bytes(4, 'little')
 			else:
@@ -661,7 +660,7 @@ class Relationship:
 # 				packed += (len(nameRepr) + nameOffset).to_bytes(4, 'little')
 # 				packed += (0xFFFFFF04).to_bytes(4, 'little')
 # 				nameRepr += param + b'\x00'
-# 			elif isinstance(param, np.float32):
+# 			elif isinstance(param, float):
 # 				packed += struct.pack('<f', param)
 # 				packed += (2).to_bytes(4, 'little')
 # 			else:

@@ -20,7 +20,7 @@ def makeEventChanges(flowchart, placements, item_defs):
         item_get.insertItemGetAnimation(flowchart, item_key, item_index, defs[1], defs[2], False, False)
     
     bottle_get = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-    {'symbol': 'FishingBottleGet', 'value': True}, 'Event264')
+        {'symbol': 'FishingBottleGet', 'value': True}, 'Event264')
 
     event_tools.insertEventAfter(flowchart, 'Event20', 'Event3')
     event_tools.insertEventAfter(flowchart, 'Event18', 'Event133')
@@ -29,19 +29,23 @@ def makeEventChanges(flowchart, placements, item_defs):
 
 
 
-# def fixFishingBottle(flowchart):
-#     take_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-#     {'itemKey': 'Bottle', 'count': -1, 'index': 1, 'autoEquip': False}, 'Event74')
-#     fishing_bottle_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-#     {'symbol': 'FishingBottleGet'}, {0: take_bottle, 1: 'Event74'})
+def fixFishingBottle(flowchart):
+    # since no event actually removes sword, we change itemType 0 in RemoveItem to remove Bottle 1 with ASM
+    take_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 0}, 'Event74')
+    fishing_bottle_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': 'FishingBottleGet'}, {0: take_bottle, 1: 'Event83'})
 
-#     event_tools.insertEventAfter(flowchart, 'Event315', fishing_bottle_check)
-#     event_tools.insertEventAfter(flowchart, 'Event316', fishing_bottle_check)
-#     event_tools.insertEventAfter(flowchart, 'Event317', fishing_bottle_check)
+    event_tools.insertEventAfter(flowchart, 'Event83', 'Event74')
+    event_tools.insertEventAfter(flowchart, 'Event315', fishing_bottle_check)
+    event_tools.insertEventAfter(flowchart, 'Event316', fishing_bottle_check)
+    event_tools.insertEventAfter(flowchart, 'Event317', fishing_bottle_check)
 
-#     give_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-#     {'itemKey': 'Bottle', 'count': 1, 'index': 1, 'autoEquip': False}, 'Event45')
-#     bottle2_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-#     {'symbol': 'Bottle2Get'}, {0: 'Event45', 1: give_bottle})
+    give_bottle = event_tools.createActionEvent(flowchart, 'Inventory', 'AddBottle',
+        {'index': 1}, 'Event45')
+    take_bottle_2 = event_tools.createActionEvent(flowchart, 'Inventory', 'RemoveItem',
+        {'itemType': 0}, 'Event45')
+    bottle2_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': 'Bottle2Get'}, {0: take_bottle_2, 1: give_bottle})
 
-#     event_tools.insertEventAfter(flowchart, 'Event189', bottle2_check)
+    event_tools.insertEventAfter(flowchart, 'Event189', bottle2_check)

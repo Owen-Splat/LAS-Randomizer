@@ -9,7 +9,7 @@ prizes_dict = {}
 
 
 
-def makeDatasheetChanges(sheet, placements, item_defs):
+def makeDatasheetChanges(sheet, settings):
     """Edits conditions in the Trendy prizes datasheet. Trendy is still a WIP"""
     
     # PRIZE PLACEMENTS
@@ -23,7 +23,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
         # symbols.append(prize['symbol'])
 
         # Bombs should not be obtainable until you have bombs if shuffled bombs is on
-        if prize['symbol'] == 'Bomb' and placements['settings']['shuffle-bombs']:
+        if prize['symbol'] == 'Bomb' and settings['shuffle-bombs']:
             prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
             continue
 
@@ -41,7 +41,7 @@ def makeDatasheetChanges(sheet, placements, item_defs):
                 'place': {'type': 2, 'index': 1}
             }))
 
-            if placements['settings']['shuffle-bombs']:
+            if settings['shuffle-bombs']:
                 prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}'})
             else:
                 prize['layouts'][2]['conditions'].append({'category': 2, 'parameter': '!SurfHarp'})

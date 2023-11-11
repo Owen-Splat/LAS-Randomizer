@@ -25,14 +25,15 @@
 
 
 import os
+import sys
 import appdirs
 import platform
 
 
-# this is for bundling files into a single exe with pyinstaller
-try:
-    from sys import _MEIPASS
-    ROOT_PATH = _MEIPASS
+
+if getattr(sys, "frozen", False):
+    # application is frozen
+    ROOT_PATH = os.path.dirname(sys.executable)
     IS_RUNNING_FROM_SOURCE = False
     if platform.system() == 'Darwin':
         userdata_path = appdirs.user_data_dir('randomizer', 'LAS Randomizer')
@@ -45,8 +46,9 @@ try:
         SETTINGS_PATH = os.path.join('.', 'settings.txt')
         LOGIC_PATH = os.path.join('.', 'logic.yml')
         LOGS_PATH = os.path.join('.', 'log.txt')
-except ImportError:
-    ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+else:
+    # application is not frozen
+    ROOT_PATH = os.path.dirname(__file__)
     SETTINGS_PATH = os.path.join(ROOT_PATH, 'settings.txt')
     LOGS_PATH = os.path.join(ROOT_PATH, 'log.txt')
     IS_RUNNING_FROM_SOURCE = True

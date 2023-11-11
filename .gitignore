@@ -7,11 +7,9 @@ __pycache__
 /romfs
 /Resources/Dev Resources
 /Tools/lvb.py
-/Tools/message_tools.py
-/Tools/msbt.py
-/Tools/texture_tools.py
+/Tools/text_tools.py
 /Test
-text_tests.py
 tests.py
+memory_tests.py
 settings.txt
 log.txt

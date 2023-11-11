@@ -110,7 +110,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.tricksComboBox,
             self.ui.instrumentsComboBox,
             self.ui.owlsComboBox,
-            self.ui.goalComboBox,
+            self.ui.platformComboBox,
             self.ui.rupeesSpinBox
         ])
         for item in desc_items:
@@ -118,7 +118,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         ### show and check for updates
         self.setFixedSize(780, 640)
-        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-RC1-hotfix-1') # {VERSION}')
+        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-rc2') # {VERSION}')
         
         # self.ui.retranslateUi(self)
         
@@ -263,6 +263,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.owlsComboBox.setCurrentIndex(0)
         self.updateOwls()
 
+        self.ui.trapsComboBox.setCurrentIndex(0)
+
         self.ui.leavesCheck.setChecked(True)
         self.excluded_checks.difference_update(LEAF_LOCATIONS)
 
@@ -280,7 +282,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.spoilerCheck.setChecked(True)
         self.ui.kanaletCheck.setChecked(True)
         self.ui.badPetsCheck.setChecked(False)
-        self.ui.trapsCheck.setChecked(False)
         self.ui.bridgeCheck.setChecked(True)
         self.ui.mazeCheck.setChecked(True)
         self.ui.swampCheck.setChecked(False)
@@ -290,6 +291,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.fastFishingCheck.setChecked(True)
         self.ui.dungeonsCheck.setChecked(False)
 
+        self.ui.ohkoCheck.setChecked(False)
+        self.ui.lv1BeamCheck.setChecked(False)
+    
         self.starting_gear = list() # fully reset starting items
         self.ui.rupeesSpinBox.setValue(0)
 
@@ -304,6 +308,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Output_Folder': self.ui.lineEdit_2.text(),
             'Seed': self.ui.lineEdit_3.text(),
             'Logic': LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()],
+            'Platform': PLATFORMS[self.ui.platformComboBox.currentIndex()],
             'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
             'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
             'Fishing': self.ui.fishingCheck.isChecked(),
@@ -335,7 +340,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
             'Open_Bridge': self.ui.bridgeCheck.isChecked(),
             'Open_Mamu': self.ui.mazeCheck.isChecked(),
-            'Trapsanity': self.ui.trapsCheck.isChecked(),
+            'Traps': TRAP_SETTINGS[self.ui.trapsComboBox.currentIndex()],
             'Blupsanity': self.ui.rupCheck.isChecked(),
             'Classic_D2': self.ui.swampCheck.isChecked(),
             'Owl_Statues': OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()],
@@ -344,6 +349,8 @@ class MainWindow(QtWidgets.QMainWindow):
             'Randomize_Music': self.ui.musicCheck.isChecked(),
             'Randomize_Enemies': self.ui.enemyCheck.isChecked(),
             'Shuffled_Dungeons': self.ui.dungeonsCheck.isChecked(),
+            '1HKO': self.ui.ohkoCheck.isChecked(),
+            'Lv1_Beam': self.ui.lv1BeamCheck.isChecked(),
             'Starting_Items': self.starting_gear,
             'Starting_Rupees': self.ui.rupeesSpinBox.value(),
             'Excluded_Locations': list(self.excluded_checks)
@@ -572,11 +579,11 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.badPetsCheck.setChecked(False)
 
-        # trapsanity
+        # traps
         try:
-            self.ui.trapsCheck.setChecked(SETTINGS['Trapsanity'])
-        except (KeyError, TypeError):
-            self.ui.trapsCheck.setChecked(False)
+            self.ui.trapsComboBox.setCurrentIndex(TRAP_SETTINGS.index(SETTINGS['Traps'].lower().strip()))
+        except (KeyError, TypeError, IndexError, ValueError):
+            self.ui.trapsComboBox.setCurrentIndex(0)
         
         # color dungeon rupees
         try:
@@ -602,7 +609,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # except (KeyError, TypeError):
         #     self.ui.companionCheck.setChecked(True)
 
-        # # randomize entances
+        # # randomize entrances
         # try:
         #     self.ui.loadingCheck.setChecked(SETTINGS['Randomize_Entrances'])
         # except (KeyError, TypeError):
@@ -631,6 +638,24 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.spoilerCheck.setChecked(SETTINGS['Create_Spoiler'])
         except (KeyError, TypeError):
             self.ui.spoilerCheck.setChecked(True)
+        
+        # platform
+        try:
+            self.ui.platformComboBox.setCurrentIndex(PLATFORMS.index(SETTINGS['Platform'].lower().strip()))
+        except (KeyError, TypeError, IndexError, ValueError):
+            self.ui.platformComboBox.setCurrentIndex(0)
+        
+        # 1HKO
+        try:
+            self.ui.ohkoCheck.setChecked(SETTINGS['1HKO'])
+        except (KeyError, TypeError):
+            self.ui.ohkoCheck.setChecked(False)
+        
+        # Lv1 sword beam
+        try:
+            self.ui.lv1BeamCheck.setChecked(SETTINGS['Lv1_Beam'])
+        except (KeyError, TypeError):
+            self.ui.lv1BeamCheck.setChecked(False)
         
         # excluded checks
         try:
@@ -880,13 +905,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # verify RomFS before shuffling items
         rom_path = self.ui.lineEdit.text()
         
-        if rom_path.lower().endswith('romfs'):
-            pass
-        elif os.path.exists(os.path.join(rom_path, 'RomFS')):
-            rom_path = os.path.join(rom_path, 'RomFS')
-        else:
-            self.showUserError('RomFS path is not valid!')
-            return
+        if os.path.exists(os.path.join(rom_path, 'romfs')):
+            rom_path = os.path.join(rom_path, 'romfs')
         
         if not os.path.isfile(f'{rom_path}/region_common/event/PlayerStart.bfevfl'):
             self.showUserError('RomFS path is not valid!')
@@ -904,15 +924,16 @@ class MainWindow(QtWidgets.QMainWindow):
         logic_file = yaml.safe_load(self.logic_defs)
         
         seed = self.ui.lineEdit_3.text()
-        if seed.lower().strip() in ("", "random"):
+        if seed.lower().strip() in ('', 'random'):
             random.seed()
             seed = str(random.getrandbits(32))
         
         outdir = f"{self.ui.lineEdit_2.text()}/{seed}"
         
         logic = LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()]
-
+        
         settings = {
+            'platform': PLATFORMS[self.ui.platformComboBox.currentIndex()],
             'create-spoiler': self.ui.spoilerCheck.isChecked(),
             'free-book': self.ui.bookCheck.isChecked(),
             'unlocked-bombs': self.ui.unlockedBombsCheck.isChecked(),
@@ -929,8 +950,8 @@ class MainWindow(QtWidgets.QMainWindow):
             'open-kanalet': self.ui.kanaletCheck.isChecked(),
             'open-bridge': self.ui.bridgeCheck.isChecked(),
             'open-mamu': self.ui.mazeCheck.isChecked(),
-            'trap-sanity': self.ui.trapsCheck.isChecked(),
-            'blup-sanity': self.ui.rupCheck.isChecked(),
+            'traps': TRAP_SETTINGS[self.ui.trapsComboBox.currentIndex()],
+            'blupsanity': self.ui.rupCheck.isChecked(),
             'classic-d2': self.ui.swampCheck.isChecked(),
             'owl-overworld-gifts': self.overworld_owls,
             'owl-dungeon-gifts': self.dungeon_owls,
@@ -943,8 +964,11 @@ class MainWindow(QtWidgets.QMainWindow):
             # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
             'randomize-music': self.ui.musicCheck.isChecked(),
             'randomize-enemies': self.ui.enemyCheck.isChecked(),
-            'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
-            'shuffled-dungeons': self.ui.dungeonsCheck.isChecked(),
+            # 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
+            'shuffle-dungeons': self.ui.dungeonsCheck.isChecked(),
+            # 'dungeon-items': DUNGEON_ITEM_SETTINGS[self.ui.itemsComboBox.currentIndex()],
+            '1HKO': self.ui.ohkoCheck.isChecked(),
+            'lv1-beam': self.ui.lv1BeamCheck.isChecked(),
             'starting-items': self.starting_gear,
             'starting-rupees': self.ui.rupeesSpinBox.value(),
             'excluded-locations': self.excluded_checks
@@ -1119,6 +1143,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
 
+    # Display new window to let the user know what went wrong - missing romfs/output path, bad custom logic, etc.
     def showUserError(self, msg):
         message = QtWidgets.QMessageBox()
         message.setWindowTitle("Error")

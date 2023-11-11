@@ -1,29 +1,27 @@
 <b>New Features:</b>
 <br></br><br></br>
-- Added option to update logic
+- Patches tab: Additional, unrequired patches to spice up gameplay elements
 <br></br><br></br>
-- Added experimental logic for companions inside dungeons
-<br></br><br></br>
-- Added 2 new traps for trapsanity (5 total)
-<br></br><br></br>
-- Damp&eacute; is now working properly
+- Automatically adjusts the output for console or emulator
 <br></br><br></br>
 
 <b>Changes:</b>
 <br></br><br></br>
-- The final Trendy prize is now set to junk by default
+- Songs now display Marin/Manbo/Mamu when obtaining them
 <br></br><br></br>
-- The spoiler log now lists every trap as "trap"
+- The green zol in a chest is now randomized if randomizing enemies
 <br></br><br></br>
-- Some music tweaks have been made
+- Seashells and Trade Items now will be in normal sized chests instead of big chests
 <br></br><br></br>
 
 <b>Bug Fixes:</b>
 <br></br><br></br>
-- Fixed issue where powder-capacity would directly give Magic Powder
+- Shuffled Bombs/Powder made it impossible to obtain from specific sources
 <br></br><br></br>
-- Fixed issue with reloading a save after completing the Rapids Race
+- Bad Pets setting would not work with randomized music
 <br></br><br></br>
-- Fixed softlock from entering water caves early with the Rooster
+- Having Bottle[1] made the Fishing Bottle not spawn
 <br></br><br></br>
-- Fixed many issues with Damp&eacute;
+- Having GoldenLeaf[4] made the Kanalet Final Guard not spawn
+<br></br><br></br>
+- The romfs path no longer requires a folder named "romfs"

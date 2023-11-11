@@ -3,15 +3,14 @@ from Randomizers import item_get
 
 
 
-def makeEventChanges(flowchart, placements, item_defs):
+def makeEventChanges(flowchart, placements, settings, item_defs):
     """Edits Tarin to detain you based on if you talked to him rather than on having shield"""
     
     item_index = placements['indexes']['tarin'] if 'tarin' in placements['indexes'] else -1
     item_get.insertItemGetAnimation(flowchart, item_defs[placements['tarin']]['item-key'], item_index, 'Event52', 'Event31')
 
     # If reduce-farming is on, and Tarin has boots, also give 20 bombs if Tarin has boots
-    # and not placements['settings']['shuffle-bombs']
-    if placements['tarin'] == 'boots' and placements['settings']['reduce-farming']:
+    if placements['tarin'] == 'boots' and settings['reduce-farming']:
         event_tools.createActionChain(flowchart, 'Event31', [
             ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 30, 'index': -1, 'autoEquip': False})
         ], 'Event2')
@@ -48,7 +47,7 @@ def makeEventChanges(flowchart, placements, item_defs):
         event_defs += item_get.insertItemWithoutAnimation(item_key, -1)
     
     after = 'Event52'
-    starting_rupees = placements['settings']['starting-rupees']
+    starting_rupees = settings['starting-rupees']
     if starting_rupees > 0:
         event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AddRupee')
         after = event_tools.createActionEvent(flowchart, 'Link', 'AddRupee', {'amount': starting_rupees}, 'Event52')

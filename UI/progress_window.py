@@ -20,18 +20,19 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.rom_path : str = rom_path
         self.out_dir : str = out_dir
         self.seed : str = seed
+        self.randstate = None
         self.logic : str = logic
         self.item_defs = copy.deepcopy(item_defs)
         self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 155 - len(settings['starting-items'])
-        self.num_of_mod_tasks = 249 # +3 for shop
+        self.num_of_mod_tasks = 258
         
         # if not settings['shuffle-companions']:
-        #     self.num_of_mod_files -= 8
+        #     self.num_of_mod_files += 8
 
-        if settings['blup-sanity']:
+        if settings['blupsanity']:
             self.num_of_mod_tasks += 1
         
         if settings['owl-overworld-gifts']:
@@ -48,9 +49,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_tasks += 10
         
         if settings['randomize-enemies']:
-            self.num_of_mod_tasks += 347
+            self.num_of_mod_tasks += 312
         
-        if settings['shuffled-dungeons']:
+        if settings['shuffle-dungeons']:
             self.num_of_mod_tasks += 19
         
         if settings['classic-d2']:
@@ -78,8 +79,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.progressBar.setMaximum(self.valid_placements)
         self.ui.label.setText(f'Shuffling item placements...')
         self.shuffler_process =\
-            ItemShuffler(self.rom_path, f'{self.out_dir}',
-                self.seed, self.logic, self.settings, self.item_defs, self.logic_defs)
+            ItemShuffler(self.out_dir, self.seed, self.logic, self.settings, self.item_defs, self.logic_defs)
         self.shuffler_process.setParent(self)
         self.shuffler_process.progress_update.connect(self.updateProgress)
         self.shuffler_process.progress_adjustment.connect(self.adjustProgress)
@@ -101,7 +101,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     # receive the placements from the shuffler thread to the modgenerator
     def receivePlacements(self, placements):
-        self.placements = placements
+        self.placements = placements[0]
+        self.randstate = placements[1]
     
 
     def shufflerError(self, er_message=str):
@@ -110,6 +111,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         with open(LOGS_PATH, 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
             f.write(f'\n\n{er_message}')
+            f.write(f'\n\n{self.settings}')
     
 
     # receive signals when threads are done
@@ -129,7 +131,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.progressBar.setValue(0)
         self.ui.progressBar.setMaximum(self.num_of_mod_tasks)
         self.ui.label.setText(f'Generating mod files...')
-        self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed)
+        self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed, self.randstate)
         self.mods_process.setParent(self)
         self.mods_process.progress_update.connect(self.updateProgress)
         self.mods_process.is_done.connect(self.modsDone)
@@ -141,9 +143,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.mods_error = True
         from randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
-            f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
-            f.write(f'\n\n{er_message}')
-            f.write(f'\n\n{self.placements}')
+            f.write(f"{self.seed} - {self.logic.capitalize()} Logic")
+            f.write(f"\n\n{er_message}")
+            f.write(f"\n\n{self.settings}")
 
 
     def modsDone(self):

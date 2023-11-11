@@ -60,7 +60,7 @@ def saleChanges(flowchart, placements, item_defs, rom_path):
 
 
 
-def kikiChanges(flowchart, placements, item_defs, rom_path):
+def kikiChanges(flowchart, placements, settings, item_defs, rom_path):
     actors.addNeededActors(flowchart, rom_path)
 
     item = placements['kiki']
@@ -77,7 +77,7 @@ def kikiChanges(flowchart, placements, item_defs, rom_path):
     fork = event_tools.findEvent(flowchart, 'Event88')
     fork.data.forks.pop(0)
 
-    if placements['settings']['open-bridge']:
+    if settings['open-bridge']:
         event_tools.insertEventAfter(flowchart, 'Event9', 'Event31')
         event_tools.insertEventAfter(flowchart, 'Event10', 'Event31')
 

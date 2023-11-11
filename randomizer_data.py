@@ -81,6 +81,12 @@ TOTAL_CHECKS = set([
 
 SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
 
-LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'death', 'none')
+LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'hell', 'none')
 
 OWLS_SETTINGS = ('none', 'overworld', 'dungeons', 'all') # ('vanilla', 'hints', 'gifts', 'hybrid')
+
+TRAP_SETTINGS = ('none', 'few', 'several', 'many')
+
+# DUNGEON_ITEM_SETTINGS = ('standard', 'keys', 'keys+mcb')
+
+PLATFORMS = ('console', 'emulator')

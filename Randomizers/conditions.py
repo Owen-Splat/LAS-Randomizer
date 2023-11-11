@@ -36,7 +36,7 @@ def makeConditions(sheet, placements):
 
 
 
-def editConditions(condition, placements, item_defs):
+def editConditions(condition, settings):
     """Makes needed changes to conditions, such as making Marin staying in Mabe and the shop not sell shields until you find one"""
     
     # Make sure Marin always stays in the village even if you trade for the pineapple
@@ -69,7 +69,7 @@ def editConditions(condition, placements, item_defs):
     
     # Make the shop not sell bombs until you find some (flag automatically set with unlocked-bombs on)
     # Condition stays as ConchHorn if neither unlocked-bombs or shuffled-bombs is on
-    if condition['symbol'] == 'ShopBombCondition' and (placements['settings']['unlocked-bombs'] or placements['settings']['shuffle-bombs']):
+    if condition['symbol'] == 'ShopBombCondition' and (settings['unlocked-bombs'] or settings['shuffle-bombs']):
         condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
         return
     

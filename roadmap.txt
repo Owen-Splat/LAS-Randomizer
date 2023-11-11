@@ -1,36 +1,56 @@
 v0.3
 
-any potential GUI cleanup
+- test fishing bottle patch
 
-make a release candidate build, give it a few weeks
+- update GUI for setting console/emulator output
 
-potentially release the randomizer on gamebanana, maybe will wait until 0.4
+- make a 2nd release candidate build, give it a week or two
 
 -------------------------------------------------------------------------------------------------------------------------------------
 v0.4
 
-trendy
+- finish writing keysanity (work on this first and release a new dev build when done)
 
-shop
+- work on custom text, probably will first implement to work with keysanity
 
-individual tricks toggles
+- make new eventflow file to streamline giving items instead of always calling item_get.py
 
-try to find better workaround for slime key
+- write custom text for tunics, also make telephone tunic switcher less confusing
 
-make separete repo containing custom models to be used optionally with rando
-    for songs, capacity upgrades, and even custom items
+- trendy
+
+- shop
+
+- individual tricks toggles
+
+- try to find better workaround for slime key
 
 -------------------------------------------------------------------------------------------------------------------------------------
 GENERAL FUTURE STUFF TO LOOK INTO
 
-fix sunken heart pieces (likely needs asm patches)
+- make separete repo containing custom models to be used optionally with rando
+    for songs, capacity upgrades, and even custom items
 
-randomize seashells (needs asm patches)
+- fix sunken heart pieces
+    needs asm to make heart pieces ignore inventory
+    then all heart pieces will be changed back into heart piece actors
 
-turn small key actors into golden leaf actors to remove compass ringing (needs asm patches)
+- randomize seashells
+    will be by far the most complex asm
+    seashells need to ignore inventory as well as add actor params to the ones dynamically spawned in
 
-fix dampe logic for instrument shuffle sometime (i refuse to do this myself lol)
+- turn small key actors that are not actually keys into golden leaf actors to remove compass ringing
+    needs asm patch to make golden leaf actors ignore inventory
 
+- fix dampe logic for instrument shuffle
+    logic currently assumes that if you have the instrument, you have all the items needed to clear the rooms
+    this is obviously not true with instrument shuffle, but logic is complex and I do not care enough for it
+
+
+    FIXED, NEEDS TESTING
 fix fishing bottle (tried sneakily adding and removing the bottle from inventory, but Inventory.RemoveItem cannot handle indexes)
+    wrote asm to make Inventory.RemoveItem itemType 0 remove the bottle, since nothing uses the event to remove SwordLv1
+    this need testing because the game could potentially reference the same function for Dampe
 
 fix ball and chain soldier not spawning if the player has the leaf (likely needs asm patches)
+    wrote asm to skip over deleting the enemy if the player has the leaf

@@ -4,14 +4,10 @@ import oead
 
 
 
-def makeDatasheetChanges(sheet, placements):
+def makeDatasheetChanges(sheet, settings):
     """Iterates through all the values in the ItemDrop datasheet and makes changes"""
     
     for i in range(len(sheet['values'])):
-
-        # sheet['values'][i]['condition'] = ''
-        # if sheet['values'][i]['mKey'] == 'Bomb' and placements['settings']['shuffle-bombs']:
-        #     sheet['values'][i]['condition'] = data.BOMBS_FOUND_FLAG
         
         if sheet['values'][i]['mKey'] == 'HeartContainer0':
             first_heart_index = i
@@ -24,29 +20,16 @@ def makeDatasheetChanges(sheet, placements):
             sheet['values'][i]['mLotTable'][0]['mType'] = ''
         
         if sheet['values'][i]['mKey'] == 'Bomb':
-            if placements['settings']['reduce-farming']:
+            if settings['reduce-farming']:
                 sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-            if placements['settings']['shuffle-bombs']:
-                sheet['values'][i]['mLotTable'][0]['mCookie'] = 0
-        
-        if sheet['values'][i]['mKey'] == 'GhiniBomb' and placements['settings']['shuffle-bombs']:
-            sheet['values'][i]['mLotTable'][3]['mCookie'] = 0 # set bomb drops to 0
-        
-        if sheet['values'][i]['mKey'] == 'ShadowLink':
-            if placements['settings']['shuffle-bombs']:
-                sheet['values'][i]['mLotTable'][7]['mCookie'] = 0 # set bomb drops to 0
-            if placements['settings']['shuffle-powder']:
-                sheet['values'][i]['mLotTable'][8]['mCookie'] = 0 # set powder drops to 0
         
         if sheet['values'][i]['mKey'] == 'MagicPowder':
-            if placements['settings']['reduce-farming']:
+            if settings['reduce-farming']:
                 sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-            if placements['settings']['shuffle-powder']:
-                sheet['values'][i]['mLotTable'][0]['mCookie'] = 0
         
-        if sheet['values'][i]['mKey'] == 'Arrow' and placements['settings']['reduce-farming']:
+        if sheet['values'][i]['mKey'] == 'Arrow' and settings['reduce-farming']:
             sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-        if sheet['values'][i]['mKey'] == 'Grass' and placements['settings']['reduce-farming']:
+        if sheet['values'][i]['mKey'] == 'Grass' and settings['reduce-farming']:
             sheet['values'][i]['mLotTable'][1]['mWeight'] = 18
             sheet['values'][i]['mLotTable'][2]['mWeight'] = 3
             sheet['values'][i]['mLotTable'][3]['mWeight'] = 71

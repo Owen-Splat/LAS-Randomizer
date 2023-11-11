@@ -59,7 +59,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
         
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder', 'keepCarry': False, 'messageEntry': item})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item})
         ], powder_check)
     
     if item == 'Bomb_MaxUp':
@@ -71,14 +71,14 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
 
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Bomb', 'keepCarry': False, 'messageEntry': item})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item})
         ], bombs_check)
     
     if item == 'Arrow_MaxUp':
         return event_tools.createActionChain(flowchart, before, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Inventory', 'AddItemByKey', {'itemKey': 'Arrow', 'count': 60, 'index': -1, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'Arrow', 'keepCarry': False, 'messageEntry': item})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item})
         ], after)
     
 
@@ -209,7 +209,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('EventFlags', 'SetFlag', {'symbol': data.RED_TUNIC_FOUND_FLAG, 'value': True}),
             ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Red_00', 'index': 0, 'restart': False, 'time': 3.58}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesRed'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'ClothesRed'})
         ], after)
     
     if item == 'ClothesBlue':
@@ -217,17 +217,16 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('EventFlags', 'SetFlag', {'symbol': data.BLUE_TUNIC_FOUND_FLAG, 'value': True}),
             ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Blue_00', 'index': 0, 'restart': False, 'time': 3.58}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesBlue'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'ClothesBlue'})
         ], after)
     
     if item == 'ClothesGreen':
         return event_tools.createActionChain(flowchart, before, [
             ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Green_00', 'index': 0, 'restart': False, 'time': 3.58}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': 'MagicPowder_MaxUp', 'keepCarry': False, 'messageEntry': 'ClothesGreen'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'ClothesGreen'})
         ], after)
     
-
     ### Medicine
     if item == 'SecretMedicine':
         return event_tools.createActionChain(flowchart, before, [
@@ -236,7 +235,6 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'Heal', {'amount': 99})
         ], after)
     
-
     ### Shuffled Bombs and Powder
     if item == 'Bomb':
         return event_tools.createActionChain(flowchart, before, [
@@ -244,24 +242,21 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 60, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
-    
     if item == 'MagicPowder':
-        return event_tools.createActionChain(flowchart, before, [
+        return [
             ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False}),
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'MagicPowder_First'})
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
+        ]
+    
+    ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
+    if item == 'Bottle' and index == 1:
+        return event_tools.createActionChain(flowchart, before, [
+            ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     
-
-    # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
-    # if item == 'Bottle' and index == 1:
-    #     return event_tools.createActionChain(flowchart, before, [
-    #         ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
-    #         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-    #         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
-    #     ], after)
-
-
     ### Trade Quest items
     if item == 'YoshiDoll':
         return event_tools.createActionChain(flowchart, before, [
@@ -347,11 +342,10 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
-    
-
+        
     ### everything else - play the get event before giving the item, otherwise it messes with index related messages
-    # this is how the game normally does it, and so for the "just one more until you have them all" messages,
-    # the game actually checks for 2 heart pieces and 3 golden leaves respectively
+    # this is how the game normally does it, and so for the "you've collected them all" messages,
+    # the game actually checks for 3 heart pieces and 4 golden leaves respectively
     return event_tools.createActionChain(flowchart, before, [
         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item}),
         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})

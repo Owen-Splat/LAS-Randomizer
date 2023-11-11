@@ -5,7 +5,7 @@ import copy
 
 
 
-def makeNpcChanges(npc, placements):
+def makeNpcChanges(npc, placements, settings):
     """Makes lots of changes to the Npc datasheet to make this randomizer work, 
     ranging from event triggers to layout conditions to even graphics changes. 
     Also makes the shell sensor go off if the Npc holds a seashell"""
@@ -41,7 +41,7 @@ def makeNpcChanges(npc, placements):
         npc['collision']['filter'] = 5
         npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific yoshidoll actors trigger the shell sensor
         return
-        
+    
     if npc['symbol'] == 'ItemHoneycomb': # Make the Honeycomb object ring the sensor instead of Tarin
         npc['graphics']['path'] = '$0'
         npc['graphics']['model'] = '$1'
@@ -80,13 +80,19 @@ def makeNpcChanges(npc, placements):
         npc['talk'] = {'personalSpace': 1.5, 'talkerLabel': 'NpcFairyQueen'}
         return
     
-    # make the flying bomb refills not appear until you find your bombs
-    if npc['symbol'] == 'ItemFeatherBomb' and placements['settings']['shuffle-bombs']:
+    # make the bomb refills not appear until you find your bombs
+    if npc['symbol'] == 'ItemBomb' and settings['shuffle-bombs']:
+        npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
+        return
+    if npc['symbol'] == 'ItemFeatherBomb' and settings['shuffle-bombs']:
         npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
         return
     
-    # make the flying powder refills not appear until you find your powder
-    if npc['symbol'] == 'ItemFeatherMagicPowder' and placements['settings']['shuffle-powder']:
+    # make the powder refills not appear until you find your powder
+    if npc['symbol'] == 'ItemMagicPowder' and settings['shuffle-powder']:
+        npc['layoutConditions'].append({'category': 1, 'parameter': '!GetMagicPowder', 'layoutID': -1})
+        return
+    if npc['symbol'] == 'ItemFeatherMagicPowder' and settings['shuffle-powder']:
         npc['layoutConditions'].append({'category': 1, 'parameter': '!GetMagicPowder', 'layoutID': -1})
         return
     
@@ -104,7 +110,7 @@ def makeNpcChanges(npc, placements):
         del npc['layoutConditions'][0]
         return
     
-    if npc['symbol'] == 'NpcKiki' and placements['settings']['open-bridge']:
+    if npc['symbol'] == 'NpcKiki' and settings['open-bridge']:
         npc['layoutConditions'][0] = {'category': 1, 'parameter': 'KikiGone', 'layoutID': -1}
         return
     
@@ -199,7 +205,7 @@ def makeNpcChanges(npc, placements):
 
 
 def makeNewNpcs(npc_sheet):
-    """add new npcs so that we can properly show item models"""
+    """We change the graphics for some items, so create new npcs to show the correct model when obtaining them"""
 
     dummy = copy.deepcopy(DUMMY_NPC)
     dummy['symbol'] = 'PatchSmallKey'
