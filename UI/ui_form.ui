@@ -2625,16 +2625,7 @@
     <addaction name="separator"/>
     <addaction name="actionDark"/>
    </widget>
-   <widget class="QMenu" name="menuLogic">
-    <property name="title">
-     <string>Logic</string>
-    </property>
-    <addaction name="actionUpdate"/>
-    <addaction name="separator"/>
-    <addaction name="actionExport"/>
-   </widget>
    <addaction name="menuLanguage"/>
-   <addaction name="menuLogic"/>
    <addaction name="menuTheme"/>
    <addaction name="menuAbout"/>
   </widget>

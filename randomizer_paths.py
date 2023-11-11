@@ -29,8 +29,6 @@ import sys
 import appdirs
 import platform
 
-
-
 if getattr(sys, "frozen", False):
     # application is frozen
     ROOT_PATH = os.path.dirname(sys.executable)
@@ -40,11 +38,9 @@ if getattr(sys, "frozen", False):
         if not os.path.isdir(userdata_path):
             os.mkdir(userdata_path)
         SETTINGS_PATH = os.path.join(userdata_path, 'settings.txt')
-        LOGIC_PATH = os.path.join(userdata_path, 'logic.yml')
         LOGS_PATH = os.path.join(userdata_path, 'log.txt')
     else:
         SETTINGS_PATH = os.path.join('.', 'settings.txt')
-        LOGIC_PATH = os.path.join('.', 'logic.yml')
         LOGS_PATH = os.path.join('.', 'log.txt')
 else:
     # application is not frozen
@@ -55,5 +51,4 @@ else:
 
 DATA_PATH = os.path.join(ROOT_PATH, 'Data')
 RESOURCE_PATH = os.path.join(ROOT_PATH, 'Resources')
-if IS_RUNNING_FROM_SOURCE:
-    LOGIC_PATH = os.path.join(DATA_PATH, 'logic.yml')
+LOGIC_PATH = os.path.join(DATA_PATH, 'logic.yml')

@@ -690,12 +690,9 @@ class Ui_MainWindow(object):
         self.menuAbout.setObjectName(u"menuAbout")
         self.menuTheme = QMenu(self.menuBar)
         self.menuTheme.setObjectName(u"menuTheme")
-        self.menuLogic = QMenu(self.menuBar)
-        self.menuLogic.setObjectName(u"menuLogic")
         MainWindow.setMenuBar(self.menuBar)
 
         self.menuBar.addAction(self.menuLanguage.menuAction())
-        self.menuBar.addAction(self.menuLogic.menuAction())
         self.menuBar.addAction(self.menuTheme.menuAction())
         self.menuBar.addAction(self.menuAbout.menuAction())
         self.menuLanguage.addAction(self.actionEnglish)
@@ -711,9 +708,6 @@ class Ui_MainWindow(object):
         self.menuTheme.addAction(self.actionLight)
         self.menuTheme.addSeparator()
         self.menuTheme.addAction(self.actionDark)
-        self.menuLogic.addAction(self.actionUpdate)
-        self.menuLogic.addSeparator()
-        self.menuLogic.addAction(self.actionExport)
 
         self.retranslateUi(MainWindow)
 
@@ -1105,6 +1099,5 @@ class Ui_MainWindow(object):
         self.menuLanguage.setTitle(QCoreApplication.translate("MainWindow", u"Language", None))
         self.menuAbout.setTitle(QCoreApplication.translate("MainWindow", u"About", None))
         self.menuTheme.setTitle(QCoreApplication.translate("MainWindow", u"Theme", None))
-        self.menuLogic.setTitle(QCoreApplication.translate("MainWindow", u"Logic", None))
     # retranslateUi
 

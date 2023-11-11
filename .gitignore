@@ -1,7 +1,6 @@
 __pycache__
 .qt_for_python
 /build
-/dist
 /Models
 /output
 /romfs
@@ -10,6 +9,5 @@ __pycache__
 /Tools/text_tools.py
 /Test
 tests.py
-memory_tests.py
 settings.txt
 log.txt

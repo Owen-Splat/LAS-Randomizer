@@ -42,12 +42,12 @@ if platform.system() == "Linux":
 
 release_archive_path = os.path.join(".", "build/exe.win-amd64-3.8")
 
-if os.path.exists(release_archive_path) and os.path.isdir(release_archive_path):
-	shutil.rmtree(release_archive_path)
+# if os.path.exists(release_archive_path) and os.path.isdir(release_archive_path):
+# 	shutil.rmtree(release_archive_path)
 
-os.mkdir(release_archive_path)
+# os.mkdir(release_archive_path)
 shutil.copyfile("README.md", os.path.join(release_archive_path, "README.txt"))
-shutil.copyfile('Data/logic.yml', os.path.join(release_archive_path, 'logic.yml'))
+# shutil.copyfile('Data/logic.yml', os.path.join(release_archive_path, 'logic.yml'))
 
 # shutil.move(exe_path, os.path.join(release_archive_path, base_name + exe_ext))
 

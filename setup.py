@@ -2,7 +2,7 @@ import sys
 from cx_Freeze import setup, Executable
 
 build_exe_options = {"packages": ["os"], 
-                    "excludes": ["numpy", "zstandard"],
+                    "excludes": ["tkinter", "sqlite3", "numpy", "matplotlib", "zstandard"],
                     "include_files": ["Data", "Resources", "version.txt"],
                     "optimize": 2}
 
