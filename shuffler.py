@@ -672,7 +672,7 @@ class ItemShuffler(QtCore.QThread):
                 access = self.removeAccess(access, item)
                 
                 # Check for item type restrictions, i.e. songs can't be standing items
-                if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('hidden', 'dig', 'underwater'):
+                if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('standing', 'hidden', 'dig', 'drop', 'underwater', 'shop'):
                     valid_placement = False
                 elif item in self.force_chests and self.logic_defs[locations[0]]['subtype'] != 'chest':
                     valid_placement = False
