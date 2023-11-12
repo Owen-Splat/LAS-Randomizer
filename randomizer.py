@@ -28,7 +28,7 @@ except ImportError:
 
 app = QtWidgets.QApplication([])
 app.setStyle('cleanlooks')
-app.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, 'LASR_Icon.ico')))
+app.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, 'icon.png')))
 
 m = window.MainWindow()
 
