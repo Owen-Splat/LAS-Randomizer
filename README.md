@@ -1,11 +1,11 @@
 # LAS-Randomizer
 A randomizer for The Legend of Zelda: Link's Awakening remake. Currently still very early in development.
 
-Based on the original randomizer here: https://github.com/la-switch/LAS-Randomizer
+Based on the original randomizer [here](https://github.com/la-switch/LAS-Randomizer)
 
 This release version allows for shuffling chests, NPC gifts including the Trading Quest, miscellaneous standing items, minigames, boss drops, instruments, and standing heart pieces. More work will come soon.
 
-Several extra options, including Trapsanity, Shuffled Dungeons, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk!
+Several extra options, including Trapsanity, Shuffled Dungeons, Randomized Music, Randomized Enemies and more! Don't like checking a specific location? You can toggle it to always be junk! Want to start with a specific item? Go ahead!
 
 Please note that while most things are functional, there is a definite possibility of the logic resulting in softlocks. This will be especially true with the glitched logics. If this does happen, dying and selecting the Save + Quit option will respawn you back at Marin's house.
 
@@ -42,7 +42,7 @@ If you are using a higher version of Python, change the commands to include your
 
 ## How to build:
 
-Once you have installed all the requirements, there is an included **build.bat** file. Run that and it will automatically enter the commands to create a build. Once again, if you are using a higher version of Python, you will need to edit this file to match your version
+Once you have installed all the requirements, there is an included **build.bat** file. Run that (you can just enter `build` in the terminal) and it will automatically enter the commands to create a build. Once again, if you are using a different version of Python, you will need to edit this file to match your version
 
 ## How to play:
 
@@ -54,11 +54,11 @@ The randomizer does not provide a second copy of the game to use, but rather mak
 
 The number of files will differ depending on settings, so clear out any old files first.
 
-Switch: On your SD card for your homebrew setup, navigate to the `Atmosphere/contents` folder and create a new directory named `01006BB00C6F0000`. Copy and paste the `romfs` folder from the randomizer output into this new folder. That is, the folder structure here should look like `Atmosphere/contents/01006BB00C6F0000/romfs/...`. Next, copy and paste the `exefs_patches` folder from the randomizer output into the `Atmosphere` folder. It should look like `Atmosphere/exefs_patches/las_randomizer/...` with 2 ips files inside. After this, relaunch CFW and simply start up Link's Awakening to play the randomizer!
+Switch: Copy and paste the `Atmosphere` folder from the output to the root of your SD card. I'd recommend to use a file transfer homebrew app to avoid needing to take the SD card out and relaunch CFW each time.
 
-Emulator: Open up the mods folder and create a new directory named `01006BB00C6F0000`. Enter it and create a new folder named whatever you want. Inside that should be the `romfs` and `exefs` folders from the randomizer output. It should look something like `%ModsDir%/01006BB00C6F0000/%OutputFolder/romfs/...` and `%ModsDir%/01006BB00C6F0000/LASRando/exefs/...`
+Emulator: Set the output platfrom to emulator and set the output path to the emulator's mod directory for Link's Awakening. After creating a seed, simply just enable it and enjoy playing!
 
-Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or launch the game holding L. Keep in mind that exefs patches are still applied even when holding L.
+Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or launch the game holding L. Keep in mind that exefs patches are still applied even when holding L. Because of this, the SimpleModManager homebrew app is a wonderful solution. You can simply toggle on/off individual mods.
 
 ### Known Issues:
 - Dampe lacks logic for instrument shuffle
@@ -67,7 +67,7 @@ Applying this mod will not in any way affect your save data, so don't delete any
 - Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
 
 ### Special Thanks:
-- Glan: For creating the earlier builds of this randomizer and always helping answer any questions
+- Glan: For creating the original early builds of the randomizer and answering any questions I had
 - Br00ty: For always playtesting early dev builds and for work on maptracker for newer rando versions
 - EDL666: For being an awesome friend who has been thoroughly reporting on bugs and feedback
 - And everyone who has played this randomizer: Seeing people enjoy themselves playing this makes the time I've spent working on this feel worth it :)
