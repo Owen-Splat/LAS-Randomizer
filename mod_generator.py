@@ -1963,13 +1963,13 @@ class ModsProcess(QtCore.QThread):
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Kiki.bfevfl')
             trade_quest.kikiChanges(flow.flowchart, self.placements, self.settings, self.item_defs, self.rom_path)
 
-            # shuffle bridge building music
-            if self.settings['randomize-music']:
-                event_tools.findEvent(flow.flowchart, 'Event114').data.params.data['label'] = self.songs_dict['BGM_EVENT_MONKEY']
-                event_tools.addForkEventForks(flow.flowchart, 'Event102', [
-                    event_tools.createActionEvent(flow.flowchart, 'Audio', 'StopBGM',
-                        {'label': self.songs_dict['BGM_EVENT_MONKEY'], 'duration': 0.0})
-                ])
+            # # shuffle bridge building music
+            # if self.settings['randomize-music']:
+            #     event_tools.findEvent(flow.flowchart, 'Event114').data.params.data['label'] = self.songs_dict['BGM_EVENT_MONKEY']
+            #     event_tools.addForkEventForks(flow.flowchart, 'Event102', [
+            #         event_tools.createActionEvent(flow.flowchart, 'Audio', 'StopBGM',
+            #             {'label': self.songs_dict['BGM_EVENT_MONKEY'], 'duration': 0.0})
+            #     ])
             
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Kiki.bfevfl', flow)
 
