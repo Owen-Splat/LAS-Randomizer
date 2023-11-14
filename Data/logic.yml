@@ -1948,7 +1948,7 @@ D7-instrument:
   content: evening-calm-organ
   region: eagle-tower
   spoiler-region: eagle-tower
-  condition-basic: D7-2F & kill-evil-eagle
+  condition-basic: D7-2F & hookshot & kill-evil-eagle
 D7-eagle:
   type: item
   subtype: boss
@@ -1956,7 +1956,7 @@ D7-eagle:
   index: 6
   region: eagle-tower
   spoiler-region: eagle-tower
-  condition-basic: D7-2F & kill-evil-eagle
+  condition-basic: D7-2F & hookshot & kill-evil-eagle
 D7-like-likes:
   type: item
   subtype: drop
@@ -2155,7 +2155,7 @@ D8-surrounded-by-blocks:
   content: map-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & (feather | (rooster & bad-pets))
+  condition-basic: D8-8D & feather
 D8-sparks-chest:
   type: item
   subtype: chest
@@ -2169,14 +2169,14 @@ D8-east-of-pots:
   content: zol-trap
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & ((feather | (rooster & bad-pets)) | (break-pot & kill-vire))
+  condition-basic: D8-8D & (feather | (break-pot & kill-vire))
 D8-east-roomba:
   type: item
   subtype: drop
   content: key-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & ((feather & bombs) | (rooster & bad-pets))
+  condition-basic: D8-8D & feather & bombs
   condition-advanced: D8-8D & dash-jump
 D8-far-southwest:
   type: item
@@ -2191,14 +2191,14 @@ D8-far-southeast:
   content: stone-beak-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & (feather | (rooster & bad-pets)) & kill-smasher & (bombs | break-pot)
+  condition-basic: D8-8D & feather & kill-smasher & (bombs | break-pot)
 D8-owl-statue-above-smasher:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & (feather | (rooster & bad-pets)) & ((bombs & kill-smasher) | (break-pot & kill-arm-mimic)) & stone-beak-D8
+  condition-basic: D8-8D & feather & ((bombs & kill-smasher) | (break-pot & kill-arm-mimic)) & stone-beak-D8
   condition-advanced: D8-8D & dash-jump & kill-smasher & stone-beak-D8
 D8-owl-statue-below-gibdos:
   type: item
@@ -2206,7 +2206,7 @@ D8-owl-statue-below-gibdos:
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & (feather | (rooster & bad-pets)) & key-D8:2 & stone-beak-D8
+  condition-basic: D8-8D & feather & key-D8:2 & stone-beak-D8
 D8-owl-statue-eye-statue:
   type: item
   subtype: dungeon-statue
