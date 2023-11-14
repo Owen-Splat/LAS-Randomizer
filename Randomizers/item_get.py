@@ -155,7 +155,7 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'dmg_quake'}),
             event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}),
             event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
-            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6})
+            event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 2})
         ]
         return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
     
