@@ -1554,7 +1554,7 @@ D3-vacuum-mouth:
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-8B & (boots | hookshot) # (rooster & bad-pets) # maybe rooster works here?
+  condition-basic: D3-8B & (boots | hookshot | (rooster & bad-pets))
 D3-owl-statue-basement-north:
   type: item
   subtype: dungeon-statue
