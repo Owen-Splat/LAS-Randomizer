@@ -243,11 +243,11 @@ def insertItemGetAnimation(flowchart, item, index, before=None, after=None, play
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
         ], after)
     if item == 'MagicPowder':
-        return [
+        return event_tools.createActionChain(flowchart, before, [
             ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False}),
             ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
-        ]
+        ], after)
     
     ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
     if item == 'Bottle' and index == 1:
