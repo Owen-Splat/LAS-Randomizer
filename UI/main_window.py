@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.starting_gear = list()
         self.overworld_owls = bool(False)
         self.dungeon_owls = bool(False)
-        
+
         # Load User Settings
         if not DEFAULTS:
             self.loadSettings()
@@ -111,11 +111,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.instrumentsComboBox,
             self.ui.owlsComboBox,
             self.ui.platformComboBox,
-            self.ui.rupeesSpinBox
+            self.ui.rupeesSpinBox,
+            self.ui.trapsComboBox
         ])
         for item in desc_items:
             item.installEventFilter(self)
         
+        self.makeSmartComboBoxes()
+
         ### show and check for updates
         self.setFixedSize(780, 640)
         self.setWindowTitle(f'{self.windowTitle()} v0.3.0-rc2') # {VERSION}')
@@ -133,25 +136,48 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+    def makeSmartComboBoxes(self):
+        combos = [
+            self.ui.seashellsComboBox,
+            self.ui.tricksComboBox,
+            self.ui.instrumentsComboBox,
+            self.ui.owlsComboBox,
+            self.ui.platformComboBox,
+            self.ui.trapsComboBox
+        ]
+        for combo in combos:
+            combo.__class__ = SmartComboBox
+            combo.popup_closed.connect(self.closeComboBox)
+    
+
+
+    def closeComboBox(self):
+        self.ui.explainationLabel.setText('Hover over an option to see what it does')
+        if self.mode == 'light':
+            self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
+        else:
+            self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
+    
+
+
     # event filter for showing option info onto label
     def eventFilter(self, source, event):
-        
-        if event.type() == QtCore.QEvent.Type.HoverEnter: # Display description text of items when hovered over
+
+        # Display description text of items when hovered over
+        if event.type() == QtCore.QEvent.Type.HoverEnter:
             self.ui.explainationLabel.setText(source.whatsThis())
             if self.mode == 'light':
                 self.ui.explainationLabel.setStyleSheet('color: black;')
             else:
                 self.ui.explainationLabel.setStyleSheet('color: white;')
         
-        elif event.type() == QtCore.QEvent.Type.HoverLeave: # Display default text when item is no longer hovered over
+        # Display default text when item is no longer hovered over
+        elif event.type() == QtCore.QEvent.Type.HoverLeave:
             self.ui.explainationLabel.setText('Hover over an option to see what it does')
             if self.mode == 'light':
                 self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
             else:
                 self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-            
-            # if isinstance(source, QtWidgets.QComboBox) and source.hasFocus():
-            #     source.clearFocus()
         
         return QtWidgets.QWidget.eventFilter(self, source, event)
     
@@ -731,8 +757,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Chests Check Changed
-    def chestsCheck_Clicked(self):
-        if self.ui.chestsCheck.isChecked():
+    def chestsCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
         else:
             self.excluded_checks.update(MISCELLANEOUS_CHESTS)
@@ -740,8 +766,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Fishing Check Changed
-    def fishingCheck_Clicked(self):
-        if self.ui.fishingCheck.isChecked():
+    def fishingCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(FISHING_REWARDS)
         else:
             self.excluded_checks.update(FISHING_REWARDS)
@@ -749,8 +775,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Rapids Check Changed
-    def rapidsCheck_Clicked(self):
-        if self.ui.rapidsCheck.isChecked():
+    def rapidsCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(RAPIDS_REWARDS)
             if self.overworld_owls:
                 self.excluded_checks.difference_update(['owl-statue-rapids'])
@@ -762,8 +788,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Dampe Check Changed
-    def dampeCheck_Clicked(self):
-        if self.ui.dampeCheck.isChecked():
+    def dampeCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(DAMPE_REWARDS)
         else:
             self.excluded_checks.update(DAMPE_REWARDS)
@@ -771,8 +797,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # # Trendy Check Changed
-    # def trendyCheck_Clicked(self):
-    #     if self.ui.trendyCheck.isChecked():
+    # def trendyCheck_Clicked(self, checked):
+    #     if checked:
     #         self.excluded_checks.difference_update(TRENDY_REWARDS)
     #     else:
     #         self.excluded_checks.update(TRENDY_REWARDS)
@@ -780,8 +806,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # # Shop Check Changed
-    # def shopCheck_Clicked(self):
-    #     if self.ui.shopCheck.isChecked():
+    # def shopCheck_Clicked(self, checked):
+    #     if checked:
     #         self.excluded_checks.difference_update(SHOP_ITEMS)
     #     else:
     #         self.excluded_checks.update(SHOP_ITEMS)
@@ -789,8 +815,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Gifts Check Changed
-    def giftsCheck_Clicked(self):
-        if self.ui.giftsCheck.isChecked():
+    def giftsCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
         else:
             self.excluded_checks.update(FREE_GIFT_LOCATIONS)
@@ -798,8 +824,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Trade Quest Check Changed
-    def tradeQuest_Clicked(self):
-        if self.ui.tradeGiftsCheck.isChecked():
+    def tradeQuest_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(TRADE_GIFT_LOCATIONS)
         else:
             self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
@@ -807,8 +833,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Bosses Check Changed
-    def bossCheck_Clicked(self):
-        if self.ui.bossCheck.isChecked():
+    def bossCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(BOSS_LOCATIONS)
         else:
             self.excluded_checks.update(BOSS_LOCATIONS)
@@ -816,8 +842,8 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Miscellaneous Standing Items Check Changed
-    def miscellaneousCheck_Clicked(self):
-        if self.ui.miscellaneousCheck.isChecked():
+    def miscellaneousCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(MISC_LOCATIONS)
         else:
             self.excluded_checks.update(MISC_LOCATIONS)
@@ -825,16 +851,16 @@ class MainWindow(QtWidgets.QMainWindow):
     
     
     # Heart Pieces Check Changed
-    def heartsCheck_Clicked(self):
-        if self.ui.heartsCheck.isChecked():
+    def heartsCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
         else:
             self.excluded_checks.update(HEART_PIECE_LOCATIONS)
     
 
 
-    def leavesCheck_Clicked(self):
-        if self.ui.leavesCheck.isChecked():
+    def leavesCheck_Clicked(self, checked):
+        if checked:
             self.excluded_checks.difference_update(LEAF_LOCATIONS)
         else:
             self.excluded_checks.update(LEAF_LOCATIONS)
@@ -842,7 +868,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def rupCheck_Clicked(self):
-        self.excluded_checks.difference_update(BLUE_RUPEES) # regardless of if it's checked or not, reset blue rupees
+        # regardless of if it's checked or not, reset blue rupees
+        # switching to the locations tab will handle if it shows or not
+        self.excluded_checks.difference_update(BLUE_RUPEES)
     
 
 
@@ -1187,6 +1215,19 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, event):
         self.saveSettings()
         event.accept()
+
+
+
+# Create custom QComboBox to detect when the popup list is closed
+# The default signals only emit when an item is selected, NOT if the user clicks elsewhere
+# So instead we make a custom class to override hidePopup and emit a custom signal
+# We simply just iterate through each QComboBox, and set the class to this new one
+class SmartComboBox(QtWidgets.QComboBox):
+    popup_closed = QtCore.Signal()
+
+    def hidePopup(self):
+        QtWidgets.QComboBox.hidePopup(self)
+        self.popup_closed.emit()
 
 
 

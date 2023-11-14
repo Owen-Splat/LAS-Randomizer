@@ -89,9 +89,6 @@ QComboBox {
 QComboBox:hover {
     border: 1px solid rgb(120, 180, 250);
 }
-QComboBox:open {
-    border: 1px solid rgb(120, 180, 250);
-}
 QComboBox::drop-down {
     padding-right: 4px;
 }
