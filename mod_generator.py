@@ -99,6 +99,7 @@ class ModsProcess(QtCore.QThread):
         
         self.global_flags = {}
         self.songs_dict = {} 
+        self.directories = []
 
         self.progress_value = 0
         self.thread_active = True
@@ -2370,8 +2371,7 @@ class ModsProcess(QtCore.QThread):
         if not self.thread_active:
             return
         
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+        self.createDirectory(dir)
         
         if name.endswith('bfevfl'):
             event_tools.writeFlow(f'{dir}/{name}', data)
@@ -2386,3 +2386,11 @@ class ModsProcess(QtCore.QThread):
         
         self.progress_value += 1
         self.progress_update.emit(self.progress_value)
+
+
+
+    def createDirectory(self, dir):
+        if dir not in self.directories:
+            self.directories.append(dir)
+            if not os.path.exists(dir):
+                os.makedirs(dir)
