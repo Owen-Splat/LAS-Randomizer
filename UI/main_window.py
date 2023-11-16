@@ -5,9 +5,6 @@ from update import UpdateProcess, LogicUpdateProcess
 from randomizer_paths import IS_RUNNING_FROM_SOURCE
 from randomizer_data import *
 
-import yaml
-from indentation import MyDumper
-
 import os
 import yaml
 import random
@@ -1289,3 +1286,9 @@ class SmartListWidget(QtWidgets.QListWidgetItem):
                 return True
             else:
                 return False
+
+
+
+class MyDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(MyDumper, self).increase_indent(flow, indentless)
