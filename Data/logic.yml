@@ -2106,7 +2106,7 @@ D8-northern-ledge:
   content: medicine
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: (D8-4C & (feather | (rooster & bad-pets)) & hookshot) | (D8-8D & (feather | (rooster & bad-pets)) & hookshot & kill-zol-green & key-D8:2)
+  condition-basic: (D8-4C & feather & hookshot) | (D8-8D & feather & hookshot & kill-zol-green & key-D8:2)
 D8-gibdos:
   type: item
   subtype: drop
@@ -2176,7 +2176,7 @@ D8-east-roomba:
   content: key-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & bombs
+  condition-basic: D8-8D & feather & (break-pot | (rooster & bad-pets))
   condition-advanced: D8-8D & dash-jump
 D8-far-southwest:
   type: item
@@ -2191,15 +2191,15 @@ D8-far-southeast:
   content: stone-beak-D8
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & kill-smasher & (bombs | break-pot)
+  condition-basic: D8-8D & feather & (break-pot | (rooster & bad-pets))
 D8-owl-statue-above-smasher:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: D8-8D & feather & ((bombs & kill-smasher) | (break-pot & kill-arm-mimic)) & stone-beak-D8
-  condition-advanced: D8-8D & dash-jump & kill-smasher & stone-beak-D8
+  condition-basic: D8-8D & feather & (break-pot | (rooster & bad-pets)) & stone-beak-D8
+  condition-advanced: D8-8D & dash-jump & stone-beak-D8
 D8-owl-statue-below-gibdos:
   type: item
   subtype: dungeon-statue
@@ -3103,9 +3103,6 @@ kill-master-stalfos:
 kill-rolling-bones:
   type: enemy
   condition-basic: sword | shoot-arrows | bombs | rod | boomerang
-kill-smasher:
-  type: enemy
-  condition-basic: 'True'
 kill-stone-hinox:
   type: enemy
   condition-basic: (sword | shoot-arrows | bombs | rod | boomerang) & feather
