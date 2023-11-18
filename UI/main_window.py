@@ -775,8 +775,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def rapidsCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(RAPIDS_REWARDS)
-            if self.overworld_owls:
-                self.excluded_checks.difference_update(['owl-statue-rapids'])
+            self.excluded_checks.difference_update(['owl-statue-rapids'])
         else:
             self.excluded_checks.update(RAPIDS_REWARDS)
             if self.overworld_owls:
@@ -1215,10 +1214,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-# Create custom QComboBox to detect when the popup list is closed
-# The default signals only emit when an item is selected, NOT if the user clicks elsewhere
-# So instead we make a custom class to override hidePopup and emit a custom signal
-# We simply just iterate through each QComboBox, and set the class to this new one
+# Create custom QComboBox to signal when the popup is closed, regardless of how
 class SmartComboBox(QtWidgets.QComboBox):
     popup_closed = QtCore.Signal()
 
@@ -1234,49 +1230,36 @@ class SmartListWidget(QtWidgets.QListWidgetItem):
         try:
             dungeon_checks = ('D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8')
 
-            nums_a = []
-            for c in self.text():
-                if c.isdigit():
-                    nums_a.append(c)
-            if self.text().startswith(dungeon_checks):
-                del nums_a[0]
-            
-            nums_b = []
-            for c in other.text():
-                if c.isdigit():
-                    nums_b.append(c)
-            if other.text().startswith(dungeon_checks):
-                del nums_b[0]
-            
+            nums_a = [c for c in self.text() if c.isdigit()]
             nums_a = "".join(nums_a)
+            str_a = [c for c in self.text() if not c.isdigit()]
+            a = int(nums_a)
+
+            nums_b = [c for c in other.text() if c.isdigit()]
             nums_b = "".join(nums_b)
-            
-            if (len(nums_a) < 1) and (len(nums_b) < 1):
-                raise ValueError('')
-            
-            a = int("".join(nums_a))
-            b = int("".join(nums_b))
+            str_b = [c for c in other.text() if not c.isdigit()]
+            b = int(nums_b)
             
             if self.text().startswith(dungeon_checks) and other.text().startswith(dungeon_checks):
-                if not len(nums_a) == len(nums_b):
-                    return len(nums_a) > len(nums_b)
+                d = [d for d in dungeon_checks if self.text().startswith(d)]
+                if not other.text().startswith(d[0]):
+                    return int(nums_a[0]) < int(nums_b[0])
+                else:
+                    a = int(nums_a[1:])
+                    b = int(nums_b[1:])
+                    if str_a != str_b:
+                        raise ValueError('')
+                    return a < b
             if self.text().startswith(dungeon_checks) or other.text().startswith(dungeon_checks):
                 raise TypeError('')
             
-            if self.text().startswith(nums_a) and not other.text().startswith(nums_b):
-                return True
-            elif other.text().startswith(nums_b) and not self.text().startswith(nums_a):
-                return False
+            if str_a == str_b:
+                if self.text().startswith(nums_a) and other.text().startswith(nums_b):
+                    return a < b
+                if self.text().endswith(nums_a) and other.text().endswith(nums_b):
+                    return a < b
             
-            if not self.text().startswith(nums_a) and not self.text().endswith(nums_a):
-                raise TypeError('')
-            if not other.text().startswith(nums_b) and not other.text().endswith(nums_b):
-                raise TypeError('')
-            
-            # if self.text().startswith('Shop') or other.text().startswith('Shop'):
-            #     raise TypeError('')
-            
-            return a < b
+            raise TypeError('')
         
         except (IndexError, TypeError, ValueError):
             locations = [self.text(), other.text()]
