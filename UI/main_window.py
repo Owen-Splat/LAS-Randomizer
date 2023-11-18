@@ -25,7 +25,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Keep track of stuff
         self.mode = str('light')
-        self.update_pending = bool(False)
         self.logic_version = LOGIC_VERSION
         self.logic_defs = LOGIC_RAW
         self.excluded_checks = set()
@@ -38,19 +37,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.loadSettings()
         else:
             self.applyDefaults()
-        
-        # if running a build, check and read updated/edited logic file
-        # if it doesn't exist, we just use the built-in logic for the build
-        if not IS_RUNNING_FROM_SOURCE:
-            if os.path.isfile(LOGIC_PATH):
-                with open(LOGIC_PATH, 'r') as f:
-                    self.logic_defs = f.read()
-                    f.seek(0)
-                    try:
-                        self.logic_version = float(f.readline().strip('#'))
-                    except TypeError:
-                        self.logic_version = LOGIC_VERSION
-        
+                
         self.updateOwls()
         self.updateSeashells()
         
@@ -64,12 +51,11 @@ class MainWindow(QtWidgets.QMainWindow):
         ### SUBSCRIBE TO EVENTS
         
         # menu bar items
-        self.ui.actionUpdate.triggered.connect(self.checkLogic)
-        self.ui.actionExport.triggered.connect(self.exportLogic)
         self.ui.actionLight.triggered.connect(self.setLightMode)
         self.ui.actionDark.triggered.connect(self.setDarkMode)
         self.ui.actionChangelog.triggered.connect(self.showChangelog)
         self.ui.actionKnown_Issues.triggered.connect(self.showIssues)
+        self.ui.actionHelp.triggered.connect(self.showInfo)
         # folder browsing, seed generation, and randomize button
         self.ui.browseButton1.clicked.connect(self.romBrowse)
         self.ui.browseButton2.clicked.connect(self.outBrowse)
@@ -118,19 +104,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ### show and check for updates
         self.setFixedSize(780, 640)
-        self.setWindowTitle(f'{self.windowTitle()} v0.3.0-rc2') # {VERSION}')
+        self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
         
         # self.ui.retranslateUi(self)
         
-        self.show()
+        self.process = UpdateProcess()
+        self.process.can_update.connect(self.showUpdate)
+        self.process.give_version.connect(self.obtainVersion)
+        self.process.start()
         
-        if IS_RUNNING_FROM_SOURCE:
-            self.ui.updateChecker.setText('Running from source. No updates will be checked')
-        else:
-            self.process = UpdateProcess() # initialize a new QThread class
-            self.process.can_update.connect(self.showUpdate) # connect a boolean signal to showUpdate()
-            self.process.start() # start the thread
-
+        self.show()
 
 
     def makeSmartComboBoxes(self):
@@ -147,7 +130,6 @@ class MainWindow(QtWidgets.QMainWindow):
             combo.popup_closed.connect(self.closeComboBox)
     
 
-
     def closeComboBox(self):
         self.ui.explainationLabel.setText('Hover over an option to see what it does')
         if self.mode == 'light':
@@ -156,11 +138,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
     
 
-
-    # event filter for showing option info onto label
     def eventFilter(self, source, event):
 
-        # Display description text of items when hovered over
         if event.type() == QtCore.QEvent.Type.HoverEnter:
             self.ui.explainationLabel.setText(source.whatsThis())
             if self.mode == 'light':
@@ -168,7 +147,6 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.ui.explainationLabel.setStyleSheet('color: white;')
         
-        # Display default text when item is no longer hovered over
         elif event.type() == QtCore.QEvent.Type.HoverLeave:
             self.ui.explainationLabel.setText('Hover over an option to see what it does')
             if self.mode == 'light':
@@ -179,29 +157,49 @@ class MainWindow(QtWidgets.QMainWindow):
         return QtWidgets.QWidget.eventFilter(self, source, event)
     
 
-
-    # show update if there is one
-    def showUpdate(self, update):
-        if update:
-            self.update_pending = True
-            self.ui.updateChecker.setText(f"<a href='{DOWNLOAD_PAGE}'>Update found!</a>")
-        else:
-            self.ui.updateChecker.setText('No updates available')
+    def obtainVersion(self, version):
+        self.new_version = version
     
 
-
-    def checkLogic(self):
-        if self.update_pending: # ignore logic changes if there is an app update
-            self.showLogicUpdate(False)
+    def showUpdate(self, update):
+        if not update:
+            self.checkLogic()
             return
         
-        self.logic_process = LogicUpdateProcess(ver=self.logic_version) # initialize a new QThread class
-        self.logic_process.can_update.connect(self.showLogicUpdate) # connect a boolean signal to showLogicUpdate()
-        self.logic_process.give_logic.connect(self.obtainLogic) # connect a tuple signal to obtainLogic()
-        self.logic_process.start() # start the thread
-        self.logic_process.exec() # wait on updater
+        update_menu = self.ui.menuBar.addMenu('NEW VERSION AVAILABLE!')
+        update_action = update_menu.addAction('Update')
+        update_action.triggered.connect(self.updateClicked)
+        self.updateClicked()
     
 
+    def updateClicked(self):
+        message = QtWidgets.QMessageBox()
+        message.setWindowTitle("Link's Awakening Switch Randomizer Update")
+        message.setText(f"""
+        Current version: {VERSION}<br></br>
+        <br></br>
+
+        New version: {self.new_version}<br></br>
+        <br></br>
+
+        <a href="{DOWNLOAD_PAGE}" style="color: rgb(31, 81, 255);">{DOWNLOAD_PAGE}</a>
+        """)
+
+        if self.mode == 'light':
+            message.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            message.setStyleSheet(DARK_STYLESHEET)
+        
+        message.exec()
+    
+    
+    def checkLogic(self):
+        self.logic_process = LogicUpdateProcess(ver=self.logic_version)
+        self.logic_process.can_update.connect(self.showLogicUpdate)
+        self.logic_process.give_logic.connect(self.obtainLogic)
+        self.logic_process.start()
+        self.logic_process.exec()
+    
 
     def obtainLogic(self, version_and_logic):
         self.logic_version = version_and_logic[0]
@@ -211,8 +209,10 @@ class MainWindow(QtWidgets.QMainWindow):
             f.write(self.logic_defs)
 
 
-
     def showLogicUpdate(self, update):
+        if not update:
+            return
+        
         message = QtWidgets.QMessageBox()
         message.setWindowTitle("Logic Updater")
         
@@ -221,22 +221,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             message.setStyleSheet(DARK_STYLESHEET)
         
-        if update:
-            message.setText('Logic has updated')
-        else:
-            message.setText('No updates found')
-        
+        message.setText('Logic has been updated')
         message.exec()
-
-
-
-    def exportLogic(self):
-        filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Save As', '.', "YAML (*.yml)") # ;;TEXT (*.txt)")
-        if filename[0] != '':
-            with open(filename[0], 'w') as f:
-                f.write(self.logic_defs)
-                # yaml.dump(yaml.safe_load(self.logic_defs), f, Dumper=MyDumper, sort_keys=False, width=float('inf'))
-
 
 
     # apply defaults
@@ -770,8 +756,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(FISHING_REWARDS)
     
     
-    
-    # Rapids Check Changed
     def rapidsCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(RAPIDS_REWARDS)
@@ -782,8 +766,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.excluded_checks.update(['owl-statue-rapids'])
     
     
-    
-    # Dampe Check Changed
     def dampeCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(DAMPE_REWARDS)
@@ -791,8 +773,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(DAMPE_REWARDS)
     
     
-    
-    # # Trendy Check Changed
     # def trendyCheck_Clicked(self, checked):
     #     if checked:
     #         self.excluded_checks.difference_update(TRENDY_REWARDS)
@@ -800,8 +780,6 @@ class MainWindow(QtWidgets.QMainWindow):
     #         self.excluded_checks.update(TRENDY_REWARDS)
     
     
-    
-    # # Shop Check Changed
     # def shopCheck_Clicked(self, checked):
     #     if checked:
     #         self.excluded_checks.difference_update(SHOP_ITEMS)
@@ -809,8 +787,6 @@ class MainWindow(QtWidgets.QMainWindow):
     #         self.excluded_checks.update(SHOP_ITEMS)
     
     
-    
-    # Gifts Check Changed
     def giftsCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
@@ -818,8 +794,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(FREE_GIFT_LOCATIONS)
     
     
-    
-    # Trade Quest Check Changed
     def tradeQuest_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(TRADE_GIFT_LOCATIONS)
@@ -827,8 +801,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
     
     
-    
-    # Bosses Check Changed
     def bossCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(BOSS_LOCATIONS)
@@ -836,8 +808,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(BOSS_LOCATIONS)
     
     
-    
-    # Miscellaneous Standing Items Check Changed
     def miscellaneousCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(MISC_LOCATIONS)
@@ -845,15 +815,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(MISC_LOCATIONS)
     
     
-    
-    # Heart Pieces Check Changed
     def heartsCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
         else:
             self.excluded_checks.update(HEART_PIECE_LOCATIONS)
     
-
 
     def leavesCheck_Clicked(self, checked):
         if checked:
@@ -862,15 +829,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(LEAF_LOCATIONS)
     
 
-
     def rupCheck_Clicked(self):
-        # regardless of if it's checked or not, reset blue rupees
-        # switching to the locations tab will handle if it shows or not
         self.excluded_checks.difference_update(BLUE_RUPEES)
     
 
-
-    # Update Number of Max Seashells
     def updateSeashells(self):
         value = self.ui.seashellsComboBox.currentIndex()
         
@@ -892,8 +854,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.difference_update(SEASHELL_REWARDS)
     
 
-
-    # Update which owls show up in the locations tab
     def updateOwls(self):
         value = self.ui.owlsComboBox.currentIndex()
 
@@ -942,8 +902,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # if user deleted the external logic file, reset to the built-in logic
         if not os.path.isfile(LOGIC_PATH):
-            self.logic_defs = LOGIC_RAW
-            self.logic_version = LOGIC_VERSION
+            self.showUserError('Logic file not found!')
+            return
         
         logic_file = yaml.safe_load(self.logic_defs)
         
@@ -1181,7 +1141,6 @@ class MainWindow(QtWidgets.QMainWindow):
         message.exec()
     
 
-
     # Display new window listing the currently known issues
     def showIssues(self):
         message = QtWidgets.QMessageBox()
@@ -1196,6 +1155,18 @@ class MainWindow(QtWidgets.QMainWindow):
         message.exec()
     
 
+    def showInfo(self):
+        message = QtWidgets.QMessageBox()
+        message.setWindowTitle("Link's Awakening Switch Randomizer")
+        message.setText(ABOUT_INFO)
+
+        if self.mode == 'light':
+            message.setStyleSheet(LIGHT_STYLESHEET)
+        else:
+            message.setStyleSheet(DARK_STYLESHEET)
+        
+        message.exec()
+    
 
     # Override mouse click event to make certain stuff lose focus
     def mousePressEvent(self, event):
@@ -1205,7 +1176,6 @@ class MainWindow(QtWidgets.QMainWindow):
             isinstance(focused_widget, QtWidgets.QSpinBox):
                 focused_widget.clearFocus()
     
-
 
     # Override close event to save settings
     def closeEvent(self, event):

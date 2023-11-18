@@ -7,11 +7,10 @@ from randomizer_data import VERSION, LOGIC_VERSION
 
 
 class UpdateProcess(QtCore.QThread):
-    
     can_update = QtCore.Signal(bool)
+    give_version = QtCore.Signal(float)
     
-    
-    # initialize
+
     def __init__(self, parent=None):
         QtCore.QThread.__init__(self, parent)
     
@@ -23,21 +22,21 @@ class UpdateProcess(QtCore.QThread):
             web_version = float(update_file.read().strip())
             
             if web_version > VERSION:
+                self.give_version.emit(web_version)
                 self.can_update.emit(True)
             else:
                 self.can_update.emit(False)
         
-        except urlERROR.URLError: # when users use this app while not connected to the internet
+        except urlERROR.URLError:
             self.can_update.emit(False)
 
 
 
 class LogicUpdateProcess(QtCore.QThread):
-    
     can_update = QtCore.Signal(bool)
     give_logic = QtCore.Signal(tuple)
     
-    # initialize
+    
     def __init__(self, parent=None, ver=LOGIC_VERSION):
         QtCore.QThread.__init__(self, parent)
         self.ver = ver
@@ -56,5 +55,5 @@ class LogicUpdateProcess(QtCore.QThread):
             else:
                 self.can_update.emit(False)
         
-        except urlERROR.URLError: # when users use this app while not connected to the internet
+        except urlERROR.URLError:
             self.can_update.emit(False)

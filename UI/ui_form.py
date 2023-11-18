@@ -731,7 +731,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Link's Awakening Randomizer", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Link's Awakening Switch Randomizer", None))
         self.actionEnglish.setText(QCoreApplication.translate("MainWindow", u"English", None))
         self.actionfran_ais.setText(QCoreApplication.translate("MainWindow", u"Fran\u00e7ais", None))
         self.action.setText(QCoreApplication.translate("MainWindow", u"\u4e2d\u6587", None))

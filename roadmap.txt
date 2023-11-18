@@ -9,9 +9,7 @@ v0.3
 -------------------------------------------------------------------------------------------------------------------------------------
 v0.4
 
-- finish writing keysanity (work on this first and release a new dev build when done)
-
-- work on custom text, probably will first implement to work with keysanity
+- work on custom text and finish keysanity implementation
 
 - make new eventflow file to streamline giving items instead of always calling item_get.py
 

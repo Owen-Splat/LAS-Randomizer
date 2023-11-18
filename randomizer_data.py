@@ -1,12 +1,9 @@
-from randomizer_paths import DATA_PATH, RESOURCE_PATH, ROOT_PATH, SETTINGS_PATH, LOGIC_PATH
+from randomizer_paths import DATA_PATH, RESOURCE_PATH, SETTINGS_PATH, LOGIC_PATH
 
 import yaml
 import os
 
-
-### define constants
-with open(os.path.join(ROOT_PATH, 'version.txt'), 'r') as f:
-    VERSION = float(f.read().strip())
+VERSION = 0.3
 
 DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
 
@@ -22,12 +19,15 @@ with open(os.path.join(RESOURCE_PATH, 'changes.txt'), 'r') as f:
 with open(os.path.join(RESOURCE_PATH, 'issues.txt'), 'r') as f:
     KNOWN_ISSUES = f.read()
 
+with open(os.path.join(RESOURCE_PATH, 'about.txt'), 'r') as f:
+    ABOUT_INFO = f.read()
+
 with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     items = yaml.safe_load(f)
     ITEM_DEFS = items['Item_Pool']
     STARTING_ITEMS = list(items['Starting_Items'])
 
-with open(os.path.join(DATA_PATH, 'logic.yml'), 'r') as f:
+with open(LOGIC_PATH, 'r') as f:
     LOGIC_VERSION = float(f.readline().strip('#'))
     LOGIC_RAW = f.read()
     # LOGIC_DEFS = yaml.safe_load(f)
@@ -51,8 +51,6 @@ try:
 except FileNotFoundError:
     DEFAULTS = True
 
-
-# game locations
 MISCELLANEOUS_CHESTS = LOCATIONS['Chest_Locations']
 FISHING_REWARDS = LOCATIONS['Fishing_Rewards']
 RAPIDS_REWARDS = LOCATIONS['Rapids_Rewards']
@@ -70,7 +68,6 @@ DUNGEON_OWLS = LOCATIONS['Dungeon_Owl_Statues']
 OVERWORLD_OWLS = LOCATIONS['Overworld_Owl_Statues']
 BLUE_RUPEES = LOCATIONS['Blue_Rupees']
 
-# keep track of all game locations
 TOTAL_CHECKS = set([
     *MISCELLANEOUS_CHESTS, *FISHING_REWARDS, *RAPIDS_REWARDS,
     *DAMPE_REWARDS, *FREE_GIFT_LOCATIONS, *TRADE_GIFT_LOCATIONS,
