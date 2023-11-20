@@ -12,10 +12,14 @@ base = None
 if sys.platform == "win32":
     base = "Win32GUI"
 
+build_icon = "Resources/icon.ico"
+if sys.platform == "darwin":
+    build_icon = "Resources/icon.icns"
+
 setup(
     name = "Links Awakening Switch Randomizer",
     version = f"{VERSION}",
     description = "A randomizer for The Legend of Zelda: Link's Awakening remake!",
     options = {"build_exe": build_exe_options},
-    executables = [Executable("randomizer.py", base=base, target_name="Links Awakening Switch Randomizer", icon="Resources/icon.png")]
+    executables = [Executable("randomizer.py", base=base, target_name="Links Awakening Switch Randomizer", icon=build_icon)]
 )

@@ -66,8 +66,10 @@ Applying this mod will not in any way affect your save data, so don't delete any
 - While Trading Quest items work, they will not be displayed in the inventory
 - Enemy Randomization is a very early work in progress. No logic, and needed kills are left vanilla
 
+### Credits:
+- Glan: Created the original early builds of the randomizer
+- Br00ty: Maintains maptracker for newer rando versions
+- EDL666: Bug reporting, feedback, suggestions
+
 ### Special Thanks:
-- Glan: For creating the original early builds of the randomizer and answering any questions I had
-- Br00ty: For always playtesting early dev builds and for work on maptracker for newer rando versions
-- EDL666: For being an awesome friend who has been thoroughly reporting on bugs and feedback
-- And everyone who has played this randomizer: Seeing people enjoy themselves playing this makes the time I've spent working on this feel worth it :)
+- To everyone who has played this randomizer: Seeing people enjoy themselves playing this makes the time I've spent working on this feel worth it :)
