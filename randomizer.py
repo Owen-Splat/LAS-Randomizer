@@ -22,9 +22,13 @@ if IS_RUNNING_FROM_SOURCE:
     except AttributeError:
         pass # Ignore for versions of Windows before Windows 7
 
+build_icon = "icon.ico"
+if sys.platform == "darwin": # mac
+    build_icon = "icon.icns"
+
 app = QtWidgets.QApplication([])
 app.setStyle('cleanlooks')
-app.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, 'icon.png')))
+app.setWindowIcon(QtGui.QIcon(os.path.join(RESOURCE_PATH, build_icon)))
 
 m = window.MainWindow()
 
