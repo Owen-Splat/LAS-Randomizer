@@ -456,41 +456,47 @@ class ItemShuffler(QtCore.QThread):
         indexes_available = {'seashell': list(range(50)), 'heart-piece': list(range(32)), 'heart-container': list(range(9)), 'bottle': list(range(3)), 'golden-leaf': list(range(5)), 'chamber-stone': [3, 4, 8, 10, 11, 12, 13, 20, 21, 22, 23, 24, 25, 26]}
         
         for key in self.logic_defs:
-            if self.thread_active:
-                if self.logic_defs[key]['type'] == 'item':
-                    locations.append(key)
-                    placements[key] = None
-                    access = self.addAccess(access, self.logic_defs[key]['content']) # we're going to assume the player starts with everything, then slowly loses things as they get placed into the wild
-            else: break
+            if not self.thread_active:
+                break
+
+            if self.logic_defs[key]['type'] == 'item':
+                locations.append(key)
+                placements[key] = None
+                # access = self.addAccess(access, self.logic_defs[key]['content']) # we're going to assume the player starts with everything, then slowly loses things as they get placed into the wild
+        
+        # For each type of item in the item pool, add its quantity to the item lists
+        for key in self.item_defs:
+            if not self.thread_active:
+                break
+
+            # we're going to assume the player starts with everything, then slowly loses things as they get placed into the wild
+            for i in range(self.item_defs[key]['quantity']):
+                access = self.addAccess(access, key)
+
+            if self.item_defs[key]['type'] == 'important':
+                important_items += [key] * self.item_defs[key]['quantity']
+            elif self.item_defs[key]['type'] == 'trade':
+                important_items += [key] * self.item_defs[key]['quantity']
+            elif self.item_defs[key]['type'] == 'seashell':
+                seashell_items += [key] * self.item_defs[key]['quantity']
+            elif self.item_defs[key]['type'] == 'good':
+                good_items += [key] * self.item_defs[key]['quantity']
+            elif self.item_defs[key]['type'] == 'junk':
+                junk_items += [key] * self.item_defs[key]['quantity']
+            # else:
+            #     if settings['dungeon-items'] == 'keys':
+            #         if key.startswith(('key', 'nightmare')):
+            #             important_items += [key] * self.item_defs[key]['quantity']
+            #         else:
+            #             dungeon_items += [key] * self.item_defs[key]['quantity']
+            #     elif settings['dungeon-items'] == 'keys+mcb':
+            #         important_items += [key] * self.item_defs[key]['quantity']
+            else:
+                dungeon_items += [key] * self.item_defs[key]['quantity']
         
         # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
         settings_access = {setting: 1 for setting in settings if settings[setting] == True}
         access.update(settings_access)
-        
-        # For each type of item in the item pool, add its quantity to the item lists
-        for key in self.item_defs:
-            if self.thread_active:
-                if self.item_defs[key]['type'] == 'important':
-                    important_items += [key] * self.item_defs[key]['quantity']
-                elif self.item_defs[key]['type'] == 'trade':
-                    important_items += [key] * self.item_defs[key]['quantity']
-                elif self.item_defs[key]['type'] == 'seashell':
-                    seashell_items += [key] * self.item_defs[key]['quantity']
-                elif self.item_defs[key]['type'] == 'good':
-                    good_items += [key] * self.item_defs[key]['quantity']
-                elif self.item_defs[key]['type'] == 'junk':
-                    junk_items += [key] * self.item_defs[key]['quantity']
-                # else:
-                #     if settings['dungeon-items'] == 'keys':
-                #         if key.startswith(('key', 'nightmare')):
-                #             important_items += [key] * self.item_defs[key]['quantity']
-                #         else:
-                #             dungeon_items += [key] * self.item_defs[key]['quantity']
-                #     elif settings['dungeon-items'] == 'keys+mcb':
-                #         important_items += [key] * self.item_defs[key]['quantity']
-                else:
-                    dungeon_items += [key] * self.item_defs[key]['quantity']
-            else: break
         
         # Force the followers to be vanilla (for now)
         placements['moblin-cave'] = 'bow-wow'
