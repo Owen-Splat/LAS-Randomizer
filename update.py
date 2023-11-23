@@ -1,6 +1,5 @@
 from PySide6 import QtCore
 import urllib.request as lib
-import urllib.error as urlERROR
 
 from randomizer_data import VERSION, LOGIC_VERSION
 
@@ -27,7 +26,7 @@ class UpdateProcess(QtCore.QThread):
             else:
                 self.can_update.emit(False)
         
-        except urlERROR.URLError:
+        except Exception:
             self.can_update.emit(False)
 
 
@@ -55,5 +54,5 @@ class LogicUpdateProcess(QtCore.QThread):
             else:
                 self.can_update.emit(False)
         
-        except urlERROR.URLError:
+        except Exception:
             self.can_update.emit(False)
