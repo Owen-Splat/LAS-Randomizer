@@ -59,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # folder browsing, seed generation, and randomize button
         self.ui.browseButton1.clicked.connect(self.romBrowse)
         self.ui.browseButton2.clicked.connect(self.outBrowse)
+        self.ui.browseButton3.clicked.connect(self.settingsBrowse)
         self.ui.seedButton.clicked.connect(self.generateSeed)
         self.ui.randomizeButton.clicked.connect(self.randomizeButton_Clicked)
         self.ui.resetButton.clicked.connect(self.applyDefaults)
@@ -103,7 +104,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.makeSmartComboBoxes()
 
         ### show and check for updates
-        self.setFixedSize(780, 640)
+        self.setFixedSize(780, 650)
         self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
         
         # self.ui.retranslateUi(self)
@@ -306,8 +307,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.starting_gear = list() # fully reset starting items
         self.ui.rupeesSpinBox.setValue(0)
 
-        self.tab_Changed() # just call the same event as when changing the tab to refresh the list
+        self.ui.externalSettingsCheck.setChecked(False)
 
+        self.tab_Changed() # just call the same event as when changing the tab to refresh the list
 
 
     def saveSettings(self):
@@ -315,6 +317,8 @@ class MainWindow(QtWidgets.QMainWindow):
             'Theme': self.mode,
             'Romfs_Folder': self.ui.lineEdit.text(),
             'Output_Folder': self.ui.lineEdit_2.text(),
+            "Use_External_Settings": self.ui.externalSettingsCheck.isChecked(),
+            'External_Settings_File': self.ui.lineEdit_4.text(),
             'Seed': self.ui.lineEdit_3.text(),
             'Logic': LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()],
             'Platform': PLATFORMS[self.ui.platformComboBox.currentIndex()],
@@ -369,7 +373,6 @@ class MainWindow(QtWidgets.QMainWindow):
             yaml.dump(settings_dict, settingsFile, Dumper=MyDumper, sort_keys=False)
 
 
-
     def loadSettings(self):
         
         # theme
@@ -392,6 +395,19 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             if os.path.exists(SETTINGS['Output_Folder']):
                 self.ui.lineEdit_2.setText(SETTINGS['Output_Folder'])
+        except (KeyError, TypeError):
+            pass
+        
+        # use external settings
+        try:
+            self.ui.externalSettingsCheck.setChecked(SETTINGS['Use_External_Settings'])
+        except (KeyError, TypeError):
+            pass
+
+        # external settings file
+        try:
+            if os.path.isfile(SETTINGS['External_Settings_File']):
+                self.ui.lineEdit_4.setText(SETTINGS['External_Settings_File'])
         except (KeyError, TypeError):
             pass
         
@@ -713,24 +729,24 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.rupeesSpinBox.setValue(0)
 
 
-    
-    # RomFS Folder Browse
     def romBrowse(self):
-        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
-        if folderpath != "":
-            self.ui.lineEdit.setText(folderpath)
+        folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+        if os.path.exists(folder_path):
+            self.ui.lineEdit.setText(folder_path)
     
     
-    
-    # Output Folder Browse
     def outBrowse(self):
-        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
-        if folderpath != "":
-            self.ui.lineEdit_2.setText(folderpath)
+        folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+        if os.path.exists(folder_path):
+            self.ui.lineEdit_2.setText(folder_path)
     
     
+    def settingsBrowse(self):
+        file_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Select Settings', filter='Text files(*.txt)')[0]
+        if os.path.isfile(file_path):
+            self.ui.lineEdit_4.setText(file_path)
     
-    # Generate New Seed
+    
     def generateSeed(self):
         adj1 = random.choice(ADJECTIVES)
         adj2 = random.choice(ADJECTIVES)
@@ -738,8 +754,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.lineEdit_3.setText(adj1 + adj2 + char)
     
     
-    
-    # Chests Check Changed
     def chestsCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
@@ -747,8 +761,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(MISCELLANEOUS_CHESTS)
     
     
-    
-    # Fishing Check Changed
     def fishingCheck_Clicked(self, checked):
         if checked:
             self.excluded_checks.difference_update(FISHING_REWARDS)
@@ -878,16 +890,81 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.update(['owl-statue-rapids'])
 
 
+    def parseExternalSettings(self):
+        external_settings = {}
+        settings = {}
+
+        try:
+            with open(self.ui.lineEdit_4.text(), 'r') as f:
+                external_settings = yaml.safe_load(f)
+            
+            seed = external_settings['Seed']
+            if seed.lower().strip() in ('', 'random'):
+                random.seed()
+                seed = str(random.getrandbits(32))
+            
+            logic = external_settings['Logic'] if external_settings['Logic'] in LOGIC_PRESETS else 'invalid'
+            if logic == 'invalid':
+                raise TypeError('')
+
+            settings = {
+                'seed': seed,
+                'logic': logic,
+                'platform': external_settings['Platform'],
+                'create-spoiler': external_settings['Create_Spoiler'],
+                'free-book': external_settings['Free_Book'],
+                'unlocked-bombs': external_settings['Unlocked_Bombs'],
+                'shuffle-bombs': external_settings['Shuffled_Bombs'],
+                'shuffle-powder': external_settings['Shuffled_Powder'],
+                'reduce-farming': external_settings['Reduced_Farming'],
+                'fast-fishing': external_settings['Fast_Fishing'],
+                'fast-stealing': external_settings['Fast_Stealing'],
+                'fast-trendy': external_settings['Fast_Trendy'],
+                'fast-songs': external_settings['Fast_Songs'],
+                'shuffle-instruments': external_settings['Instruments'],
+                'starting-instruments': external_settings['Starting_Instruments'],
+                'bad-pets': external_settings['Bad_Pets'],
+                'open-kanalet': external_settings['Open_Kanalet'],
+                'open-bridge': external_settings['Open_Bridge'],
+                'open-mamu': external_settings['Open_Mamu'],
+                'traps': external_settings['Traps'],
+                'blupsanity': external_settings['Blupsanity'],
+                'classic-d2': external_settings['Classic_D2'],
+                'owl-overworld-gifts': True if external_settings['Owl_Statues'] in ('overworld', 'all') else False,
+                'owl-dungeon-gifts': True if external_settings['Owl_Statues'] in ('dungeons', 'all') else False,
+                # 'owl-hints': external_settings[''],
+                'fast-stalfos': external_settings['Fast_Stalfos'],
+                'scaled-chest-sizes': external_settings['Scaled_Chest_Sizes'],
+                'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in external_settings['Excluded_Locations']]) > 0 else False,
+                'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in external_settings['Excluded_Locations']]) > 0 else False,
+                # 'shuffle-companions': external_settings[''],
+                # 'randomize-entrances': external_settings[''],
+                'randomize-music': external_settings['Randomize_Music'],
+                'randomize-enemies': external_settings['Randomize_Enemies'],
+                # 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in external_settings['']]) > 0 else False,
+                'shuffle-dungeons': external_settings['Shuffled_Dungeons'],
+                # 'dungeon-items': external_settings[''],
+                '1HKO': external_settings['1HKO'],
+                'lv1-beam': external_settings['Lv1_Beam'],
+                'starting-items': external_settings['Starting_Items'],
+                'starting-rupees': external_settings['Starting_Rupees'],
+                'excluded-locations': external_settings['Excluded_Locations']
+            }
+        except (FileNotFoundError, KeyError, TypeError):
+            pass
+
+        return settings
+
 
     # Randomize Button Clicked
     def randomizeButton_Clicked(self):
         
-        if not os.path.exists(self.ui.lineEdit.text()):
-            self.showUserError('Romfs path does not exist!')
-            return
-        
         # verify RomFS before shuffling items
         rom_path = self.ui.lineEdit.text()
+
+        if not os.path.exists(rom_path):
+            self.showUserError('Romfs path does not exist!')
+            return
         
         if os.path.exists(os.path.join(rom_path, 'romfs')):
             rom_path = os.path.join(rom_path, 'romfs')
@@ -900,7 +977,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.showUserError('Output path does not exist!')
             return
         
-        # if user deleted the external logic file, reset to the built-in logic
         if not os.path.isfile(LOGIC_PATH):
             self.showUserError('Logic file not found!')
             return
@@ -911,12 +987,19 @@ class MainWindow(QtWidgets.QMainWindow):
         if seed.lower().strip() in ('', 'random'):
             random.seed()
             seed = str(random.getrandbits(32))
-        
-        outdir = f"{self.ui.lineEdit_2.text()}/{seed}"
-        
+                
         logic = LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()]
         
+        external_settings = {}
+        if self.ui.externalSettingsCheck.isChecked():
+            external_settings = self.parseExternalSettings()
+            if not external_settings:
+                self.showUserError('Could not read the external settings file!')
+                return
+        
         settings = {
+            'seed': seed,
+            'logic': logic,
             'platform': PLATFORMS[self.ui.platformComboBox.currentIndex()],
             'create-spoiler': self.ui.spoilerCheck.isChecked(),
             'free-book': self.ui.bookCheck.isChecked(),
@@ -958,9 +1041,16 @@ class MainWindow(QtWidgets.QMainWindow):
             'excluded-locations': self.excluded_checks
         }
         
-        self.progress_window = ProgressWindow(rom_path, outdir, seed, logic, ITEM_DEFS, logic_file, settings)
+        if external_settings:
+            if external_settings.keys() != settings.keys():
+                self.showUserError('External settings file is missing data!')
+                return
+            settings = external_settings
+        
+        outdir = f"{self.ui.lineEdit_2.text()}/{settings['seed']}"
+        self.progress_window = ProgressWindow(rom_path, outdir, ITEM_DEFS, logic_file, settings)
         self.progress_window.setFixedSize(472, 125)
-        self.progress_window.setWindowTitle(f"{seed}")
+        self.progress_window.setWindowTitle(f"{settings['seed']}")
 
         if self.mode == 'light':
             self.progress_window.setStyleSheet(LIGHT_STYLESHEET)
@@ -968,7 +1058,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.progress_window.setStyleSheet(DARK_STYLESHEET)
         
         self.progress_window.show()
-    
     
     
     # Tab changed
@@ -1019,14 +1108,12 @@ class MainWindow(QtWidgets.QMainWindow):
             return
     
     
-    
     # Locations Include Button Clicked
     def includeButton_Clicked(self):
         for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
             self.excluded_checks.remove(self.listToCheck(i.text()))
             self.ui.listWidget.addItem(SmartListWidget(i.text()))
-    
     
     
     # Locations Exclude Button Clicked
@@ -1037,7 +1124,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.excluded_checks.add(self.listToCheck(i.text()))
     
     
-    
     # Starting Items Include Button Clicked - 'including' is moving starting items into the randomized pool
     def includeButton_3_Clicked(self):
         for i in self.ui.listWidget_6.selectedItems():
@@ -1046,14 +1132,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.listWidget_5.addItem(i.text())
 
 
-
     # Starting Items Exclude Button Clicked - 'excluding' is moving randomized items into starting items
     def excludeButton_3_Clicked(self):
         for i in self.ui.listWidget_5.selectedItems():
             self.ui.listWidget_5.takeItem(self.ui.listWidget_5.row(i))
             self.ui.listWidget_6.addItem(i.text())
             self.starting_gear.append(self.listToItem(i.text()))
-
 
 
     # some-check to Some Check
@@ -1068,7 +1152,6 @@ class MainWindow(QtWidgets.QMainWindow):
         return s
     
     
-    
     # Some Check to some-check
     def listToCheck(self, check):
         stayUpper = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
@@ -1081,14 +1164,12 @@ class MainWindow(QtWidgets.QMainWindow):
         return s
     
 
-
     # Starting Item to starting-item and also converts names that were changed to look nicer
     def listToItem(self, item):
         s = sub(" ", "-", item).lower()
         
         return s
     
-
 
     # Sets the app to Light Mode
     def setLightMode(self):
@@ -1100,7 +1181,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.explainationLabel.setStyleSheet('color: black;')
     
 
-
     # Sets the app to Dark Mode
     def setDarkMode(self):
         self.mode = str('dark')
@@ -1110,7 +1190,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.ui.explainationLabel.setStyleSheet('color: white;')
     
-
 
     # Display new window listing the new features and bug fixes
     def showChangelog(self):
@@ -1125,7 +1204,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
         message.exec()
     
-
 
     # Display new window to let the user know what went wrong - missing romfs/output path, bad custom logic, etc.
     def showUserError(self, msg):

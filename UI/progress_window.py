@@ -12,16 +12,16 @@ import shutil
 
 class ProgressWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, rom_path, out_dir, seed, logic, item_defs, logic_defs, settings):
+    def __init__(self, rom_path, out_dir, item_defs, logic_defs, settings):
         super (ProgressWindow, self).__init__()
         self.ui = Ui_ProgressWindow()
         self.ui.setupUi(self)
         
         self.rom_path : str = rom_path
         self.out_dir : str = out_dir
-        self.seed : str = seed
+        self.seed : str = settings['seed']
         self.randstate = None
-        self.logic : str = logic
+        self.logic : str = settings['logic']
         self.item_defs = copy.deepcopy(item_defs)
         self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = copy.deepcopy(settings)
