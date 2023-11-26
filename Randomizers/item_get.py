@@ -416,26 +416,24 @@ def insertItemWithoutAnimation(item, index):
             ('Link', 'Heal', {'amount': 99})
         ]
 
-    ### Bomb for Shuffled Bombs
+    ### Shuffled Bombs / Shuffled Powder
     if item == 'Bomb':
         return [
             ('EventFlags', 'SetFlag', {'symbol': data.BOMBS_FOUND_FLAG, 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 60, 'index': index, 'autoEquip': False})
         ]
-    
-    ### Powder for Shuffled Powder
     if item == 'MagicPowder':
         return [
             ('EventFlags', 'SetFlag', {'symbol': 'GetMagicPowder', 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 40, 'index': index, 'autoEquip': False})
         ]
     
-    # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
-    # if item == 'Bottle' and index == 1:
-    #     return event_tools.createActionChain(flowchart, before, [
-    #         ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
-    #         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
-    #     ], after)
+    ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
+    if item == 'Bottle' and index == 1:
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
 
     ### Trade Quest items
     if item == 'YoshiDoll':
@@ -693,13 +691,12 @@ def insertDampeItemGet(flowchart, item, index, after=None):
         ], after)
     
 
-    # ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
-    # if item == 'Bottle' and index == 1:
-    #     return event_tools.createActionChain(flowchart, before, [
-    #         ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
-    #         ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
-    #         ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': ''})
-    #     ], after)
+    ### Fishing Minigame Bottle fix, since it wont show up if you have the second bottle in your inventory
+    if item == 'Bottle' and index == 1:
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
 
 
     ### Trade Quest items
