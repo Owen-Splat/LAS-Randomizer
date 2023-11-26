@@ -1591,6 +1591,22 @@
           <string>Sword Beam With Lv1</string>
          </property>
         </widget>
+        <widget class="QCheckBox" name="niceRodCheck">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Increases the fire rate of the Magic Rod</string>
+         </property>
+         <property name="text">
+          <string>Nice Magic Rod</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QLabel" name="label_4">
         <property name="geometry">

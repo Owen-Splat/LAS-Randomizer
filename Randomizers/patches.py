@@ -46,6 +46,11 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     # if settings['dungeon-items'] != 'standard':
     #     allowKeysanity(patcher, settings['dungeon-items'])
     
+    optionalPatches(patcher, settings)
+
+
+
+def optionalPatches(patcher: Patcher, settings: dict):
     # if 1HKO mode is enabled, make all forms of damage substract 80 health to make Link always die in 1 hit
     if settings['1HKO']:
         patcher.addPatch(0xd4c754, 'sub w22, w8, #80')
@@ -54,6 +59,10 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     # beam slash with either sword
     if settings['lv1-beam']:
         patcher.addPatch(0xde1ba8, 'ldrb w9, [x8, #0xa8]')
+    
+    # change magic rod projectile instance limit from 3 to 16
+    if settings['nice-rod']:
+        patcher.addPatch(0xd51698, 'cmp x19, #0x10')
 
 
 

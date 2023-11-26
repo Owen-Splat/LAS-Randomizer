@@ -303,7 +303,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.ohkoCheck.setChecked(False)
         self.ui.lv1BeamCheck.setChecked(False)
-    
+        self.ui.niceRodCheck.setChecked(False)
+
         self.starting_gear = list() # fully reset starting items
         self.ui.rupeesSpinBox.setValue(0)
 
@@ -364,6 +365,7 @@ class MainWindow(QtWidgets.QMainWindow):
             'Shuffled_Dungeons': self.ui.dungeonsCheck.isChecked(),
             '1HKO': self.ui.ohkoCheck.isChecked(),
             'Lv1_Beam': self.ui.lv1BeamCheck.isChecked(),
+            'Nice_Rod': self.ui.niceRodCheck.isChecked(),
             'Starting_Items': self.starting_gear,
             'Starting_Rupees': self.ui.rupeesSpinBox.value(),
             'Excluded_Locations': list(self.excluded_checks)
@@ -682,6 +684,12 @@ class MainWindow(QtWidgets.QMainWindow):
         except (KeyError, TypeError):
             self.ui.lv1BeamCheck.setChecked(False)
         
+        # nice magic rod
+        try:
+            self.ui.niceRodCheck.setChecked(SETTINGS['Nice_Rod'])
+        except (KeyError, TypeError):
+            self.ui.niceRodCheck.setChecked(False)
+        
         # excluded checks
         try:
             for check in SETTINGS['Excluded_Locations']:
@@ -946,6 +954,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 # 'dungeon-items': external_settings[''],
                 '1HKO': external_settings['1HKO'],
                 'lv1-beam': external_settings['Lv1_Beam'],
+                'nice-rod': external_settings['Nice_Rod'],
                 'starting-items': external_settings['Starting_Items'],
                 'starting-rupees': external_settings['Starting_Rupees'],
                 'excluded-locations': external_settings['Excluded_Locations']
@@ -1036,6 +1045,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # 'dungeon-items': DUNGEON_ITEM_SETTINGS[self.ui.itemsComboBox.currentIndex()],
             '1HKO': self.ui.ohkoCheck.isChecked(),
             'lv1-beam': self.ui.lv1BeamCheck.isChecked(),
+            'nice-rod': self.ui.niceRodCheck.isChecked(),
             'starting-items': self.starting_gear,
             'starting-rupees': self.ui.rupeesSpinBox.value(),
             'excluded-locations': self.excluded_checks
