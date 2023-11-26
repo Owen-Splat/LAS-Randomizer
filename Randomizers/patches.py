@@ -51,6 +51,8 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
 
 
 def optionalPatches(patcher: Patcher, settings: dict):
+    """Adds the optional gameplay patches to the seed"""
+    
     # if 1HKO mode is enabled, make all forms of damage substract 80 health to make Link always die in 1 hit
     if settings['1HKO']:
         patcher.addPatch(0xd4c754, 'sub w22, w8, #80')
