@@ -211,6 +211,13 @@ def writeChestEvent(flowchart):
     event_tools.insertEventAfter(flowchart, 'Event40', auto_save)
     event_tools.insertEventAfter(flowchart, 'Event5', auto_save)
 
+    # make the D6 pot chest check if it contains an enemy
+    event_tools.insertEventAfter(flowchart, 'TreasureBox_ShockOpen', 'Event27')
+    event_tools.insertEventAfter(flowchart, 'Event15', 'Event28')
+    check_enemy = event_tools.createSwitchEvent(flowchart, 'TreasureBox', 'ContainsEnemy',
+        {}, {0: 'Event15', 1: 'Event42'})
+    event_tools.insertEventAfter(flowchart, 'Event27', check_enemy)
+
 
 
 def makeChestsFaster(flowchart):
