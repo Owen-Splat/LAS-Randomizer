@@ -1,6 +1,6 @@
 <b>New Features:</b>
 <br></br><br></br>
-- Patches tab: Additional, unrequired patches to spice up gameplay elements
+- Patches tab: Additional, unrequired ASM patches to spice up gameplay elements
 <br></br><br></br>
 - Automatically adjusts the output for console or emulator
 <br></br><br></br>
@@ -23,5 +23,7 @@
 - Having Bottle[1] made the Fishing Bottle not spawn
 <br></br><br></br>
 - Having GoldenLeaf[4] made the Kanalet Final Guard not spawn
+<br></br><br></br>
+- The D6-pot-chest did nothing when an enemy was shuffled to it
 <br></br><br></br>
 - The romfs path no longer requires a folder named "romfs"

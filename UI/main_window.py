@@ -1,14 +1,14 @@
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
 from update import UpdateProcess, LogicUpdateProcess
-from randomizer_paths import IS_RUNNING_FROM_SOURCE
 from randomizer_data import *
+from re import sub
 
 import os
 import yaml
 import random
-from re import sub
+import UI.settings_handler as settings_handler
 
 
 
@@ -34,7 +34,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Load User Settings
         if not DEFAULTS:
-            self.loadSettings()
+            settings_handler.loadSettings(self)
         else:
             self.applyDefaults()
                 
@@ -103,11 +103,14 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.makeSmartComboBoxes()
 
-        ### show and check for updates
         self.setFixedSize(780, 650)
         self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
-        
         # self.ui.retranslateUi(self)
+
+        center = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen()).center()
+        geo = self.frameGeometry()
+        geo.moveCenter(center)
+        self.move(geo.topLeft())
         
         self.process = UpdateProcess()
         self.process.can_update.connect(self.showUpdate)
@@ -116,6 +119,10 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.show()
 
+
+    def applyDefaults(self):
+        settings_handler.applyDefaults(self)
+    
 
     def makeSmartComboBoxes(self):
         combos = [
@@ -224,518 +231,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         message.setText('Logic has been updated')
         message.exec()
-
-
-    # apply defaults
-    def applyDefaults(self):
-        self.ui.chestsCheck.setChecked(True)
-        self.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
-
-        self.ui.fishingCheck.setChecked(True)
-        self.excluded_checks.difference_update(FISHING_REWARDS)
-
-        self.ui.rapidsCheck.setChecked(False)
-        self.excluded_checks.update(RAPIDS_REWARDS)
-
-        self.ui.dampeCheck.setChecked(False)
-        self.excluded_checks.update(DAMPE_REWARDS)
-
-        # self.ui.trendyCheck.setChecked(False)
-        self.excluded_checks.update(TRENDY_REWARDS)
-
-        # self.ui.shopCheck.setChecked(True)
-        # self.excluded_checks.difference_update(SHOP_ITEMS)
-
-        self.ui.giftsCheck.setChecked(True)
-        self.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
-
-        self.ui.tradeGiftsCheck.setChecked(False)
-        self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
-
-        self.ui.bossCheck.setChecked(True)
-        self.excluded_checks.difference_update(BOSS_LOCATIONS)
-
-        self.ui.miscellaneousCheck.setChecked(True)
-        self.excluded_checks.difference_update(MISC_LOCATIONS)
-
-        self.ui.heartsCheck.setChecked(True)
-        self.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
-
-        self.ui.rupCheck.setChecked(False)
-        self.excluded_checks.difference_update(BLUE_RUPEES)
-
-        self.ui.instrumentCheck.setChecked(True)
-        self.ui.instrumentsComboBox.setCurrentIndex(0)
-
-        self.ui.seashellsComboBox.setCurrentIndex(2)
-        self.updateSeashells()
-
-        self.ui.owlsComboBox.setCurrentIndex(0)
-        self.updateOwls()
-
-        self.ui.trapsComboBox.setCurrentIndex(0)
-
-        self.ui.leavesCheck.setChecked(True)
-        self.excluded_checks.difference_update(LEAF_LOCATIONS)
-
-        self.ui.tricksComboBox.setCurrentIndex(0)
-
-        self.ui.bookCheck.setChecked(True)
-        self.ui.unlockedBombsCheck.setChecked(True)
-        self.ui.shuffledBombsCheck.setChecked(False)
-        self.ui.fastTrendyCheck.setChecked(False)
-        self.ui.stealingCheck.setChecked(True)
-        self.ui.farmingCheck.setChecked(True)
-        self.ui.shuffledPowderCheck.setChecked(False)
-        self.ui.musicCheck.setChecked(False)
-        self.ui.enemyCheck.setChecked(False)
-        self.ui.spoilerCheck.setChecked(True)
-        self.ui.kanaletCheck.setChecked(True)
-        self.ui.badPetsCheck.setChecked(False)
-        self.ui.bridgeCheck.setChecked(True)
-        self.ui.mazeCheck.setChecked(True)
-        self.ui.swampCheck.setChecked(False)
-        self.ui.stalfosCheck.setChecked(False)
-        self.ui.chestSizesCheck.setChecked(False)
-        self.ui.songsCheck.setChecked(False)
-        self.ui.fastFishingCheck.setChecked(True)
-        self.ui.dungeonsCheck.setChecked(False)
-
-        self.ui.ohkoCheck.setChecked(False)
-        self.ui.lv1BeamCheck.setChecked(False)
-        self.ui.niceRodCheck.setChecked(False)
-
-        self.starting_gear = list() # fully reset starting items
-        self.ui.rupeesSpinBox.setValue(0)
-
-        self.ui.externalSettingsCheck.setChecked(False)
-
-        self.tab_Changed() # just call the same event as when changing the tab to refresh the list
-
-
-    def saveSettings(self):
-        settings_dict = {
-            'Theme': self.mode,
-            'Romfs_Folder': self.ui.lineEdit.text(),
-            'Output_Folder': self.ui.lineEdit_2.text(),
-            "Use_External_Settings": self.ui.externalSettingsCheck.isChecked(),
-            'External_Settings_File': self.ui.lineEdit_4.text(),
-            'Seed': self.ui.lineEdit_3.text(),
-            'Logic': LOGIC_PRESETS[self.ui.tricksComboBox.currentIndex()],
-            'Platform': PLATFORMS[self.ui.platformComboBox.currentIndex()],
-            'Create_Spoiler': self.ui.spoilerCheck.isChecked(),
-            'NonDungeon_Chests': self.ui.chestsCheck.isChecked(),
-            'Fishing': self.ui.fishingCheck.isChecked(),
-            'Rapids': self.ui.rapidsCheck.isChecked(),
-            'Dampe': self.ui.dampeCheck.isChecked(),
-            # 'Trendy': self.ui.trendyCheck.isChecked(),
-            # 'Shop': self.ui.shopCheck.isChecked(),
-            'Free_Gifts': self.ui.giftsCheck.isChecked(),
-            'Trade_Quest': self.ui.tradeGiftsCheck.isChecked(),
-            'Boss_Drops': self.ui.bossCheck.isChecked(),
-            'Miscellaneous': self.ui.miscellaneousCheck.isChecked(),
-            'Heart_Pieces': self.ui.heartsCheck.isChecked(),
-            'Golden_Leaves': self.ui.leavesCheck.isChecked(),
-            'Instruments': self.ui.instrumentCheck.isChecked(),
-            'Starting_Instruments': self.ui.instrumentsComboBox.currentIndex(),
-            'Seashells': SEASHELL_VALUES[self.ui.seashellsComboBox.currentIndex()],
-            'Free_Book': self.ui.bookCheck.isChecked(),
-            'Unlocked_Bombs': self.ui.unlockedBombsCheck.isChecked(),
-            'Shuffled_Bombs': self.ui.shuffledBombsCheck.isChecked(),
-            'Bad_Pets': self.ui.badPetsCheck.isChecked(),
-            'Fast_Fishing': self.ui.fastFishingCheck.isChecked(),
-            'Fast_Stealing': self.ui.stealingCheck.isChecked(),
-            'Fast_Trendy': self.ui.fastTrendyCheck.isChecked(),
-            'Fast_Songs': self.ui.songsCheck.isChecked(),
-            'Fast_Stalfos': self.ui.stalfosCheck.isChecked(),
-            'Scaled_Chest_Sizes': self.ui.chestSizesCheck.isChecked(),
-            'Reduced_Farming': self.ui.farmingCheck.isChecked(),
-            'Shuffled_Powder': self.ui.shuffledPowderCheck.isChecked(),
-            'Open_Kanalet': self.ui.kanaletCheck.isChecked(),
-            'Open_Bridge': self.ui.bridgeCheck.isChecked(),
-            'Open_Mamu': self.ui.mazeCheck.isChecked(),
-            'Traps': TRAP_SETTINGS[self.ui.trapsComboBox.currentIndex()],
-            'Blupsanity': self.ui.rupCheck.isChecked(),
-            'Classic_D2': self.ui.swampCheck.isChecked(),
-            'Owl_Statues': OWLS_SETTINGS[self.ui.owlsComboBox.currentIndex()],
-            # 'Shuffled_Companions': self.ui.companionCheck.isChecked(),
-            # 'Randomize_Entrances': self.ui.loadingCheck.isChecked(),
-            'Randomize_Music': self.ui.musicCheck.isChecked(),
-            'Randomize_Enemies': self.ui.enemyCheck.isChecked(),
-            'Shuffled_Dungeons': self.ui.dungeonsCheck.isChecked(),
-            '1HKO': self.ui.ohkoCheck.isChecked(),
-            'Lv1_Beam': self.ui.lv1BeamCheck.isChecked(),
-            'Nice_Rod': self.ui.niceRodCheck.isChecked(),
-            'Starting_Items': self.starting_gear,
-            'Starting_Rupees': self.ui.rupeesSpinBox.value(),
-            'Excluded_Locations': list(self.excluded_checks)
-        }
-        
-        with open(SETTINGS_PATH, 'w') as settingsFile:
-            yaml.dump(settings_dict, settingsFile, Dumper=MyDumper, sort_keys=False)
-
-
-    def loadSettings(self):
-        
-        # theme
-        try:
-            if SETTINGS['Theme'].lower() in ['light', 'dark']:
-                self.mode = str(SETTINGS['Theme'].lower())
-            else:
-                self.mode = str('light')
-        except (KeyError, AttributeError, TypeError):
-            self.mode = str('light')
-
-        # romfs folder
-        try:
-            if os.path.exists(SETTINGS['Romfs_Folder']):
-                self.ui.lineEdit.setText(SETTINGS['Romfs_Folder'])
-        except (KeyError, TypeError):
-            pass
-        
-        # output folder
-        try:
-            if os.path.exists(SETTINGS['Output_Folder']):
-                self.ui.lineEdit_2.setText(SETTINGS['Output_Folder'])
-        except (KeyError, TypeError):
-            pass
-        
-        # use external settings
-        try:
-            self.ui.externalSettingsCheck.setChecked(SETTINGS['Use_External_Settings'])
-        except (KeyError, TypeError):
-            pass
-
-        # external settings file
-        try:
-            if os.path.isfile(SETTINGS['External_Settings_File']):
-                self.ui.lineEdit_4.setText(SETTINGS['External_Settings_File'])
-        except (KeyError, TypeError):
-            pass
-        
-        # seed
-        try:
-            if SETTINGS['Seed'] != "":
-                self.ui.lineEdit_3.setText(SETTINGS['Seed'])
-        except (KeyError, TypeError):
-            pass
-        
-        # nondungeon chests
-        try:
-            self.ui.chestsCheck.setChecked(SETTINGS['NonDungeon_Chests'])
-        except (KeyError, TypeError):
-            self.ui.chestsCheck.setChecked(True)
-        
-        # fishing
-        try:
-            self.ui.fishingCheck.setChecked(SETTINGS['Fishing'])
-        except (KeyError, TypeError):
-            self.ui.fishingCheck.setChecked(True)
-        
-        # fast fishing
-        try:
-            self.ui.fastFishingCheck.setChecked(SETTINGS['Fast_Fishing'])
-        except (KeyError, TypeError):
-            self.ui.fastFishingCheck.setChecked(True)
-        
-        # rapids
-        try:
-            self.ui.rapidsCheck.setChecked(SETTINGS['Rapids'])
-        except (KeyError, TypeError):
-            self.ui.rapidsCheck.setChecked(False)
-        
-        # dampe
-        try:
-            self.ui.dampeCheck.setChecked(SETTINGS['Dampe'])
-        except (KeyError, TypeError):
-            self.ui.dampeCheck.setChecked(False)
-        
-        # # trendy
-        # try:
-        #     self.ui.trendyCheck.setChecked(SETTINGS['Trendy'])
-        # except (KeyError, TypeError):
-        #     self.ui.trendyCheck.setChecked(True)
-        
-        # # shop
-        # try:
-        #     self.ui.shopCheck.setChecked(SETTINGS['Shop'])
-        # except (KeyError, TypeError):
-        #     self.ui.shopCheck.setChecked(True)
-        
-        # free gifts
-        try:
-            self.ui.giftsCheck.setChecked(SETTINGS['Free_Gifts'])
-        except (KeyError, TypeError):
-            self.ui.giftsCheck.setChecked(True)
-        
-        # trade gifts
-        try:
-            self.ui.tradeGiftsCheck.setChecked(SETTINGS['Trade_Quest'])
-        except (KeyError, TypeError):
-            self.ui.tradeGiftsCheck.setChecked(False)
-        
-        # boss drops
-        try:
-            self.ui.bossCheck.setChecked(SETTINGS['Boss_Drops'])
-        except (KeyError, TypeError):
-            self.ui.bossCheck.setChecked(True)
-        
-        # misc items
-        try:
-            self.ui.miscellaneousCheck.setChecked(SETTINGS['Miscellaneous'])
-        except (KeyError, TypeError):
-            self.ui.miscellaneousCheck.setChecked(True)
-        
-        # heart pieces
-        try:
-            self.ui.heartsCheck.setChecked(SETTINGS['Heart_Pieces'])
-        except (KeyError, TypeError):
-            self.ui.heartsCheck.setChecked(True)
-        
-        # instruments
-        try:
-            self.ui.instrumentCheck.setChecked(SETTINGS['Instruments'])
-        except (KeyError, TypeError):
-            self.ui.instrumentCheck.setChecked(True)
-        
-        # golden leaves
-        try:
-            self.ui.leavesCheck.setChecked(SETTINGS['Golden_Leaves'])
-        except (KeyError, TypeError):
-            self.ui.leavesCheck.setChecked(True)
-
-        # starting instruments
-        try:
-            self.ui.instrumentsComboBox.setCurrentIndex(SETTINGS['Starting_Instruments'])
-        except (KeyError, TypeError):
-            self.ui.instrumentsComboBox.setCurrentIndex(0)
-
-        # seashells
-        try:
-            self.ui.seashellsComboBox.setCurrentIndex(SEASHELL_VALUES.index(SETTINGS['Seashells']))
-        except (KeyError, TypeError, IndexError):
-            self.ui.seashellsComboBox.setCurrentIndex(2)
-        
-        # logic
-        try:
-            self.ui.tricksComboBox.setCurrentIndex(LOGIC_PRESETS.index(SETTINGS['Logic'].lower().strip()))
-        except (KeyError, TypeError, IndexError):
-            self.ui.tricksComboBox.setCurrentIndex(0)
-        
-        # free book
-        try:
-            self.ui.bookCheck.setChecked(SETTINGS['Free_Book'])
-        except (KeyError, TypeError):
-            self.ui.bookCheck.setChecked(True)
-        
-        # unlocked bombs
-        try:
-            self.ui.unlockedBombsCheck.setChecked(SETTINGS['Unlocked_Bombs'])
-        except (KeyError, TypeError):
-            self.ui.unlockedBombsCheck.setChecked(True)
-        
-        # fast trendy
-        try:
-            self.ui.fastTrendyCheck.setChecked(SETTINGS['Fast_Trendy'])
-        except (KeyError, TypeError):
-            self.ui.fastTrendyCheck.setChecked(False)
-        
-        # shuffled bombs
-        try:
-            self.ui.shuffledBombsCheck.setChecked(SETTINGS['Shuffled_Bombs'])
-        except (KeyError, TypeError):
-            self.ui.shuffledBombsCheck.setChecked(False)
-
-        # fast stealing
-        try:
-            self.ui.stealingCheck.setChecked(SETTINGS['Fast_Stealing'])
-        except (KeyError, TypeError):
-            self.ui.stealingCheck.setChecked(True)
-        
-        # fast songs
-        try:
-            self.ui.songsCheck.setChecked(SETTINGS['Fast_Songs'])
-        except (KeyError, TypeError):
-            self.ui.songsCheck.setChecked(False)
-        
-        # fast master stalfos
-        try:
-            self.ui.stalfosCheck.setChecked(SETTINGS['Fast_Stalfos'])
-        except (KeyError, TypeError):
-            self.ui.stalfosCheck.setChecked(False)
-        
-        # scaled chest sizes
-        try:
-            self.ui.chestSizesCheck.setChecked(SETTINGS['Scaled_Chest_Sizes'])
-        except (KeyError, TypeError):
-            self.ui.chestSizesCheck.setChecked(False)
-        
-        # reduced farming
-        try:
-            self.ui.farmingCheck.setChecked(SETTINGS['Reduced_Farming'])
-        except (KeyError, TypeError):
-            self.ui.farmingCheck.setChecked(True)
-        
-        # shuffled powder
-        try:
-            self.ui.shuffledPowderCheck.setChecked(SETTINGS['Shuffled_Powder'])
-        except (KeyError, TypeError):
-            self.ui.shuffledPowderCheck.setChecked(False)
-        
-        # open kanalet
-        try:
-            self.ui.kanaletCheck.setChecked(SETTINGS['Open_Kanalet'])
-        except (KeyError, TypeError):
-            self.ui.kanaletCheck.setChecked(True)
-        
-        # open bridge
-        try:
-            self.ui.bridgeCheck.setChecked(SETTINGS['Open_Bridge'])
-        except (KeyError, TypeError):
-            self.ui.bridgeCheck.setChecked(True)
-        
-        # open mamu
-        try:
-            self.ui.mazeCheck.setChecked(SETTINGS['Open_Mamu'])
-        except (KeyError, TypeError):
-            self.ui.mazeCheck.setChecked(True)
-        
-        # bad pets - companions follow inside dungeons
-        try:
-            self.ui.badPetsCheck.setChecked(SETTINGS['Bad_Pets'])
-        except (KeyError, TypeError):
-            self.ui.badPetsCheck.setChecked(False)
-
-        # traps
-        try:
-            self.ui.trapsComboBox.setCurrentIndex(TRAP_SETTINGS.index(SETTINGS['Traps'].lower().strip()))
-        except (KeyError, TypeError, IndexError, ValueError):
-            self.ui.trapsComboBox.setCurrentIndex(0)
-        
-        # color dungeon rupees
-        try:
-            self.ui.rupCheck.setChecked(SETTINGS['Blupsanity'])
-        except(KeyError, TypeError):
-            self.ui.rupCheck.setChecked(False)
-        
-        # classic d2
-        try:
-            self.ui.swampCheck.setChecked(SETTINGS['Classic_D2'])
-        except (KeyError, TypeError):
-            self.ui.swampCheck.setChecked(False)
-        
-        # owl statues
-        try:
-            self.ui.owlsComboBox.setCurrentIndex(OWLS_SETTINGS.index(SETTINGS['Owl_Statues'].lower().strip()))
-        except (KeyError, TypeError, IndexError, ValueError):
-            self.ui.owlsComboBox.setCurrentIndex(0)
-        
-        # # companions
-        # try:
-        #     self.ui.companionCheck.setChecked(SETTINGS['Shuffled_Companions'])
-        # except (KeyError, TypeError):
-        #     self.ui.companionCheck.setChecked(True)
-
-        # # randomize entrances
-        # try:
-        #     self.ui.loadingCheck.setChecked(SETTINGS['Randomize_Entrances'])
-        # except (KeyError, TypeError):
-        #     self.ui.loadingCheck.setChecked(False)
-
-        # randomize music
-        try:
-            self.ui.musicCheck.setChecked(SETTINGS['Randomize_Music'])
-        except (KeyError, TypeError):
-            self.ui.musicCheck.setChecked(False)
-        
-        # randomize enemies
-        try:
-            self.ui.enemyCheck.setChecked(SETTINGS['Randomize_Enemies'])
-        except (KeyError, TypeError):
-            self.ui.enemyCheck.setChecked(False)
-        
-        # shuffled dungeons
-        try:
-            self.ui.dungeonsCheck.setChecked(SETTINGS['Shuffled_Dungeons'])
-        except (KeyError, TypeError):
-            self.ui.dungeonsCheck.setChecked(False)
-        
-        # spoiler log
-        try:
-            self.ui.spoilerCheck.setChecked(SETTINGS['Create_Spoiler'])
-        except (KeyError, TypeError):
-            self.ui.spoilerCheck.setChecked(True)
-        
-        # platform
-        try:
-            self.ui.platformComboBox.setCurrentIndex(PLATFORMS.index(SETTINGS['Platform'].lower().strip()))
-        except (KeyError, TypeError, IndexError, ValueError):
-            self.ui.platformComboBox.setCurrentIndex(0)
-        
-        # 1HKO
-        try:
-            self.ui.ohkoCheck.setChecked(SETTINGS['1HKO'])
-        except (KeyError, TypeError):
-            self.ui.ohkoCheck.setChecked(False)
-        
-        # Lv1 sword beam
-        try:
-            self.ui.lv1BeamCheck.setChecked(SETTINGS['Lv1_Beam'])
-        except (KeyError, TypeError):
-            self.ui.lv1BeamCheck.setChecked(False)
-        
-        # nice magic rod
-        try:
-            self.ui.niceRodCheck.setChecked(SETTINGS['Nice_Rod'])
-        except (KeyError, TypeError):
-            self.ui.niceRodCheck.setChecked(False)
-        
-        # excluded checks
-        try:
-            for check in SETTINGS['Excluded_Locations']:
-                if check in TOTAL_CHECKS:
-                    self.excluded_checks.add(check)
-        except (KeyError, TypeError):
-            if not self.ui.chestsCheck.isChecked():
-                self.excluded_checks.update(MISCELLANEOUS_CHESTS)
-            if not self.ui.fishingCheck.isChecked():
-                self.excluded_checks.update(FISHING_REWARDS)
-            if not self.ui.rapidsCheck.isChecked():
-                self.excluded_checks.update(RAPIDS_REWARDS)
-            if not self.ui.dampeCheck.isChecked():
-                self.excluded_checks.update(DAMPE_REWARDS)
-            if not self.ui.giftsCheck.isChecked():
-                self.excluded_checks.update(FREE_GIFT_LOCATIONS)
-            if not self.ui.tradeGiftsCheck.isChecked():
-                self.excluded_checks.update(TRADE_GIFT_LOCATIONS)
-            if not self.ui.bossCheck.isChecked():
-                self.excluded_checks.update(BOSS_LOCATIONS)
-            if not self.ui.miscellaneousCheck.isChecked():
-                self.excluded_checks.update(MISC_LOCATIONS)
-            if not self.ui.heartsCheck.isChecked():
-                self.excluded_checks.update(HEART_PIECE_LOCATIONS)
-            if not self.ui.leavesCheck.isChecked():
-                self.excluded_checks.update(LEAF_LOCATIONS)
-            # if not self.ui.trendyCheck.isChecked():
-            #     self.excluded_checks.update(TRENDY_REWARDS)
-            # if not self.ui.shopCheck.isChecked():
-            #     self.excluded_checks.update(SHOP_ITEMS)
-        
-        # starting items
-        try:
-            for item in SETTINGS['Starting_Items']:
-                if item in STARTING_ITEMS:
-                    if self.starting_gear.count(item) < STARTING_ITEMS.count(item):
-                        self.starting_gear.append(item)
-        except (KeyError, TypeError):
-            self.starting_gear = list() # reset starting gear to default if error
-        
-        # starting rupees
-        try:
-            self.ui.rupeesSpinBox.setValue(SETTINGS['Starting_Rupees'])
-        except (KeyError, TypeError):
-            self.ui.rupeesSpinBox.setValue(0)
-
+    
 
     def romBrowse(self):
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
@@ -1267,7 +763,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Override close event to save settings
     def closeEvent(self, event):
-        self.saveSettings()
+        settings_handler.saveSettings(self)
         event.accept()
 
 
@@ -1327,9 +823,3 @@ class SmartListWidget(QtWidgets.QListWidgetItem):
                 return True
             else:
                 return False
-
-
-
-class MyDumper(yaml.Dumper):
-    def increase_indent(self, flow=False, indentless=False):
-        return super(MyDumper, self).increase_indent(flow, indentless)
