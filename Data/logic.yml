@@ -1,4 +1,4 @@
-# 0.222
+# 0.301
 
 # The randomizer will use whatever logic is in the same directory as the program
 # Updating the logic will overwrite the existing file, so if using custom logic, rename it before updating and manually add the changes
@@ -2092,7 +2092,7 @@ D8-left-exit-chest:
   content: rupee-50
   region: turtle-rock
   spoiler-region: turtle-rock
-  condition-basic: (D8-4C & kill-vire & kill-rope & hookshot) | (D8-8D & rod & hookshot)
+  condition-basic: (D8-4C & kill-vire & kill-rope & hookshot) | (D8-8D & rod & feather & hookshot)
 D8-dodongos:
   type: item
   subtype: chest
