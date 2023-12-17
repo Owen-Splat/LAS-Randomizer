@@ -6,6 +6,7 @@ __pycache__
 /output
 /romfs
 /Resources/Dev Resources
+/Resources/__Combined.bntx
 /Tools/lvb.py
 /Tools/text_tools.py
 /Test

@@ -18,7 +18,7 @@ def createRandomizerTitleScreenArchive(rom_path):
     textureToReplace = 'Logo_00^f'
 
     editor = bntx_editor.BNTXEditor()
-    editor.openFile(RESOURCE_PATH + '\\__Combined-original.bntx')
+    editor.openFile(os.path.join(RESOURCE_PATH, '__Combined-original.bntx'))
 
     # Get Texture Index by Name
     foundIndex = -1
@@ -34,27 +34,27 @@ def createRandomizerTitleScreenArchive(rom_path):
     editor.exportTexByIndex(foundIndex)
 
     # Converting in PNG
-    im = Image.open(f'{RESOURCE_PATH}\\{textureToReplace}.dds')
-    im.save(f'{RESOURCE_PATH}\\{textureToReplace}.png', format="PNG")
+    im = Image.open(os.path.join(RESOURCE_PATH, f'{textureToReplace}.dds'))
+    im.save(os.path.join(RESOURCE_PATH, f'{textureToReplace}.png'), format="PNG")
 
     # Merge our PNG with the original one to create the new title screen
-    background = Image.open(f'{RESOURCE_PATH}\\{textureToReplace}.png')
-    foreground = Image.open(f'{RESOURCE_PATH}\\randomizer.png')
+    background = Image.open(os.path.join(RESOURCE_PATH, f'{textureToReplace}.png'))
+    foreground = Image.open(os.path.join(RESOURCE_PATH, 'randomizer.png'))
     background.paste(foreground, (0, 0), foreground)
-    background.save(f'{RESOURCE_PATH}\\{textureToReplace}-updated.png')
+    background.save(os.path.join(RESOURCE_PATH, f'{textureToReplace}-updated.png'))
 
-    updatedLogo = Image.open(f'{RESOURCE_PATH}\\{textureToReplace}-updated.png')
+    updatedLogo = Image.open(os.path.join(RESOURCE_PATH, f'{textureToReplace}-updated.png'))
 
     # Convert back to DDS using QuickTex
-    quicktex_dds.encode(updatedLogo, bc3.BC3Encoder(18), 'DXT5').save(f'{RESOURCE_PATH}\\{textureToReplace}-updated.dds')
+    quicktex_dds.encode(updatedLogo, bc3.BC3Encoder(18), 'DXT5').save(os.path.join(RESOURCE_PATH, f'{textureToReplace}-updated.dds'))
 
     # Inject it back to the BNTX File
-    editor.replaceTexByIndex(f'{RESOURCE_PATH}\\{textureToReplace}-updated.dds', foundIndex)
-    editor.saveAs(RESOURCE_PATH + '\\__Combined.bntx')
+    editor.replaceTexByIndex(os.path.join(RESOURCE_PATH, f'{textureToReplace}-updated.dds'), foundIndex)
+    editor.saveAs(os.path.join(RESOURCE_PATH, '__Combined.bntx'))
 
     #Cleanup
-    os.remove(f'{RESOURCE_PATH}\\__Combined-original.bntx')  # Original BNTX file
-    os.remove(f'{RESOURCE_PATH}\\{textureToReplace}.dds')  # Original DDS Texture
-    os.remove(f'{RESOURCE_PATH}\\{textureToReplace}.png')  # PNG-converted Texture
-    os.remove(f'{RESOURCE_PATH}\\{textureToReplace}-updated.png')  # Merged PNG texture
-    os.remove(f'{RESOURCE_PATH}\\{textureToReplace}-updated.dds')  # Converted merged DDS texture
+    os.remove(os.path.join(RESOURCE_PATH, '__Combined-original.bntx')) # Original BNTX file
+    os.remove(os.path.join(RESOURCE_PATH, f'{textureToReplace}.dds'))  # Original DDS Texture
+    os.remove(os.path.join(RESOURCE_PATH, f'{textureToReplace}.png'))  # PNG-converted Texture
+    os.remove(os.path.join(RESOURCE_PATH, f'{textureToReplace}-updated.png'))  # Merged PNG texture
+    os.remove(os.path.join(RESOURCE_PATH, f'{textureToReplace}-updated.dds'))  # Converted merged DDS texture
