@@ -337,8 +337,9 @@ class Room:
             chest.parameters[2] = item_index if item_index != -1 else b''
 
             # WIP - Chest matching texture (TODO Add bfres files to the rando itself.)
+            # TODO Manage StoneBeak and PanelDungeonPiece (Dampe) texture thanks to the seed settings.
             if (new_content in ['Compass', 'DungeonMap', 'StoneBeak', 'Rupee300', 'Rupee100', 'Rupee50', 'Rupee20', 'Rupee5',
-                                'ZapTrap', 'DrownTrap', 'SquishTrap', 'DeathballTrap', 'QuakeTrap', '$ENEMY'] or
+                                'ZapTrap', 'DrownTrap', 'SquishTrap', 'DeathballTrap', 'QuakeTrap', '$ENEMY', 'PanelDungeonPiece'] or
                     new_content[-19:] == 'MasterStalfonLetter'):
                 chest_model = "ObjTreasureBoxTrash.bfres"
             elif new_content in ['Seashell', 'ShellRader']:
