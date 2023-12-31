@@ -61,21 +61,21 @@ def makeDatasheetChanges(sheet, settings):
                 # Using a copy of an existing entry to use as a skeleton for our new data
                 bombEntry = oead_tools.parseStruct(sheet['values'][i]['mLotTable'][0])
                 bombEntry['mType'] = 'Bomb'
-                bombEntry['mCookie'] = 1
+                bombEntry['mCookie'] = 3
                 bombEntry['mWeight'] = 5
                 sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(bombEntry))
 
                 # Using a copy of an existing entry to use as a skeleton for our new data
                 arrowEntry = oead_tools.parseStruct(sheet['values'][i]['mLotTable'][0])
                 arrowEntry['mType'] = 'Arrow'
-                arrowEntry['mCookie'] = 1
+                arrowEntry['mCookie'] = 3
                 arrowEntry['mWeight'] = 5
                 sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(arrowEntry))
 
                 # Using a copy of an existing entry to use as a skeleton for our new data
                 magicPowderEntry = oead_tools.parseStruct(sheet['values'][i]['mLotTable'][0])
                 magicPowderEntry['mType'] = 'MagicPowder'
-                magicPowderEntry['mCookie'] = 1
+                magicPowderEntry['mCookie'] = 3
                 magicPowderEntry['mWeight'] = 5
                 sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(magicPowderEntry))
 
