@@ -486,3 +486,28 @@ def readInt64(data, pos, endianness):
 
 def packInt64(v, endianness):
     return struct.pack(endianness + "q", v)
+
+
+class BFRESHeader:
+    def _setFormat(self):
+        self.format = self.endianness + '8sIH2BI2H2I'
+
+    def load(self, data, pos):
+        self.endianness = ">" if data[0xC:0xE] == b'\xFE\xFF' else "<"
+        self._setFormat()
+
+        (self.magic,
+         self.version,
+         _,
+         self.alignmentShift,
+         self.targetAddrSize,
+         self.fileNameAddr,
+         self.flag,
+         self.firstBlkAddr,
+         self.relocAddr,
+         self.fileSize) = struct.unpack_from(self.format, data, pos)
+
+        if self.magic != b'FRES    ':
+            raise Exception("Not a valid BFRES File !")
+
+        return 0

@@ -32,6 +32,20 @@ class BNTXEditor:
         if texture_:
             self.bntx.textures[index] = texture_
 
+    def replaceTextureByName(self, textureName, textureFile):
+        # Get Texture Index by Name
+        foundIndex = -1
+        for imageIndex, element in enumerate(self.bntx.textures):
+            if element.name == textureName:
+                foundIndex = imageIndex
+                break
+
+        if foundIndex < 0:
+            raise Exception(f'Texture {textureName} not found')
+
+        # Inject it back to the BNTX File
+        self.replaceTexByIndex(textureFile, foundIndex)
+
     def saveAs(self, file):
         if not file:
             return False
