@@ -328,30 +328,16 @@ class Room:
             self.grid = None
 
 
-    def setChestContent(self, new_content, item_index, chest_index=0, chest_size=1.0):
+    def setChestContent(self, new_content, item_index, chest_index=0, chest_size=1.0, chest_model="ObjTreasureBox.bfres"):
         chests = [a for a in self.actors if a.type == 0xF7]
 
         if len(chests) > chest_index:
             chest = chests[chest_index]
             chest.parameters[1] = bytes(new_content, 'utf-8')
             chest.parameters[2] = item_index if item_index != -1 else b''
-
-            # WIP - Chest matching texture (TODO Add bfres files to the rando itself.)
-            # TODO Manage StoneBeak and PanelDungeonPiece (Dampe) texture thanks to the seed settings.
-            if (new_content in ['Compass', 'DungeonMap', 'StoneBeak', 'Rupee300', 'Rupee100', 'Rupee50', 'Rupee20', 'Rupee5',
-                                'ZapTrap', 'DrownTrap', 'SquishTrap', 'DeathballTrap', 'QuakeTrap', '$ENEMY', 'PanelDungeonPiece'] or
-                    new_content[-19:] == 'MasterStalfonLetter'):
-                chest_model = "ObjTreasureBoxTrash.bfres"
-            elif new_content in ['Seashell', 'ShellRader']:
-                chest_model = "ObjTreasureBoxSeashell.bfres"
-            elif new_content in ['Bottle', 'HeartContainer', 'HeartPiece', 'SecretMedicine']:
-                chest_model = "ObjTreasureBoxLifeUpgrade.bfres"
-            elif new_content in ['SmallKey', 'NightmareKey']:
-                chest_model = "ObjTreasureBoxKey.bfres"
-            else:
-                chest_model = "ObjTreasureBox.bfres"
-
             chest.parameters[6] = bytes(chest_model, 'utf-8')
+
+            # Temporary hardcoded parameter to use only one model with multiple textures later
             chest.parameters[7] = bytes('TreasureBox', 'utf-8')
 
             chest.scaleX = chest_size

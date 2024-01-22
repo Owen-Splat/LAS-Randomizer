@@ -59,7 +59,7 @@ def applyDefaults(window):
     window.ui.mazeCheck.setChecked(True)
     window.ui.swampCheck.setChecked(False)
     window.ui.stalfosCheck.setChecked(False)
-    window.ui.chestSizesCheck.setChecked(False)
+    window.ui.chestAspectComboBox.setCurrentIndex(0)
     window.ui.songsCheck.setChecked(False)
     window.ui.fastFishingCheck.setChecked(True)
     window.ui.dungeonsCheck.setChecked(False)
@@ -108,7 +108,7 @@ def saveSettings(window):
         'Fast_Trendy': window.ui.fastTrendyCheck.isChecked(),
         'Fast_Songs': window.ui.songsCheck.isChecked(),
         'Fast_Stalfos': window.ui.stalfosCheck.isChecked(),
-        'Scaled_Chest_Sizes': window.ui.chestSizesCheck.isChecked(),
+        'Chest_Aspect': CHEST_ASPECT_SETTINGS[window.ui.chestAspectComboBox.currentIndex()],
         'Reduced_Farming': window.ui.farmingCheck.isChecked(),
         'Shuffled_Powder': window.ui.shuffledPowderCheck.isChecked(),
         'Open_Kanalet': window.ui.kanaletCheck.isChecked(),
@@ -265,9 +265,9 @@ def loadSettings(window):
     except (KeyError, TypeError):
         window.ui.stalfosCheck.setChecked(False)
     try:
-        window.ui.chestSizesCheck.setChecked(SETTINGS['Scaled_Chest_Sizes'])
-    except (KeyError, TypeError):
-        window.ui.chestSizesCheck.setChecked(False)
+        window.ui.chestAspectComboBox.setCurrentIndex(CHEST_ASPECT_SETTINGS.index(SETTINGS['Chest_Aspect'].lower().strip()))
+    except (KeyError, TypeError, IndexError, ValueError):
+        window.ui.chestAspectComboBox.setCurrentIndex(0)
     try:
         window.ui.farmingCheck.setChecked(SETTINGS['Reduced_Farming'])
     except (KeyError, TypeError):

@@ -518,6 +518,13 @@ CHEST_SIZES = {
     'D0': 1.0
 }
 
+CHEST_TEXTURES = {
+    'default': 'ObjTreasureBox.bfres',
+    'junk': "ObjTreasureBoxJunk.bfres",
+    'seashell': "ObjTreasureBoxSeashell.bfres",
+    'life-upgrade': "ObjTreasureBoxLifeUpgrade.bfres",
+    'key': "ObjTreasureBoxKey.bfres"
+}
 
 DUNGEON_ENTRANCES = {
     'tail-cave':        ('Lv01TailCave_08D',        '',     'Field_14D', '',     0),
