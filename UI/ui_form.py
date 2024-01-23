@@ -961,7 +961,7 @@ class Ui_MainWindow(object):
         self.chestAspectComboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Chests : Texture & Size", None))
 
 #if QT_CONFIG(whatsthis)
-        self.chestAspectComboBox.setWhatsThis(QCoreApplication.translate("MainWindow", u"This will controle how chests will look like in the game. (Size and/or texture)", None))
+        self.chestAspectComboBox.setWhatsThis(QCoreApplication.translate("MainWindow", u"Setup the way chests appear in game (With a custom size and/or texture depending on its content)", None))
 #endif // QT_CONFIG(whatsthis)
         self.chestAspectComboBox.setPlaceholderText("")
         self.groupBox_5.setTitle(QCoreApplication.translate("MainWindow", u"Logic Options", None))

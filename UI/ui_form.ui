@@ -1204,7 +1204,7 @@
           </rect>
          </property>
          <property name="whatsThis">
-          <string>This controls how many custom traps get added to the item pool</string>
+          <string>Setup the way chests appear in game (With a custom size and/or texture depending on its content)</string>
          </property>
          <property name="editable">
           <bool>false</bool>
