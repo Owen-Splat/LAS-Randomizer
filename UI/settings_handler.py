@@ -110,6 +110,7 @@ def saveSettings(window):
         'Fast_Stalfos': window.ui.stalfosCheck.isChecked(),
         'Chest_Aspect': CHEST_ASPECT_SETTINGS[window.ui.chestAspectComboBox.currentIndex()],
         'Reduced_Farming': window.ui.farmingCheck.isChecked(),
+        'Extended_Consumable_Drop': window.ui.extendedConsumableCheck.isChecked(),
         'Shuffled_Powder': window.ui.shuffledPowderCheck.isChecked(),
         'Open_Kanalet': window.ui.kanaletCheck.isChecked(),
         'Open_Bridge': window.ui.bridgeCheck.isChecked(),
@@ -272,6 +273,10 @@ def loadSettings(window):
         window.ui.farmingCheck.setChecked(SETTINGS['Reduced_Farming'])
     except (KeyError, TypeError):
         window.ui.farmingCheck.setChecked(True)
+    try:
+        window.ui.extendedConsumableCheck.setChecked(SETTINGS['Extended_Consumable_Drop'])
+    except (KeyError, TypeError):
+        window.ui.extendedConsumableCheck.setChecked(False)
     try:
         window.ui.shuffledPowderCheck.setChecked(SETTINGS['Shuffled_Powder'])
     except (KeyError, TypeError):

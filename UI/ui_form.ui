@@ -1238,7 +1238,7 @@
           <x>10</x>
           <y>130</y>
           <width>521</width>
-          <height>141</height>
+          <height>181</height>
          </rect>
         </property>
         <property name="title">
@@ -1437,6 +1437,28 @@
          </property>
          <property name="text">
           <string>Free Book</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="extendedConsumableCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>144</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Allows grass to drop arrows, bombs and powder (if owned)</string>
+         </property>
+         <property name="text">
+          <string>Extra consumable drop</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </widget>
