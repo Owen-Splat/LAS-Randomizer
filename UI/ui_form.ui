@@ -375,7 +375,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -1163,37 +1163,6 @@
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="chestSizesCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>548</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Sets chest sizes to match the importance of the item</string>
-         </property>
-         <property name="text">
-          <string>Scaled Chests</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
         <widget class="QCheckBox" name="dungeonsCheck">
          <property name="enabled">
           <bool>true</bool>
@@ -1224,6 +1193,43 @@
          <property name="checkable">
           <bool>true</bool>
          </property>
+        </widget>
+        <widget class="QComboBox" name="chestAspectComboBox">
+         <property name="geometry">
+          <rect>
+           <x>548</x>
+           <y>24</y>
+           <width>150</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Setup the way chests appear in game (With a custom size and/or texture depending on its content)</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Chests : Default</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Chests : Size</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Chests : Texture &amp; Size</string>
+          </property>
+         </item>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_5">

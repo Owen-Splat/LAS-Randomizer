@@ -503,21 +503,28 @@ ITEM_MODELS = {
 
 CHEST_SIZES = {
     'important': 1.2,
-    'trade': 1.0,
-    'seashell': 1.0,
-    'good': 1.0,
+    'trade': 1.2,
+    'seashell': 0.8,
+    'good': 0.8,
     'junk': 0.8,
-    'D1': 1.0,
-    'D2': 1.0,
-    'D3': 1.0,
-    'D4': 1.0,
-    'D5': 1.0,
-    'D6': 1.0,
-    'D7': 1.0,
-    'D8': 1.0,
-    'D0': 1.0
+    # 'D1': 1.0,
+    # 'D2': 1.0,
+    # 'D3': 1.0,
+    # 'D4': 1.0,
+    # 'D5': 1.0,
+    # 'D6': 1.0,
+    # 'D7': 1.0,
+    # 'D8': 1.0,
+    # 'D0': 1.0
 }
 
+CHEST_TEXTURES = {
+    'default': 'ObjTreasureBox.bfres',
+    'junk': "ObjTreasureBoxJunk.bfres",
+    'seashell': "ObjTreasureBoxSeashell.bfres",
+    'life-upgrade': "ObjTreasureBoxLifeUpgrade.bfres",
+    'key': "ObjTreasureBoxKey.bfres"
+}
 
 DUNGEON_ENTRANCES = {
     'tail-cave':        ('Lv01TailCave_08D',        '',     'Field_14D', '',     0),

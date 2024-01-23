@@ -84,6 +84,8 @@ OWLS_SETTINGS = ('none', 'overworld', 'dungeons', 'all') # ('vanilla', 'hints', 
 
 TRAP_SETTINGS = ('none', 'few', 'several', 'many')
 
+CHEST_ASPECT_SETTINGS = ('default', 'csmc', 'camc')
+
 # DUNGEON_ITEM_SETTINGS = ('standard', 'keys', 'keys+mcb')
 
 PLATFORMS = ('console', 'emulator')
