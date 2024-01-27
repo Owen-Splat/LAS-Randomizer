@@ -1,3 +1,12 @@
+<b>Mod Features & Fixes:</b>
+<br></br><br></br>
+- Logic options: Added a feature to enable extra drops in grass (bombs, arrows, powder) if owned
+<br></br><br></br>
+- Extra settings : Dropped the scale chest setting for a CSMC (Chest size matches content) or CAMC (Chest aspect matches content) feature instead.
+<br></br><br></br>
+--------------------------------------------
+<br></br><br></br>
+
 <b>New Features:</b>
 <br></br><br></br>
 - Patches tab: Additional, unrequired ASM patches to spice up gameplay elements
