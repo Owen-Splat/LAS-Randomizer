@@ -80,6 +80,7 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          automatic_release_tag: "${{ github.ref_name }}"
           title: "Release ${{ github.ref_name }}"
           files: "build/*.zip"
 
