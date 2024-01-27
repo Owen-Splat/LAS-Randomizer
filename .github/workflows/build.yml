@@ -3,7 +3,7 @@ on:
 #    branches:
 #      - 'master-law'
     tags:
-      - "MOD*"
+      - "v*"
 
 jobs:
   prepare-build-files:
