@@ -1,9 +1,9 @@
 on:
   push:
-    branches:
-      - 'master-law'
+#    branches:
+#      - 'master-law'
     tags:
-      - "v*"
+      - "*"
 
 jobs:
   prepare-build-files:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run : echo "Replacing essential data with the ones from this repository instead of the default ones"
-      - run : sed -i "s/EXTRA_TITLE_DATA\ =.*/EXTRA_TITLE_DATA\ = '- ${{ github.repository_owner }}'/g" randomizer_data.py
+      - run : sed -i "s/EXTRA_TITLE_DATA\ =.*/EXTRA_TITLE_DATA\ = '- ${{ github.repository_owner }} - ${{ github.ref_name }}'/g" randomizer_data.py
       - run : sed -i "s/MAIN_BRANCH\ =.*/MAIN_BRANCH\ = '${{ github.event.repository.default_branch }}'/g" randomizer_data.py
       - run : sed -i "s/AUTHOR\ =.*/AUTHOR\ = '${{ github.repository_owner }}'/g" randomizer_data.py
       - uses: actions/upload-artifact@v4
@@ -48,27 +48,27 @@ jobs:
           name: release-build-${{ matrix.os }}
           path: build/*.zip
 
-  dev-release:
-    needs: build
-    if: success() && (github.ref_name == github.event.repository.default_branch)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: build
-          pattern: release-build-*
-          merge-multiple: true
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: true
-          automatic_release_tag: "testing"
-          title: "Release ${{ github.ref_name }}"
-          files: "build/*.zip"
+#  dev-release:
+#    needs: build
+#    if: success() && (github.ref_name == github.event.repository.default_branch)
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/download-artifact@v4
+#        with:
+#          path: build
+#          pattern: release-build-*
+#          merge-multiple: true
+#      - uses: "marvinpinto/action-automatic-releases@latest"
+#        with:
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          prerelease: true
+#          automatic_release_tag: "testing"
+#          title: "Release ${{ github.ref_name }}"
+#          files: "build/*.zip"
 
   prod-release:
     needs: build
-    if: success() && startsWith(github.ref, 'refs/tags/v')
+    if: success() && startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -86,7 +86,8 @@ jobs:
 
   # Artifact Cleanup (to avoid too much storage)
   cleanup:
-    needs: [prepare-build-files, build, dev-release, prod-release]
+#    needs: [prepare-build-files, build, dev-release, prod-release]
+    needs: [prepare-build-files, build, prod-release]
     if: ${{ always() || contains(needs.*.result, 'failure') }}
     runs-on: ubuntu-latest
     steps:
