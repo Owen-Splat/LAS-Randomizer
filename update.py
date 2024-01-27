@@ -1,8 +1,7 @@
 from PySide6 import QtCore
 import urllib.request as lib
 
-from randomizer_data import VERSION, LOGIC_VERSION
-
+from randomizer_data import VERSION, LOGIC_VERSION, AUTHOR, MAIN_BRANCH
 
 
 class UpdateProcess(QtCore.QThread):
@@ -17,7 +16,7 @@ class UpdateProcess(QtCore.QThread):
     def run(self):
         try:
             update_file =\
-                lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/version.txt")
+                lib.urlopen(f"https://raw.githubusercontent.com/{AUTHOR}/LAS-Randomizer/{MAIN_BRANCH}/version.txt")
             web_version = float(update_file.read().strip())
             
             if web_version > VERSION:
@@ -44,7 +43,7 @@ class LogicUpdateProcess(QtCore.QThread):
     def run(self):
         try:
             update_file =\
-                lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/Data/logic.yml")
+                lib.urlopen(f"https://raw.githubusercontent.com/{AUTHOR}/LAS-Randomizer/{MAIN_BRANCH}/Data/logic.yml")
             web_version = float(update_file.readline().decode('utf-8').strip('#'))
             new_logic = update_file.read().decode('utf-8')
 

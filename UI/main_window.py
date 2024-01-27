@@ -104,7 +104,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.makeSmartComboBoxes()
 
         self.setFixedSize(780, 650)
-        self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
+        self.setWindowTitle(f'{self.windowTitle()} v{VERSION} {EXTRA_TITLE_DATA}')
         # self.ui.retranslateUi(self)
 
         center = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen()).center()
