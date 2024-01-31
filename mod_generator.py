@@ -239,7 +239,7 @@ class ModsProcess(QtCore.QThread):
             # Changing the texture and size of Stone Beaks if dungeon Owl rewards are enabled
             if item_key == "StoneBeak" and self.settings['owl-dungeon-gifts']:
                 item_chest_type = 'default'
-                size = 'important'
+                size = chest_sizes['important']
 
             # TODO Manage PanelDungeonPiece thanks to Dampe settings (need to check how it works)
 
@@ -258,7 +258,7 @@ class ModsProcess(QtCore.QThread):
             #     pass
             # elif item_key == 'Rooster':
             #     room_data.addChestRooster()
-            
+
             self.writeModFile(f'{self.romfs_dir}/region_common/level/{dirname}', f'{data.CHEST_ROOMS[room]}.leb', room_data)
             
             # Two special cases in D7 have duplicate rooms, once for pre-collapse and once for post-collapse. So we need to make sure we write the same data to both rooms.
