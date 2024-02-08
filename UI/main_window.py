@@ -31,13 +31,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.starting_gear = list()
         self.overworld_owls = bool(False)
         self.dungeon_owls = bool(False)
-
+        
         # Load User Settings
+        self.applyDefaults()
         if not DEFAULTS:
             settings_handler.loadSettings(self)
-        else:
-            self.applyDefaults()
-                
+        
         self.updateOwls()
         self.updateSeashells()
         
