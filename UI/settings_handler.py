@@ -52,6 +52,7 @@ def applyDefaults(window):
     window.ui.shuffledPowderCheck.setChecked(False)
     window.ui.musicCheck.setChecked(False)
     window.ui.enemyCheck.setChecked(False)
+    window.ui.enemySizesCheck.setChecked(False)
     window.ui.spoilerCheck.setChecked(True)
     window.ui.kanaletCheck.setChecked(True)
     window.ui.badPetsCheck.setChecked(False)
@@ -122,6 +123,7 @@ def saveSettings(window):
         # 'Randomize_Entrances': window.ui.loadingCheck.isChecked(),
         'Randomize_Music': window.ui.musicCheck.isChecked(),
         'Randomize_Enemies': window.ui.enemyCheck.isChecked(),
+        'Randomize_Enemy_Sizes': window.ui.enemySizesCheck.isChecked(),
         'Shuffled_Dungeons': window.ui.dungeonsCheck.isChecked(),
         '1HKO': window.ui.ohkoCheck.isChecked(),
         'Lv1_Beam': window.ui.lv1BeamCheck.isChecked(),
@@ -324,6 +326,10 @@ def loadSettings(window):
         window.ui.enemyCheck.setChecked(SETTINGS['Randomize_Enemies'])
     except (KeyError, TypeError):
         window.ui.enemyCheck.setChecked(False)
+    try:
+        window.ui.enemySizesCheck.setChecked(SETTINGS['Randomize_Enemy_Sizes'])
+    except (KeyError, TypeError):
+        window.ui.enemySizesCheck.setChecked(False)
     try:
         window.ui.dungeonsCheck.setChecked(SETTINGS['Shuffled_Dungeons'])
     except (KeyError, TypeError):
