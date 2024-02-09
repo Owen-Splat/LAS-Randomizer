@@ -998,7 +998,7 @@
           <x>10</x>
           <y>14</y>
           <width>711</width>
-          <height>101</height>
+          <height>141</height>
          </rect>
         </property>
         <property name="title">
@@ -1061,7 +1061,7 @@
          <property name="geometry">
           <rect>
            <x>369</x>
-           <y>64</y>
+           <y>104</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1080,37 +1080,6 @@
          </property>
          <property name="text">
           <string>Randomize Music</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="enemyCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>369</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Randomizes enemies that do not affect logic. Needed kills are left vanilla</string>
-         </property>
-         <property name="text">
-          <string>Randomize Enemies</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1138,8 +1107,8 @@
         <widget class="QCheckBox" name="mazeCheck">
          <property name="geometry">
           <rect>
-           <x>189</x>
-           <y>64</y>
+           <x>10</x>
+           <y>104</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1169,8 +1138,8 @@
          </property>
          <property name="geometry">
           <rect>
-           <x>548</x>
-           <y>24</y>
+           <x>189</x>
+           <y>64</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1200,8 +1169,8 @@
          </property>
          <property name="geometry">
           <rect>
-           <x>548</x>
-           <y>64</y>
+           <x>189</x>
+           <y>104</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1225,12 +1194,74 @@
           <bool>true</bool>
          </property>
         </widget>
+        <widget class="QCheckBox" name="enemyCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Randomizes enemies. Required kills are left vanilla</string>
+         </property>
+         <property name="text">
+          <string>Randomize Enemies</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="enemySizesCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>64</y>
+           <width>161</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Randomizes the size of the enemies between 50% and 150%</string>
+         </property>
+         <property name="text">
+          <string>Randomize Enemy Sizes</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>130</y>
+          <y>169</y>
           <width>521</width>
           <height>141</height>
          </rect>
@@ -1438,7 +1469,7 @@
         <property name="geometry">
          <rect>
           <x>540</x>
-          <y>130</y>
+          <y>169</y>
           <width>181</width>
           <height>141</height>
          </rect>

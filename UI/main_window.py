@@ -31,13 +31,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.starting_gear = list()
         self.overworld_owls = bool(False)
         self.dungeon_owls = bool(False)
-
+        
         # Load User Settings
+        self.applyDefaults()
         if not DEFAULTS:
             settings_handler.loadSettings(self)
-        else:
-            self.applyDefaults()
-                
+        
         self.updateOwls()
         self.updateSeashells()
         
@@ -445,6 +444,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 # 'randomize-entrances': external_settings[''],
                 'randomize-music': external_settings['Randomize_Music'],
                 'randomize-enemies': external_settings['Randomize_Enemies'],
+                'randomize-enemy-sizes': external_settings['Randomize_Enemy_Sizes'],
                 # 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in external_settings['']]) > 0 else False,
                 'shuffle-dungeons': external_settings['Shuffled_Dungeons'],
                 # 'dungeon-items': external_settings[''],
@@ -536,6 +536,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # 'randomize-entrances': self.ui.loadingCheck.isChecked(),
             'randomize-music': self.ui.musicCheck.isChecked(),
             'randomize-enemies': self.ui.enemyCheck.isChecked(),
+            'randomize-enemy-sizes': self.ui.enemySizesCheck.isChecked(),
             # 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in self.excluded_checks]) > 0 else False,
             'shuffle-dungeons': self.ui.dungeonsCheck.isChecked(),
             # 'dungeon-items': DUNGEON_ITEM_SETTINGS[self.ui.itemsComboBox.currentIndex()],
