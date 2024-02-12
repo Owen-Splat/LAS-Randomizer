@@ -99,7 +99,7 @@
      <widget class="QLineEdit" name="lineEdit">
       <property name="geometry">
        <rect>
-        <x>99</x>
+        <x>100</x>
         <y>5</y>
         <width>561</width>
         <height>23</height>
@@ -213,7 +213,7 @@
      <widget class="QLineEdit" name="lineEdit_2">
       <property name="geometry">
        <rect>
-        <x>99</x>
+        <x>100</x>
         <y>35</y>
         <width>561</width>
         <height>23</height>
@@ -269,7 +269,7 @@
      <widget class="QLineEdit" name="lineEdit_3">
       <property name="geometry">
        <rect>
-        <x>99</x>
+        <x>100</x>
         <y>65</y>
         <width>561</width>
         <height>23</height>
@@ -2496,15 +2496,15 @@
    <widget class="QPushButton" name="randomizeButton">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>561</y>
-      <width>121</width>
-      <height>41</height>
+      <x>683</x>
+      <y>590</y>
+      <width>75</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <pointsize>9</pointsize>
       <bold>false</bold>
      </font>
     </property>
@@ -2524,18 +2524,18 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="resetButton">
+   <widget class="QPushButton" name="copyButton">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>561</y>
-      <width>121</width>
-      <height>41</height>
+      <y>590</y>
+      <width>91</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <pointsize>9</pointsize>
       <bold>false</bold>
      </font>
     </property>
@@ -2546,7 +2546,7 @@
      <string notr="true">background-color: rgb(218, 218, 218);</string>
     </property>
     <property name="text">
-     <string>Reset Settings</string>
+     <string>Copy Settings</string>
     </property>
     <property name="default">
      <bool>false</bool>
@@ -2605,11 +2605,14 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_4">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>20</x>
       <y>560</y>
-      <width>471</width>
+      <width>741</width>
       <height>23</height>
      </rect>
     </property>
@@ -2619,52 +2622,18 @@
       <bold>false</bold>
      </font>
     </property>
-   </widget>
-   <widget class="QCheckBox" name="externalSettingsCheck">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>590</y>
-      <width>161</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-      <strikeout>false</strikeout>
-     </font>
-    </property>
-    <property name="toolTip">
-     <string/>
-    </property>
-    <property name="whatsThis">
-     <string/>
-    </property>
-    <property name="text">
-     <string>Use external settings file</string>
-    </property>
-    <property name="checkable">
+    <property name="readOnly">
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="browseButton3">
+   <widget class="QPushButton" name="resetButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>220</x>
       <y>590</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
     </property>
     <property name="font">
      <font>
@@ -2679,7 +2648,69 @@
      <string notr="true">background-color: rgb(218, 218, 218);</string>
     </property>
     <property name="text">
-     <string>Browse</string>
+     <string>Reset Settings</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pasteButton">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>590</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(218, 218, 218);</string>
+    </property>
+    <property name="text">
+     <string>Paste Settings</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="randomizeSettingsButton">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>590</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(218, 218, 218);</string>
+    </property>
+    <property name="text">
+     <string>Randomize Settings</string>
     </property>
     <property name="default">
      <bool>false</bool>
