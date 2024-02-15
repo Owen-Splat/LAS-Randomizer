@@ -504,7 +504,7 @@ ITEM_MODELS = {
 CHEST_SIZES = {
     'important': 1.2,
     'trade': 1.2,
-    'seashell': 0.8,
+    'seashell': 1.2,
     'good': 0.8,
     'junk': 0.8,
     # 'D1': 1.0,

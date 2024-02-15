@@ -418,6 +418,7 @@ Item_Pool:
     model-path: ItemRupeePurple.bfres
     model-name: RupeePurple
     npc-key: ItemRupeePurple
+    chest-type: junk
   rupee-100:
     type: junk
     quantity: 5

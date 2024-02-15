@@ -208,6 +208,7 @@ class ModsProcess(QtCore.QThread):
 
         # CSMC Management (Chest size)
         chest_sizes = copy.deepcopy(data.CHEST_SIZES)
+
         if self.settings['chest-aspect'] == 'csmc' or self.settings['chest-aspect'] == 'camc':
             # if all seashell and trade gift locations are set to junk, set chests that contain them to be small
             if not self.settings['seashells-important']:
@@ -230,7 +231,18 @@ class ModsProcess(QtCore.QThread):
             item_key = self.item_defs[self.placements[room]]['item-key']
             item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
             item_type = self.item_defs[self.placements[room]]['type']
-            size = chest_sizes[item_type]
+
+            # Managing CSMC on the fly. TODO Make this cleaner. This should not be there.
+            if self.settings['chest-aspect'] == 'csmc':
+                if item_type in ('HeartContainer', 'ClothesRed', 'ClothesBlue'):
+                    size = chest_sizes['junk']
+                elif item_type in ('SmallKey', 'Bomb_MaxUp', 'Arrow_MaxUp', 'MagicPowder_MaxUp'):
+                    size = chest_sizes['important']
+                else:
+                    size = chest_sizes[item_type]
+            else:
+                size = chest_sizes[item_type]
+
             try:
                 item_chest_type = self.item_defs[self.placements[room]]['chest-type']
             except KeyError:
@@ -247,6 +259,7 @@ class ModsProcess(QtCore.QThread):
             model = CHEST_TEXTURES['default']
             if self.settings['chest-aspect'] == 'camc' and item_chest_type is not None:
                 model = CHEST_TEXTURES[item_chest_type]
+
 
             if room == 'taltal-5-chest-puzzle':
                 for i in range(5):
