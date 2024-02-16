@@ -9,6 +9,7 @@ import traceback
 import Tools.leb as leb
 import Tools.oead_tools as oead_tools
 import Tools.event_tools as event_tools
+from Tools import bntx_tools
 from Tools.patcher import Patcher
 
 from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves, heart_pieces
@@ -1685,14 +1686,23 @@ class ModsProcess(QtCore.QThread):
         """Replaces the Title Screen logo with the Randomizer logo"""
 
         try:
-            writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
-            
-            with open(os.path.join(RESOURCE_PATH, '__Combined.bntx'), 'rb') as f: # will eventually manually replace the texture
-                writer.files['timg/__Combined.bntx'] = f.read()
 
+            # Getting the original __Combined.bntx file to extract the original logo if modified one is not already there
+            if not os.path.isfile(os.path.join(RESOURCE_PATH, '__Combined.bntx')):
+                bntx_tools.createRandomizerTitleScreenArchive(self.rom_path)
+
+            # ARC Writer
+            writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
+
+            # Creates the UI folder path
             if not os.path.exists(f'{self.romfs_dir}/region_common/ui'):
                 os.makedirs(f'{self.romfs_dir}/region_common/ui')
 
+            # Prepare file to be replaced with new content
+            with open(os.path.join(RESOURCE_PATH, '__Combined.bntx'), 'rb') as f: # will eventually manually replace the texture
+                writer.files['timg/__Combined.bntx'] = f.read()
+            
+            # Actual writing
             oead_tools.writeSarc(writer, f'{self.romfs_dir}/region_common/ui/StartUp.arc')
         
         finally: # regardless if the user had the file or not, just consider this task done, the logo is not needed to play
