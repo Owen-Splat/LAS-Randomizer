@@ -35,11 +35,8 @@ pow2_round_up = swizzle.pow2_round_up
 
 class File:
 
-    def readFromFile(self, fname):
-        with open(fname, "rb") as inf:
-            inb = inf.read()
-
-        return self.load(inb, 0)
+    def readBytes(self, data):
+        return self.load(data, 0)
 
     def load(self, data, pos):
         self.header = BNTXHeader()
@@ -132,7 +129,7 @@ class File:
 
         return result_, blkWidth, blkHeight
 
-    def extract(self, index, BFRESPath, dontShowMsg=False):
+    def extract(self, index, dontShowMsg=False) -> bytes:
         texture = self.textures[index]
         if (texture.format_ in globals.formats
                 and texture.dim == 2
@@ -212,12 +209,6 @@ class File:
                 '?', '_').replace('"', '_').replace('<', '_').replace('>', '_').replace('|', '_')
 
             if (texture.format_ >> 8) in globals.ASTC_formats:
-                file = os.path.join(BFRESPath, name + '.astc')
-
-            else:
-                file = os.path.join(BFRESPath, name + '.dds')
-
-            if (texture.format_ >> 8) in globals.ASTC_formats:
                 outBuffer = b''.join([
                     b'\x13\xAB\xA1\x5C', blkWidth.to_bytes(1, "little"),
                     blkHeight.to_bytes(1, "little"), b'\1',
@@ -226,8 +217,7 @@ class File:
                     result_[0],
                 ])
 
-                with open(file, "wb+") as output:
-                    output.write(outBuffer)
+                return outBuffer
 
             else:
                 hdr = dds.generateHeader(
@@ -235,8 +225,7 @@ class File:
                     len(result_[0]), (texture.format_ >> 8) in globals.BCn_formats,
                 )
 
-                with open(file, "wb+") as output:
-                    output.write(b''.join([hdr, b''.join(result_)]))
+                return b''.join([hdr, b''.join(result_)])
 
         elif not dontShowMsg:
             msg = "Can't convert: " + texture.name

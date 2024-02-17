@@ -1686,26 +1686,16 @@ class ModsProcess(QtCore.QThread):
         """Replaces the Title Screen logo with the Randomizer logo"""
 
         try:
-
-            # Getting the original __Combined.bntx file to extract the original logo if modified one is not already there
-            if not os.path.isfile(os.path.join(RESOURCE_PATH, '__Combined.bntx')):
-                bntx_tools.createRandomizerTitleScreenArchive(self.rom_path)
-
-            # ARC Writer
-            writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
-
             # Creates the UI folder path
             if not os.path.exists(f'{self.romfs_dir}/region_common/ui'):
                 os.makedirs(f'{self.romfs_dir}/region_common/ui')
-
-            # Prepare file to be replaced with new content
-            with open(os.path.join(RESOURCE_PATH, '__Combined.bntx'), 'rb') as f: # will eventually manually replace the texture
-                writer.files['timg/__Combined.bntx'] = f.read()
             
-            # Actual writing
+            # Read the BNTX file from the sarc file and edit the title screen logo to include the randomizer logo
+            writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
+            writer.files['timg/__Combined.bntx'] = bntx_tools.createRandomizerTitleScreenArchive(self.rom_path)
             oead_tools.writeSarc(writer, f'{self.romfs_dir}/region_common/ui/StartUp.arc')
         
-        finally: # regardless if the user had the file or not, just consider this task done, the logo is not needed to play
+        finally: # regardless of any errors, just consider this task done, the logo is not needed to play
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
