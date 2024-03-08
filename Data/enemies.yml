@@ -459,7 +459,7 @@ Chest_Enemies:
   - 0x3C
 
 
-# Rooms each with a list of actors to not modify. I made an old crapp level editor you can use to see the actors. Update soon maybe
+# Rooms each with a list of actors to not modify. I made an old crappy level editor you can use to see the actors. Update soon maybe
 Excluded_Actors:
   Field_12P: [0] # armos
   Field_10G: [0] # villa skip pincer

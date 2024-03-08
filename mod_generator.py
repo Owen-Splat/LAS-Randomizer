@@ -159,7 +159,7 @@ class ModsProcess(QtCore.QThread):
             if self.settings['randomize-music'] and self.thread_active:
                 self.makeMusicChanges()
             
-            if self.settings['randomize-enemies'] and self.thread_active:
+            if (self.settings['randomize-enemies'] or self.settings['randomize-enemy-sizes']) and self.thread_active:
                 self.randomizeEnemies()
             
             if self.thread_active: self.fixWaterLoadingZones()
@@ -1878,7 +1878,7 @@ class ModsProcess(QtCore.QThread):
     def makeTelephoneChanges(self):
         """Edits the telephone event file to allow the player to freely swap tunics
         
-        Also adds rooster and bowwow to be able to get them back if companion shuffle is on"""
+        [Not Implemented] Also adds rooster and bowwow to be able to get them back if companion shuffle is on"""
 
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Telephone.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
@@ -2267,7 +2267,7 @@ class ModsProcess(QtCore.QThread):
                         room_data = leb.Room(f.read())
                 
                 rand_state, edited_room =\
-                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, random.getstate())
+                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, self.settings['randomize-enemy-sizes'], random.getstate())
                 
                 random.setstate(rand_state)
                 
