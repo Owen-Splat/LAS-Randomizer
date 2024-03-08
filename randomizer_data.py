@@ -50,6 +50,7 @@ try:
         DEFAULTS = False
 except FileNotFoundError:
     DEFAULTS = True
+    SETTINGS = {}
 
 MISCELLANEOUS_CHESTS = LOCATIONS['Chest_Locations']
 FISHING_REWARDS = LOCATIONS['Fishing_Rewards']
