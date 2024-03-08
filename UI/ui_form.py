@@ -748,7 +748,7 @@ class Ui_MainWindow(object):
         self.browseButton1.setDefault(False)
         self.browseButton2.setDefault(False)
         self.seedButton.setDefault(False)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(0)
         self.seashellsComboBox.setCurrentIndex(0)
         self.owlsComboBox.setCurrentIndex(0)
         self.itemsComboBox.setCurrentIndex(0)
