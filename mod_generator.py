@@ -148,7 +148,7 @@ class ModsProcess(QtCore.QThread):
             
             if self.settings['blupsanity'] and self.thread_active:
                 self.makeLv10RupeeChanges()
-            
+
             if self.settings['shuffle-dungeons'] and self.thread_active:
                 self.shuffleDungeons()
                 self.shuffleDungeonIcons()
@@ -159,7 +159,7 @@ class ModsProcess(QtCore.QThread):
             if self.settings['randomize-music'] and self.thread_active:
                 self.makeMusicChanges()
             
-            if self.settings['randomize-enemies'] and self.thread_active:
+            if (self.settings['randomize-enemies'] or self.settings['randomize-enemy-sizes']) and self.thread_active:
                 self.randomizeEnemies()
             
             if self.thread_active: self.fixWaterLoadingZones()
@@ -228,15 +228,26 @@ class ModsProcess(QtCore.QThread):
             with open(f'{self.rom_path}/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'rb') as roomfile:
                 room_data = leb.Room(roomfile.read())
 
+            # Managing panels to set default chest texture for now as I cannot detect chest content (only $PANEL)
+            if room.startswith('panel-'):
+                for actor in room_data.actors:
+                    if actor.name.startswith(b'ObjTreasureBox'):
+                        room_data.setChestContent(
+                            actor.parameters[1].decode("utf-8"), actor.parameters[2], chest_size=1.0, chest_model=CHEST_TEXTURES['default']
+                        )
+                self.writeModFile(f'{self.romfs_dir}/region_common/level/{dirname}', f'{data.CHEST_ROOMS[room]}.leb',
+                                  room_data)
+                continue
+
             item_key = self.item_defs[self.placements[room]]['item-key']
             item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
             item_type = self.item_defs[self.placements[room]]['type']
 
             # Managing CSMC on the fly. TODO Make this cleaner. This should not be there.
             if self.settings['chest-aspect'] == 'csmc':
-                if item_type in ('HeartContainer', 'ClothesRed', 'ClothesBlue'):
+                if item_key in ('HeartContainer', 'ClothesRed', 'ClothesBlue'):
                     size = chest_sizes['junk']
-                elif item_type in ('SmallKey', 'Bomb_MaxUp', 'Arrow_MaxUp', 'MagicPowder_MaxUp'):
+                elif item_key in ('SmallKey', 'Bomb_MaxUp', 'Arrow_MaxUp', 'MagicPowder_MaxUp'):
                     size = chest_sizes['important']
                 else:
                     size = chest_sizes[item_type]
@@ -1867,7 +1878,7 @@ class ModsProcess(QtCore.QThread):
     def makeTelephoneChanges(self):
         """Edits the telephone event file to allow the player to freely swap tunics
         
-        Also adds rooster and bowwow to be able to get them back if companion shuffle is on"""
+        [Not Implemented] Also adds rooster and bowwow to be able to get them back if companion shuffle is on"""
 
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Telephone.bfevfl')
         actors.addNeededActors(flow.flowchart, self.rom_path)
@@ -2256,7 +2267,7 @@ class ModsProcess(QtCore.QThread):
                         room_data = leb.Room(f.read())
                 
                 rand_state, edited_room =\
-                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, random.getstate())
+                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, self.settings['randomize-enemy-sizes'], random.getstate())
                 
                 random.setstate(rand_state)
                 

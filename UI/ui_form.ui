@@ -26,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>760</width>
-      <height>491</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -99,7 +99,7 @@
      <widget class="QLineEdit" name="lineEdit">
       <property name="geometry">
        <rect>
-        <x>99</x>
+        <x>100</x>
         <y>5</y>
         <width>561</width>
         <height>23</height>
@@ -213,7 +213,7 @@
      <widget class="QLineEdit" name="lineEdit_2">
       <property name="geometry">
        <rect>
-        <x>99</x>
+        <x>100</x>
         <y>35</y>
         <width>561</width>
         <height>23</height>
@@ -269,7 +269,7 @@
      <widget class="QLineEdit" name="lineEdit_3">
       <property name="geometry">
        <rect>
-        <x>99</x>
+        <x>100</x>
         <y>65</y>
         <width>561</width>
         <height>23</height>
@@ -371,7 +371,7 @@
         <x>10</x>
         <y>104</y>
         <width>733</width>
-        <height>350</height>
+        <height>365</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -616,32 +616,32 @@
          </property>
          <item>
           <property name="text">
-           <string>Seashell Mansion:  0</string>
+           <string>Seashell Mansion: 0</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Seashell Mansion:  5</string>
+           <string>Seashell Mansion: 5</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Seashell Mansion:  15</string>
+           <string>Seashell Mansion: 15</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Seashell Mansion:  30</string>
+           <string>Seashell Mansion: 30</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Seashell Mansion:  40</string>
+           <string>Seashell Mansion: 40</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Seashell Mansion:  50</string>
+           <string>Seashell Mansion: 50</string>
           </property>
          </item>
         </widget>
@@ -998,7 +998,7 @@
           <x>10</x>
           <y>14</y>
           <width>711</width>
-          <height>101</height>
+          <height>141</height>
          </rect>
         </property>
         <property name="title">
@@ -1061,7 +1061,7 @@
          <property name="geometry">
           <rect>
            <x>369</x>
-           <y>64</y>
+           <y>104</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1080,37 +1080,6 @@
          </property>
          <property name="text">
           <string>Randomize Music</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="enemyCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>369</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Randomizes enemies that do not affect logic. Needed kills are left vanilla</string>
-         </property>
-         <property name="text">
-          <string>Randomize Enemies</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1138,8 +1107,8 @@
         <widget class="QCheckBox" name="mazeCheck">
          <property name="geometry">
           <rect>
-           <x>189</x>
-           <y>64</y>
+           <x>10</x>
+           <y>104</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1158,37 +1127,6 @@
          </property>
          <property name="text">
           <string>Open Mamu</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="dungeonsCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>548</x>
-           <y>64</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Randomizes Dungeons&lt;br&gt;&lt;/br&gt;&lt;u&gt;Only front entrances are randomized,&lt;/u&gt; and only handles non-glitched logics</string>
-         </property>
-         <property name="text">
-          <string>Shuffled Dungeons</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1231,14 +1169,107 @@
           </property>
          </item>
         </widget>
+        <widget class="QCheckBox" name="dungeonsCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Randomizes Dungeons&lt;br&gt;&lt;/br&gt;&lt;u&gt;Only front entrances are randomized,&lt;/u&gt; and only handles non-glitched logics</string>
+         </property>
+         <property name="text">
+          <string>Shuffled Dungeons</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="enemyCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Randomizes enemies. Required kills are left vanilla</string>
+         </property>
+         <property name="text">
+          <string>Randomize Enemies</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="enemySizesCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>64</y>
+           <width>161</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Randomizes the size of the enemies between 50% and 150%</string>
+         </property>
+         <property name="text">
+          <string>Randomize Enemy Sizes</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>130</y>
+          <y>169</y>
           <width>521</width>
-          <height>181</height>
+          <height>170</height>
          </rect>
         </property>
         <property name="title">
@@ -1444,7 +1475,7 @@
           <rect>
            <x>10</x>
            <y>144</y>
-           <width>151</width>
+           <width>145</width>
            <height>21</height>
           </rect>
          </property>
@@ -1466,7 +1497,7 @@
         <property name="geometry">
          <rect>
           <x>540</x>
-          <y>130</y>
+          <y>169</y>
           <width>181</width>
           <height>141</height>
          </rect>
@@ -1902,47 +1933,47 @@
       </property>
       <item>
        <property name="text">
-        <string>Starting Instruments:  0</string>
+        <string>Starting Instruments: 0</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  1</string>
+        <string>Starting Instruments: 1</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  2</string>
+        <string>Starting Instruments: 2</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  3</string>
+        <string>Starting Instruments: 3</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  4</string>
+        <string>Starting Instruments: 4</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  5</string>
+        <string>Starting Instruments: 5</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  6</string>
+        <string>Starting Instruments: 6</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  7</string>
+        <string>Starting Instruments: 7</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Starting Instruments:  8</string>
+        <string>Starting Instruments: 8</string>
        </property>
       </item>
      </widget>
@@ -1967,7 +1998,7 @@
        <string/>
       </property>
       <property name="prefix">
-       <string>Rupees:  </string>
+       <string>Rupees:</string>
       </property>
       <property name="maximum">
        <number>9999</number>
@@ -2417,27 +2448,27 @@
       </property>
       <item>
        <property name="text">
-        <string>Logic:  Basic</string>
+        <string>Logic: Basic</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Logic:  Advanced</string>
+        <string>Logic: Advanced</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Logic:  Glitched</string>
+        <string>Logic: Glitched</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Logic:  Hell</string>
+        <string>Logic: Hell</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Logic:  None</string>
+        <string>Logic: None</string>
        </property>
       </item>
      </widget>
@@ -2493,15 +2524,15 @@
    <widget class="QPushButton" name="randomizeButton">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>561</y>
-      <width>121</width>
-      <height>41</height>
+      <x>683</x>
+      <y>590</y>
+      <width>75</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <pointsize>9</pointsize>
       <bold>false</bold>
      </font>
     </property>
@@ -2521,18 +2552,18 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="resetButton">
+   <widget class="QPushButton" name="copyButton">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>561</y>
-      <width>121</width>
-      <height>41</height>
+      <y>590</y>
+      <width>91</width>
+      <height>23</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <pointsize>9</pointsize>
       <bold>false</bold>
      </font>
     </property>
@@ -2543,7 +2574,7 @@
      <string notr="true">background-color: rgb(218, 218, 218);</string>
     </property>
     <property name="text">
-     <string>Reset Settings</string>
+     <string>Copy Settings</string>
     </property>
     <property name="default">
      <bool>false</bool>
@@ -2556,9 +2587,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>509</y>
+      <y>519</y>
       <width>711</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -2602,11 +2633,14 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_4">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>20</x>
       <y>560</y>
-      <width>471</width>
+      <width>741</width>
       <height>23</height>
      </rect>
     </property>
@@ -2616,52 +2650,18 @@
       <bold>false</bold>
      </font>
     </property>
-   </widget>
-   <widget class="QCheckBox" name="externalSettingsCheck">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>590</y>
-      <width>161</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>9</pointsize>
-      <strikeout>false</strikeout>
-     </font>
-    </property>
-    <property name="toolTip">
-     <string/>
-    </property>
-    <property name="whatsThis">
-     <string/>
-    </property>
-    <property name="text">
-     <string>Use external settings file</string>
-    </property>
-    <property name="checkable">
+    <property name="readOnly">
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="browseButton3">
+   <widget class="QPushButton" name="resetButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>220</x>
       <y>590</y>
-      <width>75</width>
+      <width>91</width>
       <height>23</height>
      </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
     </property>
     <property name="font">
      <font>
@@ -2676,7 +2676,69 @@
      <string notr="true">background-color: rgb(218, 218, 218);</string>
     </property>
     <property name="text">
-     <string>Browse</string>
+     <string>Reset Settings</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pasteButton">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>590</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(218, 218, 218);</string>
+    </property>
+    <property name="text">
+     <string>Paste Settings</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="randomizeSettingsButton">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>590</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(218, 218, 218);</string>
+    </property>
+    <property name="text">
+     <string>Randomize Settings</string>
     </property>
     <property name="default">
      <bool>false</bool>
