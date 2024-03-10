@@ -1279,6 +1279,13 @@ class ModsProcess(QtCore.QThread):
         ### Make Save&Quit after getting a GameOver send you back to Marin's house
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Common.bfevfl')
+
+            # Disables death counter to force perfect ending
+            if self.settings['perfect-ending']:
+                event_tools.removeEventAfter(flow.flowchart, 'Event62')
+                event_tools.removeEventAfter(flow.flowchart, 'Event42')
+                event_tools.insertEventAfter(flow.flowchart, 'Event62', 'Event63')
+
             actors.addNeededActors(flow.flowchart, self.rom_path)
 
             event_tools.setSwitchEventCase(flow.flowchart, 'Event64', 1,

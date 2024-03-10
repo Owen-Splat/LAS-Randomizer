@@ -1638,6 +1638,22 @@
           <string>Nice Magic Rod</string>
          </property>
         </widget>
+        <widget class="QCheckBox" name="perfectEndingCheck">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Forces the perfect ending to be displayed at the end of the game.&lt;br&gt;&lt;b&gt;&lt;u&gt;WARNING : Disables the death count&lt;/u&gt;&lt;/b&gt;</string>
+         </property>
+         <property name="text">
+          <string>Perfect Ending</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QLabel" name="label_4">
         <property name="geometry">
