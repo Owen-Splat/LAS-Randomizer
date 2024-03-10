@@ -375,7 +375,7 @@ class Ui_MainWindow(object):
         self.bookCheck.setGeometry(QRect(10, 64, 151, 21))
         self.extendedConsumableCheck = QCheckBox(self.groupBox_5)
         self.extendedConsumableCheck.setObjectName(u"extendedConsumableCheck")
-        self.extendedConsumableCheck.setGeometry(QRect(10, 144, 145, 21))
+        self.extendedConsumableCheck.setGeometry(QRect(10, 144, 150, 21))
         self.extendedConsumableCheck.setCheckable(True)
         self.groupBox_7 = QGroupBox(self.tab_5)
         self.groupBox_7.setObjectName(u"groupBox_7")
