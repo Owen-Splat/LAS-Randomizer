@@ -26,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>760</width>
-      <height>491</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -371,7 +371,7 @@
         <x>10</x>
         <y>104</y>
         <width>733</width>
-        <height>350</height>
+        <height>365</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -1263,7 +1263,7 @@
           <x>10</x>
           <y>169</y>
           <width>521</width>
-          <height>141</height>
+          <height>170</height>
          </rect>
         </property>
         <property name="title">
@@ -1462,6 +1462,28 @@
          </property>
          <property name="text">
           <string>Free Book</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="compassMapStartCheck">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>144</y>
+           <width>185</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Start with dungeons compass and maps</string>
+         </property>
+         <property name="text">
+          <string>Start with compass &amp;&amp; maps</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </widget>
@@ -2559,9 +2581,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>509</y>
+      <y>519</y>
       <width>711</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="sizePolicy">

@@ -1,6 +1,5 @@
 import Tools.event_tools as event_tools
-from Randomizers import data
-
+from Randomizers import data, item_get
 
 
 def makeStartChanges(flowchart, settings):
@@ -64,6 +63,12 @@ def makeStartChanges(flowchart, settings):
             ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
         ])
     
+    if settings['compass-map-start']:
+        event_defs = []
+        event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
+        event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
+        event_tools.createActionChain(flowchart, 'Event539', event_defs)
+
     # Remove the 7 second timeOut wait on the companion when it gets blocked from a loading zone
     timeout_events = ('Event637', 'Event660', 'Event693', 'Event696', 'Event371', 'Event407', 'Event478')
     for e in timeout_events:

@@ -129,9 +129,15 @@ class ItemShuffler(QtCore.QThread):
             for inst in instrument_locations:
                 vanilla_locations.append(inst)
         
+        # if start with compass & map setting is enabled, adding them into the starting item setting
+        start_dungeon_items = {}
+        if self.settings['compass-map-start']:
+            start_dungeon_items = [s for s in self.item_defs if s.startswith(('map', 'compass'))]
+
         # add the starting instruments to the list of starting items since we are done with them
         self.settings['starting-items'].extend(start_instruments)
-        
+        self.settings['starting-items'].extend(start_dungeon_items)
+
         # do the same for the remaining starting items
         for e, item in enumerate(self.settings['starting-items']):
             self.logic_defs[f'starting-item-{e+1}'] = { # add a location for each starting item
@@ -546,10 +552,13 @@ class ItemShuffler(QtCore.QThread):
             # if settings['dungeon-items'] == 'keys+mcb':
             #     break
 
-            item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
             # if settings['dungeon-items'] == 'keys':
             #     item_pool = [s for s in item_pool if s.startswith(('map', 'compass', 'stone'))]
-            
+            if settings['compass-map-start']:
+                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}' and not s.startswith(('map', 'compass'))]
+            else:
+                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
+
             location_pool = [s for s in locations if len(s) >= 2 and s[:2] == f'D{i}']
             random.shuffle(location_pool)
             
