@@ -133,10 +133,19 @@ class ItemShuffler(QtCore.QThread):
         start_dungeon_items = {}
         if self.settings['compass-map-start']:
             start_dungeon_items = [s for s in self.item_defs if s.startswith(('map', 'compass'))]
+            for e, item in enumerate(start_dungeon_items):
+                self.logic_defs[f'starting-dungeon-item-{e + 1}'] = {  # add a location for each starting item
+                    'type': 'item',
+                    'subtype': 'npc',
+                    'content': item,
+                    'region': 'mabe',
+                    'spoiler-region': 'mabe-village'
+                }
+                vanilla_locations.append(f'starting-dungeon-item-{e + 1}')
+                self.item_defs['rupee-50']['quantity'] += 1  # since we add a location for each item, add a 50 rupee in the pool for each
 
         # add the starting instruments to the list of starting items since we are done with them
         self.settings['starting-items'].extend(start_instruments)
-        self.settings['starting-items'].extend(start_dungeon_items)
 
         # do the same for the remaining starting items
         for e, item in enumerate(self.settings['starting-items']):
