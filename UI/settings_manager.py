@@ -48,6 +48,7 @@ BASE_OPTIONS = {
     'ohkoCheck': False,
     'lv1BeamCheck': False,
     'niceRodCheck': False,
+    'perfectEndingCheck': False,
     'rupeesSpinBox': 0,
     'starting_gear': []
 }
@@ -397,6 +398,7 @@ def loadRandomizerSettings(window, seed):
         '1HKO': window.ui.ohkoCheck.isChecked(),
         'lv1-beam': window.ui.lv1BeamCheck.isChecked(),
         'nice-rod': window.ui.niceRodCheck.isChecked(),
+        'perfect-ending': window.ui.perfectEndingCheck.isChecked(),
         'starting-items': window.starting_gear,
         'starting-rupees': window.ui.rupeesSpinBox.value(),
         'excluded-locations': window.excluded_checks
