@@ -323,7 +323,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.overworld_owls = True
             self.dungeon_owls = True
         
-        if not self.ui.rapidsCheck.isChecked():
+        if value in [1, 3] and not self.ui.rapidsCheck.isChecked():
             self.excluded_checks.update(['owl-statue-rapids'])
         
         self.updateSettingsString()
@@ -383,8 +383,15 @@ class MainWindow(QtWidgets.QMainWindow):
             self.progress_window.setStyleSheet(DARK_STYLESHEET)
         
         self.progress_window.show()
-    
-    
+
+    def getValidLocationChecks(self, locationList):
+        return [loc for loc in locationList
+                if (loc in DUNGEON_OWLS and self.dungeon_owls)
+                or (loc in OVERWORLD_OWLS and self.overworld_owls)
+                or (loc in BLUE_RUPEES and self.ui.rupCheck.isChecked())
+                or (loc not in DUNGEON_OWLS and loc not in OVERWORLD_OWLS and loc not in BLUE_RUPEES)
+                ]
+
     def tab_Changed(self):
 
         # starting items
@@ -406,23 +413,13 @@ class MainWindow(QtWidgets.QMainWindow):
         # locations
         if self.ui.tabWidget.currentIndex() == 2:
             self.ui.listWidget.clear()
-            for check in TOTAL_CHECKS.difference(self.excluded_checks):
-                if check in DUNGEON_OWLS and not self.dungeon_owls:
-                    continue
-                if check in OVERWORLD_OWLS and not self.overworld_owls:
-                    continue
-                if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
-                    continue
+            checks = self.getValidLocationChecks(TOTAL_CHECKS.difference(self.excluded_checks))
+            for check in checks:
                 self.ui.listWidget.addItem(SmartListWidget(self.checkToList(str(check))))
             
             self.ui.listWidget_2.clear()
-            for check in self.excluded_checks:
-                if check in DUNGEON_OWLS and not self.dungeon_owls:
-                    continue
-                if check in OVERWORLD_OWLS and not self.overworld_owls:
-                    continue
-                if check in BLUE_RUPEES and not self.ui.rupCheck.isChecked():
-                    continue
+            checks = self.getValidLocationChecks(self.excluded_checks)
+            for check in checks:
                 self.ui.listWidget_2.addItem(SmartListWidget(self.checkToList(str(check))))
             
             return
