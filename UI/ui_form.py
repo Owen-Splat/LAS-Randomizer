@@ -1090,7 +1090,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(whatsthis)
         self.niceRodCheck.setText(QCoreApplication.translate("MainWindow", u"Nice Magic Rod", None))
 #if QT_CONFIG(whatsthis)
-        self.perfectEndingCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Forces the perfect ending to be displayed at the end of the game.<br><b><u>WARNING : Disables the death count</u></b>", None))
+        self.perfectEndingCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Forces the perfect ending to be displayed at the end of the game.<br><b><u>WARNING : Disables the death counter</u></b>", None))
 #endif // QT_CONFIG(whatsthis)
         self.perfectEndingCheck.setText(QCoreApplication.translate("MainWindow", u"Perfect Ending", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Suggest ideas on GitHub or the Discord server!", None))
