@@ -239,9 +239,9 @@ def encodeSettings(window) -> str:
             int_bytes.append(v)
         elif isinstance(v, list):
             if k == 'starting_gear':
-                comp = STARTING_ITEMS
+                comp = sorted(STARTING_ITEMS)
             elif k == 'excluded_locations':
-                comp = TOTAL_CHECKS
+                comp = sorted(TOTAL_CHECKS)
             settings_list = list(copy.deepcopy(settings_dict[k]))
             for c in comp:
                 list_bits.append(1 if c in settings_list else 0)
@@ -285,8 +285,8 @@ def decodeSettings(settings_str: str) -> dict:
     
     check_boxes = []
     nums_options = []
-    items = list(copy.deepcopy(STARTING_ITEMS))
-    locs = list(copy.deepcopy(TOTAL_CHECKS))
+    items = sorted(list(copy.deepcopy(STARTING_ITEMS)))
+    locs = sorted(list(copy.deepcopy(TOTAL_CHECKS)))
 
     for k,v in BASE_OPTIONS.items():
         if isinstance(v, bool):
