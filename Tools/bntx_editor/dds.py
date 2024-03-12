@@ -24,8 +24,7 @@ dx10_formats = ["BC4U", "BC4S", "BC5U", "BC5S", "BC6H_UF16", "BC6H_SF16", "BC7"]
 
 
 def readDDS(f, SRGB):
-    with open(f, "rb") as inf:
-        inb = inf.read()
+    inb = f.read()
 
     if len(inb) < 0x80 or inb[:4] != b'DDS ':
         return 0, 0, 0, b'', 0, [], 0, []
