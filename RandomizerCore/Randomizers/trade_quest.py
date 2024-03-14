@@ -1,5 +1,5 @@
-import Tools.event_tools as event_tools
-from Randomizers import actors, item_get
+import RandomizerCore.Tools.event_tools as event_tools
+from RandomizerCore.Randomizers import actors, item_get
 
 
 def mamashaChanges(flowchart, placements, item_defs, rom_path):

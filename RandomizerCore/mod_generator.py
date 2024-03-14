@@ -6,18 +6,14 @@ import copy
 import random
 import traceback
 
-import Tools.leb as leb
-import Tools.oead_tools as oead_tools
-import Tools.event_tools as event_tools
-from Tools import bntx_tools
-from Tools.patcher import Patcher
-
-from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves, heart_pieces
-from Randomizers import instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches
-from Randomizers import player_start, rapids, seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap
-
-from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
-
+import RandomizerCore.Tools.leb as leb
+import RandomizerCore.Tools.oead_tools as oead_tools
+import RandomizerCore.Tools.event_tools as event_tools
+import RandomizerCore.Tools.bntx_tools as bntx_tools
+from RandomizerCore.Tools.exefs_editor.patcher import Patcher
+from RandomizerCore.Randomizers import (actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
+heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches, player_start, rapids,
+seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap)
 
 
 

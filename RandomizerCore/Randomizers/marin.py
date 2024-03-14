@@ -1,4 +1,4 @@
-import Tools.event_tools as event_tools
+import RandomizerCore.Tools.event_tools as event_tools
 
 
 

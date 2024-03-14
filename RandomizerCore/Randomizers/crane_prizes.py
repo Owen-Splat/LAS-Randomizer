@@ -1,6 +1,6 @@
-from Randomizers import data
-import Tools.event_tools as event_tools
-import Tools.oead_tools as oead_tools
+from RandomizerCore.Randomizers import data
+import RandomizerCore.Tools.event_tools as event_tools
+import RandomizerCore.Tools.oead_tools as oead_tools
 import shutil
 import copy
 

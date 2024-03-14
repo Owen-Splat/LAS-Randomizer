@@ -1,4 +1,4 @@
-from Tools.fixed_hash import *
+from RandomizerCore.Tools.fixed_hash import *
 import re
 
 

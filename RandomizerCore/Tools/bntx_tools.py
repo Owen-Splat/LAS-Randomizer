@@ -1,11 +1,10 @@
 from PIL import Image
-import Tools.bntx_editor.bntx_editor as bntx_editor
+import RandomizerCore.Tools.bntx_editor.bntx_editor as bntx_editor
+import RandomizerCore.Tools.oead_tools as oead_tools
+from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
 import os, struct
 import quicktex.dds as quicktex_dds
 import quicktex.s3tc.bc3 as bc3
-
-from Tools import oead_tools
-from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
 from io import BytesIO
 
 

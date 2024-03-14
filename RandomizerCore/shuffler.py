@@ -1,7 +1,5 @@
 from PySide6 import QtCore
-
 import RandomizerCore.spoiler as spoiler
-
 import re
 import copy
 import random

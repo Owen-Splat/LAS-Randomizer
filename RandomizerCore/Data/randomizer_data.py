@@ -39,7 +39,7 @@ with open(os.path.join(DATA_PATH, 'enemies.yml'), 'r') as f:
 with open(os.path.join(DATA_PATH, 'locations.yml'), 'r') as f:
     LOCATIONS = yaml.safe_load(f)
 
-with open(os.path.join(DATA_PATH, 'seeds.yml'), 'r') as f:
+with open(os.path.join(RESOURCE_PATH, 'seeds.yml'), 'r') as f:
     seeds = yaml.safe_load(f)
     ADJECTIVES = seeds['Adjectives']
     CHARACTERS = seeds['Characters']

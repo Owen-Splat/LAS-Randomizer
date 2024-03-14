@@ -18,11 +18,11 @@ if getattr(sys, "frozen", False):
         LOGS_PATH = os.path.join('.', 'log.txt')
 else:
     # application is not frozen
-    ROOT_PATH = os.path.dirname(__file__)
+    ROOT_PATH = os.path.dirname(sys.argv[0])
     SETTINGS_PATH = os.path.join(ROOT_PATH, 'settings.txt')
     LOGS_PATH = os.path.join(ROOT_PATH, 'log.txt')
     IS_RUNNING_FROM_SOURCE = True
 
-DATA_PATH = os.path.join(ROOT_PATH, 'Data')
-RESOURCE_PATH = os.path.join(ROOT_PATH, 'Resources')
+DATA_PATH = os.path.join(ROOT_PATH, 'RandomizerCore/Data')
+RESOURCE_PATH = os.path.join(ROOT_PATH, 'RandomizerUI/Resources')
 LOGIC_PATH = os.path.join(DATA_PATH, 'logic.yml')

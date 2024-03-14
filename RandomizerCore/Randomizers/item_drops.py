@@ -1,5 +1,5 @@
-from Randomizers import data
-import Tools.oead_tools as oead_tools
+from RandomizerCore.Randomizers import data
+import RandomizerCore.Tools.oead_tools as oead_tools
 import oead
 
 

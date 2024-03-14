@@ -19,11 +19,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os.path
-import Tools.bntx_editor.dds as dds
-import Tools.bntx_editor.globals as globals
-import Tools.bntx_editor.swizzle as swizzle
+import RandomizerCore.Tools.bntx_editor.dds as dds
+import RandomizerCore.Tools.bntx_editor.globals as globals
+import RandomizerCore.Tools.bntx_editor.swizzle as swizzle
 
-from Tools.bntx_editor.structs import (
+from RandomizerCore.Tools.bntx_editor.structs import (
     BNTXHeader, TexContainer, BlockHeader, StringTable,
     TextureInfo, RelocTBL, readInt64, packInt64,
 )

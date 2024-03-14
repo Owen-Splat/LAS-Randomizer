@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from PySide6 import QtCore, QtGui, QtWidgets
-import UI.main_window as window
+import RandomizerUI.main_window as window
 from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH, IS_RUNNING_FROM_SOURCE
 
 import os

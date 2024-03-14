@@ -1,9 +1,7 @@
 from PySide6 import QtWidgets
-from UI.ui_progress_form import Ui_ProgressWindow
-
+from RandomizerUI.UI.ui_progress_form import Ui_ProgressWindow
 from RandomizerCore.shuffler import ItemShuffler
 from RandomizerCore.mod_generator import ModsProcess
-
 import os
 import copy
 import shutil

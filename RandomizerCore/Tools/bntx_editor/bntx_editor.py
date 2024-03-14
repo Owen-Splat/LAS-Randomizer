@@ -3,7 +3,7 @@
 # Licensed under GNU GPLv3
 
 import os.path
-import Tools.bntx_editor.bntx as BNTX
+import RandomizerCore.Tools.bntx_editor.bntx as BNTX
 
 
 class BNTXEditor:

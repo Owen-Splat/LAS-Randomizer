@@ -1,4 +1,4 @@
-from Tools.patcher import Patcher
+from RandomizerCore.Tools.exefs_editor.patcher import Patcher
 import random
 
 

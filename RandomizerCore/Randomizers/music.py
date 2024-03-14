@@ -1,4 +1,4 @@
-import Tools.leb as leb
+import RandomizerCore.Tools.leb as leb
 
 
 
