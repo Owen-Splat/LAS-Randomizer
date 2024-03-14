@@ -1,17 +1,10 @@
-v0.3
-
-- test fishing bottle patch
-
-- update GUI for setting console/emulator output
-
-- make a 2nd release candidate build, give it a week or two
-
--------------------------------------------------------------------------------------------------------------------------------------
 v0.4
 
 - work on custom text and finish keysanity implementation
 
-- make new eventflow file to streamline giving items instead of always calling item_get.py
+- make custom give_item.bfevfl file to for every other flowchart to subflow to
+    this way, we don't need to add all the event actors to every single flowchart we edit
+    cleaner flowcharts to debug, and keeps total file size of seeds down a little
 
 - write custom text for tunics, also make telephone tunic switcher less confusing
 
@@ -19,12 +12,12 @@ v0.4
 
 - shop
 
-- individual tricks toggles
-
-- try to find better workaround for slime key
-
 -------------------------------------------------------------------------------------------------------------------------------------
 GENERAL FUTURE STUFF TO LOOK INTO
+
+- individual tricks toggles
+
+- better workaround for slime key
 
 - make separete repo containing custom models to be used optionally with rando
     for songs, capacity upgrades, and even custom items
