@@ -16,7 +16,7 @@ from Randomizers import actors, chests, conditions, crane_prizes, dampe, data, f
 from Randomizers import instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches
 from Randomizers import player_start, rapids, seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap
 
-from randomizer_paths import RESOURCE_PATH
+from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
 
 
 
@@ -2119,7 +2119,7 @@ class ModsProcess(QtCore.QThread):
         Needed kills are left vanilla and potentially problematic enemies are excluded"""
 
         from Randomizers import enemies
-        from randomizer_data import ENEMY_DATA
+        from RandomizerCore.Data.randomizer_data import ENEMY_DATA
 
         land_ids = []
         air_ids = []

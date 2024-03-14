@@ -1,8 +1,8 @@
 from PySide6 import QtWidgets
 from UI.ui_progress_form import Ui_ProgressWindow
 
-from shuffler import ItemShuffler
-from mod_generator import ModsProcess
+from RandomizerCore.shuffler import ItemShuffler
+from RandomizerCore.mod_generator import ModsProcess
 
 import os
 import copy
@@ -107,7 +107,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     def shufflerError(self, er_message=str):
         self.shuffle_error = True
-        from randomizer_paths import LOGS_PATH
+        from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
             f.write(f'\n\n{er_message}')
@@ -141,7 +141,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
     
     def modsError(self, er_message=str):
         self.mods_error = True
-        from randomizer_paths import LOGS_PATH
+        from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
             f.write(f"{self.seed} - {self.logic.capitalize()} Logic")
             f.write(f"\n\n{er_message}")

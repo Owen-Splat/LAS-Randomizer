@@ -38,7 +38,7 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     
     # if enemizer is enabled, randomize the green zol chest trap into another enemy
     if settings['randomize-enemies']:
-        from randomizer_data import ENEMY_DATA
+        from RandomizerCore.Data.randomizer_data import ENEMY_DATA
         enemy_id = random.choice(ENEMY_DATA['Chest_Enemies'])
         patcher.addPatch(0xca92c0, f'mov w9, #{enemy_id}')
     

@@ -5,7 +5,7 @@ import quicktex.dds as quicktex_dds
 import quicktex.s3tc.bc3 as bc3
 
 from Tools import oead_tools
-from randomizer_paths import RESOURCE_PATH
+from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
 from io import BytesIO
 
 

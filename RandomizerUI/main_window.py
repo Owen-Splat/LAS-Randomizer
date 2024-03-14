@@ -1,8 +1,8 @@
 from PySide6 import QtCore, QtWidgets, QtGui
 from UI.ui_form import Ui_MainWindow
 from UI.progress_window import ProgressWindow
-from update import UpdateProcess, LogicUpdateProcess
-from randomizer_data import *
+from RandomizerUI.update import UpdateProcess, LogicUpdateProcess
+from RandomizerCore.Data.randomizer_data import *
 from re import sub
 
 import os

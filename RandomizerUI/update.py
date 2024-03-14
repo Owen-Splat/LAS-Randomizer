@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 import urllib.request as lib
 
-from randomizer_data import VERSION, LOGIC_VERSION
+from RandomizerCore.Data.randomizer_data import VERSION, LOGIC_VERSION
 
 
 

@@ -1,4 +1,4 @@
-from randomizer_paths import DATA_PATH, RESOURCE_PATH, SETTINGS_PATH, LOGIC_PATH
+from RandomizerCore.Paths.randomizer_paths import DATA_PATH, RESOURCE_PATH, SETTINGS_PATH, LOGIC_PATH
 
 import yaml
 import os

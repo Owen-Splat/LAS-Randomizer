@@ -1,6 +1,6 @@
 from PySide6 import QtCore
 
-import spoiler
+import RandomizerCore.spoiler as spoiler
 
 import re
 import copy
