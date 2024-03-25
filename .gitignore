@@ -1,11 +1,8 @@
 __pycache__
 .qt_for_python
-/.idea
 /build
 /Models
 /output
-/romfs
-/Resources/Dev Resources
 /Tools/lvb.py
 /Tools/text_tools.py
 /Test
