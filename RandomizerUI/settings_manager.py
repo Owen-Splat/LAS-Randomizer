@@ -4,7 +4,7 @@ import yaml, base64, copy, random
 
 BASE_OPTIONS = {
     'chestsCheck': True,
-    'fishingCheck': True,
+    'fishingCheck': False,
     'rapidsCheck': False,
     'dampeCheck': False,
     'trendyCheck': False,
@@ -93,7 +93,7 @@ def applyDefaults(window):
             exec(f"window.{k} = v")
     
     window.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
-    window.excluded_checks.difference_update(FISHING_REWARDS)
+    window.excluded_checks.update(FISHING_REWARDS)
     window.excluded_checks.update(RAPIDS_REWARDS)
     window.excluded_checks.update(DAMPE_REWARDS)
     window.excluded_checks.update(TRENDY_REWARDS)
