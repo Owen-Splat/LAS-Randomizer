@@ -31,7 +31,7 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     """)
     
     # make songs, tunics, and capacity upgrades show the correct item model by making them go to the default case
-    # default case means it will use the model in Items.gsheet rather than a hardcoded one
+    # default case means it will use the npcKey in Items.gsheet rather than a hardcoded one
     patcher.addPatch(0xd798c4, 'b +0x134')
     patcher.addPatch(0xd79814, 'b +0x1e4')
     patcher.addPatch(0xd79804, 'b +0x1f4')

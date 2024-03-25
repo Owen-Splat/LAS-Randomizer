@@ -24,9 +24,8 @@ class ModsProcess(QtCore.QThread):
     def __init__(self, placements, rom_path, out_dir, items, seed, randstate, parent=None):
         QtCore.QThread.__init__(self, parent)
 
-        self.settings = placements['settings']
-        del placements['settings']
         self.placements = placements
+        self.settings = self.placements.pop('settings')
 
         self.rom_path = rom_path
         if self.settings['platform'] == 'console':
