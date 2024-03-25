@@ -39,10 +39,11 @@ with open(os.path.join(DATA_PATH, 'enemies.yml'), 'r') as f:
 with open(os.path.join(DATA_PATH, 'locations.yml'), 'r') as f:
     LOCATIONS = yaml.safe_load(f)
 
-with open(os.path.join(RESOURCE_PATH, 'seeds.yml'), 'r') as f:
-    seeds = yaml.safe_load(f)
-    ADJECTIVES = seeds['Adjectives']
-    CHARACTERS = seeds['Characters']
+with open(os.path.join(RESOURCE_PATH, 'adjectives.txt'), 'r') as f:
+    ADJECTIVES = f.readlines()
+
+with open(os.path.join(RESOURCE_PATH, 'characters.txt'), 'r') as f:
+    CHARACTERS = f.readlines()
 
 try:
     with open(SETTINGS_PATH, 'r') as settingsFile:
