@@ -2,7 +2,6 @@ from RandomizerCore.Tools.exefs_editor.patcher import Patcher
 import random
 
 
-
 def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     """Writes the necessary asm for the randomizer"""
     
@@ -31,7 +30,7 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     """)
     
     # make songs, tunics, and capacity upgrades show the correct item model by making them go to the default case
-    # default case means it will use the npcKey in Items.gsheet rather than a hardcoded one
+    # default case means it will use its own npcKey in Items.gsheet rather than a different item's npcKey
     patcher.addPatch(0xd798c4, 'b +0x134')
     patcher.addPatch(0xd79814, 'b +0x1e4')
     patcher.addPatch(0xd79804, 'b +0x1f4')
@@ -42,12 +41,11 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
         enemy_id = random.choice(ENEMY_DATA['Chest_Enemies'])
         patcher.addPatch(0xca92c0, f'mov w9, #{enemy_id}')
     
-    # # if keysanity is enabled, use the item index to determine which level it goes to
+    # # if keysanity is enabled, use the item index to determine which dungeon it goes to
     # if settings['dungeon-items'] != 'standard':
     #     allowKeysanity(patcher, settings['dungeon-items'])
     
     optionalPatches(patcher, settings)
-
 
 
 def optionalPatches(patcher: Patcher, settings: dict):
@@ -55,8 +53,10 @@ def optionalPatches(patcher: Patcher, settings: dict):
     
     # if 1HKO mode is enabled, make all forms of damage substract 80 health to make Link always die in 1 hit
     if settings['1HKO']:
-        patcher.addPatch(0xd4c754, 'sub w22, w8, #80')
-        patcher.addPatch(0xdb1f74, 'sub w8, w21, #80')
+        patcher.addPatch(0xd4c754, 'sub w22, w8, #80') # normal damage
+        patcher.addPatch(0xdb1f74, 'sub w8, w21, #80') # fall/drown damage
+        patcher.addPatch(0xd7c8c8, 'sub w20, w8, #80') # eventflow damage
+        patcher.addPatch(0xd96950, 'sub w8, w23, #80') # blaino damage
     
     # beam slash with either sword
     if settings['lv1-beam']:
@@ -65,7 +65,6 @@ def optionalPatches(patcher: Patcher, settings: dict):
     # change magic rod projectile instance limit from 3 to 16
     if settings['nice-rod']:
         patcher.addPatch(0xd51698, 'cmp x19, #0x10')
-
 
 
 def allowKeysanity(patcher: Patcher, dungeon_items: str):
@@ -108,7 +107,6 @@ def allowKeysanity(patcher: Patcher, dungeon_items: str):
         """)
 
 
-
 # def fixZoneMusic(patcher: Patcher):
 #     """Allows event music to keep playing when transitioning into another zone"""
     
@@ -117,7 +115,6 @@ def allowKeysanity(patcher: Patcher, dungeon_items: str):
 #     patcher.addPatch(0xae698, f'add x11, x11, #')
 #     patcher.addPatch(0xae6a0, f'adrp x13, ')
 #     patcher.addPatch(0xae6a4, f'add x13, x13, #')
-
 
 
 # def randomizeSoundEffects(patcher: Patcher):
