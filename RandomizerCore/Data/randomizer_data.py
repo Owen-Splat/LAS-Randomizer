@@ -40,10 +40,10 @@ with open(os.path.join(DATA_PATH, 'locations.yml'), 'r') as f:
     LOCATIONS = yaml.safe_load(f)
 
 with open(os.path.join(RESOURCE_PATH, 'adjectives.txt'), 'r') as f:
-    ADJECTIVES = f.readlines()
+    ADJECTIVES = f.read().splitlines()
 
 with open(os.path.join(RESOURCE_PATH, 'characters.txt'), 'r') as f:
-    CHARACTERS = f.readlines()
+    CHARACTERS = f.read().splitlines()
 
 try:
     with open(SETTINGS_PATH, 'r') as settingsFile:
