@@ -253,7 +253,7 @@ class MainWindow(QtWidgets.QMainWindow):
         adj1 = random.choice(ADJECTIVES)
         adj2 = random.choice(ADJECTIVES)
         char = random.choice(CHARACTERS)
-        self.ui.lineEdit_3.setText(adj1 + adj2 + char)
+        self.ui.lineEdit_3.setText(adj1.strip() + adj2.strip() + char.strip())
     
     
     def checkClicked(self, checked):
