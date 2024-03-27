@@ -1,18 +1,58 @@
 v0.4
 
+BUGS
+
+- chests and seashell mansion do not set the flag for Bottle[1], making Fishing Pond take it away
+
+    no idea yet if the unused FlowControl.CompareInt(value1, value2) event works to compare indexes
+    it's probably easier to use $FishingBottle or something for chests to go to an EntryPoint
+
+    seashell mansion we don't really need to be doing this huge itemKey comparison
+    we can just subflow to EntryPoint itemKey
+
+- potential of kanalet crow to not drop the "leaf" if you have the actual leaf
+
+    this is strange because the leaf is turned into a SmallKey actor
+    the crow does have "1" as a parameter however, maybe this is why
+    relook into the other Kanalet checks and make sure they all work even when you have all 5 leaves
+
+
+FEATURES
+
+- eventflow edits through code gets pretty messy and hard to follow
+    create our own type of flowchart file and write a parser that'll translate them into the .bfevfl files
+
 - work on custom text and finish keysanity implementation
 
 - make custom give_item.bfevfl file to for every other flowchart to subflow to
     this way, we don't need to add all the event actors to every single flowchart we edit
-    cleaner flowcharts to debug, and keeps total file size of seeds down a little
+    subflow also allows passing parameters such as the item index
+    this will give a cleaner result to debug since any bugged item event will just be in 1 location
 
 - write custom text for tunics, also make telephone tunic switcher less confusing
 
+- shuffle followers
+    rooster implementation is easy, just need to compile a list of every room + the actor of the check
+    bowwow has not been tested. Unlike the rooster, bowwow physically exists and needs to be touched
+    if nothing works too well, we can always use custom text and require to go to a telephone booth
+
+- make every telephone booth have bowwow and rooster to swap between
+
+- make sure logic knows that you can't have both followers at once
+
+
+----------
+v0.5
+
 - trendy
+    most likely needs .bfres editing, will need to look into again
 
 - shop
+    needs ASM changes to make the gettingFlag of the stolen item get set
+    once set, we can simply just check for the flags in the post steal eventflow
 
--------------------------------------------------------------------------------------------------------------------------------------
+
+----------
 GENERAL FUTURE STUFF TO LOOK INTO
 
 - individual tricks toggles
@@ -36,12 +76,3 @@ GENERAL FUTURE STUFF TO LOOK INTO
 - fix dampe logic for instrument shuffle
     logic currently assumes that if you have the instrument, you have all the items needed to clear the rooms
     this is obviously not true with instrument shuffle, but logic is complex and I do not care enough for it
-
-
-    FIXED, NEEDS TESTING
-fix fishing bottle (tried sneakily adding and removing the bottle from inventory, but Inventory.RemoveItem cannot handle indexes)
-    wrote asm to make Inventory.RemoveItem itemType 0 remove the bottle, since nothing uses the event to remove SwordLv1
-    this need testing because the game could potentially reference the same function for Dampe
-
-fix ball and chain soldier not spawning if the player has the leaf (likely needs asm patches)
-    wrote asm to skip over deleting the enemy if the player has the leaf
