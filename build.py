@@ -1,11 +1,11 @@
 import os
 import re
 import shutil
+from RandomizerCore.Data.randomizer_data import VERSION, EXTRA_TITLE_DATA
 import glob
 import sys
 
-from randomizer_data import VERSION, EXTRA_TITLE_DATA
-
+base_name = f"LAS Randomizer v{VERSION}"
 build_path = os.path.join(".", "build")
 
 freeze_path_search = glob.glob(os.path.join(build_path, f"exe.*-{sys.version_info.major}.{sys.version_info.minor}"))
@@ -24,4 +24,6 @@ release_path = os.path.join(build_path, base_name)
 os.rename(freeze_path, release_path)
 shutil.copyfile("README.md", os.path.join(release_path, "README.txt"))
 shutil.copyfile("LICENSE.txt", os.path.join(release_path, "LICENSE.txt"))
+shutil.move(os.path.join(release_path, "RandomizerCore/Data"), os.path.join(release_path, "Data"))
+shutil.move(os.path.join(release_path, "RandomizerUI/Resources"), os.path.join(release_path, "Resources"))
 shutil.make_archive(release_path, "zip", release_path)
