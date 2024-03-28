@@ -1256,6 +1256,37 @@
           <bool>true</bool>
          </property>
         </widget>
+        <widget class="QCheckBox" name="openMabeCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>549</x>
+           <y>104</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Opens all Mabe Village exists (Beach, Plains, Woods)</string>
+         </property>
+         <property name="text">
+          <string>Open Mabe</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
