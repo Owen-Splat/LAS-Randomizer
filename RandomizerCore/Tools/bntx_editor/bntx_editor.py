@@ -29,3 +29,25 @@ class BNTXEditor:
 
     def save(self):
         return self.bntx.save()
+
+    def replaceTextureByName(self, textureName, textureFile):
+        # Get Texture Index by Name
+        foundIndex = -1
+        for imageIndex, element in enumerate(self.bntx.textures):
+            if element.name == textureName:
+                foundIndex = imageIndex
+                break
+
+        if foundIndex < 0:
+            raise Exception(f'Texture {textureName} not found')
+
+        with open(textureFile, "rb") as textureFileInstance:
+            # Inject it back to the BNTX File
+            self.replaceTexByIndex(textureFileInstance, foundIndex)
+
+    def saveAs(self, file):
+        if not file:
+            return False
+
+        with open(file, "wb") as out:
+            out.write(self.bntx.save())

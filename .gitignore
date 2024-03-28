@@ -6,6 +6,8 @@ __pycache__
 /output
 /RandomizerCore/Tools/lvb.py
 /RandomizerCore/Tools/text_tools.py
+/RandomizerUI/Resources/__Combined.bntx
+/RandomizerUI/Resources/textures/chest/bfres
 /Test
 tests.py
 settings.txt

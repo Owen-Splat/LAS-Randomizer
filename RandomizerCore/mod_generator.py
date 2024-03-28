@@ -2,6 +2,7 @@ import shutil
 
 from PySide6 import QtCore
 
+from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
 from RandomizerCore.Tools.exefs_editor.patcher import Patcher
 from RandomizerCore.Tools import (bntx_tools, event_tools, leb, oead_tools)
 from RandomizerCore.Randomizers import (actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
