@@ -70,6 +70,7 @@ Applying this mod will not in any way affect your save data, so don't delete any
 - Glan: Created the original early builds of the randomizer
 - j_im: Created the original tracker for the randomizer
 - Br00ty: Maintains and updates the tracker for newer randomizer versions
+- ProfessorLaw: Additional programming (Randomizer Title Screen)
 
 ### Special Thanks:
 - To everyone who has reported bugs or given feedback and suggestions. This randomizer would not be where it is today without our community.

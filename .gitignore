@@ -4,12 +4,8 @@ __pycache__
 /build
 /Models
 /output
-/romfs
-/Resources/Dev Resources
-/Resources/__Combined.bntx
-/Resources/textures/chest/bfres
-/Tools/lvb.py
-/Tools/text_tools.py
+/RandomizerCore/Tools/lvb.py
+/RandomizerCore/Tools/text_tools.py
 /Test
 tests.py
 settings.txt
