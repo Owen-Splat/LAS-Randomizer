@@ -994,7 +994,7 @@ class Ui_MainWindow(object):
         self.openMabeCheck.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(whatsthis)
-        self.openMabeCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Opens all Mabe Village exists (Beach, Plains, Woods)", None))
+        self.openMabeCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Opens all Mabe Village exits (Beach, Plains, Woods)", None))
 #endif // QT_CONFIG(whatsthis)
         self.openMabeCheck.setText(QCoreApplication.translate("MainWindow", u"Open Mabe", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("MainWindow", u"Logic Options", None))

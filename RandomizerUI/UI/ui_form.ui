@@ -1278,7 +1278,7 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>Opens all Mabe Village exists (Beach, Plains, Woods)</string>
+          <string>Opens all Mabe Village exits (Beach, Plains, Woods)</string>
          </property>
          <property name="text">
           <string>Open Mabe</string>
