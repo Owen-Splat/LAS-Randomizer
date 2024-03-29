@@ -1464,27 +1464,47 @@
           <string>Free Book</string>
          </property>
         </widget>
-        <widget class="QCheckBox" name="compassMapStartCheck">
+        <widget class="QComboBox" name="dungeonItemsComboBox">
          <property name="geometry">
           <rect>
            <x>189</x>
            <y>144</y>
-           <width>185</width>
-           <height>21</height>
+           <width>161</width>
+           <height>22</height>
           </rect>
          </property>
-         <property name="toolTip">
+         <property name="whatsThis">
+          <string>This will set the dungeon items already rewarded at the beginning of the seed&lt;br&gt;MC = Maps &amp; Compass, MCB = Maps, Compass &amp; Beaks</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
           <string/>
          </property>
-         <property name="whatsThis">
-          <string>Start with dungeons compass and maps</string>
-         </property>
-         <property name="text">
-          <string>Start with compass &amp;&amp; maps</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
+         <item>
+          <property name="text">
+           <string>Dungeon Items : None</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dungeon Items : Beaks</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dungeon Items : MC</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dungeon Items : MCB</string>
+          </property>
+         </item>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_7">

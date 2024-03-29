@@ -5,6 +5,7 @@ import copy
 import random
 import traceback
 
+from RandomizerCore.Data.randomizer_data import DUNGEON_ITEM_SETTINGS
 
 
 class ItemShuffler(QtCore.QThread):
@@ -128,9 +129,17 @@ class ItemShuffler(QtCore.QThread):
                 vanilla_locations.append(inst)
         
         # if start with compass & map setting is enabled, adding them into the starting item setting
-        start_dungeon_items = {}
-        if self.settings['compass-map-start']:
-            start_dungeon_items = [s for s in self.item_defs if s.startswith(('map', 'compass'))]
+        dungeon_item_setting = self.settings['dungeon-items']
+        if dungeon_item_setting != 'none':
+            to_check = ()
+            if dungeon_item_setting == 'mc':
+                to_check = ('map', 'compass')
+            elif dungeon_item_setting == 'mcb':
+                to_check = ('map', 'compass', 'stone-beak')
+            elif dungeon_item_setting == 'stone-beak':
+                to_check = 'stone-beak'
+
+            start_dungeon_items = [s for s in self.item_defs if s.startswith(to_check)]
             for e, item in enumerate(start_dungeon_items):
                 self.logic_defs[f'starting-dungeon-item-{e + 1}'] = {  # add a location for each starting item
                     'type': 'item',
@@ -561,8 +570,16 @@ class ItemShuffler(QtCore.QThread):
 
             # if settings['dungeon-items'] == 'keys':
             #     item_pool = [s for s in item_pool if s.startswith(('map', 'compass', 'stone'))]
-            if settings['compass-map-start']:
-                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}' and not s.startswith(('map', 'compass'))]
+            dungeon_item_setting = self.settings['dungeon-items']
+            if dungeon_item_setting != 'none':
+                to_check = ()
+                if dungeon_item_setting == 'mc':
+                    to_check = ('map', 'compass')
+                elif dungeon_item_setting == 'mcb':
+                    to_check = ('map', 'compass', 'stone-beak')
+                elif dungeon_item_setting == 'stone-beak':
+                    to_check = 'stone-beak'
+                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}' and not s.startswith(to_check)]
             else:
                 item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
 
