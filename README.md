@@ -56,7 +56,7 @@ The number of files will differ depending on settings, so clear out any old file
 
 Switch: Set the output platform to `Console`. Copy and paste the `Atmosphere` folder from the output to the root of your SD card. I'd recommend to use a file transfer homebrew app to avoid needing to take the SD card out and relaunch CFW each time.
 
-Emulator: Set the output platfrom to `Emulator` and set the output path to the emulator's mod directory for Link's Awakening. After creating a seed, simply just enable it and enjoy playing!
+Emulator: Set the output platfrom to `Emulator` and set the output path to the emulator's mod directory for Link's Awakening. After creating a seed, simply just enable it and enjoy playing! You **MUST** play on v1.0.0 otherwise the exefs patches will not work on emulator. Please look up how to set up exefs patches for your emulator of choice
 
 Applying this mod will not in any way affect your save data, so don't delete anything you don't want deleted. If you want to go back to the original game after, either manually clear the files out, or launch the game holding L. Keep in mind that exefs patches are still applied even when holding L. Because of this, the SimpleModManager homebrew app is a wonderful solution. You can simply toggle on/off individual mods.
 
