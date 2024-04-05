@@ -1,6 +1,6 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import data
-
+from RandomizerCore.Data.randomizer_data import DUNGEON_ITEM_SETTINGS
+from RandomizerCore.Randomizers import data, item_get
 
 
 def makeStartChanges(flowchart, settings):
@@ -63,7 +63,22 @@ def makeStartChanges(flowchart, settings):
         event_tools.createActionChain(flowchart, 'Event774', [
             ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
         ])
-    
+
+    # Auto give dungeon items when entering the dungeon (We have to do that for the level to be identified properly)
+    dungeon_item_setting = settings['dungeon-items']
+    if dungeon_item_setting != 'none':
+        event_defs = []
+
+        if dungeon_item_setting in ['mc', 'mcb']:
+            event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
+            event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
+
+        if dungeon_item_setting in ['stone-beak', 'mcb']:
+            event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
+
+        # Adding event on DungeonIn entrypoint
+        event_tools.createActionChain(flowchart, 'Event539', event_defs)
+
     # Remove the 7 second timeOut wait on the companion when it gets blocked from a loading zone
     timeout_events = ('Event637', 'Event660', 'Event693', 'Event696', 'Event371', 'Event407', 'Event478')
     for e in timeout_events:
