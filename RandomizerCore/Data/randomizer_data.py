@@ -5,7 +5,14 @@ import os
 
 VERSION = 0.3
 
-DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
+# Using this to add extra data to the window title to precise what version they are using
+EXTRA_TITLE_DATA = os.getenv('EXTRA_TITLE_DATA', '')
+
+# Adding this to support proper download links and logic updates from the right repository
+AUTHOR = os.getenv('AUTHOR', "Owen-Splat")
+MAIN_BRANCH = os.getenv('MAIN_BRANCH', "master")
+
+DOWNLOAD_PAGE = f'https://github.com/{AUTHOR}/LAS-Randomizer/releases/latest'
 
 with open(os.path.join(RESOURCE_PATH, 'light_theme.txt'), 'r') as f:
     LIGHT_STYLESHEET = f.read()
@@ -21,6 +28,9 @@ with open(os.path.join(RESOURCE_PATH, 'issues.txt'), 'r') as f:
 
 with open(os.path.join(RESOURCE_PATH, 'about.txt'), 'r') as f:
     ABOUT_INFO = f.read()
+
+    # Adding this to redirect users to the right place depending on the version they're using
+    ABOUT_INFO = ABOUT_INFO.replace('<AUTHOR>', AUTHOR)
 
 with open(os.path.join(DATA_PATH, 'items.yml'), 'r') as f:
     items = yaml.safe_load(f)
