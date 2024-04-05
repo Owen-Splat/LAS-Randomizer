@@ -471,7 +471,9 @@ class ItemShuffler(QtCore.QThread):
             for i in range(self.item_defs[key]['quantity']):
                 access = self.addAccess(access, key)
 
-            if self.item_defs[key]['type'] == 'important':
+            if len(key) >= 2 and re.match(r"D[0-8]", key[-2:]):
+                dungeon_items += [key] * self.item_defs[key]['quantity']
+            elif self.item_defs[key]['type'] == 'important':
                 important_items += [key] * self.item_defs[key]['quantity']
             elif self.item_defs[key]['type'] == 'trade':
                 important_items += [key] * self.item_defs[key]['quantity']
@@ -489,9 +491,7 @@ class ItemShuffler(QtCore.QThread):
             #             dungeon_items += [key] * self.item_defs[key]['quantity']
             #     elif settings['dungeon-items'] == 'keys+mcb':
             #         important_items += [key] * self.item_defs[key]['quantity']
-            else:
-                dungeon_items += [key] * self.item_defs[key]['quantity']
-        
+
         # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
         settings_access = {setting: 1 for setting in settings if settings[setting] == True}
         access.update(settings_access)

@@ -95,7 +95,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.owlsComboBox,
             self.ui.platformComboBox,
             self.ui.rupeesSpinBox,
-            self.ui.trapsComboBox
+            self.ui.trapsComboBox,
+            self.ui.chestAspectComboBox
         ]
         for item in desc_items:
             item.installEventFilter(self)
@@ -134,7 +135,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.instrumentsComboBox,
             self.ui.owlsComboBox,
             self.ui.platformComboBox,
-            self.ui.trapsComboBox
+            self.ui.trapsComboBox,
+            self.ui.chestAspectComboBox
         ]
         for combo in combos:
             combo.__class__ = SmartComboBox

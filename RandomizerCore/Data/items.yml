@@ -327,20 +327,23 @@ Item_Pool:
     model-path: ItemSecretSeashell.bfres
     model-name: SecretSeashell
     npc-key: ItemSecretSeashell
+    chest-type: seashell
   bottle:
-    type: good
+    type: important
     quantity: 3
     item-key: Bottle
     model-path: ItemBottle.bfres
     model-name: Bottle
     npc-key: ItemBottle
+    chest-type: life-upgrade
   heart-container:
-    type: good
+    type: important
     quantity: 9
     item-key: HeartContainer
     model-path: ItemHeartContainer.bfres
     model-name: HeartContainer
     npc-key: ItemHeartContainer
+    chest-type: life-upgrade
   bomb-capacity:
     type: good
     quantity: 1
@@ -369,13 +372,15 @@ Item_Pool:
     model-path: ItemShellRader.bfres
     model-name: ShellRader
     npc-key: ItemShellRader
+    chest-type: seashell
   medicine:
-    type: good
+    type: important
     quantity: 3
     item-key: SecretMedicine
     model-path: ItemSecretMedicine.bfres
     model-name: SecretMedicine
     npc-key: ItemSecretMedicine
+    chest-type: life-upgrade
   red-tunic:
     type: good
     quantity: 1
@@ -397,6 +402,7 @@ Item_Pool:
     model-path: ItemRupeeGold.bfres
     model-name: RupeeGold
     npc-key: ItemRupeeGold
+    chest-type: junk
   heart-piece:
     type: junk
     quantity: 32
@@ -404,6 +410,7 @@ Item_Pool:
     model-path: ItemHeartPiece.bfres
     model-name: HeartPiece
     npc-key: ItemHeartPiece
+    chest-type: life-upgrade
   rupee-50:
     type: junk
     quantity: 19
@@ -411,6 +418,7 @@ Item_Pool:
     model-path: ItemRupeePurple.bfres
     model-name: RupeePurple
     npc-key: ItemRupeePurple
+    chest-type: junk
   rupee-100:
     type: junk
     quantity: 5
@@ -418,6 +426,7 @@ Item_Pool:
     model-path: ItemRupeeSilver.bfres
     model-name: RupeeSilver
     npc-key: ItemRupeeSilver
+    chest-type: junk
   chamber-stone:
     type: junk
     quantity: 14
@@ -425,6 +434,7 @@ Item_Pool:
     model-path: ItemPanelDungeonPiece.bfres
     model-name: PanelDungeonPiece
     npc-key: ItemPanelDungeonPiece
+    chest-type: junk
   rupee-20:
     type: junk
     quantity: 5
@@ -432,6 +442,7 @@ Item_Pool:
     model-path: ItemRupeeRed.bfres
     model-name: RupeeRed
     npc-key: ItemRupeeRed
+    chest-type: junk
   rupee-5:
     type: junk
     quantity: 28
@@ -439,10 +450,12 @@ Item_Pool:
     model-path: ItemRupeeBlue.bfres
     model-name: RupeeBlue
     npc-key: ItemRupeeBlue
+    chest-type: junk
   zol-trap:
     type: junk
     quantity: 4
     item-key: $ENEMY
+    chest-type: junk
   zap-trap:
     type: junk
     quantity: 0
@@ -450,6 +463,7 @@ Item_Pool:
     model-path: NpcToolShopkeeper.bfres
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
+    chest-type: junk
   drown-trap:
     type: junk
     quantity: 0
@@ -457,6 +471,7 @@ Item_Pool:
     model-path: NpcToolShopkeeper.bfres
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
+    chest-type: junk
   squish-trap:
     type: junk
     quantity: 0
@@ -464,6 +479,7 @@ Item_Pool:
     model-path: NpcToolShopkeeper.bfres
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
+    chest-type: junk
   deathball-trap:
     type: junk
     quantity: 0
@@ -471,6 +487,7 @@ Item_Pool:
     model-path: NpcToolShopkeeper.bfres
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
+    chest-type: junk
   quake-trap:
     type: junk
     quantity: 0
@@ -478,6 +495,7 @@ Item_Pool:
     model-path: NpcToolShopkeeper.bfres
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
+    chest-type: junk
   # hydro-trap:
   #   type: junk
   #   quantity: 0
@@ -503,321 +521,367 @@ Item_Pool:
     type: junk
     quantity: 1
     item-key: $EXT:MasterStalfonLetter
+    chest-type: junk
   key-D1:
-    type: D1
+    type: good
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D1:
-    type: D1
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D1:
-    type: D1
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D1:
-    type: D1
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D1:
-    type: D1
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D2:
-    type: D2
+    type: good
     quantity: 5
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D2:
-    type: D2
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D2:
-    type: D2
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D2:
-    type: D2
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D2:
-    type: D2
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D3:
-    type: D3
+    type: good
     quantity: 9
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D3:
-    type: D3
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D3:
-    type: D3
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D3:
-    type: D3
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D3:
-    type: D3
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D4:
-    type: D4
+    type: good
     quantity: 5
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D4:
-    type: D4
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D4:
-    type: D4
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D4:
-    type: D4
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D4:
-    type: D4
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D5:
-    type: D5
+    type: good
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D5:
-    type: D5
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D5:
-    type: D5
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D5:
-    type: D5
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D5:
-    type: D5
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D6:
-    type: D6
+    type: good
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D6:
-    type: D6
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D6:
-    type: D6
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D6:
-    type: D6
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D6:
-    type: D6
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D7:
-    type: D7
+    type: good
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D7:
-    type: D7
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D7:
-    type: D7
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D7:
-    type: D7
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D7:
-    type: D7
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D8:
-    type: D8
+    type: good
     quantity: 7
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D8:
-    type: D8
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D8:
-    type: D8
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D8:
-    type: D8
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D8:
-    type: D8
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
   key-D0:
-    type: D0
+    type: good
     quantity: 3
     item-key: SmallKey
     model-path: ItemSmallKey.bfres
     model-name: SmallKey
     npc-key: ItemClothesGreen
+    chest-type: key
   nightmare-key-D0:
-    type: D0
+    type: important
     quantity: 1
     item-key: NightmareKey
     model-path: ItemNightmareKey.bfres
     model-name: NightmareKey
     npc-key: ItemNightmareKey
+    chest-type: key
   stone-beak-D0:
-    type: D0
+    type: junk
     quantity: 1
     item-key: StoneBeak
     model-path: ItemStoneBeak.bfres
     model-name: StoneBeak
     npc-key: ItemStoneBeak
+    chest-type: junk
   compass-D0:
-    type: D0
+    type: junk
     quantity: 1
     item-key: Compass
     model-path: ItemCompass.bfres
     model-name: Compass
     npc-key: ItemCompass
+    chest-type: junk
   map-D0:
-    type: D0
+    type: junk
     quantity: 1
     item-key: DungeonMap
     model-path: ItemDungeonMap.bfres
     model-name: DungeonMap
     npc-key: ItemDungeonMap
+    chest-type: junk
 
 Starting_Items:
   - sword
