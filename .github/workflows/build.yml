@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run : echo "Replacing essential data with the ones from this repository instead of the default ones"
-      - run : sed -i "s/EXTRA_TITLE_DATA\ =.*/EXTRA_TITLE_DATA\ = '- ${{ github.repository_owner }} - ${{ github.ref_name }}'/g" randomizer_data.py
-      - run : sed -i "s/MAIN_BRANCH\ =.*/MAIN_BRANCH\ = '${{ github.event.repository.default_branch }}'/g" randomizer_data.py
-      - run : sed -i "s/AUTHOR\ =.*/AUTHOR\ = '${{ github.repository_owner }}'/g" randomizer_data.py
+      - run : sed -i "s/EXTRA_TITLE_DATA\ =.*/EXTRA_TITLE_DATA\ = '- ${{ github.repository_owner }} - ${{ github.ref_name }}'/g" RandomizerCore/Data/randomizer_data.py
+      - run : sed -i "s/MAIN_BRANCH\ =.*/MAIN_BRANCH\ = '${{ github.event.repository.default_branch }}'/g" RandomizerCore/Data/randomizer_data.py
+      - run : sed -i "s/AUTHOR\ =.*/AUTHOR\ = '${{ github.repository_owner }}'/g" RandomizerCore/Data/randomizer_data.py
       - uses: actions/upload-artifact@v4
         with:
           name: updated-version-data
-          path: randomizer_data.py
+          path: RandomizerCore/Data/randomizer_data.py
 
   # Application build (For every OS)
   build:
