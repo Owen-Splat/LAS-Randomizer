@@ -40,7 +40,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: updated-version-data
-          path: RandomizerCore/Data/randomizer_data.py
+          path: RandomizerCore/Data
       - run: mkdir build
       - run: python setup.py build
       - run: python build.py
