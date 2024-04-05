@@ -16,7 +16,7 @@ This randomizes all the items in the game so that every playthrough is unique. I
 Please note that while most things are functional, there is a possibility of the logic resulting in softlocks. This will be especially true with the glitched logics. If this does happen, dying and selecting the Save + Quit option will respawn you back at Marin's house.
 
 ## How to play:
-In order to play the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through your choice of emulator, or with nxdumptool on a homebrewed Switch console. The RomFS is the component of the game with all of the data files that this randomizer will output an edited copy of.
+In order to play the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through your choice of emulator, or with nxdumptool on a homebrewed Switch console.
 
 The number of files will differ depending on settings, so clear out any old files first.
 
