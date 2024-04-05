@@ -2582,7 +2582,7 @@ armos-maze:
   condition-basic: bracelet & (river | animal-village | rapids)
 beach:
   type: region
-  condition-basic: mabe & (kill-urchin | shield | break-bush)
+  condition-basic: mabe & (open-mabe | kill-urchin | shield | break-bush)
 bottle-grotto:
   type: region
   condition-basic: swamp & (kill-flower | (bracelet & !classic-d2))
@@ -2643,7 +2643,7 @@ mr-write-house:
   condition-hell: mabe & swamp
 plains:
   type: region
-  condition-basic: (mabe & bracelet) | river | (wasteland & bracelet)
+  condition-basic: (mabe & (open-mabe | bracelet)) | river | (wasteland & bracelet)
   condition-hell: mabe & swamp & feather
 pothole:
   type: region
@@ -2711,7 +2711,7 @@ wasteland:
   condition-basic: (woods & (feather | bracelet | rooster | hookshot)) | (taltal-east-0 & (break-obstacle | rooster) & bracelet) | (heights & bracelet) | (swamp & bracelet) | (plains & bracelet)
 woods:
   type: region
-  condition-basic: (mabe & break-bush) | (swamp & break-bush) | (wasteland & (feather | bracelet | rooster | hookshot))
+  condition-basic: (mabe & (open-mabe | break-bush)) | (swamp & break-bush) | (wasteland & (feather | bracelet | rooster | hookshot))
 
 
 # Rooms
