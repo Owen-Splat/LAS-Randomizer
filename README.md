@@ -16,13 +16,19 @@ This randomizes all the items in the game so that every playthrough is unique. I
 Please note that while most things are functional, there is a possibility of the logic resulting in softlocks. This will be especially true with the glitched logics. If this does happen, dying and selecting the Save + Quit option will respawn you back at Marin's house.
 
 ## How to play:
-In order to play the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through your choice of emulator, or with nxdumptool on a homebrewed Switch console.
+In order to play the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through your choice of emulator, or with nxdumptool on a homebrewed Switch console. After you have extracted the RomFS, keep it somewhere where you will not lose it!
 
-The number of files will differ depending on settings, so clear out any old files first.
+Set the RomFS Path to the folder where you extracted the RomFS.
 
-Switch: Set the output platform to `Console`. Copy and paste the `Atmosphere` folder from the output to the root of your SD card. I'd recommend to use a file transfer homebrew app to avoid needing to take the SD card out and relaunch CFW each time.
+Set the Output Path to the folder where you want the edited files to go. On Emulator, you can right-click the game and open mods directory to get the path.
 
-Emulator: Set the output platfrom to `Emulator` and set the output path to the emulator's mod directory for Link's Awakening. After creating a seed, simply just enable it and enjoy playing! You **MUST** play on v1.0.0 otherwise the exefs patches will not work on emulator.
+The Seed can be anything you want it to be, or just left blank.
+
+### Switch
+Set the output platform to `Console`. Copy and paste the `Atmosphere` folder from the output to the root of your SD card. I'd recommend to use a file transfer homebrew app to avoid needing to take the SD card out and relaunch CFW each time. The number of files will differ depending on settings, so clear out any old files first.
+
+### Emulator
+Set the output platform to `Emulator` and set the output path to the emulator's mod directory (see above) for Link's Awakening. After creating a seed, simply just enable it in the emulator and enjoy playing! You **MUST** play on version 1.0.0 otherwise the exefs patches will not work on emulator.
 
 ## Discord Server
 Join the Discord server to talk about the randomizer, ask questions, or even set up races!  
@@ -41,6 +47,7 @@ https://discord.com/invite/rfBSCUfzj8
 
 ## Running from source:
 **NOTE**: This is for advanced users or those helping with the development of this randomizer.
+
 If you want to run from source, then you need to clone this repository and make sure you have Python 3.8+ installed
 
 Open the folder in a command prompt and install dependencies by running:  
