@@ -12,9 +12,9 @@ base = None
 if sys.platform == "win32":
     base = "Win32GUI"
 
-build_icon = "Resources/icon.ico"
+build_icon = "RandomizerUI/Resources/icon.ico"
 if sys.platform == "darwin": # mac
-    build_icon = "Resources/icon.icns"
+    build_icon = "RandomizerUI/Resources/icon.icns"
 
 setup(
     name = "Links Awakening Switch Randomizer",
