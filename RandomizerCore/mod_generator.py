@@ -1245,6 +1245,7 @@ class ModsProcess(QtCore.QThread):
         ### SkeletalGuardBlue: Make him sell 20 bombs in addition to the 20 powder
         if self.settings['reduce-farming'] and self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SkeletalGuardBlue.bfevfl')
+            actors.addNeededActors(flow.flowchart, self.rom_path)
 
             event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['count'] = 40 # still gives 20 w/o capacity upgrade
             
@@ -1266,7 +1267,21 @@ class ModsProcess(QtCore.QThread):
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', check_bombs)
             else:
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', add_bombs)
-            
+
+            dungeon_item_setting = self.settings['dungeon-items']
+            if dungeon_item_setting != 'none':
+                event_defs = []
+
+                if dungeon_item_setting in ['mc', 'mcb']:
+                    event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
+                    event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
+
+                if dungeon_item_setting in ['stone-beak', 'mcb']:
+                    event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
+
+                # Adding event on DungeonIn entrypoint
+                event_tools.createActionChain(flow.flowchart, 'Event2', event_defs)
+
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'SkeletalGuardBlue.bfevfl', flow)
 
         ### Make Save&Quit after getting a GameOver send you back to Marin's house
