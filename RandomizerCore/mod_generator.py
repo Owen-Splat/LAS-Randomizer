@@ -1605,8 +1605,8 @@ class ModsProcess(QtCore.QThread):
     def makeMusicChanges(self):
         """Replaces the BGM info in the lvb files with the shuffled songs"""
 
-        from Randomizers import music
-        
+        from RandomizerCore.Randomizers import music
+
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.romfs_dir}/region_common/level'
 
@@ -1622,7 +1622,7 @@ class ModsProcess(QtCore.QThread):
             else:
                 with open(f'{out_levels}/{folder}/{folder}.lvb', 'rb') as f:
                     f_data = f.read()
-            
+
             f_data = music.shuffleLevelBGMS(f_data, self.songs_dict)
             
             self.writeModFile(f'{out_levels}/{folder}', f'{folder}.lvb', f_data)
@@ -1965,7 +1965,7 @@ class ModsProcess(QtCore.QThread):
     def makeLv10RupeeChanges(self):
         """Edits the room data for the 28 free standing rupees in Color Dungeon so they are randomized"""
 
-        from Randomizers import rupees
+        from RandomizerCore.Randomizers import rupees
 
         flow = event_tools.readFlow(f'{self.romfs_dir}/region_common/event/SinkingSword.bfevfl')
 
@@ -2203,7 +2203,7 @@ class ModsProcess(QtCore.QThread):
         """Randomizes enemy actors that do not affect logic
         Needed kills are left vanilla and potentially problematic enemies are excluded"""
 
-        from Randomizers import enemies
+        from RandomizerCore.Randomizers import enemies
         from RandomizerCore.Data.randomizer_data import ENEMY_DATA
 
         land_ids = []
