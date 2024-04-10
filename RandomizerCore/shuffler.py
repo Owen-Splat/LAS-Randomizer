@@ -481,6 +481,8 @@ class ItemShuffler(QtCore.QThread):
                 seashell_items += [key] * self.item_defs[key]['quantity']
             elif self.item_defs[key]['type'] == 'good':
                 good_items += [key] * self.item_defs[key]['quantity']
+            elif self.item_defs[key]['type'] == 'important-health':
+                good_items += [key] * self.item_defs[key]['quantity']
             elif self.item_defs[key]['type'] == 'junk':
                 junk_items += [key] * self.item_defs[key]['quantity']
             # else:
