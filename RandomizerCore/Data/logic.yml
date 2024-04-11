@@ -721,7 +721,7 @@ kanalet-south-cave:
   region: plains
   spoiler-region: ukuku-prairie
   condition-basic: rooster | (hookshot & (flippers | (ocarina & song-mambo)))
-  condition-advanced: hookshot & (feather | bombs)
+  condition-advanced: hookshot & feather
   condition-glitched: wasteland & feather & bracelet & (flippers | (ocarina & song-mambo))
   condition-hell: wasteland & feather & bracelet
 plains-rock-maze:
