@@ -637,6 +637,9 @@ class ItemShuffler(QtCore.QThread):
                         or self.canReachLocation('marin', placements, settings_access, logic)
                         or self.canReachLocation('trendy', placements, settings_access, logic))
                 
+                if items[0] == "boots":
+                    success = False
+                
                 if not success:
                     items.insert(items.index('seashell'), items[0])
                     items.pop(0)

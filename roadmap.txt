@@ -11,7 +11,6 @@ BUGS
     it's only 5 items, so we really only should compare across those
 
 - potential of kanalet crow to not drop the "leaf" if you have the actual leaf
-
     this is strange because the leaf is turned into a SmallKey actor
     the crow does have "1" as a parameter however, maybe this is why
     relook into the other Kanalet checks and make sure they all work even when you have all 5 leaves
