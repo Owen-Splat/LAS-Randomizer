@@ -45,7 +45,7 @@ BASE_OPTIONS = {
     'dungeonsCheck': False,
     'ohkoCheck': False,
     'lv1BeamCheck': False,
-    'niceRodCheck': False,
+    'niceRodCheck': True,
     'rupeesSpinBox': 0,
     'starting_gear': []
 }
