@@ -3,12 +3,12 @@ v0.4
 BUGS
 
 - chests and seashell mansion do not set the flag for Bottle[1], making Fishing Pond take it away
+    the unused FlowControl.CompareInt event returns True if value1 > value 2
+    We can write ASM so that the values need to be equal to return True
+    event work for this is already done, the ASM is all that is left to write
 
-    no idea yet if the unused FlowControl.CompareInt(value1, value2) event works to compare indexes
-    it's probably easier to use $FishingBottle or something for chests to go to an EntryPoint
-
-    seashell mansion we don't really need to be doing this huge itemKey comparison
-    we can just subflow to EntryPoint itemKey
+    seashell mansion doesn't really need this huge itemKey comparison
+    it's only 5 items, so we really only should compare across those
 
 - potential of kanalet crow to not drop the "leaf" if you have the actual leaf
 
@@ -24,8 +24,8 @@ FEATURES
 
 - work on custom text and finish keysanity implementation
 
-- make custom give_item.bfevfl file to for every other flowchart to subflow to
-    this way, we don't need to add all the event actors to every single flowchart we edit
+- make custom Randomizer.bfevfl file to for every other flowchart to subflow to
+    this way, we don't need to add all the different event actors to every single flowchart we edit
     subflow also allows passing parameters such as the item index
     this will give a cleaner result to debug since any bugged item event will just be in 1 location
 
