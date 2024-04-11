@@ -441,6 +441,7 @@ ITEM_MODELS = {
     # 'MirrorShield': 'ItemMirrorShield.bfres',
     'Bomb': 'ItemBomb.bfres',
     # 'Bow': 'ItemBow.bfres',
+    'Arrow': 'ItemArrow.bfres',
     'HookShot': 'ItemHookShot.bfres',
     'Boomerang': 'ItemBoomerang.bfres',
     'MagicRod': 'ItemMagicRod.bfres',
