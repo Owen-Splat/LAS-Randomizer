@@ -88,22 +88,22 @@ Item_Pool:
     type: important
     quantity: 1
     item-key: Song_WindFish
-    model-path: ItemOcarina.bfres
-    model-name: Ocarina
+    model-path: NpcMarin.bfres
+    model-name: Marin
     npc-key: NpcMarin
   song-mambo:
     type: important
     quantity: 1
     item-key: Song_Mambo
-    model-path: ItemOcarina.bfres
-    model-name: Ocarina
+    model-path: NpcManboTamegoro.bfres
+    model-name: NpcManboTamegoro
     npc-key: NpcManboTamegoro
   song-soul:
     type: important
     quantity: 1
     item-key: Song_Soul
-    model-path: ItemOcarina.bfres
-    model-name: Ocarina
+    model-path: NpcMamu.bfres
+    model-name: NpcMamu
     npc-key: NpcMamu
   yoshi-doll:
     type: trade
@@ -190,7 +190,7 @@ Item_Pool:
     model-name: Necklace
     npc-key: ItemPinkBra
   mermaid-scale:
-    type: important
+    type: trade
     quantity: 1
     item-key: MermaidsScale
     model-path: ItemMermaidsScale.bfres

@@ -72,6 +72,7 @@ Trade_Gifts:
   - grandma-yahoo
   - bay-fisherman
   - mermaid-martha
+  - mermaid-cave
 
 Boss_Locations:
   - lanmola
@@ -91,7 +92,6 @@ Misc_Items:
   - dream-shrine-left
   - taltal-rooster-cave
   - woods-loose
-  - mermaid-cave
   - pothole-final
 
 Mansion:
