@@ -96,14 +96,14 @@ Item_Pool:
     quantity: 1
     item-key: Song_Mambo
     model-path: NpcManboTamegoro.bfres
-    model-name: NpcManboTamegoro
+    model-name: ManboTamegoro
     npc-key: NpcManboTamegoro
   song-soul:
     type: important
     quantity: 1
     item-key: Song_Soul
     model-path: NpcMamu.bfres
-    model-name: NpcMamu
+    model-name: Mamu
     npc-key: NpcMamu
   yoshi-doll:
     type: trade
