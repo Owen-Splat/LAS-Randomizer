@@ -732,10 +732,10 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_update.emit(self.progress_value)
         
         # Now assign all non-vanilla indexes
-        locs = [i for i in placement_tracker if placements[i] in indexes_available]
+        locs = [l for l in placement_tracker if placements[l] in indexes_available]
         for loc in locs:
             placements['indexes'][loc] = indexes_available[placements[loc]].pop(0)
-                
+        
         # dungeon_indexes = [k for k in placement_tracker if placements[k].startswith(('compass', 'map', 'stone', 'key', 'nightmare'))]
         # for key in dungeon_indexes:
         #     # if key in placements['indexes']:

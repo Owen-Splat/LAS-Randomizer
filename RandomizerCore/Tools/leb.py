@@ -1,4 +1,5 @@
 from RandomizerCore.Tools.fixed_hash import *
+from RandomizerCore.Randomizers.data import MODEL_SIZES
 import re
 
 
@@ -202,6 +203,12 @@ class Room:
 				key.parameters[4] = bytes('true', 'utf-8')
 			else:
 				key.parameters[4] = bytes('false', 'utf-8')
+			
+			if model_name in MODEL_SIZES:
+				size = MODEL_SIZES[model_name]
+				key.scaleX = size
+				key.scaleY = size
+				key.scaleZ = size
 	
 
 	def setRupeeParams(self, model_path, model_name, entry_point, item_key, rup_index=0):
@@ -219,6 +226,12 @@ class Room:
 				rup.parameters[4] = bytes('true', 'utf-8')
 			else:
 				rup.parameters[4] = bytes('false', 'utf-8')
+			
+			if model_name in MODEL_SIZES:
+				size = MODEL_SIZES[model_name]
+				rup.scaleX = size
+				rup.scaleY = size
+				rup.scaleZ = size
 	
 
 	def setLoadingZoneTarget(self, new_destination, index=0):
