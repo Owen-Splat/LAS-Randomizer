@@ -38,6 +38,7 @@ def makeNpcChanges(npc, placements, settings):
         npc['collision']['traits'] = ''
         npc['collision']['isStatic'] = True
         npc['collision']['filter'] = 5
+        # npc['collision']['offset']['y'] = 0.5
         npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific yoshidoll actors trigger the shell sensor
         return
     
