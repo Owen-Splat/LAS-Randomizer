@@ -1937,13 +1937,18 @@ class ModsProcess(QtCore.QThread):
             'restr': restrictions
         }
 
+        enemy_settings = {
+            'types': self.settings['randomize-enemies'],
+            'sizes':self.settings['randomize-enemy-sizes']
+        }
+
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.romfs_dir}/region_common/level'
 
         included_folders = ENEMY_DATA['Included_Folders']
         folders = [f for f in os.listdir(levels_path) if f in included_folders]
         
-        # num_of_mods = 0
+        num_of_mods = 0
         random.seed(self.seed) # restart the rng so that enemies will be the same regardless of settings
 
         for folder in folders:
@@ -1965,15 +1970,15 @@ class ModsProcess(QtCore.QThread):
                         room_data = leb.Room(f.read())
                 
                 rand_state, edited_room =\
-                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, self.settings['randomize-enemy-sizes'], random.getstate())
+                    enemies.shuffleEnemyActors(room_data, folder, file, enemy_ids, enemy_settings, random.getstate())
                 
                 random.setstate(rand_state)
                 
                 if edited_room:
                     self.writeModFile(f'{out_levels}/{folder}', f'{file}', room_data)
-                    # num_of_mods += 1
+                    num_of_mods += 1
         
-        # print(f'Num of modded files for enemizer: {num_of_mods}')
+        print(f'Num of modded files for enemizer: {num_of_mods}')
     
 
 

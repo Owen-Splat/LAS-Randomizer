@@ -46,9 +46,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if settings['bad-pets']:
             self.num_of_mod_tasks += 10
         
-        if settings['randomize-enemies'] or settings['randomize-enemy-sizes']:
-            self.num_of_mod_tasks += 312
-        
+        modded_enemies = 0
+        if settings['randomize-enemies']:
+            modded_enemies = 313
+        if settings['randomize-enemy-sizes']:
+            modded_enemies = 391
+        self.num_of_mod_tasks += modded_enemies
+
         if settings['shuffle-dungeons']:
             self.num_of_mod_tasks += 19
         
