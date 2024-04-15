@@ -1,25 +1,26 @@
-SWORD_FOUND_FLAG        = 'unused0357'
-SHIELD_FOUND_FLAG       = 'unused0358'
-BRACELET_FOUND_FLAG     = 'unused0359'
-LENS_FOUND_FLAG         = 'unused0360'
+SWORD_FOUND_FLAG        = 'unused0151'
+SHIELD_FOUND_FLAG       = 'unused0229'
+BRACELET_FOUND_FLAG     = 'unused0230'
+LENS_FOUND_FLAG         = 'unused0271'
 
-RED_TUNIC_FOUND_FLAG    = 'unused0361'
-BLUE_TUNIC_FOUND_FLAG   = 'unused0362'
+RED_TUNIC_FOUND_FLAG    = 'unused0294'
+BLUE_TUNIC_FOUND_FLAG   = 'unused0357'
 
-GORIYA_FLAG             = 'unused0432'
-MAMU_FLAG               = 'unused0433'
-MANBO_FLAG              = 'unused0434'
+GORIYA_FLAG             = 'unused0358'
+MAMU_FLAG               = 'unused0359'
+MANBO_FLAG              = 'unused0360'
 
-ROOSTER_CAVE_FLAG       = 'unused0707'
-DREAM_SHRINE_FLAG       = 'unused0708'
-WOODS_LOOSE_FLAG        = 'unused0709'
-MERMAID_CAVE_FLAG       = 'MermaidCaveItemGet'
-POTHOLE_FLAG            = 'PotholeGet'
+BEACH_LOOSE_FLAG        = 'unused0361'
+WOODS_LOOSE_FLAG        = 'unused0362'
+POTHOLE_FLAG            = 'unused0363' #'PotholeGet'
+DREAM_SHRINE_FLAG       = 'unused0390'
+ROOSTER_CAVE_FLAG       = 'unused0391'
+MERMAID_CAVE_FLAG       = 'unused0393' #'MermaidCaveItemGet'
 
-BOMBS_FOUND_FLAG        = 'BombsFound'
+BOMBS_FOUND_FLAG        = 'unused0424' # 'BombsFound'
 
-ROOSTER_FOUND_FLAG      = 'RoosterFound'
-BOWWOW_FOUND_FLAG       = 'BowWowFound'
+ROOSTER_FOUND_FLAG      = 'unused0425' # 'RoosterFound'
+BOWWOW_FOUND_FLAG       = 'unused0426' # 'BowWowFound'
 
 INSTRUMENT_FLAGS = {
     'D1-instrument': 'TailCaveInstrumentGet',

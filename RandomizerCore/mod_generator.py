@@ -261,7 +261,7 @@ class ModsProcess(QtCore.QThread):
                 act.posX += 1.5 # move right one tile
                 act.posZ -= 1.5 # move up one tile
                 act.switches[0] = (1, self.global_flags['PotholeKeySpawn']) # index of PotholeKeySpawn
-                act.switches[1] = (1, self.global_flags['PotholeGet']) # index of PotholeGet
+                act.switches[1] = (1, 363) # index of the getflag, which is now unused0363
             else:
                 item_key, item_index, model_path, model_name = self.getItemInfo(room, self.dungeon_trap_models)
                         
@@ -862,13 +862,13 @@ class ModsProcess(QtCore.QThread):
         if not os.path.exists(f'{self.romfs_dir}/region_common/level/Field'):
             os.makedirs(f'{self.romfs_dir}/region_common/level/Field')
         
-        if self.thread_active:
-            with open(f'{self.rom_path}/region_common/level/Field/Field_09A.leb', 'rb') as file:
-                room_data = leb.Room(file.read())
+        # if self.thread_active:
+        #     with open(f'{self.rom_path}/region_common/level/Field/Field_09A.leb', 'rb') as file:
+        #         room_data = leb.Room(file.read())
 
-            room_data.actors[1].parameters[0] = 0
+        #     room_data.actors[1].parameters[0] = 0
 
-            self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', 'Field_09A.leb', room_data)
+        #     self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', 'Field_09A.leb', room_data)
 
         ### Mad Batters: Give the batters a 3rd parameter for the event entry point to run
         # A: Bay
@@ -2094,7 +2094,9 @@ class ModsProcess(QtCore.QThread):
 
 
     def fixWaterLoadingZones(self):
-        """Changes each water loading zone to be deactivated until the player has flippers"""
+        """Changes each water loading zone to be deactivated until the player has flippers
+        
+        This is to prevent the player from potentially softlocking by entering them with the rooster"""
 
         for room in data.WATER_LOADING_ZONES:
             if not self.thread_active:

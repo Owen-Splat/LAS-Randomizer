@@ -67,13 +67,9 @@ def makeFlags(sheet):
     global_flags.addFlag('TradeFishingHookGet')
     global_flags.addFlag('TradeNecklaceGet')
     global_flags.addFlag('TradeMermaidsScaleGet')
-    global_flags.addFlag('MermaidCaveItemGet')
 
     global_flags.addFlag('KikiGone')
 
-    global_flags.addFlag('BombsFound')
-
-    global_flags.addFlag('PotholeGet')
     global_flags.addFlag('PotholeKeySpawn')
 
     global_flags.addFlag('PrizeGet1')
@@ -128,9 +124,6 @@ def makeFlags(sheet):
     global_flags.addFlag('D0-owl-statue-nine-switches')
     global_flags.addFlag('D0-owl-statue-first-switches')
     global_flags.addFlag('D0-owl-statue-before-mini-boss')
-
-    global_flags.addFlag('RoosterFound')
-    global_flags.addFlag('BowWowFound')
 
     global_flags.addFlag('KeyGetField06I')
     global_flags.addFlag('KeyGetField06K')

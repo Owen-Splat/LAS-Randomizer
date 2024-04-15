@@ -28,6 +28,7 @@ def makeStartChanges(flowchart, settings):
         ('EventFlags', 'SetFlag', {'symbol': 'FiveteenClear', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'WalrusAwaked', 'value': True}),
         ('EventFlags', 'SetFlag', {'symbol': 'MarinRescueClear', 'value': True}),
+        ('EventFlags', 'SetFlag', {'symbol': 'SwordGet', 'value': True}), # flag for woods owl, the sinking sword's flag is changed
         ('EventFlags', 'SetFlag', {'symbol': 'UI_FieldMapTraverse_MabeVillage', 'value': True}), # temp fix
     ]
 
