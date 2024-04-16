@@ -1,4 +1,5 @@
 from PySide6 import QtCore
+from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 
 from RandomizerCore.Tools.exefs_editor.patcher import Patcher
 from RandomizerCore.Tools import (bntx_tools, event_tools, leb, oead_tools)
@@ -352,9 +353,6 @@ class ModsProcess(QtCore.QThread):
         flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/SinkingSword.bfevfl')
 
         # Beach
-        if not os.path.exists(f'{self.romfs_dir}/region_common/level/Field'):
-            os.makedirs(f'{self.romfs_dir}/region_common/level/Field')
-
         with open(f'{self.rom_path}/region_common/level/Field/Field_16C.leb', 'rb') as file:
             room_data = leb.Room(file.read())
          
@@ -365,9 +363,6 @@ class ModsProcess(QtCore.QThread):
         
         ########################################################################################################################
         # Rooster Cave (bird key)
-        if not os.path.exists(f'{self.romfs_dir}/region_common/level/EagleKeyCave'):
-            os.makedirs(f'{self.romfs_dir}/region_common/level/EagleKeyCave')
-
         with open(f'{self.rom_path}/region_common/level/EagleKeyCave/EagleKeyCave_01A.leb', 'rb') as file:
             room_data = leb.Room(file.read())
         
@@ -377,9 +372,6 @@ class ModsProcess(QtCore.QThread):
         
         ##########################################################################################################################
         # Dream Shrine (ocarina)
-        if not os.path.exists(f'{self.romfs_dir}/region_common/level/DreamShrine'):
-            os.makedirs(f'{self.romfs_dir}/region_common/level/DreamShrine')
-
         with open(f'{self.rom_path}/region_common/level/DreamShrine/DreamShrine_01A.leb', 'rb') as file:
             room_data = leb.Room(file.read())
         
@@ -857,25 +849,9 @@ class ModsProcess(QtCore.QThread):
     def makeGeneralLEBChanges(self):
         """Fix some LEB files in ways that are always done, regardless of item placements"""
 
-        ### Entrance to Mysterious Forest: Set the owl to 0 instead of 1, prevents the cutscene from triggering in some circumstances.
-        # For all other owls, setting the flags is sufficient but this one sucks.
-        if not os.path.exists(f'{self.romfs_dir}/region_common/level/Field'):
-            os.makedirs(f'{self.romfs_dir}/region_common/level/Field')
-        
-        # if self.thread_active:
-        #     with open(f'{self.rom_path}/region_common/level/Field/Field_09A.leb', 'rb') as file:
-        #         room_data = leb.Room(file.read())
-
-        #     room_data.actors[1].parameters[0] = 0
-
-        #     self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', 'Field_09A.leb', room_data)
-
         ### Mad Batters: Give the batters a 3rd parameter for the event entry point to run
         # A: Bay
         if self.thread_active:
-            if not os.path.exists(f'{self.romfs_dir}/region_common/level/MadBattersWell01'):
-                os.makedirs(f'{self.romfs_dir}/region_common/level/MadBattersWell01')
-
             with open(f'{self.rom_path}/region_common/level/MadBattersWell01/MadBattersWell01_01A.leb', 'rb') as roomfile:
                 room_data = leb.Room(roomfile.read())
 
@@ -885,9 +861,6 @@ class ModsProcess(QtCore.QThread):
 
         # B: Woods
         if self.thread_active:
-            if not os.path.exists(f'{self.romfs_dir}/region_common/level/MadBattersWell02'):
-                os.makedirs(f'{self.romfs_dir}/region_common/level/MadBattersWell02')
-
             with open(f'{self.rom_path}/region_common/level/MadBattersWell02/MadBattersWell02_01A.leb', 'rb') as roomfile:
                 room_data = leb.Room(roomfile.read())
 
@@ -897,9 +870,6 @@ class ModsProcess(QtCore.QThread):
 
         # C: Mountain
         if self.thread_active:
-            if not os.path.exists(f'{self.romfs_dir}/region_common/level/MadBattersWell03'):
-                os.makedirs(f'{self.romfs_dir}/region_common/level/MadBattersWell03')
-
             with open(f'{self.rom_path}/region_common/level/MadBattersWell03/MadBattersWell03_01A.leb', 'rb') as roomfile:
                 room_data = leb.Room(roomfile.read())
 
@@ -909,9 +879,6 @@ class ModsProcess(QtCore.QThread):
 
         ### Lanmola Cave: Remove the AnglerKey actor
         if self.thread_active:
-            if not os.path.exists(f'{self.romfs_dir}/region_common/level/LanmolaCave'):
-                os.makedirs(f'{self.romfs_dir}/region_common/level/LanmolaCave')
-
             with open(f'{self.rom_path}/region_common/level/LanmolaCave/LanmolaCave_02A.leb', 'rb') as roomfile:
                 room_data = leb.Room(roomfile.read())
 
@@ -1504,9 +1471,9 @@ class ModsProcess(QtCore.QThread):
             # Read the BNTX file from the sarc file and edit the title screen logo to include the randomizer logo
             writer = oead_tools.makeSarcWriterFromSarc(f'{self.rom_path}/region_common/ui/StartUp.arc')
             writer.files['timg/__Combined.bntx'] = bntx_tools.createRandomizerTitleScreenArchive(self.rom_path)
-            oead_tools.writeSarc(writer, f'{self.romfs_dir}/region_common/ui/StartUp.arc')
+            self.writeModFile(f'{self.romfs_dir}/region_common/ui', 'StartUp.arc', writer)
         
-        finally: # regardless of any errors, just consider this task done, the logo is not needed to play
+        except: # regardless of any errors, just consider this task done, the logo is not needed to play
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
 
@@ -1978,7 +1945,8 @@ class ModsProcess(QtCore.QThread):
                     self.writeModFile(f'{out_levels}/{folder}', f'{file}', room_data)
                     num_of_mods += 1
         
-        print(f'Num of modded files for enemizer: {num_of_mods}')
+        if IS_RUNNING_FROM_SOURCE:
+            print(f'Num of modded files for enemizer: {num_of_mods}')
     
 
 
@@ -2179,6 +2147,8 @@ class ModsProcess(QtCore.QThread):
             event_tools.writeFlow(f'{dir}/{name}', data)
         elif name.endswith('gsheet'):
             oead_tools.writeSheet(f'{dir}/{name}', data)
+        elif name.endswith('arc'):
+            oead_tools.writeSarc(data, f'{dir}/{name}')
         elif name.endswith('leb'):
             with open(f'{dir}/{name}', 'wb') as f:
                 f.write(data.repack())
