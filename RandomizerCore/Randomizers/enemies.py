@@ -40,10 +40,11 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, enemy
     
     # iterate through each actor
     for e, act in enumerate(room_data.actors):
-        if not act.type in total_ids: # check for enemy actors
+        # check for valid enemy actors
+        if (not act.type in total_ids) or (e in excluded_actors):
             continue
-        
-        if enemy_settings['types'] and (e not in excluded_actors):
+
+        if enemy_settings['types']:
             enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
             new_enemy = -1
             
@@ -98,23 +99,22 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, enemy
 
                 act.relationships.e = int([v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['enemy'])
 
-                if act.type == 0x1E2: # EnemyZoroZoro spawner
-                    act.scaleX = 4.5
-                    act.scaleY = 3.0
-                    act.scaleZ = 4.5
-                elif act.type == 0x4A: # StretchyGhosts - only includes one color in pool so it will be 1/3 likely now
+                if act.type == 0x4A: # StretchyGhosts - only includes one color in pool so it will be 1/3 likely now
                     act.type = random.choice((0x4A, 0x4B, 0x4C)) # decide color
                 elif act.type == 0x4D: # ColorDungeon Orbs - same thing as above
                     act.type = random.choice((0x4D, 0x4E, 0x4F))
                 
                 act.rotY = 0 # change each enemy to be facing the screen, some will stay sideways if we don't
-                edited_room = True
         
-        if enemy_settings['sizes'] and (e not in excluded_sizes):
+
+        if enemy_settings['sizes']:
             new_scale = random.uniform(0.5, 1.5)
-            act.scaleX = new_scale
-            act.scaleY = new_scale
-            act.scaleZ = new_scale
-            edited_room = True
+        else:
+            new_scale = 1.0
+        
+        act.scaleX = new_scale
+        act.scaleY = new_scale
+        act.scaleZ = new_scale
+        edited_room = True
     
     return random.getstate(), edited_room
