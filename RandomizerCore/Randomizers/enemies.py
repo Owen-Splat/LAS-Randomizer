@@ -13,11 +13,6 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, enemy
     if file[:-4] in list(ENEMY_DATA['Excluded_Actors'].keys()):
         excluded_actors = ENEMY_DATA['Excluded_Actors'][file[:-4]]
     
-    excluded_sizes = []
-    if file[:-4] in list(ENEMY_DATA['Excluded_Sizes'].keys()):
-        excluded_sizes = ENEMY_DATA['Excluded_Sizes'][file[:-4]]
-    
-    excluded_actors.extend(excluded_sizes)
     restr = list(enemy_ids['restr'])
 
     # we want to exclude certain enemies from being in 2D rooms
@@ -40,10 +35,10 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, enemy
     
     # iterate through each actor
     for e, act in enumerate(room_data.actors):
-        if not act.type in total_ids: # check for valid enemy actors
+        if act.type not in total_ids or e in excluded_actors: # check for valid enemy actors
             continue
 
-        if enemy_settings['types'] and e not in excluded_actors:
+        if enemy_settings['types']:
             enemy_type = [v for k,v in ENEMY_DATA['Actors'].items() if v['id'] == act.type][0]['type']
             new_enemy = -1
             
@@ -111,7 +106,7 @@ def shuffleEnemyActors(room_data, folder: str, file: str, enemy_ids: dict, enemy
                 act.scaleZ = 1.0
                 edited_room = True
         
-        if enemy_settings['sizes'] and e not in excluded_sizes:
+        if enemy_settings['sizes']:
             new_scale = random.uniform(0.5, 1.5)
             act.scaleX = new_scale
             act.scaleY = new_scale
