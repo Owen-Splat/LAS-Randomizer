@@ -1,3 +1,7 @@
+import platform
+import subprocess
+from pathlib import Path
+
 from PySide6 import QtWidgets
 from RandomizerUI.UI.ui_progress_form import Ui_ProgressWindow
 from RandomizerCore.shuffler import ItemShuffler
@@ -14,7 +18,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         super (ProgressWindow, self).__init__()
         self.ui = Ui_ProgressWindow()
         self.ui.setupUi(self)
-        
+
         self.rom_path : str = rom_path
         self.out_dir : str = out_dir
         self.seed : str = settings['seed']
@@ -26,7 +30,10 @@ class ProgressWindow(QtWidgets.QMainWindow):
         
         self.valid_placements = 155 - len(settings['starting-items'])
         self.num_of_mod_tasks = 258
-        
+
+        self.ui.openOutputFolder.setVisible(False)
+        self.ui.openOutputFolder.clicked.connect(lambda x: self.openFolder(Path(self.out_dir).parent.absolute()))
+
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files += 8
 
@@ -164,6 +171,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         
         self.ui.progressBar.setValue(self.num_of_mod_tasks)
         self.ui.label.setText("All done! Check the README for instructions on how to play!")
+        self.ui.progressBar.setVisible(False)
+        self.ui.openOutputFolder.setVisible(True)
         self.done = True
 
 
@@ -179,3 +188,11 @@ class ProgressWindow(QtWidgets.QMainWindow):
                 self.shuffler_process.stop()
             elif self.current_job == 'modgenerator':
                 self.mods_process.stop()
+
+    def openFolder(self, path):
+        if platform.system() == "Windows":
+            os.startfile(path)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", path])
+        else:
+            subprocess.Popen(["xdg-open", path])

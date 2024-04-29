@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QProgressBar,
-    QSizePolicy, QWidget)
+    QPushButton, QSizePolicy, QWidget)
 
 class Ui_ProgressWindow(object):
     def setupUi(self, ProgressWindow):
@@ -37,6 +37,9 @@ class Ui_ProgressWindow(object):
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(10, 12, 451, 61))
         self.label.setAlignment(Qt.AlignCenter)
+        self.openOutputFolder = QPushButton(self.centralwidget)
+        self.openOutputFolder.setObjectName(u"openOutputFolder")
+        self.openOutputFolder.setGeometry(QRect(180, 85, 121, 24))
         ProgressWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(ProgressWindow)
@@ -48,5 +51,6 @@ class Ui_ProgressWindow(object):
         ProgressWindow.setWindowTitle(QCoreApplication.translate("ProgressWindow", u"ProgressWindow", None))
         self.progressBar.setFormat("")
         self.label.setText(QCoreApplication.translate("ProgressWindow", u"Getting ready...", None))
+        self.openOutputFolder.setText(QCoreApplication.translate("ProgressWindow", u"Open output folder", None))
     # retranslateUi
 
