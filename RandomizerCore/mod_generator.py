@@ -151,6 +151,9 @@ class ModsProcess(QtCore.QThread):
             
             if (self.settings['randomize-enemies'] or self.settings['randomize-enemy-sizes']) and self.thread_active:
                 self.randomizeEnemies()
+
+            if self.settings['open-mabe'] and self.thread_active:
+                self.openMabe()
             
             if self.thread_active: self.fixWaterLoadingZones()
             if self.thread_active: self.fixRapidsRespawn()
@@ -2058,7 +2061,7 @@ class ModsProcess(QtCore.QThread):
         # create an ips file with the versions build ids as the names
         self.writeModFile(self.exefs_dir, f'{base_bid}.ips', patcher.generatePatch())
         self.writeModFile(self.exefs_dir, f'{update_bid}.ips', patcher.generatePatch())
-    
+
 
 
     def fixWaterLoadingZones(self):
@@ -2087,7 +2090,7 @@ class ModsProcess(QtCore.QThread):
     def fixRapidsRespawn(self):
         '''If the player reloads an autosave after completing the Rapids Race without flippers,
         they will drown and then be sent to 0,0,0 in an endless falling loop
-        
+
         This is fixed by iterating over every touching water tile, and prevent reloading on them'''
 
         rooms_to_fix = (
@@ -2096,7 +2099,7 @@ class ModsProcess(QtCore.QThread):
             'Field_09P',
             'Field_10P',
         )
-        
+
         for room in rooms_to_fix:
             if not self.thread_active:
                 break
@@ -2111,10 +2114,36 @@ class ModsProcess(QtCore.QThread):
             for tile in room_data.grid.tilesdata:
                 if tile.flags3['iswaterlava']:
                     tile.flags3['respawnload'] = 0
-            
+
             self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', f'{room}.leb', room_data)
 
+    def openMabe(self):
+        '''Removing grass / monsters / rocks that may block access to go outside of Mabe village'''
 
+        rooms_to_fix = {
+            'Field_10A': [0x624A97005CD29205],
+            'Field_10E': [0x62000A005D15AC9E, 0x620015005D15AC9E],
+            'Field_15B': [0x7200BB005CFF3740, 0x7200B9005CFF3740],
+            'Field_15C': [0x7200DC005CFF3741, 0x7200D6005CFF3741],
+        }
+
+        for room, elements_to_remove in rooms_to_fix.items():
+            if not self.thread_active:
+                break
+
+            if not os.path.exists(f'{self.romfs_dir}/region_common/level/Field/{room}.leb'):
+                with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read(), edit_grid=True)
+            else:
+                with open(f'{self.romfs_dir}/region_common/level/Field/{room}.leb', 'rb') as f:
+                    room_data = leb.Room(f.read(), edit_grid=True)
+
+            for element_key in elements_to_remove:
+                for index, actor in enumerate(room_data.actors):
+                    if actor.key == element_key:
+                        room_data.actors.pop(index)
+
+            self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', f'{room}.leb', room_data)
 
     def getItemInfo(self, check, trap_models=None):
         item = self.placements[check]
