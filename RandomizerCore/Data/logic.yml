@@ -261,7 +261,7 @@ graveyard-cave:
   index: 9
   region: ghost-grave
   spoiler-region: koholint-prairie
-  condition-basic: (bombs & hookshot) | rooster
+  condition-basic: (bombs & hookshot & feather) | rooster
   condition-advanced: dash-jump | obstacle-skip
 ghost-house-pot:
   type: item

@@ -2025,7 +2025,7 @@ class ModsProcess(QtCore.QThread):
 
 
     def changeLevelConfigs(self):
-        '''Edits the config of the lvb files for dungeons to allow companions'''
+        """Edits the config of the lvb files for dungeons to allow companions"""
 
         levels_path = f'{self.rom_path}/region_common/level'
         out_levels = f'{self.romfs_dir}/region_common/level'
@@ -2088,10 +2088,10 @@ class ModsProcess(QtCore.QThread):
 
 
     def fixRapidsRespawn(self):
-        '''If the player reloads an autosave after completing the Rapids Race without flippers,
+        """If the player reloads an autosave after completing the Rapids Race without flippers,
         they will drown and then be sent to 0,0,0 in an endless falling loop
 
-        This is fixed by iterating over every touching water tile, and prevent reloading on them'''
+        This is fixed by iterating over every touching water tile, and prevent reloading on them"""
 
         rooms_to_fix = (
             'Field_09N',
@@ -2117,8 +2117,9 @@ class ModsProcess(QtCore.QThread):
 
             self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', f'{room}.leb', room_data)
 
+
     def openMabe(self):
-        '''Removing grass / monsters / rocks that may block access to go outside of Mabe village'''
+        """Removing grass / monsters / rocks that may block access to go outside of Mabe village"""
 
         rooms_to_fix = {
             'Field_10A': [0x624A97005CD29205],
@@ -2133,17 +2134,19 @@ class ModsProcess(QtCore.QThread):
 
             if not os.path.exists(f'{self.romfs_dir}/region_common/level/Field/{room}.leb'):
                 with open(f'{self.rom_path}/region_common/level/Field/{room}.leb', 'rb') as f:
-                    room_data = leb.Room(f.read(), edit_grid=True)
+                    room_data = leb.Room(f.read())
             else:
                 with open(f'{self.romfs_dir}/region_common/level/Field/{room}.leb', 'rb') as f:
-                    room_data = leb.Room(f.read(), edit_grid=True)
+                    room_data = leb.Room(f.read())
 
             for element_key in elements_to_remove:
                 for index, actor in enumerate(room_data.actors):
                     if actor.key == element_key:
                         room_data.actors.pop(index)
+                        break
 
             self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', f'{room}.leb', room_data)
+
 
     def getItemInfo(self, check, trap_models=None):
         item = self.placements[check]
