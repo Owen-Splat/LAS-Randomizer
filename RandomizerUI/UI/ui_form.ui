@@ -1594,7 +1594,7 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>24</y>
+           <y>64</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1609,7 +1609,7 @@
         <widget class="QCheckBox" name="lv1BeamCheck">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>189</x>
            <y>64</y>
            <width>151</width>
            <height>21</height>
@@ -1636,6 +1636,22 @@
          </property>
          <property name="text">
           <string>Nice Magic Rod</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="blurCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Removes the blur around the edges of the screen</string>
+         </property>
+         <property name="text">
+          <string>Blur Removal</string>
          </property>
         </widget>
        </widget>

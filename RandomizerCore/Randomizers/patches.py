@@ -3,20 +3,17 @@ import random
 
 
 def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
-    """Writes the necessary asm for the randomizer"""
-    
-    # carry over the internal random state
-    random.setstate(rand_state)
-    
+    """Writes the necessary ASM for the randomizer"""
+
     # Change the companion check for Color Dungeon from == 0 to != 5
     # 0=alone, 1=bowwow, 2=marin, 3=ghost, 4=rooster
     # 5 does not exist so the condition will always be met
     patcher.addPatch(0xc868d4, 'ccmp w9, #0, #5, ne')
-    
-    # Iron Ball Soldier checks both for GoldenLeaf[4] and for Actor Switch 0 (flag)
-    # If the player does have it, jump to the code that checks for the actor switch
+
+    # Iron Ball Soldier checks both for GoldenLeaf[4] and for Actor Switch[0]
+    # If the player has the Leaf, jump to the code that checks for the actor switch flag
     patcher.addPatch(0x6a62f8, 'cbz w0, 0x6a6340')
-    
+
     # Make Inventory.RemoveItem itemType 0 remove Bottle[1] instead of SwordLv1 since this case is unused
     # This is done by using bitwise AND to only change the Bottle[1] bit to 0
     # The reason for this is to add/remove the fishing bottle from the inventory to control if it shows in the pond or not
@@ -28,40 +25,54 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     str w9, [x8, #0xa8];
     b -0x19C;
     """)
-    
+
     # make songs, tunics, and capacity upgrades show the correct item model by making them go to the default case
     # default case means it will use its own npcKey in Items.gsheet rather than a different item's npcKey
     patcher.addPatch(0xd798c4, 'b +0x134')
     patcher.addPatch(0xd79814, 'b +0x1e4')
     patcher.addPatch(0xd79804, 'b +0x1f4')
-    
+
+    # rewrite the unused FlowControl.CompareInt event to return 1 if the values are equal, 0 if not
+    # for now, this is just for Bottles, but will allow us to display unique text for dungeon items in the future
+    # patcher.addPatch(0x0, '')
+
+    # now write the patches that require certain settings
+    optionalPatches(patcher, settings, rand_state)
+
+
+def optionalPatches(patcher: Patcher, settings: dict, rand_state: tuple):
+    """Writes the settings-based ASM for the randomizer"""
+
+    # carry over the internal random state
+    random.setstate(rand_state)
+
     # if enemizer is enabled, randomize the green zol chest trap into another enemy
     if settings['randomize-enemies']:
         from RandomizerCore.Data.randomizer_data import ENEMY_DATA
         enemy_id = random.choice(ENEMY_DATA['Chest_Enemies'])
         patcher.addPatch(0xca92c0, f'mov w9, #{enemy_id}')
-    
+
     # # if keysanity is enabled, use the item index to determine which dungeon it goes to
     # if settings['dungeon-items'] != 'standard':
     #     allowKeysanity(patcher, settings['dungeon-items'])
-    
-    optionalPatches(patcher, settings)
 
+    # Changes the string "PFXTiltShiftParam" that is used in postprocess.bfsha shader file
+    # This new string can be anything that isn't found in the shader
+    # As a result, the TiltShift is not applied anywhere
+    if settings['blur-removal']:
+        patcher.replaceString(0x16cbd73, "NoTiltShift")
 
-def optionalPatches(patcher: Patcher, settings: dict):
-    """Adds the optional gameplay patches to the seed"""
-    
-    # if 1HKO mode is enabled, make all forms of damage substract 80 health to make Link always die in 1 hit
-    if settings['1HKO']:
+    # if OHKO mode is enabled, make all forms of damage substract 80 health to make Link always die in 1 hit
+    if settings['OHKO']:
         patcher.addPatch(0xd4c754, 'sub w22, w8, #80') # normal damage
         patcher.addPatch(0xdb1f74, 'sub w8, w21, #80') # fall/drown damage
         patcher.addPatch(0xd7c8c8, 'sub w20, w8, #80') # eventflow damage
         patcher.addPatch(0xd96950, 'sub w8, w23, #80') # blaino damage
-    
+
     # beam slash with either sword
     if settings['lv1-beam']:
         patcher.addPatch(0xde1ba8, 'ldrb w9, [x8, #0xa8]')
-    
+
     # change magic rod projectile instance limit from 3 to 16
     if settings['nice-rod']:
         patcher.addPatch(0xd51698, 'cmp x19, #0x10')
@@ -69,7 +80,7 @@ def optionalPatches(patcher: Patcher, settings: dict):
 
 def allowKeysanity(patcher: Patcher, dungeon_items: str):
     """Overrides the current level value with the index to work outside of dungeons"""
-    
+
     # Set the current level value to the index, this is fine since only the dungeon items use it
     # Because Dampe dungeons function outside of the randomizer loop, use the normal level value if it's 8
 
@@ -80,7 +91,7 @@ def allowKeysanity(patcher: Patcher, dungeon_items: str):
     b.eq +8;
     mov w8, #8;
     """)
-    
+
     patcher.addPatch(0x8d0e58, 'cmp w8, #-1') # NightmareKey
     patcher.addPatch(0x8d0e5c, """
     b.eq +8;
