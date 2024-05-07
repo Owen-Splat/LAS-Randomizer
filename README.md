@@ -16,19 +16,7 @@ This randomizes all the items in the game so that every playthrough is unique. I
 Please note that while most things are functional, there is a possibility of the logic resulting in softlocks. This will be especially true with the glitched logics. If this does happen, dying and selecting the Save + Quit option will respawn you back at Marin's house.
 
 ## How to play:
-In order to play the randomizer, you must have the RomFS of the game extracted and on the device you're running this program from. This can be extracted through your choice of emulator, or with nxdumptool on a homebrewed Switch console. After you have extracted the RomFS, keep it somewhere where you will not lose it!
-
-Set the RomFS Path to the folder where you extracted the RomFS.
-
-Set the Output Path to the folder where you want the edited files to go. On Emulator, you can right-click the game and open mods directory to get the path.
-
-The Seed can be anything you want it to be, or just left blank.
-
-### Switch
-Set the output platform to `Console`. Copy and paste the `Atmosphere` folder from the output to the root of your SD card. I'd recommend to use a file transfer homebrew app to avoid needing to take the SD card out and relaunch CFW each time. The number of files will differ depending on settings, so clear out any old files first.
-
-### Emulator
-Set the output platform to `Emulator` and set the output path to the emulator's mod directory (see above) for Link's Awakening. After creating a seed, simply just enable it in the emulator and enjoy playing! You **MUST** play on version 1.0.0 otherwise the exefs patches will not work on emulator.
+Please refer to the setup wiki: https://github.com/Owen-Splat/LAS-Randomizer/wiki/Setup-Instuctions
 
 ## Discord Server
 Join the Discord server to talk about the randomizer, ask questions, or even set up races!  
