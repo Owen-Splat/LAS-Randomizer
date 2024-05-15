@@ -44,6 +44,7 @@ BASE_OPTIONS = {
     'fastFishingCheck': True,
     'dungeonsCheck': False,
     'ohkoCheck': False,
+    'quickModeCheck': False,
     'lv1BeamCheck': False,
     'niceRodCheck': False,
     'rupeesSpinBox': 0,
@@ -393,6 +394,7 @@ def loadRandomizerSettings(window, seed):
         '1HKO': window.ui.ohkoCheck.isChecked(),
         'lv1-beam': window.ui.lv1BeamCheck.isChecked(),
         'nice-rod': window.ui.niceRodCheck.isChecked(),
+        'quick-mode': window.ui.quickModeCheck.isChecked(),
         'starting-items': window.starting_gear,
         'starting-rupees': window.ui.rupeesSpinBox.value(),
         'excluded-locations': window.excluded_checks
