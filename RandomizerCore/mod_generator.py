@@ -156,7 +156,7 @@ class ModsProcess(QtCore.QThread):
 
             if self.settings['open-mabe'] and self.thread_active:
                 self.openMabe()
-            
+
             if self.thread_active: self.fixWaterLoadingZones()
             if self.thread_active: self.fixRapidsRespawn()
             
@@ -432,8 +432,11 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active: self.armosKnightChanges()
         if self.thread_active: self.masterStalfosChanges()
         if self.thread_active: self.syrupChanges()
-    
-
+        if self.thread_active: self.bossBlobChanges()
+        if self.thread_active: self.donPawnChanges()
+        if self.thread_active: self.piccoloMasterChanges()
+        if self.thread_active: self.shadowChanges()
+        if self.thread_active: self.stoneHinoxChanges()
 
     def tarinChanges(self):
         ### Event changes
@@ -858,7 +861,12 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event65').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'DeguTail', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event31')
+            event_tools.insertEventAfter(flow.flowchart, 'Event33', event)
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'DeguTail.bfevfl', flow)
 
 
@@ -878,7 +886,18 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event53').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event50').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'PotDemonKing', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event35')
+            event_tools.insertEventAfter(flow.flowchart, 'Event57', event)
+
+            # Intermediate textboxes
+            event_tools.insertEventAfter(flow.flowchart, 'PotDemonNoDamage', None)
+            event_tools.insertEventAfter(flow.flowchart, 'PotDemonNoMove', None)
+            event_tools.insertEventAfter(flow.flowchart, 'PotDemonBreak', None)
+
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'PotDemonKing.bfevfl', flow)
 
 
@@ -897,7 +916,12 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event17').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event36').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event32').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'DeguZol', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event18')
+            event_tools.insertEventAfter(flow.flowchart, 'Event51', event)
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'DeguZol.bfevfl', flow)
 
 
@@ -917,7 +941,12 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event28').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event51').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'Angler', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event20')
+            event_tools.insertEventAfter(flow.flowchart, 'Event1', event)
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Angler.bfevfl', flow)
 
 
@@ -937,7 +966,15 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event33').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event49').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'Hooker', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event42')
+            event_tools.insertEventAfter(flow.flowchart, 'Event23', event)
+
+            # Post boss message skip
+            event_tools.insertEventAfter(flow.flowchart, 'Event14', 'Event39')
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Hooker.bfevfl', flow)
 
 
@@ -957,7 +994,15 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event78').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'MatFace', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event3')
+            event_tools.insertEventAfter(flow.flowchart, 'Event32', event)
+
+            # Post boss message skip
+            event_tools.insertEventAfter(flow.flowchart, 'Event30', 'Event43')
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'MatFace.bfevfl', flow)
 
 
@@ -976,7 +1021,16 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event15').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_LV7_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
             event_tools.findEvent(flow.flowchart, 'Event66').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'Albatoss', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event25')
+            event_tools.insertEventAfter(flow.flowchart, 'Event49', event)
+
+            # Skip after-boss textbox
+            event_tools.insertEventAfter(flow.flowchart, 'Event32', 'Event6')
+
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Albatoss.bfevfl', flow)
 
 
@@ -997,7 +1051,15 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event63').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
             event_tools.findEvent(flow.flowchart, 'Event17').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event70').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'DeguFlame', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event4')
+            event_tools.insertEventAfter(flow.flowchart, 'Event62', event)
+
+            # Skip after-boss textbox
+            event_tools.insertEventAfter(flow.flowchart, 'Event43', 'Event46')
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'DeguFlame.bfevfl', flow)
 
 
@@ -1016,7 +1078,12 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event2').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
             event_tools.findEvent(flow.flowchart, 'Event18').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
             event_tools.findEvent(flow.flowchart, 'Event22').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip
+            event = event_tools.createActionEvent(flow.flowchart, 'Lanmola', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event5')
+            event_tools.insertEventAfter(flow.flowchart, 'Event48', event)
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Lanmola.bfevfl', flow)
 
 
@@ -1062,7 +1129,34 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event4').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event10').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
             event_tools.findEvent(flow.flowchart, 'Event23').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
-        
+
+        if self.settings['quick-mode']:
+            # Intro skip /!\ Might break fast stalfos setting. Needs to be reviewed.
+            event1 = event_tools.createActionEvent(flow.flowchart, 'MasterStalfon', 'SetActorSwitch', {'switchIndex': 2, 'value': True}, 'Event31')
+            event_tools.insertEventAfter(flow.flowchart, 'Event113', event1)
+
+            event2 = event_tools.createActionEvent(flow.flowchart, 'MasterStalfon', 'SetActorSwitch', {'switchIndex': 2, 'value': True}, 'Event58')
+            event_tools.insertEventAfter(flow.flowchart, 'Event115', event2)
+
+            event3 = event_tools.createActionEvent(flow.flowchart, 'MasterStalfon', 'SetActorSwitch', {'switchIndex': 2, 'value': True}, 'Event77')
+            event_tools.insertEventAfter(flow.flowchart, 'Event118', event3)
+
+            event4 = event_tools.createActionEvent(flow.flowchart, 'MasterStalfon', 'SetActorSwitch', {'switchIndex': 2, 'value': True}, 'Event79')
+            event_tools.insertEventAfter(flow.flowchart, 'Event122', event4)
+
+            # Textbox skips
+            event_tools.insertEventAfter(flow.flowchart, 'Event95', 'Event99')
+            event_tools.insertEventAfter(flow.flowchart, 'Event99', 'Event203')
+
+            event_tools.insertEventAfter(flow.flowchart, 'Event61', 'Event87')
+            event_tools.insertEventAfter(flow.flowchart, 'Event87', 'Event200')
+
+            event_tools.insertEventAfter(flow.flowchart, 'Event138', 'Event21')
+
+            event_tools.insertEventAfter(flow.flowchart, 'Event76', 'Event86')
+            event_tools.insertEventAfter(flow.flowchart, 'Event86', 'Event196')
+
+
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'MasterStalfon.bfevfl', flow)
     
 
@@ -1191,8 +1285,131 @@ class ModsProcess(QtCore.QThread):
             room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
 
             self.writeModFile(f'{self.romfs_dir}/region_common/level/Field', 'Field_09H.leb', room_data)
-    
 
+    def bossBlobChanges(self):
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/BossBlob.bfevfl')
+            changes = False
+
+            # Shuffle BGMs
+            if self.settings['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+                event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+                event_tools.findEvent(flow.flowchart, 'Event12').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
+                changes = True
+
+            if self.settings['quick-mode']:
+                # Intro skip
+                event = event_tools.createActionEvent(flow.flowchart, 'BossBlob', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event37')
+                event_tools.insertEventAfter(flow.flowchart, 'Event11', event)
+
+                # No damage textbox
+                event_tools.insertEventAfter(flow.flowchart, 'BossBlobNoDamage', None)
+                changes = True
+
+            if changes:
+                self.writeModFile(f'{self.romfs_dir}/region_common/event', 'BossBlob.bfevfl', flow)
+
+    def donPawnChanges(self):
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DonPawn.bfevfl')
+            changes = False
+
+            # Shuffle BGMs
+            if self.settings['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event21').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+                event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
+                event_tools.findEvent(flow.flowchart, 'Event38').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
+                event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']  # StopBGM
+                changes = True
+
+            if self.settings['quick-mode']:
+                # Intro skip
+                event = event_tools.createActionEvent(flow.flowchart, 'DonPawn', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event16')
+                event_tools.insertEventAfter(flow.flowchart, 'Event50', event)
+
+                # Intermediate textboxes
+                event_tools.insertEventAfter(flow.flowchart, 'DonPawnBattle1', None)
+                event_tools.insertEventAfter(flow.flowchart, 'DonPawnBattle2', None)
+                changes = True
+
+            if changes:
+                self.writeModFile(f'{self.romfs_dir}/region_common/event', 'DonPawn.bfevfl', flow)
+
+    def piccoloMasterChanges(self):
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PiccoloMaster.bfevfl')
+            changes = False
+
+            # Shuffle BGMs
+            if self.settings['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event48').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+                event_tools.findEvent(flow.flowchart, 'Event53').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+                event_tools.findEvent(flow.flowchart, 'Event3').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']  # StopBGM
+                changes = True
+
+            if self.settings['quick-mode']:
+                # Intro skip
+                event = event_tools.createActionEvent(flow.flowchart, 'PiccoloMaster', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event8')
+                event_tools.insertEventAfter(flow.flowchart, 'Event16', event)
+
+                # Intermediate textbox
+                event_tools.insertEventAfter(flow.flowchart, 'PiccoloMasterRestart', None)
+
+                # Post boss textbox
+                event_tools.insertEventAfter(flow.flowchart, 'Event61', 'Event57')
+                changes = True
+
+            if changes:
+                self.writeModFile(f'{self.romfs_dir}/region_common/event', 'PiccoloMaster.bfevfl', flow)
+
+    def shadowChanges(self):
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Shadow.bfevfl')
+            changes = False
+
+            # Shuffle BGMs
+            if self.settings['randomize-music']:
+                # event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT']
+                event_tools.findEvent(flow.flowchart, 'Event37').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_WIN']
+                event_tools.findEvent(flow.flowchart, 'Event60').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
+                event_tools.findEvent(flow.flowchart, 'Event71').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
+                # event_tools.findEvent(flow.flowchart, 'Event44').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT'] # StopBGM
+                changes = True
+
+            if self.settings['quick-mode']:
+                # Intro skip
+                event = event_tools.createActionEvent(flow.flowchart, 'ShadowZol', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event35')
+                event_tools.insertEventAfter(flow.flowchart, 'Event21', event)
+
+                # Post boss textbox
+                event_tools.insertEventAfter(flow.flowchart, 'Event24', 'Event55')
+                changes = True
+
+            if changes:
+                self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Shadow.bfevfl', flow)
+
+    def stoneHinoxChanges(self):
+        if self.thread_active:
+            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/StoneHinox.bfevfl')
+            changes = False
+
+            # Shuffle BGMs
+            if self.settings['randomize-music']:
+                event_tools.findEvent(flow.flowchart, 'Event4').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+                event_tools.findEvent(flow.flowchart, 'Event35').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
+                event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']  # StopBGM
+                changes = True
+
+            if self.settings['quick-mode']:
+                # Intro skip
+                event = event_tools.createActionEvent(flow.flowchart, 'StoneHinox', 'SetActorSwitch', {'switchIndex': 1, 'value': True}, 'Event2')
+                event_tools.insertEventAfter(flow.flowchart, 'Event9', event)
+
+                changes = True
+
+            if changes:
+                self.writeModFile(f'{self.romfs_dir}/region_common/event', 'StoneHinox.bfevfl', flow)
 
     def makeGeneralEventChanges(self):
         """Make changes to some events that should be in every seed, e.g. setting flags for having watched cutscenes"""
@@ -1287,7 +1504,11 @@ class ModsProcess(QtCore.QThread):
                 dialog_event = event_tools.createSubFlowEvent(flow.flowchart, '',
                     item_key, {})
                 event_tools.insertEventAfter(flow.flowchart, 'DampeFinal', dialog_event)
-            
+
+            if self.settings['quick-mode']:
+                event_tools.insertEventAfter(flow.flowchart, 'PowerUp', None)
+                event_tools.insertEventAfter(flow.flowchart, 'DefenceUp', None)
+
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Item.bfevfl', flow)
         
         ### MadamMeowMeow: Change her behaviour to always take back BowWow if you have him, and not do anything based on having the Horn
@@ -1650,14 +1871,6 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event68').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Bossblin.bfevfl', flow)
 
-        ### BossBlob - shuffles boss BGMs
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/BossBlob.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
-            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
-            event_tools.findEvent(flow.flowchart, 'Event12').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
-            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'BossBlob.bfevfl', flow)
-
         ### Dodongo - shuffles boss BGMs
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Dodongo.bfevfl')
@@ -1665,15 +1878,6 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event43').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
             event_tools.findEvent(flow.flowchart, 'Event3').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Dodongo.bfevfl', flow)
-
-        ### DonPawn - shuffles boss BGMs
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/DonPawn.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event21').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event30').data.params.data['label'] = self.songs_dict['BGM_PANEL_RESULT']
-            event_tools.findEvent(flow.flowchart, 'Event38').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS']
-            event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS'] # StopBGM
-            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'DonPawn.bfevfl', flow)
 
         ### Gohma - shuffles boss BGMs
         if self.thread_active:
@@ -1710,14 +1914,6 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event56').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
             event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'MightPunch.bfevfl', flow)
-        
-        ### PiccoloMaster - shuffles boss BGMs
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/PiccoloMaster.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event48').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
-            event_tools.findEvent(flow.flowchart, 'Event53').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
-            event_tools.findEvent(flow.flowchart, 'Event3').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
-            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'PiccoloMaster.bfevfl', flow)
 
         ### Rola - shuffles boss BGMs
         if self.thread_active:
@@ -1725,25 +1921,7 @@ class ModsProcess(QtCore.QThread):
             event_tools.findEvent(flow.flowchart, 'Event20').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
             event_tools.findEvent(flow.flowchart, 'Event1').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Rola.bfevfl', flow)
-        
-        ### Shadow - shuffles boss BGMs
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/Shadow.bfevfl')
-            # event_tools.findEvent(flow.flowchart, 'Event6').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT']
-            event_tools.findEvent(flow.flowchart, 'Event37').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_WIN']
-            event_tools.findEvent(flow.flowchart, 'Event60').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
-            event_tools.findEvent(flow.flowchart, 'Event71').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_BATTLE']
-            # event_tools.findEvent(flow.flowchart, 'Event44').data.params.data['label'] = self.songs_dict['BGM_LASTBOSS_DEMO_TEXT'] # StopBGM
-            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Shadow.bfevfl', flow)
-        
-        ### StoneHinox - shuffles boss BGMs
-        if self.thread_active:
-            flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/StoneHinox.bfevfl')
-            event_tools.findEvent(flow.flowchart, 'Event4').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
-            event_tools.findEvent(flow.flowchart, 'Event35').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE']
-            event_tools.findEvent(flow.flowchart, 'Event29').data.params.data['label'] = self.songs_dict['BGM_DUNGEON_BOSS_MIDDLE'] # StopBGM
-            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'StoneHinox.bfevfl', flow)
-        
+
         ### ToolShopkeeper - shuffles music when the ToolShopkeeper kills you after stealing
         if self.thread_active:
             flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')

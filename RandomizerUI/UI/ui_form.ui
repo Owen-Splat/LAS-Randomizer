@@ -1755,6 +1755,22 @@
           <string>Perfect Ending</string>
          </property>
         </widget>
+        <widget class="QCheckBox" name="quickModeCheck">
+         <property name="geometry">
+          <rect>
+           <x>368</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Disables boss intros and Power/Defense up text boxes, skips some animations to make the game quicker&lt;br&gt;&lt;b&gt;/!\ WIP: This is still in testing phase and might break your seed ! Feedbacks would be appreciated !&lt;/b&gt;</string>
+         </property>
+         <property name="text">
+          <string>WIP : Quick Mode</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QLabel" name="label_4">
         <property name="geometry">
