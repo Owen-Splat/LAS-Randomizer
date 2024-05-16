@@ -32,7 +32,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.num_of_mod_tasks = 258
 
         self.ui.openOutputFolder.setVisible(False)
-        self.ui.openOutputFolder.clicked.connect(lambda x: self.openFolder(Path(self.out_dir).parent.absolute()))
+        self.ui.openOutputFolder.clicked.connect(self.openOutputFolderButtonClicked)
 
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files += 8
@@ -196,3 +196,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
             subprocess.Popen(["open", path])
         else:
             subprocess.Popen(["xdg-open", path])
+
+    def openOutputFolderButtonClicked(self):
+        self.openFolder(Path(self.out_dir).parent.absolute())
+        self.window().close()
