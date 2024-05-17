@@ -1918,7 +1918,7 @@ D6-wizzrobes-ledge:
   content: medicine
   region: face-shrine
   spoiler-region: face-shrine
-  condition-basic: D6-8D & bracelet:2 & kill-wizzrobe
+  condition-basic: D6-8D & bracelet:2 & kill-wizzrobe & feather
 D6-owl-statue-ledge:
   type: item
   subtype: dungeon-statue
