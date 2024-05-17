@@ -52,6 +52,14 @@ def makeStartChanges(flowchart, settings):
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl2_L05_04H', 'value': True}))
         player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'DoorOpen_Btl3_L05_01F', 'value': True}))
 
+    if settings['quick-mode']:
+        # Making the floor and walls to be already broken in D5 boss room
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'Lv05BrokeWall1', 'value': True}))
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'Lv05BrokeWall2', 'value': True}))
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'Lv05BrokeWall3', 'value': True}))
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'Lv05BrokeWall4', 'value': True}))
+        player_start_event_flags.append(('EventFlags', 'SetFlag', {'symbol': 'Lv05BrokeFloor', 'value': True}))
+
     event_tools.insertEventAfter(flowchart, 'Event558', player_start_flag_check_event)
     event_tools.createActionChain(flowchart, player_start_flags_first_event, player_start_event_flags)
 

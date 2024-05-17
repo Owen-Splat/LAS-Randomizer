@@ -1030,6 +1030,9 @@ class ModsProcess(QtCore.QThread):
             # Skip after-boss textbox
             event_tools.insertEventAfter(flow.flowchart, 'Event32', 'Event6')
 
+            # Fixes animations
+            event_tools.insertEventAfter(flow.flowchart, 'Event73', 'Event11')
+            event_tools.insertEventAfter(flow.flowchart, 'Event12', 'Event65')
 
         self.writeModFile(f'{self.romfs_dir}/region_common/event', 'Albatoss.bfevfl', flow)
 
@@ -1383,7 +1386,7 @@ class ModsProcess(QtCore.QThread):
                 event_tools.insertEventAfter(flow.flowchart, 'Event21', event)
 
                 # Post boss textbox
-                event_tools.insertEventAfter(flow.flowchart, 'Event24', 'Event55')
+                event_tools.insertEventAfter(flow.flowchart, 'Event24', 'Event39')
                 changes = True
 
             if changes:
@@ -1613,7 +1616,16 @@ class ModsProcess(QtCore.QThread):
             crane_prizes.makeEventChanges(flow.flowchart, self.settings)
             self.writeModFile(f'{self.romfs_dir}/region_common/event', 'PrizeCommon.bfevfl', flow)
 
+        ### RoosterBones: Change the animation in quick mode to avoid long wait
+        if self.thread_active:
+            # Only doing it for quick mode as this is the only setting that uses it for now.
 
+            if self.settings['quick-mode']:
+                flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/RoosterBones.bfevfl')
+                flow.flowchart.actors.append(flow_control_actor)
+                event_tools.insertEventAfter(flow.flowchart, 'Event33', 'Event31')
+
+                self.writeModFile(f'{self.romfs_dir}/region_common/event', 'RoosterBones.bfevfl', flow)
 
     def makeGeneralDatasheetChanges(self):
         """Make changes to some datasheets that are general in nature and not tied to specific item placements"""
