@@ -43,7 +43,7 @@ class LogicUpdateProcess(QtCore.QThread):
     def run(self):
         try:
             update_file =\
-                lib.urlopen(f"https://raw.githubusercontent.com/{AUTHOR}/LAS-Randomizer/{MAIN_BRANCH}/Data/logic.yml")
+                lib.urlopen(f"https://raw.githubusercontent.com/{AUTHOR}/LAS-Randomizer/{MAIN_BRANCH}/RandomizerCore/Data/logic.yml")
             web_version = float(update_file.readline().decode('utf-8').strip('#'))
             new_logic = update_file.read().decode('utf-8')
 
