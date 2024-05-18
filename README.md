@@ -12,6 +12,7 @@ This repository is a **modded version of the original randomizer made by Owen th
 - **Starting Dungeon Items** : You can now choose to start with nothing, Maps & Compass, or Maps, Compass & Beaks as dungeon items!
 - **Perfect ending** : You can force the perfect ending to show at the end of the game even if you get a game over.
 - **Open Mabe (experimental)** : This setting allows you to get out of the village without any items. This opens access to Beach, Woods & Plains (3 to 4 locations)
+- **Quick Mode (experimental)** : This setting makes most boss intro skipped, textbox skips and faster animations. **This is still a work in progress !**
 
 **More to come in the future !**
 ### Donate:
