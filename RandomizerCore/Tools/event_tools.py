@@ -363,3 +363,7 @@ def addForkEventForks(flowchart, forkevent, forks):
 			forkEvents.append(fork)
 	
 	forkEvent.data.forks = forkEvents
+
+
+def setEventSong(flowchart, event_name, song):
+	findEvent(flowchart, event_name).data.params.data['label'] = song
