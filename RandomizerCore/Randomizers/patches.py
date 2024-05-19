@@ -33,8 +33,10 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     patcher.addPatch(0xd79804, 'b +0x1f4')
 
     # rewrite the unused FlowControl.CompareInt event to return 1 if the values are equal, 0 if not
-    # for now, this is just for Bottles, but will allow us to display unique text for dungeon items in the future
-    # patcher.addPatch(0x0, '')
+    # this will be useful if we ever need to check the index of something
+    # for now, this is just for the fishing bottle to be able to set a flag
+    patcher.addPatch(0x8049d8, 'mov w8, #0x1')
+    patcher.addPatch(0x8049dc, 'csel w0, w8, wzr, eq')
 
     # now write the patches that require certain settings
     optionalPatches(patcher, settings, rand_state)
@@ -77,12 +79,25 @@ def optionalPatches(patcher: Patcher, settings: dict, rand_state: tuple):
     if settings['nice-rod']:
         patcher.addPatch(0xd51698, 'cmp x19, #0x10')
 
+    # allow stealing without the sword
+    # ignores sword check and jumps to the code that checks which way the shopkeeper is facing
+    if settings['always-steal']:
+        patcher.addPatch(0xa4a8f0, 'b +0x20')
+
+    # prevent stealing no matter what
+    # ignores sword check and jumps to the code that prevents stealing
+    if settings['never-steal']:
+        patcher.addPatch(0xa4a8f0, 'b +0x4')
+
 
 def allowKeysanity(patcher: Patcher, dungeon_items: str):
-    """Overrides the current level value with the index to work outside of dungeons"""
+    """Overrides the current level value with the index to work outside of dungeons
+    
+    Not yet implemented, still needs a line of ASM to use the item_index instead of the current level in memory"""
 
     # Set the current level value to the index, this is fine since only the dungeon items use it
     # Because Dampe dungeons function outside of the randomizer loop, use the normal level value if it's 8
+    # patcher.addPatch(0x0, '')
 
     # Compare count instead of current level just to skip over the "level can't be non dungeon" check
     # Will return if count == 0 instead of level == 0xff
