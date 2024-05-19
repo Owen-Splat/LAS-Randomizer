@@ -186,6 +186,11 @@ class Room:
 			chest.scaleX = chest_size
 			chest.scaleY = chest_size
 			chest.scaleZ = chest_size
+		
+		# if item_key == 'BowWow':
+		#     pass
+		# elif item_key == 'Rooster':
+		#     room_data.addChestRooster()
 	
 
 	def setSmallKeyParams(self, model_path, model_name, room, item_key, key_index=0):
