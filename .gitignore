@@ -3,7 +3,6 @@ __pycache__
 /build
 /Models
 /output
-/RandomizerCore/Tools/lvb.py
 /RandomizerCore/Tools/text_tools.py
 /Test
 tests.py
