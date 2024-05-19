@@ -2,7 +2,15 @@ v0.4
 
 - finish partial seashell support
 
-- make sure logic knows that you can't have both followers at once
+- make sure logic knows that you can't have both followers at once for D2
+
+- write ASM for Inventory.HasItem(44) to always return True if free-book is on
+
+- use new setEventSong function, too tired to make changes at the same time as the readFile/writeFile refactor
+
+- we can add the lens found flag as a gettingFlag and remove its entries in item_get
+
+- add gui option for changing how stealing works
 
 BUGS
 - chests and seashell mansion do not set the flag for Bottle[1], making Fishing Pond take it away
