@@ -15,7 +15,6 @@ class Level:
 		self.zones = []
 		zone_entry = [e for e in self.fixed_hash.entries if e.name == b'zone'][0]
 		for entry in zone_entry.data.entries:
-			# entry.printEntry()
 			self.zones.append(Zone(entry.data))
 
 		# self.player_starts = []
