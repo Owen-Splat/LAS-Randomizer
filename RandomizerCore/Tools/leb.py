@@ -114,38 +114,6 @@ class Actor:
 
 
 
-class Level:
-	def __init__(self, data):
-		self.fixed_hash = FixedHash(data)
-		self.config = LevelConfig([e for e in self.fixed_hash.entries if e.name == b'config'][0].data)
-
-
-
-class LevelConfig:
-	def __init__(self, data):
-		self.data = data
-		self.attr_1 = readBytes(data, 0x0, 1)
-		self.attr_2 = readBytes(data, 0x1, 1)
-		self.attr_3 = readBytes(data, 0x2, 1)
-		self.attr_4 = readBytes(data, 0x3, 1)
-		self.attr_5 = readBytes(data, 0x4, 1)
-		self.attr_6 = readBytes(data, 0x5, 1)
-		self.padding = b'\xFF'
-	
-	def pack(self):
-		packed = b''
-		packed += self.attr_1.to_bytes(1, 'little')
-		packed += self.attr_2.to_bytes(1, 'little')
-		packed += self.attr_3.to_bytes(1, 'little')
-		packed += self.attr_4.to_bytes(1, 'little')
-		packed += self.attr_5.to_bytes(1, 'little')
-		packed += self.attr_6.to_bytes(1, 'little')
-		packed += self.padding
-
-		return packed
-
-
-
 class Room:
 	def __init__(self, data, edit_grid=False):
 		self.fixed_hash = FixedHash(data)
