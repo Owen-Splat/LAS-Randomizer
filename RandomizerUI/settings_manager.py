@@ -55,7 +55,7 @@ BASE_OPTIONS = {
 
 EXTRA_OPTIONS = [
     'theme',
-    'fomfs_folder',
+    'romfs_folder',
     'output_folder',
     'seed',
     'platform',
