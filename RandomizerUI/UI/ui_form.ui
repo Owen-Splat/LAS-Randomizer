@@ -1294,7 +1294,7 @@
           <x>10</x>
           <y>169</y>
           <width>521</width>
-          <height>170</height>
+          <height>141</height>
          </rect>
         </property>
         <property name="title">
@@ -1684,6 +1684,43 @@
          <property name="text">
           <string>Blur Removal</string>
          </property>
+        </widget>
+        <widget class="QComboBox" name="stealingComboBox">
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>24</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This controls the requirement for stealing from the shop&lt;br&gt;&lt;/br&gt;Normal means that Sword is required</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>2</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Stealing: Always</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Stealing: Never</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Stealing: Normal</string>
+          </property>
+         </item>
         </widget>
        </widget>
        <widget class="QLabel" name="label_4">

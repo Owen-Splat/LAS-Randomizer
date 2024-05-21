@@ -2,7 +2,7 @@ from RandomizerCore.Tools.exefs_editor.patcher import Patcher
 import random
 
 
-def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
+def requiredPatches(patcher: Patcher):
     """Writes the necessary ASM for the randomizer"""
 
     # Change the companion check for Color Dungeon from == 0 to != 5
@@ -38,9 +38,6 @@ def writePatches(patcher: Patcher, settings: dict, rand_state: tuple):
     patcher.addPatch(0x8049d8, 'mov w8, #0x1')
     patcher.addPatch(0x8049dc, 'csel w0, w8, wzr, eq')
 
-    # now write the patches that require certain settings
-    optionalPatches(patcher, settings, rand_state)
-
 
 def optionalPatches(patcher: Patcher, settings: dict, rand_state: tuple):
     """Writes the settings-based ASM for the randomizer"""
@@ -56,7 +53,7 @@ def optionalPatches(patcher: Patcher, settings: dict, rand_state: tuple):
 
     # # if keysanity is enabled, use the item index to determine which dungeon it goes to
     # if settings['dungeon-items'] != 'standard':
-    #     allowKeysanity(patcher, settings['dungeon-items'])
+    #     keysanityPatches(patcher, settings['dungeon-items'])
 
     # Changes the string "PFXTiltShiftParam" that is used in postprocess.bfsha shader file
     # This new string can be anything that isn't found in the shader
@@ -79,18 +76,24 @@ def optionalPatches(patcher: Patcher, settings: dict, rand_state: tuple):
     if settings['nice-rod']:
         patcher.addPatch(0xd51698, 'cmp x19, #0x10')
 
-    # allow stealing without the sword
-    # ignores sword check and jumps to the code that checks which way the shopkeeper is facing
-    if settings['always-steal']:
+    # ignores sword check and either executes checking shopkeeper direction, or preventing stealing outright
+    if settings['stealing'] == 'always':
         patcher.addPatch(0xa4a8f0, 'b +0x20')
-
-    # prevent stealing no matter what
-    # ignores sword check and jumps to the code that prevents stealing
-    if settings['never-steal']:
+    elif settings['stealing'] == 'never':
         patcher.addPatch(0xa4a8f0, 'b +0x4')
+    
+    # commented out for now, can implement ignoring shopkeeper direction, but I'd like this setting to match LADXR
+    # elif settings['stealing'] == 'always':
+    #     patcher.addPatch(0xa4a8f0, 'b +0x64')
+
+    # makes Inventory.HasItem(44) always return True
+    # this allows us to remove needing to edit Book.bfevfl
+    # we already set a flag when collecting lens, so it's fine
+    if settings['free-book']:
+        patcher.addPatch(0x7e3004, 'mov w0, #0x1')
 
 
-def allowKeysanity(patcher: Patcher, dungeon_items: str):
+def keysanityPatches(patcher: Patcher, dungeon_items: str):
     """Overrides the current level value with the index to work outside of dungeons
     
     Not yet implemented, still needs a line of ASM to use the item_index instead of the current level in memory"""

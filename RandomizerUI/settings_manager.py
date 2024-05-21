@@ -48,6 +48,7 @@ BASE_OPTIONS = {
     'ohkoCheck': False,
     'lv1BeamCheck': False,
     'niceRodCheck': True,
+    'stealingComboBox': 0,
     'rupeesSpinBox': 0,
     'starting_gear': []
 }
@@ -397,6 +398,7 @@ def loadRandomizerSettings(window, seed):
         'OHKO': window.ui.ohkoCheck.isChecked(),
         'lv1-beam': window.ui.lv1BeamCheck.isChecked(),
         'nice-rod': window.ui.niceRodCheck.isChecked(),
+        'stealing': STEALING_REQUIREMENTS[window.ui.stealingComboBox.currentIndex()],
         'starting-items': window.starting_gear,
         'starting-rupees': window.ui.rupeesSpinBox.value(),
         'excluded-locations': window.excluded_checks

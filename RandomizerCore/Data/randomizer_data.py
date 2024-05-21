@@ -89,3 +89,5 @@ TRAP_SETTINGS = ('none', 'few', 'several', 'many')
 # DUNGEON_ITEM_SETTINGS = ('standard', 'keys', 'keys+mcb')
 
 PLATFORMS = ('console', 'emulator')
+
+STEALING_REQUIREMENTS = ('always', 'never', 'normal')
