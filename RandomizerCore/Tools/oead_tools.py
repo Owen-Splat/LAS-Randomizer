@@ -180,8 +180,8 @@ def createLayoutCondition(category, parameter, layoutId=-1):
 class SARC:
 	def __init__(self, sarcFile: str):
 		with open(sarcFile, 'rb') as f:
-			reader = oead.Sarc(f.read())
-		self.writer = oead.SarcWriter.from_sarc(reader)
+			self.reader = oead.Sarc(f.read())
+		self.writer = oead.SarcWriter.from_sarc(self.reader)
 		oead.SarcWriter.set_endianness(self.writer, oead.Endianness.Little) # Switch uses Little Endian
 	
 	def repack(self):
