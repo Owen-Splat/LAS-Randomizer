@@ -435,6 +435,13 @@ def insertItemWithoutAnimation(item, index):
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
         ]
 
+    ### Flippers needs a flag to enable water loading zones that were disabled to prevent rooster softlocks
+    if item == 'Flippers':
+        return [
+            ('EventFlags', 'SetFlag', {'symbol': 'FlippersFound', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
+        ]
+
     ### Trade Quest items
     if item == 'YoshiDoll':
         return [('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True})]
@@ -695,6 +702,14 @@ def insertDampeItemGet(flowchart, item, index, after=None):
     if item == 'Bottle' and index == 1:
         return event_tools.createActionChain(flowchart, None, [
             ('EventFlags', 'SetFlag', {'symbol': 'Bottle2Get', 'value': True}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
+        ], after)
+
+
+    ### Flippers needs a flag to enable water loading zones that were disabled to prevent rooster softlocks
+    if item == 'Flippers':
+        return event_tools.createActionChain(flowchart, None, [
+            ('EventFlags', 'SetFlag', {'symbol': 'FlippersFound', 'value': True}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
         ], after)
 
