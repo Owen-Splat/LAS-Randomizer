@@ -16,11 +16,13 @@ signal.signal(signal.SIGINT, interruptHandler)
 
 # Set app id so the custom taskbar icon will show while running from source
 if IS_RUNNING_FROM_SOURCE:
-    from ctypes import windll
     try:
+        from ctypes import windll
         windll.shell32.SetCurrentProcessExplicitAppUserModelID("Link's_Awakening_Switch_Randomizer")
     except AttributeError:
         pass # Ignore for versions of Windows before Windows 7
+    except ImportError:
+        if sys.platform != 'linux': raise
 
 build_icon = "icon.ico"
 if sys.platform == "darwin": # mac
