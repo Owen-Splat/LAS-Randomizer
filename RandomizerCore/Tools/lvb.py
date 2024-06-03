@@ -20,7 +20,7 @@ class Level:
 		# self.player_starts = []
 		# start_entry = [e for e in self.fixed_hash.entries if e.name == b'tagPlayerStart'][0]
 		# for entry in start_entry.data.entries:
-		# 	self.player_starts.append([entry.name, tagPlayerStart(entry.data)])
+		# 	self.player_starts.append(tagPlayerStart(entry.name, entry.data))
 
 		config_entry = [e for e in self.fixed_hash.entries if e.name == b'config'][0]
 		self.config = Config(config_entry.data)
@@ -38,7 +38,7 @@ class Level:
 			# if entry.name == b'tagPlayerStart':
 			# 	entry.data.entries = []
 			# 	for start in self.player_starts:
-			# 		entry.data.entries.append(Entry(0xFFF0, start[0], 0xFFFFFFFF, start[1].pack()))
+			# 		entry.data.entries.append(Entry(0xFFF0, start.name, 0xFFFFFFFF, start.pack()))
 			
 			if entry.name == b'config':
 				entry.data = self.config.pack()
@@ -132,9 +132,11 @@ class Zone:
 # This is a FixedHash child
 # There is an entry for every tagPlayerStart actor, with the entry name matching the first actor parameter
 # Each entry holds 16 bytes of data, the first 12 being 3 floats, which are the coordinate points of each actor
-# Last 4 bytes are not yet understood
+# Last 4 bytes are not yet understood, although they appear to be Y-rotation / 45.0
+# For the rotations that aren't divided evenly, there's a decent margin of error
 class tagPlayerStart:
-	def __init__(self, data):
+	def __init__(self, name, data):
+		self.name = name
 		self.pos_x = readFloat(data, 0x0, 4)
 		self.pos_y = readFloat(data, 0x4, 4)
 		self.pos_z = readFloat(data, 0x8, 4)
