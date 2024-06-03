@@ -29,15 +29,31 @@ BOSS_FLAGS = (
     'Lv3BossDemoClear',
     'Lv4BossDemoClear',
     'Lv5BossDemoClear',
-    'Lv6BossDemoClear',
-    'Lv7BossDemoClear',
-    'Lv8BossDemoClear',
-    'Lv9BossDemoClear',
     'Lv05BrokeWall1',
     'Lv05BrokeWall2',
     'Lv05BrokeWall3',
     'Lv05BrokeWall4',
     'Lv05BrokeFloor',
+    'Lv6BossDemoClear',
+    'Lv7BossDemoClear',
+    'Lv8BossDemoClear',
+    'Lv9BossDemoClear',
+    'ShadowBattle',
+    'LanmolaDemoClear',
+    'GrimCreeperDemoClear',
+    'StoneHinoxDemoClear',
+    'GiantBuzzBlobDemoClear',
+    'EvilOrbDemoClear',
+    'DeguArmosDemoClear',
+    'LanemoraDemoClear'
+)
+
+MESSAGE_FLAGS = (
+    # 'FindWarpPedestalFirst', # excluded because it forces you into the warp
+    'FindWarpPointFirst',
+    'ArrowGetNoBowMessageShown',
+    'MagicPowderFirstMessage',
+    'SmallKeyFirstGet'
 )
 
 
@@ -73,8 +89,9 @@ def makeStartChanges(flowchart, settings):
         player_start_event_flags.append('DoorOpen_Btl2_L05_04H')
         player_start_event_flags.append('DoorOpen_Btl3_L05_01F')
     
-    # if settings['quick-mode']: # set boss cutscenes to have already been watched
-    #     player_start_event_flags.extend(BOSS_FLAGS)
+    if settings['quick-mode']: # set boss cutscenes and popup messages to have already been seen
+        player_start_event_flags.extend(BOSS_FLAGS)
+        player_start_event_flags.extend(MESSAGE_FLAGS)
     
     player_start_event_flags = [('EventFlags', 'SetFlag', {'symbol': f, 'value': True}) for f in player_start_event_flags]
 
