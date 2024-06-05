@@ -204,7 +204,7 @@ def makeNpcChanges(npc, placements, settings):
 
 
 
-def makeNewNpcs(npc_sheet):
+def makeNewNpcs(npc_sheet, placements, item_defs):
     """We change the graphics for some items, so create new npcs to show the correct model when obtaining them"""
 
     dummy = copy.deepcopy(DUMMY_NPC)
@@ -212,7 +212,7 @@ def makeNewNpcs(npc_sheet):
     dummy['graphics']['path'] = 'ItemSmallKey.bfres'
     dummy['graphics']['model'] = 'SmallKey'
     npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
-    
+
     dummy['symbol'] = 'PatchYoshiDoll'
     dummy['graphics']['path'] = 'ItemYoshiDoll.bfres'
     dummy['graphics']['model'] = 'YoshiDoll'
@@ -222,14 +222,30 @@ def makeNewNpcs(npc_sheet):
     dummy['graphics']['path'] = 'ItemHoneycomb.bfres'
     dummy['graphics']['model'] = 'Honeycomb'
     npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
-    
-    # bombBag = copy.deepcopy(DUMMY_NPC)
+
+    item = placements['syrup']
+    dummy['symbol'] = 'SyrupPowder'
+    dummy['graphics']['path'] = item_defs[item]['model-path']
+    dummy['graphics']['model'] = item_defs[item]['model-name']
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
+    item = placements['walrus']
+    dummy['symbol'] = 'WalrusShell'
+    dummy['graphics']['path'] = item_defs[item]['model-path']
+    dummy['graphics']['model'] = item_defs[item]['model-name']
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
+    item = placements['bay-fisherman']
+    dummy['symbol'] = 'FishNecklace'
+    dummy['graphics']['path'] = item_defs[item]['model-path']
+    dummy['graphics']['model'] = item_defs[item]['model-name']
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
     # bombBag['symbol'] = 'ObjBombBag'
     # bombBag['graphics']['path'] = 'ObjBombBag.bfres'
     # bombBag['graphics']['model'] = 'BombBag'
     # npc_sheet['values'].append(oead_tools.dictToStruct(bombBag))
 
-    # arrowBag = copy.deepcopy(DUMMY_NPC)
     # arrowBag['symbol'] = 'ObjArrowBag'
     # arrowBag['graphics']['path'] = 'ObjArrowBag.bfres'
     # arrowBag['graphics']['model'] = 'ArrowBag'

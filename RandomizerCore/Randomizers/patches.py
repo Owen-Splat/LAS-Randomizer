@@ -26,6 +26,12 @@ def requiredPatches(patcher: Patcher):
     b -0x19C;
     """)
 
+    # Makes NPCs hold the updated random item models before giving it to the player
+    # This is done by changing the itemID of the model to a new Items.gsheet entry with a custom NpcKey
+    patcher.addPatch(0x9fa0f0, 'mov w4, #202') # bay-fisherman
+    patcher.addPatch(0xa40374, 'mov w3, #200') # syrup
+    patcher.addPatch(0xa534a4, 'mov w8, #201') # walrus
+
     # make songs, tunics, and capacity upgrades show the correct item model by making them go to the default case
     # default case means it will use its own npcKey in Items.gsheet rather than a different item's npcKey
     patcher.addPatch(0xd798c4, 'b +0x134')
