@@ -11,7 +11,7 @@
 ; Randomize the green zol chest trap into another enemy
 .settings randomize-enemies
     .offset 0xca92c0
-        mov w9, .global CHEST_ENEMY
+        mov w9, #.global CHEST_ENEMY
 
 
 ; Make all forms of damage substract 80 health so Link always die in 1 hit
