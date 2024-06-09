@@ -1,8 +1,7 @@
 from PySide6 import QtCore
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 
-from RandomizerCore.Tools.exefs_editor.patcher import Patcher
-from RandomizerCore.Tools import (bntx_tools, event_tools, leb, lvb, oead_tools)
+from RandomizerCore.Tools import (assemble, bntx_tools, event_tools, leb, lvb, oead_tools)
 from RandomizerCore.Randomizers import (chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
 heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches, player_start, rapids,
 seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap)
@@ -1877,11 +1876,7 @@ class ModsProcess(QtCore.QThread):
         
         base_bid = 'AE16F71E002AF8CB059A9A74C4D90F34BA984892'
         update_bid = '909E904AF78AC1B8DEEFE97AB2CCDB51968f0EC7'
-        
-        # initialize the patcher object and pass it to a separate script for cleanness
-        patcher = Patcher()
-        patches.requiredPatches(patcher)
-        patches.optionalPatches(patcher, self.settings, random.getstate())
+        patcher = assemble.createRandomizerPatches(random.getstate(), self.settings)
         
         # output the ASM as .ips for console, and .pchtxt for emulator
         if self.settings['platform'] == 'console':
