@@ -1718,7 +1718,7 @@ class ModsProcess(QtCore.QThread):
         Needed kills are left vanilla and potentially problematic enemies are excluded"""
 
         from RandomizerCore.Randomizers import enemies
-        from RandomizerCore.Data.randomizer_data import ENEMY_DATA
+        from RandomizerCore.randomizer_data import ENEMY_DATA
 
         land_ids = []
         air_ids = []

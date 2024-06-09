@@ -1,4 +1,4 @@
-from RandomizerCore.Data.randomizer_data import *
+from RandomizerCore.randomizer_data import *
 import yaml, base64, copy, random
 
 
