@@ -1883,9 +1883,13 @@ class ModsProcess(QtCore.QThread):
         patches.requiredPatches(patcher)
         patches.optionalPatches(patcher, self.settings, random.getstate())
         
-        # create an ips file with the versions build ids as the names
-        self.writeFile(f'{base_bid}.ips', patcher.generatePatch())
-        self.writeFile(f'{update_bid}.ips', patcher.generatePatch())
+        # output the ASM as .ips for console, and .pchtxt for emulator
+        if self.settings['platform'] == 'console':
+            self.writeFile(f'{base_bid}.ips', patcher.generateIPS32Patch())
+            self.writeFile(f'{update_bid}.ips', patcher.generateIPS32Patch())
+        else:
+            self.writeFile('1.0.0.pchtxt', patcher.generatePCHTXT(base_bid))
+            self.writeFile('1.0.1.pchtxt', patcher.generatePCHTXT(update_bid))
 
 
 

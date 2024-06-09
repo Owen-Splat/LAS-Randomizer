@@ -42,3 +42,15 @@ class Patcher:
         result += bytearray('EEOF', 'ascii')
 
         return result
+
+
+    def generatePCHTXT(self, buildId: str):
+        outText = f"@nsobid-{buildId}\n"
+        if self.shift != 0:
+            outText += f"@flag offset_shift {'0x{:x}'.format(self.nso_header_offset)}\n"
+        outText += "\n@enabled\n"
+        for patch in self.patches:
+            address, instruction = patch
+            outText += f"{address.hex().upper()} {instruction.hex().upper()}\n"
+        outBuffer = bytearray(outText, 'ascii')
+        return outBuffer
