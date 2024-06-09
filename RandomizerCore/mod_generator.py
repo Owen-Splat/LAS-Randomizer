@@ -1147,17 +1147,17 @@ class ModsProcess(QtCore.QThread):
                 # dummy['itemID'] = 132
                 # sheet['values'].append(oead_tools.dictToStruct(dummy))
             
-            dummy['symbol'] = 'SyrupPowder'
+            dummy['symbol'] = 'FishNecklace'
             dummy['itemID'] = 200
+            dummy['npcKey'] = 'FishNecklace'
+            sheet['values'].append(oead_tools.dictToStruct(dummy))
+            dummy['symbol'] = 'SyrupPowder'
+            dummy['itemID'] = 201
             dummy['npcKey'] = 'SyrupPowder'
             sheet['values'].append(oead_tools.dictToStruct(dummy))
             dummy['symbol'] = 'WalrusShell'
-            dummy['itemID'] = 201
-            dummy['npcKey'] = 'WalrusShell'
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'FishNecklace'
             dummy['itemID'] = 202
-            dummy['npcKey'] = 'FishNecklace'
+            dummy['npcKey'] = 'WalrusShell'
             sheet['values'].append(oead_tools.dictToStruct(dummy))
 
             self.writeFile('Items.gsheet', sheet)
