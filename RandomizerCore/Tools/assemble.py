@@ -33,13 +33,14 @@ def readASM(asm, asm_data, settings):
     for line in asm_lines:
         line = line.strip()
 
-        if line.startswith(';'):
+        if line.startswith(';* '):
             if len(comment_block) > 0:
                 comment_block += '\n'
             comment_block += line.replace(';', '//')
             continue
-
-        if len(line) == 0:
+        elif line.startswith('; '):
+            continue
+        elif len(line) == 0:
             if offset > 0 and len(asm_block) > 0 and condition_met:
                 patches.append((offset, asm_block, comment_block))
             condition_met = True
@@ -52,6 +53,7 @@ def readASM(asm, asm_data, settings):
             state = True
             if condition.startswith('!'):
                 state = False
+                condition = condition.split('!')[1]
             if condition not in settings:
                 condition_met = False
                 continue
@@ -78,6 +80,9 @@ def readASM(asm, asm_data, settings):
 
         line = line.strip()
         asm_block += line + '; '
+
+    if offset > 0 and len(asm_block) > 0:
+        patches.append(offset, asm_block, comment_block)
 
     return patches
 

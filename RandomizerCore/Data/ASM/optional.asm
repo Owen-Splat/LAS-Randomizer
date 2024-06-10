@@ -1,20 +1,20 @@
 ; This contains the patches required to make miscellaneous, optional settings work
 
 
-; Makes Inventory.HasItem(44) always return True
-; This lets the player read the egg path without having the Lens
+;* Read the egg path without Lens
+; This is done by making Inventory.HasItem(44) always return True
 .settings free-book
     .offset 0x7e3004
         mov w0, #1
 
 
-; Randomize the green zol chest trap into another enemy
+;* Randomize the EnemyZolGreen inside chests
 .settings randomize-enemies
     .offset 0xca92c0
         mov w9, #.global CHEST_ENEMY
 
 
-; Make all forms of damage substract 80 health so Link always die in 1 hit
+;* Make all forms of damage kill Link in 1 hit
 .settings OHKO
     .offset 0xd4c754 ; normal damage
         sub w22, w8, #80
@@ -26,13 +26,14 @@
         sub w8, w23, #80
 
 
-; Beam slash with either sword
+;* Beam slash with base sword
 .settings lv1-beam
     .offset 0xde1ba8
         ldrb w9, [x8, #0xa8]
 
 
-; Change the Magic Rod projectile instance limit from 3 to 16
+;* Rapid-fire Magic Rod
+; This is done by changing the Magic Rod projectile instance limit from 3 to 16
 .settings nice-rod
     .offset 0xd51698
         cmp x19, #16

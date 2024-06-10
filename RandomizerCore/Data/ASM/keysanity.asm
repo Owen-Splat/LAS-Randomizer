@@ -1,11 +1,13 @@
 ; This contains patches required for keysanity to work
 
 
+;* Allows using the item index to determine the dungeon the item goes to
 ; Replaces the variable holding the current level value with the item index
 ; This makes the dungeon items go to the dungeon that corresponds to the item index
 ; NOT WRITTEN YET BECAUSE IT NEEDS TO ONLY DO THIS IF YOU'RE NOT IN A DAMPE DUNGEON
 
 
+;* Allows dungeon items to be obtained outside of dungeons
 ; For dungeon items, compare the item count instead of current level/item index
 ; This lets it work outside of dungeons as well as supporting item indexes of -1
 .offset 0x8d0cf4 ; SmallKey
