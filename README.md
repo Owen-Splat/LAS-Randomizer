@@ -28,7 +28,8 @@ https://discord.com/invite/rfBSCUfzj8
 - Glan: Created the original early builds of the randomizer found here: https://github.com/la-switch/LAS-Randomizer
 - j_im: Created the original tracker for the randomizer
 - Br00ty: Maintains and updates the tracker for newer randomizer versions
-- ProfessorLaw: Additional programming (Randomizer Title Screen)
+- ProfessorLaw: Additional programming
+- theboy181: Blur removal patch
 
 ### Special Thanks:
 - To everyone who has reported bugs or given feedback and suggestions. This randomizer would not be where it is today without our community.
