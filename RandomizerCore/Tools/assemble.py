@@ -92,7 +92,7 @@ def readASM(asm, asm_data, settings):
         asm_block += line + '; '
 
     if offset > 0 and len(asm_block) > 0:
-        patches.append(offset, asm_block, comment_block)
+        patches.append((offset, asm_block, comment_block))
 
     return patches
 
