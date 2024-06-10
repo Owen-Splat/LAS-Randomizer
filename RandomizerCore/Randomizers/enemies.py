@@ -1,5 +1,5 @@
 import random
-from RandomizerCore.Data.randomizer_data import ENEMY_DATA
+from RandomizerCore.randomizer_data import ENEMY_DATA
 
 
 
