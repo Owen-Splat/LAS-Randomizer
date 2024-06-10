@@ -1,5 +1,5 @@
 from RandomizerCore.Tools.exefs_editor.patcher import Patcher
-from RandomizerCore.Paths.randomizer_paths import ASM_PATH
+from RandomizerCore.Paths.randomizer_paths import ASM_PATH, IS_RUNNING_FROM_SOURCE
 import os, random
 
 
@@ -13,7 +13,11 @@ def createRandomizerPatches(rand_state: tuple, settings: dict):
         for patch in patches:
             address, instruction, comment = patch
             if instruction.startswith('.string'):
-                patcher.replaceString(address, instruction.split('.string ')[1], comment)
+                instruction = instruction.split('.string ')[1]
+                instruction = instruction.split('; ')[0]
+                print('reached!')
+                print(instruction)
+                patcher.replaceString(address, instruction, comment)
             else:
                 patcher.addPatch(address, instruction, comment)
     
@@ -25,7 +29,7 @@ def readASM(asm, asm_data, settings):
         asm_lines = f.read().splitlines()
 
     patches = []
-    offset = 0x0
+    offset = 0
     asm_block = ''
     comment_block = ''
     condition_met = True
@@ -38,7 +42,7 @@ def readASM(asm, asm_data, settings):
             if len(comment_block) > 0:
                 comment_block += '\n'
             comment_block += line.replace(';*', '//')
-        if line.startswith('; '):
+        if line.startswith(';'):
             continue
 
         # add the patch if the line is blank, reset data and skip
@@ -49,7 +53,13 @@ def readASM(asm, asm_data, settings):
             condition_met = True
             asm_block = ''
             comment_block = ''
+            offset = 0
             continue
+
+        # strip any mid-line comments
+        if ';' in line:
+            line = line.split(';')[0]
+            line = line.strip()
 
         # parse condition
         if line.startswith('.settings'):
@@ -77,10 +87,6 @@ def readASM(asm, asm_data, settings):
             offset = int(line.split(' ')[1][2:], 16)
             continue
 
-        # strip any mid-line comments
-        if ';' in line:
-            line = line.split(';')[0]
-
         # replace "".global DATA" with DATA value
         if '.global' in line:
             line_data = line.split('.global ')
@@ -93,6 +99,13 @@ def readASM(asm, asm_data, settings):
 
     if offset > 0 and len(asm_block) > 0:
         patches.append((offset, asm_block, comment_block))
+
+    if IS_RUNNING_FROM_SOURCE:
+        print(asm)
+        for patch in patches:
+            print(patch[2])
+            print(patch[1])
+            print('')
 
     return patches
 
