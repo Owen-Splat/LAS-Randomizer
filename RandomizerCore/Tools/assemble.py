@@ -7,7 +7,7 @@ def createRandomizerPatches(rand_state: tuple, settings: dict):
     asm_data = preSetup(rand_state, settings)
     patcher = Patcher()
 
-    asm_files = [f for f in os.listdir(ASM_PATH) if f.endswith('.asm') and f != 'keysanity.asm']
+    asm_files = [f for f in os.listdir(ASM_PATH) if f.endswith('.asm')]
     for asm in asm_files:
         patches = readASM(asm, asm_data, settings)
         for patch in patches:
