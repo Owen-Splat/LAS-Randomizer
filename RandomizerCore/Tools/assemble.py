@@ -33,10 +33,10 @@ def readASM(asm, asm_data, settings):
     for line in asm_lines:
         line = line.strip()
 
-        if line.startswith(';* '):
+        if line.startswith(';*'):
             if len(comment_block) > 0:
                 comment_block += '\n'
-            comment_block += line.replace(';', '//')
+            comment_block += line.replace(';*', '//')
             continue
         elif line.startswith('; '):
             continue
