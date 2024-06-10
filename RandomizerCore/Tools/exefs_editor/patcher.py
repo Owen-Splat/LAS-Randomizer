@@ -48,7 +48,6 @@ class Patcher:
         outText = f"@nsobid-{buildId}\n"
         if self.nso_header_offset != 0:
             outText += f"@flag offset_shift {'0x{:x}'.format(self.nso_header_offset)}\n"
-        # outText += "\n@enabled\n"
         for patch in self.patches:
             address, instruction, comment = patch
             if len(comment) > 0:

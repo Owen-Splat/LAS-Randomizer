@@ -33,14 +33,17 @@ def readASM(asm, asm_data, settings):
     for line in asm_lines:
         line = line.strip()
 
+        # store pchtxt patch titles, skip over comments
         if line.startswith(';*'):
             if len(comment_block) > 0:
                 comment_block += '\n'
             comment_block += line.replace(';*', '//')
+        if line.startswith('; '):
             continue
-        elif line.startswith('; '):
-            continue
-        elif len(line) == 0:
+
+        # add the patch if the line is blank, reset data and skip
+        # reset condition & comment block, skip
+        if len(line) == 0:
             if offset > 0 and len(asm_block) > 0 and condition_met:
                 patches.append((offset, asm_block, comment_block))
             condition_met = True
@@ -48,6 +51,7 @@ def readASM(asm, asm_data, settings):
             comment_block = ''
             continue
 
+        # parse condition
         if line.startswith('.settings'):
             condition = line.split(' ')[1]
             state = True
@@ -56,13 +60,15 @@ def readASM(asm, asm_data, settings):
                 condition = condition.split('!')[1]
             if condition not in settings:
                 condition_met = False
-                continue
-            condition_met = True if settings[condition] == state else False
+            else:
+                condition_met = True if settings[condition] == state else False
             continue
 
+        # skip lines if the condition is not met (until blank line which resets the condition)
         if not condition_met:
             continue
 
+        # add patch if there's still any, reset data and store new offset
         if line.startswith('.offset'):
             if offset > 0 and len(asm_block) > 0:
                 patches.append((offset, asm_block, comment_block))
@@ -71,13 +77,17 @@ def readASM(asm, asm_data, settings):
             offset = int(line.split(' ')[1][2:], 16)
             continue
 
+        # strip any mid-line comments
         if ';' in line:
             line = line.split(';')[0]
+
+        # replace "".global DATA" with DATA value
         if '.global' in line:
             line_data = line.split('.global ')
             needed_data = asm_data[line_data[1]]
             line = line_data[0] + str(needed_data)
 
+        # strip line of any remaining whitespace, add multi-line asm separator
         line = line.strip()
         asm_block += line + '; '
 
@@ -91,10 +101,12 @@ def preSetup(rand_state, settings):
     random.setstate(rand_state)
     asm_data = {}
 
+    # store the actor ID of the randomized chest enemy
     if settings['randomize-enemies']:
         from RandomizerCore.randomizer_data import ENEMY_DATA
         asm_data['CHEST_ENEMY'] = random.choice(ENEMY_DATA['Chest_Enemies'])
 
+    # since the patches are written last, we can just change the stealing setting to a boolean
     if settings['stealing'] == 'always':
         settings['stealing'] = True
     elif settings['stealing'] == 'never':
