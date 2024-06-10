@@ -25,6 +25,6 @@
 ;* Removes the blur around the edge of the screen [theboy181]
 ; Changes the string "PFXTiltShiftParam" that is used in postprocess.bfsha shader file
 ; This new string can be anything that isn't found in the shader
-.settings blur-removal
+.settings blur-removal [theboy181]
     .offset 0x16cbd73
         .string NoTiltShift
