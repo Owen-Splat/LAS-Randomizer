@@ -1,1 +1,1 @@
-*.asm linguist-language=Assembly
+RandomizerCore/ASM/required.asm -linguist-detectable
