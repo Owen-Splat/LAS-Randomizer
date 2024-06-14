@@ -28,8 +28,8 @@ def readASM(asm, asm_data, settings):
 
     patches = []
     offset = 0
-    asm_block = ''
-    comment_block = ''
+    instruction = ''
+    patch_info = ''
     condition_met = True
 
     for line in asm_lines:
@@ -37,9 +37,9 @@ def readASM(asm, asm_data, settings):
 
         # store pchtxt patch titles, skip over comments
         if line.startswith(';*'):
-            if len(comment_block) > 0:
-                comment_block += '\n'
-            comment_block += line.replace(';*', '//')
+            if len(patch_info) > 0:
+                patch_info += '\n'
+            patch_info += line.replace(';*', '//')
             continue
         elif line.startswith('; '):
             continue
@@ -60,11 +60,11 @@ def readASM(asm, asm_data, settings):
         # add the patch if the line is blank, reset data and skip
         # reset condition & comment block, skip
         if len(line) == 0:
-            if offset > 0 and len(asm_block) > 0 and condition_met:
-                patches.append((offset, asm_block, comment_block))
+            if offset > 0 and len(instruction) > 0 and condition_met:
+                patches.append((offset, instruction, patch_info))
             condition_met = True
-            asm_block = ''
-            comment_block = ''
+            instruction = ''
+            patch_info = ''
             offset = 0
             continue
 
@@ -87,10 +87,10 @@ def readASM(asm, asm_data, settings):
 
         # add patch if there's still any, reset data and store new offset
         if line.startswith('.offset'):
-            if offset > 0 and len(asm_block) > 0:
-                patches.append((offset, asm_block, comment_block))
-                asm_block = ''
-                comment_block = ''
+            if offset > 0 and len(instruction) > 0:
+                patches.append((offset, instruction, patch_info))
+                instruction = ''
+                patch_info = ''
             offset = int(line.split(' ')[1][2:], 16)
             continue
 
@@ -106,10 +106,10 @@ def readASM(asm, asm_data, settings):
 
         # strip line of any remaining whitespace, add multi-line asm separator
         line = line.strip()
-        asm_block += line + '; '
+        instruction += line + '; '
 
-    if offset > 0 and len(asm_block) > 0:
-        patches.append((offset, asm_block, comment_block))
+    if offset > 0 and len(instruction) > 0:
+        patches.append((offset, instruction, patch_info))
 
     if IS_RUNNING_FROM_SOURCE:
         for patch in patches:
