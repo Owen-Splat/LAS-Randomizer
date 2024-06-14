@@ -1,7 +1,8 @@
 from PySide6 import QtCore
+from RandomizerCore.ASM import assemble
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 
-from RandomizerCore.Tools import (assemble, bntx_tools, event_tools, leb, lvb, oead_tools)
+from RandomizerCore.Tools import (bntx_tools, event_tools, leb, lvb, oead_tools)
 from RandomizerCore.Randomizers import (chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
 heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, player_start, rapids,
 seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap)
