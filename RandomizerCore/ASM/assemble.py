@@ -94,6 +94,16 @@ def readASM(asm, asm_data, settings):
             offset = int(line.split(' ')[1][2:], 16)
             continue
 
+        # handle branch offsets
+        if line.startswith(('b ', 'b.eq', 'b.ne')):
+            line_data = line.split(' ')
+            branch_offset = int(line_data[1][2:], 16)
+            diff = branch_offset - offset
+            symbol = '+'
+            if diff < 0:
+                symbol = '' # if the diff is negative, it already has a - in front
+            line = f"{line_data[0]} {symbol}{hex(diff)}"
+
         # strip line of any remaining whitespace, add multi-line asm separator
         line = line.strip()
         asm_block += line + '; '
@@ -105,7 +115,7 @@ def readASM(asm, asm_data, settings):
         for patch in patches:
             if len(patch[2]) > 0:
                 print('\n' + patch[2])
-            print(patch[0])
+            print(hex(patch[0]))
             print(patch[1])
 
     return patches

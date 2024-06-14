@@ -23,7 +23,7 @@ ldr x8, [x8, #0x368]
 ldr w9, [x8, #0xa8]
 and w9, w9, 0xFFFFBFFF
 str w9, [x8, #0xa8]
-b -0x19C
+b 0x7e1dd0
 
 
 ;* Rewrite FlowControl::CompareInt event to check if the values are equal

@@ -15,11 +15,11 @@ mov w8, #202
 ; This is done by making them go to the default itemID case
 ; Default case means it will use its own npcKey in Items.gsheet rather than a different item's npcKey
 .offset 0xd798c4
-b +0x134
+b 0xd799f8
 .offset 0xd79814
-b +0x1e4
+b 0xd799f8
 .offset 0xd79804
-b +0x1f4
+b 0xd799f8
 
 
 ;* Removes the blur around the edge of the screen [theboy181]

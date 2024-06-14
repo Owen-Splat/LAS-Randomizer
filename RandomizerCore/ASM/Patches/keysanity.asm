@@ -14,27 +14,27 @@
 .offset 0x8d0cf4 ; SmallKey
 cmp w8, #-1
 .offset 0x8d0cf8
-b.eq +8
+b.eq 0x8d0d00
 mov w8, #8
 .offset 0x8d0e58 ; NightmareKey
 cmp w8, #-1
 .offset 0x8d0e5c
-b.eq +8
+b.eq 0x8d0e64
 mov w8, #8
 
 ;settings keys+mcb
 .offset 0x8d0e04 ; Compass
 cmp w8, #-1
 .offset 0x8d0e08
-b.eq +8
+b.eq 0x8d0e10
 mov w8, #8
 .offset 0x8d1278 ; DungeonMap
 cmp w8, #-1
 .offset 0x8d127c
-b.eq +8
+b.eq 0x8d1284
 mov w8, #8
 .offset 0x8d1478 ; StoneBeak
 cmp w8, #-1
 .offset 0x8d147c
-b.eq +8
+b.eq 0x8d1484
 mov w8, #8
