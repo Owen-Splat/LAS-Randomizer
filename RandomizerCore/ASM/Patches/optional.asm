@@ -37,3 +37,10 @@ ldrb w9, [x8, #0xa8]
 ;settings nice-rod
 .offset 0xd51698
 cmp x19, #16
+
+
+;* Rapid-fire Bombs
+; This is done by changing a boolean value to always be True
+;settings nice-bombs
+.offset 0xd52958
+mov w8, #1
