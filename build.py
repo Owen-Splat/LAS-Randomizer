@@ -1,6 +1,6 @@
 import os
 import shutil
-from RandomizerCore.Data.randomizer_data import VERSION
+from RandomizerCore.randomizer_data import VERSION
 
 base_name = f"LAS Randomizer v{VERSION}"
 build_path = os.path.join(".", "build")

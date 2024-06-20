@@ -26,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>760</width>
-      <height>491</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -371,7 +371,7 @@
         <x>10</x>
         <y>104</y>
         <width>733</width>
-        <height>350</height>
+        <height>365</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -1256,6 +1256,68 @@
           <bool>true</bool>
          </property>
         </widget>
+        <widget class="QCheckBox" name="openMabeCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>549</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Opens all Mabe Village exits (Beach, Plains, Woods)</string>
+         </property>
+         <property name="text">
+          <string>Open Mabe</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="quickModeCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>549</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Sets all boss cutscenes and one-time messages to have already been seen</string>
+         </property>
+         <property name="text">
+          <string>Quick Mode</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
@@ -1426,25 +1488,6 @@
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="farmingCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>104</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Reduces time spent grinding money and resources</string>
-         </property>
-         <property name="text">
-          <string>Reduced Farming</string>
-         </property>
-        </widget>
         <widget class="QCheckBox" name="bookCheck">
          <property name="geometry">
           <rect>
@@ -1462,6 +1505,28 @@
          </property>
          <property name="text">
           <string>Free Book</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="extendedConsumableCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>104</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Allows grass to drop arrows, bombs and powder (if owned)</string>
+         </property>
+         <property name="text">
+          <string>Extra consumable drop</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </widget>
@@ -1594,7 +1659,7 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>24</y>
+           <y>64</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1609,7 +1674,7 @@
         <widget class="QCheckBox" name="lv1BeamCheck">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>189</x>
            <y>64</y>
            <width>151</width>
            <height>21</height>
@@ -1636,6 +1701,75 @@
          </property>
          <property name="text">
           <string>Nice Magic Rod</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="blurCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Removes the blur around the edges of the screen</string>
+         </property>
+         <property name="text">
+          <string>Blur Removal</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="stealingComboBox">
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>24</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This controls the requirement for stealing from the shop&lt;br&gt;&lt;/br&gt;Normal means that Sword is required</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>2</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Stealing: Always</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Stealing: Never</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Stealing: Normal</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QCheckBox" name="niceBombsCheck">
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Allows you to rapidly place down bombs with no cooldown</string>
+         </property>
+         <property name="text">
+          <string>Nice Bombs</string>
          </property>
         </widget>
        </widget>
@@ -2559,9 +2693,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>509</y>
+      <y>519</y>
       <width>711</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="sizePolicy">

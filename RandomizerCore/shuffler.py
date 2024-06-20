@@ -419,7 +419,10 @@ class ItemShuffler(QtCore.QThread):
         forceVanilla : list
             A list of strings as location names, which should be forced to hold the same item they do in the normal game.
             forceJunk takes priority over forceVanilla
-        
+        settings : dict
+            The settings that will be checked while making the placements
+        dungeon_entrances : dict
+            The new dungeon entrances that will be checked while making the placements
         """
         
         verbose = False # change this to True to print item placements to help debug
@@ -441,8 +444,7 @@ class ItemShuffler(QtCore.QThread):
         locations = []
         placements = {}
         
-        vanilla_seashells = 0 # Keep track of how many seashells were forced into their vanilla locations. This is important for ensuring there is enough room to place the random ones.
-        vanilla_leaves = 0 # Keep track of how many golden leaves were forced into their vanilla locations. This is important for ensuring there is enough room to place the random ones
+        vanilla_seashells = 0 # Keep track of how many seashells were forced into their vanilla locations
 
         placements['settings'] = settings
         placements['force-junk'] = force_junk
@@ -451,7 +453,12 @@ class ItemShuffler(QtCore.QThread):
         placements['dungeon-entrances'] = dungeon_entrances
         placements['indexes'] = {}
         
-        indexes_available = {'seashell': list(range(50)), 'heart-piece': list(range(32)), 'heart-container': list(range(9)), 'bottle': list(range(3)), 'golden-leaf': list(range(5)), 'chamber-stone': [3, 4, 8, 10, 11, 12, 13, 20, 21, 22, 23, 24, 25, 26]}
+        indexes_available = {'seashell': list(range(50)),
+                             'heart-piece': list(range(32)),
+                             'heart-container': list(range(9)),
+                             'bottle': list(range(3)),
+                             'golden-leaf': list(range(5)),
+                             'chamber-stone': [3, 4, 8, 10, 11, 12, 13, 20, 21, 22, 23, 24, 25, 26]}
         
         for key in self.logic_defs:
             if not self.thread_active:
@@ -520,19 +527,16 @@ class ItemShuffler(QtCore.QThread):
             # Place the defined vanilla content
             placements[loc] = self.logic_defs[loc]['content']
             
-            items.remove(self.logic_defs[loc]['content'])
-            access = self.removeAccess(access, self.logic_defs[loc]['content'])
+            items.remove(placements[loc])
+            access = self.removeAccess(access, placements[loc])
             locations.remove(loc)
-            
-            if self.logic_defs[loc]['content'] == 'seashell':
-                vanilla_seashells += 1
-            if self.logic_defs[loc]['content'] == 'golden-leaf':
-                vanilla_leaves += 1
-            
+                        
             # If the item is one that needs an index, assign it its vanilla item index and remove that from the available indexes
-            if self.logic_defs[loc]['content'] in indexes_available:
+            if placements[loc] in indexes_available:
+                if placements[loc] == 'seashell':
+                    vanilla_seashells += 1
                 placements['indexes'][loc] = self.logic_defs[loc]['index']
-                indexes_available[self.logic_defs[loc]['content']].remove(self.logic_defs[loc]['index'])
+                indexes_available[placements[loc]].remove(placements['indexes'][loc])
         
         # Next, assign dungeon items into their own dungeons
         # Some may have been placed already because of forceVanilla so we need to factor that in
@@ -615,25 +619,17 @@ class ItemShuffler(QtCore.QThread):
             if verbose: print(chests[0])
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
-        
-        # # testing stuff on Tarin
-        # placements['tarin'] = 'hydro-trap'
-        # if placements['tarin'] != None and self.thread_active:
-        #     items.pop(items.index(placements['tarin']))
-        #     locations.remove('tarin')
-        
+                
         # Keep track of where we placed items. this is necessary to undo placements if we get stuck
-        # tarin can have indexed items in no logic, or in the future with entrance rando, so add him to the placement tracker
         placement_tracker = []
 
-        # Next, place an item on Tarin. Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
+        # Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
         # Only do this if Tarin has no item placed, i.e. not forced to be vanilla
         if placements['tarin'] == None and self.thread_active:
             success = False
             while not success and self.thread_active:
                 placements['tarin'] = items[0]
                 success = (self.canReachLocation('can-shop', placements, settings_access, logic)
-                        # make Tarin check if you can reach whatever region is over tail-cave, since it could be another dungeon
                         or self.canReachLocation(dungeon_entrances['tail-cave'], placements, settings_access, logic)
                         or self.canReachLocation('beach', placements, settings_access, logic)
                         # or self.canReachLocation('mamasha', placements, settings_access, logic)
@@ -641,15 +637,13 @@ class ItemShuffler(QtCore.QThread):
                         or self.canReachLocation('marin', placements, settings_access, logic)
                         or self.canReachLocation('trendy', placements, settings_access, logic))
                 
+                if items[0] == "boots":
+                    success = False
+                
                 if not success:
                     items.insert(items.index('seashell'), items[0])
                     items.pop(0)
-            
-            # If the item is one that needs an index, give it the next available one
-            if placements['tarin'] in indexes_available:
-                if placements['tarin'] != 'golden-leaf':
-                    placements['indexes'][locations[0]] = indexes_available[placements['tarin']].pop(0)
-            
+                        
             placement_tracker.append('tarin')
             
             if verbose: print(items[0]+' -> tarin')
@@ -659,9 +653,6 @@ class ItemShuffler(QtCore.QThread):
             self.progress_value += 1 # update progress bar
             self.progress_update.emit(self.progress_value)
         
-        # # Keep track of where we placed items. this is necessary to undo placements if we get stuck
-        # placement_tracker = []
-
         # Do a very similar process for all other items
         while items and self.thread_active:
             item = items[0]
@@ -676,15 +667,16 @@ class ItemShuffler(QtCore.QThread):
                 access = self.removeAccess(access, item)
                 
                 # Check for item type restrictions, i.e. songs can't be standing items
-                if item in ('song-ballad', 'song-mambo', 'song-soul', 'bomb-capacity', 'arrow-capacity', 'powder-capacity', 'red-tunic', 'blue-tunic') and self.logic_defs[locations[0]]['subtype'] in ('standing', 'hidden', 'dig', 'drop', 'underwater', 'shop', 'enemy'):
+                subtype = self.logic_defs[locations[0]]['subtype']
+                if item in ('red-tunic', 'blue-tunic') and subtype in ('standing', 'hidden', 'dig', 'drop', 'underwater', 'shop', 'enemy'):
                     valid_placement = False
-                elif item in self.force_chests and self.logic_defs[locations[0]]['subtype'] != 'chest':
+                elif item in self.force_chests and subtype != 'chest':
                     valid_placement = False
                 # special case where if the actual check on the 5 chests room is a zol-trap, nothing happens with the 5th chest
                 elif item == 'zol-trap' and locations[0] == 'taltal-5-chest-puzzle':
                     valid_placement = False
                 elif self.item_defs[item]['type'] in ('important', 'trade', 'seashell'):
-                    # Check if it's reachable there. We only need to do this check for important items! good and junk items are never needed in logic
+                    # Check if it's reachable. We only need to do this check for important items!
                     valid_placement = self.canReachLocation(locations[0], placements, access, logic)
                 else:
                     valid_placement = True
@@ -712,13 +704,7 @@ class ItemShuffler(QtCore.QThread):
                 # After we successfully made a valid placement, remove the item and location from consideration
                 if verbose: print(locations[0])
                 
-                placed_item = items.pop(0)
-                
-                # If the item is one that needs an index, give it the next available one
-                if placed_item in indexes_available:
-                    if placed_item != 'golden-leaf':
-                        placements['indexes'][locations[0]] = indexes_available[placed_item].pop(0)
-                
+                items.pop(0)
                 placement_tracker.append(locations.pop(0))
                 
                 # If we placed the last important item (so that afterward we start placing seashells), we want to ensure there's enough available locations to place a number of seashells required.
@@ -745,12 +731,10 @@ class ItemShuffler(QtCore.QThread):
                 self.progress_value += 1 # update progress bar
                 self.progress_update.emit(self.progress_value)
         
-
-        # Now assign indexes to golden leaves since they were probably moved from seashells
-        leaves = [p for p in placement_tracker if placements[p] == 'golden-leaf']
-        for leaf in leaves:
-            placements['indexes'][leaf] = indexes_available['golden-leaf'].pop(0)
-            # print(leaf, placements['indexes'][leaf])
+        # Now assign all non-vanilla indexes
+        locs = [l for l in placement_tracker if placements[l] in indexes_available]
+        for loc in locs:
+            placements['indexes'][loc] = indexes_available[placements[loc]].pop(0)
         
         # dungeon_indexes = [k for k in placement_tracker if placements[k].startswith(('compass', 'map', 'stone', 'key', 'nightmare'))]
         # for key in dungeon_indexes:

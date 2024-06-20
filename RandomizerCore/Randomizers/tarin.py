@@ -9,11 +9,11 @@ def makeEventChanges(flowchart, placements, settings, item_defs):
     item_index = placements['indexes']['tarin'] if 'tarin' in placements['indexes'] else -1
     item_get.insertItemGetAnimation(flowchart, item_defs[placements['tarin']]['item-key'], item_index, 'Event52', 'Event31')
 
-    # If reduce-farming is on, and Tarin has boots, also give 20 bombs if Tarin has boots
-    if placements['tarin'] == 'boots' and settings['reduce-farming']:
-        event_tools.createActionChain(flowchart, 'Event31', [
-            ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 30, 'index': -1, 'autoEquip': False})
-        ], 'Event2')
+    # # If reduce-farming is on, and Tarin has boots, also give 20 bombs if Tarin has boots
+    # if placements['tarin'] == 'boots' and settings['reduce-farming']:
+    #     event_tools.createActionChain(flowchart, 'Event31', [
+    #         ('Inventory', 'AddItemByKey', {'itemKey': 'Bomb', 'count': 30, 'index': -1, 'autoEquip': False})
+    #     ], 'Event2')
 
     event0 = event_tools.findEvent(flowchart, 'Event0')
     event78 = event_tools.findEvent(flowchart, 'Event78')

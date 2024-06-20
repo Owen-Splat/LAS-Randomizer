@@ -1,4 +1,5 @@
 from RandomizerCore.Tools.fixed_hash import *
+from RandomizerCore.Randomizers.data import MODEL_SIZES
 import re
 
 
@@ -113,38 +114,6 @@ class Actor:
 
 
 
-class Level:
-	def __init__(self, data):
-		self.fixed_hash = FixedHash(data)
-		self.config = LevelConfig([e for e in self.fixed_hash.entries if e.name == b'config'][0].data)
-
-
-
-class LevelConfig:
-	def __init__(self, data):
-		self.data = data
-		self.attr_1 = readBytes(data, 0x0, 1)
-		self.attr_2 = readBytes(data, 0x1, 1)
-		self.attr_3 = readBytes(data, 0x2, 1)
-		self.attr_4 = readBytes(data, 0x3, 1)
-		self.attr_5 = readBytes(data, 0x4, 1)
-		self.attr_6 = readBytes(data, 0x5, 1)
-		self.padding = b'\xFF'
-	
-	def pack(self):
-		packed = b''
-		packed += self.attr_1.to_bytes(1, 'little')
-		packed += self.attr_2.to_bytes(1, 'little')
-		packed += self.attr_3.to_bytes(1, 'little')
-		packed += self.attr_4.to_bytes(1, 'little')
-		packed += self.attr_5.to_bytes(1, 'little')
-		packed += self.attr_6.to_bytes(1, 'little')
-		packed += self.padding
-
-		return packed
-
-
-
 class Room:
 	def __init__(self, data, edit_grid=False):
 		self.fixed_hash = FixedHash(data)
@@ -185,6 +154,11 @@ class Room:
 			chest.scaleX = chest_size
 			chest.scaleY = chest_size
 			chest.scaleZ = chest_size
+		
+		# if item_key == 'BowWow':
+		#     pass
+		# elif item_key == 'Rooster':
+		#     room_data.addChestRooster()
 	
 
 	def setSmallKeyParams(self, model_path, model_name, room, item_key, key_index=0):
@@ -202,6 +176,12 @@ class Room:
 				key.parameters[4] = bytes('true', 'utf-8')
 			else:
 				key.parameters[4] = bytes('false', 'utf-8')
+			
+			if model_name in MODEL_SIZES:
+				size = MODEL_SIZES[model_name]
+				key.scaleX = size
+				key.scaleY = size
+				key.scaleZ = size
 	
 
 	def setRupeeParams(self, model_path, model_name, entry_point, item_key, rup_index=0):
@@ -219,6 +199,12 @@ class Room:
 				rup.parameters[4] = bytes('true', 'utf-8')
 			else:
 				rup.parameters[4] = bytes('false', 'utf-8')
+			
+			if model_name in MODEL_SIZES:
+				size = MODEL_SIZES[model_name]
+				rup.scaleX = size
+				rup.scaleY = size
+				rup.scaleZ = size
 	
 
 	def setLoadingZoneTarget(self, new_destination, index=0):

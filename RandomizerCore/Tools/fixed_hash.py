@@ -83,7 +83,7 @@ class FixedHash:
 			if nodeIndex <= 0xFFED:
 				entryData = FixedHash(data, dataSectionOffset + entryDataOffset)
 				#print(data[dataSectionOffset + entryDataOffset : dataSectionOffset + entryDataOffset + 32])
-				pass
+				#pass
 			elif nodeIndex >= 0xFFF0:
 				dataSize = readBytes(data, dataSectionOffset + entryDataOffset, 8)
 				
@@ -139,16 +139,16 @@ class FixedHash:
 		result = b''
 		result += intro
 
-		if (len(result) + offset) % 8 != 0:
-			result += b'\x00\x00\x00\x00' # Pad with 4 null bytes if it's not at a multiple of 8
+		while (len(result) + offset) % 8 != 0:
+			result += b'\x00'
 		result += entriesSect
 
-		if (len(result) + offset) % 8 != 0:
-			result += b'\x00\x00\x00\x00'
+		while (len(result) + offset) % 8 != 0:
+			result += b'\x00'
 		result += entryOffsetsSect
 
-		if (len(result) + offset) % 8 != 0:
-			result += b'\x00\x00\x00\x00'
+		while (len(result) + offset) % 8 != 0:
+			result += b'\x00'
 		result += dataSect
 
 		while (len(result) + offset) % 4 != 0:

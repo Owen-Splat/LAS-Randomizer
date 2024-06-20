@@ -50,25 +50,44 @@ def findEntryPoint(flowchart, name):
 	return None
 
 
-def findActor(flowchart, name, subName=None):
-	"""Finds and returns an actor from a flowchart given a name and an optional subName as a string"""
+def findActor(flowchart, name, sub_name=''):
+	"""Finds and returns an actor from a flowchart given a name and an optional sub_name as a string
+	
+	If the actor does not exist, it is created and then returned"""
 
-	if subName != None:
-		act = evfl.ActorIdentifier(name, subName)
-	else:
-		act = evfl.ActorIdentifier(name)
-
-	return flowchart.find_actor(act)
+	identifier = evfl.ActorIdentifier(name, sub_name)
+	try:
+		return flowchart.find_actor(identifier)
+	except ValueError:
+		act = evfl.Actor()
+		act.identifier = evfl.ActorIdentifier(name, sub_name)
+		flowchart.actors.append(act)
+		return flowchart.find_actor(act.identifier)	
 
 
 def addActorAction(actor, action):
 	"""Appends an action to the actor in the flowchart"""
-	actor.actions.append(evfl.common.StringHolder(action))
+
+	has_action = False
+	for act in actor.actions:
+		if act.v == action:
+			has_action = True
+			break
+	if not has_action:
+		actor.actions.append(evfl.common.StringHolder(action))
 
 
-def addActorQuery(actor, action):
+def addActorQuery(actor, query):
 	"""Appends a query to an actor in the flowchart"""
-	actor.queries.append(evfl.common.StringHolder(action))
+
+	has_query = False
+	for que in actor.queries:
+		if que.v == query:
+			has_query = True
+			break
+	
+	if not has_query:
+		actor.queries.append(evfl.common.StringHolder(query))
 
 
 def addEntryPoint(flowchart, name):
@@ -184,6 +203,10 @@ def createProgressiveItemSwitch(flowchart, item1, item2, flag, before=None, afte
 def createActionEvent(flowchart, actor, action, params, nextev=None):
 	"""Creates a new action event. {actor} and {action} should be strings, {params} should be a dict 
 	{nextev} is the name of the next event"""
+
+	act = findActor(flowchart, actor)
+	addActorAction(act, action)
+	
 	nextEvent = findEvent(flowchart, nextev)
 
 	if '[' in actor:
@@ -215,6 +238,9 @@ def createSwitchEvent(flowchart, actor, query, params, cases):
 	"""Creates a new switch event and adds it to the flowchart 
 	{actor} and {query} should be strings, {params} should be a dict, {cases} is a dict if {int: event name}"""
 
+	act = findActor(flowchart, actor)
+	addActorQuery(act, query)
+
 	new = evfl.event.Event()
 	new.data = evfl.event.SwitchEvent()
 	new.data.actor = evfl.util.make_rindex(flowchart.find_actor(evfl.common.ActorIdentifier(actor)))
@@ -222,6 +248,9 @@ def createSwitchEvent(flowchart, actor, query, params, cases):
 	new.data.actor_query = evfl.util.make_rindex(new.data.actor.v.find_query(query))
 	new.data.actor_query.set_index(invertList(new.data.actor.v.queries))
 	new.data.params = evfl.container.Container()
+
+	if "value1" in params:
+		params["value1"] = evfl.common.Argument(params["value1"])
 	new.data.params.data = params
 
 	flowchart.add_event(new, idgen)
@@ -334,3 +363,7 @@ def addForkEventForks(flowchart, forkevent, forks):
 			forkEvents.append(fork)
 	
 	forkEvent.data.forks = forkEvents
+
+
+def setEventSong(flowchart, event_name, song):
+	findEvent(flowchart, event_name).data.params.data['label'] = song

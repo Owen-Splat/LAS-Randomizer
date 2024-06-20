@@ -1,6 +1,6 @@
 import sys
 from cx_Freeze import setup, Executable
-from RandomizerCore.Data.randomizer_data import VERSION
+from RandomizerCore.randomizer_data import VERSION
 
 build_exe_options = {"packages": ["os"], 
                     "excludes": ["tkinter", "unittest", "sqlite3", "numpy", "matplotlib", "zstandard"],

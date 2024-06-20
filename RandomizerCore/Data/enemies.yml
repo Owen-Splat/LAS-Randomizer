@@ -461,12 +461,14 @@ Chest_Enemies:
 
 # Rooms each with a list of actors to not modify. I made an old crappy level editor you can use to see the actors. Update soon maybe
 Excluded_Actors:
+# enemies needed for tricks
   Field_12P: [0] # armos
   Field_10G: [0] # villa skip pincer
-  Field_06I: [0] # kanalet crow
-  Field_06K: [0] # kanalet mad bomber
   Field_04B: [1] # bowwow skip like like
   Field_04I: [3] # ak skip boarblin
+# regular
+  Field_06I: [0] # kanalet crow
+  Field_06K: [0] # kanalet mad bomber
   KanaletCastle_01D: [0]
   KanaletCastle_02A: [0, 1, 2]
   Lv01TailCave_08B: [1, 2, 3, 4] # kill room but can reset

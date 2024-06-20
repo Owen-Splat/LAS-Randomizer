@@ -1,4 +1,4 @@
-# 0.301
+# 0.302
 
 # The randomizer will use whatever logic is in the same directory as the program
 # Updating the logic will overwrite the existing file, so if using custom logic, rename it before updating and manually add the changes
@@ -261,7 +261,7 @@ graveyard-cave:
   index: 9
   region: ghost-grave
   spoiler-region: koholint-prairie
-  condition-basic: (bombs & hookshot) | rooster
+  condition-basic: (bombs & hookshot & feather) | rooster
   condition-advanced: dash-jump | obstacle-skip
 ghost-house-pot:
   type: item
@@ -721,7 +721,7 @@ kanalet-south-cave:
   region: plains
   spoiler-region: ukuku-prairie
   condition-basic: rooster | (hookshot & (flippers | (ocarina & song-mambo)))
-  condition-advanced: hookshot & (feather | bombs)
+  condition-advanced: hookshot & feather
   condition-glitched: wasteland & feather & bracelet & (flippers | (ocarina & song-mambo))
   condition-hell: wasteland & feather & bracelet
 plains-rock-maze:
@@ -1918,7 +1918,7 @@ D6-wizzrobes-ledge:
   content: medicine
   region: face-shrine
   spoiler-region: face-shrine
-  condition-basic: D6-8D & bracelet:2 & kill-wizzrobe
+  condition-basic: D6-8D & bracelet:2 & kill-wizzrobe & feather
 D6-owl-statue-ledge:
   type: item
   subtype: dungeon-statue
@@ -2582,7 +2582,7 @@ armos-maze:
   condition-basic: bracelet & (river | animal-village | rapids)
 beach:
   type: region
-  condition-basic: mabe & (kill-urchin | shield | break-bush)
+  condition-basic: mabe & (open-mabe | kill-urchin | shield | break-bush)
 bottle-grotto:
   type: region
   condition-basic: swamp & (kill-flower | (bracelet & !classic-d2))
@@ -2643,7 +2643,7 @@ mr-write-house:
   condition-hell: mabe & swamp
 plains:
   type: region
-  condition-basic: (mabe & bracelet) | river | (wasteland & bracelet)
+  condition-basic: (mabe & (open-mabe | bracelet)) | river | (wasteland & bracelet)
   condition-hell: mabe & swamp & feather
 pothole:
   type: region
@@ -2711,7 +2711,7 @@ wasteland:
   condition-basic: (woods & (feather | bracelet | rooster | hookshot)) | (taltal-east-0 & (break-obstacle | rooster) & bracelet) | (heights & bracelet) | (swamp & bracelet) | (plains & bracelet)
 woods:
   type: region
-  condition-basic: (mabe & break-bush) | (swamp & break-bush) | (wasteland & (feather | bracelet | rooster | hookshot))
+  condition-basic: (mabe & (open-mabe | break-bush)) | (swamp & break-bush) | (wasteland & (feather | bracelet | rooster | hookshot))
 
 
 # Rooms

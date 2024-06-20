@@ -1,4 +1,3 @@
-from oead import Sarc, SarcWriter
 import oead
 
 
@@ -178,24 +177,12 @@ def createLayoutCondition(category, parameter, layoutId=-1):
 
 
 
-### SARC
-# read and return sarc file
-def readSarc(sarcFile):
-	with open(sarcFile, 'rb') as file:
-		arc = Sarc(file.read())
+class SARC:
+	def __init__(self, sarcFile: str):
+		with open(sarcFile, 'rb') as f:
+			self.reader = oead.Sarc(f.read())
+		self.writer = oead.SarcWriter.from_sarc(self.reader)
+		oead.SarcWriter.set_endianness(self.writer, oead.Endianness.Little) # Switch uses Little Endian
 	
-	return arc
-
-
-# create a SarcWriter to edit
-def makeSarcWriterFromSarc(sarcFile):
-	writer = SarcWriter.from_sarc(readSarc(sarcFile))
-	SarcWriter.set_endianness(writer, oead.Endianness.Little)
-
-	return writer
-
-
-# write sarc to new file
-def writeSarc(writer, output):
-	with open(output, 'wb') as f:
-		f.write(writer.write()[1])
+	def repack(self):
+		return self.writer.write()[1]

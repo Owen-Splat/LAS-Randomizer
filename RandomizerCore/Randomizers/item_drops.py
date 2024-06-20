@@ -6,7 +6,7 @@ import oead
 
 def makeDatasheetChanges(sheet, settings):
     """Iterates through all the values in the ItemDrop datasheet and makes changes"""
-    
+
     for i in range(len(sheet['values'])):
         
         if sheet['values'][i]['mKey'] == 'HeartContainer0':
@@ -20,31 +20,55 @@ def makeDatasheetChanges(sheet, settings):
             sheet['values'][i]['mLotTable'][0]['mType'] = ''
         
         if sheet['values'][i]['mKey'] == 'Bomb':
-            if settings['reduce-farming']:
-                sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
+            sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
         
         if sheet['values'][i]['mKey'] == 'MagicPowder':
-            if settings['reduce-farming']:
-                sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-        
-        if sheet['values'][i]['mKey'] == 'Arrow' and settings['reduce-farming']:
             sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-        if sheet['values'][i]['mKey'] == 'Grass' and settings['reduce-farming']:
-            sheet['values'][i]['mLotTable'][1]['mWeight'] = 18
-            sheet['values'][i]['mLotTable'][2]['mWeight'] = 3
-            sheet['values'][i]['mLotTable'][3]['mWeight'] = 71
+        
+        if sheet['values'][i]['mKey'] == 'Arrow':
+            sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
+
+        # Values will be different depending on extended consumable drop and reduce farming settings
+        if sheet['values'][i]['mKey'] == 'Grass':
+            heartWeight = sheet['values'][i]['mLotTable'][0]['mWeight']
+            rupee1Weight = sheet['values'][i]['mLotTable'][1]['mWeight']
+            rupee5Weight = sheet['values'][i]['mLotTable'][2]['mWeight']
+            nothingWeight = sheet['values'][i]['mLotTable'][3]['mWeight']
+
+            # Managing existing entries
+            rupee1Weight = 18
+            rupee5Weight = 3
+
+            if settings['extended-consumable-drop']:
+                nothingWeight = 56
+            else:
+                nothingWeight = 71
+
+            sheet['values'][i]['mLotTable'][0]['mWeight'] = heartWeight
+            sheet['values'][i]['mLotTable'][1]['mWeight'] = rupee1Weight
+            sheet['values'][i]['mLotTable'][2]['mWeight'] = rupee5Weight
+            sheet['values'][i]['mLotTable'][3]['mWeight'] = nothingWeight
+
+            # Adding new entries if extended consumable drop setting is enabled
+            if settings['extended-consumable-drop']:
+                # Using a copy of an existing entry to use as a skeleton for our new data
+                dummyEntry = oead_tools.parseStruct(sheet['values'][i]['mLotTable'][0])
+
+                dummyEntry['mType'] = 'Bomb'
+                dummyEntry['mCookie'] = 3
+                dummyEntry['mWeight'] = 5
+                sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(dummyEntry))
+
+                dummyEntry['mType'] = 'Arrow'
+                dummyEntry['mCookie'] = 3
+                dummyEntry['mWeight'] = 5
+                sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(dummyEntry))
+
+                dummyEntry['mType'] = 'MagicPowder'
+                dummyEntry['mCookie'] = 3
+                dummyEntry['mWeight'] = 5
+                sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(dummyEntry))
+
 
     for i in range(8):
         sheet['values'][first_heart_index+i]['mLotTable'][0]['mType'] = ''
-
-
-
-# def createDatasheetConditions(sheet):
-#     # {name: gettingFlag, type_name: GlobalFlags, type: 4, flags: 9, fields: null}
-#     sheet['root_fields'].append(oead_tools.createField(
-#     name='mCondition',
-#     type_name='Conditions',
-#     type=oead.gsheet.Field.Type.String,
-#     flags=oead.gsheet.Field.Flag.IsNullable,
-#     offset=28
-# ))

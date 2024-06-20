@@ -29,6 +29,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 155 - len(settings['starting-items'])
+        self.num_of_mod_tasks = 257 # +1 so that it takes a step to the "finished" text
+        
         self.num_of_mod_tasks = 258
 
         self.ui.openOutputFolder.setVisible(False)
@@ -53,17 +55,21 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if settings['bad-pets']:
             self.num_of_mod_tasks += 10
         
-        if settings['randomize-enemies'] or settings['randomize-enemy-sizes']:
-            self.num_of_mod_tasks += 312
-        
+        modded_enemies = 0
+        if settings['randomize-enemies']:
+            modded_enemies = 313
+        if settings['randomize-enemy-sizes']:
+            modded_enemies = 323
+        self.num_of_mod_tasks += modded_enemies
+
         if settings['shuffle-dungeons']:
             self.num_of_mod_tasks += 19
         
         if settings['classic-d2']:
             self.num_of_mod_tasks += 1
         
-        if settings['free-book']:
-            self.num_of_mod_tasks += 1
+        if settings['open-mabe']:
+            self.num_of_mod_tasks += 4
         
         self.done = False
         self.cancel = False

@@ -9,10 +9,9 @@ from io import BytesIO
 
 
 # This method aims to create a custom BNTX archive based on the original one to add a custom title screen
-def createRandomizerTitleScreenArchive(rom_path):
-    reader = oead_tools.readSarc(f'{rom_path}/region_common/ui/StartUp.arc')
+def createRandomizerTitleScreenArchive(sarc_data):
     editor = bntx_editor.BNTXEditor()
-    editor.openFile(reader.get_file('timg/__Combined.bntx').data.tobytes())
+    editor.openFile(sarc_data.reader.get_file('timg/__Combined.bntx').data.tobytes())
 
     texture_to_replace = 'Logo_00^f'
     logo_texs = [t for t in editor.bntx.textures if t.name == texture_to_replace]
@@ -47,7 +46,7 @@ def createRandomizerTitleScreenArchive(rom_path):
 
     # Inject it back to the BNTX File
     editor.replaceTexByIndex(new_dds, texture_index)
-    return editor.save()
+    sarc_data.writer.files['timg/__Combined.bntx'] = editor.save()
 
 
 def save(dds_file, new_dds: BytesIO):

@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 import urllib.request as lib
 
-from RandomizerCore.Data.randomizer_data import VERSION, LOGIC_VERSION
+from RandomizerCore.randomizer_data import VERSION, LOGIC_VERSION
 
 
 
@@ -44,7 +44,7 @@ class LogicUpdateProcess(QtCore.QThread):
     def run(self):
         try:
             update_file =\
-                lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/Data/logic.yml")
+                lib.urlopen("https://raw.githubusercontent.com/Owen-Splat/LAS-Randomizer/master/RandomizerCore/Data/logic.yml")
             web_version = float(update_file.readline().decode('utf-8').strip('#'))
             new_logic = update_file.read().decode('utf-8')
 
