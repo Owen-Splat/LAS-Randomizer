@@ -1,11 +1,15 @@
 v0.4
 
-- add nice-bombs setting, asm is already written
+- add nice-bombs setting
+    work is done, needs tested
+    get feedback for if it should be enabled by default or not
+
+- change phrasing of the consumable drops description, could be read as only powder needs to be owned
 
 - make sure logic knows that you can't have both followers at once
 
 - merge settings from ProfessorLaw's fork
-    open output folder button after seed generation
+    start with maps & compasses
     chest textures I'm going to make from scratch because even modified assets fall under copyright
     not adding perfect-ending, players should have to work for it
         softlocking and needing to die sucks, but that's a player knowledge issue
