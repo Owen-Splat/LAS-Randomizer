@@ -31,6 +31,6 @@ b 0x7e1dd0
 ; The main purpose of this will be for Keysanity to know which dungeon text to display
 ; This is also used to set a flag for the Fishing Bottle
 .offset 0x8049d8
-mov w8, #0x1
+mov w8, #1
 .offset 0x8049dc
 csel w0, w8, wzr, eq
