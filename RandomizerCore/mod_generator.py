@@ -994,8 +994,25 @@ class ModsProcess(QtCore.QThread):
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', check_bombs)
             else:
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', add_bombs)
-            
-            self.writeFile('SkeletalGuardBlue.bfevfl', flow)
+
+        dungeon_item_setting = self.settings['dungeon-items']
+        if dungeon_item_setting != 'none':
+            skeletal_gard_flow_changes = True
+            actors.addNeededActors(flow.flowchart, self.rom_path)
+            event_defs = []
+
+            if dungeon_item_setting in ['mc', 'mcb']:
+                event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
+                event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
+
+            if dungeon_item_setting in ['stone-beak', 'mcb']:
+                event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
+
+            # Adding event on DungeonIn entrypoint
+            event_tools.createActionChain(flow.flowchart, 'Event2', event_defs)
+
+        if skeletal_gard_flow_changes:
+            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'SkeletalGuardBlue.bfevfl', flow)
 
         ### Make Save&Quit after getting a GameOver send you back to Marin's house
         if self.thread_active:

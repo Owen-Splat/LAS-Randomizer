@@ -5,6 +5,7 @@ import copy
 import random
 import traceback
 
+from RandomizerCore.Data.randomizer_data import DUNGEON_ITEM_SETTINGS
 
 
 class ItemShuffler(QtCore.QThread):
@@ -127,9 +128,32 @@ class ItemShuffler(QtCore.QThread):
             for inst in instrument_locations:
                 vanilla_locations.append(inst)
         
+        # if start with compass & map setting is enabled, adding them into the starting item setting
+        dungeon_item_setting = self.settings['dungeon-items']
+        if dungeon_item_setting != 'none':
+            to_check = ()
+            if dungeon_item_setting == 'mc':
+                to_check = ('map', 'compass')
+            elif dungeon_item_setting == 'mcb':
+                to_check = ('map', 'compass', 'stone-beak')
+            elif dungeon_item_setting == 'stone-beak':
+                to_check = 'stone-beak'
+
+            start_dungeon_items = [s for s in self.item_defs if s.startswith(to_check)]
+            for e, item in enumerate(start_dungeon_items):
+                self.logic_defs[f'starting-dungeon-item-{e + 1}'] = {  # add a location for each starting item
+                    'type': 'item',
+                    'subtype': 'npc',
+                    'content': item,
+                    'region': 'mabe',
+                    'spoiler-region': 'mabe-village'
+                }
+                vanilla_locations.append(f'starting-dungeon-item-{e + 1}')
+                self.item_defs['rupee-50']['quantity'] += 1  # since we add a location for each item, add a 50 rupee in the pool for each
+
         # add the starting instruments to the list of starting items since we are done with them
         self.settings['starting-items'].extend(start_instruments)
-        
+
         # do the same for the remaining starting items
         for e, item in enumerate(self.settings['starting-items']):
             self.logic_defs[f'starting-item-{e+1}'] = { # add a location for each starting item
@@ -548,10 +572,21 @@ class ItemShuffler(QtCore.QThread):
             # if settings['dungeon-items'] == 'keys+mcb':
             #     break
 
-            item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
             # if settings['dungeon-items'] == 'keys':
             #     item_pool = [s for s in item_pool if s.startswith(('map', 'compass', 'stone'))]
-            
+            dungeon_item_setting = self.settings['dungeon-items']
+            if dungeon_item_setting != 'none':
+                to_check = ()
+                if dungeon_item_setting == 'mc':
+                    to_check = ('map', 'compass')
+                elif dungeon_item_setting == 'mcb':
+                    to_check = ('map', 'compass', 'stone-beak')
+                elif dungeon_item_setting == 'stone-beak':
+                    to_check = 'stone-beak'
+                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}' and not s.startswith(to_check)]
+            else:
+                item_pool = [s for s in items if len(s) >= 2 and s[-2:] == f'D{i}']
+
             location_pool = [s for s in locations if len(s) >= 2 and s[:2] == f'D{i}']
             random.shuffle(location_pool)
             
