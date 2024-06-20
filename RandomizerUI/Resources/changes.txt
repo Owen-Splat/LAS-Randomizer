@@ -1,29 +1,25 @@
 <b>New Features:</b>
 <br></br><br></br>
-- Patches tab: Additional, unrequired ASM patches to spice up gameplay elements
+- Settings string: Share settings with others, or even randomize settings
 <br></br><br></br>
-- Automatically adjusts the output for console or emulator
+- New Settings: Quick mode, random enemy sizes, start with dungeon items, and more!
+<br></br><br></br>
+- ASM Patches: One-Hit KO Mode, Nice Items, and more to spice up gameplay!
 <br></br><br></br>
 
 <b>Changes:</b>
 <br></br><br></br>
 - Songs now display Marin/Manbo/Mamu when obtaining them
 <br></br><br></br>
-- The green zol in a chest is now randomized if randomizing enemies
-<br></br><br></br>
-- Seashells and Trade Items now will be in normal sized chests instead of big chests
+- Reduced-farming is now baseline behavior and was replaced with a new setting
 <br></br><br></br>
 
 <b>Bug Fixes:</b>
 <br></br><br></br>
-- Shuffled Bombs/Powder made it impossible to obtain from specific sources
+- Bombs & Powder can now be obtained properly from other sources
 <br></br><br></br>
-- Bad Pets setting would not work with randomized music
+- Fixed some compatibility issues across settings
 <br></br><br></br>
-- Having Bottle[1] made the Fishing Bottle not spawn
+- Fixed some issues when specific items were already obtained
 <br></br><br></br>
-- Having GoldenLeaf[4] made the Kanalet Final Guard not spawn
-<br></br><br></br>
-- The D6-pot-chest did nothing when an enemy was shuffled to it
-<br></br><br></br>
-- The romfs path no longer requires a folder named "romfs"
+- Tons of minor bug fixes to improve the gameplay experience
