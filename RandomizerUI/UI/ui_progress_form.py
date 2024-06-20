@@ -39,7 +39,9 @@ class Ui_ProgressWindow(object):
         self.label.setAlignment(Qt.AlignCenter)
         self.openOutputFolder = QPushButton(self.centralwidget)
         self.openOutputFolder.setObjectName(u"openOutputFolder")
+        self.openOutputFolder.setEnabled(True)
         self.openOutputFolder.setGeometry(QRect(180, 85, 121, 24))
+        self.openOutputFolder.setCheckable(False)
         ProgressWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(ProgressWindow)
