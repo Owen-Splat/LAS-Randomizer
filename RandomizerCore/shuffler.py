@@ -5,7 +5,6 @@ import copy
 import random
 import traceback
 
-from RandomizerCore.Data.randomizer_data import DUNGEON_ITEM_SETTINGS
 
 
 class ItemShuffler(QtCore.QThread):
