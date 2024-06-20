@@ -1,5 +1,4 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Data.randomizer_data import DUNGEON_ITEM_SETTINGS
 from RandomizerCore.Randomizers import data, item_get
 
 START_FLAGS = (
