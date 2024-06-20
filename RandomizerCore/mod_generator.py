@@ -974,8 +974,10 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             flow = self.readFile('SkeletalGuardBlue.bfevfl')
 
-            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['count'] = 40 # still gives 20 w/o capacity upgrade
+            # edit Magic Powder amount from 20 to 40 so that it'll max even with the capacity upgrade
+            event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['count'] = 40
             
+            # give 60 Bombs so that it'll max even with the capacity upgrade
             add_bombs = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItem',
                 {'itemType': 4, 'count': 60, 'autoEquip': False})
             
@@ -997,22 +999,19 @@ class ModsProcess(QtCore.QThread):
 
         dungeon_item_setting = self.settings['dungeon-items']
         if dungeon_item_setting != 'none':
-            skeletal_gard_flow_changes = True
-            actors.addNeededActors(flow.flowchart, self.rom_path)
             event_defs = []
 
+            # TODO: add the items through ASM when the level text is being displayed
             if dungeon_item_setting in ['mc', 'mcb']:
                 event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
                 event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
-
             if dungeon_item_setting in ['stone-beak', 'mcb']:
                 event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
 
             # Adding event on DungeonIn entrypoint
             event_tools.createActionChain(flow.flowchart, 'Event2', event_defs)
 
-        if skeletal_gard_flow_changes:
-            self.writeModFile(f'{self.romfs_dir}/region_common/event', 'SkeletalGuardBlue.bfevfl', flow)
+        self.writeFile('SkeletalGuardBlue.bfevfl', flow)
 
         ### Make Save&Quit after getting a GameOver send you back to Marin's house
         if self.thread_active:

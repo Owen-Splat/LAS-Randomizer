@@ -10,6 +10,7 @@ v0.4
 
 - merge settings from ProfessorLaw's fork
     start with maps & compasses
+        WRITE ASM FOR THIS SO IT'S CLEANER
     chest textures I'm going to make from scratch because even modified assets fall under copyright
     not adding perfect-ending, players should have to work for it
         softlocking and needing to die sucks, but that's a player knowledge issue
