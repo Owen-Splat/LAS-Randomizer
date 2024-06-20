@@ -5,7 +5,6 @@ v0.4
 - make sure logic knows that you can't have both followers at once
 
 - merge settings from ProfessorLaw's fork
-    reduced-farming will be made general rando behavior, consumable drops will replace it
     open output folder button after seed generation
     chest textures I'm going to make from scratch because even modified assets fall under copyright
     not adding perfect-ending, players should have to work for it

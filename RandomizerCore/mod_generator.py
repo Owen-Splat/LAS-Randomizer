@@ -971,7 +971,7 @@ class ModsProcess(QtCore.QThread):
             self.writeFile('WindFishsEgg.bfevfl', flow)
 
         ### SkeletalGuardBlue: Make him sell 20 bombs in addition to the 20 powder
-        if self.settings['reduce-farming'] and self.thread_active:
+        if self.thread_active:
             flow = self.readFile('SkeletalGuardBlue.bfevfl')
 
             event_tools.findEvent(flow.flowchart, 'Event19').data.params.data['count'] = 40 # still gives 20 w/o capacity upgrade
