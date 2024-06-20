@@ -1756,6 +1756,22 @@
           </property>
          </item>
         </widget>
+        <widget class="QCheckBox" name="niceBombsCheck">
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Allows you to rapidly place down bombs with no cooldown</string>
+         </property>
+         <property name="text">
+          <string>Nice Bombs</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QLabel" name="label_4">
         <property name="geometry">
