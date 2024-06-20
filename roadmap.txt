@@ -1,15 +1,23 @@
 v0.4
 
+- add nice-bombs setting, asm is already written
+
 - make sure logic knows that you can't have both followers at once
 
 - merge settings from ProfessorLaw's fork
+    reduced-farming will be made general rando behavior, consumable drops will replace it
+    open output folder button after seed generation
+    chest textures I'm going to make from scratch because even modified assets fall under copyright
+    not adding perfect-ending, players should have to work for it
+        softlocking and needing to die sucks, but that's a player knowledge issue
 
 ----------
 v0.5
 
 - eventflow edits through code gets pretty messy and hard to follow
     create our own type of flowchart file and write a parser that'll translate them into the .bfevfl files
-    im a lot more confident to write this after the .asm parser :>
+    this reduces the amount of code and will just be plain easier to edit
+    may also carry over well for EoW
 
 - barren dungeons
 
