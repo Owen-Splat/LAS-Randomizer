@@ -327,7 +327,7 @@ Item_Pool:
     model-path: ItemSecretSeashell.bfres
     model-name: SecretSeashell
     npc-key: ItemSecretSeashell
-    chest-type: seashell
+    # chest-type: seashell
   bottle:
     type: important-health
     quantity: 3
@@ -335,7 +335,7 @@ Item_Pool:
     model-path: ItemBottle.bfres
     model-name: Bottle
     npc-key: ItemBottle
-    chest-type: life-upgrade
+    # chest-type: life-upgrade
   heart-container:
     type: important-health
     quantity: 9
@@ -343,7 +343,7 @@ Item_Pool:
     model-path: ItemHeartContainer.bfres
     model-name: HeartContainer
     npc-key: ItemHeartContainer
-    chest-type: life-upgrade
+    # chest-type: life-upgrade
   bomb-capacity:
     type: good
     quantity: 1
@@ -372,7 +372,7 @@ Item_Pool:
     model-path: ItemShellRader.bfres
     model-name: ShellRader
     npc-key: ItemShellRader
-    chest-type: seashell
+    # chest-type: seashell
   medicine:
     type: important-health
     quantity: 3
@@ -380,7 +380,7 @@ Item_Pool:
     model-path: ItemSecretMedicine.bfres
     model-name: SecretMedicine
     npc-key: ItemSecretMedicine
-    chest-type: life-upgrade
+    # chest-type: life-upgrade
   red-tunic:
     type: good
     quantity: 1
@@ -410,7 +410,7 @@ Item_Pool:
     model-path: ItemHeartPiece.bfres
     model-name: HeartPiece
     npc-key: ItemHeartPiece
-    chest-type: life-upgrade
+    # chest-type: life-upgrade
   rupee-50:
     type: junk
     quantity: 19
