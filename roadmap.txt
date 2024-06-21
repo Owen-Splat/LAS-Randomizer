@@ -8,6 +8,8 @@ v0.4
 
 - make sure logic knows that you can't have both followers at once
 
+- if we're going to write code for constantly changing swordlv1 model to ObjSinkingSword, might as well just the model in items.yml
+
 - merge settings from ProfessorLaw's fork
     start with maps & compasses
         WRITE ASM FOR THIS SO IT'S CLEANER
