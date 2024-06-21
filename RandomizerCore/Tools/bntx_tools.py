@@ -105,7 +105,7 @@ def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolde
         os.makedirs(bfresOutputFolder)
 
     # Checking if we need to generate something
-    textureTypes = ['Junk', 'Key', 'SeaShell', 'LifeUpgrade']
+    textureTypes = ['Junk', 'Key'] # ['Junk', 'Key', 'SeaShell', 'LifeUpgrade']
     missingTextureTypes = []
 
     for textureType in textureTypes:
@@ -127,15 +127,20 @@ def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolde
     temporaryBntx = os.path.join(RESOURCE_PATH, 'textures', 'chestTextures_updated.bntx')
 
     for textureType in missingTextureTypes:
+        new_dds = BytesIO()
+        texture_png = Image.open(os.path.join(
+            RESOURCE_PATH,
+            'textures',
+            'chest', 'TreasureBox' + textureType + '.png'
+        ))
+        save(quicktex_dds.encode(texture_png, bc3.BC3Encoder(18), 'DXT5'), new_dds)
+        new_dds.seek(0)
+
         replaceTextureInFile(
             chestBntxFilepath,
             temporaryBntx,
             'MI_dungeonTreasureBox_01_alb',
-            os.path.join(
-                RESOURCE_PATH,
-                'textures',
-                'chest', 'MI_dungeonTreasureBox' + textureType + '_01_alb.dds'
-            )
+            new_dds
         )
 
         # Injecting BNTX in the BFRES file

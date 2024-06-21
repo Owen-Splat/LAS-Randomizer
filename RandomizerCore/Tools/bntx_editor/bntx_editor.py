@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # Licensed under GNU GPLv3
 
-import os.path
 import RandomizerCore.Tools.bntx_editor.bntx as BNTX
+from io import BytesIO
 
 
 class BNTXEditor:
@@ -41,9 +41,14 @@ class BNTXEditor:
         if foundIndex < 0:
             raise Exception(f'Texture {textureName} not found')
 
-        with open(textureFile, "rb") as textureFileInstance:
-            # Inject it back to the BNTX File
-            self.replaceTexByIndex(textureFileInstance, foundIndex)
+        # Inject it back to the BNTX File
+        if isinstance(textureFile, str):
+            with open(textureFile, "rb") as textureFileInstance:
+                self.replaceTexByIndex(textureFileInstance, foundIndex)
+        elif isinstance(textureFile, BytesIO):
+            self.replaceTexByIndex(textureFile, foundIndex)
+        else:
+            raise Exception("textureFile is an unknown type")
 
     def saveAs(self, file):
         if not file:
