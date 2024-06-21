@@ -103,14 +103,14 @@ class Actor:
         print(f'Parameters: {self.parameters}')
 
 
-	def positionToPoint(self):
-		packed = b''
-		packed += struct.pack('<f', self.posX)
-		packed += struct.pack('<f', self.posY)
-		packed += struct.pack('<f', self.posZ)
-		packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
-		
-		return packed
+    def positionToPoint(self):
+        packed = b''
+        packed += struct.pack('<f', self.posX)
+        packed += struct.pack('<f', self.posY)
+        packed += struct.pack('<f', self.posZ)
+        packed += b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'
+        
+        return packed
 
 
 
@@ -158,11 +158,11 @@ class Room:
             chest.scaleX = chest_size
             chest.scaleY = chest_size
             chest.scaleZ = chest_size
-		
-		# if item_key == 'BowWow':
-		#     pass
-		# elif item_key == 'Rooster':
-		#     room_data.addChestRooster()
+        
+        # if item_key == 'BowWow':
+        #     pass
+        # elif item_key == 'Rooster':
+        #     room_data.addChestRooster()
 
 
     def setSmallKeyParams(self, model_path, model_name, room, item_key, key_index=0):
@@ -176,17 +176,17 @@ class Room:
             key.parameters[2] = bytes(model_name, 'utf-8')
             key.parameters[3] = bytes(room, 'utf-8')
 
-			if item_key == 'Seashell':
-				key.parameters[4] = bytes('true', 'utf-8')
-			else:
-				key.parameters[4] = bytes('false', 'utf-8')
-			
-			if model_name in MODEL_SIZES:
-				size = MODEL_SIZES[model_name]
-				key.scaleX = size
-				key.scaleY = size
-				key.scaleZ = size
-	
+            if item_key == 'Seashell':
+                key.parameters[4] = bytes('true', 'utf-8')
+            else:
+                key.parameters[4] = bytes('false', 'utf-8')
+            
+            if model_name in MODEL_SIZES:
+                size = MODEL_SIZES[model_name]
+                key.scaleX = size
+                key.scaleY = size
+                key.scaleZ = size
+    
 
     def setRupeeParams(self, model_path, model_name, entry_point, item_key, rup_index=0):
         rups = [a for a in self.actors if a.type == 0xAB]
@@ -199,17 +199,17 @@ class Room:
             rup.parameters[2] = bytes(entry_point, 'utf-8')
             rup.parameters[3] = bytes('Lv10RupeeGet' if rup_index == 0 else f'Lv10RupeeGet_{rup_index + 1}', 'utf-8')
 
-			if item_key == 'Seashell':
-				rup.parameters[4] = bytes('true', 'utf-8')
-			else:
-				rup.parameters[4] = bytes('false', 'utf-8')
-			
-			if model_name in MODEL_SIZES:
-				size = MODEL_SIZES[model_name]
-				rup.scaleX = size
-				rup.scaleY = size
-				rup.scaleZ = size
-	
+            if item_key == 'Seashell':
+                rup.parameters[4] = bytes('true', 'utf-8')
+            else:
+                rup.parameters[4] = bytes('false', 'utf-8')
+            
+            if model_name in MODEL_SIZES:
+                size = MODEL_SIZES[model_name]
+                rup.scaleX = size
+                rup.scaleY = size
+                rup.scaleZ = size
+    
 
     def setLoadingZoneTarget(self, new_destination, index=0):
         zones = [a for a in self.actors if a.type == 0x190]
