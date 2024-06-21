@@ -202,7 +202,11 @@ def makeNpcChanges(npc, placements, settings):
         npc['shellSensor'].append({'category': 9, 'parameter': '!MansionShellsComplete'})
         return
 
-
+    # Chest matching texture feature
+    if npc['symbol'] == 'ObjTreasureBox':
+        npc['graphics']['path'] = '$6'
+        npc['graphics']['model'] = '$7'
+        return
 
 def makeNewNpcs(npc_sheet, placements, item_defs):
     """We change the graphics for some items, so create new npcs to show the correct model when obtaining them"""

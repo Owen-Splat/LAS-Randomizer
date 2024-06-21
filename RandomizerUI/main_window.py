@@ -96,6 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.platformComboBox,
             self.ui.rupeesSpinBox,
             self.ui.trapsComboBox,
+            self.ui.chestAspectComboBox,
             self.ui.dungeonItemsComboBox
         ]
         for item in desc_items:
@@ -136,6 +137,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.owlsComboBox,
             self.ui.platformComboBox,
             self.ui.trapsComboBox,
+            self.ui.chestAspectComboBox,
             self.ui.dungeonItemsComboBox
         ]
 

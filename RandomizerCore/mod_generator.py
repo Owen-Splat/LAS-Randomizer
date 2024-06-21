@@ -1,3 +1,5 @@
+import shutil
+
 from PySide6 import QtCore
 from RandomizerCore.ASM import assemble
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
@@ -5,6 +7,12 @@ from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 from RandomizerCore.Tools import (bntx_tools, event_tools, leb, lvb, oead_tools)
 from RandomizerCore.Randomizers import (chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
 heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, player_start, rapids,
+
+from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
+from RandomizerCore.Tools.exefs_editor.patcher import Patcher
+from RandomizerCore.Tools import (bntx_tools, event_tools, leb, oead_tools)
+from RandomizerCore.Randomizers import (actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
+heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches, player_start, rapids,
 seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap)
 
 import os
@@ -135,7 +143,7 @@ class ModsProcess(QtCore.QThread):
             
             if self.settings['blupsanity'] and self.thread_active:
                 self.makeLv10RupeeChanges()
-            
+
             if self.settings['shuffle-dungeons'] and self.thread_active:
                 self.shuffleDungeons()
                 self.shuffleDungeonIcons()
@@ -172,9 +180,35 @@ class ModsProcess(QtCore.QThread):
 
     def makeChestContentFixes(self):
         """Patch LEB files of rooms with chests to update their contents"""
-        
+
+        # CAMC Pre-Checks
+        if self.settings['chest-aspect'] == 'camc':
+            # Creating custom textures bfres files from the original one in the RomFS
+            bfresOutputFolder = os.path.join(RESOURCE_PATH, 'textures', 'chest', 'bfres')
+
+            bntx_tools.createChestBfresWithCustomTexturesIfMissing(
+                f'{self.rom_path}/region_common/actor/ObjTreasureBox.bfres',
+                bfresOutputFolder
+            )
+
+            # Copying files to the custom RomFS
+            actorOutputFolder = f'{self.romfs_dir}/region_common/actor'
+            if not os.path.exists(actorOutputFolder):
+                os.makedirs(actorOutputFolder)
+
+            files = os.listdir(bfresOutputFolder)
+
+            # Loop through the files and copy them to the destination directory
+            for file in files:
+                source = os.path.join(bfresOutputFolder, file)
+                destination = os.path.join(actorOutputFolder, file)
+                shutil.copy(source, destination)
+
+
+        # CSMC Management (Chest size)
         chest_sizes = copy.deepcopy(data.CHEST_SIZES)
-        if self.settings['scaled-chest-sizes']:
+
+        if self.settings['chest-aspect'] == 'csmc' or self.settings['chest-aspect'] == 'camc':
             # if all seashell and trade gift locations are set to junk, set chests that contain them to be small
             if not self.settings['seashells-important']:
                 chest_sizes['seashell'] = 0.8
@@ -182,34 +216,86 @@ class ModsProcess(QtCore.QThread):
                 chest_sizes['trade'] = 0.8
         else:
             for k in chest_sizes:
-                chest_sizes[k] = 1.0 # if scaled chest sizes is off, set every value to normal size
-        
+                chest_sizes[k] = 1.0  # if scaled chest sizes is off, set every value to normal size
+
         for room in data.CHEST_ROOMS:
             if not self.thread_active:
                 break
 
+            dirname = re.match('(.+)_\\d\\d[A-P]', data.CHEST_ROOMS[room]).group(1)
+            
+            with open(f'{self.rom_path}/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'rb') as roomfile:
+                room_data = leb.Room(roomfile.read())
+
+            # Managing panels to set default chest texture for now as I cannot detect chest content (only $PANEL)
+            if room.startswith('panel-'):
+                for actor in room_data.actors:
+                    if actor.name.startswith(b'ObjTreasureBox'):
+                        room_data.setChestContent(
+                            actor.parameters[1].decode("utf-8"), actor.parameters[2], chest_size=1.0, chest_model=data.CHEST_TEXTURES['default']
+                        )
+                self.writeModFile(f'{self.romfs_dir}/region_common/level/{dirname}', f'{data.CHEST_ROOMS[room]}.leb',
+                                  room_data)
+                continue
+
+            item_key = self.item_defs[self.placements[room]]['item-key']
+            item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
             room_data = self.readFile(f'{data.CHEST_ROOMS[room]}.leb')
             item_key, item_index = self.getItemInfo(room)
             item_type = self.item_defs[self.placements[room]]['type']
-            size = chest_sizes[item_type]
-            
+
+            # Managing CSMC on the fly. TODO Make this cleaner. This should not be there.
+            if self.settings['chest-aspect'] == 'csmc':
+                if item_key in ('HeartContainer', 'ClothesRed', 'ClothesBlue'):
+                    size = chest_sizes['junk']
+                elif item_key in ('SmallKey', 'Bomb_MaxUp', 'Arrow_MaxUp', 'MagicPowder_MaxUp'):
+                    size = chest_sizes['important']
+                else:
+                    size = chest_sizes[item_type]
+            else:
+                size = chest_sizes[item_type]
+
+            try:
+                item_chest_type = self.item_defs[self.placements[room]]['chest-type']
+            except KeyError:
+                item_chest_type = None
+
+            # Changing the texture and size of Stone Beaks if dungeon Owl rewards are enabled
+            if item_key == "StoneBeak" and self.settings['owl-dungeon-gifts']:
+                item_chest_type = 'default'
+                size = chest_sizes['important']
+
+            # TODO Manage PanelDungeonPiece thanks to Dampe settings (need to check how it works)
+
+            # CAMC Management (Chest aspect - Texture management)
+            model = data.CHEST_TEXTURES['default']
+            if self.settings['chest-aspect'] == 'camc' and item_chest_type is not None:
+                model = data.CHEST_TEXTURES[item_chest_type]
+
+
             if room == 'taltal-5-chest-puzzle':
                 for i in range(5):
-                    room_data.setChestContent(item_key, item_index, i, size)
+                    room_data.setChestContent(item_key, item_index, i, size, model)
             else:
-                room_data.setChestContent(item_key, item_index, chest_size=size)
+                room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
             
             self.writeFile(f'{data.CHEST_ROOMS[room]}.leb', room_data)
+            # if item_key == 'BowWow':
+            #     pass
+            # elif item_key == 'Rooster':
+            #     room_data.addChestRooster()
+
+            self.writeModFile(f'{self.romfs_dir}/region_common/level/{dirname}', f'{data.CHEST_ROOMS[room]}.leb', room_data)
             
             # Two special cases in D7 have duplicate rooms, once for pre-collapse and once for post-collapse. So we need to make sure we write the same data to both rooms.
             if room == 'D7-grim-creeper':
                 room_data = self.readFile('Lv07EagleTower_06H.leb')
-                room_data.setChestContent(item_key, item_index, chest_size=size)
+                room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
                 self.writeFile('Lv07EagleTower_06H.leb', room_data)
             
             if room == 'D7-3f-horseheads':
                 room_data = self.readFile('Lv07EagleTower_05G.leb')
-                room_data.setChestContent(item_key, item_index, chest_size=size)
+                room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
                 self.writeFile('Lv07EagleTower_05G.leb', room_data)
 
 
@@ -1384,6 +1470,10 @@ class ModsProcess(QtCore.QThread):
         """Replaces the Title Screen logo with the Randomizer logo"""
 
         try:
+            # Creates the UI folder path
+            if not os.path.exists(f'{self.romfs_dir}/region_common/ui'):
+                os.makedirs(f'{self.romfs_dir}/region_common/ui')
+
             # Read the BNTX file from the sarc file and edit the title screen logo to include the randomizer logo
             sarc_data = self.readFile('StartUp.arc')
             bntx_tools.createRandomizerTitleScreenArchive(sarc_data)

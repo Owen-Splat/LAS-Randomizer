@@ -1132,36 +1132,42 @@
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="chestSizesCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+        <widget class="QComboBox" name="chestAspectComboBox">
          <property name="geometry">
           <rect>
-           <x>189</x>
-           <y>64</y>
-           <width>151</width>
-           <height>21</height>
+           <x>548</x>
+           <y>24</y>
+           <width>150</width>
+           <height>22</height>
           </rect>
          </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
+         <property name="whatsThis">
+          <string>Setup the way chests appear in game (With a custom size and/or texture depending on its content)</string>
          </property>
-         <property name="toolTip">
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <property name="placeholderText">
           <string/>
          </property>
-         <property name="whatsThis">
-          <string>Sets chest sizes to match the importance of the item</string>
+         <item>
+          <property name="text">
+           <string>Chests : Default</string>
          </property>
+         </item>
+         <item>
          <property name="text">
-          <string>Scaled Chests</string>
+           <string>Chests : Size</string>
          </property>
-         <property name="checkable">
-          <bool>true</bool>
+         </item>
+         <item>
+          <property name="text">
+           <string>Chests : Texture &amp; Size</string>
          </property>
+         </item>
         </widget>
         <widget class="QCheckBox" name="dungeonsCheck">
          <property name="enabled">
@@ -1170,7 +1176,7 @@
          <property name="geometry">
           <rect>
            <x>189</x>
-           <y>104</y>
+           <y>64</y>
            <width>151</width>
            <height>21</height>
           </rect>
