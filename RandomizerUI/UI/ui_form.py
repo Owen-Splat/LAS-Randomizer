@@ -316,7 +316,7 @@ class Ui_MainWindow(object):
         self.chestAspectComboBox.addItem("")
         self.chestAspectComboBox.addItem("")
         self.chestAspectComboBox.setObjectName(u"chestAspectComboBox")
-        self.chestAspectComboBox.setGeometry(QRect(548, 24, 150, 22))
+        self.chestAspectComboBox.setGeometry(QRect(189, 104, 150, 22))
         self.chestAspectComboBox.setEditable(False)
         self.dungeonsCheck = QCheckBox(self.groupBox_6)
         self.dungeonsCheck.setObjectName(u"dungeonsCheck")

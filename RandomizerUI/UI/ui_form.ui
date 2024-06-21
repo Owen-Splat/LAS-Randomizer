@@ -1135,8 +1135,8 @@
         <widget class="QComboBox" name="chestAspectComboBox">
          <property name="geometry">
           <rect>
-           <x>548</x>
-           <y>24</y>
+           <x>189</x>
+           <y>104</y>
            <width>150</width>
            <height>22</height>
           </rect>
@@ -1156,17 +1156,17 @@
          <item>
           <property name="text">
            <string>Chests : Default</string>
-         </property>
+          </property>
          </item>
          <item>
-         <property name="text">
+          <property name="text">
            <string>Chests : Size</string>
-         </property>
+          </property>
          </item>
          <item>
           <property name="text">
            <string>Chests : Texture &amp; Size</string>
-         </property>
+          </property>
          </item>
         </widget>
         <widget class="QCheckBox" name="dungeonsCheck">
