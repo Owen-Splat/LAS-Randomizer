@@ -88,7 +88,9 @@ TRAP_SETTINGS = ('none', 'few', 'several', 'many')
 
 CHEST_ASPECT_SETTINGS = ('default', 'csmc', 'camc')
 
-# DUNGEON_ITEM_SETTINGS = ('standard', 'keys', 'keys+mcb')
+DUNGEON_ITEM_SETTINGS = ('none', 'stone-beak', 'mc', 'mcb')
+
+# KEYSANITY_SETTINGS = ('standard', 'keys', 'keys+mcb')
 
 PLATFORMS = ('console', 'emulator')
 

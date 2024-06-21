@@ -2,17 +2,11 @@ import shutil
 
 from PySide6 import QtCore
 from RandomizerCore.ASM import assemble
-from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
+from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE, RESOURCE_PATH
 
 from RandomizerCore.Tools import (bntx_tools, event_tools, leb, lvb, oead_tools)
 from RandomizerCore.Randomizers import (chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
 heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, player_start, rapids,
-
-from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
-from RandomizerCore.Tools.exefs_editor.patcher import Patcher
-from RandomizerCore.Tools import (bntx_tools, event_tools, leb, oead_tools)
-from RandomizerCore.Randomizers import (actors, chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
-heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, patches, player_start, rapids,
 seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap)
 
 import os
@@ -222,25 +216,18 @@ class ModsProcess(QtCore.QThread):
             if not self.thread_active:
                 break
 
-            dirname = re.match('(.+)_\\d\\d[A-P]', data.CHEST_ROOMS[room]).group(1)
-            
-            with open(f'{self.rom_path}/region_common/level/{dirname}/{data.CHEST_ROOMS[room]}.leb', 'rb') as roomfile:
-                room_data = leb.Room(roomfile.read())
+            room_data = self.readFile(f'{data.CHEST_ROOMS[room]}.leb')
 
             # Managing panels to set default chest texture for now as I cannot detect chest content (only $PANEL)
             if room.startswith('panel-'):
                 for actor in room_data.actors:
                     if actor.name.startswith(b'ObjTreasureBox'):
                         room_data.setChestContent(
-                            actor.parameters[1].decode("utf-8"), actor.parameters[2], chest_size=1.0, chest_model=data.CHEST_TEXTURES['default']
-                        )
-                self.writeModFile(f'{self.romfs_dir}/region_common/level/{dirname}', f'{data.CHEST_ROOMS[room]}.leb',
-                                  room_data)
+                            actor.parameters[1].decode("utf-8"), actor.parameters[2],
+                            chest_size=1.0, chest_model=data.CHEST_TEXTURES['default'])
+                self.writeFile(f'{data.CHEST_ROOMS[room]}.leb', room_data)
                 continue
 
-            item_key = self.item_defs[self.placements[room]]['item-key']
-            item_index = self.placements['indexes'][room] if room in self.placements['indexes'] else -1
-            room_data = self.readFile(f'{data.CHEST_ROOMS[room]}.leb')
             item_key, item_index = self.getItemInfo(room)
             item_type = self.item_defs[self.placements[room]]['type']
 
@@ -280,12 +267,6 @@ class ModsProcess(QtCore.QThread):
                 room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
             
             self.writeFile(f'{data.CHEST_ROOMS[room]}.leb', room_data)
-            # if item_key == 'BowWow':
-            #     pass
-            # elif item_key == 'Rooster':
-            #     room_data.addChestRooster()
-
-            self.writeModFile(f'{self.romfs_dir}/region_common/level/{dirname}', f'{data.CHEST_ROOMS[room]}.leb', room_data)
             
             # Two special cases in D7 have duplicate rooms, once for pre-collapse and once for post-collapse. So we need to make sure we write the same data to both rooms.
             if room == 'D7-grim-creeper':
