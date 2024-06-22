@@ -29,7 +29,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 155 - len(settings['starting-items'])
-        self.num_of_mod_tasks = 257 # +1 so that it takes a step to the "finished" text
+        self.num_of_mod_tasks = 322 # +1 so that it takes a step to the "finished" text
 
         self.ui.openOutputFolder.setVisible(False)
         self.ui.openOutputFolder.clicked.connect(self.openOutputFolderButtonClicked)

@@ -8,8 +8,6 @@ v0.4
 
 - reduced-farming is baseline behavior now, write ASM so a single drop gives 3 of the item instead of sources dropping 3
 
--uncomment editing PanelDungeon chest rooms, commented out to speed up tests
-
 - merge settings from ProfessorLaw's fork
     start with maps & compasses
         WRITE ASM FOR THIS SO IT'S CLEANER
