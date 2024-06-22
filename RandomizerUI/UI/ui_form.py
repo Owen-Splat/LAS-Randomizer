@@ -1098,7 +1098,7 @@ class Ui_MainWindow(object):
         self.extendedConsumableCheck.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(whatsthis)
-        self.extendedConsumableCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Allows grass to drop arrows, bombs and powder (if owned)", None))
+        self.extendedConsumableCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Allows grass to drop arrows, bombs and powder", None))
 #endif // QT_CONFIG(whatsthis)
         self.extendedConsumableCheck.setText(QCoreApplication.translate("MainWindow", u"Extra consumable drop", None))
         self.groupBox_7.setTitle(QCoreApplication.translate("MainWindow", u"Other Options", None))

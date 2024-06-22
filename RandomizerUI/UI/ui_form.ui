@@ -1526,7 +1526,7 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>Allows grass to drop arrows, bombs and powder (if owned)</string>
+          <string>Allows grass to drop arrows, bombs and powder</string>
          </property>
          <property name="text">
           <string>Extra consumable drop</string>

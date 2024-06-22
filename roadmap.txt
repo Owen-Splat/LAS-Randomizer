@@ -4,8 +4,6 @@ v0.4
     work is done, needs tested
     get feedback for if it should be enabled by default or not
 
-- change phrasing of the consumable drops description, could be read as only powder needs to be owned
-
 - make sure logic knows that you can't have both followers at once
 
 - reduced-farming is baseline behavior now, write ASM so a single drop gives 3 of the item instead of sources dropping 3
