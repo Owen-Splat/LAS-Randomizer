@@ -2,7 +2,7 @@
 <br></br><br></br>
 - Settings string: Share settings with others, or even randomize settings
 <br></br><br></br>
-- New Settings: Quick mode, random enemy sizes, start with dungeon items, and more!
+- New Settings: Quick mode, random enemy sizes, chest type matches content, and more!
 <br></br><br></br>
 - ASM Patches: One-Hit KO Mode, Nice Items, and more to spice up gameplay!
 <br></br><br></br>
@@ -10,6 +10,8 @@
 <b>Changes:</b>
 <br></br><br></br>
 - Songs now display Marin/Manbo/Mamu when obtaining them
+<br></br><br></br>
+- NPCs now hold up the proper model before giving the item
 <br></br><br></br>
 - Reduced-farming is now baseline behavior and was replaced with a new setting
 <br></br><br></br>
