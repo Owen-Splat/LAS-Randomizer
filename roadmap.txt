@@ -10,6 +10,8 @@ v0.4
 
 - if we're going to write code for constantly changing swordlv1 model to ObjSinkingSword, might as well just the model in items.yml
 
+- reduced-farming is baseline behavior now, write ASM so a single drop gives 3 of the item instead of sources dropping 3
+
 - merge settings from ProfessorLaw's fork
     start with maps & compasses
         WRITE ASM FOR THIS SO IT'S CLEANER
