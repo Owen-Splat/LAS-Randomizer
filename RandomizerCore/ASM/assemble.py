@@ -16,6 +16,11 @@ def createRandomizerPatches(rand_state: tuple, settings: dict):
                 instruction = instruction.split('.string ')[1]
                 instruction = instruction.split('; ')[0]
                 patcher.replaceString(address, instruction, comment)
+            elif instruction.startswith('.short'):
+                instruction = instruction.split('.short ')[1]
+                instruction = instruction.split('; ')[0]
+                instruction = instruction.replace('#', '')
+                patcher.replaceShort(address, int(instruction), comment)
             else:
                 patcher.addPatch(address, instruction, comment)
 

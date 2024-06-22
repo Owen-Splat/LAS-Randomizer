@@ -20,9 +20,16 @@ class Patcher:
 
 
     def replaceString(self, address: int, new_string: str, comment=None):
-        """Changes a string at address into new_string"""
+        """Changes a string in the data section into new_string"""
 
         self.patches.append((address, new_string, comment))
+
+
+    def replaceShort(self, address: int, value: int, comment=None):
+        """Changes a short in the data section into value"""
+
+        instruction = value.to_bytes(1, 'little', signed=True)
+        self.patches.append((address, instruction, comment))
 
 
     def generateIPS32Patch(self):

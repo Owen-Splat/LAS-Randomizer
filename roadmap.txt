@@ -6,8 +6,6 @@ v0.4
 
 - make sure logic knows that you can't have both followers at once
 
-- reduced-farming is baseline behavior now, write ASM so a single drop gives 3 of the item instead of sources dropping 3
-
 - merge settings from ProfessorLaw's fork
     start with maps & compasses
         WRITE ASM FOR THIS SO IT'S CLEANER

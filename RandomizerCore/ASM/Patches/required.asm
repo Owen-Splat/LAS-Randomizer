@@ -34,3 +34,12 @@ b 0x7e1dd0
 mov w8, #1
 .offset 0x8049dc
 csel w0, w8, wzr, eq
+
+
+;* Make Bombs/Arrows/Powder give 3 for a single drop
+.offset 0x88f674
+mov w4, #3
+.offset 0x895674
+mov w4, #3
+.offset 0x16fae60
+.short #3 ; ItemMagicPowder count is stored in the data section instead of a local variable

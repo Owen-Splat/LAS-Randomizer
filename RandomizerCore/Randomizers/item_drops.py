@@ -19,15 +19,6 @@ def makeDatasheetChanges(sheet, settings):
         if sheet['values'][i]['mKey'] == 'HookShot':
             sheet['values'][i]['mLotTable'][0]['mType'] = ''
         
-        if sheet['values'][i]['mKey'] == 'Bomb':
-            sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-        
-        if sheet['values'][i]['mKey'] == 'MagicPowder':
-            sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-        
-        if sheet['values'][i]['mKey'] == 'Arrow':
-            sheet['values'][i]['mLotTable'][0]['mCookie'] = 3
-
         # Values will be different depending on extended consumable drop and reduce farming settings
         if sheet['values'][i]['mKey'] == 'Grass':
             heartWeight = sheet['values'][i]['mLotTable'][0]['mWeight']
@@ -55,20 +46,16 @@ def makeDatasheetChanges(sheet, settings):
                 dummyEntry = oead_tools.parseStruct(sheet['values'][i]['mLotTable'][0])
 
                 dummyEntry['mType'] = 'Bomb'
-                dummyEntry['mCookie'] = 3
                 dummyEntry['mWeight'] = 5
                 sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(dummyEntry))
 
                 dummyEntry['mType'] = 'Arrow'
-                dummyEntry['mCookie'] = 3
                 dummyEntry['mWeight'] = 5
                 sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(dummyEntry))
 
                 dummyEntry['mType'] = 'MagicPowder'
-                dummyEntry['mCookie'] = 3
                 dummyEntry['mWeight'] = 5
                 sheet['values'][i]['mLotTable'].append(oead_tools.dictToStruct(dummyEntry))
-
 
     for i in range(8):
         sheet['values'][first_heart_index+i]['mLotTable'][0]['mType'] = ''
