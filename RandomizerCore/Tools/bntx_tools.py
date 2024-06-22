@@ -134,7 +134,7 @@ def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolde
         texture_file = os.path.join(
             RESOURCE_PATH,
             'textures',
-            'chest', 'TreasureBox' + textureType + '.png'
+            'chest', 'TreasureBox' + textureType + '.dds'
         )
         replaceTextureInFile(
             chestBntxFilepath,
