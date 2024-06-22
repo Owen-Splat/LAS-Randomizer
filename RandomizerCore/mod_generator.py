@@ -2061,8 +2061,8 @@ class ModsProcess(QtCore.QThread):
             return item_key, item_index
         
         if item_key[-4:] != 'Trap':
-            model_path = 'ObjSinkingSword.bfres' if item_key == 'SwordLv1' else self.item_defs[item]['model-path']
-            model_name = 'SinkingSword' if item_key == 'SwordLv1' else self.item_defs[item]['model-name']
+            model_path = self.item_defs[item]['model-path']
+            model_name = self.item_defs[item]['model-name']
         else:
             model_name = random.choice(list(trap_models))
             model_path = trap_models[model_name]

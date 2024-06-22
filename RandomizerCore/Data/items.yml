@@ -4,8 +4,8 @@ Item_Pool:
     type: important
     quantity: 2
     item-key: SwordLv1
-    model-path: ItemSwordLv1.bfres
-    model-name: SwordLv1
+    model-path: ObjSinkingSword.bfres # ItemSwordLv1.bfres
+    model-name: SinkingSword #SwordLv1
     npc-key: ItemSwordLv1
   shield:
     type: important

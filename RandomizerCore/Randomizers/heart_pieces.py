@@ -44,8 +44,8 @@ def changeHeartPiece(flowchart, item_key, item_index, model_path, model_name, ro
         else:
             act.posY += 0.375 # raise all others by 1/4 tile
     
-    act.parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
-    act.parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
+    act.parameters[0] = bytes(model_path, 'utf-8')
+    act.parameters[1] = bytes(model_name, 'utf-8')
     act.parameters[2] = bytes(room, 'utf-8') # entry point
     act.parameters[3] = bytes(HEART_FLAGS[room], 'utf-8') # flag which controls if the heart piece appears or not
 

@@ -36,8 +36,8 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
     room.actors[4].rotY = 0
 
     # Keep the normal model if it's a sword
-    room.actors[4].parameters[0] = bytes('ObjSinkingSword.bfres' if item_key == 'SwordLv1' else model_path, 'utf-8')
-    room.actors[4].parameters[1] = bytes('SinkingSword' if item_key == 'SwordLv1' else model_name, 'utf-8')
+    room.actors[4].parameters[0] = bytes(model_path, 'utf-8')
+    room.actors[4].parameters[1] = bytes(model_name, 'utf-8')
     room.actors[4].parameters[2] = bytes('examine', 'utf-8')
     room.actors[4].parameters[3] = bytes(BEACH_LOOSE_FLAG, 'utf-8')
 
