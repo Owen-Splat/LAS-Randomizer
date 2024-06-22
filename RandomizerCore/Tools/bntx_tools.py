@@ -1,7 +1,7 @@
 from PIL import Image
 import RandomizerCore.Tools.bntx_editor.bntx_editor as bntx_editor
 import RandomizerCore.Tools.oead_tools as oead_tools
-from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH
+from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH, IS_RUNNING_FROM_SOURCE
 import os
 import struct
 import quicktex.dds as quicktex_dds
@@ -109,6 +109,10 @@ def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolde
     missingTextureTypes = []
 
     for textureType in textureTypes:
+        if IS_RUNNING_FROM_SOURCE: # always create the files when running from source to make sure there aren't any issues
+            missingTextureTypes.append(textureType)
+            continue
+
         if not os.path.exists(os.path.join(RESOURCE_PATH, 'textures', f'ObjTreasureBox{textureType}.bfres')):
             missingTextureTypes.append(textureType)
 
@@ -127,20 +131,16 @@ def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolde
     temporaryBntx = os.path.join(RESOURCE_PATH, 'textures', 'chestTextures_updated.bntx')
 
     for textureType in missingTextureTypes:
-        new_dds = BytesIO()
-        texture_png = Image.open(os.path.join(
+        texture_file = os.path.join(
             RESOURCE_PATH,
             'textures',
             'chest', 'TreasureBox' + textureType + '.png'
-        ))
-        save(quicktex_dds.encode(texture_png, bc3.BC3Encoder(18), 'DXT5'), new_dds)
-        new_dds.seek(0)
-
+        )
         replaceTextureInFile(
             chestBntxFilepath,
             temporaryBntx,
             'MI_dungeonTreasureBox_01_alb',
-            new_dds
+            texture_file
         )
 
         # Injecting BNTX in the BFRES file

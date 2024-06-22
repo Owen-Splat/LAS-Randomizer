@@ -220,6 +220,7 @@ class ModsProcess(QtCore.QThread):
 
             # Managing panels to set default chest texture for now as I cannot detect chest content (only $PANEL)
             if room.startswith('panel-'):
+                continue
                 for actor in room_data.actors:
                     if actor.name.startswith(b'ObjTreasureBox'):
                         room_data.setChestContent(
