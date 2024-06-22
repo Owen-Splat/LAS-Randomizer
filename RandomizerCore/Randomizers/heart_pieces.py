@@ -1,6 +1,6 @@
 import RandomizerCore.Tools.event_tools as event_tools
 from RandomizerCore.Randomizers import item_get
-from RandomizerCore.Randomizers.data import HEART_FLAGS, MODEL_SIZES
+from RandomizerCore.Randomizers.data import HEART_FLAGS, MODEL_SIZES, MODEL_ROTATIONS
 
 
 sunken = [
@@ -59,3 +59,5 @@ def changeHeartPiece(flowchart, item_key, item_index, model_path, model_name, ro
         act.scaleX = size
         act.scaleY = size
         act.scaleZ = size
+    if model_name in MODEL_ROTATIONS:
+        act.rotY = MODEL_ROTATIONS[model_name]

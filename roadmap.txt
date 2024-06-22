@@ -8,8 +8,6 @@ v0.4
 
 - make sure logic knows that you can't have both followers at once
 
-- if we're going to write code for constantly changing swordlv1 model to ObjSinkingSword, might as well just the model in items.yml
-
 - reduced-farming is baseline behavior now, write ASM so a single drop gives 3 of the item instead of sources dropping 3
 
 -uncomment editing PanelDungeon chest rooms, commented out to speed up tests
@@ -18,8 +16,6 @@ v0.4
     start with maps & compasses
         WRITE ASM FOR THIS SO IT'S CLEANER
     chest textures I'm going to make from scratch because even modified assets fall under copyright
-    not adding perfect-ending, players should have to work for it
-        softlocking and needing to die sucks, but that's a player knowledge issue
 
 ----------
 v0.5

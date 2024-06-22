@@ -603,6 +603,9 @@ MODEL_SIZES = {
     'ManboTamegoro': 0.35,
     'Mamu': 0.25
 }
+MODEL_ROTATIONS = {
+    'SinkingSword': 180.0
+}
 
 
 DUNGEON_ENTRANCES = {
