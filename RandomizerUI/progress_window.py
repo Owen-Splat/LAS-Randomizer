@@ -29,7 +29,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings = copy.deepcopy(settings)
         
         self.valid_placements = 155 - len(settings['starting-items'])
-        self.num_of_mod_tasks = 318 # adjusted so the progress bar takes a final step to display it's done
+        self.num_of_mod_tasks = 319 # adjusted so the progress bar takes a final step to display it's done
 
         self.ui.openOutputFolder.setVisible(False)
         self.ui.openOutputFolder.clicked.connect(self.openOutputFolderButtonClicked)
@@ -69,6 +69,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if settings['open-mabe']:
             self.num_of_mod_tasks += 4
         
+        if settings['open-bridge']:
+            self.num_of_mod_tasks += 1
+
         self.done = False
         self.cancel = False
 

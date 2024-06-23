@@ -1663,22 +1663,22 @@ class ModsProcess(QtCore.QThread):
 
         if self.thread_active:
             flow = self.readFile('QuadrupletsMother.bfevfl')
-            trade_quest.mamashaChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.mamashaChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('QuadrupletsMother.bfevfl', flow)
         
         if self.thread_active:
             flow = self.readFile('RibbonBowWow.bfevfl')
-            trade_quest.ciaociaoChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.ciaociaoChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('RibbonBowWow.bfevfl', flow)
         
         if self.thread_active:
             flow = self.readFile('Sale.bfevfl')
-            trade_quest.saleChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.saleChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('Sale.bfevfl', flow)
         
         if self.thread_active:
             flow = self.readFile('Kiki.bfevfl')
-            trade_quest.kikiChanges(flow.flowchart, self.placements, self.settings, self.item_defs, self.rom_path)
+            trade_quest.kikiChanges(flow.flowchart, self.placements, self.settings, self.item_defs)
             # # shuffle bridge building music
             # if self.settings['randomize-music']:
             #     event_tools.findEvent(flow.flowchart, 'Event114').data.params.data['label'] = self.songs_dict['BGM_EVENT_MONKEY']
@@ -1687,6 +1687,10 @@ class ModsProcess(QtCore.QThread):
             #             {'label': self.songs_dict['BGM_EVENT_MONKEY'], 'duration': 0.0})
             #     ])
             self.writeFile('Kiki.bfevfl', flow)
+            if self.settings['open-bridge']:
+                room_data = self.readFile('Field_08L.leb')
+                room_data.actors[0].posX += 1.5
+                self.writeFile('Field_08L.leb', room_data)
 
         if self.thread_active:
             flow = self.readFile('Tarin.bfevfl')
@@ -1698,42 +1702,42 @@ class ModsProcess(QtCore.QThread):
         
         if self.thread_active:
             flow = self.readFile('ChefBear.bfevfl')
-            trade_quest.chefChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.chefChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('ChefBear.bfevfl', flow)
 
         if self.thread_active:
             flow = self.readFile('Papahl.bfevfl')
-            trade_quest.papahlChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.papahlChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('Papahl.bfevfl', flow)
 
         if self.thread_active:
             flow = self.readFile('Christine.bfevfl')
-            trade_quest.christineChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.christineChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('Christine.bfevfl', flow)
 
         if self.thread_active:
             flow = self.readFile('DrWrite.bfevfl')
-            trade_quest.mrWriteChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.mrWriteChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('DrWrite.bfevfl', flow)
 
         if self.thread_active:
             flow = self.readFile('GrandmaUlrira.bfevfl')
-            trade_quest.grandmaYahooChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.grandmaYahooChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('GrandmaUlrira.bfevfl', flow)
 
         if self.thread_active:
             flow = self.readFile('MarthasBayFisherman.bfevfl')
-            trade_quest.fishermanChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.fishermanChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('MarthasBayFisherman.bfevfl', flow)
 
         if self.thread_active:
             flow = self.readFile('MermaidMartha.bfevfl')
-            trade_quest.mermaidChanges(flow.flowchart, self.placements, self.item_defs, self.rom_path)
+            trade_quest.mermaidChanges(flow.flowchart, self.placements, self.item_defs)
             self.writeFile('MermaidMartha.bfevfl', flow)
         
         if self.thread_active:
             flow = self.readFile('MarthaStatue.bfevfl')
-            trade_quest.statueChanges(flow.flowchart, self.rom_path)
+            trade_quest.statueChanges(flow.flowchart)
             self.writeFile('MarthaStatue.bfevfl', flow)
     
 
