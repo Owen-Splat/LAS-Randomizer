@@ -1,15 +1,12 @@
 v0.4
 
-- add nice-bombs setting
-    work is done, needs tested
-    get feedback for if it should be enabled by default or not
-
 - make sure logic knows that you can't have both followers at once
 
 - merge settings from ProfessorLaw's fork
-    start with maps & compasses
+    start with keys, maps, compasses, & beaks
         WRITE ASM FOR THIS SO IT'S CLEANER
     chest textures I'm going to make from scratch because even modified assets fall under copyright
+    less detailed textures are fine since the chest model is detailed enough
 
 ----------
 v0.5

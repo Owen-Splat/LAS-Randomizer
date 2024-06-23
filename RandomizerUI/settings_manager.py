@@ -50,7 +50,7 @@ BASE_OPTIONS = {
     'ohkoCheck': False,
     'lv1BeamCheck': False,
     'niceRodCheck': True,
-    'niceBombsCheck': True,
+    'niceBombsCheck': False,
     'stealingComboBox': 2,
     'rupeesSpinBox': 0,
     'starting_gear': []
