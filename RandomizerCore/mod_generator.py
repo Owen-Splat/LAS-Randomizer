@@ -1139,6 +1139,8 @@ class ModsProcess(QtCore.QThread):
                     item['npcKey'] = 'PatchSmallKey'
                 if item['symbol'] == 'Honeycomb':
                     item['npcKey'] = 'PatchHoneycomb'
+                if item['symbol'] == 'Stick':
+                    item['npcKey'] = 'PatchStick'
                 if item['symbol'] == 'YoshiDoll': # ocarina and instruments are ItemYoshiDoll actors
                     item['npcKey'] = 'PatchYoshiDoll'
                     dummy = oead_tools.parseStruct(item) # create copy to use as a base for custom entries
@@ -1678,7 +1680,8 @@ class ModsProcess(QtCore.QThread):
         
         if self.thread_active:
             flow = self.readFile('Kiki.bfevfl')
-            trade_quest.kikiChanges(flow.flowchart, self.settings, self.getItemInfo('kiki'))
+            item_key, item_index, model_path, model_name = self.getItemInfo('kiki', self.trap_models)
+            trade_quest.kikiChanges(flow.flowchart, self.settings, item_key, item_index)
             # # shuffle bridge building music
             # if self.settings['randomize-music']:
             #     event_tools.findEvent(flow.flowchart, 'Event114').data.params.data['label'] = self.songs_dict['BGM_EVENT_MONKEY']
@@ -1687,10 +1690,18 @@ class ModsProcess(QtCore.QThread):
             #             {'label': self.songs_dict['BGM_EVENT_MONKEY'], 'duration': 0.0})
             #     ])
             self.writeFile('Kiki.bfevfl', flow)
+            room_data = self.readFile('Field_08L.leb')
+            kiki_actor = room_data.actors[0]
+            stick_actor = room_data.actors[7]
+            # move kiki & the stick if open-bridge is on
             if self.settings['open-bridge']:
-                room_data = self.readFile('Field_08L.leb')
-                room_data.actors[0].posX += 1.5
-                self.writeFile('Field_08L.leb', room_data)
+                kiki_actor.posX += 1.5
+                stick_actor.posX += 1.5
+                stick_actor.posZ -= 1.5
+            # add the model info to the stick actor parameters
+            stick_actor.parameters[1] = bytes(model_path, 'utf-8')
+            stick_actor.parameters[2] = bytes(model_name, 'utf-8')
+            self.writeFile('Field_08L.leb', room_data)
 
         if self.thread_active:
             flow = self.readFile('Tarin.bfevfl')

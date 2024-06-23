@@ -49,6 +49,10 @@ def makeNpcChanges(npc, placements, settings):
             npc['shellSensor'].append({'category': 2, 'parameter': f"!Seashell:{placements['indexes']['tarin-ukuku']}"})
         return
     
+    if npc['symbol'] == 'ItemStick': # Change the model of the item that Kiki drops
+        npc['graphics']['path'] = '$1'
+        npc['graphics']['model'] = '$2'
+    
     if npc['symbol'] == 'ObjClothBag': # Make it so Papahl's bag appears with him when you get the Pineapple
         npc['layoutConditions'][1] = {'category': 1, 'parameter': 'TradePineappleGet', 'layoutID': 0}
         return
@@ -225,6 +229,11 @@ def makeNewNpcs(npc_sheet, placements, item_defs):
     dummy['symbol'] = 'PatchHoneycomb'
     dummy['graphics']['path'] = 'ItemHoneycomb.bfres'
     dummy['graphics']['model'] = 'Honeycomb'
+    npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
+    dummy['symbol'] = 'PatchStick'
+    dummy['graphics']['path'] = 'ItemStick.bfres'
+    dummy['graphics']['model'] = 'Stick'
     npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
 
     item = placements['syrup']

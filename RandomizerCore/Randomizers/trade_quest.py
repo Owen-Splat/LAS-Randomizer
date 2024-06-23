@@ -38,8 +38,7 @@ def saleChanges(flowchart, item_info):
 
 
 
-def kikiChanges(flowchart, settings, item_info):
-    item_key, item_index = item_info
+def kikiChanges(flowchart, settings, item_key, item_index):
     get_event = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, 'Event102')
 
     bananas_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
