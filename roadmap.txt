@@ -6,7 +6,7 @@ v0.4
     start with keys, maps, compasses, & beaks
         WRITE ASM FOR THIS SO IT'S CLEANER
     chest textures I'm going to make from scratch because even modified assets fall under copyright
-    less detailed textures are fine since the chest model is detailed enough
+        less detailed textures are fine since the chest model is detailed enough
 
 ----------
 v0.5
@@ -14,13 +14,13 @@ v0.5
 - eventflow edits through code gets pretty messy and hard to follow
     create our own type of flowchart file and write a parser that'll translate them into the .bfevfl files
     this reduces the amount of code and will just be plain easier to edit
-    may also carry over well for EoW
+    also create a Randomizer.bfevfl to handle giving all items, everything else will subflow to this
+
+- keysanity
+    use the Randomizer.bfevfl and the itemIndex parameter with the FlowControl::CompareInt to determine dungeon
+    holding up dungeon items can just display the Place:LvXDungeon, no need for custom text
 
 - barren dungeons
-
-- work on custom text and finish keysanity implementation
-    use custom text to make tunics more intuitive
-    we can use the new FlowControl::CompareInt to determine what text to display for keysanity
 
 ----------
 v0.6
@@ -45,10 +45,8 @@ v0.7
 ----------
 GENERAL FUTURE STUFF TO LOOK INTO
 
-- make custom Randomizer.bfevfl file to for every other flowchart to subflow to
-    this way, we don't need to add all the different event actors to every single flowchart we edit
-    subflow also allows passing parameters such as the item index
-    this will give a cleaner result to debug since any bugged item event will just be in 1 location
+- work on custom text
+    use custom text to make tunics more intuitive
 
 - make every telephone booth have bowwow and rooster to swap between
 
@@ -68,8 +66,7 @@ GENERAL FUTURE STUFF TO LOOK INTO
     will be by far the most complex asm
     seashells need to ignore inventory as well as add actor params to the ones dynamically spawned in
 
-- turn small key actors that are not actually keys into golden leaf actors to remove compass ringing
-    needs asm patch to make golden leaf actors ignore inventory
+- write ASM to make ItemSmallKey actors check parameter[1] like ObjTreasureBox does
 
 - fix dampe logic for instrument shuffle
     logic currently assumes that if you have the instrument, you have all the items needed to clear the rooms
