@@ -1,12 +1,16 @@
 v0.4
 
+- double check that FlowControl::CompareInt actually works
+    I think I already did but we need to be absolutely sure before pushing a new build
+
 - make sure logic knows that you can't have both followers at once
 
 - merge settings from ProfessorLaw's fork
     start with keys, maps, compasses, & beaks
         WRITE ASM FOR THIS SO IT'S CLEANER
-    chest textures I'm going to make from scratch because even modified assets fall under copyright
-        less detailed textures are fine since the chest model is detailed enough
+            adds different items depending on settings, asm needs to be on the same line, make sure assemble.py can handle that
+    mess with chest textures more to make them look better
+        seashell chest is excluded because it removes some value from the sensor
 
 ----------
 v0.5
@@ -15,10 +19,11 @@ v0.5
     create our own type of flowchart file and write a parser that'll translate them into the .bfevfl files
     this reduces the amount of code and will just be plain easier to edit
     also create a Randomizer.bfevfl to handle giving all items, everything else will subflow to this
+        made a branch for this, but rapids and seashell mansion crash for some reason, they might still need to be manual
 
 - keysanity
     use the Randomizer.bfevfl and the itemIndex parameter with the FlowControl::CompareInt to determine dungeon
-    holding up dungeon items can just display the Place:LvXDungeon, no need for custom text
+    holding up dungeon items can just display the "Place:LvXDungeon" text, no need for custom text
 
 - barren dungeons
 
