@@ -170,7 +170,7 @@ def changeRewards(flowchart):
     bottle_get = item_get.insertItemGetAnimation(flowchart, 'Bottle', 1, None, 'Event0')
     index_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt',
         {'value1': 'itemIndex', 'value2': 1},
-        {0: powder_check, 1: bottle_get})
+        {0: bottle_get, 1: powder_check})
     bottle_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
         {'value1': 'itemKey', 'value2': 'Bottle'},
         {0: index_check, 1: powder_check})

@@ -27,13 +27,12 @@ b 0x7e1dd0
 
 
 ;* Rewrite FlowControl::CompareInt event to check if the values are equal
+; To match FlowControl::CompareString, it returns 0 if they are equal, 1 if not
 ; This allows us to check the index of items through the EventFlow system
 ; The main purpose of this will be for Keysanity to know which dungeon text to display
 ; This is also used to set a flag for the Fishing Bottle
 .offset 0x8049d8
 mov w8, #1
-.offset 0x8049dc
-csel w0, w8, wzr, eq
 
 
 ;* Make Bombs/Arrows/Powder give 3 for a single drop

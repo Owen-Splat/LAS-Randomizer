@@ -1,10 +1,16 @@
 from PySide6 import QtCore
+from .Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 import RandomizerCore.spoiler as spoiler
 import re
 import copy
 import random
 import traceback
 
+TEST_PLACEMENTS = { # example: testing specific items in chests
+    # 'woods-crossing-cave-chest': 'bottle',
+    # 'woods-south-chest': 'bottle',
+    # 'beach-chest': 'bottle'
+}
 
 
 class ItemShuffler(QtCore.QThread):
@@ -30,7 +36,6 @@ class ItemShuffler(QtCore.QThread):
         self.logic_defs = logic_defs
         
         self.force_chests = ['zol-trap', 'stalfos-note']
-        # self.force_out_shop = ['zap-trap']
 
         self.progress_value = 0
         self.thread_active = True
@@ -38,57 +43,56 @@ class ItemShuffler(QtCore.QThread):
     
     # thread automatically starts the run method
     def run(self):
-        # remove some settings specific stuff from the logic before creating the vanilla placements
-        if not self.settings['owl-overworld-gifts']:
-            owls = [k for k, v in self.logic_defs.items()
-                   if v['type'] == 'item'
-                   and v['subtype'] == 'overworld-statue']
-            for owl in owls:
-                del self.logic_defs[owl]
-        else:
-            self.item_defs['rupee-20']['quantity'] += 9 # 33 total owl statues, 9 in overworld
-        
-        if not self.settings['owl-dungeon-gifts']:
-            owls = [k for k, v in self.logic_defs.items()
-                   if v['type'] == 'item'
-                   and v['subtype'] == 'dungeon-statue']
-            for owl in owls:
-                del self.logic_defs[owl]
-        else:
-            self.item_defs['rupee-20']['quantity'] += 24 # 33 total owl statues, 24 in dungeons
+        # change some logic & item pool things before we create the list of vanilla locations
+        self.logicSettingsChanges()
 
         # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
-        vanilla_locations = [k for k, v in self.logic_defs.items()
+        self.vanilla_locations = [k for k, v in self.logic_defs.items()
                             if v['type'] == 'item'
                             and v['subtype'] not in ('chest', 'boss', 'enemy', 'drop', 'npc', 'standing', 'overworld-statue', 'dungeon-statue')]
-        vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
-        vanilla_locations.append('trendy-prize-2')
-        vanilla_locations.append('trendy-prize-3')
-        vanilla_locations.append('trendy-prize-4')
-        vanilla_locations.append('trendy-prize-5')
-        vanilla_locations.append('trendy-prize-6')
-        # vanilla_locations.append('kanalet-final-guard')
-        # vanilla_locations.append('fishing-loose')
-        
-        # vanilla_locations.remove('shop-slot3-1st')
-        # vanilla_locations.remove('shop-slot3-2nd')
-        # vanilla_locations.remove('shop-slot6')
-        # vanilla_locations.remove('bay-passage-sunken')
-        # vanilla_locations.remove('river-crossing-cave')
-        # vanilla_locations.remove('kanalet-moat-south')
-        # vanilla_locations.remove('south-bay-sunken')
-        # vanilla_locations.remove('taltal-east-drop')
-        
-        # if not self.settings['shuffle-companions']:
-        # vanilla_locations.append('moblin-cave')
-        # vanilla_locations.append('rooster-statue')
+        self.vanilla_locations.append('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
+        self.vanilla_locations.append('trendy-prize-2')
+        self.vanilla_locations.append('trendy-prize-3')
+        self.vanilla_locations.append('trendy-prize-4')
+        self.vanilla_locations.append('trendy-prize-5')
+        self.vanilla_locations.append('trendy-prize-6')
 
         # if blupsanity is not enabled, add the checks to the vanilla locations
         if not self.settings['blupsanity']:
             for i in range(28):
-                vanilla_locations.append(f'D0-rupee-{i+1}')
+                self.vanilla_locations.append(f'D0-rupee-{i+1}')
         
-        ### ITEM_DEF CHANGES DEPENDING ON SEED SETTINGS
+        # make changes to the logic & item pool based on starting items
+        self.addStartingItems()
+        
+        # create the new dungeon entrances
+        self.shuffleDungeons()
+
+        try:
+            # Create a placement and spoiler log
+            if self.thread_active:
+                placements = self.makeRandomizedPlacement()
+            
+            if self.thread_active:
+                self.give_placements.emit(placements)
+        
+        except Exception:
+            er = traceback.format_exc()
+            print(er)
+            self.error.emit(er)
+        
+        finally: # regardless if there was an error or not, we want to tell the progress window that this thread has finished
+            self.is_done.emit()
+    
+    
+    # executed when the user attempts to close the progress window, sets thread_active to false so further code will be skipped
+    def stop(self):
+        self.thread_active = False
+    
+    
+    def addStartingItems(self):
+        """Edits the logic & item pool to support the starting items"""
+
         instruments = [
             'full-moon-cello',
             'conch-horn',
@@ -125,7 +129,7 @@ class ItemShuffler(QtCore.QThread):
         # if randomized instruments is off, make sure the remaining instruments are in their vanilla locations
         if not self.settings['shuffle-instruments']:
             for inst in instrument_locations:
-                vanilla_locations.append(inst)
+                self.vanilla_locations.append(inst)
         
         # if start with compass & map setting is enabled, adding them into the starting item setting
         dungeon_item_setting = self.settings['dungeon-items']
@@ -147,7 +151,7 @@ class ItemShuffler(QtCore.QThread):
                     'region': 'mabe',
                     'spoiler-region': 'mabe-village'
                 }
-                vanilla_locations.append(f'starting-dungeon-item-{e + 1}')
+                self.vanilla_locations.append(f'starting-dungeon-item-{e + 1}')
                 self.item_defs['rupee-50']['quantity'] += 1  # since we add a location for each item, add a 50 rupee in the pool for each
 
         # add the starting instruments to the list of starting items since we are done with them
@@ -162,61 +166,93 @@ class ItemShuffler(QtCore.QThread):
                 'region': 'mabe',
                 'spoiler-region': 'mabe-village'
             }
-            vanilla_locations.append(f'starting-item-{e+1}')
+            self.vanilla_locations.append(f'starting-item-{e+1}')
             self.item_defs['rupee-50']['quantity'] += 1 # since we add a location for each item, add a 50 rupee in the pool for each
+
+
+    def logicSettingsChanges(self):
+        """Changes logic & item pool depending on settings"""
         
+        # remove some settings specific stuff from the logic before creating the vanilla placements
+        if not self.settings['owl-overworld-gifts']:
+            owls = [k for k, v in self.logic_defs.items()
+                if v['type'] == 'item'
+                and v['subtype'] == 'overworld-statue']
+            for owl in owls:
+                del self.logic_defs[owl]
+        else:
+            self.item_defs['rupee-20']['quantity'] += 9 # 33 total owl statues, 9 in overworld
+        
+        if not self.settings['owl-dungeon-gifts']:
+            owls = [k for k, v in self.logic_defs.items()
+                if v['type'] == 'item'
+                and v['subtype'] == 'dungeon-statue']
+            for owl in owls:
+                del self.logic_defs[owl]
+        else:
+            self.item_defs['rupee-20']['quantity'] += 24 # 33 total owl statues, 24 in dungeons
+
         # if shuffled bombs or powder is on, we want to consider them important instead of junk
         if self.settings['shuffle-bombs']:
             self.item_defs['bomb']['type'] = 'important'
         if self.settings['shuffle-powder']:
             self.item_defs['powder']['type'] = 'important'
         
-        # add traps to the item pool, with the amount varying depending on the level
+        # add traps to the item pool
         if self.settings['traps'] != 'none':
-            traps = [k for k in self.item_defs # get all non zol-traps, not optimal but can add traps without editing the shuffler
-                    if k[-4:] == 'trap'
-                    and k[:3] != 'zol']
-            
-            num_traps = {'few': 3, 'several': 9, 'many': 15}
-            num_traps = num_traps[self.settings['traps']]
+            self.addTraps()
 
-            # with trapsanity, the number of traps also increase depending on other settings
-            if self.settings['blupsanity'] and num_traps == 15:
-                self.item_defs['rupee-5']['quantity'] -= 14
-                for i in range(14):
-                    trap = random.choice(traps)
-                    self.item_defs[trap]['quantity'] += 1
-            
-            if self.settings['owl-overworld-gifts'] and num_traps == 15:
-                self.item_defs['rupee-20']['quantity'] -= 3
-                for i in range(3):
-                    trap = random.choice(traps)
-                    self.item_defs[trap]['quantity'] += 1
-            
-            if self.settings['owl-dungeon-gifts'] and num_traps == 15:
-                self.item_defs['rupee-20']['quantity'] -= 8
-                for i in range(8):
-                    trap = random.choice(traps)
-                    self.item_defs[trap]['quantity'] += 1
-            
-            # remove duplicate zol-traps in exchange for custom traps
-            self.item_defs['zol-trap']['quantity'] -= 3
 
-            # remove 50-rupees to make room for the traps, and add in more high value rupees
-            self.item_defs['rupee-50']['quantity'] -= num_traps + 3
-            self.item_defs['rupee-100']['quantity'] += 5 # +500 rupees
-            self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
+    def addTraps(self):
+        """Adds traps to the item pool. The amount varies based on the trap level & other settings"""
 
-            for i in range(num_traps):
+        traps = [k for k in self.item_defs # get all non zol-traps, not optimal but can add traps without editing the shuffler
+                if k[-4:] == 'trap'
+                and k[:3] != 'zol']
+        
+        num_traps = {'few': 3, 'several': 9, 'many': 15}
+        num_traps = num_traps[self.settings['traps']]
+
+        # with trapsanity, the number of traps also increase depending on other settings
+        if self.settings['blupsanity'] and num_traps == 15:
+            self.item_defs['rupee-5']['quantity'] -= 14
+            for i in range(14):
                 trap = random.choice(traps)
                 self.item_defs[trap]['quantity'] += 1
         
-        # shuffled dungeons testing
+        if self.settings['owl-overworld-gifts'] and num_traps == 15:
+            self.item_defs['rupee-20']['quantity'] -= 3
+            for i in range(3):
+                trap = random.choice(traps)
+                self.item_defs[trap]['quantity'] += 1
+        
+        if self.settings['owl-dungeon-gifts'] and num_traps == 15:
+            self.item_defs['rupee-20']['quantity'] -= 8
+            for i in range(8):
+                trap = random.choice(traps)
+                self.item_defs[trap]['quantity'] += 1
+        
+        # remove duplicate zol-traps in exchange for custom traps
+        self.item_defs['zol-trap']['quantity'] -= 3
+
+        # remove 50-rupees to make room for the traps, and add in more high value rupees
+        self.item_defs['rupee-50']['quantity'] -= num_traps + 3
+        self.item_defs['rupee-100']['quantity'] += 5 # +500 rupees
+        self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
+
+        for i in range(num_traps):
+            trap = random.choice(traps)
+            self.item_defs[trap]['quantity'] += 1
+
+
+    def shuffleDungeons(self):
+        """Randomizes the dungeon entrances, and swaps the logic for each"""
+
         dungeons = [
             'tail-cave', 'bottle-grotto', 'key-cavern', 'angler-tunnel', 'catfish-maw',
             'face-shrine', 'eagle-tower', 'turtle-rock', 'color-dungeon'
         ]
-        new_dungeons = {}
+        self.dungeon_entrances = {}
         
         if self.settings['shuffle-dungeons']:
             target_dungeons = copy.deepcopy(dungeons)
@@ -226,7 +262,7 @@ class ItemShuffler(QtCore.QThread):
             # keep track of new destinations and the condition of the old one
             for dungeon in dungeons:
                 dun = target_dungeons.pop(0)
-                new_dungeons[dungeon] = dun
+                self.dungeon_entrances[dungeon] = dun
                 conditions[dun] = self.logic_defs[dungeon]['condition-basic']
             
             # edit the new dungeon condition to be the condition of the old one
@@ -234,31 +270,9 @@ class ItemShuffler(QtCore.QThread):
                 self.logic_defs[c]['condition-basic'] = conditions[c]
         else:
             for dungeon in dungeons:
-                new_dungeons[dungeon] = dungeon
-        
-        try:
-            # Create a placement and spoiler log
-            if self.thread_active:
-                placements = self.makeRandomizedPlacement(self.logic, self.settings['excluded-locations'],
-                                                          vanilla_locations, self.settings, new_dungeons)
-            
-            if self.thread_active:
-                self.give_placements.emit(placements)
-        
-        except Exception:
-            er = traceback.format_exc()
-            print(er)
-            self.error.emit(er)
-        
-        finally: # regardless if there was an error or not, we want to tell the progress window that this thread has finished
-            self.is_done.emit()
-    
-    
-    # executed when the user attempts to close the progress window, sets thread_active to false so further code will be skipped
-    def stop(self):
-        self.thread_active = False
-    
-    
+                self.dungeon_entrances[dungeon] = dungeon
+
+
     # SHUFFLE ITEMS
     def addAccess(self, access, new):
         if new in access:
@@ -428,34 +442,17 @@ class ItemShuffler(QtCore.QThread):
     
     
     
-    def makeRandomizedPlacement(self, logic, force_junk, force_vanilla, settings, dungeon_entrances):
-        """Creates and returns a a randomized placement of items, adhering to the logic
-        
-        Parameters
-        ----------
-        seed : int
-            The seed to initialize the randomness.
-        logic : str
-            The logic to use in verifying. 'basic', 'advanced', 'glitched', or 'hell'
-        forceJunk : list
-            A list of strings as location names, which should be forced to hold junk items.
-        forceVanilla : list
-            A list of strings as location names, which should be forced to hold the same item they do in the normal game.
-            forceJunk takes priority over forceVanilla
-        settings : dict
-            The settings that will be checked while making the placements
-        dungeon_entrances : dict
-            The new dungeon entrances that will be checked while making the placements
-        """
+    def makeRandomizedPlacement(self):
+        """Creates and returns a a randomized placement of items, adhering to the logic"""
         
         verbose = False # change this to True to print item placements to help debug
 
-        if not set(force_junk).isdisjoint(force_vanilla):
+        if not set(self.settings['excluded-locations']).isdisjoint(self.vanilla_locations):
             print('Warning! Some locations set as disabled are unrandomized. These locations will not actually be considered out of logic.')
-            force_junk = [l for l in force_junk if l not in force_vanilla]
+            self.settings['excluded-locations'] = [l for l in self.settings['excluded-locations'] if l not in self.vanilla_locations]
         
         # Ensure all excluded locations are actually location names
-        force_junk = [l for l in force_junk if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
+        self.settings['excluded-locations'] = [l for l in self.settings['excluded-locations'] if l in self.logic_defs and self.logic_defs[l]['type'] == 'item']
         
         # Initialize the item and location lists, and the structures for tracking placements and access
         access = {}
@@ -469,11 +466,11 @@ class ItemShuffler(QtCore.QThread):
         
         vanilla_seashells = 0 # Keep track of how many seashells were forced into their vanilla locations
 
-        placements['settings'] = settings
-        placements['force-junk'] = force_junk
-        placements['force-vanilla'] = force_vanilla
-        placements['starting-items'] = settings['starting-items']
-        placements['dungeon-entrances'] = dungeon_entrances
+        placements['settings'] = self.settings
+        placements['force-junk'] = self.settings['excluded-locations']
+        placements['force-vanilla'] = self.vanilla_locations
+        placements['starting-items'] = self.settings['starting-items']
+        placements['dungeon-entrances'] = self.dungeon_entrances
         placements['indexes'] = {}
         
         indexes_available = {'seashell': list(range(50)),
@@ -525,7 +522,7 @@ class ItemShuffler(QtCore.QThread):
             #         important_items += [key] * self.item_defs[key]['quantity']
 
         # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
-        settings_access = {setting: 1 for setting in settings if settings[setting] == True}
+        settings_access = {setting: 1 for setting in self.settings if self.settings[setting] == True}
         access.update(settings_access)
         
         # Force the followers to be vanilla (for now)
@@ -541,7 +538,7 @@ class ItemShuffler(QtCore.QThread):
         # print(len(items))
 
         # Assign vanilla contents to forceVanilla locations
-        for loc in force_vanilla:
+        for loc in self.vanilla_locations:
             if not self.thread_active:
                 break
 
@@ -555,7 +552,7 @@ class ItemShuffler(QtCore.QThread):
             items.remove(placements[loc])
             access = self.removeAccess(access, placements[loc])
             locations.remove(loc)
-                        
+            
             # If the item is one that needs an index, assign it its vanilla item index and remove that from the available indexes
             if placements[loc] in indexes_available:
                 if placements[loc] == 'seashell':
@@ -608,7 +605,7 @@ class ItemShuffler(QtCore.QThread):
                     access = self.removeAccess(access, item)
                     
                     # Check if it's reachable there
-                    valid_placement = self.canReachLocation(location_pool[0], placements, access, logic)
+                    valid_placement = self.canReachLocation(location_pool[0], placements, access, self.logic)
                     if not valid_placement:
                         # If it's not, take back the item and shift that location to the end of the list
                         access = self.addAccess(access, item)
@@ -659,19 +656,27 @@ class ItemShuffler(QtCore.QThread):
         # Keep track of where we placed items. this is necessary to undo placements if we get stuck
         placement_tracker = []
 
+        # Test placements only if running from source, mainly as a failsafe in case this is forgotten about before new builds
+        if IS_RUNNING_FROM_SOURCE:
+            for k,v in TEST_PLACEMENTS.items():
+                placements[k] = v
+                locations.remove(k)
+                items.remove(v)
+                placement_tracker.append(k)
+
         # Since Tarin is the only check available with no items, he has to have something out of a certain subset of items
         # Only do this if Tarin has no item placed, i.e. not forced to be vanilla
         if placements['tarin'] == None and self.thread_active:
             success = False
             while not success and self.thread_active:
                 placements['tarin'] = items[0]
-                success = (self.canReachLocation('can-shop', placements, settings_access, logic)
-                        or self.canReachLocation(dungeon_entrances['tail-cave'], placements, settings_access, logic)
-                        or self.canReachLocation('beach', placements, settings_access, logic)
+                success = (self.canReachLocation('can-shop', placements, settings_access, self.logic)
+                        or self.canReachLocation(self.dungeon_entrances['tail-cave'], placements, settings_access, self.logic)
+                        or self.canReachLocation('beach', placements, settings_access, self.logic)
                         # or self.canReachLocation('mamasha', placements, settings_access, logic)
-                        or self.canReachLocation('ciao-ciao', placements, settings_access, logic)
-                        or self.canReachLocation('marin', placements, settings_access, logic)
-                        or self.canReachLocation('trendy', placements, settings_access, logic))
+                        or self.canReachLocation('ciao-ciao', placements, settings_access, self.logic)
+                        or self.canReachLocation('marin', placements, settings_access, self.logic)
+                        or self.canReachLocation('trendy', placements, settings_access, self.logic))
                 
                 if items[0] == "boots":
                     success = False
@@ -713,7 +718,7 @@ class ItemShuffler(QtCore.QThread):
                     valid_placement = False
                 elif self.item_defs[item]['type'] in ('important', 'trade', 'seashell'):
                     # Check if it's reachable. We only need to do this check for important items!
-                    valid_placement = self.canReachLocation(locations[0], placements, access, logic)
+                    valid_placement = self.canReachLocation(locations[0], placements, access, self.logic)
                 else:
                     valid_placement = True
                 
@@ -746,11 +751,11 @@ class ItemShuffler(QtCore.QThread):
                 # If we placed the last important item (so that afterward we start placing seashells), we want to ensure there's enough available locations to place a number of seashells required.
                 # i.e., are there 40 locations reachable without getting the 40 and 50 rewards? If not, we haven't made a valid placement, so we have to go back and undo things until this is resolved.
                 if item != 'seashell' and len(items) > 0 and items[0] == 'seashell':
-                    if not ((self.verifySeashellsAttainable(placements, settings_access, logic, 5)) 
-                    and (self.verifySeashellsAttainable(placements, settings_access, logic, 15))
-                    and (self.verifySeashellsAttainable(placements, settings_access, logic, 30))
-                    and (self.verifySeashellsAttainable(placements, settings_access, logic, 40))
-                    and (self.verifySeashellsAttainable(placements, settings_access, logic, 50))):
+                    if not ((self.verifySeashellsAttainable(placements, settings_access, self.logic, 5)) 
+                    and (self.verifySeashellsAttainable(placements, settings_access, self.logic, 15))
+                    and (self.verifySeashellsAttainable(placements, settings_access, self.logic, 30))
+                    and (self.verifySeashellsAttainable(placements, settings_access, self.logic, 40))
+                    and (self.verifySeashellsAttainable(placements, settings_access, self.logic, 50))):
                         if verbose: 
                             print('no room for shells')
                             #print(placements)

@@ -1,16 +1,17 @@
 v0.4
 
-- double check that FlowControl::CompareInt actually works
-    I think I already did but we need to be absolutely sure before pushing a new build
-
 - make sure logic knows that you can't have both followers at once
 
 - merge settings from ProfessorLaw's fork
-    start with keys, maps, compasses, & beaks
-        WRITE ASM FOR THIS SO IT'S CLEANER
-            adds different items depending on settings, asm needs to be on the same line, make sure assemble.py can handle that
     mess with chest textures more to make them look better
-        seashell chest is excluded because it removes some value from the sensor
+    dont do chest model parameter edits if chest type matches content is not on
+        this way, Dampe rooms don't need to be edited and will shorten the output size
+
+- clean up the shuffler code to be more readable and tweak trap level amounts
+    add an "all" traps option that turns every non-important item into a trap
+    not important yet, but if enough time before v0.4 release, rewrite keysanity shuffler to work with dungeon starting items
+
+- clean up any GUI bugs with the settings string and any included/excluded location sorting problems
 
 ----------
 v0.5
@@ -18,8 +19,9 @@ v0.5
 - eventflow edits through code gets pretty messy and hard to follow
     create our own type of flowchart file and write a parser that'll translate them into the .bfevfl files
     this reduces the amount of code and will just be plain easier to edit
-    also create a Randomizer.bfevfl to handle giving all items, everything else will subflow to this
-        made a branch for this, but rapids and seashell mansion crash for some reason, they might still need to be manual
+
+- create a Randomizer.bfevfl to handle giving all items, everything else will subflow to this
+    made a branch for this, but rapids and seashell mansion crash for some reason, they might still need to be manual
 
 - keysanity
     use the Randomizer.bfevfl and the itemIndex parameter with the FlowControl::CompareInt to determine dungeon
@@ -44,11 +46,17 @@ v0.7
 
 - trendy
     needs .bfres editing, at least enough to rename the model & file
+    the format is Prize{prizeKey}.bfres, with prizeKey also serving as the model name
+    might be possible to rename NpcMarin.bfres for example as PrizeMarin.bfres, and have the shop item called Marin?
+        may not need .bfres editing if so
 
 - randomized trendy physics
 
 ----------
 GENERAL FUTURE STUFF TO LOOK INTO
+
+- write asm for starting with maps, compasses, beaks
+    it's fine to handle through events right now, this will just result in less written code
 
 - work on custom text
     use custom text to make tunics more intuitive
@@ -61,9 +69,10 @@ GENERAL FUTURE STUFF TO LOOK INTO
 
 - make separete repo containing custom models to be used optionally with rando
     for songs, capacity upgrades, and even custom items
+    we could also potentially use EoW models if the user has the RomFS
 
 - fix sunken heart pieces
-    needs asm to make heart pieces ignore inventory
+    needs asm to make heart pieces ignore inventory (or just allow indexes past 31)
     then all heart pieces will be changed back into heart piece actors
 
 - randomize seashells
