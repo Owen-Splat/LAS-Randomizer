@@ -2966,7 +2966,7 @@ kill-darknut-flail:
   condition-basic: sword | shoot-arrows | bombs | rod | boomerang
 kill-flower:
   type: enemy
-  condition-basic: (hookshot & (sword | powders | shoot-arrows | bombs)) | rod | boomerang | bow-wow
+  condition-basic: (hookshot & (sword | powders | shoot-arrows | bombs)) | rod | boomerang | (bow-wow & !rooster)
 kill-big-flower:
   type: enemy
   condition-basic: (hookshot & (sword | shoot-arrows | bombs)) | rod | boomerang | bow-wow
