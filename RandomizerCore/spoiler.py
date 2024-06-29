@@ -1,3 +1,4 @@
+from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 import os
 
 
@@ -41,6 +42,12 @@ def generateSpoilerLog(placements, logic_defs, out_dir, seed):
             output.write(f'{key}:\n')
             for location in regions[key]:
                 item = placements[location]
+                index = -1
+                if location in placements['indexes']:
+                    index = placements['indexes'][location]
+                index = f'[{index}]' if (IS_RUNNING_FROM_SOURCE and index > -1) else ''
+                if location.startswith('starting-dungeon-item'):
+                    continue
                 if item.endswith('trap'):
                     item = 'trap'
-                output.write('    {0}:  {1}\n'.format(location, item))
+                output.write('    {0}:  {1}{2}\n'.format(location, item, index))
