@@ -19,7 +19,7 @@ BASE_OPTIONS = {
     'instrumentsComboBox': 0,
     'seashellsComboBox': 2,
     'owlsComboBox': 0,
-    'trapsComboBox': 0,
+    'trapsComboBox': 1,
     'leavesCheck': True,
     'tricksComboBox': 0,
     'bookCheck': True,
