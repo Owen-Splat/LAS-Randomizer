@@ -1,15 +1,15 @@
 v0.4
 
-- make sure logic knows that you can't have both followers at once
-
 - merge settings from ProfessorLaw's fork
-    mess with chest textures more to make them look better
+    mess with chest textures to make them look better
+    make the chest texture/model edits in a separate thread so it doesn't hang, same as the randomizer logo (and save it for future use)
+    make sure traps can be in any chest, they might be forced in junk & small
     dont do chest model parameter edits if chest type matches content is not on
         this way, Dampe rooms don't need to be edited and will shorten the output size
 
-- clean up the shuffler code to be more readable and tweak trap level amounts
-    add an "all" traps option that turns every non-important item into a trap
-    not important yet, but if enough time before v0.4 release, rewrite keysanity shuffler to work with dungeon starting items
+- rework or maybe even outright remove fast-trendy setting and make it baseline behavior
+
+- move all fast cutscene settings into their own group
 
 - clean up any GUI bugs with the settings string and any included/excluded location sorting problems
 
