@@ -28,7 +28,6 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = copy.deepcopy(settings)
         
-        self.valid_placements = 155 - len(settings['starting-items'])
         self.num_of_mod_tasks = 320 # adjusted so the progress bar takes a final step to display it's done
 
         self.ui.openOutputFolder.setVisible(False)
@@ -40,11 +39,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if settings['blupsanity']:
             self.num_of_mod_tasks += 1
         
-        if settings['owl-overworld-gifts']:
-            self.valid_placements += 9
-        
         if settings['owl-dungeon-gifts']:
-            self.valid_placements += 24
             self.num_of_mod_tasks += 4 # 4 extra room modifications
         
         if settings['randomize-music']:
@@ -85,13 +80,11 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         # initialize the shuffler thread
         self.current_job = 'shuffler'
-        self.ui.progressBar.setMaximum(self.valid_placements)
+        self.ui.progressBar.setMaximum(0) # busy status instead of direct progress
         self.ui.label.setText(f'Shuffling item placements...')
         self.shuffler_process =\
             ItemShuffler(self.out_dir, self.seed, self.logic, self.settings, self.item_defs, self.logic_defs)
         self.shuffler_process.setParent(self)
-        self.shuffler_process.progress_update.connect(self.updateProgress)
-        self.shuffler_process.progress_adjustment.connect(self.adjustProgress)
         self.shuffler_process.give_placements.connect(self.receivePlacements)
         self.shuffler_process.is_done.connect(self.shufflerDone)
         self.shuffler_process.error.connect(self.shufflerError)
@@ -101,11 +94,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
     # receives the int signal as a parameter named progress
     def updateProgress(self, progress):
         self.ui.progressBar.setValue(progress)
-    
-
-    # if an item has to be reshuffled, adjust the progress bar accordingly
-    def adjustProgress(self):
-        self.valid_placements += 1
+        if self.current_job == 'modgenerator':
+            percentage = progress / self.num_of_mod_tasks
+            self.ui.progressBar.setFormat("%p%")
     
 
     # receive the placements from the shuffler thread to the modgenerator
@@ -139,6 +130,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.current_job = 'modgenerator'
         self.ui.progressBar.setValue(0)
         self.ui.progressBar.setMaximum(self.num_of_mod_tasks)
+        self.ui.progressBar.setTextVisible(True)
         self.ui.label.setText(f'Generating mod files...')
         self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed, self.randstate)
         self.mods_process.setParent(self)
