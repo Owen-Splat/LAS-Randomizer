@@ -1119,7 +1119,7 @@ class Ui_MainWindow(object):
         self.trapsComboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Traps: None", None))
         self.trapsComboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Traps: Few", None))
         self.trapsComboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Traps: Several", None))
-        self.trapsComboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"Traps: Many", None))
+        self.trapsComboBox.setItemText(3, QCoreApplication.translate("MainWindow", u"Traps: Trapsanity", None))
 
 #if QT_CONFIG(whatsthis)
         self.trapsComboBox.setWhatsThis(QCoreApplication.translate("MainWindow", u"This controls how many custom traps get added to the item pool", None))

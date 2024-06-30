@@ -84,7 +84,7 @@ LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'hell', 'none')
 
 OWLS_SETTINGS = ('none', 'overworld', 'dungeons', 'all') # ('vanilla', 'hints', 'gifts', 'hybrid')
 
-TRAP_SETTINGS = ('none', 'few', 'several', 'many')
+TRAP_SETTINGS = ('none', 'few', 'several', 'trapsanity')
 
 CHEST_ASPECT_SETTINGS = ('default', 'csmc', 'camc')
 
