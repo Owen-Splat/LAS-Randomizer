@@ -16,8 +16,6 @@ TEST_PLACEMENTS = { # example: testing specific items in chests
 class ItemShuffler(QtCore.QThread):
     
     # sends signals to main thread when emitted
-    progress_update = QtCore.Signal(int)
-    progress_adjustment = QtCore.Signal()
     give_placements = QtCore.Signal(dict)
     is_done = QtCore.Signal()
     error = QtCore.Signal(str)
@@ -64,6 +62,9 @@ class ItemShuffler(QtCore.QThread):
         
         # make changes to the logic & item pool based on starting items
         self.addStartingItems()
+        
+        # add traps to the item pool
+        self.addTraps()
         
         # create the new dungeon entrances
         self.shuffleDungeons()
@@ -197,49 +198,46 @@ class ItemShuffler(QtCore.QThread):
             self.item_defs['bomb']['type'] = 'important'
         if self.settings['shuffle-powder']:
             self.item_defs['powder']['type'] = 'important'
-        
-        # add traps to the item pool
-        if self.settings['traps'] != 'none':
-            self.addTraps()
 
 
     def addTraps(self):
         """Adds traps to the item pool. The amount varies based on the trap level & other settings"""
 
+        if self.settings['traps'] == 'none':
+            return
+        
         traps = [k for k in self.item_defs # get all non zol-traps, not optimal but can add traps without editing the shuffler
                 if k[-4:] == 'trap'
                 and k[:3] != 'zol']
         
-        num_traps = {'few': 3, 'several': 9, 'many': 15}
+        num_traps = {'few': 3, 'several': 11, 'trapsanity': 19}
         num_traps = num_traps[self.settings['traps']]
 
-        # with trapsanity, the number of traps also increase depending on other settings
-        if self.settings['blupsanity'] and num_traps == 15:
-            self.item_defs['rupee-5']['quantity'] -= 14
-            for i in range(14):
+        # trapsanity replaces every single 5(blupsanity), 20, and 50 rupee with a trap, on top of the base 19 traps
+        if num_traps == 19:
+            if self.settings['blupsanity']:
+                blues = self.item_defs['rupee-5']['quantity']
+                self.item_defs['rupee-5']['quantity'] = 0
+                for i in range(blues):
+                    trap = random.choice(traps)
+                    self.item_defs[trap]['quantity'] += 1
+            
+            reds = self.item_defs['rupee-20']['quantity']
+            self.item_defs['rupee-20']['quantity'] = 0
+            for i in range(reds):
                 trap = random.choice(traps)
                 self.item_defs[trap]['quantity'] += 1
+            
+            # we always replace purple rupees with traps, so just set the number here to be edited later
+            num_traps = self.item_defs['rupee-50']['quantity']
         
-        if self.settings['owl-overworld-gifts'] and num_traps == 15:
-            self.item_defs['rupee-20']['quantity'] -= 3
-            for i in range(3):
-                trap = random.choice(traps)
-                self.item_defs[trap]['quantity'] += 1
-        
-        if self.settings['owl-dungeon-gifts'] and num_traps == 15:
-            self.item_defs['rupee-20']['quantity'] -= 8
-            for i in range(8):
-                trap = random.choice(traps)
-                self.item_defs[trap]['quantity'] += 1
-        
-        # remove duplicate zol-traps in exchange for custom traps
+        # remove duplicate zol-traps in exchange for more money
         self.item_defs['zol-trap']['quantity'] -= 3
-
-        # remove 50-rupees to make room for the traps, and add in more high value rupees
-        self.item_defs['rupee-50']['quantity'] -= num_traps + 3
-        self.item_defs['rupee-100']['quantity'] += 5 # +500 rupees
+        self.item_defs['rupee-100']['quantity'] += 2 # +200 rupees
         self.item_defs['rupee-300']['quantity'] += 1 # +300 rupees
 
+        # remove 50-rupees to make room for the traps
+        self.item_defs['rupee-50']['quantity'] -= num_traps
         for i in range(num_traps):
             trap = random.choice(traps)
             self.item_defs[trap]['quantity'] += 1
@@ -631,8 +629,6 @@ class ItemShuffler(QtCore.QThread):
                     if verbose: print(location_pool[0])
                     locations.remove(location_pool[0])
                     placement_tracker.append(location_pool.pop(0))
-                    self.progress_value += 1 # update progress bar
-                    self.progress_update.emit(self.progress_value)
         
         # Shuffle remaining locations
         random.shuffle(locations)
@@ -650,8 +646,6 @@ class ItemShuffler(QtCore.QThread):
             items.remove(item)
             locations.remove(chest)
             if verbose: print(chests[0])
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
                 
         # Keep track of where we placed items. this is necessary to undo placements if we get stuck
         placement_tracker = []
@@ -690,9 +684,6 @@ class ItemShuffler(QtCore.QThread):
             if verbose: print(items[0]+' -> tarin')
             access = self.removeAccess(access, items.pop(0))
             locations.remove('tarin')
-
-            self.progress_value += 1 # update progress bar
-            self.progress_update.emit(self.progress_value)
         
         # Do a very similar process for all other items
         while items and self.thread_active:
@@ -735,9 +726,6 @@ class ItemShuffler(QtCore.QThread):
                         items.insert(0, placements[undo_location])
                         access = self.addAccess(access, placements[undo_location])
                         placements[undo_location] = None
-                        self.progress_value += 1 # update progress bar
-                        self.progress_adjustment.emit()
-                        self.progress_update.emit(self.progress_value)
                         if verbose: print("can't place")
                         break
             
@@ -765,12 +753,6 @@ class ItemShuffler(QtCore.QThread):
                         items.insert(0, placements[undo_location])
                         access = self.addAccess(access, placements[undo_location])
                         placements[undo_location] = None
-                        self.progress_value += 1 # update progress bar
-                        self.progress_adjustment.emit()
-                        self.progress_update.emit(self.progress_value)
-                
-                self.progress_value += 1 # update progress bar
-                self.progress_update.emit(self.progress_value)
         
         # Now assign all non-vanilla indexes
         locs = [l for l in placement_tracker if placements[l] in indexes_available]
