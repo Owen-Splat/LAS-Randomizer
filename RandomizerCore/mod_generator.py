@@ -175,8 +175,13 @@ class ModsProcess(QtCore.QThread):
     def makeChestContentFixes(self):
         """Patch LEB files of rooms with chests to update their contents"""
 
+        chest_rooms = {}
+        chest_rooms.update(data.CHEST_ROOMS)
+
         # CAMC Pre-Checks
         if self.settings['chest-aspect'] == 'camc':
+            chest_rooms.update(data.PANEL_CHEST_ROOMS)
+
             # Creating custom textures bfres files from the original one in the RomFS
             bfresOutputFolder = os.path.join(RESOURCE_PATH, 'textures', 'chest', 'bfres')
 
@@ -202,7 +207,7 @@ class ModsProcess(QtCore.QThread):
         # CSMC Management (Chest size)
         chest_sizes = copy.deepcopy(data.CHEST_SIZES)
 
-        if self.settings['chest-aspect'] == 'csmc' or self.settings['chest-aspect'] == 'camc':
+        if self.settings['chest-aspect'] != 'default':
             # if all seashell and trade gift locations are set to junk, set chests that contain them to be small
             if not self.settings['seashells-important']:
                 chest_sizes['seashell'] = 0.8
@@ -212,11 +217,11 @@ class ModsProcess(QtCore.QThread):
             for k in chest_sizes:
                 chest_sizes[k] = 1.0  # if scaled chest sizes is off, set every value to normal size
 
-        for room in data.CHEST_ROOMS:
+        for room in chest_rooms:
             if not self.thread_active:
                 break
 
-            room_data = self.readFile(f'{data.CHEST_ROOMS[room]}.leb')
+            room_data = self.readFile(f'{chest_rooms[room]}.leb')
 
             # Managing panels to set default chest texture for now as I cannot detect chest content (only $PANEL)
             if room.startswith('panel-'):
@@ -225,7 +230,7 @@ class ModsProcess(QtCore.QThread):
                         room_data.setChestContent(
                             actor.parameters[1].decode("utf-8"), actor.parameters[2],
                             chest_size=1.0, chest_model=data.CHEST_TEXTURES['default'])
-                self.writeFile(f'{data.CHEST_ROOMS[room]}.leb', room_data)
+                self.writeFile(f'{data.PANEL_CHEST_ROOMS[room]}.leb', room_data)
                 continue
 
             item_key, item_index = self.getItemInfo(room)
@@ -255,10 +260,9 @@ class ModsProcess(QtCore.QThread):
             # TODO Manage PanelDungeonPiece thanks to Dampe settings (need to check how it works)
 
             # CAMC Management (Chest aspect - Texture management)
-            model = data.CHEST_TEXTURES['default']
+            model = data.CHEST_TEXTURES['default'] if self.settings['chest-aspect'] == 'camc' else None
             if self.settings['chest-aspect'] == 'camc' and item_chest_type is not None:
                 model = data.CHEST_TEXTURES[item_chest_type]
-
 
             if room == 'taltal-5-chest-puzzle':
                 for i in range(5):

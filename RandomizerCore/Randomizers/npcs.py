@@ -207,7 +207,7 @@ def makeNpcChanges(npc, placements, settings):
         return
 
     # Chest matching texture feature
-    if npc['symbol'] == 'ObjTreasureBox':
+    if npc['symbol'] == 'ObjTreasureBox' and settings['chest-aspect'] == 'camc':
         npc['graphics']['path'] = '$6'
         npc['graphics']['model'] = '$7'
         return

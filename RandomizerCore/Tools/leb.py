@@ -143,17 +143,17 @@ class Room:
             self.grid = None
 
 
-    def setChestContent(self, new_content, item_index, chest_index=0, chest_size=1.0, chest_model="ObjTreasureBox.bfres"):
+    def setChestContent(self, new_content, item_index, chest_index=0, chest_size=1.0, chest_model=None):
         chests = [a for a in self.actors if a.type == 0xF7]
 
         if len(chests) > chest_index:
             chest = chests[chest_index]
             chest.parameters[1] = bytes(new_content, 'utf-8')
             chest.parameters[2] = item_index if item_index != -1 else b''
-            chest.parameters[6] = bytes(chest_model, 'utf-8')
 
-            # Temporary hardcoded parameter to use only one model with multiple textures later
-            chest.parameters[7] = bytes('TreasureBox', 'utf-8')
+            if chest_model != None:
+                chest.parameters[6] = bytes(chest_model, 'utf-8')
+                chest.parameters[7] = bytes('TreasureBox', 'utf-8')
 
             chest.scaleX = chest_size
             chest.scaleY = chest_size
