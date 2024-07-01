@@ -106,14 +106,14 @@ Mansion:
 #   - shop-slot3-2nd
 #   - shop-slot6
 
-Trendy_Rewards:
-  # - trendy-prize-1
-  # - trendy-prize-2
-  # - trendy-prize-3
-  # - trendy-prize-4
-  # - trendy-prize-5
-  # - trendy-prize-6
-  - trendy-prize-final
+# Trendy_Rewards:
+#   - trendy-prize-1
+#   - trendy-prize-2
+#   - trendy-prize-3
+#   - trendy-prize-4
+#   - trendy-prize-5
+#   - trendy-prize-6
+#   - trendy-prize-final
 
 Heart_Pieces:
   - animal-village-northwest

@@ -27,7 +27,6 @@ BASE_OPTIONS = {
     'dungeonItemsComboBox': 0,
     'unlockedBombsCheck': True,
     'shuffledBombsCheck': False,
-    'fastTrendyCheck': False,
     'stealingCheck': True,
     'shuffledPowderCheck': False,
     'musicCheck': False,
@@ -102,7 +101,7 @@ def applyDefaults(window):
     window.excluded_checks.update(FISHING_REWARDS)
     window.excluded_checks.update(RAPIDS_REWARDS)
     window.excluded_checks.update(DAMPE_REWARDS)
-    window.excluded_checks.update(TRENDY_REWARDS)
+    # window.excluded_checks.update(TRENDY_REWARDS)
     # window.excluded_checks.difference_update(SHOP_ITEMS)
     window.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
     window.excluded_checks.update(TRADE_GIFT_LOCATIONS)
@@ -371,7 +370,6 @@ def loadRandomizerSettings(window, seed):
         'shuffle-powder': window.ui.shuffledPowderCheck.isChecked(),
         'fast-fishing': window.ui.fastFishingCheck.isChecked(),
         'fast-stealing': window.ui.stealingCheck.isChecked(),
-        'fast-trendy': window.ui.fastTrendyCheck.isChecked(),
         'fast-songs': window.ui.songsCheck.isChecked(),
         'shuffle-instruments': window.ui.instrumentCheck.isChecked(),
         'starting-instruments': window.ui.instrumentsComboBox.currentIndex(),

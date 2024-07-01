@@ -1368,25 +1368,6 @@
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="fastTrendyCheck">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>104</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Gives the final Trendy reward from getting the CiaoCiao Figure&lt;br&gt;&lt;/br&gt;This check does not change whether the final prize is included or not</string>
-         </property>
-         <property name="text">
-          <string>Fast Trendy</string>
-         </property>
-        </widget>
         <widget class="QCheckBox" name="unlockedBombsCheck">
          <property name="geometry">
           <rect>

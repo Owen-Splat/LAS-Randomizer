@@ -54,6 +54,7 @@ class ItemShuffler(QtCore.QThread):
         self.vanilla_locations.append('trendy-prize-4')
         self.vanilla_locations.append('trendy-prize-5')
         self.vanilla_locations.append('trendy-prize-6')
+        self.vanilla_locations.append('trendy-prize-final')
 
         # if blupsanity is not enabled, add the checks to the vanilla locations
         if not self.settings['blupsanity']:
