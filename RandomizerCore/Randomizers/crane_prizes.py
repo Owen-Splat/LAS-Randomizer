@@ -316,8 +316,8 @@ def changePrizeGroups(sheet1):
 
 def makeEventChanges(flowchart, settings):
 
-    if settings['fast-trendy']:
-        event_tools.findEvent(flowchart, 'Event5').data.params.data['prizeType'] = 10
+    # if settings['fast-trendy']:
+    #     event_tools.findEvent(flowchart, 'Event5').data.params.data['prizeType'] = 10
     
     yoshi_lens_get = event_tools.createActionChain(flowchart, None, [
         ('EventFlags', 'SetFlag', {'symbol': 'TradeYoshiDollGet', 'value': True}),
