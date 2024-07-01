@@ -23,7 +23,7 @@ BASE_OPTIONS = {
     'leavesCheck': True,
     'tricksComboBox': 0,
     'bookCheck': True,
-    'extendedConsumableCheck': False,
+    'extendedConsumableCheck': True, # Helps beginner players not run into the issue of being too low on resources
     'dungeonItemsComboBox': 0,
     'unlockedBombsCheck': True,
     'shuffledBombsCheck': False,
@@ -45,12 +45,12 @@ BASE_OPTIONS = {
     'songsCheck': False,
     'fastFishingCheck': False,
     'dungeonsCheck': False,
-    'blurCheck': False,
+    'blurCheck': True, # May change, lots of people hate the blur and it even hurts some player's eyes
     'ohkoCheck': False,
     'lv1BeamCheck': False,
     'niceRodCheck': True,
     'niceBombsCheck': False,
-    'stealingComboBox': 2,
+    'stealingComboBox': 0, # May change, but players often feel frustrated at not being able to steal, not knowing sword is needed
     'rupeesSpinBox': 0,
     'starting_gear': []
 }
