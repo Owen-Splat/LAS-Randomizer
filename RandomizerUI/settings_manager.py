@@ -24,7 +24,7 @@ BASE_OPTIONS = {
     'tricksComboBox': 0,
     'bookCheck': True,
     'extendedConsumableCheck': True, # Helps beginner players not run into the issue of being too low on resources
-    'dungeonItemsComboBox': 0,
+    'dungeonItemsComboBox': 3, # Beginner setting to start with maps, compasses, beaks
     'unlockedBombsCheck': True,
     'shuffledBombsCheck': False,
     'stealingCheck': True,
