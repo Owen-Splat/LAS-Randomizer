@@ -211,7 +211,7 @@ class ItemShuffler(QtCore.QThread):
                 if k[-4:] == 'trap'
                 and k[:3] != 'zol']
         
-        num_traps = {'few': 3, 'several': 11, 'trapsanity': 19}
+        num_traps = {'few': 3, 'several': 9, 'many': 17, 'trapsanity': 19}
         num_traps = num_traps[self.settings['traps']]
 
         # trapsanity replaces every single 5(blupsanity), 20, and 50 rupee with a trap, on top of the base 19 traps
@@ -223,11 +223,13 @@ class ItemShuffler(QtCore.QThread):
                     trap = random.choice(traps)
                     self.item_defs[trap]['quantity'] += 1
             
-            reds = self.item_defs['rupee-20']['quantity']
-            self.item_defs['rupee-20']['quantity'] = 0
-            for i in range(reds):
-                trap = random.choice(traps)
-                self.item_defs[trap]['quantity'] += 1
+            trap_items = ('rupee-20', 'medicine')
+            for item_key in trap_items:
+                quantity = self.item_defs[item_key]['quantity']
+                self.item_defs[item_key]['quantity'] = 0
+                for i in range(quantity):
+                    trap = random.choice(traps)
+                    self.item_defs[trap]['quantity'] += 1
             
             # we always replace purple rupees with traps, so just set the number here to be edited later
             num_traps = self.item_defs['rupee-50']['quantity']

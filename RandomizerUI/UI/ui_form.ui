@@ -1617,6 +1617,11 @@
          </item>
          <item>
           <property name="text">
+           <string>Traps: Many</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Traps: Trapsanity</string>
           </property>
          </item>
