@@ -1,10 +1,8 @@
 <b>New Features:</b>
 <br></br><br></br>
+- New Settings: One-Hit KO Mode, Nice Items, random enemy sizes, chest type matches content, and more!
+<br></br><br></br>
 - Settings string: Share settings with others, or even randomize settings
-<br></br><br></br>
-- New Settings: Quick mode, random enemy sizes, chest type matches content, and more!
-<br></br><br></br>
-- ASM Patches: One-Hit KO Mode, Nice Items, Blur Removal, and more to spice up gameplay!
 <br></br><br></br>
 
 <b>Changes:</b>

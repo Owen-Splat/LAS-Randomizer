@@ -1,10 +1,3 @@
-v0.4
-
-- mess with chest textures to make them look better
-
-- clean up any GUI bugs with the settings string and any included/excluded location sorting problems
-
-----------
 v0.5
 
 - eventflow edits through code gets pretty messy and hard to follow
