@@ -88,9 +88,10 @@ def makeStartChanges(flowchart, settings):
         player_start_event_flags.append('DoorOpen_Btl2_L05_04H')
         player_start_event_flags.append('DoorOpen_Btl3_L05_01F')
     
-    if settings['quick-mode']: # set boss cutscenes and popup messages to have already been seen
+    if settings['boss-cutscenes']: # set boss cutscenes to have already been watched
         player_start_event_flags.extend(BOSS_FLAGS)
-        player_start_event_flags.extend(MESSAGE_FLAGS)
+    # if settings['nag-meesages']: # set annoying one-time messages to not pop-up
+    #     player_start_event_flags.extend(MESSAGE_FLAGS)
     
     player_start_event_flags = [('EventFlags', 'SetFlag', {'symbol': f, 'value': True}) for f in player_start_event_flags]
 

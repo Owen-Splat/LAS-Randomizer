@@ -290,7 +290,8 @@ class ModsProcess(QtCore.QThread):
 
         # Open up the SmallKey event to be ready to edit
         flow = self.readFile('SmallKey.bfevfl')
-        small_keys.makeKeysFaster(flow.flowchart)
+        if self.settings['fast-keys']:
+            small_keys.makeKeysFaster(flow.flowchart)
         # small_keys.writeSunkenKeyEvent(flow.flowchart)
 
         for room in data.SMALL_KEY_ROOMS:
@@ -949,7 +950,8 @@ class ModsProcess(QtCore.QThread):
         if self.thread_active:
             flow = self.readFile('TreasureBox.bfevfl')
             chests.writeChestEvent(flow.flowchart)
-            chests.makeChestsFaster(flow.flowchart)
+            if self.settings['fast-chests']:
+                chests.makeChestsFaster(flow.flowchart)
             self.writeFile('TreasureBox.bfevfl', flow)
 
         ### ShellMansionPresent event: Similar to TreasureBox, must make some items progressive and add custom events for other items.

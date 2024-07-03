@@ -370,7 +370,7 @@
        <rect>
         <x>10</x>
         <y>104</y>
-        <width>733</width>
+        <width>731</width>
         <height>365</height>
        </rect>
       </property>
@@ -990,78 +990,31 @@
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
-        <string>Extra Settings</string>
+        <string>World Settings</string>
        </attribute>
        <widget class="QGroupBox" name="groupBox_6">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>14</y>
-          <width>711</width>
+          <width>171</width>
           <height>141</height>
          </rect>
         </property>
         <property name="title">
-         <string>World Options</string>
+         <string>Global</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignHCenter|Qt::AlignTop</set>
         </property>
-        <widget class="QCheckBox" name="bridgeCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Sets the Kanalet bridge to be built from the start</string>
-         </property>
-         <property name="text">
-          <string>Completed Bridge</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="swampCheck">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Turns the rock in front of Dungeon 2 into a flower</string>
-         </property>
-         <property name="text">
-          <string>Classic D2</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="musicCheck">
+        <widget class="QCheckBox" name="enemyCheck">
          <property name="enabled">
           <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
-           <x>369</x>
-           <y>104</y>
+           <x>10</x>
+           <y>24</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1076,40 +1029,24 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>Randomizes music</string>
+          <string>Randomizes enemies. Required kills are left vanilla</string>
          </property>
          <property name="text">
-          <string>Randomize Music</string>
+          <string>Randomize Enemies</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="kanaletCheck">
+        <widget class="QCheckBox" name="enemySizesCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>64</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Sets the Kanalet Gate to be open from the start</string>
-         </property>
-         <property name="text">
-          <string>Open Kanalet</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="mazeCheck">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>104</y>
-           <width>151</width>
+           <width>161</width>
            <height>21</height>
           </rect>
          </property>
@@ -1123,10 +1060,10 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>Sets the Sign Maze to be automatically completed</string>
+          <string>Randomizes the size of the enemies between 50% and 150%</string>
          </property>
          <property name="text">
-          <string>Open Mamu</string>
+          <string>Randomize Enemy Sizes</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1135,7 +1072,7 @@
         <widget class="QComboBox" name="chestAspectComboBox">
          <property name="geometry">
           <rect>
-           <x>189</x>
+           <x>10</x>
            <y>104</y>
            <width>150</width>
            <height>22</height>
@@ -1168,161 +1105,6 @@
            <string>Chests : Texture &amp; Size</string>
           </property>
          </item>
-        </widget>
-        <widget class="QCheckBox" name="dungeonsCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>64</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Randomizes Dungeons&lt;br&gt;&lt;/br&gt;&lt;u&gt;Only front entrances are randomized,&lt;/u&gt; and only handles non-glitched logics</string>
-         </property>
-         <property name="text">
-          <string>Shuffled Dungeons</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="enemyCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>369</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Randomizes enemies. Required kills are left vanilla</string>
-         </property>
-         <property name="text">
-          <string>Randomize Enemies</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="enemySizesCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>369</x>
-           <y>64</y>
-           <width>161</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Randomizes the size of the enemies between 50% and 150%</string>
-         </property>
-         <property name="text">
-          <string>Randomize Enemy Sizes</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="openMabeCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>549</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Opens all Mabe Village exits (Beach, Plains, Woods)</string>
-         </property>
-         <property name="text">
-          <string>Open Mabe</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="quickModeCheck">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>549</x>
-           <y>64</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Sets all boss cutscenes and one-time messages to have already been seen</string>
-         </property>
-         <property name="text">
-          <string>Quick Mode</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
         </widget>
        </widget>
        <widget class="QGroupBox" name="groupBox_5">
@@ -1494,11 +1276,152 @@
           <string>Free Book</string>
          </property>
         </widget>
-        <widget class="QCheckBox" name="extendedConsumableCheck">
+       </widget>
+       <widget class="QGroupBox" name="groupBox_9">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>14</y>
+          <width>531</width>
+          <height>141</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Overworld</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <widget class="QCheckBox" name="kanaletCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Sets the Kanalet Gate to be open from the start</string>
+         </property>
+         <property name="text">
+          <string>Open Kanalet</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="openMabeCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Opens all Mabe Village exits (Beach, Plains, Woods)</string>
+         </property>
+         <property name="text">
+          <string>Open Mabe</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="mazeCheck">
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>104</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Sets the Sign Maze to be automatically completed</string>
+         </property>
+         <property name="text">
+          <string>Open Mamu</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="bridgeCheck">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>24</y>
+           <width>141</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Sets the Kanalet bridge to be built from the start</string>
+         </property>
+         <property name="text">
+          <string>Completed Bridge</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="swampCheck">
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>64</y>
+           <width>141</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Turns the rock in front of Dungeon 2 into a flower</string>
+         </property>
+         <property name="text">
+          <string>Classic D2</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="extendedConsumableCheck">
+         <property name="geometry">
+          <rect>
+           <x>369</x>
+           <y>24</y>
            <width>151</width>
            <height>21</height>
           </rect>
@@ -1516,28 +1439,15 @@
           <bool>true</bool>
          </property>
         </widget>
-       </widget>
-       <widget class="QGroupBox" name="groupBox_7">
-        <property name="geometry">
-         <rect>
-          <x>540</x>
-          <y>169</y>
-          <width>181</width>
-          <height>141</height>
-         </rect>
-        </property>
-        <property name="title">
-         <string>Other Options</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignHCenter|Qt::AlignTop</set>
-        </property>
-        <widget class="QCheckBox" name="songsCheck">
+        <widget class="QCheckBox" name="dungeonsCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>24</y>
-           <width>151</width>
+           <x>189</x>
+           <y>104</y>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
@@ -1551,16 +1461,53 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>Skips the song learning animations and instead just immediately gives the item</string>
+          <string>Randomizes Dungeons&lt;br&gt;&lt;/br&gt;&lt;u&gt;Only front entrances are randomized,&lt;/u&gt; and only handles non-glitched logics</string>
          </property>
          <property name="text">
-          <string>Fast Songs</string>
+          <string>Shuffled Dungeons</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QCheckBox" name="stealingCheck">
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_7">
+       <attribute name="title">
+        <string>Extra Settings</string>
+       </attribute>
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>14</y>
+          <width>171</width>
+          <height>141</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Nice Items</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <widget class="QCheckBox" name="lv1BeamCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>104</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Allows you to beam slash with the Lv1 Sword. Still requires full health</string>
+         </property>
+         <property name="text">
+          <string>Sword Beam With Lv1</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="niceRodCheck">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1569,21 +1516,50 @@
            <height>21</height>
           </rect>
          </property>
-         <property name="toolTip">
-          <string/>
-         </property>
          <property name="whatsThis">
-          <string>The shopkeeper will not kill you after stealing</string>
+          <string>Increases the fire rate of the Magic Rod</string>
          </property>
          <property name="text">
-          <string>Fast Stealing</string>
+          <string>Nice Magic Rod</string>
          </property>
         </widget>
+        <widget class="QCheckBox" name="niceBombsCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>Allows you to rapidly place down bombs with no cooldown</string>
+         </property>
+         <property name="text">
+          <string>Nice Bombs</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>170</y>
+          <width>181</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Item Pool</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
         <widget class="QComboBox" name="trapsComboBox">
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>100</y>
+           <y>64</y>
            <width>161</width>
            <height>22</height>
           </rect>
@@ -1626,73 +1602,91 @@
           </property>
          </item>
         </widget>
+        <widget class="QComboBox" name="poolComboBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>161</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="whatsThis">
+          <string>This controls what items can be found in the randomizer</string>
+         </property>
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Item Pool: Plentiful</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item Pool: Standard</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item Pool: Reduced</string>
+          </property>
+         </item>
+        </widget>
        </widget>
-      </widget>
-      <widget class="QWidget" name="tab_7">
-       <attribute name="title">
-        <string>Patches</string>
-       </attribute>
-       <widget class="QGroupBox" name="groupBox_8">
+       <widget class="QGroupBox" name="groupBox_10">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>14</y>
-          <width>711</width>
-          <height>101</height>
+          <width>181</width>
+          <height>141</height>
          </rect>
         </property>
         <property name="title">
-         <string>Gameplay</string>
+         <string>Cosmetics</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignHCenter|Qt::AlignTop</set>
         </property>
-        <widget class="QCheckBox" name="ohkoCheck">
+        <widget class="QCheckBox" name="musicCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>64</y>
-           <width>151</width>
+           <width>131</width>
            <height>21</height>
           </rect>
          </property>
-         <property name="whatsThis">
-          <string>Link will die in a single hit</string>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
          </property>
-         <property name="text">
-          <string>One Hit KO Mode</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="lv1BeamCheck">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>64</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
+         <property name="toolTip">
+          <string/>
          </property>
          <property name="whatsThis">
-          <string>Allows you to beam slash with the Lv1 Sword. Still requires full health</string>
+          <string>Randomizes music</string>
          </property>
          <property name="text">
-          <string>Sword Beam With Lv1</string>
+          <string>Randomize Music</string>
          </property>
-        </widget>
-        <widget class="QCheckBox" name="niceRodCheck">
-         <property name="geometry">
-          <rect>
-           <x>189</x>
-           <y>24</y>
-           <width>151</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="whatsThis">
-          <string>Increases the fire rate of the Magic Rod</string>
-         </property>
-         <property name="text">
-          <string>Nice Magic Rod</string>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
         <widget class="QCheckBox" name="blurCheck">
@@ -1700,7 +1694,7 @@
           <rect>
            <x>10</x>
            <y>24</y>
-           <width>151</width>
+           <width>131</width>
            <height>21</height>
           </rect>
          </property>
@@ -1711,11 +1705,183 @@
           <string>Blur Removal</string>
          </property>
         </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_11">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>14</y>
+          <width>341</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Speed Options</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <widget class="QCheckBox" name="bossCutscenesCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Sets all boss cutscenes to have already been watched</string>
+         </property>
+         <property name="text">
+          <string>Boss Cutscenes</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="songsCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Skips the song learning animations and instead just immediately gives the item</string>
+         </property>
+         <property name="text">
+          <string>Song Cutscenes</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="chestAnimationsCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Speeds up the animation when a chest appears</string>
+         </property>
+         <property name="text">
+          <string>Chest Animations</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="keyAnimationsCheck">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>189</x>
+           <y>64</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Speeds up the animation when keys drop from the ceiling</string>
+         </property>
+         <property name="text">
+          <string>Key Animations</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_12">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>170</y>
+          <width>181</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Shop</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <widget class="QCheckBox" name="stealingCheck">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>24</y>
+           <width>151</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>The shopkeeper will not kill you after stealing</string>
+         </property>
+         <property name="text">
+          <string>Fast Stealing</string>
+         </property>
+        </widget>
         <widget class="QComboBox" name="stealingComboBox">
          <property name="geometry">
           <rect>
-           <x>369</x>
-           <y>24</y>
+           <x>10</x>
+           <y>64</y>
            <width>161</width>
            <height>22</height>
           </rect>
@@ -1748,44 +1914,38 @@
           </property>
          </item>
         </widget>
-        <widget class="QCheckBox" name="niceBombsCheck">
+       </widget>
+       <widget class="QGroupBox" name="groupBox_13">
+        <property name="geometry">
+         <rect>
+          <x>560</x>
+          <y>120</y>
+          <width>161</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Other</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <widget class="QCheckBox" name="ohkoCheck">
          <property name="geometry">
           <rect>
-           <x>369</x>
-           <y>64</y>
-           <width>151</width>
+           <x>10</x>
+           <y>24</y>
+           <width>141</width>
            <height>21</height>
           </rect>
          </property>
          <property name="whatsThis">
-          <string>Allows you to rapidly place down bombs with no cooldown</string>
+          <string>Link will die in a single hit</string>
          </property>
          <property name="text">
-          <string>Nice Bombs</string>
+          <string>One Hit KO Mode</string>
          </property>
         </widget>
-       </widget>
-       <widget class="QLabel" name="label_4">
-        <property name="geometry">
-         <rect>
-          <x>18</x>
-          <y>125</y>
-          <width>691</width>
-          <height>191</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Suggest ideas on GitHub or the Discord server!</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
        </widget>
       </widget>
      </widget>
@@ -2618,7 +2778,7 @@
         <x>295</x>
         <y>248</y>
         <width>161</width>
-        <height>81</height>
+        <height>101</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -2647,7 +2807,7 @@
        <enum>QFrame::Plain</enum>
       </property>
       <property name="text">
-       <string>Not complete&lt;br&gt;&lt;/br&gt;&lt;br&gt;&lt;/br&gt;Refer to the README for info on the current logic</string>
+       <string>You cannot yet choose&lt;br&gt;&lt;/br&gt;individual tricks&lt;br&gt;&lt;/br&gt;&lt;br&gt;&lt;/br&gt;Refer to the README for info on the current logic</string>
       </property>
       <property name="textFormat">
        <enum>Qt::RichText</enum>
@@ -2918,6 +3078,8 @@
     <addaction name="separator"/>
     <addaction name="actionKnown_Issues"/>
     <addaction name="separator"/>
+    <addaction name="actionHelpful_Tips"/>
+    <addaction name="separator"/>
     <addaction name="actionHelp"/>
    </widget>
    <widget class="QMenu" name="menuTheme">
@@ -2980,6 +3142,11 @@
   <action name="actionExport">
    <property name="text">
     <string>Export Logic</string>
+   </property>
+  </action>
+  <action name="actionHelpful_Tips">
+   <property name="text">
+    <string>Useful Info</string>
    </property>
   </action>
  </widget>

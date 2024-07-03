@@ -55,6 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionDark.triggered.connect(self.setDarkMode)
         self.ui.actionChangelog.triggered.connect(self.showChangelog)
         self.ui.actionKnown_Issues.triggered.connect(self.showIssues)
+        self.ui.actionHelpful_Tips.triggered.connect(self.showTips)
         self.ui.actionHelp.triggered.connect(self.showInfo)
         self.ui.browseButton1.clicked.connect(self.romBrowse)
         self.ui.browseButton2.clicked.connect(self.outBrowse)
@@ -519,50 +520,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Display new window listing the new features and bug fixes
     def showChangelog(self):
-        message = QtWidgets.QMessageBox()
-        message.setWindowTitle("What's New")
-        message.setText(CHANGE_LOG)
-
-        if self.mode == 'light':
-            message.setStyleSheet(LIGHT_STYLESHEET)
-        else:
-            message.setStyleSheet(DARK_STYLESHEET)
-        
-        message.exec()
+        self.createMessageWindow("What's New", CHANGE_LOG)
     
 
     # Display new window to let the user know what went wrong - missing romfs/output path, bad custom logic, etc.
     def showUserError(self, msg):
-        message = QtWidgets.QMessageBox()
-        message.setWindowTitle("Error")
-        message.setText(msg)
-
-        if self.mode == 'light':
-            message.setStyleSheet(LIGHT_STYLESHEET)
-        else:
-            message.setStyleSheet(DARK_STYLESHEET)
-        
-        message.exec()
+        self.createMessageWindow("Error", msg)
     
 
     # Display new window listing the currently known issues
     def showIssues(self):
-        message = QtWidgets.QMessageBox()
-        message.setWindowTitle("Known Issues")
-        message.setText(KNOWN_ISSUES)
-
-        if self.mode == 'light':
-            message.setStyleSheet(LIGHT_STYLESHEET)
-        else:
-            message.setStyleSheet(DARK_STYLESHEET)
-        
-        message.exec()
+        self.createMessageWindow("Known Issues", KNOWN_ISSUES)
     
 
+    def showTips(self):
+        self.createMessageWindow("Helpful Tips", HELPFUL_TIPS)
+
+
+    # Display new window with information about the randomizer
     def showInfo(self):
+        self.createMessageWindow("Link's Awakening Switch Randomizer", ABOUT_INFO)
+    
+
+    def createMessageWindow(self, title, text):
         message = QtWidgets.QMessageBox()
-        message.setWindowTitle("Link's Awakening Switch Randomizer")
-        message.setText(ABOUT_INFO)
+        message.setWindowTitle(title)
+        message.setText(text)
 
         if self.mode == 'light':
             message.setStyleSheet(LIGHT_STYLESHEET)

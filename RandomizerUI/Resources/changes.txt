@@ -4,7 +4,7 @@
 <br></br><br></br>
 - New Settings: Quick mode, random enemy sizes, chest type matches content, and more!
 <br></br><br></br>
-- ASM Patches: One-Hit KO Mode, Nice Items, and more to spice up gameplay!
+- ASM Patches: One-Hit KO Mode, Nice Items, Blur Removal, and more to spice up gameplay!
 <br></br><br></br>
 
 <b>Changes:</b>
@@ -13,7 +13,11 @@
 <br></br><br></br>
 - NPCs now hold up the proper model before giving the item
 <br></br><br></br>
-- Reduced-farming is now baseline behavior and was replaced with a new setting
+- Reduced-Farming has been removed and is now baseline behavior
+<br></br><br></br>
+- A single Bomb/Powder/Arrow now gives 3 of that item
+<br></br><br></br>
+- Fast-Trendy has been removed and Trendy-Prize-Final is forced vanilla
 <br></br><br></br>
 
 <b>Bug Fixes:</b>

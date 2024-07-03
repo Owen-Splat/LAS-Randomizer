@@ -15,7 +15,7 @@ BASE_OPTIONS = {
     'miscellaneousCheck': True,
     'heartsCheck': True,
     'rupCheck': False,
-    'instrumentCheck': True,
+    'instrumentCheck': False,
     'instrumentsComboBox': 0,
     'seashellsComboBox': 2,
     'owlsComboBox': 0,
@@ -31,7 +31,7 @@ BASE_OPTIONS = {
     'shuffledPowderCheck': False,
     'musicCheck': False,
     'openMabeCheck': False,
-    'quickModeCheck': True,
+    'bossCutscenesCheck': True,
     'enemyCheck': False,
     'enemySizesCheck': False,
     'spoilerCheck': True,
@@ -51,8 +51,10 @@ BASE_OPTIONS = {
     'niceRodCheck': True,
     'niceBombsCheck': False,
     'stealingComboBox': 0, # May change, but players often feel frustrated at not being able to steal, not knowing sword is needed
+    'chestAnimationsCheck': True,
+    'keyAnimationsCheck': True,
     'rupeesSpinBox': 0,
-    'starting_gear': []
+    'starting_gear': ['sword', 'shield', 'ocarina', 'song-mambo']
 }
 
 EXTRA_OPTIONS = [
@@ -61,6 +63,11 @@ EXTRA_OPTIONS = [
     'output_folder',
     'seed',
     'platform',
+]
+
+STRING_EXCLUSIONS = [
+    'musicCheck',
+    'blurCheck',
 ]
 
 CHECK_LOCATIONS = {
@@ -233,6 +240,8 @@ def encodeSettings(window) -> str:
     list_bits = []
 
     for k,v in settings_dict.items():
+        if k in STRING_EXCLUSIONS:
+            continue
         if isinstance(v, bool):
             bool_bits.append(int(v))
             if len(bool_bits) == 8:
@@ -291,6 +300,8 @@ def decodeSettings(settings_str: str) -> dict:
     locs = sorted(list(copy.deepcopy(TOTAL_CHECKS)))
 
     for k,v in BASE_OPTIONS.items():
+        if k in STRING_EXCLUSIONS:
+            continue
         if isinstance(v, bool):
             check_boxes.append(k)
         elif isinstance(v, int):
@@ -391,18 +402,20 @@ def loadRandomizerSettings(window, seed):
         # 'randomize-entrances': window.ui.loadingCheck.isChecked(),
         'randomize-music': window.ui.musicCheck.isChecked(),
         'open-mabe': window.ui.openMabeCheck.isChecked(),
-        'quick-mode': window.ui.quickModeCheck.isChecked(),
+        'boss-cutscenes': window.ui.bossCutscenesCheck.isChecked(),
         'randomize-enemies': window.ui.enemyCheck.isChecked(),
         'randomize-enemy-sizes': window.ui.enemySizesCheck.isChecked(),
         # 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in window.excluded_checks]) > 0 else False,
         'shuffle-dungeons': window.ui.dungeonsCheck.isChecked(),
-        # 'dungeon-items': DUNGEON_ITEM_SETTINGS[window.ui.itemsComboBox.currentIndex()],
+        # 'keysanity': DUNGEON_ITEM_SETTINGS[window.ui.itemsComboBox.currentIndex()],
         'blur-removal': window.ui.blurCheck.isChecked(),
         'OHKO': window.ui.ohkoCheck.isChecked(),
         'lv1-beam': window.ui.lv1BeamCheck.isChecked(),
         'nice-rod': window.ui.niceRodCheck.isChecked(),
         'nice-bombs': window.ui.niceBombsCheck.isChecked(),
         'stealing': STEALING_REQUIREMENTS[window.ui.stealingComboBox.currentIndex()],
+        'fast-chests': window.ui.chestAnimationsCheck.isChecked(),
+        'fast-keys': window.ui.keyAnimationsCheck.isChecked(),
         'starting-items': window.starting_gear,
         'starting-rupees': window.ui.rupeesSpinBox.value(),
         'excluded-locations': window.excluded_checks
@@ -412,6 +425,7 @@ def loadRandomizerSettings(window, seed):
 
 def bitsToInt(bits: list) -> int:
     """Reads a list of bits in big endian and converts it into an unsigned integer"""
+
     while len(bits) < 8:
         bits.append(0)
     bits.reverse() # reverse bit order since base64 is big endian

@@ -19,6 +19,9 @@ with open(os.path.join(RESOURCE_PATH, 'changes.txt'), 'r') as f:
 with open(os.path.join(RESOURCE_PATH, 'issues.txt'), 'r') as f:
     KNOWN_ISSUES = f.read()
 
+with open(os.path.join(RESOURCE_PATH, 'tips.txt'), 'r') as f:
+    HELPFUL_TIPS = f.read()
+
 with open(os.path.join(RESOURCE_PATH, 'about.txt'), 'r') as f:
     ABOUT_INFO = f.read()
 

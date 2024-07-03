@@ -1,15 +1,6 @@
 v0.4
 
-- merge settings from ProfessorLaw's fork
-    mess with chest textures to make them look better
-    make the chest texture/model edits in a separate thread so it doesn't hang, same as the randomizer logo (and save it for future use)
-    make sure traps can be in any chest, they might be forced in junk & small
-    dont do chest model parameter edits if chest type matches content is not on
-        this way, Dampe rooms don't need to be edited and will shorten the output size
-
-- rework or maybe even outright remove fast-trendy setting and make it baseline behavior
-
-- move all fast cutscene settings into their own group
+- mess with chest textures to make them look better
 
 - clean up any GUI bugs with the settings string and any included/excluded location sorting problems
 
