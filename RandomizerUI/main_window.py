@@ -71,6 +71,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.trapsComboBox.currentIndexChanged.connect(self.updateSettingsString)
         self.ui.instrumentsComboBox.currentIndexChanged.connect(self.updateSettingsString)
         self.ui.tricksComboBox.currentIndexChanged.connect(self.updateSettingsString)
+        self.ui.stealingComboBox.currentIndexChanged.connect(self.updateSettingsString)
+        self.ui.chestAspectComboBox.currentIndexChanged.connect(self.updateSettingsString)
         self.ui.rupeesSpinBox.valueChanged.connect(self.updateSettingsString)
         self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
         self.ui.includeButton.clicked.connect(self.includeButton_Clicked)
@@ -98,7 +100,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.rupeesSpinBox,
             self.ui.trapsComboBox,
             self.ui.chestAspectComboBox,
-            self.ui.dungeonItemsComboBox
+            self.ui.dungeonItemsComboBox,
+            self.ui.stealingComboBox
         ]
         for item in desc_items:
             item.installEventFilter(self)
