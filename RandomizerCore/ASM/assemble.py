@@ -83,7 +83,7 @@ def readASM(asm, asm_data, settings):
             needed_data = asm_data[line_data[1]]
             line = line_data[0].strip()
             register = line[-3:].strip()
-            line.replace(register, needed_data)
+            line = line.replace(register, needed_data)
 
         # strip any mid-line comments
         if ';' in line:
