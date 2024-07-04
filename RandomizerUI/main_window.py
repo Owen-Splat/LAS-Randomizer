@@ -380,9 +380,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # load mod settings from the UI, no need to decode settings string
         settings = settings_manager.loadRandomizerSettings(self, seed)
-        
+        settings_string = self.ui.lineEdit_4.text()
         outdir = f"{self.ui.lineEdit_2.text()}/{settings['seed']}"
-        self.progress_window = ProgressWindow(rom_path, outdir, ITEM_DEFS, logic_defs, settings)
+        self.progress_window = ProgressWindow(rom_path, outdir, ITEM_DEFS, logic_defs, settings, settings_string)
         self.progress_window.setFixedSize(472, 125)
         self.progress_window.setWindowTitle(f"{settings['seed']}")
 

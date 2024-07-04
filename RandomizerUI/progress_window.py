@@ -14,7 +14,7 @@ import shutil
 
 class ProgressWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, rom_path, out_dir, item_defs, logic_defs, settings):
+    def __init__(self, rom_path, out_dir, item_defs, logic_defs, settings, settings_string):
         super (ProgressWindow, self).__init__()
         self.ui = Ui_ProgressWindow()
         self.ui.setupUi(self)
@@ -27,8 +27,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.item_defs = copy.deepcopy(item_defs)
         self.logic_defs = copy.deepcopy(logic_defs)
         self.settings = copy.deepcopy(settings)
+        self.settings_string : str = settings_string
         
-        self.num_of_mod_tasks = 320 # adjusted so the progress bar takes a final step to display it's done
+        self.num_of_mod_tasks = 255
 
         self.ui.openOutputFolder.setVisible(False)
         self.ui.openOutputFolder.clicked.connect(self.openOutputFolderButtonClicked)
@@ -64,6 +65,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if settings['open-mabe']:
             self.num_of_mod_tasks += 4
         
+        if settings['chest-aspect'] == 'camc':
+            self.num_of_mod_tasks += 65 # len(PANEL_CHEST_ROOMS)
+        
         self.done = False
         self.cancel = False
 
@@ -94,9 +98,6 @@ class ProgressWindow(QtWidgets.QMainWindow):
     # receives the int signal as a parameter named progress
     def updateProgress(self, progress):
         self.ui.progressBar.setValue(progress)
-        if self.current_job == 'modgenerator':
-            percentage = progress / self.num_of_mod_tasks
-            self.ui.progressBar.setFormat("%p%")
     
 
     # receive the placements from the shuffler thread to the modgenerator
@@ -110,6 +111,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
             f.write(f'{self.seed} - {self.logic.capitalize()} Logic')
+            f.write(f'\n{self.settings_string}')
             f.write(f'\n\n{er_message}')
             f.write(f'\n\n{self.settings}')
     
@@ -131,6 +133,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.progressBar.setValue(0)
         self.ui.progressBar.setMaximum(self.num_of_mod_tasks)
         self.ui.progressBar.setTextVisible(True)
+        self.ui.progressBar.setFormat("%p%")
         self.ui.label.setText(f'Generating mod files...')
         self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed, self.randstate)
         self.mods_process.setParent(self)
@@ -145,6 +148,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
             f.write(f"{self.seed} - {self.logic.capitalize()} Logic")
+            f.write(f'\n{self.settings_string}')
             f.write(f"\n\n{er_message}")
             f.write(f"\n\n{self.settings}")
 
