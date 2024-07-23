@@ -18,7 +18,7 @@ cbz w0, 0x6a6340
 ;* Rewrite Inventory::RemoveItem(0) to remove Bottle[1]
 ; This is so that we can actively add/remove it from inventory to control if it shows in the FishingPond
 .offset 0x7e1f6c
-adrp x8, 0x14e0000
+adrp x8, 0x1cc1368 ; inventory offset, the assembler handles converting to page offset
 ldr x8, [x8, #0x368]
 ldr w9, [x8, #0xa8]
 and w9, w9, 0xFFFFBFFF

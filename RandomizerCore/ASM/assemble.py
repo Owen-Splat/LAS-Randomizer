@@ -100,7 +100,7 @@ def readASM(asm, asm_data, settings):
             continue
 
         # handle branch offsets
-        if line.startswith(('b ', 'b.eq', 'b.ne')):
+        if line.startswith('b'):
             line_data = line.split(' ')
             branch_offset = int(line_data[1][2:], 16)
             diff = branch_offset - offset
@@ -108,6 +108,18 @@ def readASM(asm, asm_data, settings):
             if diff < 0:
                 symbol = '' # if the diff is negative, it already has a - in front
             line = f"{line_data[0]} {symbol}{hex(diff)}"
+        
+        # handle adrp offsets
+        # to make it easier to write patches, we can just write the absolute offset instead doing the page offset math
+        if line.startswith('adrp'):
+            line_data = line.split(', ')
+            data_offset = line_data[1]
+            line_data = line_data[0]
+            data_offset = data_offset.replace(data_offset[-3:], '000', -1)
+            page_offset = hex(offset)
+            page_offset = page_offset.replace(page_offset[-3:], '000', -1)
+            diff = int(data_offset, 16) - int(page_offset, 16)
+            line = f"{line_data}, {hex(diff)}"
 
         # strip line of any remaining whitespace, add multi-line asm separator
         line = line.strip()
