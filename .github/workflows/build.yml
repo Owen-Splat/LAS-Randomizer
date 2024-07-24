@@ -1,9 +1,4 @@
-on:
-  push:
-#    branches:
-#      - 'master'
-    tags:
-      - "v*"
+on: workflow_dispatch
 
 jobs:
   prepare-build-files:
