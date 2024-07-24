@@ -16,7 +16,7 @@ TEST_PLACEMENTS = { # example: testing specific items in chests
 class ItemShuffler(QtCore.QThread):
     
     # sends signals to main thread when emitted
-    give_placements = QtCore.Signal(dict)
+    give_placements = QtCore.Signal(tuple)
     is_done = QtCore.Signal()
     error = QtCore.Signal(str)
 
@@ -73,10 +73,10 @@ class ItemShuffler(QtCore.QThread):
         try:
             # Create a placement and spoiler log
             if self.thread_active:
-                placements = self.makeRandomizedPlacement()
+                placements, rand_state = self.makeRandomizedPlacement()
             
             if self.thread_active:
-                self.give_placements.emit(placements)
+                self.give_placements.emit((placements, rand_state))
         
         except Exception:
             er = traceback.format_exc()
