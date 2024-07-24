@@ -1517,7 +1517,7 @@
           </rect>
          </property>
          <property name="whatsThis">
-          <string>Increases the fire rate of the Magic Rod</string>
+          <string>Removes the cooldown on the Magic Rod, resulting in a greater firing rate</string>
          </property>
          <property name="text">
           <string>Nice Magic Rod</string>

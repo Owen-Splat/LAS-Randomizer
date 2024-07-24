@@ -1124,7 +1124,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(whatsthis)
         self.lv1BeamCheck.setText(QCoreApplication.translate("MainWindow", u"Sword Beam With Lv1", None))
 #if QT_CONFIG(whatsthis)
-        self.niceRodCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Increases the fire rate of the Magic Rod", None))
+        self.niceRodCheck.setWhatsThis(QCoreApplication.translate("MainWindow", u"Removes the cooldown on the Magic Rod, resulting in a greater firing rate", None))
 #endif // QT_CONFIG(whatsthis)
         self.niceRodCheck.setText(QCoreApplication.translate("MainWindow", u"Nice Magic Rod", None))
 #if QT_CONFIG(whatsthis)
