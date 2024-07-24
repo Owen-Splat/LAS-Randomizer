@@ -33,7 +33,7 @@ class ItemShuffler(QtCore.QThread):
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         
-        self.force_chests = ['zol-trap', 'stalfos-note']
+        self.force_chests = ('zol-trap', 'stalfos-note')
 
         self.progress_value = 0
         self.thread_active = True
