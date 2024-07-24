@@ -3,7 +3,7 @@ from RandomizerCore.Paths.randomizer_paths import DATA_PATH, RESOURCE_PATH, SETT
 import yaml
 import os
 
-VERSION = 0.3
+VERSION = 0.4
 
 DOWNLOAD_PAGE = 'https://github.com/Owen-Splat/LAS-Randomizer/releases/latest'
 

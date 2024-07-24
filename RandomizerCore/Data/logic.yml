@@ -1,4 +1,4 @@
-# 0.302
+# 0.4
 
 # The randomizer will use whatever logic is in the same directory as the program
 # Updating the logic will overwrite the existing file, so if using custom logic, rename it before updating and manually add the changes
