@@ -119,8 +119,9 @@ def makeStartChanges(flowchart, settings):
         if dungeon_item_setting in ['stone-beak', 'mcb']:
             event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
 
-        # Adding event on DungeonIn entrypoint
+        # Connect events to the DungeonIn and DefaultUpStairsOut entrypoints
         event_tools.createActionChain(flowchart, 'Event539', event_defs)
+        event_tools.createActionChain(flowchart, 'Event550', event_defs)
 
     # Remove the 7 second timeOut wait on the companion when it gets blocked from a loading zone
     timeout_events = ('Event637', 'Event660', 'Event693', 'Event696', 'Event371', 'Event407', 'Event478')

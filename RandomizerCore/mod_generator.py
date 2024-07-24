@@ -1070,21 +1070,7 @@ class ModsProcess(QtCore.QThread):
             else:
                 event_tools.insertEventAfter(flow.flowchart, 'Event19', add_bombs)
 
-        dungeon_item_setting = self.settings['dungeon-items']
-        if dungeon_item_setting != 'none':
-            event_defs = []
-
-            # TODO: add the items through ASM when the level text is being displayed
-            if dungeon_item_setting in ['mc', 'mcb']:
-                event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
-                event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
-            if dungeon_item_setting in ['stone-beak', 'mcb']:
-                event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
-
-            # Adding event on DungeonIn entrypoint
-            event_tools.createActionChain(flow.flowchart, 'Event2', event_defs)
-
-        self.writeFile('SkeletalGuardBlue.bfevfl', flow)
+            self.writeFile('SkeletalGuardBlue.bfevfl', flow)
 
         ### Make Save&Quit after getting a GameOver send you back to Marin's house
         if self.thread_active:
