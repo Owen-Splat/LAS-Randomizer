@@ -1,4 +1,4 @@
-# 0.4
+# 0.41
 
 # The randomizer will use whatever logic is in the same directory as the program
 # Updating the logic will overwrite the existing file, so if using custom logic, rename it before updating and manually add the changes
@@ -2235,7 +2235,7 @@ D0-north-orbs:
   content: key-D0
   region: color-dungeon
   spoiler-region: color-dungeon
-  condition-basic: D0-6D & kill-orb
+  condition-basic: D0-6D & kill-orb & break-pot
 D0-south-orbs:
   type: item
   subtype: chest
@@ -2270,21 +2270,21 @@ D0-fairy-1:
   content: red-tunic
   region: color-dungeon
   spoiler-region: color-dungeon
-  condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
+  condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch & break-pot
 D0-fairy-2:
   type: item
   subtype: npc
   content: blue-tunic
   region: color-dungeon
   spoiler-region: color-dungeon
-  condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch
+  condition-basic: D0-6D & nightmare-key-D0 & key-D0:3 & hit-color-dungeon-switch & break-pot
 D0-owl-statue-nine-switches:
   type: item
   subtype: dungeon-statue
   content: rupee-20
   region: color-dungeon
   spoiler-region: color-dungeon
-  condition-basic: D0-6D & key-D0:2 & stone-beak-D0
+  condition-basic: D0-6D & key-D0:2 & stone-beak-D0 & break-pot
 D0-owl-statue-first-switches:
   type: item
   subtype: dungeon-statue
