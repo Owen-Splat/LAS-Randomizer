@@ -1970,7 +1970,7 @@ class ModsProcess(QtCore.QThread):
         """Creates the necessary exefs_patches for the Randomizer to work correctly"""
         
         base_bid = 'AE16F71E002AF8CB059A9A74C4D90F34BA984892'
-        update_bid = '909E904AF78AC1B8DEEFE97AB2CCDB51968f0EC7'
+        update_bid = '909E904AF78AC1B8DEEFE97AB2CCDB51968F0EC7'
         patcher = assemble.createRandomizerPatches(random.getstate(), self.settings)
         
         # output the ASM as .ips for console, and .pchtxt for emulator
