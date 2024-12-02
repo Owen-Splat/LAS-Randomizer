@@ -1498,28 +1498,28 @@ D3-basement-north:
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-3G & kill-stalfos-spear & kill-stalfos
+  condition-basic: D3-4C & kill-stalfos-spear & kill-stalfos
 D3-basement-west:
   type: item
   subtype: drop
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-4B & key-D3:1 & kill-zol-green & kill-pairodd & (feather | (rooster & bad-pets))
+  condition-basic: D3-4C & kill-zol-green & kill-pairodd & (feather | (rooster & bad-pets))
 D3-basement-south:
   type: item
   subtype: drop
   content: key-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-4B & key-D3:1 & kill-zol-green & kill-pairodd & kill-stalfos-spear
+  condition-basic: D3-4C & kill-zol-green & kill-pairodd & kill-stalfos-spear
 D3-hallway-4:
   type: item
   subtype: chest
   content: stone-beak-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-4B & D3-3G & hit-crystal-switch
+  condition-basic: D3-4C & hit-crystal-switch
 D3-hallway-3:
   type: item
   subtype: chest
@@ -1540,7 +1540,7 @@ D3-hallway-side-room:
   content: map-D3
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-7B & D3-3G & kill-zol-green & hit-crystal-switch
+  condition-basic: D3-4C & kill-zol-green & hit-crystal-switch
 D3-hallway-1:
   type: item
   subtype: chest
@@ -1561,7 +1561,7 @@ D3-owl-statue-basement-north:
   content: rupee-20
   region: key-cavern
   spoiler-region: key-cavern
-  condition-basic: D3-3G & stone-beak-D3
+  condition-basic: D3-4C & stone-beak-D3
 D3-owl-statue-arrow:
   type: item
   subtype: dungeon-statue
@@ -2738,25 +2738,25 @@ D2-8C:
   type: room
   condition-basic: bottle-grotto
 
-D3-3G:
+D3-8B: 
   type: room
-  condition-basic: D3-4B & key-D3:9
+  condition-basic: key-cavern
+D3-7B:
+  type: room
+  condition-basic: D3-8B & bracelet
 D3-4B:
   type: room
   condition-basic: D3-7B & (break-obstacle | kill-zol-green)
 D3-4C:
   type: room
   condition-basic: D3-4B & key-D3:4
-D3-7B:
+D3-3G:
   type: room
-  condition-basic: D3-8B & bracelet
-D3-8B: 
-  type: room
-  condition-basic: key-cavern
+  condition-basic: D3-4B & key-D3:8
 D3-8G:
   type: room
-  condition-basic: D3-4C & key-D3:9 & dash-jump & kill-pairodd
-  condition-advanced: D3-4C & key-D3:9 & boots & kill-pairodd
+  condition-basic: D3-4C & key-D3:8 & dash-jump & kill-pairodd
+  condition-advanced: D3-4C & key-D3:8 & boots & kill-pairodd
   condition-glitched: D3-4C & dash-jump & bombs & kill-pairodd
 
 D4-4C:
