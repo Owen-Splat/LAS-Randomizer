@@ -1,14 +1,18 @@
-from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6.QtCore import QEvent, Signal
+from PySide6.QtGui import QClipboard
+from PySide6.QtWidgets import (QFileDialog, QMainWindow, QWidget,
+                               QCheckBox, QComboBox, QLineEdit, QSpinBox,
+                               QMessageBox, QListWidgetItem)
 from RandomizerUI.UI.ui_form import Ui_MainWindow
 from RandomizerUI.progress_window import ProgressWindow
 from RandomizerUI.update import UpdateProcess, LogicUpdateProcess
 from RandomizerCore.randomizer_data import *
-import os, random, re, string, yaml
+from pathlib import Path
+import random, re, string, yaml
 import RandomizerUI.settings_manager as settings_manager
 
 
-class MainWindow(QtWidgets.QMainWindow):
-    
+class MainWindow(QMainWindow):
     def __init__(self):
         super (MainWindow, self).__init__()
         # self.trans = QtCore.QTranslator(self)
@@ -17,7 +21,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.includeButton_2.setVisible(False)
         self.ui.excludeButton_2.setVisible(False)
         self.current_option = ''
-        self.clipboard = QtGui.QClipboard()
+        self.clipboard = QClipboard()
         # self.options = ([('English', ''), ('Français', 'eng-fr' ), ('中文', 'eng-chs'), ])
 
         # Keep track of stuff
@@ -43,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.setStyleSheet(DARK_STYLESHEET)
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-        
+
         ### SUBSCRIBE TO EVENTS
         self.ui.actionLight.triggered.connect(self.setLightMode)
         self.ui.actionDark.triggered.connect(self.setDarkMode)
@@ -77,10 +81,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.ui.excludeButton_2.clicked.connect(self.excludeButton_2_Clicked)
 
         for option in settings_manager.BASE_OPTIONS:
-            widget = self.findChild(QtWidgets.QWidget, option)
+            widget = self.findChild(QWidget, option)
             if widget is None:
                 continue
-            if isinstance(widget, QtWidgets.QCheckBox):
+            if isinstance(widget, QCheckBox):
                 widget.clicked.connect(self.checkClicked)
                 widget.installEventFilter(self)
 
@@ -99,23 +103,23 @@ class MainWindow(QtWidgets.QMainWindow):
         ]
         for item in desc_items:
             item.installEventFilter(self)
-        
+
         self.makeSmartComboBoxes()
 
         self.setFixedSize(780, 650)
         self.setWindowTitle(f'{self.windowTitle()} v{VERSION}')
         # self.ui.retranslateUi(self)
 
-        center = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen()).center()
-        geo = self.frameGeometry()
-        geo.moveCenter(center)
-        self.move(geo.topLeft())
-        
+        # center = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen()).center()
+        # geo = self.frameGeometry()
+        # geo.moveCenter(center)
+        # self.move(geo.topLeft())
+
         self.process = UpdateProcess()
         self.process.can_update.connect(self.showUpdate)
         self.process.give_version.connect(self.obtainVersion)
         self.process.start()
-        
+
         self.show()
 
 
@@ -142,7 +146,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for combo in combos:
             combo.__class__ = SmartComboBox
             combo.popup_closed.connect(self.closeComboBox)
-    
+
 
     def closeComboBox(self):
         self.ui.explainationLabel.setText('Hover over an option to see what it does')
@@ -150,45 +154,46 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
         else:
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-    
+
 
     def eventFilter(self, source, event):
+        match event.type():
+            case QEvent.Type.HoverEnter:
+                self.current_option = source.objectName()
+                self.ui.explainationLabel.setText(source.whatsThis())
+                if self.mode == 'light':
+                    self.ui.explainationLabel.setStyleSheet('color: black;')
+                else:
+                    self.ui.explainationLabel.setStyleSheet('color: white;')
+            case QEvent.Type.HoverLeave:
+                self.ui.explainationLabel.setText('Hover over an option to see what it does')
+                if self.mode == 'light':
+                    self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
+                else:
+                    self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
+            case _:
+                print(event.type())
 
-        if event.type() == QtCore.QEvent.Type.HoverEnter:
-            self.current_option = source.objectName()
-            self.ui.explainationLabel.setText(source.whatsThis())
-            if self.mode == 'light':
-                self.ui.explainationLabel.setStyleSheet('color: black;')
-            else:
-                self.ui.explainationLabel.setStyleSheet('color: white;')
-        
-        elif event.type() == QtCore.QEvent.Type.HoverLeave:
-            self.ui.explainationLabel.setText('Hover over an option to see what it does')
-            if self.mode == 'light':
-                self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
-            else:
-                self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
-        
-        return QtWidgets.QWidget.eventFilter(self, source, event)
-    
+        return QWidget.eventFilter(self, source, event)
+
 
     def obtainVersion(self, version):
         self.new_version = version
-    
+
 
     def showUpdate(self, update):
         if not update:
             self.checkLogic()
             return
-        
+
         update_menu = self.ui.menuBar.addMenu('NEW VERSION AVAILABLE!')
         update_action = update_menu.addAction('Update')
         update_action.triggered.connect(self.updateClicked)
         self.updateClicked()
-    
+
 
     def updateClicked(self):
-        message = QtWidgets.QMessageBox()
+        message = QMessageBox()
         message.setWindowTitle("Link's Awakening Switch Randomizer Update")
         message.setText(f"""
         Current version: {VERSION}<br></br>
@@ -204,17 +209,17 @@ class MainWindow(QtWidgets.QMainWindow):
             message.setStyleSheet(LIGHT_STYLESHEET)
         else:
             message.setStyleSheet(DARK_STYLESHEET)
-        
+
         message.exec()
-    
-    
+
+
     def checkLogic(self):
         self.logic_process = LogicUpdateProcess(ver=self.logic_version)
         self.logic_process.can_update.connect(self.showLogicUpdate)
         self.logic_process.give_logic.connect(self.obtainLogic)
         self.logic_process.start()
         self.logic_process.exec()
-    
+
 
     def obtainLogic(self, version_and_logic):
         self.logic_version = version_and_logic[0]
@@ -227,38 +232,38 @@ class MainWindow(QtWidgets.QMainWindow):
     def showLogicUpdate(self, update):
         if not update:
             return
-        
-        message = QtWidgets.QMessageBox()
+
+        message = QMessageBox()
         message.setWindowTitle("Logic Updater")
-        
+
         if self.mode == 'light':
             message.setStyleSheet(LIGHT_STYLESHEET)
         else:
             message.setStyleSheet(DARK_STYLESHEET)
-        
+
         message.setText('Logic has been updated')
         message.exec()
-    
+
 
     def romBrowse(self):
-        folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
-        if os.path.exists(folder_path):
+        folder_path = QFileDialog.getExistingDirectory(self, 'Select Folder')
+        if Path(folder_path).exists() and folder_path != "":
             self.ui.lineEdit.setText(folder_path)
-    
-    
+
+
     def outBrowse(self):
-        folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
-        if os.path.exists(folder_path):
+        folder_path = QFileDialog.getExistingDirectory(self, 'Select Folder')
+        if Path(folder_path).exists() and folder_path != "":
             self.ui.lineEdit_2.setText(folder_path)
-    
+
 
     def generateSeed(self):
         adj1 = random.choice(ADJECTIVES)
         adj2 = random.choice(ADJECTIVES)
         char = random.choice(CHARACTERS)
         self.ui.lineEdit_3.setText(adj1 + adj2 + char)
-    
-    
+
+
     def checkClicked(self, checked):
         if self.current_option not in settings_manager.CHECK_LOCATIONS:
             return
@@ -285,7 +290,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def updateSeashells(self):
         value = self.ui.seashellsComboBox.currentIndex()
-        
+
         if value == 0:
             self.excluded_checks.update(SEASHELL_REWARDS)
         elif value == 1:
@@ -307,58 +312,58 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def updateOwls(self):
-        value = self.ui.owlsComboBox.currentIndex()
-
-        if value == 0:
-            self.overworld_owls = False
-            self.excluded_checks.difference_update(OVERWORLD_OWLS)
-            self.dungeon_owls = False
-            self.excluded_checks.difference_update(DUNGEON_OWLS)
-        elif value == 1:
-            self.overworld_owls = True
-            self.dungeon_owls = False
-            self.excluded_checks.difference_update(DUNGEON_OWLS)
-        elif value == 2:
-            self.overworld_owls = False
-            self.excluded_checks.difference_update(OVERWORLD_OWLS)
-            self.dungeon_owls = True
-        else:
-            self.overworld_owls = True
-            self.dungeon_owls = True
-        
-        if value in [1, 3] and not self.ui.rapidsCheck.isChecked():
-            self.excluded_checks.update(['owl-statue-rapids'])
+        match self.ui.owlsComboBox.currentIndex():
+            case 0:
+                self.overworld_owls = False
+                self.excluded_checks.difference_update(OVERWORLD_OWLS)
+                self.dungeon_owls = False
+                self.excluded_checks.difference_update(DUNGEON_OWLS)
+            case 1:
+                self.overworld_owls = True
+                self.dungeon_owls = False
+                self.excluded_checks.difference_update(DUNGEON_OWLS)
+                if not self.ui.rapidsCheck.isChecked():
+                    self.excluded_checks.update(['owl-statue-rapids'])
+            case 2:
+                self.overworld_owls = False
+                self.excluded_checks.difference_update(OVERWORLD_OWLS)
+                self.dungeon_owls = True
+            case 3:
+                self.overworld_owls = True
+                self.dungeon_owls = True
+                if not self.ui.rapidsCheck.isChecked():
+                    self.excluded_checks.update(['owl-statue-rapids'])
 
         self.updateSettingsString()
 
 
     # Randomize Button Clicked
     def randomizeButton_Clicked(self):
-        
         # verify RomFS before shuffling items
         rom_path = self.ui.lineEdit.text()
 
-        if not os.path.exists(rom_path):
+        if not Path(rom_path).exists() and rom_path != "":
             self.showUserError('Romfs path does not exist!')
             return
-        
-        if os.path.exists(os.path.join(rom_path, 'romfs')):
-            rom_path = os.path.join(rom_path, 'romfs')
-        
-        if not os.path.isfile(f'{rom_path}/region_common/event/PlayerStart.bfevfl'):
+
+        if (Path(rom_path) / 'romfs').exists():
+            rom_path = Path(rom_path) / 'romfs'
+
+        if not (Path(rom_path) / 'region_common' / 'event' / 'PlayerStart.bfevfl').is_file():
             self.showUserError('RomFS path is not valid!')
             return
-        
-        if not os.path.exists(self.ui.lineEdit_2.text()):
+
+        out_path = self.ui.lineEdit_2.text()
+        if not Path(out_path).exists() and out_path != "":
             self.showUserError('Output path does not exist!')
             return
-        
-        if not os.path.isfile(LOGIC_PATH):
+
+        # will remove custom logic file support once the app has customization options built-in
+        if not Path(LOGIC_PATH).is_file():
             self.showUserError('Logic file not found!')
             return
-        
         logic_defs = yaml.safe_load(self.logic_defs)
-        
+
         seed = self.ui.lineEdit_3.text().strip()
         if seed.lower() in ('', 'random'):
             random.seed()
@@ -371,7 +376,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if c not in valid_chars:
                     self.showUserError(f"Invalid seed character: {c}")
                     return
-        
+
         # load mod settings from the UI, no need to decode settings string
         settings = settings_manager.loadRandomizerSettings(self, seed)
         settings_string = self.ui.lineEdit_4.text()
@@ -384,8 +389,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.progress_window.setStyleSheet(LIGHT_STYLESHEET)
         else:
             self.progress_window.setStyleSheet(DARK_STYLESHEET)
-        
+
         self.progress_window.show()
+
 
     def getValidLocationChecks(self, locationList):
         return [loc for loc in locationList
@@ -395,42 +401,33 @@ class MainWindow(QtWidgets.QMainWindow):
                 or (loc not in DUNGEON_OWLS and loc not in OVERWORLD_OWLS and loc not in BLUE_RUPEES)
                 ]
 
-    def tab_Changed(self):
 
-        # starting items
-        if self.ui.tabWidget.currentIndex() == 1:
-            randomized_gear = STARTING_ITEMS[:]
-            for x in self.starting_gear:
-                randomized_gear.remove(x)
-            
-            self.ui.listWidget_5.clear()
-            for item in randomized_gear:
-                self.ui.listWidget_5.addItem(self.checkToList(str(item)))
-            
-            self.ui.listWidget_6.clear()
-            for item in self.starting_gear:
-                self.ui.listWidget_6.addItem(self.checkToList(str(item)))
-            
-            return
-        
-        # locations
-        if self.ui.tabWidget.currentIndex() == 2:
-            self.ui.listWidget.clear()
-            checks = self.getValidLocationChecks(TOTAL_CHECKS.difference(self.excluded_checks))
-            for check in checks:
-                self.ui.listWidget.addItem(SmartListWidget(self.checkToList(str(check))))
-            
-            self.ui.listWidget_2.clear()
-            checks = self.getValidLocationChecks(self.excluded_checks)
-            for check in checks:
-                self.ui.listWidget_2.addItem(SmartListWidget(self.checkToList(str(check))))
-            
-            return
-        
-        # logic tricks
-        if self.ui.tabWidget.currentIndex() == 3:
-            return
-    
+    def tab_Changed(self):
+        match self.ui.tabWidget.currentIndex():
+            case 1: # starting items
+                randomized_gear = STARTING_ITEMS[:]
+                for x in self.starting_gear:
+                    randomized_gear.remove(x)
+                self.ui.listWidget_5.clear()
+                for item in randomized_gear:
+                    self.ui.listWidget_5.addItem(self.checkToList(str(item)))
+                self.ui.listWidget_6.clear()
+                for item in self.starting_gear:
+                    self.ui.listWidget_6.addItem(self.checkToList(str(item)))
+
+            case 2: # locations
+                self.ui.listWidget.clear()
+                checks = self.getValidLocationChecks(TOTAL_CHECKS.difference(self.excluded_checks))
+                for check in checks:
+                    self.ui.listWidget.addItem(SmartListWidget(self.checkToList(str(check))))
+                self.ui.listWidget_2.clear()
+                checks = self.getValidLocationChecks(self.excluded_checks)
+                for check in checks:
+                    self.ui.listWidget_2.addItem(SmartListWidget(self.checkToList(str(check))))
+
+            case 3: # logic
+                pass
+
 
     def includeButton_Clicked(self):
         for i in self.ui.listWidget_2.selectedItems():
@@ -472,28 +469,28 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # for slot in slots:
         #     s = s.replace(slot, slot.lower())
-        
+
         return s
-    
-    
+
+
     # Some Check to some-check
     def listToCheck(self, check):
         stayUpper = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
-        
+
         s = re.sub(" ", "-", check).lower()
-        
+
         if s.startswith(stayUpper):
             s = s.replace('d', 'D', 1)
-        
+
         return s
-    
+
 
     # Starting Item to starting-item and also converts names that were changed to look nicer
     def listToItem(self, item):
         s = re.sub(" ", "-", item).lower()
         
         return s
-    
+
 
     # Sets the app to Light Mode
     def setLightMode(self):
@@ -503,7 +500,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.explainationLabel.setStyleSheet('color: rgb(80, 80, 80);')
         else:
             self.ui.explainationLabel.setStyleSheet('color: black;')
-    
+
 
     # Sets the app to Dark Mode
     def setDarkMode(self):
@@ -513,22 +510,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
         else:
             self.ui.explainationLabel.setStyleSheet('color: white;')
-    
+
 
     # Display new window listing the new features and bug fixes
     def showChangelog(self):
         self.createMessageWindow("What's New", CHANGE_LOG)
-    
+
 
     # Display new window to let the user know what went wrong - missing romfs/output path, bad custom logic, etc.
     def showUserError(self, msg):
         self.createMessageWindow("Error", msg)
-    
+
 
     # Display new window listing the currently known issues
     def showIssues(self):
         self.createMessageWindow("Known Issues", KNOWN_ISSUES)
-    
+
 
     def showTips(self):
         self.createMessageWindow("Helpful Tips", HELPFUL_TIPS)
@@ -537,10 +534,10 @@ class MainWindow(QtWidgets.QMainWindow):
     # Display new window with information about the randomizer
     def showInfo(self):
         self.createMessageWindow("Link's Awakening Switch Randomizer", ABOUT_INFO)
-    
+
 
     def createMessageWindow(self, title, text):
-        message = QtWidgets.QMessageBox()
+        message = QMessageBox()
         message.setWindowTitle(title)
         message.setText(text)
 
@@ -548,9 +545,9 @@ class MainWindow(QtWidgets.QMainWindow):
             message.setStyleSheet(LIGHT_STYLESHEET)
         else:
             message.setStyleSheet(DARK_STYLESHEET)
-        
+
         message.exec()
-    
+
 
     def pasteSettingsString(self):
         try:
@@ -572,11 +569,11 @@ class MainWindow(QtWidgets.QMainWindow):
     # Override mouse click event to make certain stuff lose focus
     def mousePressEvent(self, event):
         focused_widget = self.focusWidget()
-        if isinstance(focused_widget, QtWidgets.QLineEdit) |\
-            isinstance(focused_widget, QtWidgets.QComboBox) |\
-            isinstance(focused_widget, QtWidgets.QSpinBox):
+        if isinstance(focused_widget, QLineEdit) |\
+            isinstance(focused_widget, QComboBox) |\
+            isinstance(focused_widget, QSpinBox):
                 focused_widget.clearFocus()
-    
+
 
     # Override close event to save settings
     def closeEvent(self, event):
@@ -586,20 +583,20 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 # Create custom QComboBox to signal when the popup is closed, regardless of how
-class SmartComboBox(QtWidgets.QComboBox):
-    popup_closed = QtCore.Signal()
+class SmartComboBox(QComboBox):
+    popup_closed = Signal()
 
     def hidePopup(self):
-        QtWidgets.QComboBox.hidePopup(self)
+        QComboBox.hidePopup(self)
         self.popup_closed.emit()
 
 
 
 # Create custom QListWidgetItem to sort locations alphanumerically
-class SmartListWidget(QtWidgets.QListWidgetItem):
+class SmartListWidget(QListWidgetItem):
     """Custom QListWidgetItem to sort locations alphanumerically"""
 
-    def __lt__(self, other: QtWidgets.QListWidgetItem) -> bool:
+    def __lt__(self, other: QListWidgetItem) -> bool:
         """Override of the sorting method to implement custom sort"""
 
         convert = lambda text: int(text) if text.isdigit() else text
