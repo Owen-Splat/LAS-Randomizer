@@ -14,9 +14,11 @@ if getattr(sys, "frozen", False):
             userdata_path.mkdir(parents=True, exist_ok=True)
         SETTINGS_PATH = userdata_path / 'settings.txt'
         LOGS_PATH = userdata_path / 'log.txt'
+        VERSION_PATH = userdata_path / 'version.txt'
     else:
         SETTINGS_PATH = ROOT_PATH / 'settings.txt'
         LOGS_PATH = ROOT_PATH / 'log.txt'
+        VERSION_PATH = ROOT_PATH / 'version.txt'
 else:
     IS_RUNNING_FROM_SOURCE = True
     ROOT_PATH = Path(sys.argv[0]).parent
@@ -25,5 +27,4 @@ else:
     RESOURCE_PATH = ROOT_PATH / 'RandomizerUI' / 'Resources'
     SETTINGS_PATH = ROOT_PATH / 'settings.txt'
     LOGS_PATH = ROOT_PATH / 'log.txt'
-
-LOGIC_PATH = DATA_PATH / 'logic.yml'
+    VERSION_PATH = ROOT_PATH / 'version.txt'
