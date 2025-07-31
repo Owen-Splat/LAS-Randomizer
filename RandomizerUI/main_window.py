@@ -3,14 +3,8 @@ from RandomizerUI.UI.ui_form import Ui_MainWindow
 from RandomizerUI.progress_window import ProgressWindow
 from RandomizerUI.update import UpdateProcess, LogicUpdateProcess
 from RandomizerCore.randomizer_data import *
-from re import sub
-
-import os
-import yaml
-import random
-import string
+import os, random, re, string, yaml
 import RandomizerUI.settings_manager as settings_manager
-
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -474,7 +468,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def checkToList(self, check):
         # slots = ('1St', '2Nd', '3Rd', '4Th', '5Th', '6Th', '7Th')
 
-        s = sub("-", " ", check).title()
+        s = re.sub("-", " ", check).title()
 
         # for slot in slots:
         #     s = s.replace(slot, slot.lower())
@@ -486,7 +480,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def listToCheck(self, check):
         stayUpper = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
         
-        s = sub(" ", "-", check).lower()
+        s = re.sub(" ", "-", check).lower()
         
         if s.startswith(stayUpper):
             s = s.replace('d', 'D', 1)
@@ -496,7 +490,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Starting Item to starting-item and also converts names that were changed to look nicer
     def listToItem(self, item):
-        s = sub(" ", "-", item).lower()
+        s = re.sub(" ", "-", item).lower()
         
         return s
     
@@ -603,46 +597,12 @@ class SmartComboBox(QtWidgets.QComboBox):
 
 # Create custom QListWidgetItem to sort locations alphanumerically
 class SmartListWidget(QtWidgets.QListWidgetItem):
-    def __lt__(self, other):
-        try:
-            dungeon_checks = ('D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8')
+    """Custom QListWidgetItem to sort locations alphanumerically"""
 
-            nums_a = [c for c in self.text() if c.isdigit()]
-            nums_a = "".join(nums_a)
-            str_a = [c for c in self.text() if not c.isdigit()]
-            a = int(nums_a)
+    def __lt__(self, other: QtWidgets.QListWidgetItem) -> bool:
+        """Override of the sorting method to implement custom sort"""
 
-            nums_b = [c for c in other.text() if c.isdigit()]
-            nums_b = "".join(nums_b)
-            str_b = [c for c in other.text() if not c.isdigit()]
-            b = int(nums_b)
-            
-            if self.text().startswith(dungeon_checks) and other.text().startswith(dungeon_checks):
-                d = [d for d in dungeon_checks if self.text().startswith(d)]
-                if not other.text().startswith(d[0]):
-                    return int(nums_a[0]) < int(nums_b[0])
-                else:
-                    a = int(nums_a[1:])
-                    b = int(nums_b[1:])
-                    if str_a != str_b:
-                        raise ValueError('')
-                    return a < b
-            if self.text().startswith(dungeon_checks) or other.text().startswith(dungeon_checks):
-                raise TypeError('')
-            
-            if str_a == str_b:
-                if self.text().startswith(nums_a) and other.text().startswith(nums_b):
-                    return a < b
-                if self.text().endswith(nums_a) and other.text().endswith(nums_b):
-                    return a < b
-            
-            raise TypeError('')
-        
-        except (IndexError, TypeError, ValueError):
-            locations = [self.text(), other.text()]
-            locations.sort()
-            
-            if self.text() == locations[0]:
-                return True
-            else:
-                return False
+        convert = lambda text: int(text) if text.isdigit() else text
+        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+        result = sorted([self.text(), other.text()], key=alphanum_key)
+        return self.text() == result[0]
