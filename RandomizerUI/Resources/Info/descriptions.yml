@@ -1,0 +1,118 @@
+ChestsCheck:
+  Chests outside of dungeons can contain progress items
+GiftsCheck:
+  Free gifts from NPCs can contain progress items
+TradeCheck:
+  Trade Quest checks can contain progress items
+LeavesCheck:
+  Golden Leaves can become progress items
+HeartsCheck:
+  Freestanding Heart Pieces can become progress items
+ShellsCheck:
+  Freestanding Seashells can become progress items
+MiscCheck:
+  Freestanding miscellaneous items can become progress items
+MansionBox:
+  This controls the maximum number of seashells that the Seashell Mansion may require
+BossCheck:
+  Bosses can drop progress items
+InstrumentsCheck:
+  Instruments will be randomized
+ShopCheck:
+  The shop can sell progress items
+RupeesCheck:
+  The 28 blue rupees in Color Dungeon can become progress items
+OwlsBox:
+  This controls if Owl Statues can give items
+DampeCheck:
+  Rewards from completing chamber dungeons can be progress items
+RapidsCheck:
+  Items inside and from the Rapids Race can be progress items
+FishingCheck:
+  Rewards from the fishing minigame can be progress items
+TrendyCheck:
+  Trendy game can contain progress items
+SpoilerCheck:
+  A spoiler log will be generated
+RaceCheck:
+  Only 5 dungeons will contain a required item
+EnemyCheck:
+  Randomizes enemies
+EnemySizesCheck:
+  Randomizes enemy sizes
+ChestTypeBox:
+  This controls if chest sizes and/or textures will reflect the contents
+KanaletCheck:
+  The Kanalet Castle gate will always be open
+MabeCheck:
+  Opens up Mabe Village from the start of the game
+MamuCheck:
+  Sign Maze will already be completed
+BridgeCheck:
+  The bridge next to Kanalet Castle will already be built
+D2Check:
+  Adds back the flower in front of D2 that the remake replaced with a rock
+DungeonsCheck:
+  Randomizes the front entrances to dungeons
+ConsumableCheck:
+  Allows finding powder, bombs, and arrows by cutting grass
+PetsCheck:
+  Allows companions to go inside dungeons with Link
+FastFishingCheck:
+  Removes the instrument requirements for finding fish
+BombsCheck:
+  Bombs can not be obtained until the player finds them as an item check
+BookCheck:
+  The book revealing the egg path will not need the Magnifying Lens to read
+StalfosCheck:
+  The first 3 Master Stalfos fights are already completed
+PowderCheck:
+  Magic Powder can not be obtained until the player finds it as an item check
+BossAnimCheck:
+  Boss animations are sped up
+ChestAnimCheck:
+  Chest animations are sped up
+KeyAnimCheck:
+  Key animations are sped up
+SongAnimCheck:
+  Song learning cutscenes will be skipped
+ItemAnimCheck:
+  Animations from getting items will be sped up
+MoveSpeedCheck:
+  Player movement speed is increased
+DungeonItemsBox:
+  This controls where dungeon items can be found
+ItemPoolBox:
+  This controls how many progress items will be added to the item pool
+TrapBox:
+  This controls how many traps will be added to the item pool
+DamageBox:
+  Controls how much damage the player recieves
+StartHeartBox:
+  Sets how many hearts the player starts with
+MaxHeartBox:
+  Sets how many total hearts the player can have
+ControlBox:
+  Changes how the player controls. Vanilla, DPAD, or 360 movement
+StealingBox:
+  This controls the requirements for being able to steal from the shop
+SuperWeaponsCheck:
+  Buffs all weapons
+InstrumentStartBox:
+  This controls how many instruments the player starts with
+DungeonStartItemsBox:
+  This controls what dungeon items the player starts with
+RupeeBox:
+  This controls how many rupees the player starts with
+LogicBox:
+  This controls how advanced the logic will be
+BlurCheck:
+  Removes the blur around the edge of the screen
+MusicCheck:
+  Randomizes the music
+SoundCheck:
+  Randomizes sound effects
+BeepCheck:
+  Removes the low health sound effect
+PlatformBox:
+  This controls which platform the randomizer generates for
