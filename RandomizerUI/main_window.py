@@ -3,6 +3,7 @@ from PySide6.QtGui import QClipboard
 from PySide6.QtWidgets import (QFileDialog, QMainWindow, QWidget,
                                QCheckBox, QComboBox, QLineEdit, QSpinBox,
                                QMessageBox, QListWidgetItem)
+from RandomizerUI.UI.custom_widgets import *
 from RandomizerUI.UI.ui_form import Ui_MainWindow
 from RandomizerUI.progress_window import ProgressWindow
 from RandomizerUI.update import UpdateProcess, LogicUpdateProcess
@@ -144,7 +145,7 @@ class MainWindow(QMainWindow):
         ]
 
         for combo in combos:
-            combo.__class__ = SmartComboBox
+            combo.__class__ = RandoComboBox
             combo.popup_closed.connect(self.closeComboBox)
 
 
@@ -419,11 +420,11 @@ class MainWindow(QMainWindow):
                 self.ui.listWidget.clear()
                 checks = self.getValidLocationChecks(TOTAL_CHECKS.difference(self.excluded_checks))
                 for check in checks:
-                    self.ui.listWidget.addItem(SmartListWidget(self.checkToList(str(check))))
+                    self.ui.listWidget.addItem(RandoListWidget(self.checkToList(str(check))))
                 self.ui.listWidget_2.clear()
                 checks = self.getValidLocationChecks(self.excluded_checks)
                 for check in checks:
-                    self.ui.listWidget_2.addItem(SmartListWidget(self.checkToList(str(check))))
+                    self.ui.listWidget_2.addItem(RandoListWidget(self.checkToList(str(check))))
 
             case 3: # logic
                 pass
@@ -433,14 +434,14 @@ class MainWindow(QMainWindow):
         for i in self.ui.listWidget_2.selectedItems():
             self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
             self.excluded_checks.remove(self.listToCheck(i.text()))
-            self.ui.listWidget.addItem(SmartListWidget(i.text()))
+            self.ui.listWidget.addItem(RandoListWidget(i.text()))
         self.updateSettingsString()
 
 
     def excludeButton_Clicked(self):
         for i in self.ui.listWidget.selectedItems():
             self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
-            self.ui.listWidget_2.addItem(SmartListWidget(i.text()))
+            self.ui.listWidget_2.addItem(RandoListWidget(i.text()))
             self.excluded_checks.add(self.listToCheck(i.text()))
         self.updateSettingsString()
 
@@ -579,27 +580,3 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         settings_manager.saveSettings(self)
         event.accept()
-
-
-
-# Create custom QComboBox to signal when the popup is closed, regardless of how
-class SmartComboBox(QComboBox):
-    popup_closed = Signal()
-
-    def hidePopup(self):
-        QComboBox.hidePopup(self)
-        self.popup_closed.emit()
-
-
-
-# Create custom QListWidgetItem to sort locations alphanumerically
-class SmartListWidget(QListWidgetItem):
-    """Custom QListWidgetItem to sort locations alphanumerically"""
-
-    def __lt__(self, other: QListWidgetItem) -> bool:
-        """Override of the sorting method to implement custom sort"""
-
-        convert = lambda text: int(text) if text.isdigit() else text
-        alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-        result = sorted([self.text(), other.text()], key=alphanum_key)
-        return self.text() == result[0]
