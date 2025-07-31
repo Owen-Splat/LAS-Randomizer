@@ -1,0 +1,191 @@
+/* Modified from PyQtDarkTheme */
+
+QMainWindow {
+    background: #2b303e;
+    color: white;
+}
+QMainWindow::separator {
+    width: 4px;
+    height: 4px;
+    background: #21242f;
+}
+QMainWindow::separator:hover,
+QMainWindow::separator:pressed {
+    background: rgb(120, 180, 250);
+}
+QCheckBox {
+    border: 1px solid transparent;
+    spacing: 8px;
+    color: white;
+}
+QCheckBox:hover {
+    border-bottom: 2px solid rgb(120, 180, 250);
+}
+QCheckBox::indicator {
+    height: 18px;
+    width: 18px;
+}
+QMenuBar {
+    padding: 2px;
+    background: #21242f;
+    color: white;
+}
+QMenuBar::item {
+    background: transparent;
+    padding: 4px;
+}
+QMenuBar::item:selected {
+    padding: 4px;
+    background: rgba(40, 70, 100, 0.15);
+    border-radius: 4px;
+}
+QMenuBar::item:pressed {
+    padding: 4px;
+}
+QMenu {
+    padding: 2px;
+    background: #21242f;
+    color: white;
+}
+QMenu:selected {
+    padding: 4px;
+    background: #2b303e;
+}
+QComboBox {
+    border: 1px solid gray;
+    background: #21242f;
+    color: white;
+    padding: 0 4px;
+    border-radius: 1px;
+}
+QComboBox:hover {
+    border: 1px solid rgb(120, 180, 250);
+}
+QComboBox::drop-down {
+    padding-right: 4px;
+}
+QComboBox::item:selected {
+    border: none;
+    background: rgb(0, 75, 125);
+    color: white;
+}
+QComboBox::indicator:checked {
+    width: 18px;
+}
+QLineEdit {
+    border: 1px solid gray;
+    background: #21242f;
+    color: white;
+}
+QLineEdit:hover {
+    border: 1px solid rgb(120, 180, 250);
+}
+QTabWidget::pane {
+    border: 1px solid rgb(190, 195, 200);
+    border-radius: 4px;
+}
+QTabBar {
+    qproperty-drawBase: 0;
+}
+QTabBar::tab {
+    padding: 3px;
+    background-color: #353c4d;
+    color: white;
+}
+QTabBar::tab:hover {
+    background: #606e87;
+}
+QTabBar::tab:selected {
+    background: #4a536b;
+}
+QTabBar::tab:top {
+    border-bottom: 2px solid rgb(120, 180, 250);
+    margin-left: 4px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+QTabBar::tab:top:selected {
+    border-bottom: 2px solid rgb(0, 75, 125);
+}
+QTabBar::tab:top:hover {
+    border-color: rgb(0, 75, 125);
+}
+QScrollBar:vertical {
+    background-color: rgb(200, 205, 210);
+    width: 15px;
+    margin: 15px 3px 15px 3px;
+    border: 1px solid rgb(190, 195, 200);
+    border-radius: 2px;
+}
+QScrollBar::handle:vertical {
+    background-color: rgba(0, 75, 125, 0.333);
+    border-radius: 2px;
+}
+QScrollBar::sub-line:vertical {
+    margin: 3px 0px 3px 0px;
+    height: 12px;
+    width: 15px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+QScrollBar::add-line:vertical {
+    margin: 3px 0px 3px 0px;
+    height: 12px;
+    width: 15px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background: none;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+QGroupBox {
+    border: 2px solid gray;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 1ex;
+}
+QGroupBox::title {
+    padding: 0 3px;
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    color: lightgray;
+}
+QMessageBox {
+    background-color: rgb(240,240,240);
+}
+QLabel {
+    color: lightgray;
+}
+QDockWidget {
+    background-color: #40475c;
+    color: lightgray;
+    font-weight: bold;
+}
+QListWidget {
+    background: #21242f;
+    border: 1px solid lightgray;
+    color: white;
+}
+QPushButton {
+    background: #4a536b;
+    border: 1px solid gray;
+    border-radius: 4px;
+    color: white;
+    padding: 2px;
+    min-width: 75px;
+    min-height: 20px;
+    font-size:calc(12px + 1.5vw); /* cool hack to set minimum font size */
+}
+QPushButton:checked {
+    background: #353c4d;
+}
+QPushButton:pressed {
+    background: #353c4d;
+}
+QPushButton:hover {
+    background: #40475c;
+}

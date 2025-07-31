@@ -1,30 +1,16 @@
-/*
-MIT License
-
-Copyright (c) 2021-2022 Yunosuke Ohsugi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
-
 /* Modified from PyQtDarkTheme */
 
+QWidget {
+    background: rgb(30, 35, 40);
+    color: rgb(200, 205, 210);
+    selection-background-color: rgb(120, 180, 250);
+    selection-color: rgb(30, 35, 40);
+}
+QWidget:disabled {
+    color: rgb(105, 110, 115);
+    selection-background-color: rgb(80, 85, 90);
+    selection-color: rgb(105, 110, 115);
+}
 QMainWindow::separator {
     width: 4px;
     height: 4px;
@@ -46,8 +32,9 @@ QCheckBox::indicator {
     width: 18px;
 }
 QMenuBar {
+    background: rgb(30, 35, 40);
     padding: 2px;
-    border-bottom: 1px solid rgb(190, 195, 200);
+    border-bottom: 1px solid rgb(60, 65, 70);
 }
 QMenuBar::item {
     background: transparent;
@@ -55,14 +42,14 @@ QMenuBar::item {
 }
 QMenuBar::item:selected {
     padding: 4px;
-    background: rgba(40, 70, 100, 0.15);
+    background: rgb(70, 75, 80);
     border-radius: 4px;
 }
 QMenuBar::item:pressed {
     padding: 4px;
 }
 QProgressBar {
-    border: 1px solid rgb(190, 195, 200);
+    border: 1px solid rgb(60, 65, 70);
     text-align: center;
     border-radius: 4px;
 }
@@ -70,8 +57,8 @@ QProgressBar::chunk {
     background: rgb(120, 180, 250);
 }
 QComboBox {
-    border: 1px solid rgb(50, 55, 60);
-    padding: 0 4px;
+    border: 1px solid rgb(60, 65, 70);
+    background: rgb(50, 55, 60);
     border-radius: 1px;
 }
 QComboBox:hover {
@@ -83,16 +70,29 @@ QComboBox::drop-down {
 QComboBox::item:selected {
     border: none;
     background: rgb(0, 75, 125);
-    color: white;
+    color: rgb(200, 205, 210);
 }
 QComboBox::indicator:checked {
     width: 18px;
 }
-QLineEdit:hover {
+QLineEdit,
+QListWidget,
+QSpinBox {
+    background: rgb(50, 55, 60);
+    border: 1px solid rgb(60, 65, 70);
+}
+QLineEdit:hover{
+    border: 1px solid rgb(0, 75, 125);
+}
+QLineEdit:focus {
     border: 1px solid rgb(120, 180, 250);
 }
+QLineEdit:disabled {
+    background: rgb(30, 35, 40);
+    border: 1px solid rgb(40, 45, 50);
+}
 QTabWidget::pane {
-    border: 1px solid rgb(190, 195, 200);
+    border: 1px solid rgb(60, 65, 70);
     border-radius: 4px;
 }
 QTabBar {
@@ -102,22 +102,22 @@ QTabBar::tab {
     padding: 3px;
 }
 QTabBar::tab:hover {
-    background: rgba(40, 70, 100, 0.1);
+    background: rgba(40, 70, 100, 0.333);
 }
 QTabBar::tab:selected {
-    background: rgba(40, 70, 100, 0.15);
+    background: rgba(40, 70, 100, 0.933);
 }
 QTabBar::tab:top {
-    border-bottom: 2px solid rgb(120, 180, 250);
+    border-bottom: 2px solid rgb(60, 65, 70);
     margin-left: 4px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
 QTabBar::tab:top:selected {
-    border-bottom: 2px solid rgb(0, 75, 125);
+    border-bottom: 2px solid rgb(120, 180, 250);
 }
 QTabBar::tab:top:hover {
-    border-color: rgb(0, 75, 125);
+    border-color: rgb(120, 180, 250);
 }
 QPushButton {
     background-color: rgb(200, 205, 210);
@@ -130,18 +130,15 @@ QPushButton {
 QPushButton:hover {
     border-color: rgb(120, 180, 250);
 }
-QPushButton:disabled {
-    color: rgb(70, 75, 80);
-}
 QScrollBar:vertical {
-    background-color: rgb(200, 205, 210);
+    background-color: rgb(40, 45, 50);
     width: 15px;
     margin: 15px 3px 15px 3px;
-    border: 1px solid rgb(190, 195, 200);
+    border: 1px transparent rgb(40, 45, 50);
     border-radius: 2px;
 }
 QScrollBar::handle:vertical {
-    background-color: rgba(0, 75, 125, 0.333);
+    background-color: rgba(120, 180, 250, 0.333);
     border-radius: 2px;
 }
 QScrollBar::sub-line:vertical {
@@ -165,7 +162,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none;
 }
 QGroupBox {
-    border: 2px solid rgb(190, 195, 200);
+    border: 2px solid rgb(50, 55, 60);
     border-radius: 5px;
     font-size: 12px;
     font-weight: bold;
@@ -176,6 +173,6 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
 }
-QMessageBox {
-    background-color: rgb(240,240,240);
+QSpinBox:hover {
+    border: 1px solid rgb(120, 180, 250);
 }
