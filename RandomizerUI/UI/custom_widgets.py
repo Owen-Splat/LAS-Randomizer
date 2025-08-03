@@ -1,4 +1,3 @@
-from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QComboBox, QListWidgetItem
 from re import split
 
@@ -18,8 +17,11 @@ class RandoListWidget(QListWidgetItem):
 
 class RandoComboBox(QComboBox):
     """Custom QComboBox to emit a signal when the popup is closed, even when the user clicks off"""
-    popup_closed = Signal()
 
-    def hidePopup(self):
-        QComboBox.hidePopup(self)
-        self.popup_closed.emit()
+    def __init__(self, parent) -> None:
+        super(RandoComboBox, self).__init__(parent=parent)
+
+
+    # def hidePopup(self):
+    #     QComboBox.hidePopup(self)
+    #     self.window().parent().setExplanationText()
