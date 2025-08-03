@@ -1,8 +1,7 @@
-from PySide6.QtCore import QEvent
-from PySide6.QtGui import QClipboard
+from PySide6.QtGui import QClipboard, QScreen
 from PySide6.QtWidgets import (QFileDialog, QMainWindow, QWidget,
                                QCheckBox, QComboBox, QLineEdit, QSpinBox,
-                               QMessageBox)
+                               QMessageBox, QApplication)
 from RandomizerUI.UI.custom_widgets import *
 from RandomizerUI.UI.ui_main import Ui_MainWindow
 from RandomizerUI.progress_window import ProgressWindow
@@ -16,17 +15,15 @@ import RandomizerUI.settings_manager as settings_manager
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.clipboard = QClipboard()
+        self.excluded_checks = set()
+        self.starting_gear = list()
+        self.current_option = ''
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.addOptionDescriptions()
-
-        # Keep track of stuff
-        self.excluded_checks = set()
-        self.starting_gear = list()
-        self.overworld_owls = bool(False)
-        self.dungeon_owls = bool(False)
-        self.current_option = ''
-        self.clipboard = QClipboard()
+        self.ui.setupSignals()
 
         # Load User Settings
         self.applyDefaults()
@@ -36,28 +33,7 @@ class MainWindow(QMainWindow):
         self.updateOwls()
         self.updateSeashells()
 
-        ### SUBSCRIBE TO EVENTS
-        self.ui.findLineEdit("SeedLine").textChanged.connect(self.updateSettingsString)
-        self.ui.findPushButton("CopyButton").clicked.connect(lambda x: self.clipboard.setText(self.ui.findLineEdit("SettingsLineEdit").text()))
-        self.ui.findPushButton("PasteButton").clicked.connect(self.pasteSettingsString)
-        self.ui.findPushButton("ResetButton").clicked.connect(self.applyDefaults)
-        self.ui.findPushButton("RandomSettingsButton").clicked.connect(self.randomizeSettings)
-        self.ui.findPushButton("RandomizeButton").clicked.connect(self.randomizeButton_Clicked)
-        self.ui.findComboBox("MansionBox").currentIndexChanged.connect(self.updateSeashells)
-        self.ui.findComboBox("OwlsBox").currentIndexChanged.connect(self.updateOwls)
-        self.ui.findComboBox("TrapBox").currentIndexChanged.connect(self.updateSettingsString)
-        self.ui.findComboBox("InstrumentStartBox").currentIndexChanged.connect(self.updateSettingsString)
-        self.ui.findComboBox("LogicBox").currentIndexChanged.connect(self.updateSettingsString)
-        self.ui.findComboBox("StealingBox").currentIndexChanged.connect(self.updateSettingsString)
-        self.ui.findComboBox("ChestTypeBox").currentIndexChanged.connect(self.updateSettingsString)
-        self.ui.findSpinBox("RupeeBox").valueChanged.connect(self.updateSettingsString)
-        # self.ui.tabWidget.currentChanged.connect(self.tab_Changed)
-
-        # center = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen()).center()
-        # geo = self.frameGeometry()
-        # geo.moveCenter(center)
-        # self.move(geo.topLeft())
-
+        # Check for app & logic updates
         self.process = UpdateProcess()
         self.process.can_update.connect(self.showUpdate)
         self.process.give_version.connect(self.obtainVersion)
@@ -73,13 +49,19 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+        # move to center
+        center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
+        geo = self.frameGeometry()
+        geo.moveCenter(center)
+        self.move(geo.topLeft())
+
 
     def applyDefaults(self):
         settings_manager.applyDefaults(self)
 
 
     def updateSettingsString(self):
-        self.ui.findLineEdit("SettingsLineEdit").setText(settings_manager.encodeSettings(self))
+        self.ui.findLineEdit("SettingsLine").setText(settings_manager.encodeSettings(self))
 
 
     def obtainVersion(self, version):
@@ -123,6 +105,8 @@ class MainWindow(QMainWindow):
 
 
     def generateSeed(self):
+        """Called when the seed button is clicked"""
+
         adj1 = random.choice(ADJECTIVES)
         adj2 = random.choice(ADJECTIVES)
         char = random.choice(CHARACTERS)
@@ -131,6 +115,8 @@ class MainWindow(QMainWindow):
 
 
     def checkClicked(self, checked):
+        """Called every time a QCheckBox is clicked"""
+
         if self.current_option not in settings_manager.CHECK_LOCATIONS:
             return
 
@@ -146,6 +132,7 @@ class MainWindow(QMainWindow):
             case "RupeesCheck":
                 self.excluded_checks.difference_update(BLUE_RUPEES)
             case _:
+                print(self.current_option, self.ui.findCheckBox(self.current_option).isChecked())
                 locs = settings_manager.CHECK_LOCATIONS[self.current_option]
                 if checked:
                     self.excluded_checks.difference_update(locs)
@@ -239,7 +226,7 @@ class MainWindow(QMainWindow):
 
         # load mod settings from the UI, no need to decode settings string
         settings = settings_manager.loadRandomizerSettings(self, seed)
-        settings_string = self.ui.findLineEdit("SettingsLineEdit").text()
+        settings_string = self.ui.findLineEdit("SettingsLine").text()
         outdir = f"{self.ui.findLineEdit('OutputLine').text()}/{settings['seed']}"
         self.progress_window = ProgressWindow(rom_path, outdir, ITEM_DEFS, LOGIC_DEFS, settings, settings_string)
         # self.progress_window.setWindowTitle(f"{settings['seed']}")
@@ -392,7 +379,7 @@ class MainWindow(QMainWindow):
             new_settings = settings_manager.decodeSettings(self.clipboard.text())
             if new_settings:
                 settings_manager.loadSettings(self, new_settings)
-                self.ui.findLineEdit("SettingsLineEdit").setText(self.clipboard.text())
+                self.ui.findLineEdit("SettingsLine").setText(self.clipboard.text())
                 self.tabChanged()
         except: # Lots of potential different errors, so we use a general except to be safe
             self.ui.showUserError('Could not decode settings string!')

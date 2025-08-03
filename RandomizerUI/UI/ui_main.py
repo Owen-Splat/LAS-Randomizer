@@ -127,7 +127,8 @@ class Ui_MainWindow(QObject):
         vl.addWidget(label)
 
         line = QLineEdit(tab)
-        line.setObjectName('SettingsLineEdit')
+        line.setObjectName('SettingsLine')
+        line.setDisabled(True)
         vl.addWidget(line)
 
         hl = QHBoxLayout()
@@ -552,6 +553,7 @@ class Ui_MainWindow(QObject):
         label.setFont(ft)
         list_widget = QListWidget(tab)
         list_widget.setObjectName('RandomItemsList')
+        list_widget.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
         vl = QVBoxLayout()
         vl.addWidget(label)
         vl.addWidget(list_widget)
@@ -605,6 +607,7 @@ class Ui_MainWindow(QObject):
         label.setFont(ft)
         list_widget = QListWidget(tab)
         list_widget.setObjectName('StartingItemsList')
+        list_widget.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
         vl = QVBoxLayout()
         vl.addWidget(label)
         vl.addWidget(list_widget)
@@ -625,6 +628,7 @@ class Ui_MainWindow(QObject):
         label.setFont(ft)
         list_widget = QListWidget(tab)
         list_widget.setObjectName('IncludedLocationsList')
+        list_widget.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
         vl = QVBoxLayout()
         vl.addWidget(label)
         vl.addWidget(list_widget)
@@ -659,6 +663,7 @@ class Ui_MainWindow(QObject):
         label.setFont(ft)
         list_widget = QListWidget(tab)
         list_widget.setObjectName('ExcludedLocationsList')
+        list_widget.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
         vl = QVBoxLayout()
         vl.addWidget(label)
         vl.addWidget(list_widget)
@@ -679,6 +684,7 @@ class Ui_MainWindow(QObject):
         label.setFont(ft)
         list_widget = QListWidget(tab)
         list_widget.setObjectName('IncludedLogicList')
+        list_widget.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
         vl = QVBoxLayout()
         vl.addWidget(label)
         vl.addWidget(list_widget)
@@ -723,6 +729,7 @@ class Ui_MainWindow(QObject):
         label.setFont(ft)
         list_widget = QListWidget(tab)
         list_widget.setObjectName('ExcludedLogicList')
+        list_widget.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
         vl = QVBoxLayout()
         vl.addWidget(label)
         vl.addWidget(list_widget)
@@ -913,5 +920,26 @@ class Ui_MainWindow(QObject):
 
         return QWidget.eventFilter(self, source, event)
 
-
     ## EVENT FILTERS <== END
+
+
+    def setupSignals(self) -> None:
+        """Connects all necessary widget signals to their respective functions"""
+
+        for check in self.window.findChildren(QCheckBox):
+            check.clicked.connect(self.window.checkClicked)
+
+        self.findLineEdit("SeedLine").textChanged.connect(self.window.updateSettingsString)
+        self.findPushButton("CopyButton").clicked.connect(lambda x: self.window.clipboard.setText(self.findLineEdit("SettingsLine").text()))
+        self.findPushButton("PasteButton").clicked.connect(self.window.pasteSettingsString)
+        self.findPushButton("ResetButton").clicked.connect(self.window.applyDefaults)
+        self.findPushButton("RandomSettingsButton").clicked.connect(self.window.randomizeSettings)
+        self.findPushButton("RandomizeButton").clicked.connect(self.window.randomizeButton_Clicked)
+        self.findComboBox("MansionBox").currentIndexChanged.connect(self.window.updateSeashells)
+        self.findComboBox("OwlsBox").currentIndexChanged.connect(self.window.updateOwls)
+        self.findComboBox("TrapBox").currentIndexChanged.connect(self.window.updateSettingsString)
+        self.findComboBox("InstrumentStartBox").currentIndexChanged.connect(self.window.updateSettingsString)
+        self.findComboBox("LogicBox").currentIndexChanged.connect(self.window.updateSettingsString)
+        self.findComboBox("StealingBox").currentIndexChanged.connect(self.window.updateSettingsString)
+        self.findComboBox("ChestTypeBox").currentIndexChanged.connect(self.window.updateSettingsString)
+        self.findSpinBox("RupeeBox").valueChanged.connect(self.window.updateSettingsString)
