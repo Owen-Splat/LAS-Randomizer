@@ -28,7 +28,7 @@ with open(RESOURCE_PATH / 'Menu' / 'tips.txt', 'r') as f:
 with open(RESOURCE_PATH / 'Menu' / 'about.txt', 'r') as f:
     ABOUT_INFO = f.read()
 
-with open(DATA_PATH, 'items.yml', 'r') as f:
+with open(DATA_PATH / 'items.yml', 'r') as f:
     items = yaml.safe_load(f)
     ITEM_DEFS = items['Item_Pool']
     STARTING_ITEMS = list(items['Starting_Items'])
@@ -70,6 +70,7 @@ TRADE_GIFT_LOCATIONS = LOCATIONS['Trade_Gifts']
 BOSS_LOCATIONS = LOCATIONS['Boss_Locations']
 MISC_LOCATIONS = LOCATIONS['Misc_Items']
 SEASHELL_REWARDS = LOCATIONS['Mansion']
+SEASHELL_LOCATIONS = LOCATIONS['Seashells']
 HEART_PIECE_LOCATIONS = LOCATIONS['Heart_Pieces']
 LEAF_LOCATIONS = LOCATIONS['Golden_Leaves']
 DUNGEON_OWLS = LOCATIONS['Dungeon_Owl_Statues']

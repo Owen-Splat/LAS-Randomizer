@@ -101,19 +101,19 @@ Mansion:
   - 40-seashell-reward
   - 50-seashell-reward
 
-# Shop_Items:
-#   - shop-slot3-1st
-#   - shop-slot3-2nd
-#   - shop-slot6
+Shop_Items:
+  - shop-slot3-1st
+  - shop-slot3-2nd
+  - shop-slot6
 
-# Trendy_Rewards:
-#   - trendy-prize-1
-#   - trendy-prize-2
-#   - trendy-prize-3
-#   - trendy-prize-4
-#   - trendy-prize-5
-#   - trendy-prize-6
-#   - trendy-prize-final
+Trendy_Rewards:
+  - trendy-prize-1
+  - trendy-prize-2
+  - trendy-prize-3
+  - trendy-prize-4
+  - trendy-prize-5
+  - trendy-prize-6
+  - trendy-prize-final
 
 Heart_Pieces:
   - animal-village-northwest
@@ -125,19 +125,55 @@ Heart_Pieces:
   - mabe-well
   - ukuku-cave-west-loose
   - ukuku-cave-east-loose
-  # - bay-passage-sunken
-  # - river-crossing-cave
+  - bay-passage-sunken
+  - river-crossing-cave
   - rapids-ascent-cave
-  # - kanalet-moat-south
-  # - south-bay-sunken
+  - kanalet-moat-south
+  - south-bay-sunken
   - taltal-crossing-cave
-  # - taltal-east-drop
+  - taltal-east-drop
   - taltal-west-escape
   - above-turtle-rock
   - pothole-north
   - woods-crossing-cave-loose
   - woods-north-cave-loose
   - diamond-island
+
+Seashells:
+  - south-bay-dig
+  - beach-dig
+  - wasteland-dig
+  - north-of-moblin-cave # we can change drops as a whole
+  - desert-dig
+  - desert-south # drop
+  - ghost-grave-dig
+  - ghost-house-pot # drop
+  - taltal-heights-hole # drop (UNIQUE, THESE ALWAYS DROP SEASHELLS)
+  - mabe-bushes # drop
+  - doghouse-dig
+  - tail-cave-bonk-tree # drop
+  - beach-bonk-tree
+  - rock-maze # drop
+  - goponga-west-dig
+  - pond-island # drop
+  - southwest-bay-bush # drop
+  - beside-seashell-mansion # drop
+  - small-coast-island # drop
+  - above-cave-dig
+  - above-d3
+  - under-skull-rock
+  - plains-rock-maze # drop
+  - ukuku-bonk-tree # drop
+  - rapids-east-island
+  - kanalet-moat-north
+  - taltal-bomb-hole # drop (UNIQUE, THESE ALWAYS DROP SEASHELLS)
+  - taltal-east-bridge # drop
+  - taltal-sunken
+  - taltal-west-rock # drop
+  - taltal-west-dig
+  - woods-west-dig
+  - woods-east-dig
+  - 
 
 Golden_Leaves:
   - kanalet-crow
