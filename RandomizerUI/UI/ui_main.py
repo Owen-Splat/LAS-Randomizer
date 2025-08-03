@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import Qt, QEvent, QObject
 from PySide6.QtWidgets import (QCheckBox, QLineEdit, QListWidget, QPushButton,
     QHBoxLayout, QVBoxLayout, QMainWindow, QTabWidget, QMessageBox, QMenuBar,
     QWidget, QLabel, QSpacerItem, QSizePolicy, QGroupBox, QFileDialog,
@@ -9,7 +9,7 @@ from RandomizerCore.randomizer_data import (LIGHT_STYLESHEET, DARK_STYLESHEET,
     APP_VERSION, DESC_DEFS)
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QObject):
     def setupUi(self, window: QMainWindow) -> None:
         window.setWindowTitle(f"Link's Awakening Switch Randomizer v{APP_VERSION}")
         self.window = window
@@ -18,6 +18,7 @@ class Ui_MainWindow(object):
         self.setupMenuBar()
         self.setupMainLayout()
         self.setLightMode()
+        self.addOptionDescriptions()
 
 
     def setupMenuBar(self) -> None:
@@ -893,22 +894,22 @@ class Ui_MainWindow(object):
     ## START ==> EVENT FILTERS
     ########################################################################
     def addOptionDescriptions(self) -> None:
+        """Iterates through the settings and adds the descriptions from Info/Descriptions.yml"""
+
         for option in DESC_DEFS:
             widget = self.findChild(option)
             if widget is None:
                 continue
-            widget.installEventFilter(self.window)
+            widget.installEventFilter(self)
 
 
     def eventFilter(self, source: QWidget, event):
         match event.type():
             case QEvent.Type.HoverEnter:
                 self.window.current_option = source.objectName()
-                self.setExplanationText(source.whatsThis())
+                self.setExplanationText(DESC_DEFS[source.objectName()])
             case QEvent.Type.HoverLeave:
                 self.setExplanationText()
-            case _:
-                print(event.type())
 
         return QWidget.eventFilter(self, source, event)
 

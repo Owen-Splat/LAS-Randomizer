@@ -1,9 +1,9 @@
-from PySide6.QtWidgets import QComboBox, QListWidgetItem
+from PySide6.QtWidgets import QComboBox, QListWidgetItem, QMainWindow
 from re import split
 
 
 class RandoListWidget(QListWidgetItem):
-    """Custom QListWidgetItem to sort locations alphanumerically"""
+    """Custom QListWidgetItem that sorts locations alphanumerically"""
 
     def __lt__(self, other: QListWidgetItem) -> bool:
         """Override of the sorting method to implement custom sort"""
@@ -16,12 +16,9 @@ class RandoListWidget(QListWidgetItem):
 
 
 class RandoComboBox(QComboBox):
-    """Custom QComboBox to emit a signal when the popup is closed, even when the user clicks off"""
+    """Custom QComboBox that resets the explanation text when the drop-down popup is closed"""
 
-    def __init__(self, parent) -> None:
-        super(RandoComboBox, self).__init__(parent=parent)
-
-
-    # def hidePopup(self):
-    #     QComboBox.hidePopup(self)
-    #     self.window().parent().setExplanationText()
+    def hidePopup(self):
+        QComboBox.hidePopup(self)
+        if isinstance(self.window(), QMainWindow):
+            self.window().ui.setExplanationText()
