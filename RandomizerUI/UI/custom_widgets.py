@@ -2,8 +2,8 @@ from PySide6.QtWidgets import QComboBox, QListWidgetItem, QMainWindow
 from re import split
 
 
-class RandoListWidget(QListWidgetItem):
-    """Custom QListWidgetItem that sorts locations alphanumerically"""
+class RandoListItem(QListWidgetItem):
+    """Custom QListWidgetItem that sorts alphanumerically"""
 
     def __lt__(self, other: QListWidgetItem) -> bool:
         """Override of the sorting method to implement custom sort"""

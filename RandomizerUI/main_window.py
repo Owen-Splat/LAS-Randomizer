@@ -270,83 +270,90 @@ class MainWindow(QMainWindow):
                 randomized_gear = STARTING_ITEMS[:]
                 for x in self.starting_gear:
                     randomized_gear.remove(x)
+    
                 random_list = self.ui.findListWidget("RandomItemsList")
                 random_list.clear()
                 for item in randomized_gear:
                     random_list.addItem(self.checkToList(str(item)))
+                random_list.sortItems()
+
                 start_list = self.ui.findListWidget("StartingItemsList")
                 start_list.clear()
                 for item in self.starting_gear:
                     start_list.addItem(self.checkToList(str(item)))
+                start_list.sortItems()
 
             case "Locations":
                 include_list = self.ui.findListWidget("IncludedLocationsList")
                 include_list.clear()
                 checks = self.getValidLocationChecks(TOTAL_CHECKS.difference(self.excluded_checks))
                 for check in checks:
-                    include_list.addItem(RandoListWidget(self.checkToList(str(check))))
+                    include_list.addItem(RandoListItem(self.checkToList(str(check))))
+                include_list.sortItems()
+
                 exclude_list = self.ui.findListWidget("ExcludedLocationsList")
                 exclude_list.clear()
                 checks = self.getValidLocationChecks(self.excluded_checks)
                 for check in checks:
-                    exclude_list.addItem(RandoListWidget(self.checkToList(str(check))))
+                    exclude_list.addItem(RandoListItem(self.checkToList(str(check))))
+                exclude_list.sortItems()
 
             case "Logic":
                 pass
 
 
-    # def includeButton_Clicked(self):
-    #     for i in self.ui.listWidget_2.selectedItems():
-    #         self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
-    #         self.excluded_checks.remove(self.listToCheck(i.text()))
-    #         self.ui.listWidget.addItem(RandoListWidget(i.text()))
-    #     self.updateSettingsString()
-
-
-    # def excludeButton_Clicked(self):
-    #     for i in self.ui.listWidget.selectedItems():
-    #         self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
-    #         self.ui.listWidget_2.addItem(RandoListWidget(i.text()))
-    #         self.excluded_checks.add(self.listToCheck(i.text()))
-    #     self.updateSettingsString()
-
-
-    # def includeButton_3_Clicked(self):
-    #     for i in self.ui.listWidget_6.selectedItems():
-    #         self.ui.listWidget_6.takeItem(self.ui.listWidget_6.row(i))
-    #         self.starting_gear.remove(self.listToItem(i.text()))
-    #         self.ui.listWidget_5.addItem(i.text())
-    #     self.updateSettingsString()
-
-
-    # def excludeButton_3_Clicked(self):
-    #     for i in self.ui.listWidget_5.selectedItems():
-    #         self.ui.listWidget_5.takeItem(self.ui.listWidget_5.row(i))
-    #         self.ui.listWidget_6.addItem(i.text())
-    #         self.starting_gear.append(self.listToItem(i.text()))
-    #     self.updateSettingsString()
-
-
     def moveListItemsRight(self) -> None:
         tab_name = self.ui.getCurrentTabName()
         match tab_name:
-            case "Starting Items": # set items to start with
+            case "Starting Items":
+                left_list = self.ui.findListWidget("RandomItemsList")
+                right_list = self.ui.findListWidget("StartingItemsList")
+                for i in left_list.selectedItems():
+                    left_list.takeItem(left_list.row(i))
+                    right_list.addItem(i.text())
+                    self.starting_gear.append(self.listToItem(i.text()))
+                right_list.sortItems()
+
+            case "Locations":
+                left_list = self.ui.findListWidget("IncludedLocationsList")
+                right_list = self.ui.findListWidget("ExcludedLocationsList")
+                for i in left_list.selectedItems():
+                    left_list.takeItem(left_list.row(i))
+                    right_list.addItem(RandoListItem(i.text()))
+                    self.excluded_checks.add(self.listToCheck(i.text()))
+                right_list.sortItems()
+
+            case "Logic":
                 pass
-            case "Locations": # set locations to exclude
-                pass
-            case "Logic": # set logic tricks to exclude
-                pass
+
+        self.updateSettingsString()
 
 
     def moveListItemsLeft(self) -> None:
         tab_name = self.ui.getCurrentTabName()
         match tab_name:
-            case "Starting Items": # unset items to start with
+            case "Starting Items":
+                left_list = self.ui.findListWidget("RandomItemsList")
+                right_list = self.ui.findListWidget("StartingItemsList")
+                for i in right_list.selectedItems():
+                    right_list.takeItem(right_list.row(i))
+                    left_list.addItem(i.text())
+                    self.starting_gear.remove(self.listToItem(i.text()))
+                left_list.sortItems()
+
+            case "Locations":
+                left_list = self.ui.findListWidget("IncludedLocationsList")
+                right_list = self.ui.findListWidget("ExcludedLocationsList")
+                for i in right_list.selectedItems():
+                    right_list.takeItem(right_list.row(i))
+                    left_list.addItem(RandoListItem(i.text()))
+                    self.excluded_checks.remove(self.listToCheck(i.text()))
+                left_list.sortItems()
+
+            case "Logic":
                 pass
-            case "Locations": # set locations to include
-                pass
-            case "Logic": # set logic tricks to include
-                pass
+
+        self.updateSettingsString()
 
 
     # some-check to Some Check
@@ -385,7 +392,7 @@ class MainWindow(QMainWindow):
             new_settings = settings_manager.decodeSettings(self.clipboard.text())
             if new_settings:
                 settings_manager.loadSettings(self, new_settings)
-                self.ui.lineEdit_4.setText(self.clipboard.text())
+                self.ui.findLineEdit("SettingsLineEdit").setText(self.clipboard.text())
                 self.tabChanged()
         except: # Lots of potential different errors, so we use a general except to be safe
             self.ui.showUserError('Could not decode settings string!')
