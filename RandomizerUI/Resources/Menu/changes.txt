@@ -1,29 +1,186 @@
-<b>New Features:</b>
-<br></br><br></br>
-- New Settings: One-Hit KO Mode, Nice Items, random enemy sizes, chest type matches content, and more!
-<br></br><br></br>
-- Settings string: Share settings with others, or even randomize settings
+<b>THIS IS UNFINISHED AND WILL NEED TO BE CLEANED UP</b>
 <br></br><br></br>
 
-<b>Changes:</b>
-<br></br><br></br>
-- Songs now display Marin/Manbo/Mamu when obtaining them
-<br></br><br></br>
-- NPCs now hold up the proper model before giving the item
-<br></br><br></br>
-- Reduced-Farming has been removed and is now baseline behavior
-<br></br><br></br>
-- A single Bomb/Powder/Arrow now gives 3 of that item
-<br></br><br></br>
-- Fast-Trendy has been removed and Trendy-Prize-Final is forced vanilla
-<br></br><br></br>
+<b>0.5.0</b>
+<ul>
+<li>Seashells, Shop, and Trendy Game are now randomized</li>
+<li>The randomizer app now compiles to Mac</li>
+<li>The randomizer app can now be resized</li>
+<li>Other stuff that I'm too lazy to write about right now</li>
+</ul>
+<br></br>
 
-<b>Bug Fixes:</b>
-<br></br><br></br>
-- Bombs & Powder can now be obtained properly from other sources
-<br></br><br></br>
-- Fixed some compatibility issues across settings
-<br></br><br></br>
-- Fixed some issues when specific items were already obtained
-<br></br><br></br>
-- Tons of minor bug fixes to improve the gameplay experience
+<b>0.4.1</b>
+<ul>
+<li>ASM patches now work properly on Emulator</li>
+</ul>
+<br></br>
+
+<b>0.4.0</b>
+<ul>
+<li>The randomizer app now compiles to Linux</li>
+<li>Added Settings String to easily share your settings</li>
+<li>Added buttons to copy and paste the settings string</li>
+<li>Added button to randomize settings</li>
+<li>Added Blur Removal patch (credit: theboy181)</li>
+<li>Added Chest Type Matches Content</li>
+<li>Added Nice Bombs. There is no limit to how many can be placed at once</li>
+<li>Added Randomized Enemy Sizes</li>
+<li>Added an option to add Arrows, Bombs, and Magic Powder to the grass drop tables</li>
+<li>Added an option to start with dungeon items (map, compass, beak)</li>
+<li>Added options to speed up Boss, Chest, and Key animations
+<li>Songs now display Marin/Manbo/Mamu when obtaining them</li>
+<li>NPCs now hold up the proper model before giving the item</li>
+<li>Reduced-Farming has been removed and is now baseline behavior</li>
+<li>A single Bomb/Powder/Arrow now gives 3 of that item</li>
+<li>Fast-Trendy has been removed and Trendy-Prize-Final is forced vanilla</li>
+<li>Fixed some compatibility issues across settings</li>
+<li>Fixed some issues when specific items were already obtained</li>
+<li>Tons of minor bug fixes to improve the gameplay experience</li>
+</ul>
+<br></br>
+
+<b>0.3.0</b>
+<ul>
+<li>External settings import. Import a settings file to run generation with, without changing your own personal settings</li>
+<li>Fishing Bottle is now randomized</li>
+<li>Kanalet Final Guard is now randomized</li>
+<li>Added Nice Items. Lv1 Sword can shoot beams and Magic Rod has no cooldown</li>
+<li>Added One-Hit KO Mode</li>
+<li>Added option to update logic</li>
+<li>Added experimental logic for companions inside dungeons</li>
+<li>Added option to choose how many rupees to start with</li>
+<li>Added 2 new traps for trapsanity (5 total)</li>
+<li>Added Starting Items tab to toggle which items to start with</li>
+<li>Witch is now randomized instead of always giving Powder</li>
+<li>Shuffled Powder: Behaves exactly the same as Shuffled Bombs</li>
+<li>Shuffled Dungeons: Only includes front entrances, glitched logic not written</li>
+<li>Bad Pets: Companions will follow you inside dungeons, no logic currently</li>
+<li>GUI makeover! Better on the eyes and easier to find settings</li>
+<li>Owl Statues added to the Locations tab</li>
+<li>Color Dungeon Blue Rupees added to the Locations tab</li>
+<li>Visible items will now trigger the Seashell Sensor, disguised traps will not</li>
+<li>New implementation of Randomized Music, results in smaller output sizes</li>
+<li>Chest Sizes tweaks: Fixes Trade Quest items always being in big chests</li>
+<li>Enemizer tweaks: Fixes sideways enemies and prevents some enemy spam</li>
+<li>Fixed Duplicate Golden Leaves</li>
+<li>Fixed Collection complete messages displaying early</li>
+<li>Fixed Issues with Lens when obtained through a chest</li>
+<li>The final Trendy prize is now set to junk by default</li>
+<li>The spoiler log now lists every trap as "trap"</li>
+<li>Some music tweaks have been made</li>
+<li>Some enemizer tweaks have been made to 2D rooms</li>
+<li>The in-game map now displays the shuffled dungeon names</li>
+<li>Removed zol-traps from being on the 5-chest puzzle room to remove confusion</li>
+<li>Removed featherless Armos Knight from Advanced logic</li>
+<li>Fixed issue where Kiki would remove the Lens from the inventory</li>
+<li>Fixed issue where the "Fast Fishing" setting would not get saved</li>
+<li>Fixed issue where slayed enemies could drop bombs and powder out of logic</li>
+<li>Fixed issue where you could not leave the house if you only chose one starting item</li>
+<li>Fixed issue where Mabe Village would not show on the map when starting with Cello</li>
+<li>Fixed logic error with progressive starting item</li>
+<li>Fixed a bug where Randomized Music and Bad Pets could not be used at the same time</li>
+<li>Fixed a bug that made it where you could not get bombs or powder from pots with the shuffled settings</li>
+<li>Fixed a bug where the romfs path required "romfs" in the directory</li>
+<li>Fixed issue where powder-capacity would directly give Magic Powder</li>
+<li>Fixed issue with reloading a save after completing the Rapids Race</li>
+<li>Fixed softlock from entering water caves early with the Rooster</li>
+<li>Fixed many issues with Damp&eacute;</li>
+</ul>
+<br></br>
+
+<b>0.2.2</b>
+<ul>
+<li>Fixes the issue where some seeds would error while shuffling item placements</li>
+<li>Fixed a logic error regarding access to Kanalet Castle</li>
+<li>Now you can include/exclude the Kanalet Castle checks. However, the Ball & Chain Soldier check is kept vanilla due to an issue</li>
+<li>The progress bar for the item shuffler is a bit more accurate now</li>
+<li>Zapsanity has been changed to Trapsanity, there are now 2 new traps! (3 custom traps)</li>
+<li>Capacity Upgrades now display the Mad Batter text letting you know about all the junk you have to carry</li>
+<li>Seashell Mansion no longer gives Green Rupees over traps</li>
+<li>Golden Rupees will now be in small chests with the Scaled Chests setting on</li>
+</ul>
+<br></br>
+
+<b>0.2.1</b>
+<ul>
+<li>Now shuffles the Golden Leaves (ball and chain soldier leaf is left vanilla due to a bug)</li>
+<li>Now shuffles the Slime Key (Talk to the Owl Statue with Shovel)</li>
+<li>Overworld and Dungeon Owl Statues are now separate</li>
+<li>New setting to match chest sizes with content importance</li>
+</ul>
+<br></br>
+
+<b>0.2.0</b>
+<ul>
+<li>The randomizer now has a user-friendly GUI and contains a prebuilt executable for Windows</li>
+<li>Randomizes Boss drops</li>
+<li>Randomized Enemies</li>
+<li>Randomizes Free Gifts from NPCs</li>
+<li>Randomizes freestanding items (heart pieces, miscellaneous items like washed-up, mushroom, bird key, etc.)
+<li>Randomizes Small Keys (own dungeon)</li>
+<li>Optional setting for randomizing the Trade Quest. The items will not appear in the inventory</li>
+<li>Owl Shuffle: Items can be placed on Owl Statues</li>
+<li>Optional setting for randomizing music</li>
+<li>Added a custom Zap Trap to the item pool</li>
+<li>Added an option for Shuffled Bombs. You need to find a main source of bombs before you can obtain them from other sources</li>
+<li>Additional logical settings (Classic D2, Completed Bridge, Fast Master Stalfos, Open Kanalet, Open Mamu)</li>
+<li>Fast Songs setting, skip the cutscene for learning songs</li>
+<li>You can now select a number of random instruments to start with</li>
+</ul>
+<br></br>
+
+<b>0.1.6</b>
+<ul>
+<li>Power Bracelet and Powerful Bracelet are now progressive, so you will always receive level 1 before level 2</li>
+<li>Owl cutscenes removed</li>
+<li>Walrus quest removed (walrus will be already moved)</li>
+<li>Ghost quest removed. To get the ghost's bottle, walk up to its grave after collecting the Surf Harp.</li>
+<li>Marin on the bridge cutscene removed</li>
+<li>Free-Book setting now implemented, which can be used to allow reading the book of dark secrets (egg path) without the magnifying lens</li>
+<li>Implemented a fix to leave Marin's house without having the shield</li>
+<li>More logic fixes/adjustments (haha imagine getting right the first time)</li>
+</ul>
+<br></br>
+
+<b>0.1.5</b>
+<ul>
+<li>Adds logic for Dampé challenges, although these still are not relevant yet</li>
+<li>Logic fixes in Color Dungeon</li>
+<li>Fixes logic error with obtaining Bow-Wow, who can now properly be required to clear the swamp flowers</li>
+</ul>
+<br></br>
+
+<b>0.1.4</b>
+<ul>
+<li>Updated beach Goriya logic to account for being able to trade the magic rod, and to be able to get the money to buy back your item.</li>
+<li>Mamu now requires being able to farm rupees, although you already could anyway if you could get there.</li>
+<li>Everything that requires the bow in order to shoot arrows now requires access to an infinite source of arrows.</li>
+<li>Armos Knight now requires the feather.</li>
+<li>Kanalet south moat cave now logically a requires a way to escape after hookshotting in.</li>
+</ul>
+<br></br>
+
+<b>0.1.3</b>
+<ul>
+<li>Fixed issue with spoiler log generation crashing when given an absolute file path.</li>
+<li>Fixed a couple small logic errors (which were not relevant to the current version yet).</li>
+</ul>
+<br></br>
+
+<b>0.1.2</b>
+<ul>
+<li>Fixes a few logic issues</li>
+</ul>
+<br></br>
+
+<b>0.1.1</b>
+<ul>
+<li>Small fix from last version to work with older versions of Python.</li>
+</ul>
+<br></br>
+
+<b>0.1.0</b>
+<ul>
+<li>The first usable version of the LAS Randomizer. This version includes a full logic and randomizes only chests. See the readme for more details.</li>
+</ul>
