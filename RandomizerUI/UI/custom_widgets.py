@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QComboBox, QListWidgetItem, QMainWindow
+from PySide6.QtWidgets import QComboBox, QListWidgetItem, QMainWindow, QMessageBox, QWidget, QVBoxLayout, QScrollArea, QLabel
 from re import split
 
 
@@ -22,3 +22,21 @@ class RandoComboBox(QComboBox):
         QComboBox.hidePopup(self)
         if isinstance(self.window(), QMainWindow):
             self.window().ui.setExplanationText()
+
+
+
+class RandoHelpWindow(QMessageBox):
+    def __init__(self, title: str, text: str, with_scroll: bool = False):
+        super(RandoHelpWindow, self).__init__()
+        self.setWindowTitle(title)
+        self.content = QWidget()
+        vl = QVBoxLayout(self.content)
+        if with_scroll:
+            vl.addWidget(QLabel(text, self))
+            scroll = QScrollArea(self)
+            scroll.setWidgetResizable(True)
+            scroll.setWidget(self.content)
+            self.layout().addWidget(scroll, 0, 0, 1, 1)
+            self.setStyleSheet("QScrollArea{min-width:600 px; min-height: 450px}")
+        else:
+            self.setText(text)

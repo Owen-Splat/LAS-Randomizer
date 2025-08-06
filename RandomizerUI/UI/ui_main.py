@@ -805,7 +805,7 @@ class Ui_MainWindow(QObject):
 
     def showChangelog(self) -> None:
         """Display new window listing the new features and bug fixes"""
-        self.createMessageWindow("What's New", CHANGE_LOG)
+        self.createMessageWindow("Changelog", CHANGE_LOG, with_scroll=True)
 
 
     def showUserError(self, msg) -> None:
@@ -828,22 +828,20 @@ class Ui_MainWindow(QObject):
         self.createMessageWindow(self.window.windowTitle(), ABOUT_INFO)
 
 
-    def createMessageWindow(self, title, text) -> None:
+    def createMessageWindow(self, title: str, text: str, with_scroll: bool = False) -> None:
         """Creates a new QMessageBox with the given window title and text
 
         This also matches the current Light/Dark Mode"""
 
-        box = QMessageBox()
-        box.setWindowTitle(title)
-        box.setText(text)
+        box = RandoHelpWindow(title, text, with_scroll)
 
         match self.theme:
             case 'dark':
-                box.setStyleSheet(DARK_STYLESHEET)
+                box.setStyleSheet(box.styleSheet() + DARK_STYLESHEET)
             case 'diamond-black':
-                box.setStyleSheet(DIAMONDBLACK_STYLESHEET)
+                box.setStyleSheet(box.styleSheet() + DIAMONDBLACK_STYLESHEET)
             case _:
-                box.setStyleSheet(LIGHT_STYLESHEET)
+                box.setStyleSheet(box.styleSheet() + LIGHT_STYLESHEET)
 
         box.exec()
 
