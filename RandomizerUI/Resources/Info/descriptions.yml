@@ -3,15 +3,15 @@ ChestsCheck:
 GiftsCheck:
   Free gifts from NPCs can contain progress items
 TradeCheck:
-  Trade Quest checks can contain progress items
+  Trade Quest checks can contain progress items<br></br>Currently, Trade Quest items other than the Lens do not show in the inventory
 LeavesCheck:
   Golden Leaves can become progress items
 HeartsCheck:
-  Freestanding Heart Pieces can become progress items
+  Heart Pieces can become progress items
 ShellsCheck:
-  Freestanding Seashells can become progress items
+  Hidden Seashells (dig spots, grass, rocks, trees, underwater) can become progress items
 MiscCheck:
-  Freestanding miscellaneous items can become progress items
+  Miscellaneous standing items can become progress items (Toadstool, Washed-Up,)
 MansionBox:
   This controls the maximum number of seashells that the Seashell Mansion may require
 BossCheck:
@@ -36,6 +36,8 @@ SpoilerCheck:
   A spoiler log will be generated
 RaceCheck:
   Only 5 dungeons will contain a required item
+UnrandomCheck:
+  Keeps all items in their vanilla locations while applying Quality of Life changes and user settings
 EnemyCheck:
   Randomizes enemies
 EnemySizesCheck:
