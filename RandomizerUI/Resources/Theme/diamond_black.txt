@@ -1,5 +1,9 @@
 /* Modified from PyQtDarkTheme */
 
+QWidget {
+    background: #21242f;
+    color: white;
+}
 QMainWindow {
     background: #2b303e;
     color: white;
@@ -80,6 +84,12 @@ QLineEdit {
 QLineEdit:hover {
     border: 1px solid rgb(120, 180, 250);
 }
+QSpinBox {
+    background: #4a536b;
+    border: 1px solid gray;
+    border-radius: 4px;
+    color: white;
+}
 QTabWidget::pane {
     border: 1px solid rgb(190, 195, 200);
     border-radius: 4px;
@@ -155,7 +165,8 @@ QGroupBox::title {
     color: lightgray;
 }
 QMessageBox {
-    background-color: rgb(240,240,240);
+    background: #2b303e;
+    color: white;
 }
 QLabel {
     color: lightgray;
