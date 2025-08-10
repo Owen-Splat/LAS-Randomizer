@@ -3,10 +3,23 @@
 
 <b>0.5.0</b>
 <ul>
-<li>Seashells, Shop, and Trendy Game are now randomized</li>
+<li>Hidden Seashells are now randomized</li>
+<li>Shop is now randomized</li>
+<li>Trendy Game is now randomized</li>
+<li>Keysanity is now available</li>
+<li>You can now include/exclude specific glitches and tricks from logic</li>
 <li>The randomizer app now compiles to Mac</li>
 <li>The randomizer app can now be resized</li>
-<li>Other stuff that I'm too lazy to write about right now</li>
+<li>Added an option to speed up the animation of holding up items</li>
+<li>Added an option to increase player movement speed</li>
+<li>Added an option to adjust the amount of items in the item pool from Standard, Reduced, Plentiful</li>
+<li>Added an option to adjust damage from Easy (halved), Standard, Hero (double), and OHKO Mode</li>
+<li>Starting and Max Hearts settings. Will need testing to make sure it isn't jank</li>
+<li>Added an option to change how the game controls from Standard, DPAD, or 360 Movement</li>
+<li>Replaced Nice Items into a Super Weapons option. This buffs all weapons without affecting logic</li>
+<li>Unlocked Bombs has been removed in favor of choosing Bombs as a starting item</li>
+<li>Fast Stealing has been removed. It is now default behavior and always on</li>
+<li>Fixed an oversight that allowed purchasing Magic Powder from the witch before obtaining it normally</li>
 </ul>
 <br></br>
 
