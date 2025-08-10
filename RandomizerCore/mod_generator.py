@@ -863,13 +863,24 @@ class ModsProcess(QtCore.QThread):
         '''Edits the witch to give the randomized item instead of Magic Powder'''
 
         flow = self.readFile('Syrup.bfevfl')
+
+        # check for mushroom first, if the user has it then give the randomized item
+        # if not, check if the user has obtained Magic Powder (GetMagicPowder flag)
+        # if so, give a full refill for free
+        event_tools.insertEventAfter(flow.flowchart, "talk", "Event43")
+        check_event = event_tools.createSwitchEvent(flow.flowchart, "EventFlags", "CheckFlag",
+            {"symbol": "GetMagicPowder"},
+            {0: "Event44", 1: "Event102"})
+        event_tools.setSwitchEventCase(flow.flowchart, "Event43", 0, check_event)
+
+        # give the randomized item when trading in the mushroom
         item_key, item_index = self.getItemInfo('syrup')
         item_get.insertItemGetAnimation(flow.flowchart, item_key, item_index, 'Event93', None)
-        
+
         # if self.settings['randomize-music']:
         #     event_tools.setEventSong(flow.flowchart, 'Event56', self.songs_dict['BGM_SHOP_FAST'])
         #     event_tools.setEventSong(flow.flowchart, 'Event13', self.songs_dict['BGM_SHOP_FAST'])
-        
+
         self.writeFile('Syrup.bfevfl', flow)
     
 
