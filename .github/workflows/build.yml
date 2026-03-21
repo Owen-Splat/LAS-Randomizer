@@ -2,19 +2,27 @@ on:
   pull_request:
     types:
       - closed
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
 
 jobs:
   build:
+    if: github.event.pull_request.merged || github.event_name == 'workflow_dispatch'
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        # os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - run: echo "Preparing '${{ github.event.ref }}' for release"
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '3.12.8'
           cache: 'pip' # caching pip dependencies
       # Force upgrading pip (Might be removed at some point)
       - run: pip install --upgrade pip
