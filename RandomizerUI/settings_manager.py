@@ -6,22 +6,32 @@ from pathlib import Path
 import yaml, base64, copy, random
 
 
-CHECKBOX_DEFAULTS = (
+CHECKBOX_DEFAULTS = ( # true if in this list, false if not
     "Chests",
     "Free Gifts",
     "Golden Leaves",
     "Heart Pieces",
     "Seashells",
     "Miscellaneous",
-    "Boss Drops",
     "Shop",
-    "Create Spoiler Log"
-)
-
-CHECKBOX_EXCLUSIONS = (
-    "Randomize Music",
-    "Randomize Sound Effects",
-    "Blur Removal"
+    "Boss Drops",
+    "Companions",
+    "Create Spoiler Log",
+    "Open Kanalet",
+    "Open Mabe",
+    "Open Mamu",
+    "Completed Bridge",
+    "Consumable Drops",
+    "Fast Fishing",
+    "Shuffled Bombs",
+    "Free Book",
+    "Fast Stalfos",
+    "Shuffled Powder",
+    "Boss Cutscenes",
+    "Movement Speed",
+    "Chest Animations",
+    "Key Animations",
+    "Super Weapons"
 )
 
 SPINBOX_DEFAULTS = {
@@ -31,8 +41,28 @@ SPINBOX_DEFAULTS = {
 }
 
 COMBOBOX_DEFAULTS = {
+    "Seashell Mansion": 3,
+    "Small Keys": 1,
+    "Nightmare Keys": 1,
+    "Shuffle_Instruments": 4,
+    "Required Dungeons":  5,
+    "Stealing": 1,
+    "Traps": 1,
+    "Damage": 1,
 
 }
+
+STRING_EXCLUSIONS = (
+    "Music",
+    "Randomize Sound Effects",
+    "Randomize Text",
+    "Blur Removal",
+    "Instant Text",
+    "360 Movement",
+    "Disable Low Health Beep",
+    "Disable Guardian Acorn",
+    "Disable Piece of Power"
+)
 
 DEFAULT_START_GEAR = (
     "sword",
@@ -62,148 +92,6 @@ CHECK_LOCATIONS = {
 class MyDumper(yaml.Dumper):
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, indentless)
-
-
-def encodeSettings(window) -> str:
-    """Encodes the current randomizer settings as a settings string"""
-
-    settings_dict = saveSettings(window, for_string=True)
-    settings_str = b''
-    settings_str += settings_dict['seed'].encode('ascii') + b'\0'
-
-    bool_bytes = []
-    int_bytes = []
-    list_bytes = []
-    bool_bits = []
-    list_bits = []
-
-    for k,v in settings_dict.items():
-        if k in STRING_EXCLUSIONS:
-            continue
-        match v:
-            case bool():
-                bool_bits.append(int(v))
-                if len(bool_bits) == 8:
-                    bool_bytes.append(bitsToInt(bool_bits))
-            case int():
-                int_bytes.append(v)
-            case list():
-                if k == 'starting_gear':
-                    comp = sorted(STARTING_ITEMS)
-                elif k == 'excluded_locations':
-                    comp = sorted(TOTAL_CHECKS)
-                settings_list = list(copy.deepcopy(settings_dict[k]))
-                for c in comp:
-                    list_bits.append(1 if c in settings_list else 0)
-                    if list_bits[-1] == 1:
-                        settings_list.remove(c)
-                    if len(list_bits) == 8:
-                        list_bytes.append(bitsToInt(list_bits))
-                if list_bits: # flush bits to byte after list is done so that they don't mix
-                    list_bytes.append(bitsToInt(list_bits))
-    
-    if bool_bits:
-        bool_bytes.append(bitsToInt(bool_bits))
-    
-    for b in bool_bytes:
-        settings_str += b.to_bytes(1, 'big', signed=False)
-    for i,b in enumerate(int_bytes):
-        num = 1
-        if i == len(int_bytes)-1:
-            num = 2
-        settings_str += b.to_bytes(num, 'big', signed=False)
-    for b in list_bytes:
-        settings_str += b.to_bytes(1, 'big', signed=False)
-    
-    settings_str = base64.b64encode(settings_str).decode("ascii")
-    return settings_str
-
-
-def decodeSettings(settings_str: str) -> dict:
-    "Decodes the settings string and returns a dictionary of the new settings"
-
-    settings_str = settings_str.encode('ascii')
-    settings_bytes = base64.b64decode(settings_str)
-    new_settings = {}
-    
-    seed = readString(settings_bytes, 0)
-    new_settings['seed'] = seed
-
-    total_bytes = []
-    for b in settings_bytes[len(seed)+1:]:
-        total_bytes.append(b)
-    
-    check_boxes = []
-    nums_options = []
-    items = sorted(list(copy.deepcopy(STARTING_ITEMS)))
-    locs = sorted(list(copy.deepcopy(TOTAL_CHECKS)))
-
-    for k,v in BASE_OPTIONS.items():
-        if k in STRING_EXCLUSIONS:
-            continue
-        if isinstance(v, bool):
-            check_boxes.append(k)
-        elif isinstance(v, int):
-            nums_options.append(k)
-    
-    check_boxes = optionsToBitList(check_boxes)
-    items = optionsToBitList(items)
-    locs = optionsToBitList(locs)
-
-    for checks in check_boxes:
-        bits = intToBits(total_bytes.pop(0))
-        for i,check in enumerate(checks):
-            new_settings[check] = bool(bits[i])
-    for check in nums_options:
-        if check != 'RupeeBox':
-            new_settings[check] = total_bytes.pop(0)
-            continue
-
-        n1 = total_bytes.pop(0)
-        n2 = total_bytes.pop(0)
-        new_settings[check] = (n1 << 8) + n2
-    
-    new_settings['starting_gear'] = []
-    for gear in items:
-        bits = intToBits(total_bytes.pop(0))
-        sgear = [k for i,k in enumerate(gear) if bits[i] == 1]
-        new_settings['starting_gear'].extend(sgear)
-    
-    new_settings['excluded_locations'] = []
-    for loc in locs:
-        bits = intToBits(total_bytes.pop(0))
-        llist = [k for i,k in enumerate(loc) if bits[i] == 1]
-        new_settings['excluded_locations'].extend(llist)
-    
-    return new_settings
-
-
-# def randomizeSettings(window):
-#     settings_dict = saveSettings(window, for_string=True)
-    
-#     ldict = locals()
-#     for k,v in BASE_OPTIONS.items():
-#         match v:
-#             case bool():
-#                 settings_dict[k] = bool(random.randint(0, 1))
-#             case int():
-#                 box = window.ui.findComboBox(k)
-#                 if box != None:
-#                     v = box.count() - 1
-#                     settings_dict[k] = random.randint(0, v)
-#                 else:
-#                     v = window.ui.findSpinBox(k).maximum()
-#                     settings_dict[k] = min(random.randint(0, v), random.randint(0, v))
-#         # elif isinstance(v, list):
-#         #     if k != 'starting_gear':
-#         #         continue
-#         #     comp = STARTING_ITEMS
-#         #     settings_dict[k] = []
-#         #     for c in comp:
-#         #         if random.randint(0, 24) == 24: # 4% chance for each item to be added
-#         #             settings_dict[k].append(c)
-
-#     return settings_dict
 
 
 class SettingsManager:
@@ -310,7 +198,7 @@ class SettingsManager:
                 case QSpinBox():
                     widget.setValue(random.randint(widget.minimum(), widget.maximum()))
                 case RandoComboBox():
-                    widget.setCurrentIndex(0, widget.count() - 1)
+                    widget.setCurrentIndex(random.randint(0, widget.count() - 1))
 
 
     def reset(self):
@@ -353,6 +241,124 @@ class SettingsManager:
         self.ui.window.updateSeashells()
         self.ui.window.updateOwls()
         self.ui.window.tabChanged()
+
+
+    def encode(self) -> str:
+        """Encodes the current randomizer settings as a settings string"""
+
+        settings_dict = self.fetch()
+        settings_str = b''
+        settings_str += settings_dict["Seed"].encode("ascii") + b'\0'
+
+        bool_bytes = []
+        int_bytes = []
+        list_bytes = []
+        bool_bits = []
+        list_bits = []
+
+        for k,v in settings_dict["Settings"].items():
+            if k in STRING_EXCLUSIONS:
+                continue
+            # first convert combobox value to the index instead of text
+            if self.ui.findComboBox(k) is not None:
+                v = self.ui.findComboBox(k).currentIndex()
+            match v:
+                case bool():
+                    bool_bits.append(int(v))
+                    if len(bool_bits) == 8:
+                        bool_bytes.append(bitsToInt(bool_bits))
+                case int():
+                    int_bytes.append(v)
+                case list():
+                    if k == "Starting Gear":
+                        comp = sorted(STARTING_ITEMS)
+                    elif k == "Excluded Locations":
+                        comp = sorted(TOTAL_CHECKS)
+                    settings_list = list(copy.deepcopy(settings_dict[k]))
+                    for c in comp:
+                        list_bits.append(1 if c in settings_list else 0)
+                        if list_bits[-1] == 1:
+                            settings_list.remove(c)
+                        if len(list_bits) == 8:
+                            list_bytes.append(bitsToInt(list_bits))
+                    if list_bits: # flush bits to byte after list is done so that they don't mix
+                        list_bytes.append(bitsToInt(list_bits))
+
+        if bool_bits:
+            bool_bytes.append(bitsToInt(bool_bits))
+
+        for b in bool_bytes:
+            settings_str += b.to_bytes(1, 'big', signed=False)
+        for i,b in enumerate(int_bytes):
+            num = 1
+            if i == len(int_bytes)-3: # starting rupees
+                num = 2
+            settings_str += b.to_bytes(num, 'big', signed=False)
+        for b in list_bytes:
+            settings_str += b.to_bytes(1, 'big', signed=False)
+
+        settings_str = base64.b64encode(settings_str).decode("ascii")
+        return settings_str
+
+
+    def decode(self, settings_str: str) -> dict:
+        "Decodes the settings string and returns a dictionary of the new settings"
+
+        settings_dict = self.fetch()
+        settings_str = settings_str.encode("ascii")
+        settings_bytes = base64.b64decode(settings_str)
+        new_settings = {}
+
+        seed = readString(settings_bytes, 0)
+        new_settings["Seed"] = seed
+
+        total_bytes = []
+        for b in settings_bytes[len(seed)+1:]:
+            total_bytes.append(b)
+
+        check_boxes = []
+        nums_options = []
+        items = sorted(list(copy.deepcopy(STARTING_ITEMS)))
+        locs = sorted(list(copy.deepcopy(TOTAL_CHECKS)))
+
+        for k,v in settings_dict["Settings"].items():
+            if k in STRING_EXCLUSIONS:
+                continue
+            if isinstance(v, bool):
+                check_boxes.append(k)
+            elif isinstance(v, int):
+                nums_options.append(k)
+
+        check_boxes = optionsToBitList(check_boxes)
+        items = optionsToBitList(items)
+        locs = optionsToBitList(locs)
+
+        for checks in check_boxes:
+            bits = intToBits(total_bytes.pop(0))
+            for i,check in enumerate(checks):
+                new_settings[check] = bool(bits[i])
+        for check in nums_options:
+            if check != "Rupees":
+                new_settings[check] = total_bytes.pop(0)
+                continue
+
+            n1 = total_bytes.pop(0)
+            n2 = total_bytes.pop(0)
+            new_settings[check] = (n1 << 8) + n2
+
+        new_settings["Starting Gear"] = []
+        for gear in items:
+            bits = intToBits(total_bytes.pop(0))
+            sgear = [k for i,k in enumerate(gear) if bits[i] == 1]
+            new_settings["Starting Gear"].extend(sgear)
+
+        new_settings["Excluded Locations"] = []
+        for loc in locs:
+            bits = intToBits(total_bytes.pop(0))
+            llist = [k for i,k in enumerate(loc) if bits[i] == 1]
+            new_settings["Excluded Locations"].extend(llist)
+
+        return new_settings
 
 
 def bitsToInt(bits: list) -> int:

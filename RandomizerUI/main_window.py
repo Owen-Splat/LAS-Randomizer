@@ -62,8 +62,7 @@ class MainWindow(QMainWindow):
 
 
     def updateSettingsString(self):
-        pass
-        # self.ui.findLineEdit("SettingsLine").setText(settings_manager.encodeSettings(self))
+        self.ui.findLineEdit("SettingsLine").setText(self.settings.encode())
 
 
     def obtainVersion(self, version):
@@ -376,15 +375,14 @@ class MainWindow(QMainWindow):
 
 
     def pasteSettingsString(self):
-        pass
-        # try:
-        #     new_settings = settings_manager.decodeSettings(self.clipboard.text())
-        #     if new_settings:
-        #         settings_manager.loadSettings(self, new_settings)
-        #         self.ui.findLineEdit("SettingsLine").setText(self.clipboard.text())
-        #         self.tabChanged()
-        # except: # Lots of potential different errors, so we use a general except to be safe
-        #     self.ui.showUserError('Could not decode settings string!')
+        try:
+            new_settings = self.settings.decode(self.clipboard.text())
+            if new_settings:
+                self.settings.load(self, new_settings)
+                self.ui.findLineEdit("SettingsLine").setText(self.clipboard.text())
+                self.tabChanged()
+        except: # Lots of potential different errors, so we use a general except to be safe
+            self.ui.showUserError('Could not decode settings string!')
 
 
     def randomizeSettings(self):
