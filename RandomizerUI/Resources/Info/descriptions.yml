@@ -1,120 +1,136 @@
-ChestsCheck:
+Chests:
   Chests outside of dungeons can contain progress items
-GiftsCheck:
+Free_Gifts:
   Free gifts from NPCs can contain progress items
-TradeCheck:
+Trade_Quest:
   Trade Quest checks can contain progress items<br></br>Currently, Trade Quest items other than the Lens do not show in the inventory
-LeavesCheck:
+Golden_Leaves:
   Golden Leaves can become progress items
-HeartsCheck:
+Heart_Pieces:
   Heart Pieces can become progress items
-ShellsCheck:
-  Hidden Seashells (dig spots, grass, rocks, trees, underwater) can become progress items
-MiscCheck:
-  Miscellaneous standing items can become progress items (Toadstool, Washed-Up,)
-MansionBox:
+Seashells:
+  Hidden Seashells can become progress items
+Miscellaneous:
+  Miscellaneous standing items can become progress items
+Seashell_Mansion:
   This controls the maximum number of seashells that the Seashell Mansion may require
-BossCheck:
+Boss_Drops:
   Bosses can drop progress items
-InstrumentsCheck:
-  Instruments will be randomized
-ShopCheck:
+Shop:
   The shop can sell progress items
-RupeesCheck:
+Companions:
+  BowWow and the rooster become item checks<br></br>Once unlocked, you can swap between companions inside phone booths
+Blue_Rupees:
   The 28 blue rupees in Color Dungeon can become progress items
-OwlsBox:
+Owl_Gifts:
   This controls if Owl Statues can give items
-DampeCheck:
+Dampe:
   Rewards from completing chamber dungeons can be progress items
-RapidsCheck:
+Rapids:
   Items inside and from the Rapids Race can be progress items
-FishingCheck:
+Fishing:
   Rewards from the fishing minigame can be progress items
-TrendyCheck:
+Trendy_Game:
   Trendy game can contain progress items
-SpoilerCheck:
+Dungeon_Maps:
+  Controls where dungeon maps can be found
+Compasses:
+  Controls where compasses can be found
+Stone_Beaks:
+  Controls where stone beaks can be found
+Small_Keys:
+  Controls where small keys can be found
+Nightmare_Keys:
+  Controls where nightmare keys can be found
+Shuffle_Instruments:
+  Controls where instruments can be found
+Race_Mode:
+  Enables race mode<br></br>This disables the spoiler log and changes how items are randomized
+Required_Dungeons:
+  Controls how many dungeons will be required to beat the game in race mode
+Create_Spoiler_Log:
   A spoiler log will be generated
-RaceCheck:
-  Only 5 dungeons will contain a required item
-UnrandomCheck:
+Unrandomizer_Mode:
   Keeps all items in their vanilla locations while applying Quality of Life changes and user settings
-EnemyCheck:
+Randomize_Enemies:
   Randomizes enemies
-EnemySizesCheck:
+Randomize_Enemy_Sizes:
   Randomizes enemy sizes
-ChestTypeBox:
+Chest_Types:
   This controls if chest sizes and/or textures will reflect the contents
-KanaletCheck:
+Open_Kanalet:
   The Kanalet Castle gate will always be open
-MabeCheck:
+Open_Mabe:
   Opens up Mabe Village from the start of the game
-MamuCheck:
+Open_Mamu:
   Sign Maze will already be completed
-BridgeCheck:
+Completed_Bridge:
   The bridge next to Kanalet Castle will already be built
-D2Check:
+Classic_D2:
   Adds back the flower in front of D2 that the remake replaced with a rock
-DungeonsCheck:
+Shuffled_Dungeons:
   Randomizes the front entrances to dungeons
-ConsumableCheck:
+Consumable_Drops:
   Allows finding powder, bombs, and arrows by cutting grass
-PetsCheck:
+Bad_Pets:
   Allows companions to go inside dungeons with Link
-FastFishingCheck:
+Fast_Fishing:
   Removes the instrument requirements for finding fish
-BombsCheck:
+Shuffled_Bombs:
   Bombs can not be obtained until the player finds them as an item check
-BookCheck:
+Free_Book:
   The book revealing the egg path will not need the Magnifying Lens to read
-StalfosCheck:
-  The first 3 Master Stalfos fights are already completed
-PowderCheck:
+Fast_Stalfos:
+  The first 3 Master Stalfos fights are already completed<br></br>This allows exploring more of the dungeon without needing bombs
+Shuffled_Powder:
   Magic Powder can not be obtained until the player finds it as an item check
-BossAnimCheck:
+Stealing:
+  Controls the requirements for being able to steal from the shop<br></br>The standard option requires the sword
+Boss_Cutscenes:
   Boss animations are sped up
-ChestAnimCheck:
-  Chest animations are sped up
-KeyAnimCheck:
-  Key animations are sped up
-SongAnimCheck:
+Chest_Animations:
+  Chest spawn animation is sped up
+Key_Animations:
+  Key drop animation is sped up
+Song_Cutscenes:
   Song learning cutscenes will be skipped
-ItemAnimCheck:
+Item_Get_Animations:
   Animations from getting items will be sped up
-MoveSpeedCheck:
-  Player movement speed is increased
-DungeonItemsBox:
-  This controls where dungeon items can be found
-ItemPoolBox:
+Movement_Speed:
+  Always have the Piece of Power speed boost
+Item_Pool:
   This controls how many progress items will be added to the item pool
-TrapBox:
+Traps:
   This controls how many traps will be added to the item pool
-DamageBox:
+Super_Weapons:
+  Buffs several weapons. This does not affect logic
+Damage:
   Controls how much damage the player recieves
-StartHeartBox:
-  Sets how many hearts the player starts with
-MaxHeartBox:
-  Sets how many total hearts the player can have
-ControlBox:
-  Changes how the player controls. Vanilla, DPAD, or 360 movement
-StealingBox:
-  This controls the requirements for being able to steal from the shop
-SuperWeaponsCheck:
-  Buffs all weapons
-InstrumentStartBox:
-  This controls how many instruments the player starts with
-DungeonStartItemsBox:
-  This controls what dungeon items the player starts with
-RupeeBox:
-  This controls how many rupees the player starts with
-LogicBox:
-  This controls how advanced the logic will be
-BlurCheck:
-  Removes the blur around the edge of the screen
-MusicCheck:
-  Randomizes the music
-SoundCheck:
+Music:
+  Randomize or remove music
+Randomize_Sound_Effects:
   Randomizes sound effects
-BeepCheck:
+Randomize_Text:
+  Randomizes text<br></br>Important text is not randomized
+Blur_Removal:
+  Removes the blur around the edge of the screen
+Instant_Text:
+  Textboxes will automatically advance by holding the B button
+360_Movement:
+  Gives full 360 degree movement instead of snapping to 8 directions
+Disable_Low_Health_Beep:
   Removes the low health sound effect
-PlatformBox:
-  This controls which platform the randomizer generates for
+Disable_Guardian_Acorn:
+  Prevents Guardian Acorns from spawning
+Disable_Piece_of_Power:
+  Prevents Pieces of Power from spawning
+Starting_Instruments:
+  Choose how many random instruments you will start with
+Rupees:
+  Choose how many rupees to start with
+Containers:
+  Choose how many heart containers to start with
+Pieces:
+  Choose how many heart pieces to start with
+Preset:
+  Choose a preset of included and excluded tricks

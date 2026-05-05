@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt, QEvent, QObject
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (QCheckBox, QLineEdit, QListWidget, QPushButton,
     QHBoxLayout, QVBoxLayout, QMainWindow, QTabWidget, QMessageBox, QMenuBar,
     QWidget, QLabel, QSpacerItem, QSizePolicy, QGroupBox, QFileDialog,
@@ -60,10 +61,39 @@ class Ui_MainWindow(QObject):
         tab_widget.addTab(self.createStartingItemsTab(), 'Starting Items')
         tab_widget.addTab(self.createLocationsTab(), 'Locations')
         tab_widget.addTab(self.createLogicTab(), 'Logic')
-        # tab_widget.addTab(self.createPatchesTab(), 'Patches')
-        tab_widget.addTab(self.createCosmeticsTab(), 'Cosmetics')
         tab_widget.currentChanged.connect(self.window.tabChanged)
         vl.addWidget(tab_widget, 5)
+
+        label = QLabel(central_widget)
+        label.setObjectName('ExplanationText')
+        label.setText('Hover over an option to see what it does')
+        label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        label.setFixedHeight(50)
+        vl.addWidget(label)
+
+        line = QLineEdit(central_widget)
+        line.setObjectName('SettingsLine')
+        line.setDisabled(True)
+        vl.addWidget(line)
+
+        hl = QHBoxLayout()
+        button = QPushButton('Copy Settings', central_widget)
+        button.setObjectName('CopyButton')
+        hl.addWidget(button)
+        button = QPushButton('Paste Settings', central_widget)
+        button.setObjectName('PasteButton')
+        hl.addWidget(button)
+        button = QPushButton('Reset Settings', central_widget)
+        button.setObjectName('ResetButton')
+        hl.addWidget(button)
+        button = QPushButton('Random Settings', central_widget)
+        button.setObjectName('RandomSettingsButton')
+        hl.addWidget(button)
+        hl.addSpacerItem(QSpacerItem(1, 1, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        button = QPushButton('Randomize', central_widget)
+        button.setObjectName('RandomizeButton')
+        hl.addWidget(button)
+        vl.addLayout(hl)
 
         central_widget.setLayout(vl)
         self.window.setCentralWidget(central_widget)
@@ -115,40 +145,11 @@ class Ui_MainWindow(QObject):
 
         tab_widget = QTabWidget(tab)
         tab_widget.addTab(self.createSettingsMainTab(), 'Main Settings')
+        tab_widget.addTab(self.createSettingsAdvancedTab(), 'Advanced Settings')
         tab_widget.addTab(self.createSettingsWorldTab(), 'World Settings')
         tab_widget.addTab(self.createSettingsGameplayTab(), 'Gameplay Settings')
+        tab_widget.addTab(self.createSettingsUserTab(), "User Settings")
         vl.addWidget(tab_widget)
-
-        label = QLabel(tab)
-        label.setObjectName('ExplanationText')
-        label.setText('Hover over an option to see what it does')
-        label.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        label.setFixedHeight(50)
-        vl.addWidget(label)
-
-        line = QLineEdit(tab)
-        line.setObjectName('SettingsLine')
-        line.setDisabled(True)
-        vl.addWidget(line)
-
-        hl = QHBoxLayout()
-        button = QPushButton('Copy Settings', tab)
-        button.setObjectName('CopyButton')
-        hl.addWidget(button)
-        button = QPushButton('Paste Settings', tab)
-        button.setObjectName('PasteButton')
-        hl.addWidget(button)
-        button = QPushButton('Reset Settings', tab)
-        button.setObjectName('ResetButton')
-        hl.addWidget(button)
-        button = QPushButton('Random Settings', tab)
-        button.setObjectName('RandomSettingsButton')
-        hl.addWidget(button)
-        hl.addSpacerItem(QSpacerItem(1, 1, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
-        button = QPushButton('Randomize', tab)
-        button.setObjectName('RandomizeButton')
-        hl.addWidget(button)
-        vl.addLayout(hl)
 
         for c in tab.findChildren(QCheckBox):
             c.setFixedWidth(self.spacing)
@@ -163,24 +164,16 @@ class Ui_MainWindow(QObject):
         tab = QWidget()
         vl = QVBoxLayout()
 
-        group = QGroupBox('Items', tab)
+        group = QGroupBox('Main Checks', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
         chests_check = QCheckBox('Chests', group)
-        chests_check.setObjectName('ChestsCheck')
         gifts_check = QCheckBox('Free Gifts', group)
-        gifts_check.setObjectName('GiftsCheck')
         trade_check = QCheckBox('Trade Quest', group)
-        trade_check.setObjectName('TradeCheck')
         leaves_check = QCheckBox('Golden Leaves', group)
-        leaves_check.setObjectName('LeavesCheck')
         hearts_check = QCheckBox('Heart Pieces', group)
-        hearts_check.setObjectName('HeartsCheck')
         shells_check = QCheckBox('Seashells', group)
-        shells_check.setObjectName('ShellsCheck')
         misc_check = QCheckBox('Miscellaneous', group)
-        misc_check.setObjectName('MiscCheck')
         mansion_box = RandoComboBox(group)
-        mansion_box.setObjectName('MansionBox')
         mansion_box.addItems((
             'Seashell Mansion:  0',
             'Seashell Mansion:  5',
@@ -190,11 +183,8 @@ class Ui_MainWindow(QObject):
             'Seashell Mansion:  50'
         ))
         shop_check = QCheckBox('Shop', group)
-        shop_check.setObjectName('ShopCheck')
         boss_check = QCheckBox('Boss Drops', group)
-        boss_check.setObjectName('BossCheck')
-        inst_check = QCheckBox('Instruments', group)
-        inst_check.setObjectName('InstrumentsCheck')
+        companions_check = QCheckBox("Companions", group)
         hl = QHBoxLayout()
         hl.addWidget(chests_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
@@ -220,48 +210,115 @@ class Ui_MainWindow(QObject):
         hl = QHBoxLayout()
         hl.addWidget(boss_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
-        hl.addWidget(inst_check)
+        hl.addWidget(companions_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
-        filler = QLabel(group)
-        filler.setFixedWidth(self.spacing)
-        hl.addWidget(filler)
+        padding = QLabel("", group)
+        padding.setFixedWidth(self.spacing)
+        hl.addWidget(padding)
         gvl.addLayout(hl)
         group.setLayout(gvl)
         vl.addWidget(group)
 
-        group = QGroupBox('Special', tab)
+        group = QGroupBox('Dungeon Settings', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        blup_check = QCheckBox('Blue Rupees', group)
-        blup_check.setObjectName('RupeesCheck')
-        owls_box = RandoComboBox(group)
-        owls_box.setObjectName('OwlsBox')
-        owls_box.addItems((
-            'Owl Gifts:  None',
-            'Owl Gifts:  Overworld',
-            'Owl Gifts:  Dungeons',
-            'Owl Gifts:  All'
+        map_label = QLabel("Dungeon Maps: ", group)
+        map_label.setFixedWidth(self.spacing)
+        map_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignRight)
+        map_box = RandoComboBox(group)
+        map_box.hidden_prefix = "Dungeon Maps"
+        map_box.addItems((
+            "Start With",
+            "Own Dungeon",
+            "Any Dungeon",
+            "Anywhere"
         ))
-        hl = QHBoxLayout()
-        hl.addWidget(blup_check)
-        hl.addSpacerItem(self.createHorizontalSpacer())
-        hl.addWidget(owls_box)
-        hl.addSpacerItem(self.createHorizontalSpacer())
-        filler = QLabel(group)
-        filler.setFixedWidth(self.spacing)
-        hl.addWidget(filler)
-        group.setLayout(hl)
+        compass_label = QLabel("Compasses: ", group)
+        compass_label.setFixedWidth(self.spacing)
+        compass_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignRight)
+        compass_box = RandoComboBox(group)
+        compass_box.hidden_prefix = "Compasses"
+        compass_box.addItems((
+            "Start With",
+            "Own Dungeon",
+            "Any Dungeon",
+            "Anywhere"
+        ))
+        beak_label = QLabel("Stone Beaks: ", group)
+        beak_label.setFixedWidth(self.spacing)
+        beak_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignRight)
+        beak_box = RandoComboBox(group)
+        beak_box.hidden_prefix = "Stone Beaks"
+        beak_box.addItems((
+            "Start With",
+            "Own Dungeon",
+            "Any Dungeon",
+            "Anywhere"
+        ))
+        key_label = QLabel("Small Keys: ", group)
+        key_label.setFixedWidth(self.spacing)
+        key_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignRight)
+        key_box = RandoComboBox(group)
+        key_box.hidden_prefix = "Small Keys"
+        key_box.addItems((
+            "Start With",
+            "Own Dungeon",
+            "Any Dungeon",
+            "Anywhere"
+        ))
+        bkey_label = QLabel("Nightmare Keys: ", group)
+        bkey_label.setFixedWidth(self.spacing)
+        bkey_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignRight)
+        bkey_box = RandoComboBox(group)
+        bkey_box.hidden_prefix = "Nightmare Keys"
+        bkey_box.addItems((
+            "Start With",
+            "Own Dungeon",
+            "Any Dungeon",
+            "Anywhere"
+        ))
+        inst_label = QLabel("Shuffle Instruments: ", group)
+        inst_label.setFixedWidth(self.spacing)
+        inst_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignRight)
+        inst_box = RandoComboBox(group)
+        inst_box.hidden_prefix = "Shuffle Instruments"
+        inst_box.addItems((
+            "Vanilla",
+            "Dungeon Rewards",
+            "Own Dungeon",
+            "Any Dungeon",
+            "Anywhere"
+        ))
+        ovl = QVBoxLayout()
+        ohl = QHBoxLayout()
+        ohl.addWidget(map_label)
+        ohl.addWidget(map_box)
+        ohl.addSpacerItem(self.createHorizontalSpacer())
+        ohl.addWidget(key_label)
+        ohl.addWidget(key_box)
+        ovl.addLayout(ohl)
+        ohl = QHBoxLayout()
+        ohl.addWidget(compass_label)
+        ohl.addWidget(compass_box)
+        ohl.addSpacerItem(self.createHorizontalSpacer())
+        ohl.addWidget(bkey_label)
+        ohl.addWidget(bkey_box)
+        ovl.addLayout(ohl)
+        ohl = QHBoxLayout()
+        ohl.addWidget(beak_label)
+        ohl.addWidget(beak_box)
+        ohl.addSpacerItem(self.createHorizontalSpacer())
+        ohl.addWidget(inst_label)
+        ohl.addWidget(inst_box)
+        ovl.addLayout(ohl)
+        group.setLayout(ovl)
         vl.addWidget(group)
 
         minigames_group = QGroupBox('Minigames', tab)
         minigames_group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        dampe_check = QCheckBox(u"Damp\u00e9", minigames_group)
-        dampe_check.setObjectName('DampeCheck')
+        dampe_check = QCheckBox("Dampe", minigames_group)
         rapids_check = QCheckBox('Rapids', minigames_group)
-        rapids_check.setObjectName('RapidsCheck')
         fishing_check = QCheckBox('Fishing', minigames_group)
-        fishing_check.setObjectName('FishingCheck')
         trendy_check = QCheckBox('Trendy Game', minigames_group)
-        trendy_check.setObjectName('TrendyCheck')
         gvl = QVBoxLayout()
         hl = QHBoxLayout()
         hl.addWidget(dampe_check)
@@ -275,38 +332,94 @@ class Ui_MainWindow(QObject):
         gvl.addLayout(hl)
         minigames_group.setLayout(gvl)
         ghl = QHBoxLayout()
-        ghl.addWidget(minigames_group, 1)
-
+        ghl.addWidget(minigames_group)
         ghl.addSpacerItem(QSpacerItem(self.spacing, 1, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
 
-        output_group = QGroupBox('Output Settings', tab)
-        output_group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        spoiler_check = QCheckBox('Create Spoiler Log', output_group)
-        spoiler_check.setObjectName('SpoilerCheck')
-        race_check = QCheckBox('Race Mode', output_group)
-        race_check.setObjectName('RaceCheck')
-        unrandomizer_check = QCheckBox('Unrandomizer Mode', output_group)
-        unrandomizer_check.setObjectName('UnrandomCheck')
-        platform_box = RandoComboBox(output_group)
-        platform_box.setObjectName('PlatformBox')
-        platform_box.addItems((
-            'Platform:  Console',
-            'Platform:  Emulator'
+        group = QGroupBox('Special', tab)
+        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        blup_check = QCheckBox('Blue Rupees', group)
+        owls_box = RandoComboBox(group)
+        owls_box.addItems((
+            'Owl Gifts:  None',
+            'Owl Gifts:  Overworld',
+            'Owl Gifts:  Dungeons',
+            'Owl Gifts:  All'
         ))
-        ovl = QVBoxLayout()
-        hl = QHBoxLayout()
-        hl.addWidget(spoiler_check)
-        hl.addSpacerItem(self.createHorizontalSpacer())
-        hl.addWidget(race_check)
-        ovl.addLayout(hl)
-        hl = QHBoxLayout()
-        hl.addWidget(unrandomizer_check)
-        hl.addSpacerItem(self.createHorizontalSpacer())
-        hl.addWidget(platform_box)
-        ovl.addLayout(hl)
-        output_group.setLayout(ovl)
-        ghl.addWidget(output_group, 1)
+        gvl = QVBoxLayout()
+        gvl.addWidget(blup_check)
+        gvl.addWidget(owls_box)
+        group.setLayout(gvl)
+        ghl.addWidget(group)
         vl.addLayout(ghl)
+
+        tab.setLayout(vl)
+        return tab
+
+
+    def createSettingsAdvancedTab(self) -> QWidget:
+        tab = QWidget()
+        vl = QVBoxLayout()
+
+        group = QGroupBox("Race Mode Settings", tab)
+        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        race_check = QCheckBox('Race Mode', group)
+        required_dungeons_box = RandoComboBox(group)
+        required_dungeons_box.addItems((
+            'Required Dungeons:  0',
+            'Required Dungeons:  1',
+            'Required Dungeons:  2',
+            'Required Dungeons:  3',
+            'Required Dungeons:  4',
+            'Required Dungeons:  5',
+            'Required Dungeons:  6',
+            'Required Dungeons:  7',
+            'Required Dungeons:  8',
+            'Required Dungeons:  9',
+        ))
+        ghl = QHBoxLayout()
+        ghl.addWidget(race_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(required_dungeons_box)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        padding = QLabel("", group)
+        padding.setFixedWidth(self.spacing)
+        ghl.addWidget(padding)
+        group.setLayout(ghl)
+        vl.addWidget(group)
+
+        group = QGroupBox("Hint Settings", tab)
+        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        ghl = QHBoxLayout()
+        padding = QLabel("", group)
+        padding.setFixedWidth(self.spacing)
+        ghl.addWidget(padding)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        hint_text = QLabel("Nothing here yet :P", group)
+        ft = hint_text.font()
+        ft.setPointSize(14)
+        hint_text.setFont(ft)
+        ghl.addWidget(hint_text)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        padding = QLabel("", group)
+        padding.setFixedWidth(self.spacing)
+        ghl.addWidget(padding)
+        group.setLayout(ghl)
+        vl.addWidget(group)
+
+        group = QGroupBox("Output Settings", tab)
+        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        ghl = QHBoxLayout()
+        spoiler_check = QCheckBox('Create Spoiler Log', group)
+        unrandomizer_check = QCheckBox('Unrandomizer Mode', group)
+        ghl.addWidget(spoiler_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(unrandomizer_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        padding = QLabel("", group)
+        padding.setFixedWidth(self.spacing)
+        ghl.addWidget(padding)
+        group.setLayout(ghl)
+        vl.addWidget(group)
 
         tab.setLayout(vl)
         return tab
@@ -319,15 +432,12 @@ class Ui_MainWindow(QObject):
         group = QGroupBox('Global', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
         enemy_check = QCheckBox('Randomize Enemies', group)
-        enemy_check.setObjectName('EnemyCheck')
         enemy_sizes_check = QCheckBox('Randomize Enemy Sizes', group)
-        enemy_sizes_check.setObjectName('EnemySizesCheck')
         chests_box = RandoComboBox(group)
-        chests_box.setObjectName('ChestTypeBox')
         chests_box.addItems((
-            'Chests:  Default',
-            'Chests:  Size',
-            'Chests:  Texture + Size'
+            'Chest Types:  Default',
+            'Chest Types:  Size',
+            'Chest Types:  Texture + Size'
         ))
         hl = QHBoxLayout()
         hl.addWidget(enemy_check)
@@ -341,19 +451,12 @@ class Ui_MainWindow(QObject):
         group = QGroupBox('Overworld', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
         kanalet_check = QCheckBox('Open Kanalet', group)
-        kanalet_check.setObjectName('KanaletCheck')
         mabe_check = QCheckBox('Open Mabe', group)
-        mabe_check.setObjectName('MabeCheck')
         mamu_check = QCheckBox('Open Mamu', group)
-        mamu_check.setObjectName('MamuCheck')
         bridge_check = QCheckBox('Completed Bridge', group)
-        bridge_check.setObjectName('BridgeCheck')
         d2_check = QCheckBox('Classic D2', group)
-        d2_check.setObjectName('D2Check')
         dungeons_check = QCheckBox('Shuffled Dungeons', group)
-        dungeons_check.setObjectName('DungeonsCheck')
         consumable_check = QCheckBox('Consumable Drops', group)
-        consumable_check.setObjectName('ConsumableCheck')
         hl = QHBoxLayout()
         hl.addWidget(kanalet_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
@@ -379,17 +482,17 @@ class Ui_MainWindow(QObject):
         group = QGroupBox('Logic', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
         pets_check = QCheckBox('Bad Pets', group)
-        pets_check.setObjectName('PetsCheck')
         fishing_check = QCheckBox('Fast Fishing', group)
-        fishing_check.setObjectName('FastFishingCheck')
         bombs_check = QCheckBox('Shuffled Bombs', group)
-        bombs_check.setObjectName('BombsCheck')
         book_check = QCheckBox('Free Book', group)
-        book_check.setObjectName('BookCheck')
         stalfos_check = QCheckBox('Fast Stalfos', group)
-        stalfos_check.setObjectName('StalfosCheck')
         powder_check = QCheckBox('Shuffled Powder', group)
-        powder_check.setObjectName('PowderCheck')
+        stealing_box = RandoComboBox(group)
+        stealing_box.addItems((
+            'Stealing:  Standard',
+            'Stealing:  Always',
+            'Stealing:  Never'
+        ))
         ovl = QVBoxLayout()
         hl = QHBoxLayout()
         hl.addWidget(pets_check)
@@ -405,6 +508,13 @@ class Ui_MainWindow(QObject):
         hl.addSpacerItem(self.createHorizontalSpacer())
         hl.addWidget(powder_check)
         ovl.addLayout(hl)
+        hl = QHBoxLayout()
+        hl.addWidget(stealing_box)
+        hl.addSpacerItem(self.createHorizontalSpacer())
+        hl.addWidget(QLabel("", group))
+        hl.addSpacerItem(self.createHorizontalSpacer())
+        hl.addWidget(QLabel("", group))
+        ovl.addLayout(hl)
         group.setLayout(ovl)
         vl.addWidget(group)
 
@@ -419,17 +529,11 @@ class Ui_MainWindow(QObject):
         group = QGroupBox('Speed Options', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
         boss_check = QCheckBox('Boss Cutscenes', group)
-        boss_check.setObjectName('BossAnimCheck')
         song_check = QCheckBox('Song Cutscenes', group)
-        song_check.setObjectName('SongAnimCheck')
         move_check = QCheckBox('Movement Speed', group)
-        move_check.setObjectName('MoveSpeedCheck')
         chest_check = QCheckBox('Chest Animations', group)
-        chest_check.setObjectName('ChestAnimCheck')
         key_check = QCheckBox('Key Animations', group)
-        key_check.setObjectName('KeyAnimCheck')
         item_check = QCheckBox('Item Get Animations', group)
-        item_check.setObjectName('ItemAnimCheck')
         hl = QHBoxLayout()
         hl.addWidget(boss_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
@@ -452,22 +556,13 @@ class Ui_MainWindow(QObject):
 
         group = QGroupBox('Item Pool', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        dungeons_box = RandoComboBox(group)
-        dungeons_box.setObjectName('DungeonItemsBox')
-        dungeons_box.addItems((
-            'Dungeon Items:  Standard',
-            'Dungeon Items:  Keysanity',
-            'Dungeon Items:  Keysy'
-        ))
         pool_box = RandoComboBox(group)
-        pool_box.setObjectName('ItemPoolBox')
         pool_box.addItems((
             'Item Pool:  Standard',
             'Item Pool:  Reduced',
             'Item Pool:  Plentiful'
         ))
         trap_box = RandoComboBox(group)
-        trap_box.setObjectName('TrapBox')
         trap_box.addItems((
             'Traps:  None',
             'Traps:  Few',
@@ -475,7 +570,6 @@ class Ui_MainWindow(QObject):
             'Traps:  Trapsanity'
         ))
         ovl = QVBoxLayout()
-        ovl.addWidget(dungeons_box)
         ovl.addWidget(pool_box)
         ovl.addWidget(trap_box)
         group.setLayout(ovl)
@@ -484,60 +578,77 @@ class Ui_MainWindow(QObject):
 
         group = QGroupBox('Difficulty', tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        super_check = QCheckBox('Super Weapons', group)
         damage_box = RandoComboBox(group)
-        damage_box.setObjectName('DamageBox')
         damage_box.addItems((
-            'Damage:  Easy',
-            'Damage:  Standard',
-            'Damage:  Hero',
+            'Damage:  0x',
+            'Damage:  1x',
+            'Damage:  2x',
             'Damage:  OHKO'
         ))
-        start_box = QSpinBox(tab)
-        start_box.setObjectName('StartHeartBox')
-        start_box.setPrefix('Starting Hearts:  ')
-        start_box.setMinimum(1)
-        start_box.setMaximum(20)
-        max_box = QSpinBox(tab)
-        max_box.setObjectName('MaxHeartBox')
-        max_box.setPrefix('Max Hearts:  ')
-        max_box.setMinimum(1)
-        max_box.setMaximum(20)
         ovl = QVBoxLayout()
-        ovl.addWidget(damage_box)
-        ovl.addWidget(start_box)
-        ovl.addWidget(max_box)
-        group.setLayout(ovl)
-        ghl.addSpacerItem(self.createHorizontalSpacer())
-        ghl.addWidget(group)
-
-        group = QGroupBox('Other', tab)
-        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        controls_box = RandoComboBox(group)
-        controls_box.setObjectName('ControlBox')
-        controls_box.addItems((
-            'Controls:  Standard',
-            'Controls:  DPAD',
-            'Controls:  360 Movement'
-        ))
-        stealing_box = RandoComboBox(group)
-        stealing_box.setObjectName('StealingBox')
-        stealing_box.addItems((
-            'Stealing:  Standard',
-            'Stealing:  Always',
-            'Stealing:  Never'
-        ))
-        super_check = QCheckBox('Super Weapons', group)
-        super_check.setObjectName('SuperWeaponsCheck')
-        ovl = QVBoxLayout()
-        ovl.addWidget(controls_box)
-        ovl.addWidget(stealing_box)
         ovl.addWidget(super_check)
+        ovl.addWidget(damage_box)
         group.setLayout(ovl)
         ghl.addSpacerItem(self.createHorizontalSpacer())
         ghl.addWidget(group)
 
         tab.setLayout(vl)
         return tab
+
+
+    def createSettingsUserTab(self) -> QWidget:
+        tab = QWidget()
+        vl = QVBoxLayout()
+
+        group = QGroupBox("Fun", tab)
+        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        ghl = QHBoxLayout()
+        music_box = RandoComboBox(group)
+        music_box.addItems((
+            "Music:  Vanilla",
+            "Music:  Shuffled",
+            "Music:  Removed"
+        ))
+        sound_box = QCheckBox("Randomize Sound Effects", group)
+        text_check = QCheckBox("Randomize Text", group)
+        ghl.addWidget(music_box)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(sound_box)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(text_check)
+        group.setLayout(ghl)
+        vl.addWidget(group)
+
+        group = QGroupBox("Tweaks", tab)
+        group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        gvl = QVBoxLayout()
+        ghl = QHBoxLayout()
+        beep_check = QCheckBox("Disable Low Health Beep", group)
+        controls_check = QCheckBox("360 Movement", group)
+        blur_check = QCheckBox("Blur Removal", group)
+        text_check = QCheckBox("Instant Text", group)
+        acorn_check = QCheckBox("Disable Guardian Acorn", group)
+        power_check = QCheckBox("Disable Piece of Power", group)
+        ghl.addWidget(blur_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(text_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(controls_check)
+        gvl.addLayout(ghl)
+        ghl = QHBoxLayout()
+        ghl.addWidget(beep_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(acorn_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        ghl.addWidget(power_check)
+        gvl.addLayout(ghl)
+        group.setLayout(gvl)
+        vl.addWidget(group)
+
+        tab.setLayout(vl)
+        return tab
+
 
     ## ==> END ##
 
@@ -560,43 +671,55 @@ class Ui_MainWindow(QObject):
         hl.addLayout(vl, 2)
 
         inst_box = RandoComboBox(tab)
-        inst_box.setObjectName('InstrumentStartBox')
         for i in range(9):
             inst_box.addItem(f'Starting Instruments:  {i}')
-        items_box = RandoComboBox(tab)
-        items_box.setObjectName('DungeonStartItemsBox')
-        items_box.addItems((
-            'Dungeon Items:  None',
-            'Dungeon Items:  Beaks',
-            'Dungeon Items:  MC',
-            'Dungeon Items:  MCB'
-        ))
         right_button = QPushButton('->', tab)
         right_button.setFixedSize(right_button.size() * 3)
         right_button.clicked.connect(self.window.moveListItemsRight)
+        button_font = right_button.font()
+        button_font.setPointSize(14)
+        right_button.setFont(button_font)
         left_button = QPushButton('<-', tab)
         left_button.setFixedSize(left_button.size() * 3)
         left_button.clicked.connect(self.window.moveListItemsLeft)
+        left_button.setFont(button_font)
         rupee_box = QSpinBox(tab)
-        rupee_box.setObjectName('RupeeBox')
         rupee_box.setPrefix('Rupees:  ')
         rupee_box.setMinimum(0)
         rupee_box.setMaximum(9999)
-        rupee_box.setFixedHeight(rupee_box.height() * 2)
         ft = rupee_box.font()
         ft.setPointSize(11)
         rupee_box.setFont(ft)
+        heartc_box = QSpinBox(tab)
+        heartc_box.setPrefix("Containers:  ")
+        heartc_box.setMinimum(0)
+        heartc_box.setMaximum(9)
+        heartc_box.setFont(ft)
+        heartp_box = QSpinBox(tab)
+        heartp_box.setPrefix("Pieces:  ")
+        heartp_box.setMinimum(0)
+        heartp_box.setMaximum(32)
+        heartp_box.setFont(ft)
+        heart_text = QLabel("Starting hearts:  3", tab)
+        heart_text.setObjectName("StartingHeartsText")
+        heart_text.setFixedHeight(30)
+        heart_text.setFont(ft)
+        heart_text.setAlignment(Qt.AlignmentFlag.AlignBottom)
         vl = QVBoxLayout()
+        padding = QLabel("", tab)
+        padding.setFixedWidth(self.spacing)
+        vl.addWidget(padding)
         vl.addSpacerItem(self.createVerticalSpacer())
         vl.addWidget(inst_box, 1)
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addWidget(items_box, 1)
         vl.addSpacerItem(self.createVerticalSpacer())
         vl.addWidget(right_button, 4)
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addWidget(left_button, 4)
         vl.addSpacerItem(self.createVerticalSpacer())
-        vl.addWidget(rupee_box, 2)
+        vl.addWidget(rupee_box, 1)
+        vl.addSpacerItem(self.createVerticalSpacer())
+        vl.addWidget(heart_text, 1)
+        vl.addWidget(heartc_box, 1)
+        vl.addWidget(heartp_box, 1)
         vl.addSpacerItem(self.createVerticalSpacer())
         hl.addLayout(vl, 1)
 
@@ -621,7 +744,7 @@ class Ui_MainWindow(QObject):
         tab = QWidget()
         hl = QHBoxLayout()
 
-        label = QLabel('Included', tab)
+        label = QLabel('Included Locations', tab)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         ft = label.font()
         ft.setPointSize(12)
@@ -637,26 +760,24 @@ class Ui_MainWindow(QObject):
         right_button = QPushButton('->', tab)
         right_button.setFixedSize(right_button.size() * 3)
         right_button.clicked.connect(self.window.moveListItemsRight)
+        button_font = right_button.font()
+        button_font.setPointSize(14)
+        right_button.setFont(button_font)
         left_button = QPushButton('<-', tab)
         left_button.setFixedSize(left_button.size() * 3)
         left_button.clicked.connect(self.window.moveListItemsLeft)
+        left_button.setFont(button_font)
         vl = QVBoxLayout()
-        vl.addSpacerItem(self.createVerticalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
+        padding = QLabel("", tab)
+        padding.setFixedWidth(self.spacing)
+        vl.addWidget(padding)
         vl.addSpacerItem(self.createVerticalSpacer())
         vl.addWidget(right_button, 4)
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addWidget(left_button, 4)
-        vl.addSpacerItem(self.createVerticalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addSpacerItem(self.createVerticalSpacer())
         hl.addLayout(vl, 1)
 
-        label = QLabel('Excluded', tab)
+        label = QLabel('Excluded Locations', tab)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         ft = label.font()
         ft.setPointSize(12)
@@ -677,7 +798,7 @@ class Ui_MainWindow(QObject):
         tab = QWidget()
         hl = QHBoxLayout()
 
-        label = QLabel('Included', tab)
+        label = QLabel('Included Tricks', tab)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         ft = label.font()
         ft.setPointSize(12)
@@ -699,30 +820,30 @@ class Ui_MainWindow(QObject):
             'Preset:  Custom',
             'NO LOGIC'
         ))
-        logic_box.setObjectName('LogicBox')
         right_button = QPushButton('->', tab)
         right_button.setFixedSize(right_button.size() * 3)
         right_button.clicked.connect(self.window.moveListItemsRight)
+        button_font = right_button.font()
+        button_font.setPointSize(14)
+        right_button.setFont(button_font)
         left_button = QPushButton('<-', tab)
         left_button.setFixedSize(left_button.size() * 3)
         left_button.clicked.connect(self.window.moveListItemsLeft)
+        left_button.setFont(button_font)
         vl = QVBoxLayout()
+        padding = QLabel("", tab)
+        padding.setFixedWidth(self.spacing)
+        vl.addWidget(padding)
         vl.addSpacerItem(self.createVerticalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addWidget(logic_box)
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addSpacerItem(self.createVerticalSpacer())
         vl.addWidget(right_button, 4)
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addWidget(left_button, 4)
         vl.addSpacerItem(self.createVerticalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
-        vl.addSpacerItem(self.createHorizontalSpacer())
         vl.addSpacerItem(self.createVerticalSpacer())
         hl.addLayout(vl, 1)
 
-        label = QLabel('Excluded', tab)
+        label = QLabel('Excluded Tricks', tab)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         ft = label.font()
         ft.setPointSize(12)
@@ -736,16 +857,6 @@ class Ui_MainWindow(QObject):
         hl.addLayout(vl, 2)
 
         tab.setLayout(hl)
-        return tab
-
-
-    def createPatchesTab(self) -> QWidget:
-        tab = QWidget()
-        return tab
-
-
-    def createCosmeticsTab(self) -> QWidget:
-        tab = QWidget()
         return tab
 
 
@@ -861,11 +972,28 @@ class Ui_MainWindow(QObject):
 
 
     def findCheckBox(self, name: str) -> QCheckBox:
-        return self.window.findChild(QCheckBox, name)
+        check = self.window.findChild(QCheckBox, name)
+        if check is None: # search by text if no name matches
+            for c in self.window.findChildren(QCheckBox):
+                if c.text() == name:
+                    check = c
+                    break
+        return check
 
 
     def findComboBox(self, name: str) -> RandoComboBox:
-        return self.window.findChild(RandoComboBox, name)
+        box = self.window.findChild(RandoComboBox, name)
+        if box is None: # search by prefix if no name matches
+            for b in self.window.findChildren(RandoComboBox):
+                b: RandoComboBox
+                if b.hidden_prefix == name:
+                    box = b
+                    break
+                else:
+                    if b.currentText().startswith(name):
+                        box = b
+                        break
+        return box
 
 
     def findLabel(self, name: str) -> QLabel:
@@ -885,14 +1013,86 @@ class Ui_MainWindow(QObject):
 
 
     def findSpinBox(self, name: str) -> QSpinBox:
-        return self.window.findChild(QSpinBox, name)
+        box = self.window.findChild(QSpinBox, name)
+        if box is None: # search by prefix if no name matches
+            for b in self.window.findChildren(QSpinBox):
+                if b.prefix().startswith(name):
+                    box = b
+                    break
+        return box
 
 
     def findChild(self, name: str) -> QWidget:
         return self.window.findChild(QWidget, name)
 
-    ## MAIN WINDOW CALLS <== END
 
+    def getSettingsDict(self) -> dict:
+        settings = {}
+
+        for c in self.window.findChildren(QCheckBox):
+            settings[c.text()] = c.isChecked()
+
+        for r in self.window.findChildren(RandoComboBox):
+            if r.hidden_prefix:
+                settings[r.hidden_prefix] = r.currentText()
+            else:
+                k,v = r.currentText().split(':')
+                settings[k.strip()] = v.strip()
+
+        for s in self.window.findChildren(QSpinBox):
+            k = s.prefix().split(':')[0]
+            settings[k] = s.value()
+
+        # combobox value is outputted as a string, convert to int if possible so it looks cleaner
+        for k,v in settings.items():
+            if str(v).isdigit():
+                settings[k] = int(v)
+
+        return settings
+
+
+    def getSettingsWidgets(self) -> list:
+        widgets = []
+        exclusions = ()
+
+        for c in self.window.findChildren(QCheckBox):
+            if c.text() not in exclusions:
+                widgets.append(c)
+        for r in self.window.findChildren(RandoComboBox):
+            widgets.append(r)
+        for s in self.window.findChildren(QSpinBox):
+            widgets.append(s)
+
+        return widgets
+
+
+    def setWidgetSetting(self, k, v) -> None:
+        check = self.findCheckBox(k)
+        if check is not None:
+            check.setChecked(v)
+            return
+
+        box = self.findComboBox(k)
+        if box is None:
+            box = self.findComboBox(f"{k}:  ")
+        if box is not None:
+            items = [box.itemText(i) for i in range(box.count())]
+            if box.hidden_prefix:
+                text = str(v)
+            else:
+                text = f"{k}:  {v}"
+            try:
+                index = items.index(text)
+            except ValueError:
+                pass
+            else:
+                box.setCurrentIndex(index)
+
+        box = self.findSpinBox(k)
+        if box is not None:
+            box.setValue(v)
+
+    ## MAIN WINDOW CALLS <== END
 
 
     ########################################################################
@@ -902,17 +1102,33 @@ class Ui_MainWindow(QObject):
         """Iterates through the settings and adds the descriptions from Info/Descriptions.yml"""
 
         for option in DESC_DEFS:
-            widget = self.findChild(option)
+            option = option.replace('_', ' ')
+            widget = self.findCheckBox(option)
             if widget is None:
-                continue
-            widget.installEventFilter(self)
+                widget = self.findSpinBox(option)
+                if widget is None:
+                    widget = self.findComboBox(option)
+            if widget is not None:
+                widget.installEventFilter(self)
 
 
     def eventFilter(self, source: QWidget, event):
         match event.type():
             case QEvent.Type.HoverEnter:
-                self.window.current_option = source.objectName()
-                self.setExplanationText(DESC_DEFS[source.objectName()])
+                desc_entry = ""
+                match source:
+                    case QCheckBox():
+                        desc_entry = source.text()
+                    case QSpinBox():
+                        desc_entry = source.prefix().split(':')[0]
+                    case RandoComboBox():
+                        if source.hidden_prefix:
+                            desc_entry = source.hidden_prefix
+                        else:
+                            desc_entry = source.currentText().split(':')[0]
+                if desc_entry:
+                    desc_entry = desc_entry.replace(' ', '_')
+                    self.setExplanationText(DESC_DEFS[desc_entry])
             case QEvent.Type.HoverLeave:
                 self.setExplanationText()
 
@@ -924,20 +1140,26 @@ class Ui_MainWindow(QObject):
     def setupSignals(self) -> None:
         """Connects all necessary widget signals to their respective functions"""
 
-        for check in self.window.findChildren(QCheckBox):
-            check.clicked.connect(self.window.checkClicked)
-
+        # run specific signals first
         self.findLineEdit("SeedLine").textChanged.connect(self.window.updateSettingsString)
         self.findPushButton("CopyButton").clicked.connect(lambda x: self.window.clipboard.setText(self.findLineEdit("SettingsLine").text()))
         self.findPushButton("PasteButton").clicked.connect(self.window.pasteSettingsString)
         self.findPushButton("ResetButton").clicked.connect(self.window.applyDefaults)
         self.findPushButton("RandomSettingsButton").clicked.connect(self.window.randomizeSettings)
         self.findPushButton("RandomizeButton").clicked.connect(self.window.randomizeButton_Clicked)
-        self.findComboBox("MansionBox").currentIndexChanged.connect(self.window.updateSeashells)
-        self.findComboBox("OwlsBox").currentIndexChanged.connect(self.window.updateOwls)
-        self.findComboBox("TrapBox").currentIndexChanged.connect(self.window.updateSettingsString)
-        self.findComboBox("InstrumentStartBox").currentIndexChanged.connect(self.window.updateSettingsString)
-        self.findComboBox("LogicBox").currentIndexChanged.connect(self.window.updateSettingsString)
-        self.findComboBox("StealingBox").currentIndexChanged.connect(self.window.updateSettingsString)
-        self.findComboBox("ChestTypeBox").currentIndexChanged.connect(self.window.updateSettingsString)
-        self.findSpinBox("RupeeBox").valueChanged.connect(self.window.updateSettingsString)
+        self.findComboBox("Seashell Mansion").currentIndexChanged.connect(self.window.updateSeashells)
+        self.findComboBox("Owl Gifts").currentIndexChanged.connect(self.window.updateOwls)
+        self.findSpinBox("Pieces:  ").valueChanged.connect(self.window.updateStartingHeartsText)
+        self.findSpinBox("Containers:  ").valueChanged.connect(self.window.updateStartingHeartsText)
+        self.findCheckBox("Race Mode").clicked.connect(self.window.toggleRaceMode)
+
+        # update settings string afterwards
+        for check in self.window.findChildren(QCheckBox):
+            check.clicked.connect(lambda checked=False, cb=check: self.window.checkClicked(cb))
+            check.clicked.connect(self.window.updateSettingsString)
+
+        for box in self.window.findChildren(QSpinBox):
+            box.valueChanged.connect(self.window.updateSettingsString)
+
+        for box in self.window.findChildren(RandoComboBox):
+            box.currentIndexChanged.connect(self.window.updateSettingsString)

@@ -1,4 +1,4 @@
-from PySide6.QtGui import QClipboard, QScreen
+from PySide6.QtGui import QScreen
 from PySide6.QtWidgets import (QFileDialog, QMainWindow, QWidget,
                                QCheckBox, QComboBox, QLineEdit, QSpinBox,
                                QMessageBox, QApplication)
@@ -9,29 +9,30 @@ from RandomizerUI.update import UpdateProcess, LogicUpdateProcess
 from RandomizerCore.randomizer_data import *
 from pathlib import Path
 import random, re, string
-import RandomizerUI.settings_manager as settings_manager
+from RandomizerUI.settings_manager import SettingsManager, CHECK_LOCATIONS
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.clipboard = QClipboard()
+        self.clipboard = QApplication.clipboard()
         self.excluded_checks = set()
         self.starting_gear = list()
-        self.current_option = ''
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.addOptionDescriptions()
         self.ui.setupSignals()
 
         # Load User Settings
+        self.settings = SettingsManager(self.ui)
         self.applyDefaults()
         if not DEFAULTS:
-            settings_manager.loadSettings(self)
+            self.settings.load()
 
         self.updateOwls()
         self.updateSeashells()
+        self.updateStartingHeartsText()
+        self.toggleRaceMode()
 
         # Check for app & logic updates
         self.process = UpdateProcess()
@@ -57,11 +58,12 @@ class MainWindow(QMainWindow):
 
 
     def applyDefaults(self):
-        settings_manager.applyDefaults(self)
+        self.settings.reset()
 
 
     def updateSettingsString(self):
-        self.ui.findLineEdit("SettingsLine").setText(settings_manager.encodeSettings(self))
+        pass
+        # self.ui.findLineEdit("SettingsLine").setText(settings_manager.encodeSettings(self))
 
 
     def obtainVersion(self, version):
@@ -114,36 +116,32 @@ class MainWindow(QMainWindow):
         line.setText(adj1 + adj2 + char)
 
 
-    def checkClicked(self, checked):
+    def checkClicked(self, checkbox: QCheckBox):
         """Called every time a QCheckBox is clicked"""
 
-        if self.current_option not in settings_manager.CHECK_LOCATIONS:
-            return
-
-        match self.current_option:
-            case "RapidsCheck":
-                if checked:
+        match checkbox.text():
+            case "Rapids":
+                if checkbox.isChecked():
                     self.excluded_checks.difference_update(RAPIDS_REWARDS)
                     self.excluded_checks.difference_update(['owl-statue-rapids'])
                 else:
                     self.excluded_checks.update(RAPIDS_REWARDS)
                     if self.overworld_owls:
                         self.excluded_checks.update(['owl-statue-rapids'])
-            case "RupeesCheck":
+            case "Blue Rupees":
                 self.excluded_checks.difference_update(BLUE_RUPEES)
             case _:
-                print(self.current_option, self.ui.findCheckBox(self.current_option).isChecked())
-                locs = settings_manager.CHECK_LOCATIONS[self.current_option]
-                if checked:
-                    self.excluded_checks.difference_update(locs)
-                else:
-                    self.excluded_checks.update(locs)
-
-        self.updateSettingsString()
+                pass
+                if checkbox.text() in CHECK_LOCATIONS:
+                    locs = CHECK_LOCATIONS[checkbox.text()]
+                    if checkbox.isChecked():
+                        self.excluded_checks.difference_update(locs)
+                    else:
+                        self.excluded_checks.update(locs)
 
 
     def updateSeashells(self):
-        match self.ui.findComboBox("MansionBox").currentIndex():
+        match self.ui.findComboBox("Seashell Mansion:  ").currentIndex():
             case 0:
                 self.excluded_checks.update(SEASHELL_REWARDS)
             case 1:
@@ -161,11 +159,9 @@ class MainWindow(QMainWindow):
             case _:
                 self.excluded_checks.difference_update(SEASHELL_REWARDS)
 
-        self.updateSettingsString()
-
 
     def updateOwls(self):
-        match self.ui.findComboBox("OwlsBox").currentIndex():
+        match self.ui.findComboBox("Owl Gifts:  ").currentIndex():
             case 0:
                 self.overworld_owls = False
                 self.excluded_checks.difference_update(OVERWORLD_OWLS)
@@ -175,7 +171,7 @@ class MainWindow(QMainWindow):
                 self.overworld_owls = True
                 self.dungeon_owls = False
                 self.excluded_checks.difference_update(DUNGEON_OWLS)
-                if not self.ui.findCheckBox("RapidsCheck").isChecked():
+                if not self.ui.findCheckBox("Rapids").isChecked():
                     self.excluded_checks.update(['owl-statue-rapids'])
             case 2:
                 self.overworld_owls = False
@@ -184,10 +180,22 @@ class MainWindow(QMainWindow):
             case 3:
                 self.overworld_owls = True
                 self.dungeon_owls = True
-                if not self.ui.findCheckBox("RapidsCheck").isChecked():
+                if not self.ui.findCheckBox("Rapids").isChecked():
                     self.excluded_checks.update(['owl-statue-rapids'])
 
-        self.updateSettingsString()
+
+    def updateStartingHeartsText(self) -> None:
+        num_pieces = self.ui.findSpinBox("Pieces:  ").value()
+        num_containers = self.ui.findSpinBox("Containers:  ").value()
+        total_hearts = 3 + num_containers + int(num_pieces // 4)
+        label = self.ui.findLabel("StartingHeartsText")
+        label.setText(f"Starting hearts:  {total_hearts}")
+
+
+    def toggleRaceMode(self) -> None:
+        toggled = self.ui.findCheckBox("Race Mode").isChecked()
+        self.ui.findComboBox("Required Dungeons:  ").setDisabled(not toggled)
+        self.ui.findCheckBox("Create Spoiler Log").setEnabled(not toggled)
 
 
     # Randomize Button Clicked
@@ -225,7 +233,7 @@ class MainWindow(QMainWindow):
                     return
 
         # load mod settings from the UI, no need to decode settings string
-        settings = settings_manager.loadRandomizerSettings(self, seed)
+        settings = self.settings.fetch()
         settings_string = self.ui.findLineEdit("SettingsLine").text()
         outdir = f"{self.ui.findLineEdit('OutputLine').text()}/{settings['seed']}"
         self.progress_window = ProgressWindow(rom_path, outdir, ITEM_DEFS, LOGIC_DEFS, settings, settings_string)
@@ -246,7 +254,7 @@ class MainWindow(QMainWindow):
         return [loc for loc in locationList
                 if (loc in DUNGEON_OWLS and self.dungeon_owls)
                 or (loc in OVERWORLD_OWLS and self.overworld_owls)
-                or (loc in BLUE_RUPEES and self.ui.findCheckBox("RupeesCheck").isChecked())
+                or (loc in BLUE_RUPEES and self.ui.findCheckBox("Blue Rupees").isChecked())
                 or (loc not in DUNGEON_OWLS and loc not in OVERWORLD_OWLS and loc not in BLUE_RUPEES)
                 ]
 
@@ -257,7 +265,7 @@ class MainWindow(QMainWindow):
                 randomized_gear = STARTING_ITEMS[:]
                 for x in self.starting_gear:
                     randomized_gear.remove(x)
-    
+
                 random_list = self.ui.findListWidget("RandomItemsList")
                 random_list.clear()
                 for item in randomized_gear:
@@ -345,13 +353,7 @@ class MainWindow(QMainWindow):
 
     # some-check to Some Check
     def checkToList(self, check):
-        # slots = ('1St', '2Nd', '3Rd', '4Th', '5Th', '6Th', '7Th')
-
         s = re.sub("-", " ", check).title()
-
-        # for slot in slots:
-        #     s = s.replace(slot, slot.lower())
-
         return s
 
 
@@ -370,24 +372,23 @@ class MainWindow(QMainWindow):
     # Starting Item to starting-item and also converts names that were changed to look nicer
     def listToItem(self, item):
         s = re.sub(" ", "-", item).lower()
-        
         return s
 
 
     def pasteSettingsString(self):
-        try:
-            new_settings = settings_manager.decodeSettings(self.clipboard.text())
-            if new_settings:
-                settings_manager.loadSettings(self, new_settings)
-                self.ui.findLineEdit("SettingsLine").setText(self.clipboard.text())
-                self.tabChanged()
-        except: # Lots of potential different errors, so we use a general except to be safe
-            self.ui.showUserError('Could not decode settings string!')
+        pass
+        # try:
+        #     new_settings = settings_manager.decodeSettings(self.clipboard.text())
+        #     if new_settings:
+        #         settings_manager.loadSettings(self, new_settings)
+        #         self.ui.findLineEdit("SettingsLine").setText(self.clipboard.text())
+        #         self.tabChanged()
+        # except: # Lots of potential different errors, so we use a general except to be safe
+        #     self.ui.showUserError('Could not decode settings string!')
 
 
     def randomizeSettings(self):
-        new_settings = settings_manager.randomizeSettings(self)
-        settings_manager.loadSettings(self, new_settings)
+        self.settings.randomize()
         self.tabChanged()
 
 
@@ -402,5 +403,5 @@ class MainWindow(QMainWindow):
 
     # Override close event to save settings
     def closeEvent(self, event):
-        settings_manager.saveSettings(self)
+        self.settings.save()
         event.accept()

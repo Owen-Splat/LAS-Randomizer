@@ -1,273 +1,67 @@
+from PySide6.QtWidgets import QCheckBox, QSpinBox
+from RandomizerUI.UI.custom_widgets import RandoComboBox
+from RandomizerUI.UI.ui_main import Ui_MainWindow
 from RandomizerCore.randomizer_data import *
 from pathlib import Path
 import yaml, base64, copy, random
 
 
-BASE_OPTIONS = {
-    'ChestsCheck': True,
-    'GiftsCheck': True,
-    'TradeCheck': False,
-    'LeavesCheck': True,
-    'HeartsCheck': True,
-    'ShellsCheck': True,
-    'MiscCheck': True,
-    'MansionBox': 2,
-    'BossCheck': True,
-    'InstrumentsCheck': False,
-    'ShopCheck': True,
-    'RupeesCheck': False,
-    'OwlsBox': 0,
-    'DampeCheck': False,
-    'RapidsCheck': False,
-    'FishingCheck': False,
-    'TrendyCheck': False,
-    'SpoilerCheck': True,
-    'RaceCheck': False,
-    'EnemyCheck': False,
-    'EnemySizesCheck': False,
-    'ChestTypeBox': 0,
-    'KanaletCheck': True,
-    'MabeCheck': False,
-    'MamuCheck': True,
-    'BridgeCheck': True,
-    'D2Check': False,
-    'DungeonsCheck': False,
-    'ConsumableCheck': True, # Helps beginner players not run into the issue of being too low on resources
-    'PetsCheck': False,
-    'FastFishingCheck': False,
-    # 'unlockedBombsCheck': True,
-    'BombsCheck': False,
-    'BookCheck': True,
-    'StalfosCheck': False,
-    'PowderCheck': False,
-    'BossAnimCheck': True,
-    'ChestAnimCheck': True,
-    'KeyAnimCheck': True,
-    'SongAnimCheck': False,
-    'ItemAnimCheck': True,
-    'MoveSpeedCheck': False,
-    'DungeonItemsBox': 0, # Dungeon items will appear in their respective dungeons
-    'ItemPoolBox': 0,
-    'TrapBox': 0,
-    'DamageBox': 0,
-    # 'ohkoCheck': False,
-    'StartHeartBox': 3,
-    'MaxHeartBox': 20,
-    'ControlBox': 0,
-    'StealingBox': 0, # May change, but players often feel frustrated at not being able to steal, not knowing sword is needed
-    # 'stealingCheck': # fast stealing always on in newer versions? TBD
-    'SuperWeaponsCheck': True,
-    # 'lv1BeamCheck': False,
-    # 'niceRodCheck': True,
-    # 'niceBombsCheck': False,
-    'InstrumentStartBox': 0,
-    'DungeonStartItemsBox': 3, # Beginner setting to start with map, compass, beak
-    'RupeeBox': 0,
-    'LogicBox': 0,
-    # 'BlurCheck': True, # May change, lots of people hate the blur and it even hurts some player's eyes
-    # 'MusicCheck': False,
-    # 'SoundCheck': False,
-    # 'BeepCheck': False,
-    'starting_gear': ['sword', 'shield', 'ocarina', 'song-mambo']
+CHECKBOX_DEFAULTS = (
+    "Chests",
+    "Free Gifts",
+    "Golden Leaves",
+    "Heart Pieces",
+    "Seashells",
+    "Miscellaneous",
+    "Boss Drops",
+    "Shop",
+    "Create Spoiler Log"
+)
+
+CHECKBOX_EXCLUSIONS = (
+    "Randomize Music",
+    "Randomize Sound Effects",
+    "Blur Removal"
+)
+
+SPINBOX_DEFAULTS = {
+    "Rupees:  ": 100,
+    "Containers:  ": 0,
+    "Pieces:  ": 0
 }
 
-EXTRA_OPTIONS = [
-    'theme',
-    'romfs_folder',
-    'output_folder',
-    'seed',
-    'platform',
-]
+COMBOBOX_DEFAULTS = {
 
-STRING_EXCLUSIONS = [
-    'MusicCheck',
-    'BlurCheck',
-]
+}
+
+DEFAULT_START_GEAR = (
+    "sword",
+    "shield",
+    "ocarina",
+    "song-mambo"
+)
 
 CHECK_LOCATIONS = {
-    'ChestsCheck': MISCELLANEOUS_CHESTS,
-    'GiftsCheck': FREE_GIFT_LOCATIONS,
-    'TradeCheck': TRADE_GIFT_LOCATIONS,
-    'LeavesCheck': LEAF_LOCATIONS,
-    'HeartsCheck': HEART_PIECE_LOCATIONS,
-    'ShellsCheck': SEASHELL_LOCATIONS,
-    'MiscCheck': MISC_LOCATIONS,
-    'BossCheck': BOSS_LOCATIONS,
-    'ShopCheck': SHOP_ITEMS,
-    'RupeesCheck': BLUE_RUPEES,
-    'DampeCheck': DAMPE_REWARDS,
-    'RapidsCheck': RAPIDS_REWARDS,
-    'FishingCheck': FISHING_REWARDS,
-    'TrendyCheck': TRENDY_REWARDS,
+    'Chests': MISCELLANEOUS_CHESTS,
+    'Free Gifts': FREE_GIFT_LOCATIONS,
+    'Trade Quest': TRADE_GIFT_LOCATIONS,
+    'Golden Leaves': LEAF_LOCATIONS,
+    'Heart Pieces': HEART_PIECE_LOCATIONS,
+    'Seashells': SEASHELL_LOCATIONS,
+    'Miscellaneous': MISC_LOCATIONS,
+    'Boss Drops': BOSS_LOCATIONS,
+    'Shop': SHOP_ITEMS,
+    'Blue Rupees': BLUE_RUPEES,
+    "Dampe": DAMPE_REWARDS,
+    'Rapids': RAPIDS_REWARDS,
+    'Fishing': FISHING_REWARDS,
+    'Trendy Game': TRENDY_REWARDS,
 }
 
 
 class MyDumper(yaml.Dumper):
     def increase_indent(self, flow=False, indentless=False):
         return super(MyDumper, self).increase_indent(flow, indentless)
-
-
-def applyDefaults(window):
-    for k,v in BASE_OPTIONS.items():
-        match v:
-            case bool():
-                window.ui.findCheckBox(k).setChecked(v)
-            case int():
-                box = window.ui.findComboBox(k)
-                if box != None:
-                    box.setCurrentIndex(v)
-                else:
-                    window.ui.findSpinBox(k).setValue(v)
-            case _:
-                exec(f"window.{k} = v")
-    
-    window.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
-    window.excluded_checks.update(FISHING_REWARDS)
-    window.excluded_checks.update(RAPIDS_REWARDS)
-    window.excluded_checks.update(DAMPE_REWARDS)
-    window.excluded_checks.update(TRENDY_REWARDS)
-    window.excluded_checks.difference_update(SHOP_ITEMS)
-    window.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
-    window.excluded_checks.update(TRADE_GIFT_LOCATIONS)
-    window.excluded_checks.difference_update(BOSS_LOCATIONS)
-    window.excluded_checks.difference_update(MISC_LOCATIONS)
-    window.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
-    window.excluded_checks.difference_update(SEASHELL_LOCATIONS)
-    window.excluded_checks.difference_update(BLUE_RUPEES)
-    window.updateSeashells()
-    window.updateOwls()
-    window.excluded_checks.difference_update(LEAF_LOCATIONS)
-    window.tabChanged()
-
-
-def saveSettings(window, for_string=False):
-    settings_dict = {
-        'theme': window.ui.theme,
-        'romfs_folder': window.ui.findLineEdit("RomfsLine").text(),
-        'output_folder': window.ui.findLineEdit("OutputLine").text(),
-        'seed': window.ui.findLineEdit("SeedLine").text(),
-        'platform': PLATFORMS[window.ui.findComboBox("PlatformBox").currentIndex()],
-    }
-
-    ldict = locals() # needed to be able to get the new variable value from exec
-    for k,v in BASE_OPTIONS.items():
-        match v:
-            case bool():
-                settings_dict[k] = window.ui.findCheckBox(k).isChecked()
-            case int():
-                box = window.ui.findComboBox(k)
-                if box != None:
-                    settings_dict[k] = box.currentIndex()
-                else:
-                    settings_dict[k] = window.ui.findSpinBox(k).value()
-            case _:
-                exec(f"v = window.{k}", globals(), ldict)
-                settings_dict[k] = ldict['v']
-
-    # for k,v in BASE_OPTIONS.items():
-    #     if isinstance(v, bool):
-    #         exec(f"v = window.ui.{k}.isChecked()", globals(), ldict)
-    #     elif isinstance(v, int):
-    #         if k.endswith('ComboBox'):
-    #             exec(f"v = window.ui.{k}.currentIndex()", globals(), ldict)
-    #         else:
-    #             exec(f"v = window.ui.{k}.value()", globals(), ldict)
-    #     else:
-    #         exec(f"v = window.{k}", globals(), ldict)
-    #     settings_dict[k] = ldict['v']
-    
-    settings_dict['excluded_locations'] = list(window.excluded_checks)
-
-    if for_string:
-        return settings_dict
-    
-    with open(SETTINGS_PATH, 'w') as f:
-        yaml.dump(settings_dict, f, Dumper=MyDumper, sort_keys=False)
-
-
-def loadSettings(window, settings_dict=SETTINGS):
-    all_options = [k for k,v in BASE_OPTIONS.items()]
-    all_options.extend(EXTRA_OPTIONS)
-    
-    for k,v in settings_dict.items():
-        if k not in all_options:
-            continue
-        match v:
-            case bool():
-                window.ui.findCheckBox(k).setChecked(v)
-            case int():
-                box = window.ui.findComboBox(k)
-                if box != None:
-                    box.setCurrentIndex(v)
-                else:
-                    window.ui.findSpinBox(k).setValue(v)
-        # try:
-        #     if isinstance(v, bool):
-        #         exec(f"window.ui.{k}.setChecked({v})")
-        #     elif isinstance(v, int):
-        #         if k.endswith('ComboBox'):
-        #             exec(f"window.ui.{k}.setCurrentIndex({v})")
-        #         else:
-        #             exec(f"window.ui.{k}.setValue({v})")
-        # except:
-        #     pass
-
-    if 'theme' in settings_dict:
-        if settings_dict['theme'].lower() in ('light', 'dark', 'diamond-black'):
-            window.ui.theme = str(settings_dict['theme'].lower())
-    if 'romfs_folder' in settings_dict:
-        if Path(settings_dict['romfs_folder']).exists():
-            window.ui.findLineEdit("RomfsLine").setText(settings_dict['romfs_folder'])
-    if 'output_folder' in settings_dict:
-        if Path(settings_dict['output_folder']).exists():
-            window.ui.findLineEdit("OutputLine").setText(settings_dict['output_folder'])
-    if 'seed' in settings_dict:
-        window.ui.findLineEdit("SeedLine").setText(settings_dict['seed'])
-    try:
-        window.ui.findComboBox("PlatformBox").setCurrentIndex(PLATFORMS.index(settings_dict['platform'].lower().strip()))
-    except (KeyError, TypeError, IndexError, ValueError):
-        window.ui.findComboBox("PlatformBox").setCurrentIndex(0)
-    try:
-        window.excluded_checks = set()
-        for check in settings_dict['excluded_locations']:
-            if check in TOTAL_CHECKS:
-                window.excluded_checks.add(check)
-    except (KeyError, TypeError):
-        for k,v in CHECK_LOCATIONS.items():
-            if not window.ui.findCheckBox(k).isChecked():
-                window.excluded_checks.update(v)
-        # if not window.ui.chestsCheck.isChecked():
-        #     window.excluded_checks.update(MISCELLANEOUS_CHESTS)
-        # if not window.ui.fishingCheck.isChecked():
-        #     window.excluded_checks.update(FISHING_REWARDS)
-        # if not window.ui.rapidsCheck.isChecked():
-        #     window.excluded_checks.update(RAPIDS_REWARDS)
-        # if not window.ui.dampeCheck.isChecked():
-        #     window.excluded_checks.update(DAMPE_REWARDS)
-        # if not window.ui.giftsCheck.isChecked():
-        #     window.excluded_checks.update(FREE_GIFT_LOCATIONS)
-        # if not window.ui.tradeGiftsCheck.isChecked():
-        #     window.excluded_checks.update(TRADE_GIFT_LOCATIONS)
-        # if not window.ui.bossCheck.isChecked():
-        #     window.excluded_checks.update(BOSS_LOCATIONS)
-        # if not window.ui.miscellaneousCheck.isChecked():
-        #     window.excluded_checks.update(MISC_LOCATIONS)
-        # if not window.ui.heartsCheck.isChecked():
-        #     window.excluded_checks.update(HEART_PIECE_LOCATIONS)
-        # if not window.ui.leavesCheck.isChecked():
-        #     window.excluded_checks.update(LEAF_LOCATIONS)
-        # if not window.ui.trendyCheck.isChecked():
-        #     window.excluded_checks.update(TRENDY_REWARDS)
-        # if not window.ui.shopCheck.isChecked():
-        #     window.excluded_checks.update(SHOP_ITEMS)
-    try:
-        window.starting_gear = []
-        for item in settings_dict['starting_gear']:
-            if item in STARTING_ITEMS:
-                if window.starting_gear.count(item) < STARTING_ITEMS.count(item):
-                    window.starting_gear.append(item)
-    except (KeyError, TypeError):
-        window.starting_gear = list() # reset starting gear to default if error
 
 
 def encodeSettings(window) -> str:
@@ -384,90 +178,181 @@ def decodeSettings(settings_str: str) -> dict:
     return new_settings
 
 
-def randomizeSettings(window):
-    settings_dict = saveSettings(window, for_string=True)
+# def randomizeSettings(window):
+#     settings_dict = saveSettings(window, for_string=True)
     
-    ldict = locals()
-    for k,v in BASE_OPTIONS.items():
-        match v:
-            case bool():
-                settings_dict[k] = bool(random.randint(0, 1))
-            case int():
-                box = window.ui.findComboBox(k)
-                if box != None:
-                    v = box.count() - 1
-                    settings_dict[k] = random.randint(0, v)
-                else:
-                    v = window.ui.findSpinBox(k).maximum()
-                    settings_dict[k] = min(random.randint(0, v), random.randint(0, v))
-        # elif isinstance(v, list):
-        #     if k != 'starting_gear':
-        #         continue
-        #     comp = STARTING_ITEMS
-        #     settings_dict[k] = []
-        #     for c in comp:
-        #         if random.randint(0, 24) == 24: # 4% chance for each item to be added
-        #             settings_dict[k].append(c)
-    
-    return settings_dict
+#     ldict = locals()
+#     for k,v in BASE_OPTIONS.items():
+#         match v:
+#             case bool():
+#                 settings_dict[k] = bool(random.randint(0, 1))
+#             case int():
+#                 box = window.ui.findComboBox(k)
+#                 if box != None:
+#                     v = box.count() - 1
+#                     settings_dict[k] = random.randint(0, v)
+#                 else:
+#                     v = window.ui.findSpinBox(k).maximum()
+#                     settings_dict[k] = min(random.randint(0, v), random.randint(0, v))
+#         # elif isinstance(v, list):
+#         #     if k != 'starting_gear':
+#         #         continue
+#         #     comp = STARTING_ITEMS
+#         #     settings_dict[k] = []
+#         #     for c in comp:
+#         #         if random.randint(0, 24) == 24: # 4% chance for each item to be added
+#         #             settings_dict[k].append(c)
+
+#     return settings_dict
 
 
-def loadRandomizerSettings(window, seed):
-    """Loads the necessary mod settings for the randomizer"""
+class SettingsManager:
+    """A class for managing user settings"""
 
-    mod_settings = {
-        'seed': seed,
-        'logic': LOGIC_PRESETS[window.ui.findComboBox("LogicBox").currentIndex()],
-        'platform': PLATFORMS[window.ui.findComboBox("PlatformBox").currentIndex()],
-        'create-spoiler': window.ui.findCheckBox("SpoilerCheck").isChecked(),
-        'free-book': window.ui.bookCheck.isChecked(),
-        'extended-consumable-drop': window.ui.extendedConsumableCheck.isChecked(),
-        'dungeon-items': DUNGEON_ITEM_SETTINGS[window.ui.dungeonItemsComboBox.currentIndex()],
-        'unlocked-bombs': window.ui.unlockedBombsCheck.isChecked(),
-        'shuffle-bombs': window.ui.shuffledBombsCheck.isChecked(),
-        'shuffle-powder': window.ui.shuffledPowderCheck.isChecked(),
-        'fast-fishing': window.ui.fastFishingCheck.isChecked(),
-        'fast-stealing': window.ui.stealingCheck.isChecked(),
-        'fast-songs': window.ui.songsCheck.isChecked(),
-        'shuffle-instruments': window.ui.instrumentCheck.isChecked(),
-        'starting-instruments': window.ui.instrumentsComboBox.currentIndex(),
-        'bad-pets': window.ui.badPetsCheck.isChecked(),
-        'open-kanalet': window.ui.kanaletCheck.isChecked(),
-        'open-bridge': window.ui.bridgeCheck.isChecked(),
-        'open-mamu': window.ui.mazeCheck.isChecked(),
-        'traps': TRAP_SETTINGS[window.ui.trapsComboBox.currentIndex()],
-        'blupsanity': window.ui.rupCheck.isChecked(),
-        'classic-d2': window.ui.swampCheck.isChecked(),
-        'owl-overworld-gifts': window.overworld_owls,
-        'owl-dungeon-gifts': window.dungeon_owls,
-        # 'owl-hints': True if OWLS_SETTINGS[window.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
-        'fast-stalfos': window.ui.stalfosCheck.isChecked(),
-        'chest-aspect': CHEST_ASPECT_SETTINGS[window.ui.chestAspectComboBox.currentIndex()],
-        'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in window.excluded_checks]) > 0 else False,
-        'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in window.excluded_checks]) > 0 else False,
-        # 'shuffle-companions': window.ui.companionCheck.isChecked(),
-        # 'randomize-entrances': window.ui.loadingCheck.isChecked(),
-        'randomize-music': window.ui.musicCheck.isChecked(),
-        'open-mabe': window.ui.openMabeCheck.isChecked(),
-        'boss-cutscenes': window.ui.bossCutscenesCheck.isChecked(),
-        'randomize-enemies': window.ui.enemyCheck.isChecked(),
-        'randomize-enemy-sizes': window.ui.enemySizesCheck.isChecked(),
-        # 'panel-enemies': True if len([s for s in DAMPE_REWARDS if s not in window.excluded_checks]) > 0 else False,
-        'shuffle-dungeons': window.ui.dungeonsCheck.isChecked(),
-        # 'keysanity': DUNGEON_ITEM_SETTINGS[window.ui.itemsComboBox.currentIndex()],
-        'blur-removal': window.ui.blurCheck.isChecked(),
-        'OHKO': window.ui.ohkoCheck.isChecked(),
-        'lv1-beam': window.ui.lv1BeamCheck.isChecked(),
-        'nice-rod': window.ui.niceRodCheck.isChecked(),
-        'nice-bombs': window.ui.niceBombsCheck.isChecked(),
-        'stealing': STEALING_REQUIREMENTS[window.ui.stealingComboBox.currentIndex()],
-        'fast-chests': window.ui.chestAnimationsCheck.isChecked(),
-        'fast-keys': window.ui.keyAnimationsCheck.isChecked(),
-        'starting-items': window.starting_gear,
-        'starting-rupees': window.ui.rupeesSpinBox.value(),
-        'excluded-locations': window.excluded_checks
-    }
-    return mod_settings
+    def __init__(self, ui: Ui_MainWindow):
+        self.ui = ui
+        self.saving = False
+
+
+    def save(self) -> None:
+        """Saves the current settings to a file"""
+
+        self.saving = True
+        with open(SETTINGS_PATH, 'w') as f:
+            yaml.dump(self.fetch(), f, Dumper=MyDumper, sort_keys=False)
+        self.saving = False
+
+
+    def load(self, settings=SETTINGS) -> None:
+        """Loads settings and applies them"""
+
+        for k,v in settings.items():
+            try:
+                match k.lower().strip():
+                    case "theme":
+                        if settings[k].lower().strip() in ("light", "dark", "diamond-black"):
+                            self.ui.theme = str(settings[k].lower().strip())
+                    case "romfs":
+                        romfs_path = Path(settings[k])
+                        if romfs_path != Path() and romfs_path.exists():
+                            self.ui.findLineEdit("RomfsLine").setText(settings[k])
+                    case "output":
+                        out_path = Path(settings[k])
+                        if out_path != Path() and out_path.exists():
+                            self.ui.findLineEdit("OutputLine").setText(settings[k])
+                    case "seed":
+                        seed = str(settings[k])
+                        if len(seed) > 32:
+                            seed = seed[:32]
+                        self.ui.findLineEdit("SeedLine").setText(seed)
+                    case "settings":
+                        for k,v in v.items():
+                            self.ui.setWidgetSetting(k, v)
+            except: # if it errors we dont really care why, ignore so it is left at the default value
+                continue
+
+        try:
+            self.ui.window.excluded_checks = set()
+            for check in settings['excluded locations']:
+                if check in TOTAL_CHECKS:
+                    self.ui.window.excluded_checks.add(check)
+        except (KeyError, TypeError):
+            for k,v in CHECK_LOCATIONS.items():
+                if not self.ui.findCheckBox(k).isChecked():
+                    self.ui.window.excluded_checks.update(v)
+        try:
+            self.ui.window.starting_gear = []
+            for item in settings['starting gear']:
+                if item in STARTING_ITEMS:
+                    if self.ui.window.starting_gear.count(item) < STARTING_ITEMS.count(item):
+                        self.ui.window.starting_gear.append(item)
+        except (KeyError, TypeError):
+            self.ui.window.starting_gear = list(DEFAULT_START_GEAR) # reset to default if error
+
+
+    def fetch(self) -> dict:
+        """Fetches the current user settings"""
+
+        seed = self.ui.findLineEdit('SeedLine').text()
+        if len(seed) > 32:
+            seed = seed[:32]
+        else:
+            if (seed == "") and (not self.saving):
+                random.seed()
+                seed = str(random.getrandbits(32))
+
+        outdir = self.ui.findLineEdit("OutputLine").text()
+        if not self.saving:
+            outdir = Path(outdir) / "atmosphere" / "contents" / "0100C2500FC20000"
+
+        settings = {
+            "RomFS": self.ui.findLineEdit("RomfsLine").text(),
+            "Output": outdir,
+            "Seed": seed,
+            "Settings": {}
+        }
+
+        settings["Settings"] = self.ui.getSettingsDict()
+        settings["Starting Gear"] = list(self.ui.window.starting_gear)
+        settings["Excluded Locations"] = list(self.ui.window.excluded_checks)
+        return settings
+
+
+    def randomize(self) -> None:
+        """Randomizes the current user settings"""
+
+        widgets = self.ui.getSettingsWidgets()
+
+        for widget in widgets:
+            match widget:
+                case QCheckBox():
+                    widget.setChecked(bool(random.randint(0, 1)))
+                case QSpinBox():
+                    widget.setValue(random.randint(widget.minimum(), widget.maximum()))
+                case RandoComboBox():
+                    widget.setCurrentIndex(0, widget.count() - 1)
+
+
+    def reset(self):
+        """Resets settings to the defaults"""
+
+        widgets = self.ui.getSettingsWidgets()
+
+        for widget in widgets:
+            match widget:
+                case QCheckBox():
+                    widget.setChecked(widget.text() in CHECKBOX_DEFAULTS)
+                case QSpinBox():
+                    widget.setValue(SPINBOX_DEFAULTS[widget.prefix()])
+                case RandoComboBox():
+                    if widget.hidden_prefix:
+                        k = widget.hidden_prefix
+                    else:
+                        k = widget.currentText().split(':')[0]
+                    if k in COMBOBOX_DEFAULTS:
+                        widget.setCurrentIndex(COMBOBOX_DEFAULTS[k])
+                    else:
+                        widget.setCurrentIndex(0)
+                case _:
+                    raise TypeError("Unknown widget type when resetting settings!")
+
+        self.ui.window.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
+        self.ui.window.excluded_checks.update(FISHING_REWARDS)
+        self.ui.window.excluded_checks.update(RAPIDS_REWARDS)
+        self.ui.window.excluded_checks.update(DAMPE_REWARDS)
+        self.ui.window.excluded_checks.update(TRENDY_REWARDS)
+        self.ui.window.excluded_checks.difference_update(SHOP_ITEMS)
+        self.ui.window.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
+        self.ui.window.excluded_checks.update(TRADE_GIFT_LOCATIONS)
+        self.ui.window.excluded_checks.difference_update(BOSS_LOCATIONS)
+        self.ui.window.excluded_checks.difference_update(MISC_LOCATIONS)
+        self.ui.window.excluded_checks.difference_update(HEART_PIECE_LOCATIONS)
+        self.ui.window.excluded_checks.difference_update(SEASHELL_LOCATIONS)
+        self.ui.window.excluded_checks.difference_update(BLUE_RUPEES)
+        self.ui.window.excluded_checks.difference_update(LEAF_LOCATIONS)
+        self.ui.window.updateSeashells()
+        self.ui.window.updateOwls()
+        self.ui.window.tabChanged()
 
 
 def bitsToInt(bits: list) -> int:

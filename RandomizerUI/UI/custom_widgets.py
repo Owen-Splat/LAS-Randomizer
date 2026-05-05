@@ -18,6 +18,8 @@ class RandoListItem(QListWidgetItem):
 class RandoComboBox(QComboBox):
     """Custom QComboBox that resets the explanation text when the drop-down popup is closed"""
 
+    hidden_prefix = ""
+
     def hidePopup(self):
         QComboBox.hidePopup(self)
         if isinstance(self.window(), QMainWindow):
