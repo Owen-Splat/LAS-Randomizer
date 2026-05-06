@@ -53,9 +53,12 @@ with open(RESOURCE_PATH / 'Info' / 'descriptions.yml', 'r') as f:
 
 try:
     with open(SETTINGS_PATH, 'r') as settingsFile:
-        SETTINGS = yaml.safe_load(settingsFile)
+        settings = yaml.safe_load(settingsFile)
+        if settings is None:
+            raise TypeError
         DEFAULTS = False
-except FileNotFoundError:
+        SETTINGS = settings
+except (FileNotFoundError, TypeError):
     DEFAULTS = True
     SETTINGS = {}
 
@@ -84,21 +87,3 @@ TOTAL_CHECKS = set([
     *HEART_PIECE_LOCATIONS, *LEAF_LOCATIONS, *DUNGEON_OWLS,
     *OVERWORLD_OWLS, *BLUE_RUPEES, *SHOP_ITEMS, *TRENDY_REWARDS
 ])
-
-SEASHELL_VALUES = (0, 5, 15, 30, 40, 50)
-
-LOGIC_PRESETS = ('basic', 'advanced', 'glitched', 'hell', 'none')
-
-OWLS_SETTINGS = ('none', 'overworld', 'dungeons', 'all') # ('vanilla', 'hints', 'gifts', 'hybrid')
-
-TRAP_SETTINGS = ('none', 'few', 'many', 'trapsanity')
-
-CHEST_ASPECT_SETTINGS = ('default', 'csmc', 'camc')
-
-DUNGEON_ITEM_SETTINGS = ('none', 'stone-beak', 'mc', 'mcb')
-
-KEYSANITY_SETTINGS = ('standard', 'keys', 'keys+mcb')
-
-PLATFORMS = ('console', 'emulator')
-
-STEALING_REQUIREMENTS = ('always', 'never', 'normal')
