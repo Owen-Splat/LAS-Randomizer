@@ -1,11 +1,11 @@
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
-import os
+from pathlib import Path
 
 
-def generateSpoilerLog(placements, logic_defs, out_dir, seed):
+def generateSpoilerLog(placements, logic_defs: dict, out_dir: Path, seed: str):
     # Make the output directory if it doesnt exist
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
+    if not out_dir.exists():
+        out_dir.mkdir(parents=True)
     
     regions = {'mabe-village': [], 'toronbo-shores': [], 'mysterious-woods': [], 'koholint-prairie': [], 'tabahl-wasteland': [], 'ukuku-prairie': [], 'sign-maze': [], 'goponga-swamp': [], 'taltal-heights': [], 'marthas-bay': [], 'kanalet-castle': [], 'pothole-field': [], 'animal-village': [], 'yarna-desert': [], 'ancient-ruins': [], 'rapids-ride': [], 'taltal-mountains-east': [], 'taltal-mountains-west': [], 'color-dungeon': [], 'tail-cave': [], 'bottle-grotto': [], 'key-cavern': [], 'angler-tunnel': [], 'catfish-maw': [], 'face-shrine': [], 'eagle-tower': [], 'turtle-rock': []}
     
@@ -13,7 +13,7 @@ def generateSpoilerLog(placements, logic_defs, out_dir, seed):
         if not key.startswith('starting-item') and logic_defs[key]['type'] in ['item', 'follower']:
             regions[logic_defs[key]['spoiler-region']].append(key)
     
-    with open(f'{out_dir}/spoiler_{seed}.txt', 'w') as output:
+    with open(out_dir / f"spoiler_{seed}.txt", 'w') as output:
         output.write('settings:\n')
         sets = list(placements['settings'])
         sets.sort()

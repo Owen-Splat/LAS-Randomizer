@@ -234,9 +234,7 @@ class MainWindow(QMainWindow):
         # load mod settings from the UI, no need to decode settings string
         settings = self.settings.fetch()
         settings_string = self.ui.findLineEdit("SettingsLine").text()
-        outdir = f"{self.ui.findLineEdit('OutputLine').text()}/{settings['seed']}"
-        self.progress_window = ProgressWindow(rom_path, outdir, ITEM_DEFS, LOGIC_DEFS, settings, settings_string)
-        # self.progress_window.setWindowTitle(f"{settings['seed']}")
+        self.progress_window = ProgressWindow(ITEM_DEFS, LOGIC_DEFS, settings, settings_string)
 
         match self.ui.theme:
             case "dark":

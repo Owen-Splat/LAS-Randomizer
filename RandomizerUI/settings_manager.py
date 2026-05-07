@@ -3,7 +3,7 @@ from RandomizerUI.UI.custom_widgets import RandoComboBox
 from RandomizerUI.UI.ui_main import Ui_MainWindow
 from RandomizerCore.randomizer_data import *
 from pathlib import Path
-import yaml, base64, copy, random
+import yaml, base64, copy, random, re
 
 
 CHECKBOX_DEFAULTS = ( # true if in this list, false if not
@@ -106,8 +106,12 @@ class SettingsManager:
         """Saves the current settings to a file"""
 
         self.saving = True
+        settings = self.fetch()
+        settings["Settings"] = dict(sorted(settings["Settings"].items()))
+        settings["Starting Gear"].sort()
+        settings["Excluded Locations"].sort(key=alphanumericSortKey)
         with open(SETTINGS_PATH, 'w') as f:
-            yaml.dump(self.fetch(), f, Dumper=MyDumper, sort_keys=False)
+            yaml.dump(settings, f, Dumper=MyDumper, sort_keys=False)
         self.saving = False
 
 
@@ -141,7 +145,8 @@ class SettingsManager:
 
         try:
             self.ui.window.excluded_checks = set()
-            for check in settings['excluded locations']:
+            for check in settings["Excluded Locations"]:
+                check = self.ui.window.listToCheck(str(check))
                 if check in TOTAL_CHECKS:
                     self.ui.window.excluded_checks.add(check)
         except (KeyError, TypeError):
@@ -150,7 +155,8 @@ class SettingsManager:
                     self.ui.window.excluded_checks.update(v)
         try:
             self.ui.window.starting_gear = []
-            for item in settings['starting gear']:
+            for item in settings["Starting Gear"]:
+                item = self.ui.window.listToItem(str(item))
                 if item in STARTING_ITEMS:
                     if self.ui.window.starting_gear.count(item) < STARTING_ITEMS.count(item):
                         self.ui.window.starting_gear.append(item)
@@ -169,20 +175,27 @@ class SettingsManager:
                 random.seed()
                 seed = str(random.getrandbits(32))
 
+        romdir = self.ui.findLineEdit("RomfsLine").text()
         outdir = self.ui.findLineEdit("OutputLine").text()
         if not self.saving:
-            outdir = Path(outdir) / "atmosphere" / "contents" / "0100C2500FC20000"
+            romdir = Path(romdir)
+            outdir = Path(outdir) / "atmosphere" / "contents" / "01006BB00C6F0000"
 
         settings = {
-            "RomFS": self.ui.findLineEdit("RomfsLine").text(),
+            "RomFS": romdir,
             "Output": outdir,
             "Seed": seed,
             "Settings": {}
         }
 
         settings["Settings"] = self.ui.getSettingsDict()
-        settings["Starting Gear"] = list(self.ui.window.starting_gear)
-        settings["Excluded Locations"] = list(self.ui.window.excluded_checks)
+        starting_gear = list(self.ui.window.starting_gear)
+        excluded_locations = list(self.ui.window.excluded_checks)
+        if self.saving:
+            starting_gear = [self.ui.window.checkToList(str(g)) for g in starting_gear]
+            excluded_locations = [self.ui.window.checkToList(str(l)) for l in excluded_locations]
+        settings["Starting Gear"] = starting_gear
+        settings["Excluded Locations"] = excluded_locations
         return settings
 
 
@@ -238,6 +251,7 @@ class SettingsManager:
         self.ui.window.excluded_checks.difference_update(SEASHELL_LOCATIONS)
         self.ui.window.excluded_checks.difference_update(BLUE_RUPEES)
         self.ui.window.excluded_checks.difference_update(LEAF_LOCATIONS)
+        self.ui.window.starting_gear = list(DEFAULT_START_GEAR)
         self.ui.window.updateSeashells()
         self.ui.window.updateOwls()
         self.ui.window.tabChanged()
@@ -409,3 +423,10 @@ def readString(data, start):
     
     result = str(result, 'ascii')
     return result
+
+
+def alphanumericSortKey(s):
+    """Splits the string into chunks of digits and non-digits"""
+
+    return [int(text) if text.isdigit() else text.lower() 
+            for text in re.split('([0-9]+)', s)]
