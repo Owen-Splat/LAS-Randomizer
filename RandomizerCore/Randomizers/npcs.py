@@ -85,18 +85,18 @@ def makeNpcChanges(npc, placements, settings):
         return
     
     # make the bomb refills not appear until you find your bombs
-    if npc['symbol'] == 'ItemBomb' and settings['shuffle-bombs']:
+    if npc['symbol'] == 'ItemBomb' and settings["Shuffled Bombs"]:
         npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
         return
-    if npc['symbol'] == 'ItemFeatherBomb' and settings['shuffle-bombs']:
+    if npc['symbol'] == 'ItemFeatherBomb' and settings["Shuffled Bombs"]:
         npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
         return
     
     # make the powder refills not appear until you find your powder
-    if npc['symbol'] == 'ItemMagicPowder' and settings['shuffle-powder']:
+    if npc['symbol'] == 'ItemMagicPowder' and settings["Shuffled Powder"]:
         npc['layoutConditions'].append({'category': 1, 'parameter': '!GetMagicPowder', 'layoutID': -1})
         return
-    if npc['symbol'] == 'ItemFeatherMagicPowder' and settings['shuffle-powder']:
+    if npc['symbol'] == 'ItemFeatherMagicPowder' and settings["Shuffled Powder"]:
         npc['layoutConditions'].append({'category': 1, 'parameter': '!GetMagicPowder', 'layoutID': -1})
         return
     
@@ -114,7 +114,7 @@ def makeNpcChanges(npc, placements, settings):
         del npc['layoutConditions'][0]
         return
     
-    if npc['symbol'] == 'NpcKiki' and settings['open-bridge']:
+    if npc['symbol'] == 'NpcKiki' and settings["Completed Bridge"]:
         npc['layoutConditions'][0] = {'category': 1, 'parameter': 'KikiGone', 'layoutID': -1}
         return
     
@@ -207,7 +207,7 @@ def makeNpcChanges(npc, placements, settings):
         return
 
     # Chest matching texture feature
-    if npc['symbol'] == 'ObjTreasureBox' and settings['chest-aspect'] == 'camc':
+    if npc['symbol'] == 'ObjTreasureBox' and settings["Chest Types"] == "Texture + Size":
         npc['graphics']['path'] = '$6'
         npc['graphics']['model'] = '$7'
         return

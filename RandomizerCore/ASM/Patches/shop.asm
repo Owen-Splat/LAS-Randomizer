@@ -3,13 +3,13 @@
 
 ;* Always allow stealing
 ; Ignores sword check and checks shopkeeper direction
-;settings stealing
+;settings Stealing
 .offset 0xa4a8f0
 b 0xa4a910
 
 
 ;* Never allow stealing
 ; Ignores sword check and prevents the player from stealing
-;settings !stealing
+;settings !Stealing
 .offset 0xa4a8f0
 b 0xa4a8f4

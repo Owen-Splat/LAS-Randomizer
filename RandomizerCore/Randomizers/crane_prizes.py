@@ -23,7 +23,7 @@ def makeDatasheetChanges(sheet, settings):
         # symbols.append(prize['symbol'])
 
         # Bombs should not be obtainable until you have bombs if shuffled bombs is on
-        if prize['symbol'] == 'Bomb' and settings['shuffle-bombs']:
+        if prize['symbol'] == 'Bomb' and settings["Shuffled Bombs"]:
             prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
             continue
 
@@ -41,7 +41,7 @@ def makeDatasheetChanges(sheet, settings):
                 'place': {'type': 2, 'index': 1}
             }))
 
-            if settings['shuffle-bombs']:
+            if settings["Shuffled Bombs"]:
                 prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}'})
             else:
                 prize['layouts'][2]['conditions'].append({'category': 2, 'parameter': '!SurfHarp'})

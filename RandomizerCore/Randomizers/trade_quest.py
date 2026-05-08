@@ -50,7 +50,7 @@ def kikiChanges(flowchart, settings, item_key, item_index):
     fork = event_tools.findEvent(flowchart, 'Event88')
     fork.data.forks.pop(0)
 
-    if settings['open-bridge']:
+    if settings["Completed Bridge"]:
         event_tools.insertEventAfter(flowchart, 'Event9', 'Event31')
         event_tools.insertEventAfter(flowchart, 'Event10', 'Event31')
 

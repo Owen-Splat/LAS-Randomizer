@@ -67,28 +67,28 @@ def makeStartChanges(flowchart, settings):
 
     player_start_event_flags = list(START_FLAGS)
 
-    if settings['open-kanalet']:
+    if settings["Open Kanalet"]:
         player_start_event_flags.append('GateOpen_Switch_KanaletCastle_01B')
     
-    if settings['open-bridge']: # flag for the bridge, we make kiki use another flag
+    if settings["Completed Bridge"]: # flag for the bridge, we make kiki use another flag
         player_start_event_flags.append('StickDrop')
     
-    if settings['open-mamu']:
+    if settings["Open Mamu"]:
         player_start_event_flags.append('MamuMazeClear')
     
-    if not settings['shuffle-bombs'] and settings['unlocked-bombs']:
+    if not settings["Shuffled Bombs"]:# and settings['unlocked-bombs']: # temp change
         player_start_event_flags.append(data.BOMBS_FOUND_FLAG)
     
-    if settings['randomize-enemies']: # special case where we need stairs under armos to be visible and open
+    if settings["Randomize Enemies"]: # special case where we need stairs under armos to be visible and open
         player_start_event_flags.append('AppearStairsFld10N')
         player_start_event_flags.append('AppearStairsFld11O')
     
-    if settings['fast-stalfos']: # set the door open flags for the first 3 master stalfos fights to be true
+    if settings["Fast Stalfos"]: # set the door open flags for the first 3 master stalfos fights to be true
         player_start_event_flags.append('DoorOpen_Btl1_L05_05F')
         player_start_event_flags.append('DoorOpen_Btl2_L05_04H')
         player_start_event_flags.append('DoorOpen_Btl3_L05_01F')
     
-    if settings['boss-cutscenes']: # set boss cutscenes to have already been watched
+    if settings["Boss Cutscenes"]: # set boss cutscenes to have already been watched
         player_start_event_flags.extend(BOSS_FLAGS)
     # if settings['nag-meesages']: # set annoying one-time messages to not pop-up
     #     player_start_event_flags.extend(MESSAGE_FLAGS)
@@ -101,27 +101,28 @@ def makeStartChanges(flowchart, settings):
     # Remove the part that kills the rooster after D7 in Level7DungeonIn_FlyingCucco
     event_tools.insertEventAfter(flowchart, 'Level7DungeonIn_FlyingCucco', 'Event476')
     
-    if settings['fast-stealing']:
-        # Remove the flag that says you stole so that the shopkeeper won't kill you
-        event_tools.createActionChain(flowchart, 'Event774', [
-            ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
-        ])
+    # if settings['fast-stealing']: # always on now
+    # Remove the flag that says you stole so that the shopkeeper won't kill you
+    event_tools.createActionChain(flowchart, 'Event774', [
+        ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
+    ])
 
-    # Auto give dungeon items when entering the dungeon (We have to do that for the level to be identified properly)
-    dungeon_item_setting = settings['dungeon-items']
-    if dungeon_item_setting != 'none':
-        event_defs = []
+    # REMOVING THIS FOR NOW BECAUSE I AM REWRITING HOW IT WORKS
+    # # Auto give dungeon items when entering the dungeon (We have to do that for the level to be identified properly)
+    # dungeon_item_setting = settings['dungeon-items']
+    # if dungeon_item_setting != 'none':
+    #     event_defs = []
 
-        if dungeon_item_setting in ['mc', 'mcb']:
-            event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
-            event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
+    #     if dungeon_item_setting in ['mc', 'mcb']:
+    #         event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
+    #         event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
 
-        if dungeon_item_setting in ['stone-beak', 'mcb']:
-            event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
+    #     if dungeon_item_setting in ['stone-beak', 'mcb']:
+    #         event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
 
-        # Connect events to the DungeonIn and DefaultUpStairsOut entrypoints
-        event_tools.createActionChain(flowchart, 'Event539', event_defs)
-        event_tools.createActionChain(flowchart, 'Event550', event_defs)
+    #     # Connect events to the DungeonIn and DefaultUpStairsOut entrypoints
+    #     event_tools.createActionChain(flowchart, 'Event539', event_defs)
+    #     event_tools.createActionChain(flowchart, 'Event550', event_defs)
 
     # Remove the 7 second timeOut wait on the companion when it gets blocked from a loading zone
     timeout_events = ('Event637', 'Event660', 'Event693', 'Event696', 'Event371', 'Event407', 'Event478')

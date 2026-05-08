@@ -30,7 +30,7 @@ def makeDatasheetChanges(sheet, settings):
             rupee1Weight = 18
             rupee5Weight = 3
 
-            if settings['extended-consumable-drop']:
+            if settings["Consumable Drops"]:
                 nothingWeight = 56
             else:
                 nothingWeight = 71
@@ -41,7 +41,7 @@ def makeDatasheetChanges(sheet, settings):
             sheet['values'][i]['mLotTable'][3]['mWeight'] = nothingWeight
 
             # Adding new entries if extended consumable drop setting is enabled
-            if settings['extended-consumable-drop']:
+            if settings["Consumable Drops"]:
                 # Using a copy of an existing entry to use as a skeleton for our new data
                 dummyEntry = oead_tools.parseStruct(sheet['values'][i]['mLotTable'][0])
 

@@ -51,7 +51,7 @@ def readASM(asm, asm_data, settings):
 
         # parse condition
         if line.startswith(';settings'):
-            condition = line.split(' ')[1]
+            condition = line.split('s ')[1]
             state = True
             if condition.startswith('!'):
                 state = False
@@ -142,15 +142,18 @@ def preSetup(rand_state, settings):
     random.setstate(rand_state)
     asm_data = {}
 
+    # WE ARE GOING TO USE EXLAUNCH'S PATCH SYSTEM INSTEAD
+    # BUT FOR NOW I WILL SUPPORT THIS
+
     # store the actor ID of the randomized chest enemy
-    if settings['randomize-enemies']:
+    if settings["Randomize Enemies"]:
         from RandomizerCore.randomizer_data import ENEMY_DATA
         asm_data['CHEST_ENEMY'] = f"#{random.choice(ENEMY_DATA['Chest_Enemies'])}"
 
     # since the patches are written last, we can just change the stealing setting to a boolean
-    if settings['stealing'] == 'always':
-        settings['stealing'] = True
-    elif settings['stealing'] == 'never':
-        settings['stealing'] = False
+    if settings["Stealing"] == "Always":
+        settings["Stealing"] = True
+    elif settings["Stealing"] == "Never":
+        settings["Stealing"] = False
 
     return asm_data

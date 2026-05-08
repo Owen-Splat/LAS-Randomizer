@@ -6,9 +6,7 @@ from PySide6 import QtWidgets
 from RandomizerUI.UI.ui_progress_form import Ui_ProgressWindow
 from RandomizerCore.shuffler import ItemShuffler
 from RandomizerCore.mod_generator import ModsProcess
-import os
-import copy
-import shutil
+import copy, shutil, os
 
 
 class ProgressWindow(QtWidgets.QMainWindow):
@@ -19,9 +17,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui = Ui_ProgressWindow()
         self.ui.setupUi(self)
 
-        print(settings)
         self.randstate = None
-        self.out_dir = settings["Output"]
+        self.out_dir: Path = settings["Output"]
         self.seed : str = settings["Seed"]
         self.item_defs: dict = copy.deepcopy(item_defs)
         self.logic_defs: dict = copy.deepcopy(logic_defs)
@@ -81,7 +78,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         self.placements = {}
 
-        if os.path.exists(self.out_dir): # remove old mod files if generating a new one with the same seed
+        if self.out_dir.exists(): # remove old mod files if generating a new one with the same seed
             shutil.rmtree(self.out_dir, ignore_errors=True)
 
         # initialize the shuffler thread
@@ -137,7 +134,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.progressBar.setTextVisible(True)
         self.ui.progressBar.setFormat("%p%")
         self.ui.label.setText(f'Generating mod files...')
-        self.mods_process = ModsProcess(self.placements, self.rom_path, f'{self.out_dir}', self.item_defs, self.seed, self.randstate)
+        self.mods_process = ModsProcess(self.placements, self.settings["RomFS"], self.out_dir, self.item_defs, self.seed, self.randstate)
         self.mods_process.setParent(self)
         self.mods_process.progress_update.connect(self.updateProgress)
         self.mods_process.is_done.connect(self.modsDone)
@@ -149,7 +146,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.mods_error = True
         from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
-            f.write(f"{self.seed} - {self.logic.capitalize()} Logic")
+            f.write(f"{self.seed} - {self.settings["Preset"]} Logic")
             f.write(f'\n{self.settings_string}')
             f.write(f"\n\n{er_message}")
             f.write(f"\n\n{self.settings}")
@@ -158,14 +155,14 @@ class ProgressWindow(QtWidgets.QMainWindow):
     def modsDone(self):
         if self.mods_error:
             self.ui.label.setText("Error detected! Please check that your romfs are valid!")
-            if os.path.exists(self.out_dir): # delete files if user canceled
+            if self.out_dir.exists(): # delete files if user canceled
                 shutil.rmtree(self.out_dir, ignore_errors=True)
             self.done = True
             return
 
         if self.cancel:
             self.ui.label.setText("Canceling...")
-            if os.path.exists(self.out_dir): # delete files if user canceled
+            if self.out_dir.exists(): # delete files if user canceled
                 shutil.rmtree(self.out_dir, ignore_errors=True)
             self.done = True
             self.close()
