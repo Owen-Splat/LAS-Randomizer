@@ -233,10 +233,14 @@ class MainWindow(QMainWindow):
 
         # load mod settings from the UI, no need to decode settings string
         settings = self.settings.fetch()
+        logic = settings["Settings"]["Preset"]
+        if logic != "No Logic":
+            logic += " Logic"
         settings["Settings"]["Seashells Important"] = True if len([s for s in SEASHELL_REWARDS if s not in self.excluded_checks]) > 0 else False
         settings["Settings"]["Trade Important"] = True if len([t for t in TRADE_GIFT_LOCATIONS if t not in self.excluded_checks]) > 0 else False
         settings_string = self.ui.findLineEdit("SettingsLine").text()
         self.progress_window = ProgressWindow(ITEM_DEFS, LOGIC_DEFS, settings, settings_string)
+        self.progress_window.setWindowTitle(f"{seed} - {logic}")
 
         match self.ui.theme:
             case "dark":
