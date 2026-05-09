@@ -28,7 +28,9 @@ class ItemShuffler(QtCore.QThread):
 
         random.seed(settings["Seed"])
         self.settings = settings
-        self.logic = settings["Preset"]
+        self.logic = settings["Preset"].lower()
+        if self.logic == "no logic":
+            self.logic = "none"
         self.item_defs = item_defs
         self.logic_defs = logic_defs
         self.force_chests = ('zol-trap', 'stalfos-note')
