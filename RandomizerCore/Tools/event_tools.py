@@ -189,11 +189,9 @@ def createProgressiveItemSwitch(flowchart, item1, item2, flag, before=None, afte
 		{'itemKey': item2, 'keepCarry': False, 'messageEntry': ''}, after)
 	item2AddEvent = createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
 		{'itemKey': item2, 'count': 1, 'index': -1, 'autoEquip': False}, item2GetSeqEvent)
-	
-	flagSetEvent = createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-		{'symbol': flag, 'value': True}, item1AddEvent)
+
 	flagCheckEvent = createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-		{'symbol': flag}, {0: flagSetEvent, 1: item2AddEvent})
+		{'symbol': flag}, {0: item1AddEvent, 1: item2AddEvent})
 
 	insertEventAfter(flowchart, before, flagCheckEvent)
 
