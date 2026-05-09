@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 from PySide6 import QtWidgets
-from RandomizerUI.UI.ui_progress_form import Ui_ProgressWindow
+from RandomizerUI.UI.ui_progress import Ui_ProgressWindow
 from RandomizerCore.shuffler import ItemShuffler
 from RandomizerCore.mod_generator import ModsProcess
 import copy, shutil, os
@@ -30,9 +30,6 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         self.num_of_mod_tasks = 255
 
-        self.ui.openOutputFolder.setVisible(False)
-        self.ui.openOutputFolder.clicked.connect(self.openOutputFolderButtonClicked)
-
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files += 8
 
@@ -47,13 +44,6 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         if settings["Bad Pets"]:
             self.num_of_mod_tasks += 10
-
-        modded_enemies = 0
-        if settings["Randomize Enemies"]:
-            modded_enemies = 313
-        if settings["Randomize Enemy Sizes"]:
-            modded_enemies = 323
-        self.num_of_mod_tasks += modded_enemies
 
         if settings["Shuffled Dungeons"]:
             self.num_of_mod_tasks += 19
@@ -83,7 +73,6 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         # initialize the shuffler thread
         self.current_job = 'shuffler'
-        self.ui.progressBar.setMaximum(0) # busy status instead of direct progress
         self.ui.label.setText(f'Shuffling item placements...')
         self.shuffler_process =\
             ItemShuffler(self.settings, self.item_defs, self.logic_defs)
@@ -96,7 +85,7 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
     # receives the int signal as a parameter named progress
     def updateProgress(self, progress):
-        self.ui.progressBar.setValue(progress)
+        self.ui.progress_bar.setValue(progress)
 
 
     # receive the placements from the shuffler thread to the modgenerator
@@ -129,10 +118,10 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         # initialize the modgenerator thread
         self.current_job = 'modgenerator'
-        self.ui.progressBar.setValue(0)
-        self.ui.progressBar.setMaximum(self.num_of_mod_tasks)
-        self.ui.progressBar.setTextVisible(True)
-        self.ui.progressBar.setFormat("%p%")
+        self.ui.progress_bar.setValue(0)
+        self.ui.progress_bar.setMaximum(self.num_of_mod_tasks)
+        self.ui.progress_bar.setTextVisible(True)
+        self.ui.progress_bar.setFormat("%p%")
         self.ui.label.setText(f'Generating mod files...')
         self.mods_process = ModsProcess(self.placements, self.settings["RomFS"], self.out_dir, self.item_defs, self.seed, self.randstate)
         self.mods_process.setParent(self)
@@ -168,10 +157,10 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.close()
             return
 
-        self.ui.progressBar.setValue(self.num_of_mod_tasks)
+        self.ui.progress_bar.setValue(self.num_of_mod_tasks)
         self.ui.label.setText("All done! Check the README for instructions on how to play!")
-        self.ui.progressBar.setVisible(False)
-        self.ui.openOutputFolder.setVisible(True)
+        self.ui.progress_bar.setVisible(False)
+        self.ui.folder_button.setVisible(True)
         self.done = True
 
 
