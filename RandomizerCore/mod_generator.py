@@ -20,14 +20,11 @@ class ModsProcess(QtCore.QThread):
         self.placements = placements
         self.settings = self.placements.pop('settings')
 
-        self.rom_path = str(rom_path)
-        # if self.settings['platform'] == 'console':
-        # self.romfs_dir = out_dir + '/atmosphere/contents/01006BB00C6F0000/romfs'
-        # self.exefs_dir = out_dir + '/atmosphere/exefs_patches/las_randomizer'
-        # else:
-        out_dir = str(out_dir)
-        self.romfs_dir = out_dir + '/romfs'
-        self.exefs_dir = out_dir + '/exefs'
+        self.rom_path = rom_path
+        game_dir = out_dir / "atmosphere" / "contents" / "01006BB00C6F0000"
+        self.romfs_dir = game_dir / "romfs"
+        self.exefs_dir = game_dir / "exefs" # exefs files that exlaunch creates will be copied to here
+        self.config_dir = out_dir / "config" / "lasr-exl" # config file on sd card that our custom code reads settings from
 
         self.item_defs = items
         self.instruments = (
@@ -165,24 +162,21 @@ class ModsProcess(QtCore.QThread):
             chest_rooms.update(data.PANEL_CHEST_ROOMS)
 
             # Creating custom textures bfres files from the original one in the RomFS
-            bfresOutputFolder = os.path.join(RESOURCE_PATH, 'textures', 'chest', 'bfres')
+            bfresOutputFolder = RESOURCE_PATH / "textures" / "chest" / "bfres"
 
             bntx_tools.createChestBfresWithCustomTexturesIfMissing(
-                f'{self.rom_path}/region_common/actor/ObjTreasureBox.bfres',
-                bfresOutputFolder
+                str(self.rom_path / "region_common" / "actor" / "ObjTreasureBox.bfres"),
+                str(bfresOutputFolder)
             )
 
             # Copying files to the custom RomFS
-            actorOutputFolder = f'{self.romfs_dir}/region_common/actor'
-            if not os.path.exists(actorOutputFolder):
-                os.makedirs(actorOutputFolder)
+            actorOutputFolder: Path = self.romfs_dir / "region_common" / "actor"
+            if not actorOutputFolder.exists():
+                actorOutputFolder.mkdir(parents=True)
 
-            files = os.listdir(bfresOutputFolder)
-
-            # Loop through the files and copy them to the destination directory
-            for file in files:
-                source = os.path.join(bfresOutputFolder, file)
-                destination = os.path.join(actorOutputFolder, file)
+            for file in bfresOutputFolder.iterdir():
+                source = str(bfresOutputFolder / file.name)
+                destination = str(actorOutputFolder / file.name)
                 shutil.copy(source, destination)
 
         # CSMC Management (Chest size)
@@ -253,7 +247,8 @@ class ModsProcess(QtCore.QThread):
 
             self.writeFile(f'{data.CHEST_ROOMS[room]}.leb', room_data)
 
-            # Two special cases in D7 have duplicate rooms, once for pre-collapse and once for post-collapse. So we need to make sure we write the same data to both rooms.
+            # Two special cases in D7 have duplicate rooms, once for pre-collapse and once for post-collapse
+            # We need to make sure we write the same data to both rooms
             if room == 'D7-grim-creeper':
                 room_data = self.readFile('Lv07EagleTower_06H.leb')
                 room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
@@ -1253,8 +1248,8 @@ class ModsProcess(QtCore.QThread):
     def makeMusicChanges(self):
         """Replaces the BGM info in the lvb files with the shuffled songs"""
 
-        levels_path = f'{self.rom_path}/region_common/level'
-        folders = [f for f in os.listdir(levels_path) if not f.endswith('.ldb')]
+        levels_path = self.rom_path / "region_common" / "level"
+        folders = [f.name for f in levels_path.iterdir() if f.is_dir()]
 
         for folder in folders:
             if not self.thread_active:
@@ -1393,10 +1388,6 @@ class ModsProcess(QtCore.QThread):
         """Replaces the Title Screen logo with the Randomizer logo"""
 
         try:
-            # Creates the UI folder path
-            if not os.path.exists(f'{self.romfs_dir}/region_common/ui'):
-                os.makedirs(f'{self.romfs_dir}/region_common/ui')
-
             # Read the BNTX file from the sarc file and edit the title screen logo to include the randomizer logo
             sarc_data = self.readFile('StartUp.arc')
             bntx_tools.createRandomizerTitleScreenArchive(sarc_data)
@@ -1802,11 +1793,11 @@ class ModsProcess(QtCore.QThread):
     def changeLevelConfigs(self):
         """Edits the config of the lvb files for dungeons to allow companions"""
 
-        levels_path = f'{self.rom_path}/region_common/level'
+        levels_path = self.rom_path / "region_common" / "level"
 
         # allow companions inside every dungeon
         # exception being the Egg since companions can collide with Nightmare and cause a softlock
-        folders = [f for f in os.listdir(levels_path) if f.startswith('Lv') and not f.startswith('Lv09')]
+        folders = [f.name for f in levels_path.iterdir() if f.name.startswith("Lv") and not f.name.startswith("Lv09")]
 
         for folder in folders:
             if not self.thread_active:
@@ -1912,9 +1903,9 @@ class ModsProcess(QtCore.QThread):
 
         dir = self.getRelativeDir(file_name)
 
-        file_path = f'{self.romfs_dir}/{dir}/{file_name}'
+        file_path = str(self.romfs_dir / dir / file_name)
         if file_name not in self.out_files:
-            file_path = f'{self.rom_path}/{dir}/{file_name}'
+            file_path = str(self.rom_path / dir / file_name)
 
         if return_path:
             return file_path
@@ -1943,11 +1934,11 @@ class ModsProcess(QtCore.QThread):
 
         dir = self.getRelativeDir(file_name)
         if dir is not None:
-            file_path = f'{self.romfs_dir}/{dir}/{file_name}'
+            file_path = self.romfs_dir / dir / file_name
         else:
-            file_path = f'{self.exefs_dir}/{file_name}'
+            file_path = self.exefs_dir / file_name
 
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        file_path.parent.mkdir(parents=True, exist_ok=True)
 
         if file_name.endswith('bfevfl'):
             event_tools.writeFlow(file_path, data)
@@ -1969,15 +1960,15 @@ class ModsProcess(QtCore.QThread):
         """Reads the file_name to determine the directory relative to the romfs"""
 
         if file_name.endswith('leb'):
-            dir = f'region_common/level/{file_name.split("_")[0]}'
+            dir = Path("region_common") / "level" / file_name.split("_")[0]
         elif file_name.endswith('lvb'):
-            dir = f'region_common/level/{file_name.split(".")[0]}'
+            dir = Path("region_common") / "level" / file_name.split(".")[0]
         elif file_name.endswith('gsheet'):
-            dir = 'region_common/datasheets'
+            dir = Path("region_common") / "datasheets"
         elif file_name.endswith('bfevfl'):
-            dir = 'region_common/event'
+            dir = Path("region_common") / "event"
         elif file_name.endswith('arc'):
-            dir = 'region_common/ui'
+            dir = Path("region_common") / "ui"
         else:
             return None
 
