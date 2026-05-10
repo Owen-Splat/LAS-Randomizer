@@ -179,7 +179,7 @@ class SettingsManager:
         outdir = self.ui.findLineEdit("OutputLine").text()
         if not self.saving:
             romdir = Path(romdir)
-            outdir = Path(outdir) / "atmosphere" / "contents" / "01006BB00C6F0000"
+            outdir = Path(outdir)
 
         settings = {
             "RomFS": romdir,

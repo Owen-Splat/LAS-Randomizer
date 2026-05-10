@@ -18,8 +18,20 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.randstate = None
-        self.out_dir: Path = settings["Output"]
         self.seed : str = settings["Seed"]
+
+        # outdir should contain the seed name for console
+        # but if the path points to an emulator, the outdir should be the title id folder
+        out_dir: Path = settings["Output"]
+        if any(s for s in ("sdcard", "sdmc") if s in str(out_dir).lower()):
+            self.del_dir = out_dir / "atmosphere" / "contents" / "01006BB00C6F0000"
+            self.out_dir = out_dir
+        else:
+            self.del_dir = out_dir / self.seed
+            self.out_dir = out_dir / self.seed
+
+        # store the parent folder of the atmosphere folder to delete
+
         self.item_defs: dict = copy.deepcopy(item_defs)
         self.logic_defs: dict = copy.deepcopy(logic_defs)
         for k,v in settings["Settings"].items():
@@ -68,8 +80,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
 
         self.placements = {}
 
-        if self.out_dir.exists(): # remove old mod files if generating a new one with the same seed
-            shutil.rmtree(self.out_dir, ignore_errors=True)
+        if self.del_dir.exists(): # remove old mod files
+            shutil.rmtree(self.del_dir, ignore_errors=True)
 
         # initialize the shuffler thread
         self.current_job = 'shuffler'
@@ -83,18 +95,19 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.shuffler_process.start() # start the item shuffler
 
 
-    # receives the int signal as a parameter named progress
-    def updateProgress(self, progress):
+    def updateProgress(self, progress: int) -> None:
+        """Receives the current number of complete tasks to display with the progress bar"""
         self.ui.progress_bar.setValue(progress)
 
 
-    # receive the placements from the shuffler thread to the modgenerator
-    def receivePlacements(self, placements):
+    def receivePlacements(self, placements) -> None:
+        """Receives the placements and current random state from the shuffler thread"""
         self.placements = placements[0]
         self.randstate = placements[1]
 
 
-    def shufflerError(self, er_message=str):
+    def shufflerError(self, er_message=str) -> None:
+        """Called when the shuffler thread encounters an error and writes the error to a file"""
         self.shuffle_error = True
         from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
@@ -104,8 +117,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
             f.write(f'\n\n{self.settings}')
 
 
-    # receive signals when threads are done
-    def shufflerDone(self):
+    def shufflerDone(self) -> None:
+        """Receives a signal when the shuffler is done. If no error, start the modgenerator thread"""
         if self.shuffle_error:
             self.ui.label.setText("Something went wrong! Please report this to either GitHub or Discord!")
             self.done = True
@@ -131,7 +144,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.mods_process.start() # start the modgenerator
 
 
-    def modsError(self, er_message=str):
+    def modsError(self, er_message=str) -> None:
+        """Receives a signal when the modgenerator is done. If no error, start the modgenerator thread"""
         self.mods_error = True
         from RandomizerCore.Paths.randomizer_paths import LOGS_PATH
         with open(LOGS_PATH, 'w') as f:
@@ -141,18 +155,19 @@ class ProgressWindow(QtWidgets.QMainWindow):
             f.write(f"\n\n{self.settings}")
 
 
-    def modsDone(self):
+    def modsDone(self) -> None:
+        """Receives a signal when the modgenerator is done. If no error, display the finish text and button"""
         if self.mods_error:
             self.ui.label.setText("Error detected! Please check that your romfs are valid!")
-            if self.out_dir.exists(): # delete files if user canceled
-                shutil.rmtree(self.out_dir, ignore_errors=True)
+            if self.del_dir.exists(): # delete files if user canceled
+                shutil.rmtree(self.del_dir, ignore_errors=True)
             self.done = True
             return
 
         if self.cancel:
             self.ui.label.setText("Canceling...")
-            if self.out_dir.exists(): # delete files if user canceled
-                shutil.rmtree(self.out_dir, ignore_errors=True)
+            if self.del_dir.exists(): # delete files if user canceled
+                shutil.rmtree(self.del_dir, ignore_errors=True)
             self.done = True
             self.close()
             return
@@ -164,8 +179,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.done = True
 
 
-    # override the window close event to close the randomization thread
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
+        """Overrides the window close event to stop any running threads"""
         if self.done:
             event.accept()
         else:
@@ -178,7 +193,8 @@ class ProgressWindow(QtWidgets.QMainWindow):
                 self.mods_process.stop()
 
 
-    def openFolder(self, path):
+    def openFolder(self, path) -> None:
+        """Opens the output folder"""
         if platform.system() == "Windows":
             os.startfile(path)
         elif platform.system() == "Darwin":
@@ -187,6 +203,10 @@ class ProgressWindow(QtWidgets.QMainWindow):
             subprocess.Popen(["xdg-open", path])
 
 
-    def openOutputFolderButtonClicked(self):
-        self.openFolder(Path(self.out_dir).parent.absolute())
+    def openOutputFolderButtonClicked(self) -> None:
+        """Opens the output folder when the user clicks on the button"""
+        out_path = self.out_dir
+        if out_path.name != self.seed:
+            out_path = self.out_dir / "atmosphere" / "contents" / "01006BB00C6F0000"
+        self.openFolder(out_path)
         self.window().close()
