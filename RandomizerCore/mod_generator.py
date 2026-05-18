@@ -13,6 +13,7 @@ from RandomizerCore.Randomizers.heart_pieces import HeartPieceRandomizer
 from RandomizerCore.Randomizers.instruments import InstrumentRandomizer
 from RandomizerCore.Randomizers.small_keys import KeyRandomizer
 from RandomizerCore.Randomizers.owls import OwlStatueRandomizer
+from RandomizerCore.Randomizers.rupees import BlueRupeeRandomizer
 import copy, re, random, shutil, traceback
 
 
@@ -82,7 +83,7 @@ class ModsProcess(QtCore.QThread):
             # if self.thread_active: self.makeItemTextBoxes()
 
             if self.settings["Blue Rupees"] and self.thread_active:
-                self.makeLv10RupeeChanges()
+                BlueRupeeRandomizer(self)
 
             if self.settings["Shuffled Dungeons"] and self.thread_active:
                 self.shuffleDungeons()
@@ -1088,25 +1089,6 @@ class ModsProcess(QtCore.QThread):
 
         #     if self.thread_active:
         #         event_tools.writeFlow(f'{self.out_dir}/region_common/event/SinkingSword.bfevfl', flow)
-
-
-    def makeLv10RupeeChanges(self):
-        """Edits the room data for the 28 free standing rupees in Color Dungeon so they are randomized"""
-
-        from RandomizerCore.Randomizers import rupees
-
-        flow = self.file_manager.readFile('SinkingSword.bfevfl')
-        room_data = self.file_manager.readFile('Lv10ClothesDungeon_08D.leb')
-
-        for i in range(28):
-            if self.thread_active:
-                item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel(f'D0-rupee-{i + 1}', self.dungeon_trap_models)
-                room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', item_key, i)
-                rupees.makeEventChanges(flow.flowchart, i, item_key, item_index)
-            else: break
-
-        self.file_manager.writeFile('Lv10ClothesDungeon_08D.leb', room_data)
-        self.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
 
     def makeShopChanges(self):
