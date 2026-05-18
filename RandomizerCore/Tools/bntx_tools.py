@@ -1,6 +1,5 @@
 from PIL import Image
 import RandomizerCore.Tools.bntx_editor.bntx_editor as bntx_editor
-import RandomizerCore.Tools.oead_tools as oead_tools
 from RandomizerCore.Paths.randomizer_paths import RESOURCE_PATH, IS_RUNNING_FROM_SOURCE
 import os
 import struct
@@ -8,7 +7,6 @@ import quicktex.dds as quicktex_dds
 import quicktex.s3tc.bc3 as bc3
 from io import BytesIO
 
-from RandomizerCore.Randomizers import data
 from RandomizerCore.Tools.bntx_editor import bfres
 
 
@@ -98,7 +96,7 @@ def replaceTextureInFile(bntxFileInput, bntxFileOutput, textureName, textureFile
         editor.saveAs(bntxFileOutput)
 
 
-def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolder):
+def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolder, chest_textures):
 
     # Checking bfres folder path
     if not os.path.exists(bfresOutputFolder):
@@ -159,5 +157,5 @@ def createChestBfresWithCustomTexturesIfMissing(chestBfresPath, bfresOutputFolde
         if os.path.isfile(os.path.join(bfresOutputFolder, path)):
             fileCount += 1
 
-    if fileCount != (len(data.CHEST_TEXTURES) - 1):
+    if fileCount != (len(chest_textures) - 1):
         raise Exception('Missing bfres files in the output folder')

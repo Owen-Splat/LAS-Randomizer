@@ -8,6 +8,7 @@ from pathlib import Path
 from RandomizerCore.Helpers.file_manager import FileManager
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Randomizers.music import MusicRandomizer
+from RandomizerCore.Randomizers.chests import ChestRandomizer
 import copy, re, random, shutil, traceback
 
 
@@ -60,7 +61,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeGeneralDatasheetChanges()
             if self.thread_active: self.makeGeneralEventChanges()
 
-            if self.thread_active: self.makeChestContentFixes()
+            ChestRandomizer(self)
             if self.thread_active: self.makeEventContentChanges()
             if self.thread_active: self.makeTradeQuestChanges()
 
@@ -102,115 +103,6 @@ class ModsProcess(QtCore.QThread):
             if IS_RUNNING_FROM_SOURCE:
                 print(f'total tasks: {self.progress_value}')
             self.is_done.emit()
-
-
-    def makeChestContentFixes(self):
-        """Patch LEB files of rooms with chests to update their contents"""
-
-        chest_rooms = {}
-        chest_rooms.update(data.CHEST_ROOMS)
-
-        # CAMC Pre-Checks
-        if self.settings["Chest Types"] == "Texture + Size":
-            chest_rooms.update(data.PANEL_CHEST_ROOMS)
-
-            # Creating custom textures bfres files from the original one in the RomFS
-            bfresOutputFolder = RESOURCE_PATH / "textures" / "chest" / "bfres"
-
-            bntx_tools.createChestBfresWithCustomTexturesIfMissing(
-                str(self.rom_path / "region_common" / "actor" / "ObjTreasureBox.bfres"),
-                str(bfresOutputFolder)
-            )
-
-            # Copying files to the custom RomFS
-            actorOutputFolder: Path = self.romfs_dir / "region_common" / "actor"
-            if not actorOutputFolder.exists():
-                actorOutputFolder.mkdir(parents=True)
-
-            for file in bfresOutputFolder.iterdir():
-                source = str(bfresOutputFolder / file.name)
-                destination = str(actorOutputFolder / file.name)
-                shutil.copy(source, destination)
-
-        # CSMC Management (Chest size)
-        chest_sizes = copy.deepcopy(data.CHEST_SIZES)
-
-        if self.settings["Chest Types"] != "Default":
-            # if all seashell and trade gift locations are set to junk, set chests that contain them to be small
-            if not self.settings["Seashells Important"]:
-                chest_sizes['seashell'] = 0.8
-            if not self.settings["Trade Important"]:
-                chest_sizes['trade'] = 0.8
-        else:
-            for k in chest_sizes:
-                chest_sizes[k] = 1.0  # if scaled chest sizes is off, set every value to normal size
-
-        for room in chest_rooms:
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{chest_rooms[room]}.leb')
-
-            # Managing panels to set default chest texture for now as I cannot detect chest content (only $PANEL)
-            if room.startswith('panel-'):
-                for actor in room_data.actors:
-                    if actor.name.startswith(b'ObjTreasureBox'):
-                        room_data.setChestContent(
-                            actor.parameters[1].decode("utf-8"), actor.parameters[2],
-                            chest_size=1.0, chest_model=data.CHEST_TEXTURES['default'])
-                self.file_manager.writeFile(f'{data.PANEL_CHEST_ROOMS[room]}.leb', room_data)
-                continue
-
-            item_key, item_index = self.item_info_manager.getItemInfo(room)
-            item_type = self.item_defs[self.placements[room]]['type']
-
-            # Managing CSMC on the fly. TODO Make this cleaner. This should not be there.
-            if self.settings["Chest Types"] == "Size":
-                if item_key in ('HeartContainer', 'ClothesRed', 'ClothesBlue'):
-                    size = chest_sizes['junk']
-                elif item_key in ('SmallKey', 'Bomb_MaxUp', 'Arrow_MaxUp', 'MagicPowder_MaxUp'):
-                    size = chest_sizes['important']
-                else:
-                    size = chest_sizes[item_type]
-            else:
-                size = chest_sizes[item_type]
-
-            try:
-                item_chest_type = self.item_defs[self.placements[room]]['chest-type']
-            except KeyError:
-                item_chest_type = None
-
-            # Changing the texture and size of Stone Beaks if dungeon Owl rewards are enabled
-            if item_key == "StoneBeak" and self.settings["Owl Gifts"] in ("Dungeons", "All"):
-                item_chest_type = 'default'
-                size = chest_sizes['important']
-
-            # TODO Manage PanelDungeonPiece thanks to Dampe settings (need to check how it works)
-
-            # CAMC Management (Chest aspect - Texture management)
-            model = data.CHEST_TEXTURES['default'] if self.settings["Chest Types"] == "Texture + Size" else None
-            if self.settings["Chest Types"] == "Texture + Size" and item_chest_type is not None:
-                model = data.CHEST_TEXTURES[item_chest_type]
-
-            if room == 'taltal-5-chest-puzzle':
-                for i in range(5):
-                    room_data.setChestContent(item_key, item_index, i, size, model)
-            else:
-                room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
-
-            self.file_manager.writeFile(f'{data.CHEST_ROOMS[room]}.leb', room_data)
-
-            # Two special cases in D7 have duplicate rooms, once for pre-collapse and once for post-collapse
-            # We need to make sure we write the same data to both rooms
-            if room == 'D7-grim-creeper':
-                room_data = self.file_manager.readFile('Lv07EagleTower_06H.leb')
-                room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
-                self.file_manager.writeFile('Lv07EagleTower_06H.leb', room_data)
-
-            if room == 'D7-3f-horseheads':
-                room_data = self.file_manager.readFile('Lv07EagleTower_05G.leb')
-                room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
-                self.file_manager.writeFile('Lv07EagleTower_05G.leb', room_data)
 
 
     def makeSmallKeyChanges(self):
@@ -833,14 +725,6 @@ class ModsProcess(QtCore.QThread):
                 event_tools.insertEventAfter(flow.flowchart, 'Event150', 'Event151')
 
             self.file_manager.writeFile('PlayerStart.bfevfl', flow)
-
-        # ### TreasureBox event: Adds in events to make certain items be progressive as well as custom events for other items.
-        if self.thread_active:
-            flow = self.file_manager.readFile('TreasureBox.bfevfl')
-            chests.writeChestEvent(flow.flowchart)
-            if self.settings["Chest Animations"]:
-                chests.makeChestsFaster(flow.flowchart)
-            self.file_manager.writeFile('TreasureBox.bfevfl', flow)
 
         ### ShellMansionPresent event: Similar to TreasureBox, must make some items progressive and add custom events for other items.
         if self.thread_active:
