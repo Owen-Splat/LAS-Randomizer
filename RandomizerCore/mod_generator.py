@@ -1,9 +1,9 @@
 from PySide6 import QtCore
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE, RESOURCE_PATH
 from RandomizerCore.Tools import (bntx_tools, event_tools, leb, lvb, oead_tools)
-from RandomizerCore.Randomizers import (chests, conditions, crane_prizes, dampe, data, fishing, flags, golden_leaves,
-heart_pieces, instruments, item_drops, item_get, mad_batter, marin, miscellaneous, npcs, owls, player_start, rapids,
-seashell_mansion, shop, small_keys, tarin, trade_quest, tunic_swap)
+from RandomizerCore.Randomizers import (conditions, crane_prizes, dampe, data, fishing, flags,
+item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, rapids,
+seashell_mansion, shop, tarin, trade_quest, tunic_swap)
 from pathlib import Path
 from RandomizerCore.Helpers.file_manager import FileManager
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
@@ -12,6 +12,7 @@ from RandomizerCore.Randomizers.chests import ChestRandomizer
 from RandomizerCore.Randomizers.heart_pieces import HeartPieceRandomizer
 from RandomizerCore.Randomizers.instruments import InstrumentRandomizer
 from RandomizerCore.Randomizers.small_keys import KeyRandomizer
+from RandomizerCore.Randomizers.owls import OwlStatueRandomizer
 import copy, re, random, shutil, traceback
 
 
@@ -72,7 +73,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: InstrumentRandomizer(self)
             # if self.thread_active: self.makeShopChanges()
 
-            if self.thread_active: self.makeOwlStatueChanges()
+            if self.thread_active: OwlStatueRandomizer(self)
             if self.thread_active: self.makeTelephoneChanges()
 
             if self.thread_active: self.makeGeneralARCChanges()
@@ -1228,43 +1229,6 @@ class ModsProcess(QtCore.QThread):
             flow = self.file_manager.readFile('MarthaStatue.bfevfl')
             trade_quest.statueChanges(flow.flowchart)
             self.file_manager.writeFile('MarthaStatue.bfevfl', flow)
-
-
-    def makeOwlStatueChanges(self):
-        '''Edits the eventflows for the owl statues to give items, as well as one extra level file'''
-
-        if self.thread_active: # put the slime key check on the owl for now
-            flow = self.file_manager.readFile('FieldOwlStatue.bfevfl')
-            owls.addSlimeKeyCheck(flow.flowchart)
-            if self.settings["Owl Gifts"] in ("Overworld", "All"):
-                owls.makeFieldChanges(flow.flowchart, self.placements, self.item_defs)
-            self.file_manager.writeFile('FieldOwlStatue.bfevfl', flow)
-
-        if self.settings["Owl Gifts"] in ("Dungeons", "All"):
-            if self.thread_active:
-                flow = self.file_manager.readFile('DungeonOwlStatue.bfevfl')
-                owls.makeDungeonChanges(flow.flowchart, self.placements, self.item_defs)
-                self.file_manager.writeFile('DungeonOwlStatue.bfevfl', flow)
-
-            if self.thread_active:
-                room_data = self.file_manager.readFile('Lv01TailCave_04B.leb')
-                room_data.actors[0].parameters[0] = bytes('examine_Tail04B', 'utf-8')
-                self.file_manager.writeFile('Lv01TailCave_04B.leb', room_data)
-
-            if self.thread_active:
-                room_data = self.file_manager.readFile('Lv10ClothesDungeon_06C.leb')
-                room_data.actors[9].parameters[0] = bytes('examine_Color06C', 'utf-8')
-                self.file_manager.writeFile('Lv10ClothesDungeon_06C.leb', room_data)
-
-            if self.thread_active:
-                room_data = self.file_manager.readFile('Lv10ClothesDungeon_07D.leb')
-                room_data.actors[4].parameters[0] = bytes('examine_Color07D', 'utf-8')
-                self.file_manager.writeFile('Lv10ClothesDungeon_07D.leb', room_data)
-
-            if self.thread_active:
-                room_data = self.file_manager.readFile('Lv10ClothesDungeon_05F.leb')
-                room_data.actors[4].parameters[0] = bytes('examine_Color05F', 'utf-8')
-                self.file_manager.writeFile('Lv10ClothesDungeon_05F.leb', room_data)
 
 
 # TRENDY GAME STUFF, DO NOT DELETE
