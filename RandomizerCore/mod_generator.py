@@ -10,6 +10,7 @@ from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.chests import ChestRandomizer
 from RandomizerCore.Randomizers.heart_pieces import HeartPieceRandomizer
+from RandomizerCore.Randomizers.instruments import InstrumentRandomizer
 from RandomizerCore.Randomizers.small_keys import KeyRandomizer
 import copy, re, random, shutil, traceback
 
@@ -68,7 +69,7 @@ class ModsProcess(QtCore.QThread):
 
             if self.thread_active: KeyRandomizer(self) # also handles the golden leaves
             if self.thread_active: HeartPieceRandomizer(self)
-            if self.thread_active: self.makeInstrumentChanges()
+            if self.thread_active: InstrumentRandomizer(self)
             # if self.thread_active: self.makeShopChanges()
 
             if self.thread_active: self.makeOwlStatueChanges()
@@ -1008,40 +1009,6 @@ class ModsProcess(QtCore.QThread):
             # regardless of any errors, just consider this task done, the logo is not needed to play
             self.progress_value += 1
             self.progress_update.emit(self.progress_value)
-
-
-    def makeInstrumentChanges(self):
-        """Iterates through the Instrument rooms and edits the Instrument actor data"""
-
-        # Open up the already modded SinkingSword eventflow to make new events
-        flow = self.file_manager.readFile('SinkingSword.bfevfl')
-
-        for room in data.INSTRUMENT_ROOMS:
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{data.INSTRUMENT_ROOMS[room]}.leb')
-
-            item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel(room, self.dungeon_trap_models)
-
-            if self.settings["Shuffled Dungeons"]:
-                cur_dun = re.match('(.+)_\\d\\d[A-Z]', data.INSTRUMENT_ROOMS[room]).group(1)
-                for k,v in data.DUNGEON_ENTRANCES.items():
-                    dun = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
-                    if dun == cur_dun:
-                        ent_keys = list(self.placements['dungeon-entrances'].keys())
-                        ent_values = list(self.placements['dungeon-entrances'].values())
-                        d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
-                        destination = d[2] + d[3]
-            else:
-                destination = None
-
-            instruments.changeInstrument(flow.flowchart, item_key, item_index, model_path, model_name,
-                room, room_data, destination)
-
-            self.file_manager.writeFile(f'{data.INSTRUMENT_ROOMS[room]}.leb', room_data)
-
-        self.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
 
     def makeTelephoneChanges(self):
