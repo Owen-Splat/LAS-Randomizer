@@ -5,6 +5,7 @@ from RandomizerCore.Randomizers import (conditions, crane_prizes, dampe, data, f
 item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, rapids,
 seashell_mansion, shop, tarin, trade_quest, tunic_swap)
 from pathlib import Path
+from RandomizerCore.Fixes.rooms import RoomFixes
 from RandomizerCore.Helpers.file_manager import FileManager
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Randomizers.music import MusicRandomizer
@@ -61,9 +62,9 @@ class ModsProcess(QtCore.QThread):
     def run(self):
         try:
             self.music_randomizer = MusicRandomizer(self)
-            if self.thread_active: self.makeGeneralLEBChanges()
             if self.thread_active: self.makeGeneralDatasheetChanges()
             if self.thread_active: self.makeGeneralEventChanges()
+            if self.thread_active: RoomFixes(self)
 
             if self.thread_active: ChestRandomizer(self)
             if self.thread_active: self.makeEventContentChanges()
@@ -91,12 +92,6 @@ class ModsProcess(QtCore.QThread):
 
             if self.settings["Bad Pets"] and self.thread_active:
                 self.changeLevelConfigs()
-
-            if self.settings["Open Mabe"] and self.thread_active:
-                self.openMabe()
-
-            if self.thread_active: self.fixWaterLoadingZones()
-            if self.thread_active: self.fixRapidsRespawn()
 
         except Exception:
             er = traceback.format_exc()
@@ -601,62 +596,6 @@ class ModsProcess(QtCore.QThread):
         # event_tools.setEventSong(flow.flowchart, 'Event13', self.music_randomizer.songs_dict['BGM_SHOP_FAST'])
 
         self.file_manager.writeFile('Syrup.bfevfl', flow)
-
-
-    def makeGeneralLEBChanges(self):
-        """Fix some LEB files in ways that are always done, regardless of item placements"""
-
-        ### Mad Batters: Give the batters a 3rd parameter for the event entry point to run
-        # A: Bay
-        if self.thread_active:
-            room_data = self.file_manager.readFile('MadBattersWell01_01A.leb')
-            room_data.actors[2].parameters[2] = b'BatterA'
-            self.file_manager.writeFile('MadBattersWell01_01A.leb', room_data)
-
-        # B: Woods
-        if self.thread_active:
-            room_data = self.file_manager.readFile('MadBattersWell02_01A.leb')
-            room_data.actors[6].parameters[2] = b'BatterB'
-            self.file_manager.writeFile('MadBattersWell02_01A.leb', room_data)
-
-        # C: Mountain
-        if self.thread_active:
-            room_data = self.file_manager.readFile('MadBattersWell03_01A.leb')
-            room_data.actors[0].parameters[2] = b'BatterC'
-            self.file_manager.writeFile('MadBattersWell03_01A.leb', room_data)
-
-        ### Lanmola Cave: Remove the AnglerKey actor
-        if self.thread_active:
-            room_data = self.file_manager.readFile('LanmolaCave_02A.leb')
-            room_data.actors.pop(5)
-            self.file_manager.writeFile('LanmolaCave_02A.leb', room_data)
-
-        ### Classic D2: Turn the rock in front of Dungeon 2 into a swamp flower
-        if self.settings["Classic D2"] and self.thread_active:
-            room_data = self.file_manager.readFile('Field_03E.leb')
-            room_data.actors[12].type = 0x0E
-            self.file_manager.writeFile('Field_03E.leb', room_data)
-
-        ### Remove the BoyA and BoyB cutscene after getting the FullMoonCello
-        if self.thread_active:
-            room_data = self.file_manager.readFile('Field_12A.leb')
-
-            # remove link between boy[1] and AreaEventBox[8]
-            room_data.actors[1].relationships.x -= 1
-            room_data.actors[1].relationships.section_1.pop(0)
-            room_data.actors[8].relationships.y -=1
-            room_data.actors[8].relationships.section_3.pop(0)
-
-            self.file_manager.writeFile('Field_12A.leb', room_data)
-
-        ### Make Honeycomb show new graphics in tree, a different NPC key is used for when the player obtains the item
-        if self.thread_active:
-            room_data = self.file_manager.readFile('Field_09H.leb')
-            item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel('tarin-ukuku', self.trap_models)
-            room_data.actors[0].parameters[0] = bytes(model_path, 'utf-8')
-            room_data.actors[0].parameters[1] = bytes(model_name, 'utf-8')
-
-            self.file_manager.writeFile('Field_09H.leb', room_data)
 
 
     def makeGeneralEventChanges(self):
@@ -1305,75 +1244,3 @@ class ModsProcess(QtCore.QThread):
             level = self.file_manager.readFile(f'{folder}.lvb')
             level.config.allow_companions = True
             self.file_manager.writeFile(f'{folder}.lvb', level)
-
-
-    def fixWaterLoadingZones(self):
-        """Changes each water loading zone to be deactivated until the player has flippers
-
-        This is to prevent the player from potentially softlocking by entering them with the rooster"""
-
-        for room in data.WATER_LOADING_ZONES:
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{room}.leb')
-
-            for actor in data.WATER_LOADING_ZONES[room]:
-                room_data.actors[actor].switches[0] = (1, self.global_flags['FlippersFound'])
-
-            self.file_manager.writeFile(f'{room}.leb', room_data)
-
-
-    def fixRapidsRespawn(self):
-        """If the player reloads an autosave after completing the Rapids Race without flippers,
-        they will drown and then be sent to 0,0,0 in an endless falling loop
-
-        This is fixed by iterating over every touching water tile, and prevent reloading on them"""
-
-        rooms_to_fix = (
-            'Field_09N',
-            'Field_09O',
-            'Field_09P',
-            'Field_10P',
-        )
-
-        for room in rooms_to_fix:
-            if not self.thread_active:
-                break
-
-            # we want to edit the grid info, which is skipped over by default since we mostly leave it untouched
-            # so we have readFile() early return the path, and read the Room data here with edit_grid=True
-            room_path = self.file_manager.readFile(f'{room}.leb', return_path=True)
-            with open(room_path, 'rb') as f:
-                room_data = leb.Room(f.read(), edit_grid=True)
-
-            for tile in room_data.grid.tilesdata:
-                if tile.flags3['iswaterlava']:
-                    tile.flags3['respawnload'] = 0
-
-            self.file_manager.writeFile(f'{room}.leb', room_data)
-
-
-    def openMabe(self):
-        """Removes grass / monsters / rocks that block access to go outside of Mabe village"""
-
-        rooms_to_fix = {
-            'Field_10A': [0x624A97005CD29205],
-            'Field_10E': [0x62000A005D15AC9E, 0x620015005D15AC9E],
-            'Field_15B': [0x7200BB005CFF3740, 0x7200B9005CFF3740],
-            'Field_15C': [0x7200DC005CFF3741, 0x7200D6005CFF3741],
-        }
-
-        for room, elements_to_remove in rooms_to_fix.items():
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{room}.leb')
-
-            for element_key in elements_to_remove:
-                for index, actor in enumerate(room_data.actors):
-                    if actor.key == element_key:
-                        room_data.actors.pop(index)
-                        break
-
-            self.file_manager.writeFile(f'{room}.leb', room_data)

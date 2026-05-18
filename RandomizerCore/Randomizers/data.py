@@ -111,15 +111,6 @@ DUNGEON_MAP_ICONS = {
 }
 
 
-WATER_LOADING_ZONES = {
-    'Field_02O': [10],
-    'Field_03K': [3],
-    'Field_03O': [1],
-    'Field_14J': [5, 6],
-    'Field_15K': [1]
-}
-
-
 # CHEAT CODES
 INFINITE_BOMBS = '01000000 01CC077E 0000001E'
 INFINITE_ARROWS = '01000000 01CC077F 0000001E'
