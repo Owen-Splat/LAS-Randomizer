@@ -73,31 +73,6 @@ INSTRUMENT_ROOMS = {
 }
 
 
-HEART_ROOMS = {
-    'animal-village-northwest': 'Field_13L',
-    'animal-village-cave': 'AnimalVillageCave_01A',
-    'taltal-entrance-blocks': 'Tamaranch04_03B',
-    'north-wasteland': 'Field_05H',
-    'desert-cave': 'LanmolaCave_01A',
-    'graveyard-cave': 'UnderGrave_01B',
-    'mabe-well': 'TownWell_01A',
-    'ukuku-cave-west-loose': 'UkukuCave01_01A',
-    'ukuku-cave-east-loose': 'UkukuCave02_01B',
-    'bay-passage-sunken': 'MadBattersWellEnter_01B',
-    'river-crossing-cave': 'AnimalVillageEnter_01B',
-    'rapids-west-island': 'Field_06M',
-    'rapids-ascent-cave': 'RapidsRideExit_01A',
-    'kanalet-moat-south': 'Field_08J',
-    'south-bay-sunken': 'Field_15J',
-    'taltal-crossing-cave': 'Tamaranch04_02C',
-    'taltal-east-drop': 'EagleTowerExit_01A',
-    'taltal-west-escape': 'Field_03B',
-    'above-turtle-rock': 'Field_01A',
-    'pothole-north': 'Field_12H',
-    'woods-crossing-cave-loose': 'MysteriousWoodsCave01_01A',
-    'woods-north-cave-loose': 'MysteriousWoodsCave02_01A',
-    'diamond-island': 'Field_05E'
-}
 
 
 MODEL_SIZES = {

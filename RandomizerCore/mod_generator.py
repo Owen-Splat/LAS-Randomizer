@@ -9,6 +9,7 @@ from RandomizerCore.Helpers.file_manager import FileManager
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.chests import ChestRandomizer
+from RandomizerCore.Randomizers.heart_pieces import HeartPieceRandomizer
 from RandomizerCore.Randomizers.small_keys import KeyRandomizer
 import copy, re, random, shutil, traceback
 
@@ -61,12 +62,12 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeGeneralDatasheetChanges()
             if self.thread_active: self.makeGeneralEventChanges()
 
-            ChestRandomizer(self)
+            if self.thread_active: ChestRandomizer(self)
             if self.thread_active: self.makeEventContentChanges()
             if self.thread_active: self.makeTradeQuestChanges()
 
-            KeyRandomizer(self) # also handles the golden leaves
-            if self.thread_active: self.makeHeartPieceChanges()
+            if self.thread_active: KeyRandomizer(self) # also handles the golden leaves
+            if self.thread_active: HeartPieceRandomizer(self)
             if self.thread_active: self.makeInstrumentChanges()
             # if self.thread_active: self.makeShopChanges()
 
@@ -1039,32 +1040,6 @@ class ModsProcess(QtCore.QThread):
                 room, room_data, destination)
 
             self.file_manager.writeFile(f'{data.INSTRUMENT_ROOMS[room]}.leb', room_data)
-
-        self.file_manager.writeFile('SinkingSword.bfevfl', flow)
-
-
-    def makeHeartPieceChanges(self):
-        """Iterates through the nonsunken Heart Piece rooms and edits the Heart Piece actor data"""
-
-        flow = self.file_manager.readFile('SinkingSword.bfevfl')
-
-        sunken = [
-            'taltal-east-drop',
-            'south-bay-sunken',
-            'bay-passage-sunken',
-            'river-crossing-cave',
-            'kanalet-moat-south'
-        ]
-        non_sunken = (x for x in data.HEART_ROOMS if x not in sunken)
-
-        for room in non_sunken:
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{data.HEART_ROOMS[room]}.leb')
-            item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel(room, self.trap_models)
-            heart_pieces.changeHeartPiece(flow.flowchart, item_key, item_index, model_path, model_name, room, room_data)
-            self.file_manager.writeFile(f'{data.HEART_ROOMS[room]}.leb', room_data)
 
         self.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
