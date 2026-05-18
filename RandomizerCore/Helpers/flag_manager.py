@@ -21,6 +21,25 @@ class FlagManager:
 
 
     def addCustomFlags(self) -> None:
+        self.addFlag("SwordFoundFlag")
+        self.addFlag("ShieldFoundFlag")
+        self.addFlag("BraceletFoundFlag")
+        self.addFlag("LensFoundFlag")
+        self.addFlag("RedTunicFoundFlag")
+        self.addFlag("BlueTunicFoundFlag")
+        self.addFlag("GoriyaItemGetFlag")
+        self.addFlag("MamuItemGetFlag")
+        self.addFlag("ManboItemGetFlag")
+        self.addFlag("BeachMiscItemGetFlag")
+        self.addFlag("WoodsMiscItemGetFlag")
+        self.addFlag("PotholeItemGetFlag")
+        self.addFlag("DreamShrineItemGetFlag")
+        self.addFlag("RoosterCaveItemGetFlag")
+        self.addFlag("MermaidCaveItemGetFlag")
+        self.addFlag("BombsFoundFlag")
+        self.addFlag("RoosterFoundFlag")
+        self.addFlag("BowWowFoundFlag")
+
         self.addFlag('AnimalVillageHeartGet')
         self.addFlag('AnimalVillageCaveHeartGet')
         self.addFlag('TaltalEntranceBlocksHeartGet')
@@ -147,6 +166,16 @@ class FlagManager:
         # self.addFlag('ShopHeartGet')
 
 
+    def editNextUnusedFlag(self, flag_name: str) -> bool:
+        unused_names = [k for k,v in self.flags.items() if "unused" in k]
+        if len(unused_names) == 0:
+            return False
+        self.flags[flag_name] = self.flags.pop(unused_names[0])
+        return True
+
+
     def addFlag(self, flag_name: str) -> None:
-        self.index += 1
-        self.flags[flag_name] = self.index
+        result = self.editNextUnusedFlag(flag_name)
+        if not result:
+            self.index += 1
+            self.flags[flag_name] = self.index

@@ -1,6 +1,6 @@
 import RandomizerCore.Tools.event_tools as event_tools
 from RandomizerCore.Randomizers import item_get
-from RandomizerCore.Randomizers.data import INSTRUMENT_ROOMS, INSTRUMENT_FLAGS, MODEL_SIZES, MODEL_ROTATIONS, DUNGEON_ENTRANCES
+from RandomizerCore.Randomizers.data import MODEL_SIZES, MODEL_ROTATIONS, DUNGEON_ENTRANCES
 import re
 
 
@@ -110,3 +110,26 @@ class InstrumentRandomizer:
                 ('Fade', 'StartParam', {'colorB': 0.9, 'colorG': 0.9, 'colorR': 0.9, 'mode': 2, 'time': 0.75})
             ])
         ], level_jump)[0]
+
+
+INSTRUMENT_FLAGS = {
+    'D1-instrument': 'TailCaveInstrumentGet',
+    'D2-instrument': 'BottleGrottoInstrumentGet',
+    'D3-instrument': 'KeyCavernInstrumentGet',
+    'D4-instrument': 'AnglersTunnelInstrumentGet',
+    'D5-instrument': 'CatfishsMawInstrumentGet',
+    'D6-instrument': 'FaceShrineInstrumentGet',
+    'D7-instrument': 'EaglesTowerInstrumentGet',
+    'D8-instrument': 'TurtleRockInstrumentGet'
+}
+
+INSTRUMENT_ROOMS = {
+    'D1-instrument': 'Lv01TailCave_03G',
+    'D2-instrument': 'Lv02BottleGrotto_04F',
+    'D3-instrument': 'Lv03KeyCavern_06G',
+    'D4-instrument': 'Lv04AnglersTunnel_03B',
+    'D5-instrument': 'Lv05CatfishsMaw_01D',
+    'D6-instrument': 'Lv06FaceShrine_03E',
+    'D7-instrument': 'Lv07EagleTower_02G',
+    'D8-instrument': 'Lv08TurtleRock_01D'
+}

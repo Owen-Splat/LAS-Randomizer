@@ -1,6 +1,6 @@
 import RandomizerCore.Tools.event_tools as event_tools
 from RandomizerCore.Randomizers import item_get
-from RandomizerCore.Randomizers.data import HEART_FLAGS, MODEL_SIZES, MODEL_ROTATIONS
+from RandomizerCore.Randomizers.data import MODEL_SIZES, MODEL_ROTATIONS
 
 sunken = [
     'taltal-east-drop',
@@ -117,4 +117,30 @@ HEART_ROOMS = {
     'woods-crossing-cave-loose': 'MysteriousWoodsCave01_01A',
     'woods-north-cave-loose': 'MysteriousWoodsCave02_01A',
     'diamond-island': 'Field_05E'
+}
+
+HEART_FLAGS = {
+    'animal-village-northwest': 'AnimalVillageHeartGet',
+    'animal-village-cave': 'AnimalVillageCaveHeartGet',
+    'taltal-entrance-blocks': 'TaltalEntranceBlocksHeartGet',
+    'north-wasteland': 'NorthWastelandHeartGet',
+    'desert-cave': 'DesertCaveHeartGet',
+    'graveyard-cave': 'GraveyardCaveHeartGet',
+    'mabe-well': 'MabeWellHeartGet',
+    'ukuku-cave-west-loose': 'UkukuCaveWestHeartGet',
+    'ukuku-cave-east-loose': 'UkukuCaveEastHeartGet',
+    'bay-passage-sunken': 'BayPassageHeartGet',
+    'river-crossing-cave': 'RiverCrossingHeartGet',
+    'rapids-west-island': 'RapidsWestHeartGet',
+    'rapids-ascent-cave': 'RapidsAscentHeartGet',
+    'kanalet-moat-south': 'KanaletMoatHeartGet',
+    'south-bay-sunken': 'SouthBayHeartGet',
+    'taltal-crossing-cave': 'TaltalCrossingHeartGet',
+    'taltal-east-drop': 'TaltalEastHeartGet',
+    'taltal-west-escape': 'TaltalWestHeartGet',
+    'above-turtle-rock': 'TurtleRockHeartGet',
+    'pothole-north': 'PotholeHeartGet',
+    'woods-crossing-cave-loose': 'WoodsCrossingHeartGet',
+    'woods-north-cave-loose': 'WoodsNorthCaveHeartGet',
+    'diamond-island': 'DiamondIslandHeartGet'
 }

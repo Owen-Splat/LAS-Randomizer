@@ -7,17 +7,12 @@ from RandomizerCore.Fixes.Datasheets.fishing import FishingDatasheetFixes
 
 
 class DatasheetFixes:
+    """Make changes to some datasheets that are general in nature and not tied to specific item placements"""
+
     def __init__(self, mod_generator):
-        self.parent = mod_generator
-        self.makeGeneralDatasheetChanges()
-
-
-    def makeGeneralDatasheetChanges(self):
-        """Make changes to some datasheets that are general in nature and not tied to specific item placements"""
-
-        if self.parent.thread_active: NpcDatasheetFixes(self.parent)
-        if self.parent.thread_active: ItemDropDatasheetFixes(self.parent)
-        if self.parent.thread_active: ItemsDatasheetFixes(self.parent)
-        if self.parent.thread_active: ConditionsDatasheetFixes(self.parent)
-        if self.parent.thread_active: CraneGameDatasheetFixes(self.parent)
-        if self.parent.thread_active: FishingDatasheetFixes(self.parent)
+        if mod_generator.thread_active: NpcDatasheetFixes(mod_generator)
+        if mod_generator.thread_active: ItemDropDatasheetFixes(mod_generator)
+        if mod_generator.thread_active: ItemsDatasheetFixes(mod_generator)
+        if mod_generator.thread_active: ConditionsDatasheetFixes(mod_generator)
+        if mod_generator.thread_active: CraneGameDatasheetFixes(mod_generator)
+        if mod_generator.thread_active: FishingDatasheetFixes(mod_generator)
