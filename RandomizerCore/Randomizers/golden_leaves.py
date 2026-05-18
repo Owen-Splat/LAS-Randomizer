@@ -27,7 +27,6 @@ def addCrowKey(room_data, global_flags: dict):
     room_data.actors.append(checker)
 
 
-
 def addBomberKey(room_data, global_flags: dict):
     bomber = room_data.actors[0]
     bomber.relationships.y = 1
@@ -54,12 +53,10 @@ def addBomberKey(room_data, global_flags: dict):
     room_data.actors.append(checker)
 
 
-
 def addKillRoomKey(room_data, global_flags: dict):
     leaf = room_data.actors[5]
     leaf.type = 0xa9 # small key
     leaf.switches[1] = (1, global_flags['KeyGetKanalet02A']) # index of KeyGetKanalet02A
-
 
 
 def addCrackedWallKey(room_data, global_flags: dict):
@@ -88,7 +85,6 @@ def addCrackedWallKey(room_data, global_flags: dict):
     room_data.actors.append(checker)
 
 
-
 def addBallChainKey(room_data, global_flags: dict):
     key = copy.deepcopy(room_data.actors[0])
     key.key = int('A1002A405CF0F2E8', 16)
@@ -101,10 +97,8 @@ def addBallChainKey(room_data, global_flags: dict):
     room_data.actors.append(key)
 
 
-
 def createRoomKey(room_data, room: str, global_flags: dict):
     funcs[room](room_data, global_flags)
-
 
 
 funcs = {

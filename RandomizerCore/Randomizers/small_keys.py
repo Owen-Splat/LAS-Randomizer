@@ -1,50 +1,131 @@
 import RandomizerCore.Tools.event_tools as event_tools
 from RandomizerCore.Randomizers import item_get
+from RandomizerCore.Randomizers.golden_leaves import createRoomKey
+
+class KeyRandomizer:
+    def __init__(self, mod_generator):
+        self.parent = mod_generator
+        self.makeSmallKeyChanges()
 
 
+    def makeSmallKeyChanges(self):
+        """Patch SmallKey event and LEB files for rooms with small key drops to change them into other items"""
 
-def writeKeyEvent(flowchart, item_key, item_index, room):
-    """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
-    
-    # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-    if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
-        item_event = event_tools.createActionChain(flowchart, None, [
-            ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-        ], None)
-    else:
-        item_event = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
+        # Open up the SmallKey event to be ready to edit
+        flow = self.parent.file_manager.readFile('SmallKey.bfevfl')
 
-    event_tools.addEntryPoint(flowchart, room)
+        if self.parent.settings["Key Animations"]:
+            self.makeKeysFaster(flow.flowchart)
 
-    event_tools.createActionChain(flowchart, room, [
-        ('SmallKey', 'Deactivate', {}),
-        ('SmallKey', 'SetActorSwitch', {'value': True, 'switchIndex': 1}),
-        ('SmallKey', 'Destroy', {})
-    ], item_event)
+        for room in SMALL_KEY_ROOMS:
+            if not self.parent.thread_active:
+                break
+
+            room_data = self.parent.file_manager.readFile(f'{SMALL_KEY_ROOMS[room]}.leb')
+
+            # TODO: WE WONT NEED TO CHANGE THIS INTO A SMALL KEY ACTOR SOON
+            if room == 'pothole-final':
+                item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
+                act = room_data.actors[42]
+                act.type = 0xa9 # small key
+                act.posX += 1.5 # move right one tile
+                act.posZ -= 1.5 # move up one tile
+                act.switches[0] = (1, self.parent.global_flags['PotholeKeySpawn']) # index of PotholeKeySpawn
+                act.switches[1] = (1, 363) # index of the getflag, which is now unused0363
+            else:
+                item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
+
+            self.writeKeyEvent(flow.flowchart, item_key, item_index, room)
+            room_data.setSmallKeyParams(model_path, model_name, room, item_key)
+            self.parent.file_manager.writeFile(f'{SMALL_KEY_ROOMS[room]}.leb', room_data)
+
+            if room == 'D4-sunken-item': # special case. need to write the same data in 06A
+                room_data = self.parent.file_manager.readFile('Lv04AnglersTunnel_06A.leb')
+                room_data.setSmallKeyParams(model_path, model_name, room, item_key)
+                self.parent.file_manager.writeFile('Lv04AnglersTunnel_06A.leb', room_data)
+
+        if self.parent.thread_active:
+            self.makeGoldenLeafChanges(flow)
 
 
+    def makeGoldenLeafChanges(self, flow):
+        '''Make small key actors spawn for the golden leaf checks'''
 
-def makeKeysFaster(flowchart):
-    '''Gives control back to the player soon after triggering the key to fall'''
-    
-    event_tools.insertEventAfter(flowchart, 'pop', 'Event5')
-    event_tools.insertEventAfter(flowchart, 'Event3', None)
-    event_tools.findEvent(flowchart, 'Event3').data.params.data['time'] = 2.0
+        for room in GOLDEN_LEAF_ROOMS:
+            if not self.parent.thread_active:
+                break
 
-    event_tools.insertEventAfter(flowchart, 'Lv4_04E_pop', 'Event7')
-    event_tools.insertEventAfter(flowchart, 'Event10', None)
+            room_data = self.parent.file_manager.readFile(f'{GOLDEN_LEAF_ROOMS[room]}.leb')
+            item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
+            createRoomKey(room_data, room, self.parent.global_flags)
+            self.writeKeyEvent(flow.flowchart, item_key, item_index, room)
+            room_data.setSmallKeyParams(model_path, model_name, room, item_key)
+            self.parent.file_manager.writeFile(f'{GOLDEN_LEAF_ROOMS[room]}.leb', room_data)
+
+        self.parent.file_manager.writeFile('SmallKey.bfevfl', flow)
 
 
+    def writeKeyEvent(self, flowchart, item_key, item_index, room):
+        """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
+        
+        # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
+        if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
+            item_event = event_tools.createActionChain(flowchart, None, [
+                ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            ], None)
+        else:
+            item_event = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
-# def writeSunkenKeyEvent(flowchart):
-#     event_tools.addEntryPoint(flowchart, 'Lv4_04E_pop')
+        event_tools.addEntryPoint(flowchart, room)
 
-#     event_tools.createActionChain(flowchart, 'Lv4_04E_pop', [
-#         ('GoldenLeaf', 'GenericGimmickSequence', {'cameraLookAt': True, 'distanceOffset': 0.0}),
-#         ('GoldenLeaf', 'Activate', {}),
-#         ('GoldenLeaf', 'PlayOneshotSE', {'label': 'SE_SY_NAZOKAGI_DROP', 'pitch': 1.0, 'volume': 1.0}),
-#         ('GoldenLeaf', 'Fall', {}),
-#         ('Timer', 'Wait', {'time': 2}),
-#         ('Audio', 'PlayJingle', {'label': 'BGM_NAZOTOKI_SEIKAI', 'volume': 1.0}),
-#         ('GoldenLeaf', 'Destroy', {})
-#     ])
+        event_tools.createActionChain(flowchart, room, [
+            ('SmallKey', 'Deactivate', {}),
+            ('SmallKey', 'SetActorSwitch', {'value': True, 'switchIndex': 1}),
+            ('SmallKey', 'Destroy', {})
+        ], item_event)
+
+
+    def makeKeysFaster(self, flowchart):
+        '''Gives control back to the player soon after triggering the key to fall'''
+        
+        event_tools.insertEventAfter(flowchart, 'pop', 'Event5')
+        event_tools.insertEventAfter(flowchart, 'Event3', None)
+        event_tools.findEvent(flowchart, 'Event3').data.params.data['time'] = 2.0
+
+        event_tools.insertEventAfter(flowchart, 'Lv4_04E_pop', 'Event7')
+        event_tools.insertEventAfter(flowchart, 'Event10', None)
+
+
+SMALL_KEY_ROOMS = {
+ 'D1-beetles': 'Lv01TailCave_08C',
+ 'D2-double-stalfos': 'Lv02BottleGrotto_07D',
+ 'D2-double-shy-guys': 'Lv02BottleGrotto_07F',
+ 'D3-pre-boss': 'Lv03KeyCavern_08G',
+ 'D3-triple-bombites': 'Lv03KeyCavern_01B',
+ 'D3-pairodds': 'Lv03KeyCavern_03A',
+ 'D3-five-zols': 'Lv03KeyCavern_04C',
+ 'D3-basement-north': 'Lv03KeyCavern_03G',
+ 'D3-basement-west': 'Lv03KeyCavern_04F',
+ 'D3-basement-south': 'Lv03KeyCavern_05G',
+ 'D4-sunken-item': 'Lv04AnglersTunnel_04E', # Also Lv04AnglersTunnel_06A, but leave vanilla for now.
+ 'D5-crystal-blocks': 'Lv05CatfishsMaw_01C',
+ 'D6-wizzrobe-pegs': 'Lv06FaceShrine_03D',
+ 'D6-tile-room': 'Lv06FaceShrine_05D',
+ 'D7-like-likes': 'Lv07EagleTower_08D',
+ 'D7-hinox': 'Lv07EagleTower_04A',
+ 'D8-gibdos': 'Lv08TurtleRock_03G',
+ 'D8-statue': 'Lv08TurtleRock_04C',
+ 'D8-west-vire': 'Lv08TurtleRock_06A',
+ 'D8-east-roomba': 'Lv08TurtleRock_07G',
+ 'D0-north-orbs': 'Lv10ClothesDungeon_05E',
+ 'D0-east-color-puzzle': 'Lv10ClothesDungeon_05F',
+ 'pothole-final': 'Field_13G'
+}
+
+GOLDEN_LEAF_ROOMS = {
+    'kanalet-crow': 'Field_06I',
+    'kanalet-mad-bomber': 'Field_06K',
+    'kanalet-kill-room': 'KanaletCastle_02A',
+    'kanalet-bombed-guard': 'KanaletCastle_01C',
+    'kanalet-final-guard': 'KanaletCastle_01D'
+}

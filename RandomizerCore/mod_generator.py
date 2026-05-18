@@ -9,6 +9,7 @@ from RandomizerCore.Helpers.file_manager import FileManager
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.chests import ChestRandomizer
+from RandomizerCore.Randomizers.small_keys import KeyRandomizer
 import copy, re, random, shutil, traceback
 
 
@@ -41,7 +42,6 @@ class ModsProcess(QtCore.QThread):
         self.trap_models = {} # temp until item info manager is done
         self.dungeon_trap_models = {} # temp until item info manager is done
 
-
         self.global_flags = {}
 
         self.progress_value = 0
@@ -65,7 +65,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeEventContentChanges()
             if self.thread_active: self.makeTradeQuestChanges()
 
-            if self.thread_active: self.makeSmallKeyChanges() # also handles the golden leaves
+            KeyRandomizer(self) # also handles the golden leaves
             if self.thread_active: self.makeHeartPieceChanges()
             if self.thread_active: self.makeInstrumentChanges()
             # if self.thread_active: self.makeShopChanges()
@@ -103,62 +103,6 @@ class ModsProcess(QtCore.QThread):
             if IS_RUNNING_FROM_SOURCE:
                 print(f'total tasks: {self.progress_value}')
             self.is_done.emit()
-
-
-    def makeSmallKeyChanges(self):
-        """Patch SmallKey event and LEB files for rooms with small key drops to change them into other items"""
-
-        # Open up the SmallKey event to be ready to edit
-        flow = self.file_manager.readFile('SmallKey.bfevfl')
-        if self.settings["Key Animations"]:
-            small_keys.makeKeysFaster(flow.flowchart)
-        # small_keys.writeSunkenKeyEvent(flow.flowchart)
-
-        for room in data.SMALL_KEY_ROOMS:
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{data.SMALL_KEY_ROOMS[room]}.leb')
-
-            if room == 'pothole-final':
-                item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel(room, self.trap_models)
-                act = room_data.actors[42]
-                act.type = 0xa9 # small key
-                act.posX += 1.5 # move right one tile
-                act.posZ -= 1.5 # move up one tile
-                act.switches[0] = (1, self.global_flags['PotholeKeySpawn']) # index of PotholeKeySpawn
-                act.switches[1] = (1, 363) # index of the getflag, which is now unused0363
-            else:
-                item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel(room, self.dungeon_trap_models)
-
-            small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
-            room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-            self.file_manager.writeFile(f'{data.SMALL_KEY_ROOMS[room]}.leb', room_data)
-
-            if room == 'D4-sunken-item': # special case. need to write the same data in 06A
-                room_data = self.file_manager.readFile('Lv04AnglersTunnel_06A.leb')
-                room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-                self.file_manager.writeFile('Lv04AnglersTunnel_06A.leb', room_data)
-
-        if self.thread_active:
-            self.makeGoldenLeafChanges(flow)
-
-
-    def makeGoldenLeafChanges(self, flow):
-        '''Make small key actors spawn for the golden leaf checks'''
-
-        for room in data.GOLDEN_LEAF_ROOMS:
-            if not self.thread_active:
-                break
-
-            room_data = self.file_manager.readFile(f'{data.GOLDEN_LEAF_ROOMS[room]}.leb')
-            item_key, item_index, model_path, model_name = self.item_info_manager.getItemInfoWithModel(room, self.trap_models)
-            golden_leaves.createRoomKey(room_data, room, self.global_flags)
-            small_keys.writeKeyEvent(flow.flowchart, item_key, item_index, room)
-            room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-            self.file_manager.writeFile(f'{data.GOLDEN_LEAF_ROOMS[room]}.leb', room_data)
-
-        self.file_manager.writeFile('SmallKey.bfevfl', flow)
 
 
     def makeEventContentChanges(self):
