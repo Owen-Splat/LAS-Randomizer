@@ -105,7 +105,7 @@ class RoomFixes:
             room_data = self.parent.file_manager.readFile(f'{room}.leb')
 
             for actor in WATER_LOADING_ZONES[room]:
-                room_data.actors[actor].switches[0] = (1, self.parent.global_flags['FlippersFound'])
+                room_data.actors[actor].switches[0] = (1, self.parent.flag_manager.flags['FlippersFound'])
 
             self.parent.file_manager.writeFile(f'{room}.leb', room_data)
 

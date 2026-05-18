@@ -1,12 +1,15 @@
 from PySide6 import QtCore
+from RandomizerCore.Fixes.Datasheets import crane_game
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE, RESOURCE_PATH
-from RandomizerCore.Tools import (bntx_tools, event_tools, leb, lvb, oead_tools)
-from RandomizerCore.Randomizers import (conditions, crane_prizes, dampe, data, fishing, flags,
-item_drops, item_get, mad_batter, marin, miscellaneous, npcs, player_start, rapids,
+from RandomizerCore.Tools import (bntx_tools, event_tools)
+from RandomizerCore.Randomizers import (dampe, data, fishing,
+item_get, mad_batter, marin, miscellaneous, player_start, rapids,
 seashell_mansion, shop, tarin, trade_quest, tunic_swap)
 from pathlib import Path
 from RandomizerCore.Fixes.rooms import RoomFixes
+from RandomizerCore.Fixes.datasheets import DatasheetFixes
 from RandomizerCore.Helpers.file_manager import FileManager
+from RandomizerCore.Helpers.flag_manager import FlagManager
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.chests import ChestRandomizer
@@ -15,7 +18,7 @@ from RandomizerCore.Randomizers.instruments import InstrumentRandomizer
 from RandomizerCore.Randomizers.small_keys import KeyRandomizer
 from RandomizerCore.Randomizers.owls import OwlStatueRandomizer
 from RandomizerCore.Randomizers.rupees import BlueRupeeRandomizer
-import copy, re, random, shutil, traceback
+import re, random, traceback
 
 
 class ModsProcess(QtCore.QThread):
@@ -42,15 +45,14 @@ class ModsProcess(QtCore.QThread):
         self.cosmetic_rng = random.Random(seed)
         self.cosmetic_rng.setstate(randstate)
 
+        self.progress_value = 0
+        self.thread_active = True
+
         self.file_manager = FileManager(self)
+        self.flag_manager = FlagManager(self)
         self.item_info_manager = ItemInfoManager(self)
         self.trap_models = {} # temp until item info manager is done
         self.dungeon_trap_models = {} # temp until item info manager is done
-
-        self.global_flags = {}
-
-        self.progress_value = 0
-        self.thread_active = True
 
 
     # STOP THREAD
@@ -62,7 +64,7 @@ class ModsProcess(QtCore.QThread):
     def run(self):
         try:
             self.music_randomizer = MusicRandomizer(self)
-            if self.thread_active: self.makeGeneralDatasheetChanges()
+            if self.thread_active: DatasheetFixes(self)
             if self.thread_active: self.makeGeneralEventChanges()
             if self.thread_active: RoomFixes(self)
 
@@ -751,191 +753,8 @@ class ModsProcess(QtCore.QThread):
         ### PrizeCommon: Change the figure to look for when the fast-trendy setting is on, and makes Yoshi not replace Lens
         if self.thread_active:
             flow = self.file_manager.readFile('PrizeCommon.bfevfl')
-            crane_prizes.makeEventChanges(flow.flowchart, self.settings)
+            crane_game.makeEventChanges(flow.flowchart, self.settings)
             self.file_manager.writeFile('PrizeCommon.bfevfl', flow)
-
-
-    def makeGeneralDatasheetChanges(self):
-        """Make changes to some datasheets that are general in nature and not tied to specific item placements"""
-
-        if self.thread_active:
-            sheet = self.file_manager.readFile('Npc.gsheet')
-            for npc in sheet['values']:
-                if not self.thread_active:
-                    break
-                npcs.makeNpcChanges(npc, self.placements, self.settings)
-
-            npcs.makeNewNpcs(sheet, self.placements, self.item_defs)
-            self.file_manager.writeFile('Npc.gsheet', sheet)
-
-        if self.thread_active:
-            sheet = self.file_manager.readFile('ItemDrop.gsheet')
-            item_drops.makeDatasheetChanges(sheet, self.settings)
-            self.file_manager.writeFile('ItemDrop.gsheet', sheet)
-
-        if self.thread_active:
-            sheet = self.file_manager.readFile('Items.gsheet')
-
-            dummy = None
-            for item in sheet['values']:
-                if not self.thread_active:
-                    break
-
-                if item['symbol'] == 'Flippers': # this custom flag is for water loading zones to use
-                    item['gettingFlag'] = 'FlippersFound'
-
-                # Set new npcKeys for items to change how they appear when Link holds it up
-                if item['symbol'] == 'SmallKey':
-                    item['npcKey'] = 'PatchSmallKey'
-                if item['symbol'] == 'Honeycomb':
-                    item['npcKey'] = 'PatchHoneycomb'
-                if item['symbol'] == 'Stick':
-                    item['npcKey'] = 'PatchStick'
-                if item['symbol'] == 'YoshiDoll': # ocarina and instruments are ItemYoshiDoll actors
-                    item['npcKey'] = 'PatchYoshiDoll'
-                    dummy = oead_tools.parseStruct(item) # create copy to use as a base for custom entries
-
-                # songs and tunics are patched to use the model from the npcKey
-                # capacity upgrades have the same patch, but we don't need to edit them here
-                if item['symbol'] == 'Song_WindFish':
-                    item['npcKey'] = 'NpcMarin'
-                if item['symbol'] == 'Song_Mambo':
-                    item['npcKey'] = 'NpcManboTamegoro'
-                if item['symbol'] == 'Song_Soul':
-                    item['npcKey'] = 'NpcMamu'
-
-                # set the tunic npcKeys to empty strings so that nothing gets held up
-                if item['symbol'] == 'ClothesGreen':
-                    item['npcKey'] = ''
-                if item['symbol'] == 'ClothesRed':
-                    item['npcKey'] = ''
-                if item['symbol'] == 'ClothesBlue':
-                    item['npcKey'] = ''
-
-            if dummy is None:
-                raise KeyError('ItemYoshiDoll was not found in Items.gsheet')
-
-            # create new entries for Dampe, which we will use to set the gettingFlag
-            # can likely use this same method for trendy and shop in the future
-            dummy['symbol'] = 'Dampe1'
-            dummy['itemID'] = 63
-            dummy['gettingFlag'] = 'Dampe1'
-            dummy['npcKey'] = self.item_defs[self.placements['dampe-page-1']]['npc-key']
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'DampeHeart'
-            dummy['itemID'] = 64
-            dummy['gettingFlag'] = 'DampeHeart'
-            dummy['npcKey'] = self.item_defs[self.placements['dampe-heart-challenge']]['npc-key']
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'Dampe2'
-            dummy['itemID'] = 65
-            dummy['gettingFlag'] = 'Dampe2'
-            dummy['npcKey'] = self.item_defs[self.placements['dampe-page-2']]['npc-key']
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'DampeBottle'
-            dummy['itemID'] = 66
-            dummy['gettingFlag'] = 'DampeBottle'
-            dummy['npcKey'] = self.item_defs[self.placements['dampe-bottle-challenge']]['npc-key']
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'DampeFinal'
-            dummy['itemID'] = 67
-            dummy['gettingFlag'] = 'DampeFinal'
-            dummy['npcKey'] = self.item_defs[self.placements['dampe-final']]['npc-key']
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-
-            dummy['symbol'] = 'ShopShovel'
-            dummy['itemID'] = 68
-            dummy['gettingFlag'] = ''
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'ShopBow'
-            dummy['itemID'] = 69
-            # dummy['gettingFlag'] = 'ShopBowSteal'
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'ShopHeart'
-            dummy['itemID'] = 70
-            # dummy['gettingFlag'] = 'ShopHeartSteal'
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-
-            # seashell mansion presents need traps to be items entries each with a unique ID, otherwise gives a GreenRupee
-            # even though IDs 128+ cause a crash when they get added to the inventory, traps never actually get added
-            # instead of just passing the itemKey to the present event, it checks the ID and passes the first itemKey with that ID
-            # so if all the traps had the same ID, every trap would act as the first one (ZapTrap)
-            if self.settings["Traps"] != "None":
-                dummy['symbol'] = 'ZapTrap'
-                dummy['itemID'] = 127
-                # dummy['gettingFlag'] = ''
-                dummy['npcKey'] = 'NpcToolShopkeeper'
-                sheet['values'].append(oead_tools.dictToStruct(dummy))
-                dummy['symbol'] = 'DrownTrap'
-                dummy['itemID'] = 128
-                sheet['values'].append(oead_tools.dictToStruct(dummy))
-                dummy['symbol'] = 'SquishTrap'
-                dummy['itemID'] = 129
-                sheet['values'].append(oead_tools.dictToStruct(dummy))
-                dummy['symbol'] = 'DeathballTrap'
-                dummy['itemID'] = 130
-                sheet['values'].append(oead_tools.dictToStruct(dummy))
-                dummy['symbol'] = 'QuakeTrap'
-                dummy['itemID'] = 131
-                sheet['values'].append(oead_tools.dictToStruct(dummy))
-                # dummy['symbol'] = 'HydroTrap'
-                # dummy['itemID'] = 132
-                # sheet['values'].append(oead_tools.dictToStruct(dummy))
-
-            dummy['symbol'] = 'FishNecklace'
-            dummy['itemID'] = 200
-            dummy['npcKey'] = 'FishNecklace'
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'SyrupPowder'
-            dummy['itemID'] = 201
-            dummy['npcKey'] = 'SyrupPowder'
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-            dummy['symbol'] = 'WalrusShell'
-            dummy['itemID'] = 202
-            dummy['npcKey'] = 'WalrusShell'
-            sheet['values'].append(oead_tools.dictToStruct(dummy))
-
-            self.file_manager.writeFile('Items.gsheet', sheet)
-
-        if self.thread_active:
-            sheet = self.file_manager.readFile('Conditions.gsheet')
-
-            for condition in sheet['values']:
-                if not self.thread_active:
-                    break
-                conditions.editConditions(condition, self.settings)
-
-            conditions.makeConditions(sheet, self.placements)
-            self.file_manager.writeFile('Conditions.gsheet', sheet)
-
-        if self.thread_active:
-            sheet = self.file_manager.readFile('CranePrize.gsheet')
-            crane_prizes.makeDatasheetChanges(sheet, self.settings)
-            self.file_manager.writeFile('CranePrize.gsheet', sheet)
-
-        if self.thread_active:
-            group1 = self.file_manager.readFile('CranePrizeFeaturedPrizeGroup1.gsheet')
-            # group2 = self.file_manager.readFile('CranePrizeFeaturedPrizeGroup2.gsheet')
-            crane_prizes.changePrizeGroups(group1)
-            self.file_manager.writeFile('CranePrizeFeaturedPrizeGroup1.gsheet', group1)
-            # self.file_manager.writeFile('CranePrizeFeaturedPrizeGroup2.gsheet', group2)
-
-        if self.thread_active:
-            sheet = self.file_manager.readFile('GlobalFlags.gsheet')
-            sheet, self.global_flags = flags.makeFlags(sheet)
-            self.file_manager.writeFile('GlobalFlags.gsheet', sheet)
-
-        if self.settings["Fast Fishing"] and self.thread_active:
-            sheet = self.file_manager.readFile('FishingFish.gsheet')
-
-            for fish in sheet['values']:
-                if not self.thread_active:
-                    break
-
-                if len(fish['mOpenItem']) > 0:
-                    fish['mOpenItem'] = 'ClothesGreen'
-
-            self.file_manager.writeFile('FishingFish.gsheet', sheet)
 
 
     def makeGeneralARCChanges(self):

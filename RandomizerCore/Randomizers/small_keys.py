@@ -30,7 +30,7 @@ class KeyRandomizer:
                 act.type = 0xa9 # small key
                 act.posX += 1.5 # move right one tile
                 act.posZ -= 1.5 # move up one tile
-                act.switches[0] = (1, self.parent.global_flags['PotholeKeySpawn']) # index of PotholeKeySpawn
+                act.switches[0] = (1, self.parent.flag_manager.flags['PotholeKeySpawn']) # index of PotholeKeySpawn
                 act.switches[1] = (1, 363) # index of the getflag, which is now unused0363
             else:
                 item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
@@ -57,7 +57,7 @@ class KeyRandomizer:
 
             room_data = self.parent.file_manager.readFile(f'{GOLDEN_LEAF_ROOMS[room]}.leb')
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
-            createRoomKey(room_data, room, self.parent.global_flags)
+            createRoomKey(room_data, room, self.parent.flag_manager.flags)
             self.writeKeyEvent(flow.flowchart, item_key, item_index, room)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
             self.parent.file_manager.writeFile(f'{GOLDEN_LEAF_ROOMS[room]}.leb', room_data)
