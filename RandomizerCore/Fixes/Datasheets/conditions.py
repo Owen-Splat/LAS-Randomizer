@@ -1,5 +1,4 @@
 import RandomizerCore.Tools.oead_tools as oead_tools
-from RandomizerCore.Randomizers import data
 
 
 class ConditionsDatasheetFixes:
@@ -75,14 +74,14 @@ class ConditionsDatasheetFixes:
 
         # Make the shop not sell shields until you find one
         if condition['symbol'] == 'ShopShieldCondition':
-            condition['conditions'][0] = {'category': 1, 'parameter': data.SHIELD_FOUND_FLAG}
+            condition['conditions'][0] = {'category': 1, 'parameter': "ShieldFoundFlag"}
             return
 
         # Make the shop not sell bombs until you find some (flag automatically set with unlocked-bombs on)
         # Condition stays as ConchHorn if neither unlocked-bombs or shuffled-bombs is on
         # if condition['symbol'] == 'ShopBombCondition' and (settings['unlocked-bombs'] or settings['shuffle-bombs']):
         if condition["symbol"] == "ShopBombCondition" and settings["Shuffled Bombs"]:
-            condition['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
+            condition['conditions'][0] = {'category': 1, 'parameter': "BombsFoundFlag"}
             return
 
         # # Edit the shop conditions for the shovel, bow, and heart

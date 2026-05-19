@@ -1,5 +1,4 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import item_get
 
 
 class OwlStatueRandomizer:
@@ -75,7 +74,7 @@ class OwlStatueRandomizer:
             item = placements[k]
             item_index = placements['indexes'][k] if k in placements['indexes'] else -1
 
-            gift_event = item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, None, None)
+            gift_event = self.parent.item_get_manager.get(flowchart, item_defs[item]['item-key'], item_index, None, None)
 
             flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
                 {'symbol': k, 'value': True}, gift_event)
@@ -162,7 +161,7 @@ class OwlStatueRandomizer:
             item = placements[k]
             item_index = placements['indexes'][k] if k in placements['indexes'] else -1
 
-            gift_event = item_get.insertItemGetAnimation(flowchart, item_defs[item]['item-key'], item_index, None, None)
+            gift_event = self.parent.item_get_manager.get(flowchart, item_defs[item]['item-key'], item_index, None, None)
 
             flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
                 {'symbol': k, 'value': True}, gift_event)

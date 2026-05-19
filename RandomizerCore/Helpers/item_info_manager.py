@@ -69,7 +69,7 @@ class ItemInfoManager:
         return item_key, item_index
 
 
-    def getItemInfoWithModel(self, check: str, model_list: dict):
+    def getItemInfoWithModel(self, check: str, model_list={}):
         item: str = self.parent.placements[check]
         item_key, item_index = self.getItemInfo(check)
 

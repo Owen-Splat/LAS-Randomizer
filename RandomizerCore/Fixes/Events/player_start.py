@@ -1,5 +1,5 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import data, item_get
+from RandomizerCore.Randomizers import data
 
 START_FLAGS = (
     'FirstClear',
@@ -61,17 +61,18 @@ class PlayerStartEventFixes:
     """Sets a bunch of flags for cutscenes being watched/triggered to prevent them from ever happening"""
 
     def __init__(self, mod_generator) -> None:
-        flow = mod_generator.file_manager.readFile('PlayerStart.bfevfl')
-        self.makeStartChanges(flow.flowchart, mod_generator.settings)
+        self.parent = mod_generator
+        flow = self.parent.file_manager.readFile('PlayerStart.bfevfl')
+        self.makeStartChanges(flow.flowchart)
 
         # skip over BGM_HOUSE_FIRST when Link wakes up because it overlaps with the shuffled zone BGM
-        if mod_generator.settings["Music"] == "Shuffled":
+        if self.parent.settings["Music"] == "Shuffled":
             event_tools.insertEventAfter(flow.flowchart, 'Event150', 'Event151')
 
-        mod_generator.file_manager.writeFile('PlayerStart.bfevfl', flow)
+        self.parent.file_manager.writeFile('PlayerStart.bfevfl', flow)
 
 
-    def makeStartChanges(self, flowchart, settings):
+    def makeStartChanges(self, flowchart):
         """Sets a bunch of flags when you leave the house for the first time, 
         including Owl cutscenes watched, Walrus Awakened, and some flags specific to settings"""
 
@@ -82,28 +83,28 @@ class PlayerStartEventFixes:
 
         player_start_event_flags = list(START_FLAGS)
 
-        if settings["Open Kanalet"]:
+        if self.parent.settings["Open Kanalet"]:
             player_start_event_flags.append('GateOpen_Switch_KanaletCastle_01B')
 
-        if settings["Completed Bridge"]: # flag for the bridge, we make kiki use another flag
+        if self.parent.settings["Completed Bridge"]: # flag for the bridge, we make kiki use another flag
             player_start_event_flags.append('StickDrop')
 
-        if settings["Open Mamu"]:
+        if self.parent.settings["Open Mamu"]:
             player_start_event_flags.append('MamuMazeClear')
 
-        if not settings["Shuffled Bombs"]:# and settings['unlocked-bombs']: # temp change
-            player_start_event_flags.append(data.BOMBS_FOUND_FLAG)
+        if not self.parent.settings["Shuffled Bombs"]:# and settings['unlocked-bombs']: # temp change
+            player_start_event_flags.append(self.parent.flag_manager.flags["BombsFoundFlag"])
 
-        if settings["Randomize Enemies"]: # special case where we need stairs under armos to be visible and open
+        if self.parent.settings["Randomize Enemies"]: # special case where we need stairs under armos to be visible and open
             player_start_event_flags.append('AppearStairsFld10N')
             player_start_event_flags.append('AppearStairsFld11O')
 
-        if settings["Fast Stalfos"]: # set the door open flags for the first 3 master stalfos fights to be true
+        if self.parent.settings["Fast Stalfos"]: # set the door open flags for the first 3 master stalfos fights to be true
             player_start_event_flags.append('DoorOpen_Btl1_L05_05F')
             player_start_event_flags.append('DoorOpen_Btl2_L05_04H')
             player_start_event_flags.append('DoorOpen_Btl3_L05_01F')
 
-        if settings["Boss Cutscenes"]: # set boss cutscenes to have already been watched
+        if self.parent.settings["Boss Cutscenes"]: # set boss cutscenes to have already been watched
             player_start_event_flags.extend(BOSS_FLAGS)
         # if settings['nag-meesages']: # set annoying one-time messages to not pop-up
         #     player_start_event_flags.extend(MESSAGE_FLAGS)

@@ -1,5 +1,4 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import item_get
 from RandomizerCore.Randomizers.data import MODEL_SIZES, MODEL_ROTATIONS, DUNGEON_ENTRANCES
 import re
 
@@ -80,7 +79,7 @@ class InstrumentRandomizer:
             act.rotY = MODEL_ROTATIONS[model_name]
 
         fade_event = self.insertInstrumentFadeEvent(flowchart, level, location)
-        instrument_get = item_get.insertItemGetAnimation(flowchart, item_key, item_index, None, fade_event)
+        instrument_get = self.parent.item_get_manager.get(flowchart, item_key, item_index, None, fade_event)
 
         event_tools.addEntryPoint(flowchart, room)
         event_tools.createActionChain(flowchart, room, [

@@ -1,27 +1,40 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import item_get
 
 
+class RapidsRandomizer:
+    def __init__(self, mod_generator) -> None:
+        self.parent = mod_generator
 
-def makePrizesStack(flowchart, placements, item_defs):
-    """Makes the rapids time attack prizes stack, so getting faster times give the slower prizes as well if you do not have them"""
+        flow = self.parent.file_manager.readFile('RaftShopMan.bfevfl')
+        self.makePrizesStack(flow.flowchart)
 
-    # 45 prize event doesn't need anything special :)
-    item_index = placements['indexes']['rapids-race-45'] if 'rapids-race-45' in placements['indexes'] else -1
-    item_get.insertItemGetAnimation(flowchart, item_defs[placements['rapids-race-45']]['item-key'], item_index, 'Event42', 'Event88')
+        # removed rapids BGM because of it being broken in music rando, so remove the StopBGM events for it
+        if self.parent.settings["Music"] == "Shuffled":
+            event_tools.insertEventAfter(flow.flowchart, 'timeAttackGoal', 'Event27')
+            event_tools.insertEventAfter(flow.flowchart, 'normalGoal', 'Event20')
 
-    # since these events only get called once by using flags, they each can just check the slower goal, and subflow to it
-    item_index = placements['indexes']['rapids-race-35'] if 'rapids-race-35' in placements['indexes'] else -1
-    get35 = item_get.insertItemGetAnimation(flowchart, item_defs[placements['rapids-race-35']]['item-key'], item_index, None, 'Event86')
-    subflow45 = event_tools.createSubFlowEvent(flowchart, '', '5minfirst', {}, get35)
-    check45 = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-    {'symbol': '5minGaul'}, {0: subflow45, 1: get35})
-    event_tools.insertEventAfter(flowchart, 'Event40', check45)
+        self.parent.file_manager.writeFile('RaftShopMan.bfevfl', flow)
 
-    # 30 prize just needs to subflow to the 35 prize, as the 35 prize event already checks for the 45
-    item_index = placements['indexes']['rapids-race-30'] if 'rapids-race-30' in placements['indexes'] else -1
-    get30 = item_get.insertItemGetAnimation(flowchart, item_defs[placements['rapids-race-30']]['item-key'], item_index, None, 'Event85')
-    subflow35 = event_tools.createSubFlowEvent(flowchart, '', '3minfirst', {}, get30)
-    check35 = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-    {'symbol': '3minGaul'}, {0: subflow35, 1: get30})
-    event_tools.insertEventAfter(flowchart, 'Event38', check35)
+
+    def makePrizesStack(self, flowchart):
+        """Makes the rapids time attack prizes stack, so getting faster times give the slower prizes as well if you do not have them"""
+
+        # 45 prize event doesn't need anything special :)
+        item_key, item_index = self.parent.item_info_manager.getItemInfo("rapids-race-45")
+        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event42', 'Event88')
+
+        # since these events only get called once by using flags, they each can just check the slower goal, and subflow to it
+        item_key, item_index = self.parent.item_info_manager.getItemInfo("rapids-race-35")
+        get35 = self.parent.item_get_manager.get(flowchart, item_key, item_index, None, 'Event86')
+        subflow45 = event_tools.createSubFlowEvent(flowchart, '', '5minfirst', {}, get35)
+        check45 = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': '5minGaul'}, {0: subflow45, 1: get35})
+        event_tools.insertEventAfter(flowchart, 'Event40', check45)
+
+        # 30 prize just needs to subflow to the 35 prize, as the 35 prize event already checks for the 45
+        item_key, item_index = self.parent.item_info_manager.getItemInfo("rapids-race-30")
+        get30 = self.parent.item_get_manager.get(flowchart, item_key, item_index, None, 'Event85')
+        subflow35 = event_tools.createSubFlowEvent(flowchart, '', '3minfirst', {}, get30)
+        check35 = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+        {'symbol': '3minGaul'}, {0: subflow35, 1: get30})
+        event_tools.insertEventAfter(flowchart, 'Event38', check35)

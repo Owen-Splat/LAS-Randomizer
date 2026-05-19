@@ -1,4 +1,3 @@
-from RandomizerCore.Randomizers import data
 import RandomizerCore.Tools.oead_tools as oead_tools
 import copy
 
@@ -97,10 +96,10 @@ class NpcDatasheetFixes:
 
         # make the bomb refills not appear until you find your bombs
         if npc['symbol'] == 'ItemBomb' and settings["Shuffled Bombs"]:
-            npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
+            npc['layoutConditions'].append({'category': 1, 'parameter': f'!BombsFoundFlag', 'layoutID': -1})
             return
         if npc['symbol'] == 'ItemFeatherBomb' and settings["Shuffled Bombs"]:
-            npc['layoutConditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}', 'layoutID': -1})
+            npc['layoutConditions'].append({'category': 1, 'parameter': f'!BombsFoundFlag', 'layoutID': -1})
             return
 
         # make the powder refills not appear until you find your powder

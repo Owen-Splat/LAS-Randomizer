@@ -1,9 +1,4 @@
-from RandomizerCore.Randomizers import data
-import RandomizerCore.Tools.event_tools as event_tools
 import RandomizerCore.Tools.oead_tools as oead_tools
-import shutil
-import copy
-
 
 prizes_dict = {}
 
@@ -38,12 +33,12 @@ class CraneGameDatasheetFixes:
 
             # Bombs should not be obtainable until you have bombs if shuffled bombs is on
             if prize['symbol'] == 'Bomb' and settings["Shuffled Bombs"]:
-                prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': data.BOMBS_FOUND_FLAG}
+                prize['layouts'][0]['conditions'][0] = {'category': 1, 'parameter': "BombsFoundFlag"}
                 continue
 
             # Shield should not be obtainable until you find your first shield
             if prize['symbol'] == 'Shield':
-                prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': data.SHIELD_FOUND_FLAG})
+                prize['layouts'][0]['conditions'].append({'category': 1, 'parameter': "ShieldFoundFlag"})
                 continue
 
             if prize['symbol'] == 'RupeeRed':
@@ -56,11 +51,11 @@ class CraneGameDatasheetFixes:
                 }))
 
                 if settings["Shuffled Bombs"]:
-                    prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!{data.BOMBS_FOUND_FLAG}'})
+                    prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!BombsFoundFlag'})
                 else:
                     prize['layouts'][2]['conditions'].append({'category': 2, 'parameter': '!SurfHarp'})
                 
-                prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!{data.SHIELD_FOUND_FLAG}'})
+                prize['layouts'][2]['conditions'].append({'category': 1, 'parameter': f'!ShieldFoundFlag'})
 
                 # We are removing Yoshi from being considered as a featured prize
                 # So we want to make the red rupee that would otherwise replace it require the yoshi gotten flag

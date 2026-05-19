@@ -1,5 +1,4 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import item_get
 from RandomizerCore.Randomizers.golden_leaves import createRoomKey
 
 class KeyRandomizer:
@@ -74,7 +73,7 @@ class KeyRandomizer:
                 ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
             ], None)
         else:
-            item_event = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
+            item_event = self.parent.item_get_manager.get(flowchart, item_key, item_index)
 
         event_tools.addEntryPoint(flowchart, room)
 
