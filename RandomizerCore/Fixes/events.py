@@ -4,13 +4,13 @@ from RandomizerCore.Fixes.Events.windfishs_egg import WindFishsEggEventFixes
 from RandomizerCore.Fixes.Events.player_start import PlayerStartEventFixes
 from RandomizerCore.Fixes.Events.prize_common import PrizeCommonEventFixes
 from RandomizerCore.Fixes.Events.madam_meow import MadamMeowMeowEventFixes
+from RandomizerCore.Fixes.Events.tunic_swap import TunicSwapper
 from RandomizerCore.Fixes.Events.common import CommonEventFixes
 from RandomizerCore.Fixes.Events.item import ItemEventFixes
-import RandomizerCore.Tools.event_tools as event_tools
 
 
 class EventFixes:
-    """Make changes to some events that should be in every seed, e.g. setting flags for having watched cutscenes"""
+    """Make changes to events that should be in every seed, regardless of item placements"""
 
     def __init__(self, mod_generator) -> None:
         if mod_generator.thread_active: PlayerStartEventFixes(mod_generator)
@@ -21,3 +21,4 @@ class EventFixes:
         if mod_generator.thread_active: SkeletalGuardEventFixes(mod_generator)
         if mod_generator.thread_active: CommonEventFixes(mod_generator)
         if mod_generator.thread_active: PrizeCommonEventFixes(mod_generator)
+        if mod_generator.thread_active: TunicSwapper(self)

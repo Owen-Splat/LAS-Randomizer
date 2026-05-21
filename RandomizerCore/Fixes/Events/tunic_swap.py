@@ -1,6 +1,4 @@
-from RandomizerCore.Helpers import item_get_manager
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers import data
 
 
 class TunicSwapper:

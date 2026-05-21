@@ -24,7 +24,6 @@ from RandomizerCore.Randomizers.miscellaneous import MiscRandomizer
 from RandomizerCore.Randomizers.rapids import RapidsRandomizer
 from RandomizerCore.Randomizers.tarin import TarinRandomizer
 from RandomizerCore.Randomizers.trade_quest import TradeQuestRandomizer
-from RandomizerCore.Randomizers.tunic_swap import TunicSwapper
 import re, random, traceback
 
 
@@ -86,7 +85,6 @@ class ModsProcess(QtCore.QThread):
             # if self.thread_active: self.makeShopChanges()
 
             if self.thread_active: OwlStatueRandomizer(self)
-            if self.thread_active: TunicSwapper(self)
 
             if self.thread_active: self.makeGeneralARCChanges()
 
