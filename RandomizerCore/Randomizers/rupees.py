@@ -4,7 +4,8 @@ import RandomizerCore.Tools.event_tools as event_tools
 class BlueRupeeRandomizer:
     def __init__(self, mod_generator):
         self.parent = mod_generator
-        self.makeLv10RupeeChanges()
+        if self.parent.settings["Blue Rupees"]:
+            self.makeLv10RupeeChanges()
 
 
     def makeLv10RupeeChanges(self):

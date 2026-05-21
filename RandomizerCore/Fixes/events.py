@@ -21,4 +21,4 @@ class EventFixes:
         if mod_generator.thread_active: SkeletalGuardEventFixes(mod_generator)
         if mod_generator.thread_active: CommonEventFixes(mod_generator)
         if mod_generator.thread_active: PrizeCommonEventFixes(mod_generator)
-        if mod_generator.thread_active: TunicSwapper(self)
+        if mod_generator.thread_active: TunicSwapper(mod_generator)

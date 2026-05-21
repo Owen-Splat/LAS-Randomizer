@@ -4,26 +4,28 @@ from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE, RESOUR
 from RandomizerCore.Tools import (bntx_tools, event_tools)
 from RandomizerCore.Randomizers import (data, mad_batter, marin)
 from pathlib import Path
-from RandomizerCore.Fixes.rooms import RoomFixes
+from RandomizerCore.Fixes.title_screen import TitleScreenFixes
 from RandomizerCore.Fixes.datasheets import DatasheetFixes
 from RandomizerCore.Fixes.events import EventFixes
-from RandomizerCore.Helpers.file_manager import FileManager
-from RandomizerCore.Helpers.flag_manager import FlagManager
+from RandomizerCore.Fixes.levels import LevelFixes
+from RandomizerCore.Fixes.rooms import RoomFixes
 from RandomizerCore.Helpers.item_info_manager import ItemInfoManager
 from RandomizerCore.Helpers.item_get_manager import ItemGetManager
-from RandomizerCore.Randomizers.music import MusicRandomizer
-from RandomizerCore.Randomizers.chests import ChestRandomizer
-from RandomizerCore.Randomizers.dampe import DampeRandomizer
-from RandomizerCore.Randomizers.fishing import FishingRandomizer
+from RandomizerCore.Helpers.file_manager import FileManager
+from RandomizerCore.Helpers.flag_manager import FlagManager
 from RandomizerCore.Randomizers.heart_pieces import HeartPieceRandomizer
 from RandomizerCore.Randomizers.instruments import InstrumentRandomizer
-from RandomizerCore.Randomizers.small_keys import KeyRandomizer
-from RandomizerCore.Randomizers.owls import OwlStatueRandomizer
-from RandomizerCore.Randomizers.rupees import BlueRupeeRandomizer
-from RandomizerCore.Randomizers.miscellaneous import MiscRandomizer
-from RandomizerCore.Randomizers.rapids import RapidsRandomizer
-from RandomizerCore.Randomizers.tarin import TarinRandomizer
 from RandomizerCore.Randomizers.trade_quest import TradeQuestRandomizer
+from RandomizerCore.Randomizers.miscellaneous import MiscRandomizer
+from RandomizerCore.Randomizers.rupees import BlueRupeeRandomizer
+from RandomizerCore.Randomizers.fishing import FishingRandomizer
+from RandomizerCore.Randomizers.owls import OwlStatueRandomizer
+from RandomizerCore.Randomizers.small_keys import KeyRandomizer
+from RandomizerCore.Randomizers.rapids import RapidsRandomizer
+from RandomizerCore.Randomizers.chests import ChestRandomizer
+from RandomizerCore.Randomizers.dampe import DampeRandomizer
+from RandomizerCore.Randomizers.music import MusicRandomizer
+from RandomizerCore.Randomizers.tarin import TarinRandomizer
 import re, random, traceback
 
 
@@ -82,24 +84,16 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: KeyRandomizer(self) # also handles the golden leaves
             if self.thread_active: HeartPieceRandomizer(self)
             if self.thread_active: InstrumentRandomizer(self)
-            # if self.thread_active: self.makeShopChanges()
 
             if self.thread_active: OwlStatueRandomizer(self)
-
-            if self.thread_active: self.makeGeneralARCChanges()
-
-            # if self.thread_active: self.makeItemModelFixes()
-            # if self.thread_active: self.makeItemTextBoxes()
-
-            if self.settings["Blue Rupees"] and self.thread_active:
-                BlueRupeeRandomizer(self)
+            if self.thread_active: TitleScreenFixes(self)
+            if self.thread_active: BlueRupeeRandomizer(self)
 
             if self.settings["Shuffled Dungeons"] and self.thread_active:
                 self.shuffleDungeons()
                 self.shuffleDungeonIcons()
 
-            if self.settings["Bad Pets"] and self.thread_active:
-                self.changeLevelConfigs()
+            if self.thread_active: LevelFixes(self)
 
         except Exception:
             er = traceback.format_exc()
@@ -523,73 +517,6 @@ class ModsProcess(QtCore.QThread):
         self.file_manager.writeFile('Syrup.bfevfl', flow)
 
 
-    def makeGeneralARCChanges(self):
-        """Replaces the Title Screen logo with the Randomizer logo"""
-
-        try:
-            # Read the BNTX file from the sarc file and edit the title screen logo to include the randomizer logo
-            sarc_data = self.file_manager.readFile('StartUp.arc')
-            bntx_tools.createRandomizerTitleScreenArchive(sarc_data)
-            self.file_manager.writeFile('StartUp.arc', sarc_data)
-        except:
-            # regardless of any errors, just consider this task done, the logo is not needed to play
-            self.progress_value += 1
-            self.progress_update.emit(self.progress_value)
-
-
-    # def makeShopChanges(self):
-    #     """Edits the shop items datasheet as well as event files relating to buying/stealing
-
-    #     NOT FINISHED!!!
-
-    #     This needs ASM to set the GettingFlag of the stolen items"""
-
-    #     if self.thread_active:
-    #         sheet = self.file_manager.readFile('ShopItem.gsheet')
-    #         shop.makeDatasheetChanges(sheet, self.placements, self.item_defs)
-    #         self.file_manager.writeFile('ShopItem.gsheet', sheet)
-
-    #     # ### ToolShopkeeper event - edit events related to manually buying items
-    #     # if self.thread_active:
-    #     #     flow = event_tools.readFlow(f'{self.rom_path}/region_common/event/ToolShopkeeper.bfevfl')
-    #     #     shop.makeBuyingEventChanges(flow.flowchart, self.placements, self.item_defs)
-    #     #     # event_tools.writeFlow(f'{self.out_dir}/region_common/event/ToolShopkeeper.bfevfl', flow)
-    #     #     self.progress_value += 1 # update progress bar
-    #     #     self.progress_update.emit(self.progress_value)
-
-    #     # ### PlayerStart event - edit events related to stealing items
-    #     # if self.thread_active:
-    #     #     # flow = event_tools.readFlow(f'{self.out_dir}/region_common/event/PlayerStart.bfevfl')
-    #     #     shop.makeStealingEventChanges(flow.flowchart, self.placements, self.item_defs)
-    #     #     event_tools.writeFlow(f'{self.romfs_dir}/region_common/event/ToolShopkeeper.bfevfl', flow)
-    #     #     # event_tools.writeFlow(f'{self.out_dir}/region_common/event/PlayerStart.bfevfl', flow)
-    #     #     self.progress_value += 1 # udate progress bar
-    #     #     self.progress_update.emit(self.progress_value)
-
-
-# TRENDY GAME STUFF, DO NOT DELETE
-
-    # def makeItemModelFixes(self):
-    #     """Adds necessary model files needed for various different fixes"""
-
-    #     if not os.path.exists(f'{self.out_dir}/region_common/actor'):
-    #         os.makedirs(f'{self.out_dir}/region_common/actor')
-
-    #     # files = os.listdir(MODELS_PATH)
-
-    #     # for file in files:
-    #     #     model = file[:-len(data.MODELS_SUFFIX)] # Switched from Python 3.10 to 3.8, so cant use str.removesuffix lol
-    #     #     if model in data.CUSTOM_MODELS:
-    #     #         shutil.copy(os.path.join(MODELS_PATH, file), f'{self.out_dir}/region_common/actor/{file}')
-    #     #         self.progress_value += 1 # update progress bar
-    #     #         self.progress_update.emit(self.progress_value)
-
-    #     if self.thread_active:
-    #         crane_prizes.makePrizeModels(self.rom_path, self.out_dir, self.placements, self.item_defs)
-    #         self.progress_value += 1 # update progress bar
-    #         self.progress_update.emit(self.progress_value)  
-
-
     def shuffleDungeons(self):
         """Shuffles the entrances of each dungeon"""
 
@@ -641,21 +568,3 @@ class ModsProcess(QtCore.QThread):
                 icon['mFirstShowFlagName'] = data.DUNGEON_MAP_ICONS[new_k][1]
 
         self.file_manager.writeFile('UiFieldMapIcons.gsheet', sheet)
-
-
-    def changeLevelConfigs(self):
-        """Edits the config of the lvb files for dungeons to allow companions"""
-
-        levels_path = self.rom_path / "region_common" / "level"
-
-        # allow companions inside every dungeon
-        # exception being the Egg since companions can collide with Nightmare and cause a softlock
-        folders = [f.name for f in levels_path.iterdir() if f.name.startswith("Lv") and not f.name.startswith("Lv09")]
-
-        for folder in folders:
-            if not self.thread_active:
-                break
-
-            level = self.file_manager.readFile(f'{folder}.lvb')
-            level.config.allow_companions = True
-            self.file_manager.writeFile(f'{folder}.lvb', level)

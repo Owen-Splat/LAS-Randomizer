@@ -2,6 +2,8 @@ from RandomizerCore.Tools.leb import Room
 
 
 class RoomFixes:
+    """Fix some LEB files in ways that are always done, regardless of item placements"""
+
     def __init__(self, mod_generator) -> None:
         self.parent = mod_generator
         self.makeGeneralRoomChanges()
@@ -12,8 +14,6 @@ class RoomFixes:
 
 
     def makeGeneralRoomChanges(self):
-        """Fix some LEB files in ways that are always done, regardless of item placements"""
-
         ### Mad Batters: Give the batters a 3rd parameter for the event entry point to run
         # A: Bay
         if self.parent.thread_active:
