@@ -202,6 +202,9 @@ class TradeQuestRandomizer:
 
         event_tools.insertEventAfter(flowchart, 'Event28', 'Event15')
 
+        item_key, item_index = self.parent.item_info_manager.getItemInfo('christine-grateful')
+        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event44', 'Event36')
+
 
     def mrWriteChanges(self, flowchart):
         item_key, item_index = self.parent.item_info_manager.getItemInfo('mr-write')

@@ -3,6 +3,10 @@ from RandomizerCore.Helpers import item_get_manager
 
 
 class TarinRandomizer:
+    """Handles randomizing the item Tarin gives, as well as to give all the starting items
+
+    Will later be moved to player_start.py when we randomize starting location"""
+
     def __init__(self, mod_generator) -> None:
         self.parent = mod_generator
         flow = self.parent.file_manager.readFile('Tarin.bfevfl')
