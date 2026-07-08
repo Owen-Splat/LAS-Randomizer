@@ -1,71 +1,53 @@
-v0.5
+ObjSinkingSword for items that the player needs to press A to grab (instruments, ocarina)
+ItemSecretSeashell for items that the player just needs to touch to grab (works for everything)
+    Write custom code so that the seashell actor looks at a flag instead of inventory for spawning
+Everything that would spawn an item will have a ItemGoldenLeaf spawn
+    If the item is a key inside of a dungeon, ItemSmallKey to trigger compass alarm
+    Probably need some small code changes to enemies that drop golden leaves so they don't randomly spawn
+
+shop is easy, the user steals fake items which then set a GettingFlag which is then used to play the get item event
+
+trendy just needs to be able for us to change string table stuff in the .bfres file
+    there looks to be a pattern in the string table, might be able to just edit some strings to short replacements and pad
+    randomized physics will be fun too, maybe for a later update though since it'll take time making sure nothing becomes impossible
+
+keysanity is easy, just needs an EventFlow comparison chain on the index to determine which dungeon it goes to
+    will need to edit FlowControl::CompareInt to check if the values are equal rather than if value1 is greater
+    by extension, we need to also make sure nothing else uses it
+
+check for any use of FlowControl::CompareFloat
+    if unused, it's a free event for us to rewrite into anything we want to do
+    currently i'm thinking it can be used for companion rando
+    if we do, make every telephone booth have bowwow and rooster to swap between
+
+----------
+GENERAL FUTURE STUFF TO LOOK INTO
 
 - eventflow edits through code gets pretty messy and hard to follow
     create our own type of flowchart file and write a parser that'll translate them into the .bfevfl files
     this reduces the amount of code and will just be plain easier to edit
 
 - create a Randomizer.bfevfl to handle giving all items, everything else will subflow to this
-    made a branch for this, but rapids and seashell mansion crash for some reason, they might still need to be manual
-
-- keysanity
-    use the Randomizer.bfevfl and the itemIndex parameter with the FlowControl::CompareInt to determine dungeon
-    holding up dungeon items can just display the "Place:LvXDungeon" text, no need for custom text
+    tried this at one point, rapids and seashell mansion crash for some reason, will need to look into it more
+    now that GettingFlags are set through code, our ItemGetManager is much smaller so this isn't as needed
 
 - barren dungeons
 
-----------
-v0.6
-
-- shuffle followers
-    rooster implementation is easy, just need to compile a list of every room + the actor of the check
-    bowwow has not been tested. Unlike the rooster, bowwow physically exists and needs to be touched
-    if nothing works too well, we can always use custom text and require to go to a telephone booth
-
-- shop
-    needs ASM changes to set the gettingFlag of the stolen item
-    once set, we can simply just check for the flags in the post steal eventflow
-
-----------
-v0.7
-
-- trendy
-    needs .bfres editing, at least enough to rename the model & file
-    the format is Prize{prizeKey}.bfres, with prizeKey also serving as the model name
-    might be possible to rename NpcMarin.bfres for example as PrizeMarin.bfres, and have the shop item called Marin?
-        may not need .bfres editing if so
-
-- randomized trendy physics
-
-----------
-GENERAL FUTURE STUFF TO LOOK INTO
-
-- write asm for starting with maps, compasses, beaks
-    it's fine to handle through events right now, this will just result in less written code
+- proper tricks toggle
 
 - work on custom text
     use custom text to make tunics more intuitive
 
-- make every telephone booth have bowwow and rooster to swap between
-
 - individual tricks toggles
-
-- better workaround for slime key
 
 - make separete repo containing custom models to be used optionally with rando
     for songs, capacity upgrades, and even custom items
     we could also potentially use EoW models if the user has the RomFS
 
-- fix sunken heart pieces
-    needs asm to make heart pieces ignore inventory (or just allow indexes past 31)
-    then all heart pieces will be changed back into heart piece actors
-
-- randomize seashells
-    FINISH PARTIAL SEASHELL SUPPORT
-    will be by far the most complex asm
-    seashells need to ignore inventory as well as add actor params to the ones dynamically spawned in
-
-- write ASM to make ItemSmallKey actors check parameter[1] like ObjTreasureBox does
-
 - fix dampe logic for instrument shuffle
     logic currently assumes that if you have the instrument, you have all the items needed to clear the rooms
     this is obviously not true with instrument shuffle, but logic is complex and I do not care enough for it
+
+
+----------
+After I'm happy with the state of everything, it'll be time to work on AP support :)
