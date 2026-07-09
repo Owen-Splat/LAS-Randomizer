@@ -165,6 +165,24 @@ class FlagManager:
         # self.addFlag('ShopHeartSteal')
         # self.addFlag('ShopHeartGet')
 
+        # flags for hidden seashells turned into drops
+        self.addFlag("HeightsHoleGet")
+        self.addFlag("BridgeHoleGet")
+        self.addFlag("BeachBonkTreeGet")
+        self.addFlag("TailCaveBonkTreeGet")
+        self.addFlag("UkukuBonkTreeGet")
+        self.addFlag("MabeBushGet")
+        self.addFlag("PondIslandBushGet")
+        self.addFlag("CoastIslandBushGet")
+        self.addFlag("BayBushGet")
+        self.addFlag("MansionBushGet")
+        self.addFlag("MoblinCaveRockGet")
+        self.addFlag("DesertSouthRockGet")
+        self.addFlag("RockMazeRockGet")
+        self.addFlag("PlainsRockGet")
+        self.addFlag("TaltalWestRockGet")
+        self.addFlag("TaltalEastRockGet")
+
 
     def editNextUnusedFlag(self, flag_name: str) -> bool:
         unused_names = [k for k,v in self.flags.items() if "unused" in k]
