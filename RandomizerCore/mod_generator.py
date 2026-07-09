@@ -1,7 +1,5 @@
 from PySide6 import QtCore
-from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE, RESOURCE_PATH
-from RandomizerCore.Randomizers import data
-from pathlib import Path
+from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 from RandomizerCore.Fixes.title_screen import TitleScreenFixes
 from RandomizerCore.Fixes.datasheets import DatasheetFixes
 from RandomizerCore.Fixes.events import EventFixes
@@ -29,6 +27,7 @@ from RandomizerCore.Randomizers.chests import ChestRandomizer
 from RandomizerCore.Randomizers.dampe import DampeRandomizer
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.tarin import TarinRandomizer
+from pathlib import Path
 import random, traceback
 
 
@@ -81,7 +80,9 @@ class ModsProcess(QtCore.QThread):
             # Handle general fixes that are done regardless of item placements
             if self.thread_active: DatasheetFixes(self)
             if self.thread_active: EventFixes(self)
+            if self.thread_active: LevelFixes(self)
             if self.thread_active: RoomFixes(self)
+            if self.thread_active: TitleScreenFixes(self)
 
             # Run all of our randomization classes
             if self.thread_active: TarinRandomizer(self)
@@ -104,9 +105,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: OwlStatueRandomizer(self)
             if self.thread_active: BlueRupeeRandomizer(self)
 
-            if self.thread_active: LevelFixes(self)
             if self.thread_active: EntranceRandomizer(self)
-            if self.thread_active: TitleScreenFixes(self)
 
         except Exception:
             er = traceback.format_exc()
