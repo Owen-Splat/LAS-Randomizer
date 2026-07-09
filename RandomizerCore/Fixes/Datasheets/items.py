@@ -15,6 +15,12 @@ class ItemsDatasheetFixes:
             if not self.parent.thread_active:
                 break
 
+            # we automatically set the gettingFlag when obtaining items via exlaunch
+            # this eliminates the need to put a bunch of stuff in our ItemGetManager
+            if item['symbol'] == 'Bomb':
+                item['gettingFlag'] = 'BombsFoundFlag'
+            if item['symbol'] == 'MagnifyingLens':
+                item['gettingFlag'] = 'LensFoundFlag'
             if item['symbol'] == 'Flippers': # this custom flag is for water loading zones to use
                 item['gettingFlag'] = 'FlippersFound'
 
@@ -77,18 +83,19 @@ class ItemsDatasheetFixes:
         dummy['npcKey'] = self.parent.item_defs[self.parent.placements['dampe-final']]['npc-key']
         sheet['values'].append(dictToStruct(dummy))
 
-        dummy['symbol'] = 'ShopShovel'
-        dummy['itemID'] = 68
-        dummy['gettingFlag'] = ''
-        sheet['values'].append(dictToStruct(dummy))
-        dummy['symbol'] = 'ShopBow'
-        dummy['itemID'] = 69
-        # dummy['gettingFlag'] = 'ShopBowSteal'
-        sheet['values'].append(dictToStruct(dummy))
-        dummy['symbol'] = 'ShopHeart'
-        dummy['itemID'] = 70
-        # dummy['gettingFlag'] = 'ShopHeartSteal'
-        sheet['values'].append(dictToStruct(dummy))
+        # shop stuff, comment out for now until we work on shop
+        # dummy['symbol'] = 'ShopShovel'
+        # dummy['itemID'] = 68
+        # dummy['gettingFlag'] = ''
+        # sheet['values'].append(dictToStruct(dummy))
+        # dummy['symbol'] = 'ShopBow'
+        # dummy['itemID'] = 69
+        # # dummy['gettingFlag'] = 'ShopBowSteal'
+        # sheet['values'].append(dictToStruct(dummy))
+        # dummy['symbol'] = 'ShopHeart'
+        # dummy['itemID'] = 70
+        # # dummy['gettingFlag'] = 'ShopHeartSteal'
+        # sheet['values'].append(dictToStruct(dummy))
 
         # seashell mansion presents need traps to be items entries each with a unique ID, otherwise gives a GreenRupee
         # even though IDs >127 cause a crash when they get added to the inventory, traps never actually get added
@@ -113,6 +120,7 @@ class ItemsDatasheetFixes:
             dummy['itemID'] = 131
             sheet['values'].append(dictToStruct(dummy))
 
+        # item entries for NPCs to display the correct item model before the player obtains it
         dummy['symbol'] = 'FishNecklace'
         dummy['itemID'] = 200
         dummy['npcKey'] = 'FishNecklace'
