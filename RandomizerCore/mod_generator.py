@@ -18,6 +18,7 @@ from RandomizerCore.Randomizers.free_gifts import FreeGiftsRandomizer
 from RandomizerCore.Randomizers.boss_drops import BossDropRandomizer
 from RandomizerCore.Randomizers.entrances import EntranceRandomizer
 from RandomizerCore.Randomizers.miscellaneous import MiscRandomizer
+from RandomizerCore.Randomizers.seashells import SeashellRandomizer
 from RandomizerCore.Randomizers.rupees import BlueRupeeRandomizer
 from RandomizerCore.Randomizers.fishing import FishingRandomizer
 from RandomizerCore.Randomizers.owls import OwlStatueRandomizer
@@ -90,6 +91,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: FreeGiftsRandomizer(self)
             if self.thread_active: TradeQuestRandomizer(self)
             if self.thread_active: HeartPieceRandomizer(self)
+            if self.thread_active: SeashellRandomizer(self)
             if self.thread_active: MiscRandomizer(self)
             if self.thread_active: SeashellMansionRandomizer(self)
             if self.thread_active: BossDropRandomizer(self)

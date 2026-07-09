@@ -182,6 +182,7 @@ class FlagManager:
         self.addFlag("PlainsRockGet")
         self.addFlag("TaltalWestRockGet")
         self.addFlag("TaltalEastRockGet")
+        self.addFlag("GhostHousePotGet")
 
 
     def editNextUnusedFlag(self, flag_name: str) -> bool:
