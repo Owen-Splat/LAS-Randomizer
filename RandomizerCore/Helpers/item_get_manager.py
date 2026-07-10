@@ -33,7 +33,7 @@ class ItemGetManager:
         # progressive items
         if item == 'PowerBraceletLv1':
             return event_tools.createProgressiveItemSwitch(flowchart, 'PowerBraceletLv1', 'PowerBraceletLv2',
-                self.parent.flag_manager.flags["BraceletFoundFlag"], before, after)
+                "BraceletFoundFlag", before, after)
 
         if item == 'SwordLv1':
             # if play_extra_anim:
@@ -47,11 +47,11 @@ class ItemGetManager:
             #         data.SWORD_FOUND_FLAG, before, spinAnim)
             # else:
             return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
-                self.parent.flag_manager.flags["SwordFoundFlag"], before, after)
+                "SwordFoundFlag", before, after)
 
         if item == 'Shield':
             return event_tools.createProgressiveItemSwitch(flowchart, 'Shield', 'MirrorShield',
-                self.parent.flag_manager.flags["ShieldFoundFlag"], before, after)    
+                "ShieldFoundFlag", before, after)    
 
         # traps
         if item == 'ZapTrap':
@@ -169,7 +169,7 @@ class ItemGetManager:
             give_bracelet1 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False}, after)
             return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-                {'symbol': self.parent.flag_manager.flags["BraceletFoundFlag"]}, {0: give_bracelet1, 1: give_bracelet2})
+                {'symbol': "BraceletFoundFlag"}, {0: give_bracelet1, 1: give_bracelet2})
 
         if item == 'SwordLv1':
             give_sword2 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
@@ -177,7 +177,7 @@ class ItemGetManager:
             give_sword1 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False}, after)
             return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-                {'symbol': self.parent.flag_manager.flags["SwordFoundFlag"]}, {0: give_sword1, 1: give_sword2})
+                {'symbol': "SwordFoundFlag"}, {0: give_sword1, 1: give_sword2})
 
         if item == 'Shield':
             give_shield2 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
@@ -185,7 +185,7 @@ class ItemGetManager:
             give_shield1 = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item, 'count': 1, 'index': -1, 'autoEquip': False}, after)
             return event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-                {'symbol': self.parent.flag_manager.flags["ShieldFoundFlag"]}, {0: give_shield1, 1: give_shield2})    
+                {'symbol': "ShieldFoundFlag"}, {0: give_shield1, 1: give_shield2})    
 
         # traps
         if item == 'ZapTrap':
