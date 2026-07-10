@@ -2583,7 +2583,7 @@ bottle-grotto:
   condition-hell: mabe & swamp & feather
 bridge:
   type: region
-  condition-basic: (plains & (bananas | open-bridge)) | (river & cross-water)
+  condition-basic: (plains & (bananas | completed-bridge)) | (river & cross-water)
 catfish-maw:
   type: region
   condition-basic: river & flippers
@@ -2782,7 +2782,7 @@ D5-3E:
   condition-basic: (D5-7F & kill-gohma & hookshot & feather & key-D5:3) | (D5-5G & feather & kill-star)
 D5-5G:
   type: room
-  condition-basic: (D5-7F & kill-stalfos-yellow & kill-stalfos-red & (kill-master-stalfos | fast-master-stalfos)) | (D5-3E & key-D5:3 & hookshot & feather & kill-star)
+  condition-basic: (D5-7F & kill-stalfos-yellow & kill-stalfos-red & (kill-master-stalfos | fast-stalfos)) | (D5-3E & key-D5:3 & hookshot & feather & kill-star)
 D5-7F:
   type: room
   condition-basic: D5-8H & key-D5:1
@@ -2876,10 +2876,10 @@ bomb-arrows:
   condition-basic: bombs & shoot-arrows
 bombs:
   type: interaction
-  condition-basic: ((mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming & powders) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | !shuffle-bombs)
+  condition-basic: ((mabe & boots) | (can-shop & (conch-horn | unlocked-bombs)) | (break-pot & (kanalet-inside | (D0-8C & ((can-farm-rupees & reduced-farming & powders) | (kill-goblin[heavy] & break-pot))) | key-cavern | D6-8D)) | (rapids & (feather | boomerang)) | (angler-tunnel & (sword | feather | boomerang))) & (bomb | !shuffled-bombs)
 powders:
   type: interaction
-  condition-basic: ((color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))) & (powder | !shuffle-powder)
+  condition-basic: ((color-dungeon & (can-farm-rupees | break-pot)) | (D2-7D & feather & hit-crystal-switch) | (D8-8D & kill-vire & feather & break-pot) | (D8-4C & feather & hookshot) | (D8-8D & feather & key-D8:2) | (rapids & (feather | boomerang))) & (powder | !shuffled-powder)
 shoot-arrows:
   type: interaction
   condition-basic: bow & (can-shop | (armos-maze & break-pot) | (D5-7F & kill-helmasaur & feather) | (D6-8D & break-pot) | (D8-4C & (feather | break-pot)) | (D8-8D & feather & key-D8:2) | arrow-capacity)

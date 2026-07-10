@@ -518,7 +518,8 @@ class ItemShuffler(QtCore.QThread):
             #         important_items += [key] * self.item_defs[key]['quantity']
 
         # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
-        settings_access = {setting: 1 for setting in self.settings if self.settings[setting] == True}
+        settings_access = {re.sub(" ", "-", setting).lower(): 1 for setting in self.settings if self.settings[setting] == True}
+        print(settings_access)
         access.update(settings_access)
 
         # Force the followers to be vanilla (for now)
