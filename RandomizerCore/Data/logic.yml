@@ -1087,7 +1087,7 @@ pothole-north:
   # condition-advanced: (feather | rooster) & (bombs | powders | sword)
 pothole-final:
   type: item
-  subtype: drop # dig
+  subtype: dig
   content: slime-key
   region: pothole
   spoiler-region: pothole-field
