@@ -181,6 +181,11 @@ class SeashellRandomizer:
                 ('EventFlags', 'SetFlag', {'symbol': SHELL_FLAGS[room], 'value': True})
             ], get_anim)
 
+            # sunken seashells will be changed into heart piece actors
+            # heart piece actors are bigger and easier to see without manually figuring out scale
+            if room in ("kanalet-moat-north", "taltal-sunken"):
+                shell.type = 0xB0
+
             # parameter[0] is index, which doesnt matter because we make ItemSecretSeashell ignore inventory for spawning
             shell.parameters[1] = bytes(model_path, 'utf-8')
             shell.parameters[2] = bytes(model_name, 'utf-8')
