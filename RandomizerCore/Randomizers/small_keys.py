@@ -21,19 +21,7 @@ class KeyRandomizer:
                 break
 
             room_data = self.parent.file_manager.readFile(f'{SMALL_KEY_ROOMS[room]}.leb')
-
-            # TODO: WE WONT NEED TO CHANGE THIS INTO A SMALL KEY ACTOR SOON
-            if room == 'pothole-final':
-                item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
-                act = room_data.actors[42]
-                act.type = 0xa9 # small key
-                act.posX += 1.5 # move right one tile
-                act.posZ -= 1.5 # move up one tile
-                act.switches[0] = (1, self.parent.flag_manager.flags['PotholeKeySpawn']) # index of PotholeKeySpawn
-                act.switches[1] = (1, 363) # index of the getflag, which is now unused0363
-            else:
-                item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
-
+            item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
             self.writeKeyEvent(flow.flowchart, item_key, item_index, room)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
             self.parent.file_manager.writeFile(f'{SMALL_KEY_ROOMS[room]}.leb', room_data)

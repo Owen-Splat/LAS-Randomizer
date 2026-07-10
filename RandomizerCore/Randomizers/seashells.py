@@ -1,4 +1,5 @@
 import RandomizerCore.Tools.event_tools as event_tools
+from RandomizerCore.Randomizers.data import MODEL_SIZES, MODEL_ROTATIONS
 import copy
 
 
@@ -20,9 +21,14 @@ class SeashellRandomizer:
 
         self.parent.file_manager.writeFile('SmallKey.bfevfl', self.flow)
 
+        self.randomizeStaticShells()
+
 
     def addBushDrops(self) -> None:
         for room in GRASS_ROOMS:
+            if not self.parent.thread_active:
+                break
+
             room_data = self.parent.file_manager.readFile(f"{GRASS_ROOMS[room]}.leb")
 
             grass = [a for a in room_data.actors if isinstance(a.parameters[1], bytes) and str(a.parameters[1], "utf-8").startswith("Seashell")][0]
@@ -45,6 +51,9 @@ class SeashellRandomizer:
 
     def addRockDrops(self) -> None:
         for room in ROCK_ROOMS:
+            if not self.parent.thread_active:
+                break
+
             room_data = self.parent.file_manager.readFile(f"{ROCK_ROOMS[room]}.leb")
 
             rock = [a for a in room_data.actors if isinstance(a.parameters[0], bytes) and str(a.parameters[0], "utf-8").startswith("Seashell")][0]
@@ -71,6 +80,9 @@ class SeashellRandomizer:
         We use exlaunch to force the tree to set its switch0 when bonked"""
 
         for room in TREE_ROOMS:
+            if not self.parent.thread_active:
+                break
+
             room_data = self.parent.file_manager.readFile(f"{TREE_ROOMS[room]}.leb")
 
             tree = [a for a in room_data.actors if isinstance(a.parameters[0], bytes) and str(a.parameters[0], "utf-8").startswith("Seashell")][0]
@@ -96,6 +108,9 @@ class SeashellRandomizer:
 
     def addHoleDrops(self) -> None:
         for room in HOLE_ROOMS:
+            if not self.parent.thread_active:
+                break
+
             room_data = self.parent.file_manager.readFile(f"{HOLE_ROOMS[room]}.leb")
 
             hole = [a for a in room_data.actors if a.type == 0x233][0]
@@ -118,7 +133,7 @@ class SeashellRandomizer:
             self.local_flag_index += 1
 
 
-    def writeKeyEvent(self, flowchart, item_key, item_index, room):
+    def writeKeyEvent(self, flowchart, item_key, item_index, room) -> None:
         """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
         
         # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
@@ -136,6 +151,58 @@ class SeashellRandomizer:
             ('SmallKey', 'SetActorSwitch', {'value': True, 'switchIndex': 1}),
             ('SmallKey', 'Destroy', {})
         ], item_event)
+
+
+    def randomizeStaticShells(self) -> None:
+        flow = self.parent.file_manager.readFile('SinkingSword.bfevfl')
+
+        for room in SHELL_ROOMS:
+            if not self.parent.thread_active:
+                break
+
+            item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
+            room_data = self.parent.file_manager.readFile(f"{SHELL_ROOMS[room]}.leb")
+            shells = [a for a in room_data.actors if a.type == 0x87]
+            if len(shells) > 0:
+                shell = shells[0]
+            else:
+                shell = [a for a in room_data.actors if a.type == 0x8a][0] # slime key
+                shell.type = 0x87
+
+            if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+                get_anim = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItemByKey',
+                {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            else:
+                get_anim = self.parent.item_get_manager.get(flow.flowchart, item_key, item_index)
+
+            event_tools.addEntryPoint(flow.flowchart, room)
+            event_tools.createActionChain(flow.flowchart, room, [
+                ('SinkingSword', 'Destroy', {}),
+                ('EventFlags', 'SetFlag', {'symbol': SHELL_FLAGS[room], 'value': True})
+            ], get_anim)
+
+            # parameter[0] is index, which doesnt matter because we make ItemSecretSeashell ignore inventory for spawning
+            shell.parameters[1] = bytes(model_path, 'utf-8')
+            shell.parameters[2] = bytes(model_name, 'utf-8')
+            shell.parameters[3] = bytes(room, 'utf-8') # entry point
+            shell.parameters[4] = bytes(SHELL_FLAGS[room], 'utf-8') # flag which controls if the shell appears or not
+
+            if item_key == 'Seashell':
+                shell.parameters[5] = bytes('true', 'utf-8')
+            else:
+                shell.parameters[5] = bytes('false', 'utf-8')
+
+            if model_name in MODEL_SIZES:
+                size = MODEL_SIZES[model_name]
+                shell.scaleX = size
+                shell.scaleY = size
+                shell.scaleZ = size
+            if model_name in MODEL_ROTATIONS:
+                shell.rotY = MODEL_ROTATIONS[model_name]
+
+            self.parent.file_manager.writeFile(f"{SHELL_ROOMS[room]}.leb", room_data)
+
+        self.parent.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
 
 GRASS_ROOMS = {
@@ -199,4 +266,43 @@ HOLE_FLAGS = {
 HOLE_DROP_POSITONS = {
     "taltal-heights-hole":          (192.75, 12.75, 32.25),
     "taltal-bomb-hole":             (150.75, 25.5, 12.75)
+}
+
+SHELL_ROOMS = {
+    "kanalet-moat-north":           "Field_04I",
+    "taltal-sunken":                "Field_02M",
+    "south-bay-dig":                "Field_14K",
+    "beach-dig":                    "Field_16F",
+    "wasteland-dig":                "Field_05H",
+    "desert-dig":                   "Field_13P",
+    "ghost-grave-dig":              "Field_08E",
+    "doghouse-dig":                 "DogHouse_01A",
+    "goponga-west-dig":             "Field_03B",
+    "above-cave-dig":               "Field_11I",
+    "above-d3":                     "Field_11F",
+    "under-skull-rock":             "Field_10H",
+    "rapids-east-island":           "Field_06O",
+    "taltal-west-dig":              "Field_02C",
+    "woods-west-dig":               "Field_05A",
+    "woods-east-dig":               "Field_06C",
+    "pothole-final":                "Field_13G" # we treat the slime key spot as a seashell
+}
+SHELL_FLAGS = {
+    "kanalet-moat-north":           "KanaletSunkenShellGet",
+    "taltal-sunken":                "TaltalSunkenShellGet",
+    "south-bay-dig":                "SouthBayDigShellGet",
+    "beach-dig":                    "BeachDigShellGet",
+    "wasteland-dig":                "WastelandDigShellGet",
+    "desert-dig":                   "DesertDigShellGet",
+    "ghost-grave-dig":              "GhostGraveDigShellGet",
+    "doghouse-dig":                 "DoghouseDigShellGet",
+    "goponga-west-dig":             "GopongaDigShellGet",
+    "above-cave-dig":               "AboveCaveDigShellGet",
+    "above-d3":                     "AboveD3DigShellGet",
+    "under-skull-rock":             "UnderSkullDigShellGet",
+    "rapids-east-island":           "RapidsEastDigShellGet",
+    "taltal-west-dig":              "TaltalWestDigShellGet",
+    "woods-west-dig":               "WoodsWestDigShellGet",
+    "woods-east-dig":               "WoodsEastDigShellGet",
+    "pothole-final":                "PotholeItemGetFlag"
 }

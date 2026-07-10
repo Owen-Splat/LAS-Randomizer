@@ -21,16 +21,7 @@ class HeartPieceRandomizer:
 
         flow = self.parent.file_manager.readFile('SinkingSword.bfevfl')
 
-        sunken = [
-            'taltal-east-drop',
-            'south-bay-sunken',
-            'bay-passage-sunken',
-            'river-crossing-cave',
-            'kanalet-moat-south'
-        ]
-        non_sunken = (x for x in HEART_ROOMS if x not in sunken)
-
-        for room in non_sunken:
+        for room in HEART_ROOMS:
             if not self.parent.thread_active:
                 break
 
@@ -60,34 +51,33 @@ class HeartPieceRandomizer:
             ('EventFlags', 'SetFlag', {'symbol': HEART_FLAGS[room], 'value': True})
         ], get_anim)
 
-        act.type = 0x194 # sinking sword
-
         if room in sunken:
-            if room == 'taltal-east-drop':
-                act.posY += 2 # cannot see the item in the water, so let's just have it float on the water lol
-            # else:
-            #     act.posY += 0.5 # raise others up by 1/3 tile
+            # raise them up half a tile
+            act.posY += 0.75
         else:
-            if room == 'mabe-well':
-                act.posY += 0.5 # this one always ends up clipped into the ground more, so raise by 1/3 tile
-            else:
-                act.posY += 0.375 # raise all others by 1/4 tile
+            # for freestanding heart pieces, shrink the actor if the model will be big
+            # we might want a separate model size list, for now this should be fine
+            if item_key not in ["HeartPiece", "HeartContainer"]:
+                act.scaleX = 0.5
+                act.scaleY = 0.5
+                act.scaleZ = 0.5
 
-        act.parameters[0] = bytes(model_path, 'utf-8')
-        act.parameters[1] = bytes(model_name, 'utf-8')
-        act.parameters[2] = bytes(room, 'utf-8') # entry point
-        act.parameters[3] = bytes(HEART_FLAGS[room], 'utf-8') # flag which controls if the heart piece appears or not
+        # parameter[0] is index, which doesnt matter because we make ItemHeartPiece ignore inventory for spawning
+        act.parameters[1] = bytes(model_path, 'utf-8')
+        act.parameters[2] = bytes(model_name, 'utf-8')
+        act.parameters[3] = bytes(room, 'utf-8') # entry point
+        act.parameters[4] = bytes(HEART_FLAGS[room], 'utf-8') # flag which controls if the heart piece appears or not
 
         if item_key == 'Seashell':
-            act.parameters[4] = bytes('true', 'utf-8')
+            act.parameters[5] = bytes('true', 'utf-8')
         else:
-            act.parameters[4] = bytes('false', 'utf-8')
+            act.parameters[5] = bytes('false', 'utf-8')
 
         if model_name in MODEL_SIZES:
             size = MODEL_SIZES[model_name]
-            act.scaleX = size
-            act.scaleY = size
-            act.scaleZ = size
+            act.scaleX *= size
+            act.scaleY *= size
+            act.scaleZ *= size
         if model_name in MODEL_ROTATIONS:
             act.rotY = MODEL_ROTATIONS[model_name]
 

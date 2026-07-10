@@ -8,14 +8,13 @@ class OwlStatueRandomizer:
 
 
     def makeOwlStatueChanges(self):
-        '''Edits the eventflows for the owl statues to give items, as well as one extra level file'''
+        '''Edits the eventflows for the owl statues to give items'''
 
-        if self.parent.thread_active: # put the slime key check on the owl for now
-            flow = self.parent.file_manager.readFile('FieldOwlStatue.bfevfl')
-            self.addSlimeKeyCheck(flow.flowchart)
-            if self.parent.settings["Owl Gifts"] in ("Overworld", "All"):
+        if self.parent.settings["Owl Gifts"] in ("Overworld", "All"):
+            if self.parent.thread_active:
+                flow = self.parent.file_manager.readFile('FieldOwlStatue.bfevfl')
                 self.makeFieldChanges(flow.flowchart, self.parent.placements, self.parent.item_defs)
-            self.parent.file_manager.writeFile('FieldOwlStatue.bfevfl', flow)
+                self.parent.file_manager.writeFile('FieldOwlStatue.bfevfl', flow)
 
         if self.parent.settings["Owl Gifts"] in ("Dungeons", "All"):
             if self.parent.thread_active:
@@ -42,18 +41,6 @@ class OwlStatueRandomizer:
                 room_data = self.parent.file_manager.readFile('Lv10ClothesDungeon_05F.leb')
                 room_data.actors[4].parameters[0] = bytes('examine_Color05F', 'utf-8')
                 self.parent.file_manager.writeFile('Lv10ClothesDungeon_05F.leb', room_data)
-
-
-    def addSlimeKeyCheck(self, flowchart):
-        '''Places an item on the owl in front of the slime key regardless if owl gifts are on or not'''
-
-        key_drop = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-            {'symbol': 'PotholeKeySpawn', 'value': True}, 'Event21')
-        shovel_check = event_tools.createSwitchEvent(flowchart, 'Inventory', 'HasItem',
-            {'itemType': 10, 'count': 1}, {0: 'Event21', 1: key_drop})
-        chest_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': 'PotholeKeySpawn'}, {0: shovel_check, 1: 'Event21'})
-        event_tools.insertEventAfter(flowchart, 'examine_anaboko', chest_check)
 
 
     def makeFieldChanges(self, flowchart, placements, item_defs):

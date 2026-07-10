@@ -17,12 +17,8 @@ class ItemsDatasheetFixes:
 
             # we automatically set the gettingFlag when obtaining items via exlaunch
             # this eliminates the need to put a bunch of stuff in our ItemGetManager
-            if item['symbol'] == 'Bomb':
-                item['gettingFlag'] = 'BombsFoundFlag'
-            if item['symbol'] == 'MagnifyingLens':
-                item['gettingFlag'] = 'LensFoundFlag'
-            if item['symbol'] == 'Flippers': # this custom flag is for water loading zones to use
-                item['gettingFlag'] = 'FlippersFound'
+            if item['symbol'] in ITEM_GETTING_FLAGS:
+                item['gettingFlag'] = ITEM_GETTING_FLAGS[item['symbol']]
 
             # Set new npcKeys for items to change how they appear when Link holds it up
             if item['symbol'] == 'SmallKey':
@@ -31,6 +27,10 @@ class ItemsDatasheetFixes:
                 item['npcKey'] = 'PatchHoneycomb'
             if item['symbol'] == 'Stick':
                 item['npcKey'] = 'PatchStick'
+            if item['symbol'] == 'Seashell':
+                item['npcKey'] = 'PatchSeashell'
+            if item['symbol'] == 'HeartPiece':
+                item['npcKey'] = 'PatchHeartPiece'
             if item['symbol'] == 'YoshiDoll': # ocarina and instruments are ItemYoshiDoll actors
                 item['npcKey'] = 'PatchYoshiDoll'
                 dummy = parseStruct(item) # create copy to use as a base for custom entries
@@ -133,3 +133,26 @@ class ItemsDatasheetFixes:
         dummy['itemID'] = 202
         dummy['npcKey'] = 'WalrusShell'
         sheet['values'].append(dictToStruct(dummy))
+
+
+ITEM_GETTING_FLAGS = {
+    "SwordLv1":             "SwordFoundFlag",
+    "Shield":               "ShieldFoundFlag",
+    "Bomb":                 "BombsFoundFlag",
+    "PowerBraceletLv1":     "BraceletFoundFlag",
+    "Flippers":             "FlippersFound",
+    "YoshiDoll":            "TradeYoshiDollGet",
+    "Ribbon":               "TradeRibbonGet",
+    "DogFood":              "TradeDogFoodGet",
+    "Bananas":              "TradeBananasGet",
+    "Stick":                "TradeStickGet",
+    "Honeycomb":            "TradeHoneycombGet",
+    "Pineapple":            "TradePineappleGet",
+    "Hibiscus":             "TradeHibiscusGet",
+    "Letter":               "TradeLetterGet",
+    "Broom":                "TradeBroomGet",
+    "FishingHook":          "TradeFishingHookGet",
+    "PinkBra":              "TradeNecklaceGet",
+    "MermaidsScale":        "TradeMermaidsScaleGet",
+    "MagnifyingLens":       "LensFoundFlag",
+}

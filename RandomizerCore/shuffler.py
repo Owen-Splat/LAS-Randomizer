@@ -44,8 +44,8 @@ class ItemShuffler(QtCore.QThread):
         # TEMPORARY CODE HERE to make it so that everything that isn't randomized yet is set to vanilla
         self.vanilla_locations = {k for k, v in self.logic_defs.items()
                             if v['type'] == 'item'
-                            and v['subtype'] not in ('chest', 'boss', 'enemy', 'drop', 'npc', 'standing',
-                                                     'overworld-statue', 'dungeon-statue', 'hidden', 'bomb-hole')}
+                            and v['subtype'] not in ('chest', 'boss', 'enemy', 'drop', 'npc', 'standing', 'overworld-statue',
+                                                     'dungeon-statue', 'hidden', 'bomb-hole', 'dig', 'underwater')}
         self.vanilla_locations.add('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
         self.vanilla_locations.add('trendy-prize-2')
         self.vanilla_locations.add('trendy-prize-3')

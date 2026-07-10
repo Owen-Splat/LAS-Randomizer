@@ -89,8 +89,6 @@ class FlagManager:
 
         self.addFlag('KikiGone')
 
-        self.addFlag('PotholeKeySpawn')
-
         self.addFlag('PrizeGet1')
         self.addFlag('PrizeGet2')
         self.addFlag('PrizeGet3')
@@ -183,6 +181,24 @@ class FlagManager:
         self.addFlag("TaltalWestRockGet")
         self.addFlag("TaltalEastRockGet")
         self.addFlag("GhostHousePotGet")
+
+        # flags for static seashells
+        self.addFlag("KanaletSunkenShellGet")
+        self.addFlag("TaltalSunkenShellGet")
+        self.addFlag("SouthBayDigShellGet")
+        self.addFlag("BeachDigShellGet")
+        self.addFlag("WastelandDigShellGet")
+        self.addFlag("DesertDigShellGet")
+        self.addFlag("GhostGraveDigShellGet")
+        self.addFlag("DoghouseDigShellGet")
+        self.addFlag("GopongaDigShellGet")
+        self.addFlag("AboveCaveDigShellGet")
+        self.addFlag("AboveD3DigShellGet")
+        self.addFlag("UnderSkullDigShellGet")
+        self.addFlag("RapidsEastDigShellGet")
+        self.addFlag("TaltalWestDigShellGet")
+        self.addFlag("WoodsWestDigShellGet")
+        self.addFlag("WoodsEastDigShellGet")
 
 
     def editNextUnusedFlag(self, flag_name: str) -> bool:

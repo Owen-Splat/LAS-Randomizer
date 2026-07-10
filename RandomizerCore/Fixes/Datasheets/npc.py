@@ -19,6 +19,24 @@ class NpcDatasheetFixes:
         ranging from event triggers to layout conditions to even graphics changes. 
         Also makes the shell sensor go off if the Npc holds a seashell"""
 
+        if npc['symbol'] == 'ItemHeartPiece':
+            npc['graphics']['path'] = '$1'
+            npc['graphics']['model'] = '$2'
+            npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
+            npc['eventTriggers'][0]['entryPoint'] = '$3'
+            npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
+            npc['shellSensor'].append({'category': 9, 'parameter': '$5'}) # make specific actors trigger the shell sensor
+            return
+
+        if npc['symbol'] == 'ItemSecretSeashell':
+            npc['graphics']['path'] = '$1'
+            npc['graphics']['model'] = '$2'
+            npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
+            npc['eventTriggers'][0]['entryPoint'] = '$3'
+            npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
+            npc['shellSensor'].append({'category': 9, 'parameter': '$5'}) # make specific actors trigger the shell sensor
+            return
+
         if npc['symbol'] == 'NpcMadBatter':
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             del npc['layoutConditions'][1]
@@ -230,6 +248,16 @@ class NpcDatasheetFixes:
         dummy['symbol'] = 'PatchSmallKey'
         dummy['graphics']['path'] = 'ItemSmallKey.bfres'
         dummy['graphics']['model'] = 'SmallKey'
+        npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
+        dummy['symbol'] = 'PatchHeartPiece'
+        dummy['graphics']['path'] = 'ItemHeartPiece.bfres'
+        dummy['graphics']['model'] = 'HeartPiece'
+        npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
+        dummy['symbol'] = 'PatchSeashell'
+        dummy['graphics']['path'] = 'ItemSecretSeashell.bfres'
+        dummy['graphics']['model'] = 'SecretSeashell'
         npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
 
         dummy['symbol'] = 'PatchYoshiDoll'
