@@ -56,20 +56,6 @@ class NpcDatasheetFixes:
             npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific smallkey actors trigger the shell sensor
             return
 
-        if npc['symbol'] == 'ItemYoshiDoll': # This is for Ocarina and Instruments since I still want the player to press A to get them
-            npc['graphics']['path'] = '$0'
-            npc['graphics']['model'] = '$1'
-            npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
-            npc['eventTriggers'][0]['entryPoint'] = '$2'
-            npc['doAction'] = {'type': 7, 'yOffset': 0.0, 'xzDistance': 1.2999999523162842, 'yDistance': 1.7999999523162842, 'playerAngleRange': 45.0, 'reactionAngleRange': 180.0}
-            npc['layoutConditions'].append({'category': 1, 'parameter': '$3', 'layoutID': -1})
-            npc['collision']['traits'] = ''
-            npc['collision']['isStatic'] = True
-            npc['collision']['filter'] = 5
-            # npc['collision']['offset']['y'] = 0.5
-            npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific yoshidoll actors trigger the shell sensor
-            return
-
         if npc['symbol'] == 'ItemHoneycomb': # Make the Honeycomb object ring the sensor instead of Tarin
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
@@ -89,17 +75,12 @@ class NpcDatasheetFixes:
             npc['layoutConditions'][1] = {'category': 9, 'parameter': 'true', 'layoutID': 4}
             return
 
-        if npc['symbol'] == 'ObjSinkingSword':
+        if npc['symbol'] == 'ObjSinkingSword': # checks where you press A to grab (ocarina & instruments)
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
-            npc['graphics']['waterChannel']['limitDepth'] = 0.5 # idk what this does but probably helps see the item?
             npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
-            npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
             npc['layoutConditions'][0]['parameter'] = '$3'
-            npc['collision']['traits'] = 'HeartPiece'
-            npc['collision']['isStatic'] = False
-            npc['collision']['filter'] = 7
             npc['collision']['offset']['y'] = 0.25
             npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific sinkingsword actors trigger the shell sensor
             return

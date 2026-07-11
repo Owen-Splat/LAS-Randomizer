@@ -59,7 +59,7 @@ class InstrumentRandomizer:
             level = re.match('(.+)_\\d\\d[A-Z]', destination).group(1)
             location = destination
 
-        act.type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
+        act.type = 0x194 # ObjSinkingSword so that the player needs to press A to grab
         act.parameters[0] = bytes(model_path, 'utf-8')
         act.parameters[1] = bytes(model_name, 'utf-8')
         act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow

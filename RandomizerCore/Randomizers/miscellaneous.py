@@ -1,5 +1,5 @@
 import RandomizerCore.Tools.event_tools as event_tools
-from RandomizerCore.Randomizers.data import (MODEL_SIZES, MODEL_ROTATIONS)
+from RandomizerCore.Randomizers.data import MODEL_SIZES, MODEL_ROTATIONS
 
 
 class MiscRandomizer:
@@ -45,18 +45,20 @@ class MiscRandomizer:
 
         # set y-rotation to be 0, if it's something that needs flipped, it will be handled later
         act = room_data.actors[4]
+        act.type = 0xB0 # heart piece
         act.rotY = 0.0
 
         # Keep the normal model if it's a sword
-        act.parameters[0] = bytes(model_path, 'utf-8')
-        act.parameters[1] = bytes(model_name, 'utf-8')
-        act.parameters[2] = bytes('examine', 'utf-8')
-        act.parameters[3] = bytes("BeachMiscItemGetFlag", 'utf-8')
+        act.parameters[0] = 51 # we can use indexes 50-63 since they are unused
+        act.parameters[1] = bytes(model_path, 'utf-8')
+        act.parameters[2] = bytes(model_name, 'utf-8')
+        act.parameters[3] = bytes('examine', 'utf-8')
+        act.parameters[4] = bytes("BeachMiscItemGetFlag", 'utf-8')
 
         if item_key == 'Seashell':
-            act.parameters[4] = bytes('true', 'utf-8')
+            act.parameters[5] = bytes('true', 'utf-8')
         else:
-            act.parameters[4] = bytes('false', 'utf-8')
+            act.parameters[5] = bytes('false', 'utf-8')
 
         if model_name in MODEL_SIZES:
             size = MODEL_SIZES[model_name]
@@ -86,16 +88,17 @@ class MiscRandomizer:
         ], get_anim)
 
         act = room_data.actors[3]
-        act.type = 0x194 # sinking sword
-        act.parameters[0] = bytes(model_path, 'utf-8')
-        act.parameters[1] = bytes(model_name, 'utf-8')
-        act.parameters[2] = bytes('Woods', 'utf-8')
-        act.parameters[3] = bytes("WoodsMiscItemGetFlag", 'utf-8')
+        act.type = 0xB0 # heart piece
+        act.parameters[0] = 52 # we can use indexes 50-63 since they are unused
+        act.parameters[1] = bytes(model_path, 'utf-8')
+        act.parameters[2] = bytes(model_name, 'utf-8')
+        act.parameters[3] = bytes('Woods', 'utf-8')
+        act.parameters[4] = bytes("WoodsMiscItemGetFlag", 'utf-8')
 
         if item_key == 'Seashell':
-            act.parameters[4] = bytes('true', 'utf-8')
+            act.parameters[5] = bytes('true', 'utf-8')
         else:
-            act.parameters[4] = bytes('false', 'utf-8')
+            act.parameters[5] = bytes('false', 'utf-8')
 
         if model_name in MODEL_SIZES:
             size = MODEL_SIZES[model_name]
@@ -125,7 +128,7 @@ class MiscRandomizer:
         ], get_anim)
 
         act = room_data.actors[5]
-        act.type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
+        act.type = 0x194 # ObjSinkingSword so that the player needs to press A to grab
         act.parameters[0] = bytes(model_path, 'utf-8')
         act.parameters[1] = bytes(model_name, 'utf-8')
         act.parameters[2] = bytes('DreamShrine', 'utf-8')
@@ -164,16 +167,17 @@ class MiscRandomizer:
         ], get_anim)
 
         act = room_data.actors[0]
-        act.type = 0x194 # sinking sword
-        act.parameters[0] = bytes(model_path, 'utf-8')
-        act.parameters[1] = bytes(model_name, 'utf-8')
-        act.parameters[2] = bytes('TalTal', 'utf-8')
-        act.parameters[3] = bytes("RoosterCaveItemGetFlag", 'utf-8')
+        act.type = 0xB0 # heart piece
+        act.parameters[0] = 53 # we can use indexes 50-63 since they are unused
+        act.parameters[1] = bytes(model_path, 'utf-8')
+        act.parameters[2] = bytes(model_name, 'utf-8')
+        act.parameters[3] = bytes('TalTal', 'utf-8')
+        act.parameters[4] = bytes("RoosterCaveItemGetFlag", 'utf-8')
 
         if item_key == 'Seashell':
-            act.parameters[4] = bytes('true', 'utf-8')
+            act.parameters[5] = bytes('true', 'utf-8')
         else:
-            act.parameters[4] = bytes('false', 'utf-8')
+            act.parameters[5] = bytes('false', 'utf-8')
 
         if model_name in MODEL_SIZES:
             size = MODEL_SIZES[model_name]
@@ -203,17 +207,18 @@ class MiscRandomizer:
         ], get_anim)
 
         act = room_data.actors[7]
-        act.type = 0x194 # sinking sword
+        act.type = 0xB0 # heart piece
         act.rotY = 0 # rotate to be facing the screen
-        act.parameters[0] = bytes(model_path, 'utf-8')
-        act.parameters[1] = bytes(model_name, 'utf-8')
-        act.parameters[2] = bytes('MermaidCave', 'utf-8')
-        act.parameters[3] = bytes("MermaidCaveItemGetFlag", 'utf-8')
+        act.parameters[0] = 54 # we can use indexes 50-63 since they are unused
+        act.parameters[1] = bytes(model_path, 'utf-8')
+        act.parameters[2] = bytes(model_name, 'utf-8')
+        act.parameters[3] = bytes('MermaidCave', 'utf-8')
+        act.parameters[4] = bytes("MermaidCaveItemGetFlag", 'utf-8')
 
         if item_key == 'Seashell':
-            act.parameters[4] = bytes('true', 'utf-8')
+            act.parameters[5] = bytes('true', 'utf-8')
         else:
-            act.parameters[4] = bytes('false', 'utf-8')
+            act.parameters[5] = bytes('false', 'utf-8')
 
         if model_name in MODEL_SIZES:
             size = MODEL_SIZES[model_name]
