@@ -1,21 +1,33 @@
-ObjSinkingSword for items that the player needs to press A to grab (instruments, ocarina)
-ItemSecretSeashell for items that the player just needs to touch to grab (works for everything)
-    Write custom code so that the seashell actor looks at a flag instead of inventory for spawning
-Everything that would spawn an item will have a ItemGoldenLeaf spawn
-    If the item is a key inside of a dungeon, ItemSmallKey to trigger compass alarm
+- ObjSinkingSword for items that the player needs to press A to grab (instruments, ocarina)
+
+- ItemSecretSeashell for dig spots
+    Needs code to disable automatic shell sensor, hopefully will use the npc sheet data like other stuff
+    MAYBE USE ITEMSLIMEKEY???
+
+- ItemHeartPiece for ground & underwater
+
+- Try to use ItemGoldenLeaf and ItemSmallKey interchangeably to control compass alarm
     Probably need some small code changes to enemies that drop golden leaves so they don't randomly spawn
 
-shop is easy, the user steals fake items which then set a GettingFlag which is then used to play the get item event
+- shop
+    make fake item entries with gettingFlags which we will then check and unset in the following event
+    for this first version, we wont have custom text
 
-trendy just needs to be able for us to change string table stuff in the .bfres file
+- keysanity
+    keysanity is easy, just needs an EventFlow comparison chain on the index to determine which dungeon it goes to
+    will need to edit FlowControl::CompareInt to check if the values are equal rather than if value1 is greater
+    by extension, we need to also make sure nothing else uses it
+    We can use the existing text for dungeon names
+
+----------
+AFTER PUBLIC DEV BUILD
+    
+- trendy (TBD)
+    trendy just needs to be able for us to change string table stuff in the .bfres file
     there looks to be a pattern in the string table, might be able to just edit some strings to short replacements and pad
     randomized physics will be fun too, maybe for a later update though since it'll take time making sure nothing becomes impossible
 
-keysanity is easy, just needs an EventFlow comparison chain on the index to determine which dungeon it goes to
-    will need to edit FlowControl::CompareInt to check if the values are equal rather than if value1 is greater
-    by extension, we need to also make sure nothing else uses it
-
-check for any use of FlowControl::CompareFloat
+- check for any use of FlowControl::CompareFloat
     if unused, it's a free event for us to rewrite into anything we want to do
     currently i'm thinking it can be used for companion rando
     if we do, make every telephone booth have bowwow and rooster to swap between
