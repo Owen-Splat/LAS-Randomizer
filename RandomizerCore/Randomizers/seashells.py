@@ -9,10 +9,11 @@ class SeashellRandomizer:
 
         self.flow = self.parent.file_manager.readFile('SmallKey.bfevfl')
 
-        # we are using unused local flags to spawn stuff the items
-        # we are close to what I believe is the limit to global flags
-        # might be possible to tell the game to allocate more space, I have not tried yet
-        self.local_flag_index = 50
+        # we are using local flags to spawn stuff the items
+        # this is because we want them to keep the bahavior where they despawn if you leave
+        # Field looks to use around 80 local flags, all being gravestones or grass with holes under them
+        # I believe local flags range from 0-255, so we will try starting at 101
+        self.local_flag_index = 101
 
         self.addBushDrops()
         self.addRockDrops()
