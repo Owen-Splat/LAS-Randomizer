@@ -166,9 +166,9 @@ class SeashellRandomizer:
             shells = [a for a in room_data.actors if a.type == 0x87]
             if len(shells) > 0:
                 shell = shells[0]
+                shell.type = 0x8a # turn shells into ItemSlimeKey actors
             else:
                 shell = [a for a in room_data.actors if a.type == 0x8a][0] # slime key
-                shell.type = 0x87
 
             if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
                 get_anim = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItemByKey',
@@ -186,8 +186,9 @@ class SeashellRandomizer:
             # heart piece actors are bigger and easier to see without manually figuring out scale
             if room in ("kanalet-moat-north", "taltal-sunken"):
                 shell.type = 0xB0
+                shell.posY += 0.5 # raise them up 3rd of a tile
 
-            # parameter[0] is index, which doesnt matter because we make ItemSecretSeashell ignore inventory for spawning
+            # could be ItemSlimeKey or ItemHeartPiece actor, so we can't use parameter[0] as that is index for HPs
             shell.parameters[1] = bytes(model_path, 'utf-8')
             shell.parameters[2] = bytes(model_name, 'utf-8')
             shell.parameters[3] = bytes(room, 'utf-8') # entry point

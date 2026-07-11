@@ -28,11 +28,13 @@ class NpcDatasheetFixes:
             npc['shellSensor'].append({'category': 9, 'parameter': '$5'}) # make specific actors trigger the shell sensor
             return
 
-        if npc['symbol'] == 'ItemSecretSeashell':
+        if npc['symbol'] == 'ItemSlimeKey':
             npc['graphics']['path'] = '$1'
             npc['graphics']['model'] = '$2'
             npc['eventInfo'] = {'eventAsset': 'SinkingSword.bfevfl', 'actorName': 'SinkingSword'}
+            npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$3'
+            npc['doAction'] = {'type': 0, 'yOffset': 0.0, 'xzDistance': 0.0, 'yDistance': 0.0, 'playerAngleRange': 0.0, 'reactionAngleRange': 0.0}
             npc['layoutConditions'].append({'category': 1, 'parameter': '$4', 'layoutID': -1})
             npc['shellSensor'].append({'category': 9, 'parameter': '$5'}) # make specific actors trigger the shell sensor
             return
@@ -78,7 +80,6 @@ class NpcDatasheetFixes:
         if npc['symbol'] == 'ObjSinkingSword': # checks where you press A to grab (ocarina & instruments)
             npc['graphics']['path'] = '$0'
             npc['graphics']['model'] = '$1'
-            npc['eventTriggers'][0]['condition'] = 0
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['layoutConditions'][0]['parameter'] = '$3'
             npc['collision']['offset']['y'] = 0.25

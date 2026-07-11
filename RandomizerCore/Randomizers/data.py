@@ -1,4 +1,5 @@
 MODEL_SIZES = {
+    'Letter': 0.65,
     'Marin': 0.65,
     'ManboTamegoro': 0.35,
     'Mamu': 0.25

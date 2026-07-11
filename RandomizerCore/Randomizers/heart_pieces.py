@@ -52,15 +52,14 @@ class HeartPieceRandomizer:
         ], get_anim)
 
         if room in sunken:
-            # raise them up half a tile
-            act.posY += 0.75
+            act.posY += 0.5 # raise them up 3rd of a tile
         else:
             # for freestanding heart pieces, shrink the actor if the model will be big
             # we might want a separate model size list, for now this should be fine
             if item_key not in ["HeartPiece", "HeartContainer"]:
-                act.scaleX = 0.5
-                act.scaleY = 0.5
-                act.scaleZ = 0.5
+                act.scaleX = 0.55
+                act.scaleY = 0.55
+                act.scaleZ = 0.55
 
         # parameter[0] is index, which doesnt matter because we make ItemHeartPiece ignore inventory for spawning
         act.parameters[1] = bytes(model_path, 'utf-8')
