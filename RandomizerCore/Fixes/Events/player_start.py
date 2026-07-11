@@ -30,6 +30,7 @@ class PlayerStartEventFixes:
         shield_num = 0
         bracelet_num = 0
 
+        # starting items
         for i in self.parent.placements['starting-items']:
             item_key = self.parent.item_defs[i]['item-key']
 
@@ -50,7 +51,7 @@ class PlayerStartEventFixes:
 
             event_defs += self.parent.item_get_manager.getWithoutAnimation(item_key, -1)
 
-        # now we will handle starting dungeon items
+        # starting dungeon items
         # we have hooked custom code to read the index as the dungeon in the Inventory::AddItemID function
         if self.parent.settings["Dungeon Maps"] == "Start With":
             for i in range(10):
@@ -67,7 +68,19 @@ class PlayerStartEventFixes:
                 if i == 8: # panel dungeon index, ignore
                     continue
                 event_defs += self.parent.item_get_manager.getWithoutAnimation("StoneBeak", i)
+        if self.parent.settings["Small Keys"] == "Start With":
+            for i in range(10):
+                if i == 8: # panel dungeon index, ignore
+                    continue
+                for c in range(DUNGEON_KEY_COUNTS[i]):
+                    event_defs += self.parent.item_get_manager.getWithoutAnimation("SmallKey", i)
+        if self.parent.settings["Nightmare Keys"] == "Start With":
+            for i in range(10):
+                if i == 8: # panel dungeon index, ignore
+                    continue
+                event_defs += self.parent.item_get_manager.getWithoutAnimation("NightmareKey", i)
 
+        # starting rupees
         starting_rupees = self.parent.settings["Rupees"]
         if starting_rupees > 0:
             event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AddRupee')
@@ -193,3 +206,15 @@ MESSAGE_FLAGS = (
     'MagicPowderFirstMessage',
     'SmallKeyFirstGet'
 )
+
+DUNGEON_KEY_COUNTS = {
+    0: 3,
+    1: 5,
+    2: 9,
+    3: 5,
+    4: 3,
+    5: 3,
+    6: 3,
+    7: 7,
+    9: 3
+}
