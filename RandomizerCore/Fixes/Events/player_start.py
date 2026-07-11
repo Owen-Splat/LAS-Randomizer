@@ -1,6 +1,144 @@
 import RandomizerCore.Tools.event_tools as event_tools
 from RandomizerCore.Randomizers import data
 
+
+class PlayerStartEventFixes:
+    """Sets a bunch of flags for cutscenes being watched/triggered to prevent them from ever happening"""
+
+    def __init__(self, mod_generator) -> None:
+        self.parent = mod_generator
+        flow = self.parent.file_manager.readFile('PlayerStart.bfevfl')
+        self.giveStartingItems(flow.flowchart)
+        self.makeStartChanges(flow.flowchart)
+
+        # skip over BGM_HOUSE_FIRST when Link wakes up because it overlaps with the shuffled zone BGM
+        if self.parent.settings["Music"] == "Shuffled":
+            event_tools.insertEventAfter(flow.flowchart, 'Event150', 'Event151')
+
+        self.parent.file_manager.writeFile('PlayerStart.bfevfl', flow)
+
+
+    def giveStartingItems(self, flowchart) -> None:
+        """We want to give the items when Link wakes up for the first time instead of talking to Tarin
+
+        This is setting the groundwork for random starting area"""
+
+        before_event = "Event151"
+        after_event = "Event155"
+        event_defs = []
+        sword_num = 0
+        shield_num = 0
+        bracelet_num = 0
+
+        for i in self.parent.placements['starting-items']:
+            item_key = self.parent.item_defs[i]['item-key']
+
+            if item_key == 'SwordLv1':
+                sword_num += 1
+                if sword_num == 2:
+                    item_key = 'SwordLv2'
+
+            elif item_key == 'Shield':
+                shield_num += 1
+                if shield_num == 2:
+                    item_key = 'MirrorShield'
+
+            elif item_key == 'PowerBraceletLv1':
+                bracelet_num += 1
+                if bracelet_num == 2:
+                    item_key = 'PowerBraceletLv2'
+
+            event_defs += self.parent.item_get_manager.getWithoutAnimation(item_key, -1)
+
+        # now we will handle starting dungeon items
+        # we have hooked custom code to read the index as the dungeon in the Inventory::AddItemID function
+        if self.parent.settings["Dungeon Maps"] == "Start With":
+            for i in range(10):
+                if i == 8: # panel dungeon index, ignore
+                    continue
+                event_defs += self.parent.item_get_manager.getWithoutAnimation("DungeonMap", i)
+        if self.parent.settings["Compasses"] == "Start With":
+            for i in range(10):
+                if i == 8: # panel dungeon index, ignore
+                    continue
+                event_defs += self.parent.item_get_manager.getWithoutAnimation("Compass", i)
+        if self.parent.settings["Stone Beaks"] == "Start With":
+            for i in range(10):
+                if i == 8: # panel dungeon index, ignore
+                    continue
+                event_defs += self.parent.item_get_manager.getWithoutAnimation("StoneBeak", i)
+
+        starting_rupees = self.parent.settings["Rupees"]
+        if starting_rupees > 0:
+            event_tools.addActorAction(event_tools.findActor(flowchart, 'Link'), 'AddRupee')
+            after_event = event_tools.createActionEvent(flowchart, 'Link', 'AddRupee', {'amount': starting_rupees}, after_event)
+
+        if len(event_defs) > 0:
+            event_tools.createActionChain(flowchart, before_event, event_defs, after_event)
+        else:
+            event_tools.insertEventAfter(flowchart, before_event, after_event)
+
+
+    # this stuff can just go with the starting items when I get around to making random starting area
+    def makeStartChanges(self, flowchart) -> None:
+        """Sets a bunch of flags when you leave the house for the first time, 
+        including Owl cutscenes watched, Walrus Awakened, and some flags specific to settings"""
+
+        player_start_flags_first_event = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
+            {'symbol': 'FirstClear', 'value': True})
+        player_start_flag_check_event = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
+            {'symbol': 'FirstClear'}, {0: player_start_flags_first_event, 1: None})
+
+        player_start_event_flags = list(START_FLAGS)
+
+        if self.parent.settings["Open Kanalet"]:
+            player_start_event_flags.append('GateOpen_Switch_KanaletCastle_01B')
+
+        if self.parent.settings["Completed Bridge"]: # flag for the bridge, we make kiki use another flag
+            player_start_event_flags.append('StickDrop')
+
+        if self.parent.settings["Open Mamu"]:
+            player_start_event_flags.append('MamuMazeClear')
+
+        # dont set bombs found flag, shop shouldnt sell any until you find some
+        # without shuffled bombs, this just means you can get them from any natural source
+        # if not self.parent.settings["Shuffled Bombs"]:
+        #     player_start_event_flags.append(self.parent.flag_manager.flags["BombsFoundFlag"])
+
+        if self.parent.settings["Randomize Enemies"]: # special case where we need stairs under armos to be visible and open
+            player_start_event_flags.append('AppearStairsFld10N')
+            player_start_event_flags.append('AppearStairsFld11O')
+
+        if self.parent.settings["Fast Stalfos"]: # set the door open flags for the first 3 master stalfos fights to be true
+            player_start_event_flags.append('DoorOpen_Btl1_L05_05F')
+            player_start_event_flags.append('DoorOpen_Btl2_L05_04H')
+            player_start_event_flags.append('DoorOpen_Btl3_L05_01F')
+
+        if self.parent.settings["Boss Cutscenes"]: # set boss cutscenes to have already been watched
+            player_start_event_flags.extend(BOSS_FLAGS)
+        # if settings['nag-meesages']: # set annoying one-time messages to not pop-up
+        #     player_start_event_flags.extend(MESSAGE_FLAGS)
+
+        player_start_event_flags = [('EventFlags', 'SetFlag', {'symbol': f, 'value': True}) for f in player_start_event_flags]
+
+        event_tools.insertEventAfter(flowchart, 'Event558', player_start_flag_check_event)
+        event_tools.createActionChain(flowchart, player_start_flags_first_event, player_start_event_flags)
+
+        # Remove the part that kills the rooster after D7 in Level7DungeonIn_FlyingCucco
+        event_tools.insertEventAfter(flowchart, 'Level7DungeonIn_FlyingCucco', 'Event476')
+
+        # fast stealing is always on now
+        # Remove the flag that says you stole so that the shopkeeper won't kill you
+        event_tools.createActionChain(flowchart, 'Event774', [
+            ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
+        ])
+
+        # Remove the 7 second timeOut wait on the companion when it gets blocked from a loading zone
+        timeout_events = ('Event637', 'Event660', 'Event693', 'Event696', 'Event371', 'Event407', 'Event478')
+        for e in timeout_events:
+            event_tools.findEvent(flowchart, e).data.params.data['timeOut'] = 0.0
+
+
 START_FLAGS = (
     'FirstClear',
     'SecondClear',
@@ -55,92 +193,3 @@ MESSAGE_FLAGS = (
     'MagicPowderFirstMessage',
     'SmallKeyFirstGet'
 )
-
-
-class PlayerStartEventFixes:
-    """Sets a bunch of flags for cutscenes being watched/triggered to prevent them from ever happening"""
-
-    def __init__(self, mod_generator) -> None:
-        self.parent = mod_generator
-        flow = self.parent.file_manager.readFile('PlayerStart.bfevfl')
-        self.makeStartChanges(flow.flowchart)
-
-        # skip over BGM_HOUSE_FIRST when Link wakes up because it overlaps with the shuffled zone BGM
-        if self.parent.settings["Music"] == "Shuffled":
-            event_tools.insertEventAfter(flow.flowchart, 'Event150', 'Event151')
-
-        self.parent.file_manager.writeFile('PlayerStart.bfevfl', flow)
-
-
-    def makeStartChanges(self, flowchart):
-        """Sets a bunch of flags when you leave the house for the first time, 
-        including Owl cutscenes watched, Walrus Awakened, and some flags specific to settings"""
-
-        player_start_flags_first_event = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
-            {'symbol': 'FirstClear', 'value': True})
-        player_start_flag_check_event = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': 'FirstClear'}, {0: player_start_flags_first_event, 1: None})
-
-        player_start_event_flags = list(START_FLAGS)
-
-        if self.parent.settings["Open Kanalet"]:
-            player_start_event_flags.append('GateOpen_Switch_KanaletCastle_01B')
-
-        if self.parent.settings["Completed Bridge"]: # flag for the bridge, we make kiki use another flag
-            player_start_event_flags.append('StickDrop')
-
-        if self.parent.settings["Open Mamu"]:
-            player_start_event_flags.append('MamuMazeClear')
-
-        if not self.parent.settings["Shuffled Bombs"]:# and settings['unlocked-bombs']: # temp change
-            player_start_event_flags.append(self.parent.flag_manager.flags["BombsFoundFlag"])
-
-        if self.parent.settings["Randomize Enemies"]: # special case where we need stairs under armos to be visible and open
-            player_start_event_flags.append('AppearStairsFld10N')
-            player_start_event_flags.append('AppearStairsFld11O')
-
-        if self.parent.settings["Fast Stalfos"]: # set the door open flags for the first 3 master stalfos fights to be true
-            player_start_event_flags.append('DoorOpen_Btl1_L05_05F')
-            player_start_event_flags.append('DoorOpen_Btl2_L05_04H')
-            player_start_event_flags.append('DoorOpen_Btl3_L05_01F')
-
-        if self.parent.settings["Boss Cutscenes"]: # set boss cutscenes to have already been watched
-            player_start_event_flags.extend(BOSS_FLAGS)
-        # if settings['nag-meesages']: # set annoying one-time messages to not pop-up
-        #     player_start_event_flags.extend(MESSAGE_FLAGS)
-
-        player_start_event_flags = [('EventFlags', 'SetFlag', {'symbol': f, 'value': True}) for f in player_start_event_flags]
-
-        event_tools.insertEventAfter(flowchart, 'Event558', player_start_flag_check_event)
-        event_tools.createActionChain(flowchart, player_start_flags_first_event, player_start_event_flags)
-
-        # Remove the part that kills the rooster after D7 in Level7DungeonIn_FlyingCucco
-        event_tools.insertEventAfter(flowchart, 'Level7DungeonIn_FlyingCucco', 'Event476')
-
-        # if settings['fast-stealing']: # always on now
-        # Remove the flag that says you stole so that the shopkeeper won't kill you
-        event_tools.createActionChain(flowchart, 'Event774', [
-            ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
-        ])
-
-        # REMOVING THIS FOR NOW BECAUSE I AM REWRITING HOW IT WORKS
-        # # Auto give dungeon items when entering the dungeon (We have to do that for the level to be identified properly)
-        # dungeon_item_setting = settings['dungeon-items']
-        # if dungeon_item_setting != 'none':
-        #     event_defs = []
-
-        #     if dungeon_item_setting in ['mc', 'mcb']:
-        #         event_defs += item_get.insertItemWithoutAnimation('DungeonMap', -1)
-        #         event_defs += item_get.insertItemWithoutAnimation('Compass', -1)
-
-        #     if dungeon_item_setting in ['stone-beak', 'mcb']:
-        #         event_defs += item_get.insertItemWithoutAnimation('StoneBeak', -1)
-
-        #     # Connect events to the DungeonIn and DefaultUpStairsOut entrypoints
-        #     event_tools.createActionChain(flowchart, 'Event539', event_defs)
-        #     event_tools.createActionChain(flowchart, 'Event550', event_defs)
-
-        # Remove the 7 second timeOut wait on the companion when it gets blocked from a loading zone
-        timeout_events = ('Event637', 'Event660', 'Event693', 'Event696', 'Event371', 'Event407', 'Event478')
-        for e in timeout_events:
-            event_tools.findEvent(flowchart, e).data.params.data['timeOut'] = 0.0
