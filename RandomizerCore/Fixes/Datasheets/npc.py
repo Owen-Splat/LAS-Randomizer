@@ -227,9 +227,9 @@ class NpcDatasheetFixes:
         """We change the graphics for some items, so create new npcs to show the correct model when obtaining them"""
 
         dummy = copy.deepcopy(DUMMY_NPC)
-        dummy['symbol'] = 'PatchSmallKey'
-        dummy['graphics']['path'] = 'ItemSmallKey.bfres'
-        dummy['graphics']['model'] = 'SmallKey'
+        dummy['symbol'] = 'PatchSlimeKey'
+        dummy['graphics']['path'] = 'ItemSlimeKey.bfres'
+        dummy['graphics']['model'] = 'SlimeKey'
         npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
 
         dummy['symbol'] = 'PatchHeartPiece'
@@ -240,11 +240,6 @@ class NpcDatasheetFixes:
         dummy['symbol'] = 'PatchSeashell'
         dummy['graphics']['path'] = 'ItemSecretSeashell.bfres'
         dummy['graphics']['model'] = 'SecretSeashell'
-        npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
-
-        dummy['symbol'] = 'PatchYoshiDoll'
-        dummy['graphics']['path'] = 'ItemYoshiDoll.bfres'
-        dummy['graphics']['model'] = 'YoshiDoll'
         npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
 
         dummy['symbol'] = 'PatchHoneycomb'

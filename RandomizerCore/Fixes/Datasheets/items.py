@@ -23,17 +23,15 @@ class ItemsDatasheetFixes:
             # Set new npcKeys for items to change how they appear when Link holds it up
             if item['symbol'] == 'SmallKey':
                 item['npcKey'] = 'PatchSmallKey'
+                dummy = parseStruct(item) # create copy to use as a base for custom entries
             if item['symbol'] == 'Honeycomb':
                 item['npcKey'] = 'PatchHoneycomb'
             if item['symbol'] == 'Stick':
                 item['npcKey'] = 'PatchStick'
-            if item['symbol'] == 'Seashell':
-                item['npcKey'] = 'PatchSeashell'
+            if item['symbol'] == 'SlimeKey':
+                item['npcKey'] = 'PatchSlimeKey'
             if item['symbol'] == 'HeartPiece':
                 item['npcKey'] = 'PatchHeartPiece'
-            if item['symbol'] == 'YoshiDoll': # ocarina and instruments are ItemYoshiDoll actors
-                item['npcKey'] = 'PatchYoshiDoll'
-                dummy = parseStruct(item) # create copy to use as a base for custom entries
 
             # songs and tunics are patched to use the model from the npcKey
             # capacity upgrades have the same patch, but we don't need to edit them here
@@ -53,7 +51,7 @@ class ItemsDatasheetFixes:
                 item['npcKey'] = ''
 
         if dummy is None:
-            raise KeyError('ItemYoshiDoll was not found in Items.gsheet')
+            raise KeyError('SmallKey was not found in Items.gsheet')
 
         # create new entries for Dampe, which we will use to set the gettingFlag
         # can likely use this same method for trendy and shop in the future
@@ -135,6 +133,7 @@ class ItemsDatasheetFixes:
         sheet['values'].append(dictToStruct(dummy))
 
 
+# bomb and powder flags make sense to trigger drops, other progression item flags might not be needed?
 ITEM_GETTING_FLAGS = {
     "SwordLv1":             "SwordFoundFlag",
     "Shield":               "ShieldFoundFlag",
