@@ -52,7 +52,11 @@ class HeartPieceRandomizer:
         ], get_anim)
 
         if room in sunken:
-            act.posY += 0.5 # raise them up 3rd of a tile
+            if item_key not in ["HeartPiece", "HeartContainer"]:
+                act.posY += 0.25 # raise them up 1/6 of a tile
+                act.scaleX = 0.75
+                act.scaleY = 0.75
+                act.scaleZ = 0.75
         else:
             # for freestanding heart pieces, shrink the actor if the model will be big
             # we might want a separate model size list, for now this should be fine

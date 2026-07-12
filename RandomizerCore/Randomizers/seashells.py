@@ -186,7 +186,11 @@ class SeashellRandomizer:
             # heart piece actors are bigger and easier to see without manually figuring out scale
             if room in ("kanalet-moat-north", "taltal-sunken"):
                 shell.type = 0xB0
-                shell.posY += 0.5 # raise them up 3rd of a tile
+                if item_key not in ["HeartPiece", "HeartContainer"]:
+                    shell.posY += 0.25 # raise them up 1/6 of a tile
+                    shell.scaleX = 0.75
+                    shell.scaleY = 0.75
+                    shell.scaleZ = 0.75
 
             # could be ItemSlimeKey or ItemHeartPiece actor, so we can't use parameter[0] as that is index for HPs
             shell.parameters[1] = bytes(model_path, 'utf-8')
