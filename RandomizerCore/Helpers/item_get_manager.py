@@ -146,11 +146,17 @@ class ItemGetManager:
                 ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'ClothesGreen'})
             ], after)
 
+        # quick check to update messageEntry for the correct dungeon for dungeon items
+        if item in ('DungeonMap', 'Compass', 'StoneBeak', 'NightmareKey', 'SmallKey'):
+            message_entry = f"Keysanity{index+1}"
+        else:
+            message_entry = item
+
         # EVERYTHING ELSE - play the get event before giving the item, otherwise it messes with index related messages
         # this is how the game normally does it, and so for the "you've collected them all" messages,
         # the game actually checks for 3 heart pieces and 4 golden leaves respectively
         return event_tools.createActionChain(flowchart, before, [
-            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': item}),
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': message_entry}),
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
         ], after)
 

@@ -56,7 +56,7 @@ class KeyRandomizer:
         """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
         
         # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-        if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
+        if not self.parent.checkItemNeedsAnimation(item_key):
             item_event = event_tools.createActionChain(flowchart, None, [
                 ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
             ], None)

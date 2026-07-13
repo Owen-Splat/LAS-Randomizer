@@ -24,7 +24,7 @@ class MiscRandomizer:
         else:
             end_ev = 'Event8'
         
-        if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+        if not self.parent.checkItemNeedsAnimation(item_key):
             rup_collect = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False}, end_ev)
             event_tools.insertEventAfter(flowchart, 'Event5', rup_collect)
@@ -75,7 +75,7 @@ class MiscRandomizer:
         room_data = self.parent.file_manager.readFile('Field_06A.leb')
         item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel('woods-loose')
 
-        if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+        if not self.parent.checkItemNeedsAnimation(item_key):
             get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:
@@ -115,7 +115,7 @@ class MiscRandomizer:
         room_data = self.parent.file_manager.readFile('DreamShrine_01A.leb')
         item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel('dream-shrine-left')
 
-        if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+        if not self.parent.checkItemNeedsAnimation(item_key):
             get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:
@@ -154,7 +154,7 @@ class MiscRandomizer:
         room_data = self.parent.file_manager.readFile('EagleKeyCave_01A.leb')
         item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel('taltal-rooster-cave')
 
-        if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+        if not self.parent.checkItemNeedsAnimation(item_key):
             get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:
@@ -194,7 +194,7 @@ class MiscRandomizer:
         room_data = self.parent.file_manager.readFile('MermaidStatue_01A.leb')
         item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel('mermaid-cave')
 
-        if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+        if not self.parent.checkItemNeedsAnimation(item_key):
             get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:

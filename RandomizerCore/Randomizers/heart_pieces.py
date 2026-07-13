@@ -39,7 +39,7 @@ class HeartPieceRandomizer:
         hp = [a for a in room_data.actors if a.type == 0xB0]
         act = hp[0]
 
-        if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+        if not self.parent.checkItemNeedsAnimation(item_key):
             get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
             {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:

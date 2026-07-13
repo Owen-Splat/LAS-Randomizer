@@ -138,7 +138,7 @@ class SeashellRandomizer:
         """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
         
         # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-        if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
+        if not self.parent.checkItemNeedsAnimation(item_key):
             item_event = event_tools.createActionChain(flowchart, None, [
                 ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
             ], None)
@@ -170,7 +170,7 @@ class SeashellRandomizer:
             else:
                 shell = [a for a in room_data.actors if a.type == 0x8a][0] # slime key
 
-            if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
+            if not self.parent.checkItemNeedsAnimation(item_key):
                 get_anim = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItemByKey',
                 {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
             else:

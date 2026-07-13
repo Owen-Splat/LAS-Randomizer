@@ -65,3 +65,14 @@ class ItemEventFixes:
             dialog_event = event_tools.createSubFlowEvent(flowchart, '',
                 item_key, {})
             event_tools.insertEventAfter(flowchart, 'DampeFinal', dialog_event)
+
+        # now add events for keysantiy to display text for the dungeon the item goes to
+        for i in range(1, 9):
+            event_tools.addEntryPoint(flowchart, f'Keysanity{i}')
+            event_tools.createActionChain(flowchart, f'Keysanity{i}', [
+                ('Dialog', 'Show', {'message': f'Glossary:glossary_Place0{i}'})
+            ])
+        event_tools.addEntryPoint(flowchart, 'Keysanity10')
+        event_tools.createActionChain(flowchart, 'Keysanity10', [
+            ('Dialog', 'Show', {'message': 'Glossary:glossary_Place59'})
+        ])

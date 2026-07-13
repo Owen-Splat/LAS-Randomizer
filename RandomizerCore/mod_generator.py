@@ -118,3 +118,26 @@ class ModsProcess(QtCore.QThread):
             if IS_RUNNING_FROM_SOURCE:
                 print(f'total tasks: {self.progress_value}')
             self.is_done.emit()
+
+
+    # TODO: MOVE THIS TO ITEM GET MANAGER...
+    def checkItemNeedsAnimation(self, item) -> bool:
+        """Some items skip over the animation for the sake of speeding up gameplay
+
+        Now with keysanity, we don't want to skip over the animation if the item is part of it"""
+
+        match item:
+            case "SmallKey":
+                return self.settings["Small Keys"] in ("Any Dungeon", "Anywhere")
+            case "NightmareKey":
+                return self.settings["Nightmare Keys"] in ("Any Dungeon", "Anywhere")
+            case "DungeonMap":
+                return self.settings["Dungeon Maps"] in ("Any Dungeon", "Anywhere")
+            case "Compass":
+                return self.settings["Compasses"] in ("Any Dungeon", "Anywhere")
+            case "StoneBeak":
+                return self.settings["Stone Beaks"] in ("Any Dungeon", "Anywhere")
+            case s if s.startswith("Rupee"):
+                return False
+            case _:
+                return True

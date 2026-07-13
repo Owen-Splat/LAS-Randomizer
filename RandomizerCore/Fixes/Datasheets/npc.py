@@ -237,6 +237,11 @@ class NpcDatasheetFixes:
         dummy['graphics']['model'] = 'HeartPiece'
         npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
 
+        dummy['symbol'] = 'PatchSmallKey'
+        dummy['graphics']['path'] = 'ItemSmallKey.bfres'
+        dummy['graphics']['model'] = 'SmallKey'
+        npc_sheet['values'].append(oead_tools.dictToStruct(dummy))
+
         dummy['symbol'] = 'PatchSeashell'
         dummy['graphics']['path'] = 'ItemSecretSeashell.bfres'
         dummy['graphics']['model'] = 'SecretSeashell'

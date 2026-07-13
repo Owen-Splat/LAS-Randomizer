@@ -32,7 +32,7 @@ class BlueRupeeRandomizer:
         event_tools.addEntryPoint(flowchart, f'Lv10Rupee_{rup_index + 1}')
 
         # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-        if item_key[:3] in ['Sma', 'Nig', 'Dun', 'Com', 'Sto', 'Rup']:
+        if not self.parent.checkItemNeedsAnimation(item_key):
             get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
             {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
         else:
