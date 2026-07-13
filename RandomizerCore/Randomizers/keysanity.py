@@ -1,0 +1,47 @@
+import RandomizerCore.Tools.event_tools as event_tools
+from RandomizerCore.Tools.text_tools import TextFile
+from pathlib import Path
+
+
+class Keysanity:
+    "Handles patching text files and the Item eventflow to support keysanity"
+
+    def __init__(self, mod_generator) -> None:
+        self.parent = mod_generator
+        self.addTextEvents()
+        self.createText()
+
+
+    def addTextEvents(self) -> None:
+        """Add events to display text for the dungeon the item goes to"""
+
+        flow = self.parent.file_manager.readFile("Item.bfevfl")
+
+        for i in range(1, 10):
+            event_tools.addEntryPoint(flow.flowchart, f"Keysanity{i}")
+            event_tools.createActionChain(flow.flowchart, f"Keysanity{i}", [
+                ("Dialog", "Show", {"message": f"Place:Keysanity{i}"})
+            ])
+
+        self.parent.file_manager.writeFile("Item.bfevfl", flow)
+
+
+    def createText(self) -> None:
+        """Opens the MSBT files and adds entries for displaying the dungeon text
+
+        We can use the existing dungeon name text, but add a tag at the end to wait for user input"""
+
+        regions = ("regionCN", "regionEU", "regionJP", "regionKR", "regionTW", "regionUS")
+        for region in regions:
+            region_path: Path = self.parent.rom_path / region
+            subdirs = [item for item in region_path.iterdir() if item.is_dir()]
+            for subdir in subdirs:
+                if subdir.name == "common":
+                    continue
+                msbt = TextFile(subdir / "message" / "Place.msbt")
+                for i in range(1, 9):
+                    msbt.copyEntry(f"Lv{i}Dungeon_map", f"Keysanity{i}")
+                    msbt.makeEntryWaitForInput(f"Keysanity{i}")
+                msbt.copyEntry("ClothesDungeon_map", "Keysanity9")
+                msbt.makeEntryWaitForInput("Keysanity9")
+                msbt.write(self.parent.romfs_dir / region / subdir.name / "message", "Place.msbt")

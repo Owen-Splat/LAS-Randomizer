@@ -4,7 +4,6 @@ __pycache__
 /build
 /Models
 /output
-/RandomizerCore/Tools/text_tools.py
 /RandomizerUI/Resources/__Combined.bntx
 /RandomizerUI/Resources/textures/chest/bfres
 /Test

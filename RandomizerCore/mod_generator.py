@@ -28,6 +28,7 @@ from RandomizerCore.Randomizers.chests import ChestRandomizer
 from RandomizerCore.Randomizers.dampe import DampeRandomizer
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.tarin import TarinRandomizer
+from RandomizerCore.Randomizers.keysanity import Keysanity
 from pathlib import Path
 import random, traceback
 
@@ -108,6 +109,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: BlueRupeeRandomizer(self)
 
             if self.thread_active: EntranceRandomizer(self)
+            if self.thread_active: Keysanity(self)
 
         except Exception:
             er = traceback.format_exc()

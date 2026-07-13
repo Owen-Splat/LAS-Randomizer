@@ -147,8 +147,20 @@ class ItemGetManager:
             ], after)
 
         # quick check to update messageEntry for the correct dungeon for dungeon items
-        if item in ('DungeonMap', 'Compass', 'StoneBeak', 'NightmareKey', 'SmallKey'):
-            message_entry = f"Keysanity{index+1}"
+        keysanity_index = index
+        if index != 9:
+            keysanity_index += 1
+        message_entry = f"Keysanity{keysanity_index}"
+        if item == 'DungeonMap' and self.parent.settings['Dungeon Maps'] in ("Any Dungeon", "Anywhere"):
+            pass
+        elif item == 'Compass' and self.parent.settings['Compasses'] in ("Any Dungeon", "Anywhere"):
+            pass
+        elif item == 'StoneBeak' and self.parent.settings['Stone Beaks'] in ("Any Dungeon", "Anywhere"):
+            pass
+        elif item == 'SmallKey' and self.parent.settings['Small Keys'] in ("Any Dungeon", "Anywhere"):
+            pass
+        elif item == 'NightmareKey' and self.parent.settings['Nightmare Keys'] in ("Any Dungeon", "Anywhere"):
+            pass
         else:
             message_entry = item
 
