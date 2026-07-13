@@ -1,10 +1,5 @@
-- ObjSinkingSword for items that the player needs to press A to grab (instruments, ocarina)
-
-- ItemSecretSeashell for dig spots
-    Needs code to disable automatic shell sensor, hopefully will use the npc sheet data like other stuff
-    MAYBE USE ITEMSLIMEKEY???
-
-- ItemHeartPiece for ground & underwater
+- rewrite the shuffler so that tasks are split up into separate scripts
+    starting items, dungeon item placements, updating logic based on settings, etc
 
 - Try to use ItemGoldenLeaf and ItemSmallKey interchangeably to control compass alarm
     Probably need some small code changes to enemies that drop golden leaves so they don't randomly spawn
