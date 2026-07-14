@@ -115,11 +115,24 @@ class ItemShuffler(QtCore.QThread):
         else:
             self.item_defs['rupee-20']['quantity'] += 24 # 33 total owl statues, 24 in dungeons
 
+        # now change item importance
         # if shuffled bombs or powder is on, we want to consider them important instead of junk
         if self.settings["Shuffled Bombs"]:
             self.item_defs['bomb']['type'] = 'important'
         if self.settings["Shuffled Powder"]:
             self.item_defs['powder']['type'] = 'important'
+
+        # small keys should be important rather than good
+        if self.settings["Small Keys"] in ("Any Dungeon", "Anywhere"):
+            keys = [k for k in self.item_defs if k.startswith("key-")]
+            for key in keys:
+                self.item_defs[key]["type"] = "important"
+
+        # stone beaks should be considered important if dungeon own statues give gifts
+        if self.settings["Owl Gifts"] in ("Dungeons", "All"):
+            beaks = [b for b in self.item_defs if b.startswith("stone-beak-")]
+            for beak in beaks:
+                self.item_defs[beak]["type"] = "important"
 
 
     def addTraps(self):
@@ -433,14 +446,6 @@ class ItemShuffler(QtCore.QThread):
                 good_items += [key] * self.item_defs[key]['quantity']
             elif self.item_defs[key]['type'] == 'junk':
                 junk_items += [key] * self.item_defs[key]['quantity']
-            # else:
-            #     if settings['dungeon-items'] == 'keys':
-            #         if key.startswith(('key', 'nightmare')):
-            #             important_items += [key] * self.item_defs[key]['quantity']
-            #         else:
-            #             dungeon_items += [key] * self.item_defs[key]['quantity']
-            #     elif settings['dungeon-items'] == 'keys+mcb':
-            #         important_items += [key] * self.item_defs[key]['quantity']
 
         # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
         settings_access = {re.sub(" ", "-", setting).lower(): 1 for setting in self.settings if self.settings[setting] == True}
