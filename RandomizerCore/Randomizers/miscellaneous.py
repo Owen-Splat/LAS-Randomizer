@@ -47,6 +47,9 @@ class MiscRandomizer:
         act = room_data.actors[4]
         act.type = 0xB0 # heart piece
         act.rotY = 0.0
+        act.scaleX = 0.55
+        act.scaleY = 0.55
+        act.scaleZ = 0.55
 
         # Keep the normal model if it's a sword
         act.parameters[0] = 51 # we can use indexes 50-63 since they are unused
@@ -89,6 +92,10 @@ class MiscRandomizer:
 
         act = room_data.actors[3]
         act.type = 0xB0 # heart piece
+        act.scaleX = 0.55
+        act.scaleY = 0.55
+        act.scaleZ = 0.55
+
         act.parameters[0] = 52 # we can use indexes 50-63 since they are unused
         act.parameters[1] = bytes(model_path, 'utf-8')
         act.parameters[2] = bytes(model_name, 'utf-8')
@@ -168,6 +175,10 @@ class MiscRandomizer:
 
         act = room_data.actors[0]
         act.type = 0xB0 # heart piece
+        act.scaleX = 0.55
+        act.scaleY = 0.55
+        act.scaleZ = 0.55
+
         act.parameters[0] = 53 # we can use indexes 50-63 since they are unused
         act.parameters[1] = bytes(model_path, 'utf-8')
         act.parameters[2] = bytes(model_name, 'utf-8')
@@ -209,6 +220,10 @@ class MiscRandomizer:
         act = room_data.actors[7]
         act.type = 0xB0 # heart piece
         act.rotY = 0 # rotate to be facing the screen
+        act.scaleX = 0.55
+        act.scaleY = 0.55
+        act.scaleZ = 0.55
+
         act.parameters[0] = 54 # we can use indexes 50-63 since they are unused
         act.parameters[1] = bytes(model_path, 'utf-8')
         act.parameters[2] = bytes(model_name, 'utf-8')
