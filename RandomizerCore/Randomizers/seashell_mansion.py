@@ -112,9 +112,20 @@ class SeashellMansionRandomizer:
             {0: deathball_get, 1: squish_check})
 
         quake_get = self.parent.item_get_manager.get(flow.flowchart, 'QuakeTrap', -1, None, 'Event0')
-        quake_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
+        last_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'QuakeTrap'},
             {0: quake_get, 1: deathball_check})
 
-        event_tools.insertEventAfter(flow.flowchart, 'Event25', quake_check)
+        if self.parent.settings["Dungeon Maps"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "DungeonMap", last_check, 'Event0')
+        if self.parent.settings["Compasses"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "Compass", last_check, 'Event0')
+        if self.parent.settings["Stone Beaks"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "StoneBeak", last_check, 'Event0')
+        if self.parent.settings["Small Keys"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "SmallKey", last_check, 'Event0')
+        if self.parent.settings["Nightmare Keys"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "NightmareKey", last_check, 'Event0')
+
+        event_tools.insertEventAfter(flow.flowchart, 'Event25', last_check)
         self.parent.file_manager.writeFile('ShellMansionPresent.bfevfl', flow)

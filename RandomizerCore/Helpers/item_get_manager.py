@@ -291,3 +291,64 @@ class ItemGetManager:
         return event_tools.createActionChain(flowchart, None, [
             ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})
         ], after)
+
+
+    def getKeysanityItem(self, flowchart, item, before, after):
+        """Get the proper keysanity item when we don't have direct access to the index
+
+        Chests and Seashell Mansion Presents use an itemIndex argument that we compare against"""
+
+        d1_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity1'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 0, 'autoEquip': False})
+        ], after)
+
+        d2_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity2'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 1, 'autoEquip': False})
+        ], after)
+
+        d3_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity3'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 2, 'autoEquip': False})
+        ], after)
+
+        d4_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity4'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 3, 'autoEquip': False})
+        ], after)
+
+        d5_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity5'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 4, 'autoEquip': False})
+        ], after)
+
+        d6_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity6'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 5, 'autoEquip': False})
+        ], after)
+
+        d7_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity7'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 6, 'autoEquip': False})
+        ], after)
+
+        d8_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity8'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 7, 'autoEquip': False})
+        ], after)
+
+        dc_get = event_tools.createActionChain(flowchart, None, [
+            ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'Keysanity9'}),
+            ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': 9, 'autoEquip': False})
+        ], after)
+
+        index_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt',
+            {'value1': 'itemIndex'},
+            {0: d1_get, 1: d2_get, 2: d3_get, 3: d4_get, 4: d5_get, 5: d6_get, 6: d7_get, 7: d8_get, 9: dc_get})
+
+        item_check = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareString',
+            {'value1': 'itemKey', 'value2': item},
+            {0: index_check, 1: before})
+
+        return item_check

@@ -180,13 +180,24 @@ class ChestRandomizer:
             {0: deathball_get, 1: squish_check})
 
         quake_get = self.parent.item_get_manager.get(flow.flowchart, 'QuakeTrap', -1, None, auto_save)
-        quake_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
+        last_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'QuakeTrap'},
             {0: quake_get, 1: deathball_check})
 
+        if self.parent.settings["Dungeon Maps"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "DungeonMap", last_check, auto_save)
+        if self.parent.settings["Compasses"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "Compass", last_check, auto_save)
+        if self.parent.settings["Stone Beaks"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "StoneBeak", last_check, auto_save)
+        if self.parent.settings["Small Keys"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "SmallKey", last_check, auto_save)
+        if self.parent.settings["Nightmare Keys"] in ("Any Dungeon", "Anywhere"):
+            last_check = self.parent.item_get_manager.getKeysanityItem(flow.flowchart, "NightmareKey", last_check, auto_save)
+
         # add this chain to TreasureBox_Open and TreasureBox_ShockOpen
-        event_tools.insertEventAfter(flow.flowchart, 'Event32', quake_check)
-        event_tools.insertEventAfter(flow.flowchart, 'Event28', quake_check)
+        event_tools.insertEventAfter(flow.flowchart, 'Event32', last_check)
+        event_tools.insertEventAfter(flow.flowchart, 'Event28', last_check)
 
         # now make the rest of the items also request an autosave
         event_tools.insertEventAfter(flow.flowchart, 'Event40', auto_save)
