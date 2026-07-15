@@ -22,32 +22,29 @@ class FreeGiftsRandomizer:
 
     def walrusChanges(self):
         flow = self.parent.file_manager.readFile('Walrus.bfevfl')
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('walrus')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event53', 'Event110')
+        self.parent.item_get_manager.get(flow.flowchart, 'walrus', 'Event53', 'Event110', True)
         self.parent.file_manager.writeFile('Walrus.bfevfl', flow)
 
 
     def ghostRewardChanges(self):
         flow = self.parent.file_manager.readFile('Owl.bfevfl')
         new = event_tools.createActionEvent(flow.flowchart, 'Owl', 'Destroy', {})
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('ghost-reward')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event34', new)
+        self.parent.item_get_manager.get(flow.flowchart, 'ghost-reward', 'Event34', new, True)
         self.parent.file_manager.writeFile('Owl.bfevfl', flow)
 
 
     def marinChanges(self):
         flow = self.parent.file_manager.readFile('Marin.bfevfl')
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('marin')
 
         if self.parent.settings["Song Cutscenes"]: # skip the cutscene if fast-songs is enabled, and make Link sad about it
-            sad_face = event_tools.createActionEvent(flow.flowchart, 'Link', 'SetFacialExpression',
-                {'expression': 'sad'}, None)
+            # sad_face = event_tools.createActionEvent(flow.flowchart, 'Link', 'SetFacialExpression',
+            #     {'expression': 'sad'}, None)
             flag_set = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
-                {'symbol': 'MarinsongGet', 'value': True}, sad_face)
+                {'symbol': 'MarinsongGet', 'value': True}, None)
             event_tools.insertEventAfter(flow.flowchart, 'Event92', flag_set)
-            self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, sad_face, 'Event666')
+            self.parent.item_get_manager.get(flow.flowchart, 'marin', None, 'Event666', True)
         else:
-            self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event246', 'Event666')
+            self.parent.item_get_manager.get(flow.flowchart, 'marin', 'Event246', 'Event666', True)
 
         # Remove the event that gives Ballad and edits other events to check if you got the 'song'
         fork = event_tools.findEvent(flow.flowchart, 'Event249')
@@ -83,8 +80,7 @@ class FreeGiftsRandomizer:
         else:
             before_item = 'Event31'
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('manbo')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, before_item, flag_event)
+        self.parent.item_get_manager.get(flow.flowchart, 'manbo', before_item, flag_event, True)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': "ManboItemGetFlag"}, {0: 'Event37', 1: 'Event35'})
@@ -104,8 +100,7 @@ class FreeGiftsRandomizer:
         else:
             before_item = 'Event85'
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mamu')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, before_item, flag_event)
+        self.parent.item_get_manager.get(flow.flowchart, 'mamu', before_item, flag_event, True)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': "MamuItemGetFlag"}, {0: 'Event14', 1: 'Event98'})
@@ -122,24 +117,21 @@ class FreeGiftsRandomizer:
         event_tools.insertEventAfter(flow.flowchart, 'Event19', 'Event13')
 
         ## Mad Batter A (bay)
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mad-batter-bay')
-        item1 = self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, None, 'Event23')
+        item1 = self.parent.item_get_manager.get(flow.flowchart, 'mad-batter-bay', None, 'Event23', True)
         event_tools.addEntryPoint(flow.flowchart, 'BatterA')
         subflow_a = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
         event_tools.insertEventAfter(flow.flowchart, 'BatterA', subflow_a)
         event_tools.insertEventAfter(flow.flowchart, subflow_a, item1)
 
         ## Mad Batter B (woods)
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mad-batter-woods')
-        item2 = self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, None, 'Event23')
+        item2 = self.parent.item_get_manager.get(flow.flowchart, 'mad-batter-woods', None, 'Event23', True)
         event_tools.addEntryPoint(flow.flowchart, 'BatterB')
         subflow_b = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
         event_tools.insertEventAfter(flow.flowchart, 'BatterB', subflow_b)
         event_tools.insertEventAfter(flow.flowchart, subflow_b, item2)
 
         ## Mad Batter C (mountain)
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mad-batter-taltal')
-        item3 = self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, None, 'Event23')
+        item3 = self.parent.item_get_manager.get(flow.flowchart, 'mad-batter-taltal', None, 'Event23', True)
         event_tools.addEntryPoint(flow.flowchart, 'BatterC')
         subflow_c = event_tools.createSubFlowEvent(flow.flowchart, '', 'talk2', {})
         event_tools.insertEventAfter(flow.flowchart, 'BatterC', subflow_c)
@@ -154,11 +146,9 @@ class FreeGiftsRandomizer:
     def clothesFairyChanges(self):
         flow = self.parent.file_manager.readFile('FairyQueen.bfevfl')
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('D0-fairy-2')
-        item2 = self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event0', 'Event180')
+        item2 = self.parent.item_get_manager.get(flow.flowchart, 'D0-fairy-2', 'Event0', 'Event180', True)
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('D0-fairy-1')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event0', item2)
+        self.parent.item_get_manager.get(flow.flowchart, 'D0-fairy-1', 'Event0', item2, True)
 
         event_tools.insertEventAfter(flow.flowchart, 'Event128', 'Event58')
 
@@ -177,8 +167,7 @@ class FreeGiftsRandomizer:
 
     def invisibleZoraChanges(self):
         flow = self.parent.file_manager.readFile('SecretZora.bfevfl')
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('invisible-zora')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event23', 'Event27')
+        self.parent.item_get_manager.get(flow.flowchart, 'invisible-zora', 'Event23', 'Event27', True)
         event_tools.insertEventAfter(flow.flowchart, 'Event32', 'Event23')
         self.parent.file_manager.writeFile('SecretZora.bfevfl', flow)
 
@@ -189,8 +178,7 @@ class FreeGiftsRandomizer:
         flag_event = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
             {'symbol': "GoriyaItemGetFlag", 'value': True}, 'Event4')
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('goriya-trader')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event87', flag_event)
+        self.parent.item_get_manager.get(flow.flowchart, 'goriya-trader', 'Event87', flag_event, True)
 
         flag_check = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
             {'symbol': "GoriyaItemGetFlag"}, {0: 'Event7', 1: 'Event15'})
@@ -214,8 +202,7 @@ class FreeGiftsRandomizer:
         event_tools.setSwitchEventCase(flow.flowchart, "Event43", 0, check_event)
 
         # give the randomized item when trading in the mushroom
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('syrup')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event93', None)
+        self.parent.item_get_manager.get(flow.flowchart, 'syrup', 'Event93', None, True)
 
         # event_tools.setEventSong(flow.flowchart, 'Event56', self.music_randomizer.songs_dict['BGM_SHOP_FAST'])
         # event_tools.setEventSong(flow.flowchart, 'Event13', self.music_randomizer.songs_dict['BGM_SHOP_FAST'])

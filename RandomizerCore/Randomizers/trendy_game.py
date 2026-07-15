@@ -10,6 +10,5 @@ class TrendyGameRandomizer:
 
     def trendyChanges(self):
         flow = self.parent.file_manager.readFile('GameShopOwner.bfevfl')
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('trendy-prize-final')
-        self.parent.item_get_manager.get(flow.flowchart, item_key, item_index, 'Event112', 'Event239')
+        self.parent.item_get_manager.get(flow.flowchart, 'trendy-prize-final', 'Event112', 'Event239', True)
         self.parent.file_manager.writeFile('GameShopOwner.bfevfl', flow)

@@ -20,23 +20,18 @@ class BlueRupeeRandomizer:
 
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(f'D0-rupee-{i + 1}', self.parent.dungeon_trap_models)
             room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', item_key, i)
-            self.makeEventChanges(flow.flowchart, i, item_key, item_index)
+            self.makeEventChanges(flow.flowchart, i, f'D0-rupee-{i + 1}')
 
         self.parent.file_manager.writeFile('Lv10ClothesDungeon_08D.leb', room_data)
         self.parent.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
 
-    def makeEventChanges(self, flowchart, rup_index, item_key, item_index):
+    def makeEventChanges(self, flowchart, rup_index, check):
         """Adds an entry point to the flowchart for each rupee, and inserts the ItemGetAnimation event into it"""
 
         event_tools.addEntryPoint(flowchart, f'Lv10Rupee_{rup_index + 1}')
 
-        # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-        if not self.parent.checkItemNeedsAnimation(item_key):
-            get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-        else:
-            get_anim = self.parent.item_get_manager.get(flowchart, item_key, item_index)
+        get_anim = self.parent.item_get_manager.get(flowchart, check)
 
         event_tools.createActionChain(flowchart, f'Lv10Rupee_{rup_index + 1}', [
             ('SinkingSword', 'Destroy', {}),

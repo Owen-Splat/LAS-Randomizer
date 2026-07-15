@@ -21,8 +21,6 @@ class InstrumentRandomizer:
 
             room_data = self.parent.file_manager.readFile(f'{INSTRUMENT_ROOMS[room]}.leb')
 
-            item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
-
             if self.parent.settings["Shuffled Dungeons"]:
                 cur_dun = re.match('(.+)_\\d\\d[A-Z]', INSTRUMENT_ROOMS[room]).group(1)
                 for k,v in DUNGEON_ENTRANCES.items():
@@ -35,16 +33,17 @@ class InstrumentRandomizer:
             else:
                 destination = None
 
-            self.changeInstrument(flow.flowchart, item_key, item_index, model_path, model_name,
-                room, room_data, destination)
+            self.changeInstrument(flow.flowchart, room, room_data, destination)
 
             self.parent.file_manager.writeFile(f'{INSTRUMENT_ROOMS[room]}.leb', room_data)
 
         self.parent.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
 
-    def changeInstrument(self, flowchart, item_key, item_index, model_path, model_name, room, room_data, destination=None):
+    def changeInstrument(self, flowchart, room, room_data, destination=None):
         """Applies changes to both the Instrument actor and the event flowchart"""
+
+        item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
 
         if room == 'D6-instrument':
             act = room_data.actors[1]
@@ -80,7 +79,7 @@ class InstrumentRandomizer:
             act.rotY = MODEL_ROTATIONS[model_name]
 
         fade_event = self.insertInstrumentFadeEvent(flowchart, level, location)
-        instrument_get = self.parent.item_get_manager.get(flowchart, item_key, item_index, None, fade_event)
+        instrument_get = self.parent.item_get_manager.get(flowchart, room, None, fade_event)
 
         event_tools.addEntryPoint(flowchart, room)
         event_tools.createActionChain(flowchart, room, [

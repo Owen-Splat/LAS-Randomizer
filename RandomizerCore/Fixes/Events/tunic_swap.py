@@ -17,13 +17,13 @@ class TunicSwapper:
         # telephone needs dialog query 'GetLastResult4' to get dialog result
         event_tools.addActorQuery(event_tools.findActor(flowchart, 'Dialog'), 'GetLastResult4')
 
-        green_get = self.parent.item_get_manager.get(flowchart, 'ClothesGreen', -1, None, None)
+        green_get = self.parent.item_get_manager.getWithAnimation(flowchart, 'ClothesGreen', -1, None, None)
 
-        red_get = self.parent.item_get_manager.get(flowchart, 'ClothesRed', -1, None, None)
+        red_get = self.parent.item_get_manager.getWithAnimation(flowchart, 'ClothesRed', -1, None, None)
         check_red = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': "RedTunicFoundFlag"}, {0: None, 1: red_get})
 
-        blue_get = self.parent.item_get_manager.get(flowchart, 'ClothesBlue', -1, None, None)
+        blue_get = self.parent.item_get_manager.getWithAnimation(flowchart, 'ClothesBlue', -1, None, None)
         check_blue = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': "BlueTunicFoundFlag"}, {0: None, 1: blue_get})
 

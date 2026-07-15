@@ -134,52 +134,52 @@ class ChestRandomizer:
 
         auto_save = event_tools.createActionEvent(flow.flowchart, 'GameControl', 'RequestAutoSave', {}, None)
 
-        sword_get = self.parent.item_get_manager.get(flow.flowchart, 'SwordLv1', -1 , None, auto_save)
+        sword_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'SwordLv1', -1 , None, auto_save)
         sword_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'SwordLv1'},
             {0: sword_get, 1: 'Event33'})
 
-        shield_get = self.parent.item_get_manager.get(flow.flowchart, 'Shield', -1, None, auto_save)
+        shield_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'Shield', -1, None, auto_save)
         shield_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'Shield'},
             {0: shield_get, 1: sword_check})
 
-        bracelet_get = self.parent.item_get_manager.get(flow.flowchart, 'PowerBraceletLv1', -1, None, auto_save)
+        bracelet_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'PowerBraceletLv1', -1, None, auto_save)
         bracelet_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'PowerBraceletLv1'},
             {0: bracelet_get, 1: shield_check})
 
-        red_tunic_get = self.parent.item_get_manager.get(flow.flowchart, 'ClothesRed', -1, None, auto_save)
+        red_tunic_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'ClothesRed', -1, None, auto_save)
         red_tunic_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'ClothesRed'},
             {0: red_tunic_get, 1: bracelet_check})
 
-        blue_tunic_get = self.parent.item_get_manager.get(flow.flowchart, 'ClothesBlue', -1, None, auto_save)
+        blue_tunic_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'ClothesBlue', -1, None, auto_save)
         blue_tunic_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'ClothesBlue'},
             {0: blue_tunic_get, 1: red_tunic_check})
 
-        zap_get = self.parent.item_get_manager.get(flow.flowchart, 'ZapTrap', -1, None, auto_save)
+        zap_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'ZapTrap', -1, None, auto_save)
         zap_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'ZapTrap'},
             {0: zap_get, 1: blue_tunic_check})
 
-        drown_get = self.parent.item_get_manager.get(flow.flowchart, 'DrownTrap', -1, None, auto_save)
+        drown_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'DrownTrap', -1, None, auto_save)
         drown_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'DrownTrap'},
             {0: drown_get, 1: zap_check})
 
-        squish_get = self.parent.item_get_manager.get(flow.flowchart, 'SquishTrap', -1, None, auto_save)
+        squish_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'SquishTrap', -1, None, auto_save)
         squish_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'SquishTrap'},
             {0: squish_get, 1: drown_check})
 
-        deathball_get = self.parent.item_get_manager.get(flow.flowchart, 'DeathballTrap', -1, None, auto_save)
+        deathball_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'DeathballTrap', -1, None, auto_save)
         deathball_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'DeathballTrap'},
             {0: deathball_get, 1: squish_check})
 
-        quake_get = self.parent.item_get_manager.get(flow.flowchart, 'QuakeTrap', -1, None, auto_save)
+        quake_get = self.parent.item_get_manager.getWithAnimation(flow.flowchart, 'QuakeTrap', -1, None, auto_save)
         last_check = event_tools.createSwitchEvent(flow.flowchart, 'FlowControl', 'CompareString',
             {'value1': 'itemKey', 'value2': 'QuakeTrap'},
             {0: quake_get, 1: deathball_check})

@@ -6,12 +6,49 @@ class ItemGetManager:
         self.parent = mod_generator
 
 
+    def get(self, flowchart, location, before=None, after=None, force_anim=False):
+        """Inserts the needed itemGet event into the flowchart
+
+        Skips over the animation if the item is a rupee or dungeon item with keysanity off"""
+
+        item_key, item_index = self.parent.item_info_manager.getItemInfo(location)
+
+        if self.checkItemNeedsAnimation(item_key) or force_anim:
+            return self.getWithAnimation(flowchart, item_key, item_index, before, after)
+        else:
+            return event_tools.createActionChain(flowchart, before, [
+                ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
+            ], after)
+
+
+    def checkItemNeedsAnimation(self, item) -> bool:
+        """Some items skip over the animation for the sake of speeding up gameplay
+
+        Now with keysanity, we don't want to skip over the animation if the item is part of it"""
+
+        match item:
+            case "SmallKey":
+                return self.parent.settings["Small Keys"] in ("Any Dungeon", "Anywhere")
+            case "NightmareKey":
+                return self.parent.settings["Nightmare Keys"] in ("Any Dungeon", "Anywhere")
+            case "DungeonMap":
+                return self.parent.settings["Dungeon Maps"] in ("Any Dungeon", "Anywhere")
+            case "Compass":
+                return self.parent.settings["Compasses"] in ("Any Dungeon", "Anywhere")
+            case "StoneBeak":
+                return self.parent.settings["Stone Beaks"] in ("Any Dungeon", "Anywhere")
+            case s if s.startswith("Rupee"):
+                return False
+            case _:
+                return True
+
+
     # Inserts an AddItemByKey and a GenericItemGetSequenceByKey, or a progressive item switch (depending on the item).
     # It goes after 'before' and before 'after'. Return the name of the first event in the sequence.
     # we used to have a 'play_extra_anim' flag only used for doing a spin attack when you get sword, it has been removed
     # we used to have a 'can_hurt_player' flag for traps since dying in certain cases can softlock, this will be handled through code now
-    def get(self, flowchart, item, index, before=None, after=None):
-        """Inserts the needed itemGet event into the flowchart and returns the name of the first event in the sequence
+    def getWithAnimation(self, flowchart, item, index, before=None, after=None):
+        """Inserts an itemGet event into the flowchart and returns the name of the first event in the sequence
 
         Parameters
         ----------
@@ -25,10 +62,6 @@ class ItemGetManager:
             The event that comes before the returned ItemGetAnimation
         after : str | None
             The event that comes after the returned ItemGetAnimation"""
-        # playExtraAnim : bool | True
-        #     Determines if special item animations will play when getting the item
-        # canHurtPlayer : bool | True
-        #     Determines if the item can hurt the player. Specifically used for traps"""
 
         # progressive items
         if item == 'PowerBraceletLv1':
@@ -36,16 +69,6 @@ class ItemGetManager:
                 "BraceletFoundFlag", before, after)
 
         if item == 'SwordLv1':
-            # if play_extra_anim:
-            #     spinAnim = event_tools.createForkEvent(flowchart, None, [
-            #         event_tools.createActionChain(flowchart, None, [
-            #             ('Link', 'RequestSwordRolling', {}),
-            #             ('Link', 'PlayAnimationEx', {'blendTime': 0.1, 'name': 'slash_hold_lp', 'time': 0.8})
-            #         ], None),
-            #     ], after)[0]
-            #     return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
-            #         data.SWORD_FOUND_FLAG, before, spinAnim)
-            # else:
             return event_tools.createProgressiveItemSwitch(flowchart, 'SwordLv1', 'SwordLv2',
                 "SwordFoundFlag", before, after)
 
@@ -64,7 +87,6 @@ class ItemGetManager:
                     {'channel': 'toolshopkeeper_dmg', 'index': 0, 'restart': False, 'time': 1.0}),
                 event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
             ]
-            # if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 6}))
             return event_tools.createForkEvent(flowchart, before, forks, stop_event)[0]
 
@@ -74,13 +96,10 @@ class ItemGetManager:
                 event_tools.createActionEvent(flowchart, 'Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_water'}),
                 event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True})
             ]
-            # if can_hurt_player:
             forks.append(event_tools.createActionChain(flowchart, None, [
                 ('Timer', 'Wait', {'time': 1.5}),
                 ('Link', 'Damage', {'amount': 2})
             ]))
-            # else:
-            #     forks.append(event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}))
             return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
 
         if item == 'SquishTrap':
@@ -90,7 +109,6 @@ class ItemGetManager:
                 event_tools.createActionEvent(flowchart, 'Hud', 'SetHeartUpdateEnable', {'enable': True}),
                 event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 2.0})
             ]
-            # if can_hurt_player:
             forks.append(event_tools.createActionEvent(flowchart, 'Link', 'Damage', {'amount': 4}))
             return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
 
@@ -104,14 +122,11 @@ class ItemGetManager:
                     ('Link', 'PlayAnimation', {'blendTime': 0.1, 'name': 'fall_deathball'})
                 ])
             ]
-            # if can_hurt_player:
             forks.append(event_tools.createActionChain(flowchart, None, [
                 ('Hud', 'SetHeartUpdateEnable', {'enable': True}),
                 ('Timer', 'Wait', {'time': 1.5}),
                 ('Link', 'Damage', {'amount': 2})
             ]))
-            # else:
-            #     forks.append(event_tools.createActionEvent(flowchart, 'Timer', 'Wait', {'time': 1.5}))
             return event_tools.createForkEvent(flowchart, before, forks, autosave_event)[0]
 
         if item == 'QuakeTrap':

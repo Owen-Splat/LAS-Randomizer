@@ -22,7 +22,7 @@ class KeyRandomizer:
 
             room_data = self.parent.file_manager.readFile(f'{SMALL_KEY_ROOMS[room]}.leb')
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.dungeon_trap_models)
-            self.writeKeyEvent(flow.flowchart, item_key, item_index, room)
+            self.writeKeyEvent(flow.flowchart, room)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
             self.parent.file_manager.writeFile(f'{SMALL_KEY_ROOMS[room]}.leb', room_data)
 
@@ -45,23 +45,17 @@ class KeyRandomizer:
             room_data = self.parent.file_manager.readFile(f'{GOLDEN_LEAF_ROOMS[room]}.leb')
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
             createRoomKey(room_data, room, self.parent.flag_manager.flags)
-            self.writeKeyEvent(flow.flowchart, item_key, item_index, room)
+            self.writeKeyEvent(flow.flowchart, room)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
             self.parent.file_manager.writeFile(f'{GOLDEN_LEAF_ROOMS[room]}.leb', room_data)
 
         self.parent.file_manager.writeFile('SmallKey.bfevfl', flow)
 
 
-    def writeKeyEvent(self, flowchart, item_key, item_index, room):
+    def writeKeyEvent(self, flowchart, room):
         """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
         
-        # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-        if not self.parent.checkItemNeedsAnimation(item_key):
-            item_event = event_tools.createActionChain(flowchart, None, [
-                ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-            ], None)
-        else:
-            item_event = self.parent.item_get_manager.get(flowchart, item_key, item_index)
+        item_event = self.parent.item_get_manager.get(flowchart, room)
 
         event_tools.addEntryPoint(flowchart, room)
 

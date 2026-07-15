@@ -17,8 +17,7 @@ class TarinRandomizer:
     def makeEventChanges(self, flowchart):
         """Edits Tarin to detain you based on if you talked to him rather than on having shield"""
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo("tarin")
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event52', 'Event31')
+        self.parent.item_get_manager.get(flowchart, "tarin", 'Event52', 'Event31', True)
 
         event0 = event_tools.findEvent(flowchart, 'Event0')
         event78 = event_tools.findEvent(flowchart, 'Event78')

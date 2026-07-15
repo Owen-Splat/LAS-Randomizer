@@ -44,7 +44,7 @@ class SeashellRandomizer:
             room_data.actors.append(key)
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-            self.writeKeyEvent(self.flow.flowchart, item_key, item_index, room)
+            self.writeKeyEvent(self.flow.flowchart, room)
 
             self.parent.file_manager.writeFile(f"{GRASS_ROOMS[room]}.leb", room_data)
             self.local_flag_index += 1
@@ -69,7 +69,7 @@ class SeashellRandomizer:
             room_data.actors.append(key)
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-            self.writeKeyEvent(self.flow.flowchart, item_key, item_index, room)
+            self.writeKeyEvent(self.flow.flowchart, room)
 
             self.parent.file_manager.writeFile(f"{ROCK_ROOMS[room]}.leb", room_data)
             self.local_flag_index += 1
@@ -101,7 +101,7 @@ class SeashellRandomizer:
             room_data.actors.append(key)
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-            self.writeKeyEvent(self.flow.flowchart, item_key, item_index, room)
+            self.writeKeyEvent(self.flow.flowchart, room)
 
             self.parent.file_manager.writeFile(f"{TREE_ROOMS[room]}.leb", room_data)
             self.local_flag_index += 1
@@ -128,22 +128,16 @@ class SeashellRandomizer:
             room_data.actors.append(key)
             item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
             room_data.setSmallKeyParams(model_path, model_name, room, item_key)
-            self.writeKeyEvent(self.flow.flowchart, item_key, item_index, room)
+            self.writeKeyEvent(self.flow.flowchart, room)
 
             self.parent.file_manager.writeFile(f"{HOLE_ROOMS[room]}.leb", room_data)
             self.local_flag_index += 1
 
 
-    def writeKeyEvent(self, flowchart, item_key, item_index, room) -> None:
+    def writeKeyEvent(self, flowchart, room) -> None:
         """Adds a new entry point to the SmallKey event flow for each key room, and inserts an ItemGetAnimation to it"""
         
-        # If item is SmallKey/NightmareKey/Map/Compass/Beak/Rupee, add to inventory without any pickup animation
-        if not self.parent.checkItemNeedsAnimation(item_key):
-            item_event = event_tools.createActionChain(flowchart, None, [
-                ('Inventory', 'AddItemByKey', {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-            ], None)
-        else:
-            item_event = self.parent.item_get_manager.get(flowchart, item_key, item_index)
+        item_event = self.parent.item_get_manager.get(flowchart, room)
 
         event_tools.addEntryPoint(flowchart, room)
 
@@ -170,11 +164,7 @@ class SeashellRandomizer:
             else:
                 shell = [a for a in room_data.actors if a.type == 0x8a][0] # slime key
 
-            if not self.parent.checkItemNeedsAnimation(item_key):
-                get_anim = event_tools.createActionEvent(flow.flowchart, 'Inventory', 'AddItemByKey',
-                {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-            else:
-                get_anim = self.parent.item_get_manager.get(flow.flowchart, item_key, item_index)
+            get_anim = self.parent.item_get_manager.get(flow.flowchart, room)
 
             event_tools.addEntryPoint(flow.flowchart, room)
             event_tools.createActionChain(flow.flowchart, room, [

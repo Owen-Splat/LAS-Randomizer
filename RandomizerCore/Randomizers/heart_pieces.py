@@ -26,24 +26,21 @@ class HeartPieceRandomizer:
                 break
 
             room_data = self.parent.file_manager.readFile(f'{HEART_ROOMS[room]}.leb')
-            item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
-            self.changeHeartPiece(flow.flowchart, item_key, item_index, model_path, model_name, room, room_data)
+            self.changeHeartPiece(flow.flowchart, room, room_data)
             self.parent.file_manager.writeFile(f'{HEART_ROOMS[room]}.leb', room_data)
 
         self.parent.file_manager.writeFile('SinkingSword.bfevfl', flow)
 
 
-    def changeHeartPiece(self, flowchart, item_key, item_index, model_path, model_name, room, room_data):
+    def changeHeartPiece(self, flowchart, room, room_data):
         """Applies changes to both the Heart Piece actor and the event flowchart"""
+
+        item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel(room, self.parent.trap_models)
 
         hp = [a for a in room_data.actors if a.type == 0xB0]
         act = hp[0]
 
-        if not self.parent.checkItemNeedsAnimation(item_key):
-            get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-        else:
-            get_anim = self.parent.item_get_manager.get(flowchart, item_key, item_index)
+        get_anim = self.parent.item_get_manager.get(flowchart, room)
 
         event_tools.addEntryPoint(flowchart, room)
         event_tools.createActionChain(flowchart, room, [

@@ -13,13 +13,13 @@ class OwlStatueRandomizer:
         if self.parent.settings["Owl Gifts"] in ("Overworld", "All"):
             if self.parent.thread_active:
                 flow = self.parent.file_manager.readFile('FieldOwlStatue.bfevfl')
-                self.makeFieldChanges(flow.flowchart, self.parent.placements, self.parent.item_defs)
+                self.makeFieldChanges(flow.flowchart)
                 self.parent.file_manager.writeFile('FieldOwlStatue.bfevfl', flow)
 
         if self.parent.settings["Owl Gifts"] in ("Dungeons", "All"):
             if self.parent.thread_active:
                 flow = self.parent.file_manager.readFile('DungeonOwlStatue.bfevfl')
-                self.makeDungeonChanges(flow.flowchart, self.parent.placements, self.parent.item_defs)
+                self.makeDungeonChanges(flow.flowchart)
                 self.parent.file_manager.writeFile('DungeonOwlStatue.bfevfl', flow)
 
             if self.parent.thread_active:
@@ -43,7 +43,7 @@ class OwlStatueRandomizer:
                 self.parent.file_manager.writeFile('Lv10ClothesDungeon_05F.leb', room_data)
 
 
-    def makeFieldChanges(self, flowchart, placements, item_defs):
+    def makeFieldChanges(self, flowchart):
         '''Places items on the field owls. Hint system not implemented'''
 
         field_owls = {
@@ -58,10 +58,7 @@ class OwlStatueRandomizer:
             'owl-statue-rapids': 'Event40'
         }
         for k,v in field_owls.items():
-            item = placements[k]
-            item_index = placements['indexes'][k] if k in placements['indexes'] else -1
-
-            gift_event = self.parent.item_get_manager.get(flowchart, item_defs[item]['item-key'], item_index, None, None)
+            gift_event = self.parent.item_get_manager.get(flowchart, k, None, None, True)
 
             flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
                 {'symbol': k, 'value': True}, gift_event)
@@ -88,7 +85,7 @@ class OwlStatueRandomizer:
             dist_ev.data.params.data['keepPersonalSpace'] = False
 
 
-    def makeDungeonChanges(self, flowchart, placements, item_defs):
+    def makeDungeonChanges(self, flowchart):
         '''Places items on the dungeon owls. Hint system not implemented'''
 
         ### since Tail Cave statues 04B and 05F use the same event, bundle the event into its own entrypoint
@@ -145,10 +142,7 @@ class OwlStatueRandomizer:
             'D0-owl-statue-before-mini-boss': subflow_e
         }
         for k,v in dungeon_owls.items():
-            item = placements[k]
-            item_index = placements['indexes'][k] if k in placements['indexes'] else -1
-
-            gift_event = self.parent.item_get_manager.get(flowchart, item_defs[item]['item-key'], item_index, None, None)
+            gift_event = self.parent.item_get_manager.get(flowchart, k, None, None, True)
 
             flag_set = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag',
                 {'symbol': k, 'value': True}, gift_event)

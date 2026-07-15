@@ -97,8 +97,7 @@ class TradeQuestRandomizer:
 
 
     def mamashaChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mamasha')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event15')
+        self.parent.item_get_manager.get(flowchart, 'mamasha', 'Event15', None, True)
 
         event1 = event_tools.findEvent(flowchart, 'Event1')
         event3 = event_tools.findEvent(flowchart, 'Event3')
@@ -108,8 +107,7 @@ class TradeQuestRandomizer:
 
 
     def ciaociaoChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('ciao-ciao')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event21')
+        self.parent.item_get_manager.get(flowchart, 'ciao-ciao', 'Event21', None, True)
 
         event1 = event_tools.findEvent(flowchart, 'Event1')
         event3 = event_tools.findEvent(flowchart, 'Event3')
@@ -119,8 +117,7 @@ class TradeQuestRandomizer:
 
 
     def saleChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('sale')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event31')
+        self.parent.item_get_manager.get(flowchart, 'sale', 'Event31', None, True)
 
         event0 = event_tools.findEvent(flowchart, 'Event0')
         event2 = event_tools.findEvent(flowchart, 'Event2')
@@ -130,7 +127,7 @@ class TradeQuestRandomizer:
 
 
     def kikiChanges(self, flowchart, item_key, item_index):
-        get_event = self.parent.item_get_manager.get(flowchart, item_key, item_index, None, 'Event102')
+        get_event = self.parent.item_get_manager.getWithAnimation(flowchart, item_key, item_index, None, 'Event102')
 
         bananas_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': 'TradeBananasGet'}, {0: 'Event118', 1: 'Event32'})
@@ -164,13 +161,11 @@ class TradeQuestRandomizer:
 
 
     def tarinChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('tarin-ukuku')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event130', 'Event29')
+        self.parent.item_get_manager.get(flowchart, 'tarin-ukuku', 'Event130', 'Event29', True)
 
 
     def chefChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('chef-bear')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event16', None) # Event4
+        self.parent.item_get_manager.get(flowchart, 'chef-bear', 'Event16', None, True) # Event4
 
         event1 = event_tools.findEvent(flowchart, 'Event1')
         event11 = event_tools.findEvent(flowchart, 'Event11')
@@ -180,8 +175,7 @@ class TradeQuestRandomizer:
 
 
     def papahlChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('papahl')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event32', 'Event62')
+        self.parent.item_get_manager.get(flowchart, 'papahl', 'Event32', 'Event62', True)
 
         event81 = event_tools.findEvent(flowchart, 'Event81')
         event2 = event_tools.findEvent(flowchart, 'Event2')
@@ -191,8 +185,7 @@ class TradeQuestRandomizer:
 
 
     def christineChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('christine-trade')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event15', 'Event22')
+        self.parent.item_get_manager.get(flowchart, 'christine-trade', 'Event15', 'Event22', True)
 
         event0 = event_tools.findEvent(flowchart, 'Event0')
         event10 = event_tools.findEvent(flowchart, 'Event10')
@@ -202,13 +195,11 @@ class TradeQuestRandomizer:
 
         event_tools.insertEventAfter(flowchart, 'Event28', 'Event15')
 
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('christine-grateful')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event44', 'Event36')
+        self.parent.item_get_manager.get(flowchart, 'christine-grateful', 'Event44', 'Event36', True)
 
 
     def mrWriteChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mr-write')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event48', 'Event46')
+        self.parent.item_get_manager.get(flowchart, 'mr-write', 'Event48', 'Event46', True)
 
         event0 = event_tools.findEvent(flowchart, 'Event0')
         event2 = event_tools.findEvent(flowchart, 'Event2')
@@ -223,8 +214,7 @@ class TradeQuestRandomizer:
 
 
     def grandmaYahooChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('grandma-yahoo')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event54', 'Event33')
+        self.parent.item_get_manager.get(flowchart, 'grandma-yahoo', 'Event54', 'Event33', True)
 
         broom_check = event_tools.createSwitchEvent(flowchart, 'EventFlags', 'CheckFlag',
         {'symbol': 'TradeBroomGet'}, {0: 'Event69', 1: 'Event79'})
@@ -240,8 +230,7 @@ class TradeQuestRandomizer:
 
 
     def fishermanChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('bay-fisherman')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event28', 'Event42')
+        self.parent.item_get_manager.get(flowchart, 'bay-fisherman', 'Event28', 'Event42', True)
 
         event0 = event_tools.findEvent(flowchart, 'Event0')
         event2 = event_tools.findEvent(flowchart, 'Event2')
@@ -256,8 +245,7 @@ class TradeQuestRandomizer:
 
 
     def mermaidChanges(self, flowchart):
-        item_key, item_index = self.parent.item_info_manager.getItemInfo('mermaid-martha')
-        self.parent.item_get_manager.get(flowchart, item_key, item_index, 'Event73', 'Event55')
+        self.parent.item_get_manager.get(flowchart, 'mermaid-martha', 'Event73', 'Event55', True)
 
         event0 = event_tools.findEvent(flowchart, 'Event0')
         event2 = event_tools.findEvent(flowchart, 'Event2')
