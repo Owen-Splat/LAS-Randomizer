@@ -82,7 +82,6 @@ class NpcDatasheetFixes:
             npc['graphics']['model'] = '$1'
             npc['eventTriggers'][0]['entryPoint'] = '$2'
             npc['layoutConditions'][0]['parameter'] = '$3'
-            npc['collision']['offset']['y'] = 0.25
             npc['shellSensor'].append({'category': 9, 'parameter': '$4'}) # make specific sinkingsword actors trigger the shell sensor
             return
 

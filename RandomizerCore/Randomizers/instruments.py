@@ -60,6 +60,7 @@ class InstrumentRandomizer:
             location = destination
 
         act.type = 0x194 # ObjSinkingSword so that the player needs to press A to grab
+        act.posY += 0.5 # they are halfway into the ground, so raise them up by 1/3 of a tile
         act.parameters[0] = bytes(model_path, 'utf-8')
         act.parameters[1] = bytes(model_name, 'utf-8')
         act.parameters[2] = bytes(room, 'utf-8') # entry point that we write to flow
