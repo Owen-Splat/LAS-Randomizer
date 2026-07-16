@@ -40,8 +40,8 @@ class Keysanity:
                     continue
                 msbt = TextFile(subdir / "message" / "Place.msbt")
                 for i in range(1, 9):
-                    msbt.copyEntry(f"Lv{i}Dungeon_map", f"Keysanity{i}")
-                    msbt.makeEntryWaitForInput(f"Keysanity{i}")
-                msbt.copyEntry("ClothesDungeon_map", "Keysanity9")
-                msbt.makeEntryWaitForInput("Keysanity9")
+                    entry = msbt.copyEntry(f"Lv{i}Dungeon_map", f"Keysanity{i}")
+                    entry.message.text += "[1:4]" # manually add input tag
+                entry = msbt.copyEntry("ClothesDungeon_map", "Keysanity9")
+                entry.message.text += "[1:4]" # manually add input tag
                 msbt.write(self.parent.romfs_dir / region / subdir.name / "message", "Place.msbt")
