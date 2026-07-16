@@ -81,19 +81,19 @@ class ItemsDatasheetFixes:
         dummy['npcKey'] = self.parent.item_defs[self.parent.placements['dampe-final']]['npc-key']
         sheet['values'].append(dictToStruct(dummy))
 
-        # shop stuff, comment out for now until we work on shop
-        # dummy['symbol'] = 'ShopShovel'
-        # dummy['itemID'] = 68
-        # dummy['gettingFlag'] = ''
-        # sheet['values'].append(dictToStruct(dummy))
-        # dummy['symbol'] = 'ShopBow'
-        # dummy['itemID'] = 69
-        # # dummy['gettingFlag'] = 'ShopBowSteal'
-        # sheet['values'].append(dictToStruct(dummy))
-        # dummy['symbol'] = 'ShopHeart'
-        # dummy['itemID'] = 70
-        # # dummy['gettingFlag'] = 'ShopHeartSteal'
-        # sheet['values'].append(dictToStruct(dummy))
+        # shop items
+        dummy['symbol'] = 'ShopShovel'
+        dummy['itemID'] = 68
+        dummy['gettingFlag'] = 'ShopShovelSteal'
+        sheet['values'].append(dictToStruct(dummy))
+        dummy['symbol'] = 'ShopBow'
+        dummy['itemID'] = 69
+        dummy['gettingFlag'] = 'ShopBowSteal'
+        sheet['values'].append(dictToStruct(dummy))
+        dummy['symbol'] = 'ShopHeart'
+        dummy['itemID'] = 70
+        dummy['gettingFlag'] = 'ShopHeartSteal'
+        sheet['values'].append(dictToStruct(dummy))
 
         # seashell mansion presents need traps to be items entries each with a unique ID, otherwise gives a GreenRupee
         # even though IDs >127 cause a crash when they get added to the inventory, traps never actually get added

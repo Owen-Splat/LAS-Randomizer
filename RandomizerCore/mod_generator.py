@@ -28,6 +28,7 @@ from RandomizerCore.Randomizers.chests import ChestRandomizer
 from RandomizerCore.Randomizers.dampe import DampeRandomizer
 from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.tarin import TarinRandomizer
+from RandomizerCore.Randomizers.shop import ShopRandomizer
 from RandomizerCore.Randomizers.keysanity import Keysanity
 from pathlib import Path
 import random, traceback
@@ -101,6 +102,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: RapidsRandomizer(self)
             if self.thread_active: FishingRandomizer(self)
             if self.thread_active: TrendyGameRandomizer(self)
+            if self.thread_active: ShopRandomizer(self)
 
             if self.thread_active: KeyRandomizer(self) # also handles the golden leaves
             if self.thread_active: InstrumentRandomizer(self)

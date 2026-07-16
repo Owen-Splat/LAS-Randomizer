@@ -84,21 +84,21 @@ class ConditionsDatasheetFixes:
             condition['conditions'][0] = {'category': 1, 'parameter': "BombsFoundFlag"}
             return
 
-        # # Edit the shop conditions for the shovel, bow, and heart
-        # if condition['symbol'] == 'ShopShovelCondition':
-        #     condition['conditions'].pop(0)
-        #     condition['conditions'][0] = {'category': 1, 'parameter': '!ShopShovelGet'}
+        # Edit the shop conditions for the shovel, bow, and heart
+        if condition['symbol'] == 'ShopShovelCondition':
+            condition['conditions'].pop(0)
+            condition['conditions'][0] = {'category': 1, 'parameter': '!ScoopGet'}
+            return
+
+        if condition['symbol'] == 'ShopBowCondition':
+            condition['conditions'][0] = {'category': 1, 'parameter': 'ScoopGet'}
+            condition['conditions'][1] = {'category': 1, 'parameter': '!BowGet'}
+            return
+
+        # if condition['symbol'] == 'ShopArrowCondition':
+        #     condition['conditions'][0]['category'] = 2 # change Bow check to category 2 instead of the weird category 11
+        #     condition['conditions'].append({'category': 1, 'parameter': 'ShopBowGet'})
         #     return
 
-        # if condition['symbol'] == 'ShopBowCondition':
-        #     condition['conditions'][0] = {'category': 1, 'parameter': 'ShopShovelGet'}
-        #     condition['conditions'][1] = {'category': 1, 'parameter': '!ShopBowGet'}
-        #     return
-
-        # # if condition['symbol'] == 'ShopArrowCondition':
-        # #     condition['conditions'][0]['category'] = 2 # change Bow check to category 2 instead of the weird category 11
-        # #     condition['conditions'].append({'category': 1, 'parameter': 'ShopBowGet'})
-        # #     return
-
-        # if condition['symbol'] == 'ShopHeartPieceCondition':
-        #     condition['conditions'][0] = {'category': 1, 'parameter': '!ShopHeartGet'}
+        if condition['symbol'] == 'ShopHeartPieceCondition':
+            condition['conditions'][0] = {'category': 1, 'parameter': '!ShopHeartGet'}

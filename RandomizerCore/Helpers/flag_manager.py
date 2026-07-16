@@ -156,12 +156,12 @@ class FlagManager:
         self.addFlag('DampeBottle')
         self.addFlag('DampeFinal')
 
-        # self.addFlag('ShopShovelSteal')
+        self.addFlag('ShopShovelSteal')
         # self.addFlag('ShopShovelGet')
-        # self.addFlag('ShopBowSteal')
+        self.addFlag('ShopBowSteal')
         # self.addFlag('ShopBowGet')
-        # self.addFlag('ShopHeartSteal')
-        # self.addFlag('ShopHeartGet')
+        self.addFlag('ShopHeartSteal')
+        self.addFlag('ShopHeartGet')
 
         # flags for hidden seashells turned into drops
         self.addFlag("HeightsHoleGet")

@@ -55,6 +55,9 @@ class ItemShuffler(QtCore.QThread):
         self.vanilla_locations.add('trendy-prize-5')
         self.vanilla_locations.add('trendy-prize-6')
         self.vanilla_locations.add('trendy-prize-final')
+        self.vanilla_locations.remove('shop-slot3-1st')
+        self.vanilla_locations.remove('shop-slot3-2nd')
+        self.vanilla_locations.remove('shop-slot6')
 
         # if blupsanity is not enabled, add the checks to the vanilla locations
         # TODO: check if there was a reason to not get rid of the checks from logic entirely

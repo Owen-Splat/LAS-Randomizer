@@ -70,7 +70,7 @@ class ShopRandomizer:
         self.parent.file_manager.writeFile('ToolShopkeeper.bfevfl', flow)
 
 
-    def makeStealingEventChanges(self, flowchart, placements, item_defs):
+    def makeStealingEventChanges(self):
         """Edits the ExitOutShop event to give the stolen items with an animation
 
         Also unsets the flag that would cause the Shopkeeper to kill you"""
@@ -78,7 +78,7 @@ class ShopRandomizer:
         flow = self.parent.file_manager.readFile('PlayerStart.bfevfl')
 
         # Remove the flag that says you stole so that the shopkeeper won't kill you
-        event_tools.createActionChain(flow.flowchart, 'Event774', [
+        fast_stealing = event_tools.createActionChain(flow.flowchart, 'Event774', [
             ('EventFlags', 'SetFlag', {'symbol': 'StealSuccess', 'value': False})
         ])
 
@@ -87,26 +87,26 @@ class ShopRandomizer:
         remove_heart = event_tools.createActionChain(flow.flowchart, None, [
             ('EventFlags', 'SetFlag', {'symbol': 'ShopHeartGet', 'value': True}),
             ('EventFlags', 'SetFlag', {'symbol': 'ShopHeartSteal', 'value': False}),
-        ], None)
+        ], fast_stealing)
         give_heart = self.parent.item_get_manager.get(flow.flowchart, 'shop-slot6', None, remove_heart, True)
         check_heart = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': 'ShopHeartSteal'}, {0: None, 1: give_heart})
+            {'symbol': 'ShopHeartSteal'}, {0: fast_stealing, 1: give_heart})
 
         remove_bow = event_tools.createActionChain(flow.flowchart, None, [
-            ('EventFlags', 'SetFlag', {'symbol': 'ShopBowGet', 'value': True}),
-            ('EventFlags', 'SetFlag', {'symbol': 'BowGet', 'value': False}),
+            ('EventFlags', 'SetFlag', {'symbol': 'BowGet', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'ShopBowSteal', 'value': False}),
         ], check_heart)
         give_bow = self.parent.item_get_manager.get(flow.flowchart, 'shop-slot3-2nd', None, remove_bow, True)
         check_bow = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': 'BowGet'}, {0: check_heart, 1: give_bow})
+            {'symbol': 'ShopBowSteal'}, {0: check_heart, 1: give_bow})
 
         remove_shovel = event_tools.createActionChain(flow.flowchart, None, [
-            ('EventFlags', 'SetFlag', {'symbol': 'ShopShovelGet', 'value': True}),
-            ('EventFlags', 'SetFlag', {'symbol': 'ScoopGet', 'value': False}),
+            ('EventFlags', 'SetFlag', {'symbol': 'ScoopGet', 'value': True}),
+            ('EventFlags', 'SetFlag', {'symbol': 'ShopShovelSteal', 'value': False}),
         ], check_bow)
         give_shovel = self.parent.item_get_manager.get(flow.flowchart, 'shop-slot3-1st', None, remove_shovel, True)
         check_shovel = event_tools.createSwitchEvent(flow.flowchart, 'EventFlags', 'CheckFlag',
-            {'symbol': 'ScoopGet'}, {0: check_bow, 1: give_shovel})
+            {'symbol': 'ShopShovelSteal'}, {0: check_bow, 1: give_shovel})
 
         # Insert our events before the nag message over stealing, no event after so it is fully removed
         event_tools.insertEventAfter(flow.flowchart, 'Event771', check_shovel)
