@@ -54,14 +54,12 @@ class ShopRandomizer:
         event_tools.setSwitchEventCase(flow.flowchart, 'Event50', 1, 'Event52')
         event_tools.insertEventAfter(flow.flowchart, 'Event52', 'Event61')
         self.parent.item_get_manager.getWithAnimation(flow.flowchart, item_key, item_index, 'Event53', 'Event43')
-        # event_tools.findEvent(flow.flowchart, 'Event43').data.params.data['symbol'] = 'ShopShovelGet'
 
         # bow
         item_key, item_index = self.parent.item_info_manager.getItemInfo('shop-slot3-2nd')
         event_tools.setSwitchEventCase(flow.flowchart, 'Event12', 1, 'Event14')
         event_tools.insertEventAfter(flow.flowchart, 'Event14', 'Event65')
         self.parent.item_get_manager.getWithAnimation(flow.flowchart, item_key, item_index, 'Event17', 'Event151')
-        # event_tools.findEvent(flow.flowchart, 'Event151').data.params.data['symbol'] = 'ShopBowGet'
 
         # heart piece
         item_key, item_index = self.parent.item_info_manager.getItemInfo('shop-slot6')
@@ -123,6 +121,7 @@ class ShopRandomizer:
         Perhaps simply just a mismatch of model and item name would work"""
 
         for location, messages in TEXT_TO_CHANGE.items():
+            # first we need to get the item names in every language
             item = self.parent.placements[location]
             message: str = self.parent.item_defs[item]["message"]
             file_name, entry_name = message.split(':')
@@ -134,22 +133,30 @@ class ShopRandomizer:
                 item_names.append(entry.message.text)
             text_files.clear()
                 
-            # first we will edit the display text
-            file_name, entry_name = messages[0].split(':')
-            text_files: list[tuple[Path, TextFile]] = self.parent.file_manager.getAllTextFiles(f"{file_name}.msbt")
+            # now we replace the text in every language with the new item name
+            entry1, entry2 = messages
+            text_files: list[tuple[Path, TextFile]] = self.parent.file_manager.getAllTextFiles("System.msbt")
             for i, file in enumerate(text_files):
                 relative_path, msbt = file
-                entry = msbt.getEntry(entry_name)
+                # entry1
+                entry = msbt.getEntry(entry1)
                 text = entry.message.text.split("\n")
                 text[0] = item_names[i]
                 entry.message.text = "\n".join(text)
-                self.parent.file_manager.writeTextFile(relative_path, f"{file_name}.msbt", msbt)
+                # entry2
+                entry = msbt.getEntry(entry2)
+                rupee_text = entry.message.text.split(msbt.COMMANDS["COLOR_PINK"])[1].split(msbt.COMMANDS["COLOR_WHITE"])[0]
+                choice_top = entry.message.text.split(msbt.COMMANDS["CHOICE_TOP"])[1].split(msbt.COMMANDS["CHOICE_BOTTOM"])[0]
+                choice_bottom = entry.message.text.split(msbt.COMMANDS["CHOICE_BOTTOM"])[1]
+                new_text = f"{item_names[i]}\n[COLOR_PINK]{rupee_text}[COLOR_WHITE][CHOICE_TOP]{choice_top}[CHOICE_BOTTOM]{choice_bottom}"
+                msbt.addEntry(entry2, new_text)
+                self.parent.file_manager.writeTextFile(relative_path, "System.msbt", msbt)
 
             # new_text = f"{display_name}\n[COLOR_PINK]{cost} {rupees_language_name}[COLOR_WHITE][WAIT]"
 
 
-TEXT_TO_CHANGE = { # need to edit 2 messages, display and shopkeeper
-    "shop-slot3-1st":       ("System:PriceTagScoop",        ""),
-    "shop-slot3-2nd":       ("System:PriceTagBow",          ""),
-    "shop-slot6":           ("System:PriceTagHeartPeace",   "")
+TEXT_TO_CHANGE = { # need to edit 2 messages, display and talking to buy, both in System.msbt
+    "shop-slot3-1st":       ("PriceTagScoop",        "BuyScoop"),
+    "shop-slot3-2nd":       ("PriceTagBow",          "BuyBow"),
+    "shop-slot6":           ("PriceTagHeartPeace",   "BuyHeartPeace")
 }
