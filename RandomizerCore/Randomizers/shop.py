@@ -1,4 +1,6 @@
 import RandomizerCore.Tools.event_tools as event_tools
+from RandomizerCore.Tools.text_tools import TextFile
+from pathlib import Path
 
 
 class ShopRandomizer:
@@ -52,14 +54,14 @@ class ShopRandomizer:
         event_tools.setSwitchEventCase(flow.flowchart, 'Event50', 1, 'Event52')
         event_tools.insertEventAfter(flow.flowchart, 'Event52', 'Event61')
         self.parent.item_get_manager.getWithAnimation(flow.flowchart, item_key, item_index, 'Event53', 'Event43')
-        event_tools.findEvent(flow.flowchart, 'Event43').data.params.data['symbol'] = 'ShopShovelGet'
+        # event_tools.findEvent(flow.flowchart, 'Event43').data.params.data['symbol'] = 'ShopShovelGet'
 
         # bow
         item_key, item_index = self.parent.item_info_manager.getItemInfo('shop-slot3-2nd')
         event_tools.setSwitchEventCase(flow.flowchart, 'Event12', 1, 'Event14')
         event_tools.insertEventAfter(flow.flowchart, 'Event14', 'Event65')
         self.parent.item_get_manager.getWithAnimation(flow.flowchart, item_key, item_index, 'Event17', 'Event151')
-        event_tools.findEvent(flow.flowchart, 'Event151').data.params.data['symbol'] = 'ShopBowGet'
+        # event_tools.findEvent(flow.flowchart, 'Event151').data.params.data['symbol'] = 'ShopBowGet'
 
         # heart piece
         item_key, item_index = self.parent.item_info_manager.getItemInfo('shop-slot6')
@@ -115,4 +117,39 @@ class ShopRandomizer:
 
 
     def makeTextChanges(self) -> None:
-        return
+        """Edits the text for the shop items to display the item name and cost
+
+        TBD on what to display for traps. Custom text would be cool but not cross-language.
+        Perhaps simply just a mismatch of model and item name would work"""
+
+        for location, messages in TEXT_TO_CHANGE.items():
+            item = self.parent.placements[location]
+            message: str = self.parent.item_defs[item]["message"]
+            file_name, entry_name = message.split(':')
+            text_files: list[tuple[Path, TextFile]] = self.parent.file_manager.getAllTextFiles(f"{file_name}.msbt")
+            item_names = []
+            for file in text_files:
+                relative_path, msbt = file
+                entry = msbt.getEntry(entry_name)
+                item_names.append(entry.message.text)
+            text_files.clear()
+                
+            # first we will edit the display text
+            file_name, entry_name = messages[0].split(':')
+            text_files: list[tuple[Path, TextFile]] = self.parent.file_manager.getAllTextFiles(f"{file_name}.msbt")
+            for i, file in enumerate(text_files):
+                relative_path, msbt = file
+                entry = msbt.getEntry(entry_name)
+                text = entry.message.text.split("\n")
+                text[0] = item_names[i]
+                entry.message.text = "\n".join(text)
+                self.parent.file_manager.writeTextFile(relative_path, f"{file_name}.msbt", msbt)
+
+            # new_text = f"{display_name}\n[COLOR_PINK]{cost} {rupees_language_name}[COLOR_WHITE][WAIT]"
+
+
+TEXT_TO_CHANGE = { # need to edit 2 messages, display and shopkeeper
+    "shop-slot3-1st":       ("System:PriceTagScoop",        ""),
+    "shop-slot3-2nd":       ("System:PriceTagBow",          ""),
+    "shop-slot6":           ("System:PriceTagHeartPeace",   "")
+}

@@ -77,7 +77,15 @@ class TextFile:
             self.msbt = readMSBT(f.read())
 
 
+    def getEntry(self, entry_name: str) -> MSBTEntry:
+        """Returns an entry by name"""
+
+        return self.msbt.get_entry_by_name(entry_name)
+
+
     def copyEntry(self, entry_name: str, new_name: str) -> MSBTEntry:
+        """Copies an existing entry, adds it under a new name, then returns it"""
+
         entry = copy.deepcopy(self.msbt.get_entry_by_name(entry_name))
         entry.name = new_name
         self.msbt.add_entry(entry)
@@ -89,8 +97,6 @@ class TextFile:
 
         for cmd in self.COMMANDS:
             message = message.replace(f"[{cmd}]", self.COMMANDS[cmd])
-
-        print(message)
 
         if label in self.msbt._label_map:
             entry = self.msbt.get_entry_by_name(label)

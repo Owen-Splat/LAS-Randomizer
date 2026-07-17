@@ -102,7 +102,6 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: RapidsRandomizer(self)
             if self.thread_active: FishingRandomizer(self)
             if self.thread_active: TrendyGameRandomizer(self)
-            if self.thread_active: ShopRandomizer(self)
 
             if self.thread_active: KeyRandomizer(self) # also handles the golden leaves
             if self.thread_active: InstrumentRandomizer(self)
@@ -112,6 +111,7 @@ class ModsProcess(QtCore.QThread):
 
             if self.thread_active: EntranceRandomizer(self)
             if self.thread_active: Keysanity(self)
+            if self.thread_active: ShopRandomizer(self)
 
         except Exception:
             er = traceback.format_exc()

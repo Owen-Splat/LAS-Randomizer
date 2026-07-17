@@ -31,17 +31,13 @@ class Keysanity:
 
         We can use the existing dungeon name text, but add a tag at the end to wait for user input"""
 
-        regions = ("regionCN", "regionEU", "regionJP", "regionKR", "regionTW", "regionUS")
-        for region in regions:
-            region_path: Path = self.parent.rom_path / region
-            subdirs = [item for item in region_path.iterdir() if item.is_dir()]
-            for subdir in subdirs:
-                if subdir.name == "common":
-                    continue
-                msbt = TextFile(subdir / "message" / "Place.msbt")
-                for i in range(1, 9):
-                    entry = msbt.copyEntry(f"Lv{i}Dungeon_map", f"Keysanity{i}")
-                    entry.message.text += "[1:4]" # manually add input tag
-                entry = msbt.copyEntry("ClothesDungeon_map", "Keysanity9")
+        text_files: list[tuple[Path, TextFile]] = self.parent.file_manager.getAllTextFiles("Place.msbt")
+
+        for file in text_files:
+            relative_path, msbt = file
+            for i in range(1, 9):
+                entry = msbt.copyEntry(f"Lv{i}Dungeon_map", f"Keysanity{i}")
                 entry.message.text += "[1:4]" # manually add input tag
-                msbt.write(self.parent.romfs_dir / region / subdir.name / "message", "Place.msbt")
+            entry = msbt.copyEntry("ClothesDungeon_map", "Keysanity9")
+            entry.message.text += "[1:4]" # manually add input tag
+            self.parent.file_manager.writeTextFile(relative_path, "Place.msbt", msbt)

@@ -1,5 +1,6 @@
 from RandomizerCore.Tools.event_tools import readFlow, writeFlow
 from RandomizerCore.Tools.oead_tools import readSheet, writeSheet, SARC
+from RandomizerCore.Tools.text_tools import TextFile
 from RandomizerCore.Tools.leb import Room
 from RandomizerCore.Tools.lvb import Level
 from pathlib import Path
@@ -86,3 +87,34 @@ class FileManager:
             return None
 
         return dir
+
+
+    def getAllTextFiles(self, file_name: str) -> list[tuple[Path, TextFile]]:
+        """Gets all text files matching file_name from either the rom path or output directories
+
+        Returns a list of full paths to the files"""
+
+        text_files = []
+        regions = ("regionCN", "regionEU", "regionJP", "regionKR", "regionTW", "regionUS")
+
+        for region in regions:
+            region_path: Path = self.parent.rom_path / region
+            subdirs = [item for item in region_path.iterdir() if item.is_dir()]
+            for subdir in subdirs:
+                if subdir.name == "common":
+                    continue
+                relative_path = Path(f"{region}/{subdir.name}/message")
+                if Path(self.parent.romfs_dir / relative_path / file_name).exists():
+                    text_files.append((relative_path, TextFile(self.parent.romfs_dir / relative_path / file_name)))
+                else:
+                    text_files.append((relative_path, TextFile(self.parent.rom_path / relative_path / file_name)))
+
+        return text_files
+
+
+    def writeTextFile(self, relative_path: Path, file_name: str, text_file: TextFile) -> None:
+        """Writes the text file to the relative path with the given file name"""
+
+        text_file.write(self.parent.romfs_dir / relative_path, file_name)
+        self.parent.progress_value += 1
+        self.parent.progress_update.emit(self.parent.progress_value)
