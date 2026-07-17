@@ -199,9 +199,11 @@ class MiscRandomizer:
         act = room_data.actors[7]
         act.type = 0xB0 # heart piece
         act.rotY = 0 # rotate to be facing the screen
-        act.scaleX = 0.55
-        act.scaleY = 0.55
-        act.scaleZ = 0.55
+
+        if model_name not in ("HeartPiece", "HeartContainer"):
+            act.scaleX = 0.55
+            act.scaleY = 0.55
+            act.scaleZ = 0.55
 
         act.parameters[0] = 54 # we can use indexes 50-63 since they are unused
         act.parameters[1] = bytes(model_path, 'utf-8')

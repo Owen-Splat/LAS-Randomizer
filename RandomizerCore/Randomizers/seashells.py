@@ -176,7 +176,7 @@ class SeashellRandomizer:
             # heart piece actors are bigger and easier to see without manually figuring out scale
             if room in ("kanalet-moat-north", "taltal-sunken"):
                 shell.type = 0xB0
-                if item_key not in ["HeartPiece", "HeartContainer"]:
+                if model_name not in ("HeartPiece", "HeartContainer"):
                     shell.posY += 0.25 # raise them up 1/6 of a tile
                     shell.scaleX = 0.75
                     shell.scaleY = 0.75
