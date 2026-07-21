@@ -523,7 +523,7 @@ Item_Pool:
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
     chest-type: junk
-    message: UI:ItemName_Random
+    message: Glossary:glossary_npc53
   drown-trap:
     type: junk
     quantity: 0
@@ -532,7 +532,7 @@ Item_Pool:
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
     chest-type: junk
-    message: UI:ItemName_Random
+    message: Glossary:glossary_npc53
   squish-trap:
     type: junk
     quantity: 0
@@ -541,7 +541,7 @@ Item_Pool:
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
     chest-type: junk
-    message: UI:ItemName_Random
+    message: Glossary:glossary_npc53
   deathball-trap:
     type: junk
     quantity: 0
@@ -550,7 +550,7 @@ Item_Pool:
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
     chest-type: junk
-    message: UI:ItemName_Random
+    message: Glossary:glossary_npc53
   quake-trap:
     type: junk
     quantity: 0
@@ -559,7 +559,7 @@ Item_Pool:
     model-name: ToolShopkeeper
     npc-key: NpcToolShopkeeper
     chest-type: junk
-    message: UI:ItemName_Random
+    message: Glossary:glossary_npc53
   bomb:
     type: junk
     quantity: 1
