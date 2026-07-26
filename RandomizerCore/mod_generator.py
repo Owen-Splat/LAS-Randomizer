@@ -30,6 +30,7 @@ from RandomizerCore.Randomizers.music import MusicRandomizer
 from RandomizerCore.Randomizers.tarin import TarinRandomizer
 from RandomizerCore.Randomizers.shop import ShopRandomizer
 from RandomizerCore.Randomizers.keysanity import Keysanity
+from RandomizerCore.Randomizers.text import TextRandomizer
 from pathlib import Path
 import random, traceback
 
@@ -109,9 +110,10 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: OwlStatueRandomizer(self)
             if self.thread_active: BlueRupeeRandomizer(self)
 
-            if self.thread_active: EntranceRandomizer(self)
+            if self.thread_active and self.settings["Randomize Text"]: TextRandomizer(self)
             if self.thread_active: Keysanity(self)
             if self.thread_active: ShopRandomizer(self)
+            if self.thread_active: EntranceRandomizer(self)
 
         except Exception:
             er = traceback.format_exc()

@@ -83,6 +83,12 @@ class TextFile:
         return self.msbt.get_entry_by_name(entry_name)
 
 
+    def getEntries(self) -> tuple[MSBTEntry]:
+        """Returns a tuple of all the entries"""
+
+        return self.msbt.entries
+
+
     def copyEntry(self, entry_name: str, new_name: str) -> MSBTEntry:
         """Copies an existing entry, adds it under a new name, then returns it"""
 
@@ -115,7 +121,4 @@ class TextFile:
 
 
     def getTextDict(self) -> dict:
-        text_entries = {}
-        for e in self.msbt.entries:
-            text_entries[e.name] = e.message.text
-        return text_entries
+        return {e.name: e.message.text for e in self.getEntries()}
