@@ -37,12 +37,12 @@ class FreeGiftsRandomizer:
         flow = self.parent.file_manager.readFile('Marin.bfevfl')
 
         if self.parent.settings["Song Cutscenes"]: # skip the cutscene if fast-songs is enabled, and make Link sad about it
-            # sad_face = event_tools.createActionEvent(flow.flowchart, 'Link', 'SetFacialExpression',
-            #     {'expression': 'sad'}, None)
+            sad_face = event_tools.createActionEvent(flow.flowchart, 'Link', 'SetFacialExpression',
+                {'expression': 'sad'}, None)
             flag_set = event_tools.createActionEvent(flow.flowchart, 'EventFlags', 'SetFlag',
-                {'symbol': 'MarinsongGet', 'value': True}, None)
+                {'symbol': 'MarinsongGet', 'value': True}, sad_face)
             event_tools.insertEventAfter(flow.flowchart, 'Event92', flag_set)
-            self.parent.item_get_manager.get(flow.flowchart, 'marin', None, 'Event666', True)
+            self.parent.item_get_manager.get(flow.flowchart, 'marin', sad_face, 'Event666', True)
         else:
             self.parent.item_get_manager.get(flow.flowchart, 'marin', 'Event246', 'Event666', True)
 
