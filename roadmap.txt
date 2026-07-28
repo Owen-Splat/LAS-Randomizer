@@ -1,22 +1,22 @@
-- rewrite the shuffler so that tasks are split up into separate scripts
-    starting items, dungeon item placements, updating logic based on settings, etc
+- disable UI stuff that isn't made yet to avoid confusion
+    don't forget to add a setting for random environments
+
+- starting hearts
+
+- instrument shuffle options
+
+- include external exluanch output download, add the ini config file to the rando so settings can be edited
+
+- play 2 or 3 seeds start to finish with a couple different settings combinations
+
+- release dev build, pray that I didn't overlook anything obvious
+
+----------
+AFTER PUBLIC DEV BUILD
 
 - Try to use ItemGoldenLeaf and ItemSmallKey interchangeably to control compass alarm
     Probably need some small code changes to enemies that drop golden leaves so they don't randomly spawn
 
-- shop
-    make fake item entries with gettingFlags which we will then check and unset in the following event
-    for this first version, we wont have custom text
-
-- keysanity
-    keysanity is easy, just needs an EventFlow comparison chain on the index to determine which dungeon it goes to
-    will need to edit FlowControl::CompareInt to check if the values are equal rather than if value1 is greater
-    by extension, we need to also make sure nothing else uses it
-    We can use the existing text for dungeon names
-
-----------
-AFTER PUBLIC DEV BUILD
-    
 - trendy (TBD)
     trendy just needs to be able for us to change string table stuff in the .bfres file
     there looks to be a pattern in the string table, might be able to just edit some strings to short replacements and pad
