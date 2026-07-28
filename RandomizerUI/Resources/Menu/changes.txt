@@ -1,25 +1,25 @@
-<b>THIS IS UNFINISHED AND WILL NEED TO BE CLEANED UP</b>
-<br></br><br></br>
-
-<b>0.5.0</b>
+<b>0.5.0 DEV BUILD</b>
 <ul>
 <li>Hidden Seashells are now randomized</li>
-<li>Shop is now randomized</li>
-<li>Trendy Game is now randomized</li>
-<li>Keysanity is now available</li>
-<li>You can now include/exclude specific glitches and tricks from logic</li>
-<li>The randomizer app now compiles to Mac</li>
-<li>The randomizer app can now be resized</li>
-<li>Added an option to speed up the animation of holding up items</li>
+<li>Sunken Heart Pieces are now randomized</li>
+<li>Shop is now partially randomized (Shovel, Bow, Heart Piece)</li>
+<li>Keysanity is now available. Every dungeon item can be toggled individually</li>
+<li>Text can now be randomized</li>
+<li>Environment effects can now be randomized</li>
+<li>Added Heart Pieces and Containers to the starting items</li>
+<li>Added the option to remove music</li>
 <li>Added an option to increase player movement speed</li>
-<li>Added an option to adjust the amount of items in the item pool from Standard, Reduced, Plentiful</li>
-<li>Added an option to adjust damage from Easy (halved), Standard, Hero (double), and OHKO Mode</li>
-<li>Starting and Max Hearts settings. Will need testing to make sure it isn't jank</li>
-<li>Added an option to change how the game controls from Standard, DPAD, or 360 Movement</li>
-<li>Replaced Nice Items into a Super Weapons option. This buffs all weapons without affecting logic</li>
+<li>Added an option to allow 360 Movement</li>
+<li>The randomizer app can now be resized</li>
 <li>Unlocked Bombs has been removed in favor of choosing Bombs as a starting item</li>
+<li>The shop will only sell bombs once the player has found some, even with Shuffled Bombs off</li>
 <li>Fast Stealing has been removed. It is now default behavior and always on</li>
-<li>Fixed an oversight that allowed purchasing Magic Powder from the witch before obtaining it normally</li>
+<li>Fixed an oversight that allowed buying Magic Powder from the witch before obtaining it normally</li>
+<li>The color dungeon guards no longer sell Bombs, only Magic Powder</li>
+<li>You now dig for the Slime Key check instead of talking to the owl statue
+<li>The randomizer now only outputs for atmosphere. Emulator setup will slightly differ</li>
+<li>The randomizer now reads a file on the SD card for some settings
+<br></br> This allows them to be easily changed without needing to regenerate the seed</li>
 </ul>
 <br></br>
 
