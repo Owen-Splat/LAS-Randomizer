@@ -6,13 +6,13 @@ import struct
 class Level:
 	def __init__(self, data):
 		self.fixed_hash = FixedHash(data)
-		
+
 		# self.nodes = []
 		# node_entry = [e for e in self.fixed_hash.entries if e.name == b'node'][0]
 		# for entry in node_entry.data.entries:
 		# 	self.nodes.append(Node(entry.data))
 
-		self.zones = []
+		self.zones: list[Zone] = []
 		zone_entry = [e for e in self.fixed_hash.entries if e.name == b'zone'][0]
 		for entry in zone_entry.data.entries:
 			self.zones.append(Zone(entry.data))
@@ -88,7 +88,7 @@ class Zone:
 		self.se_amb = readString(data, 0x5C, as_string=True)
 		self.group_amb = readString(data, 0x7C, as_string=True)
 		self.unknown_2 = data[0x9C:0xB0]
-		self.room_type = readString(data, 0xB0, as_string=True)
+		self.environment = readString(data, 0xB0, as_string=True)
 	
 
 	def pack(self):
@@ -117,10 +117,10 @@ class Zone:
 		
 		packed += padding
 		packed += self.unknown_2
-		packed += bytes(self.room_type, 'utf-8')
+		packed += bytes(self.environment, 'utf-8')
 
 		padding = b''
-		for i in range(32-len(self.room_type)):
+		for i in range(32-len(self.environment)):
 			padding += b'\x00'
 		
 		packed += padding
@@ -206,11 +206,12 @@ class Condition:
 
 
 # Holds 7 bytes of data that define properties of the level. The last 5 bytes always seem to be x00\x00\x00\x00\xff, maybe padding?
-# Only the first 2 bytes ever change. The second byte determines if companions will load
-# The first byte is not yet understood
+# Only the first 2 bytes ever change
+# The first byte determines the level type: 0=Default, 1=Shop, 2=House, 3=Overworld, 4=Ending
+# The second byte determines if companions will load
 class Config:
 	def __init__(self, data):
-		self.attr_1 = readBytes(data, 0x0, 1)
+		self.level_type = readBytes(data, 0x0, 1)
 		self.allow_companions = bool(readBytes(data, 0x1, 1))
 		self.attr_3 = readBytes(data, 0x2, 1)
 		self.attr_4 = readBytes(data, 0x3, 1)
@@ -221,7 +222,7 @@ class Config:
 	
 	def pack(self):
 		packed = b''
-		packed += self.attr_1.to_bytes(1, 'little')
+		packed += self.level_type.to_bytes(1, 'little')
 		packed += self.allow_companions.to_bytes(1, 'little')
 		packed += self.attr_3.to_bytes(1, 'little')
 		packed += self.attr_4.to_bytes(1, 'little')
