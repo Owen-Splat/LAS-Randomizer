@@ -112,6 +112,8 @@ Randomize_Sound_Effects:
   Randomizes sound effects
 Randomize_Text:
   Randomizes text<br></br>Important text is not randomized
+Randomize_Environments:
+  Randomizes the environment in each area (Fog, Sand, Heat, etc.)
 Blur_Removal:
   Removes the blur around the edge of the screen
 Instant_Text:

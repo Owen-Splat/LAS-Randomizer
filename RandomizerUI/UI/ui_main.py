@@ -603,6 +603,7 @@ class Ui_MainWindow(QObject):
 
         group = QGroupBox("Fun", tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        gvl = QVBoxLayout()
         ghl = QHBoxLayout()
         music_box = RandoComboBox(group)
         music_box.addItems((
@@ -612,12 +613,18 @@ class Ui_MainWindow(QObject):
         ))
         sound_box = QCheckBox("Randomize Sound Effects", group)
         text_check = QCheckBox("Randomize Text", group)
+        env_check = QCheckBox("Randomize Environments")
         ghl.addWidget(music_box)
         ghl.addSpacerItem(self.createHorizontalSpacer())
         ghl.addWidget(sound_box)
         ghl.addSpacerItem(self.createHorizontalSpacer())
         ghl.addWidget(text_check)
-        group.setLayout(ghl)
+        gvl.addLayout(ghl)
+        ghl = QHBoxLayout()
+        ghl.addWidget(env_check)
+        ghl.addSpacerItem(self.createHorizontalSpacer())
+        gvl.addLayout(ghl)
+        group.setLayout(gvl)
         vl.addWidget(group)
 
         group = QGroupBox("Tweaks", tab)
@@ -698,7 +705,7 @@ class Ui_MainWindow(QObject):
         heartp_box = QSpinBox(tab)
         heartp_box.setPrefix("Pieces:  ")
         heartp_box.setMinimum(0)
-        heartp_box.setMaximum(32)
+        heartp_box.setMaximum(30) # -2 because of 2 HPs in trendy that are currently vanilla
         heartp_box.setFont(ft)
         heart_text = QLabel("Starting hearts:  3", tab)
         heart_text.setObjectName("StartingHeartsText")
