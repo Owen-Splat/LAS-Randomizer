@@ -18,7 +18,7 @@ def generateSpoilerLog(placements, logic_defs: dict, out_dir: Path, seed: str):
         sets = list(placements['settings'])
         sets.sort()
         for setting in sets:
-            if setting not in ('excluded-locations', 'starting-items'):
+            if setting not in ('Excluded Locations', 'Starting Gear'):
                 output.write(f'    {setting}:  {placements["settings"][setting]}\n')
 
         output.write('\nstarting-items:\n')
