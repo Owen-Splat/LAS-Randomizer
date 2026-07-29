@@ -2,6 +2,7 @@ from PySide6 import QtCore
 from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
 from RandomizerCore.Shuffler.starting_items import ShufflerStartingItems
 from RandomizerCore.Shuffler.dungeon_items import ShufflerDungeonItems
+from RandomizerCore.Shuffler.instruments import ShufflerInstruments
 import RandomizerCore.spoiler as spoiler
 import re
 import copy
@@ -494,6 +495,7 @@ class ItemShuffler(QtCore.QThread):
 
         # Next assign dungeon items before the rest
         if self.thread_active: ShufflerDungeonItems(self, access)
+        if self.thread_active: ShufflerInstruments(self, access)
 
         # Shuffle remaining locations
         self.rng.shuffle(self.locations)
@@ -626,8 +628,6 @@ class ItemShuffler(QtCore.QThread):
 
         dungeon_indexes = [k for k in placement_tracker if self.placements[k].startswith(('compass', 'map', 'stone', 'key', 'nightmare'))]
         for key in dungeon_indexes:
-            # if key in placements['indexes']:
-            #     continue
             level = int(self.placements[key][-1])
             level -= 1
             if level == -1:
