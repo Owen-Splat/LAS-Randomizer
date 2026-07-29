@@ -26,16 +26,6 @@ def generateSpoilerLog(placements, logic_defs: dict, out_dir: Path, seed: str):
         items.sort()
         for item in items:
             output.write(f'    {item}\n')
-        if placements['settings']['Dungeon Maps'] == 'Start With':
-            output.write(f'    dungeon-maps\n')
-        if placements['settings']['Compasses'] == 'Start With':
-            output.write(f'    compasses\n')
-        if placements['settings']['Stone Beaks'] == 'Start With':
-            output.write(f'    stone-beaks\n')
-        if placements['settings']['Small Keys'] == 'Start With':
-            output.write(f'    small-keys\n')
-        if placements['settings']['Nightmare Keys'] == 'Start With':
-            output.write(f'    nightmare-keys\n')
 
         output.write('\nexcluded-locations:\n')
         junk = list(placements['force-junk'])
@@ -57,8 +47,6 @@ def generateSpoilerLog(placements, logic_defs: dict, out_dir: Path, seed: str):
                     if not item.startswith(('map', 'compass', 'stone-beak', 'key', 'nightmare-key')):
                         index = placements['indexes'][location]
                 index = f'[{index}]' if (IS_RUNNING_FROM_SOURCE and index > -1) else ''
-                if location.startswith('starting-dungeon-item'):
-                    continue
                 if item.endswith('trap'):
                     item = 'trap'
                 output.write('    {0}:  {1}{2}\n'.format(location, item, index))

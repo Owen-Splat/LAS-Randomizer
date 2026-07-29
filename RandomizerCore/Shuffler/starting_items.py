@@ -45,36 +45,32 @@ class ShufflerStartingItems:
             for inst in instrument_locations:
                 self.shuffler.vanilla_locations.add(inst)
 
-        # if start with compass & map setting is enabled, adding them into the starting item setting
-        to_check = []
-        if self.shuffler.settings["Dungeon Maps"] == "Start With":
-            to_check.append("map")
-        if self.shuffler.settings["Compasses"] == "Start With":
-            to_check.append("compass")
-        if self.shuffler.settings["Stone Beaks"] == "Start With":
-            to_check.append("stone-beak")
-        if self.shuffler.settings["Small Keys"] == "Start With":
-            to_check.append("key")
-        if self.shuffler.settings["Nightmare Keys"] == "Start With":
-            to_check.append("nightmare-key")
-        if len(to_check) > 0:
-            start_dungeon_items = [s for s in self.shuffler.item_defs if s.startswith(tuple(to_check))]
-            start_dungeon_items_with_count = [s for s in start_dungeon_items for _ in range(self.shuffler.item_defs[s]['quantity'])]
-            for e, item in enumerate(start_dungeon_items_with_count):
-                self.shuffler.logic_defs[f'starting-dungeon-item-{e + 1}'] = {  # add a location for each starting item
-                    'type': 'item',
-                    'subtype': 'npc',
-                    'content': item,
-                    'region': 'mabe',
-                    'spoiler-region': 'mabe-village'
-                }
-                self.shuffler.vanilla_locations.add(f'starting-dungeon-item-{e + 1}')
-                self.shuffler.item_defs['rupee-50']['quantity'] += 1  # since we add a location for each item, add a 50 rupee in the pool for each
-
         # add the starting instruments to the list of starting items since we are done with them
         self.shuffler.settings["Starting Gear"].extend(start_instruments)
 
-        # do the same for the remaining starting items
+        # if start with compass & map setting is enabled, adding them into the starting item setting
+        for i in range(9):
+            if self.shuffler.settings["Dungeon Maps"] == "Start With":
+                self.shuffler.settings["Starting Gear"].append(f"map-D{i}")
+            if self.shuffler.settings["Compasses"] == "Start With":
+                self.shuffler.settings["Starting Gear"].append(f"compass-D{i}")
+            if self.shuffler.settings["Stone Beaks"] == "Start With":
+                self.shuffler.settings["Starting Gear"].append(f"stone-beak-D{i}")
+            if self.shuffler.settings["Small Keys"] == "Start With":
+                self.shuffler.settings["Starting Gear"].append(f"key-D{i}")
+            if self.shuffler.settings["Nightmare Keys"] == "Start With":
+                self.shuffler.settings["Starting Gear"].append(f"nightmare-key-D{i}")
+
+        # heart pieces and containers
+        for i in range(self.shuffler.settings["Pieces"]):
+            self.shuffler.settings["Starting Gear"].append("heart-piece")
+        for i in range(self.shuffler.settings["Containers"]):
+            self.shuffler.settings["Starting Gear"].append("heart-container")
+
+        # for all the starting items, we must now add a new location with the item as a vanilla location
+        # then replace the item slot with a purple rupee for each
+        hp_index = 0
+        hc_index = 0
         for e, item in enumerate(self.shuffler.settings["Starting Gear"]):
             self.shuffler.logic_defs[f'starting-item-{e+1}'] = { # add a location for each starting item
                 'type': 'item',
@@ -83,5 +79,13 @@ class ShufflerStartingItems:
                 'region': 'mabe',
                 'spoiler-region': 'mabe-village'
             }
+            if item == "heart-piece":
+                self.shuffler.logic_defs[f'starting-item-{e+1}']["index"] = hp_index
+                hp_index += 1
+                if hp_index == 25: # 2 heart pieces in trendy are still vanilla
+                    hp_index = 27
+            elif item == "heart-container":
+                self.shuffler.logic_defs[f'starting-item-{e+1}']["index"] = hc_index
+                hc_index += 1
             self.shuffler.vanilla_locations.add(f'starting-item-{e+1}')
             self.shuffler.item_defs['rupee-50']['quantity'] += 1 # since we add a location for each item, add a 50 rupee in the pool for each

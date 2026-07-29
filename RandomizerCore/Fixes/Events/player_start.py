@@ -80,6 +80,12 @@ class PlayerStartEventFixes:
                     continue
                 event_defs += self.parent.item_get_manager.getWithoutAnimation("NightmareKey", i)
 
+        # heart pieces and containers
+        for i in range(self.parent.settings["Pieces"]):
+            event_defs += self.parent.item_get_manager.getWithoutAnimation("HeartPiece", i)
+        for i in range(self.parent.settings["Containers"]):
+            event_defs += self.parent.item_get_manager.getWithoutAnimation("HeartContainer", i)
+
         # starting rupees
         starting_rupees = self.parent.settings["Rupees"]
         if starting_rupees > 0:

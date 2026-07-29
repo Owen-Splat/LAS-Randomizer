@@ -461,12 +461,12 @@ class ItemShuffler(QtCore.QThread):
 
         # Shuffle item and location lists
         self.rng.shuffle(important_items)
+        self.rng.shuffle(dungeon_items)
         self.rng.shuffle(seashell_items)
         self.rng.shuffle(good_items)
         self.rng.shuffle(junk_items)
-        self.rng.shuffle(dungeon_items)
 
-        self.items = important_items + seashell_items + good_items + junk_items + dungeon_items
+        self.items = important_items + dungeon_items + seashell_items + good_items + junk_items
         # print(len(items))
 
         # Assign vanilla contents to forceVanilla locations
