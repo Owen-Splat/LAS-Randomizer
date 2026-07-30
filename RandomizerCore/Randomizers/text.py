@@ -26,8 +26,8 @@ class TextRandomizer:
             text_dict = msbt.getTextDict()
             keys = list(text_dict.keys())
             values = list(text_dict.values())
-            self.parent.rng.shuffle(keys)
-            self.parent.rng.shuffle(values)
+            self.parent.cosmetic_rng.shuffle(keys)
+            self.parent.cosmetic_rng.shuffle(values)
             for i in range(len(keys)):
                 text_dict[keys[i]] = values[i]
             for entry in msbt.getEntries():
@@ -54,8 +54,8 @@ class TextRandomizer:
 
             keys = list(text_messages.keys())
             values = list(text_messages.values())
-            self.parent.rng.shuffle(keys)
-            self.parent.rng.shuffle(values)
+            self.parent.cosmetic_rng.shuffle(keys)
+            self.parent.cosmetic_rng.shuffle(values)
             for i2 in range(len(keys)):
                 text_messages[keys[i2]] = values[i2]
 
