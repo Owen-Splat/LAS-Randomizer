@@ -9,7 +9,7 @@ class RapidsRandomizer:
         self.makePrizesStack(flow.flowchart)
 
         # removed rapids BGM because of it being broken in music rando, so remove the StopBGM events for it
-        if self.parent.settings["Music"] == "Shuffled":
+        if self.parent.settings["Music"] != "Vanilla":
             event_tools.insertEventAfter(flow.flowchart, 'timeAttackGoal', 'Event27')
             event_tools.insertEventAfter(flow.flowchart, 'normalGoal', 'Event20')
 

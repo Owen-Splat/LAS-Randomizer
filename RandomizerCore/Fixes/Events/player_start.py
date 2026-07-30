@@ -12,7 +12,7 @@ class PlayerStartEventFixes:
         self.makeStartChanges(flow.flowchart)
 
         # skip over BGM_HOUSE_FIRST when Link wakes up because it overlaps with the shuffled zone BGM
-        if self.parent.settings["Music"] == "Shuffled":
+        if self.parent.settings["Music"] != "Vanilla":
             event_tools.insertEventAfter(flow.flowchart, 'Event150', 'Event151')
 
         self.parent.file_manager.writeFile('PlayerStart.bfevfl', flow)

@@ -18,7 +18,7 @@ class MiscRandomizer:
         room_data = self.parent.file_manager.readFile('Field_16C.leb')
         item_key, item_index, model_path, model_name = self.parent.item_info_manager.getItemInfoWithModel('washed-up')
 
-        if self.parent.settings["Music"] == "Shuffled":
+        if self.parent.settings["Music"] != "Vanilla":
             end_ev = None
             del event_tools.findEvent(flowchart, 'Event0').data.forks[0]
         else:
