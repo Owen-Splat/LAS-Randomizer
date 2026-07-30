@@ -185,6 +185,7 @@ class Ui_MainWindow(QObject):
         shop_check = QCheckBox('Shop', group)
         boss_check = QCheckBox('Boss Drops', group)
         companions_check = QCheckBox("Companions", group)
+        companions_check.setEnabled(False)
         hl = QHBoxLayout()
         hl.addWidget(chests_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
@@ -319,6 +320,7 @@ class Ui_MainWindow(QObject):
         rapids_check = QCheckBox('Rapids', minigames_group)
         fishing_check = QCheckBox('Fishing', minigames_group)
         trendy_check = QCheckBox('Trendy Game', minigames_group)
+        trendy_check.setEnabled(False)
         gvl = QVBoxLayout()
         hl = QHBoxLayout()
         hl.addWidget(dampe_check)
@@ -363,6 +365,7 @@ class Ui_MainWindow(QObject):
         group = QGroupBox("Race Mode Settings", tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
         race_check = QCheckBox('Race Mode', group)
+        race_check.setEnabled(False)
         required_dungeons_box = RandoComboBox(group)
         required_dungeons_box.addItems((
             'Required Dungeons:  0',
@@ -411,6 +414,7 @@ class Ui_MainWindow(QObject):
         ghl = QHBoxLayout()
         spoiler_check = QCheckBox('Create Spoiler Log', group)
         unrandomizer_check = QCheckBox('Unrandomizer Mode', group)
+        unrandomizer_check.setEnabled(False)
         ghl.addWidget(spoiler_check)
         ghl.addSpacerItem(self.createHorizontalSpacer())
         ghl.addWidget(unrandomizer_check)
@@ -534,6 +538,7 @@ class Ui_MainWindow(QObject):
         chest_check = QCheckBox('Chest Animations', group)
         key_check = QCheckBox('Key Animations', group)
         item_check = QCheckBox('Item Get Animations', group)
+        item_check.setEnabled(False)
         hl = QHBoxLayout()
         hl.addWidget(boss_check)
         hl.addSpacerItem(self.createHorizontalSpacer())
@@ -562,6 +567,7 @@ class Ui_MainWindow(QObject):
             'Item Pool:  Reduced',
             'Item Pool:  Plentiful'
         ))
+        pool_box.setEnabled(False)
         trap_box = RandoComboBox(group)
         trap_box.addItems((
             'Traps:  None',
@@ -612,6 +618,7 @@ class Ui_MainWindow(QObject):
             "Music:  Removed"
         ))
         sound_box = QCheckBox("Randomize Sound Effects", group)
+        sound_box.setEnabled(False)
         text_check = QCheckBox("Randomize Text", group)
         env_check = QCheckBox("Randomize Environments")
         ghl.addWidget(music_box)
@@ -632,11 +639,15 @@ class Ui_MainWindow(QObject):
         gvl = QVBoxLayout()
         ghl = QHBoxLayout()
         beep_check = QCheckBox("Disable Low Health Beep", group)
+        beep_check.setEnabled(False)
         controls_check = QCheckBox("360 Movement", group)
         blur_check = QCheckBox("Blur Removal", group)
         text_check = QCheckBox("Instant Text", group)
+        text_check.setEnabled(False)
         acorn_check = QCheckBox("Disable Guardian Acorn", group)
+        acorn_check.setEnabled(False)
         power_check = QCheckBox("Disable Piece of Power", group)
+        power_check.setEnabled(False)
         ghl.addWidget(blur_check)
         ghl.addSpacerItem(self.createHorizontalSpacer())
         ghl.addWidget(text_check)
