@@ -32,8 +32,8 @@ CHECKBOX_DEFAULTS = ( # true if in this list, false if not
     "Chest Animations",
     "Key Animations",
     # "Super Weapons"
-    "Super Bombs",
-    "Super Magic Rod"
+    "Nice Bombs",
+    "Nice Magic Rod"
 )
 
 SPINBOX_DEFAULTS = {

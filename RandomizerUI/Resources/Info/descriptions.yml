@@ -104,11 +104,11 @@ Traps:
   This controls how many traps will be added to the item pool
 # Super_Weapons:
 #   Buffs several weapons. This does not affect logic
-Super_Bombs:
+Nice_Bombs:
   There is no cooldown when placing bombs. You can use as many as you want
-Super_Hookshot:
+Nice_Hookshot:
   The hookshot can latch onto any solid surface
-Super_Magic_Rod:
+Nice_Magic_Rod:
   The magic rod no longer has any cooldown when shooting it
 Damage:
   Controls how much damage the player recieves

@@ -584,9 +584,9 @@ class Ui_MainWindow(QObject):
 
         group = QGroupBox("Difficulty", tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        nice_bombs_check = QCheckBox("Super Bombs", group)
-        nice_hookshot_check = QCheckBox("Super Hookshot", group)
-        nice_rod_check = QCheckBox("Super Magic Rod", group)
+        nice_bombs_check = QCheckBox("Nice Bombs", group)
+        nice_hookshot_check = QCheckBox("Nice Hookshot", group)
+        nice_rod_check = QCheckBox("Nice Magic Rod", group)
         # super_check = QCheckBox('Super Weapons', group)
         damage_box = RandoComboBox(group)
         damage_box.addItems((
