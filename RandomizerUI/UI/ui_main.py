@@ -582,19 +582,27 @@ class Ui_MainWindow(QObject):
         ghl.addWidget(group)
         vl.addLayout(ghl)
 
-        group = QGroupBox('Difficulty', tab)
+        group = QGroupBox("Difficulty", tab)
         group.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        super_check = QCheckBox('Super Weapons', group)
+        nice_bombs_check = QCheckBox("Super Bombs", group)
+        nice_hookshot_check = QCheckBox("Super Hookshot", group)
+        nice_rod_check = QCheckBox("Super Magic Rod", group)
+        # super_check = QCheckBox('Super Weapons', group)
         damage_box = RandoComboBox(group)
         damage_box.addItems((
-            'Damage:  0x',
-            'Damage:  1x',
-            'Damage:  2x',
+            'Damage:  None',
+            'Damage:  Normal',
             'Damage:  OHKO'
         ))
         ovl = QVBoxLayout()
-        ovl.addWidget(super_check)
-        ovl.addWidget(damage_box)
+        ohl = QHBoxLayout()
+        ohl.addWidget(nice_bombs_check)
+        ohl.addWidget(nice_hookshot_check)
+        ovl.addLayout(ohl)
+        ohl = QHBoxLayout()
+        ohl.addWidget(nice_rod_check)
+        ohl.addWidget(damage_box)
+        ovl.addLayout(ohl)
         group.setLayout(ovl)
         ghl.addSpacerItem(self.createHorizontalSpacer())
         ghl.addWidget(group)

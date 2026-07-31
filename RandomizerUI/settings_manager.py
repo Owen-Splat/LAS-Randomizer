@@ -31,7 +31,9 @@ CHECKBOX_DEFAULTS = ( # true if in this list, false if not
     "Movement Speed",
     "Chest Animations",
     "Key Animations",
-    "Super Weapons"
+    # "Super Weapons"
+    "Super Bombs",
+    "Super Magic Rod"
 )
 
 SPINBOX_DEFAULTS = {
@@ -48,8 +50,7 @@ COMBOBOX_DEFAULTS = {
     "Required Dungeons":  5,
     "Stealing": 1,
     "Traps": 1,
-    "Damage": 1,
-
+    "Damage": 1
 }
 
 STRING_EXCLUSIONS = (
