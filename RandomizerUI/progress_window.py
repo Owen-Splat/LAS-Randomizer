@@ -40,22 +40,26 @@ class ProgressWindow(QtWidgets.QMainWindow):
         self.settings: dict = settings
         self.settings_string : str = settings_string
 
-        self.num_of_mod_tasks = 255
+        self.num_of_mod_tasks = 369 #255
 
         # if not settings['shuffle-companions']:
         #     self.num_of_mod_files += 8
 
         if settings["Blue Rupees"]:
-            self.num_of_mod_tasks += 1
+            self.num_of_mod_tasks += 2
 
-        if settings["Owl Gifts"] in ("Dungeons", "All"):
-            self.num_of_mod_tasks += 4 # 4 extra room modifications
+        if settings["Owl Gifts"] == "Overworld":
+            self.num_of_mod_tasks += 1
+        elif settings["Owl Gifts"] == "Dungeons":
+            self.num_of_mod_tasks += 5
+        elif settings["Owl Gifts"] == "All":
+            self.num_of_mod_tasks += 6
 
         if settings["Music"] != "Vanilla":
-            self.num_of_mod_tasks += (102 + 13) # all .lvb files + extra events
+            self.num_of_mod_tasks += 124
 
         if settings["Bad Pets"]:
-            self.num_of_mod_tasks += 10
+            self.num_of_mod_tasks += 9
 
         if settings["Shuffled Dungeons"]:
             self.num_of_mod_tasks += 19
@@ -67,7 +71,13 @@ class ProgressWindow(QtWidgets.QMainWindow):
             self.num_of_mod_tasks += 4
 
         if settings["Chest Types"] == "Texture + Size":
-            self.num_of_mod_tasks += 65 # len(PANEL_CHEST_ROOMS)
+            self.num_of_mod_tasks += 65
+
+        if settings["Randomize Environments"]:
+            self.num_of_mod_tasks += 102
+
+        if settings["Randomize Text"]:
+            self.num_of_mod_tasks += 34
 
         self.done = False
         self.cancel = False
