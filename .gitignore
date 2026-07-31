@@ -7,6 +7,7 @@ __pycache__
 /RandomizerUI/Resources/__Combined.bntx
 /RandomizerUI/Resources/textures/chest/bfres
 /Test
+/exl
 tests.py
 settings.txt
 log.txt

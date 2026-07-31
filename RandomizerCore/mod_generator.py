@@ -1,5 +1,5 @@
 from PySide6 import QtCore
-from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE
+from RandomizerCore.Paths.randomizer_paths import IS_RUNNING_FROM_SOURCE, EXL_PATH
 from RandomizerCore.Fixes.title_screen import TitleScreenFixes
 from RandomizerCore.Fixes.datasheets import DatasheetFixes
 from RandomizerCore.Fixes.events import EventFixes
@@ -32,7 +32,7 @@ from RandomizerCore.Randomizers.shop import ShopRandomizer
 from RandomizerCore.Randomizers.keysanity import Keysanity
 from RandomizerCore.Randomizers.text import TextRandomizer
 from pathlib import Path
-import random, traceback
+import configparser, random, shutil, traceback
 
 
 class ModsProcess(QtCore.QThread):
@@ -115,6 +115,9 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: ShopRandomizer(self)
             if self.thread_active: EntranceRandomizer(self)
 
+            if self.thread_active: self.makeExeFS()
+            if self.thread_active: self.makeConfig()
+
         except Exception:
             er = traceback.format_exc()
             print(er)
@@ -124,3 +127,58 @@ class ModsProcess(QtCore.QThread):
             if IS_RUNNING_FROM_SOURCE:
                 print(f'total tasks: {self.progress_value}')
             self.is_done.emit()
+
+
+    def makeExeFS(self) -> None:
+        """Creates the main.npdm and subsdk9 files that will go in the exefs folder
+
+        Currently just copies them to the output"""
+
+        self.exefs_dir.mkdir(exist_ok=True)
+        shutil.copy(EXL_PATH / "main.npdm", self.exefs_dir)
+        shutil.copy(EXL_PATH / "subsdk9", self.exefs_dir)
+        self.progress_value += 1
+        self.progress_update.emit(self.progress_value)
+
+
+    def makeConfig(self) -> None:
+        """Creates a config.ini file that our exlaunch hooks will read"""
+
+        config = configparser.ConfigParser()
+        config.remove_section("DEFAULT")
+
+        config.add_section("movement")
+        config["movement"] = {
+            "full_direction": self.settings["360 Movement"],
+            "speed": 1.15 if self.settings["Movement Speed"] else 1.0
+        }
+
+        config.add_section("nice_items")
+        config["nice_items"] = {
+            "bombs": self.settings["Nice Bombs"],
+            "hookshot": self.settings["Nice Hookshot"],
+            "rod": self.settings["Nice Magic Rod"]
+        }
+
+        config.add_section("blur_removal")
+        config["blue_removal"] = {
+            "enabled": self.settings["Blur Removal"]
+        }
+
+        config.add_section("damage")
+        config["damage"] = {
+            "mode": self.settings["Damage"]
+        }
+
+        config.add_section("randomizer")
+        config["randomizer"] = {
+            "free_book": True,
+            "stealing": self.settings["Stealing"],
+            "enemies": self.settings["Randomize Enemies"],
+            "enemy_sizes": self.settings["Randomize Enemy Sizes"]
+        }
+
+        with open(self.config_dir / "config.ini", 'w') as f:
+            config.write(f)
+        self.progress_value += 1
+        self.progress_update.emit(self.progress_value)

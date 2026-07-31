@@ -5,7 +5,6 @@ import appdirs, platform, sys
 if getattr(sys, "frozen", False):
     IS_RUNNING_FROM_SOURCE = False
     ROOT_PATH = Path(sys.executable).parent
-    ASM_PATH = ROOT_PATH / 'lib/RandomizerCore/ASM/Patches'
     DATA_PATH = ROOT_PATH / 'Data'
     RESOURCE_PATH = ROOT_PATH / 'Resources'
     if platform.system() == 'Darwin':
@@ -15,16 +14,18 @@ if getattr(sys, "frozen", False):
         SETTINGS_PATH = userdata_path / 'settings.txt'
         LOGS_PATH = userdata_path / 'log.txt'
         VERSION_PATH = userdata_path / 'version.txt'
+        EXL_PATH = userdata_path / 'exl'
     else:
         SETTINGS_PATH = ROOT_PATH / 'settings.txt'
         LOGS_PATH = ROOT_PATH / 'log.txt'
         VERSION_PATH = ROOT_PATH / 'version.txt'
+        EXL_PATH = ROOT_PATH / 'exl'
 else:
     IS_RUNNING_FROM_SOURCE = True
     ROOT_PATH = Path(sys.argv[0]).parent
-    ASM_PATH = ROOT_PATH / 'RandomizerCore' / 'ASM' / 'Patches'
     DATA_PATH = ROOT_PATH / 'RandomizerCore' / 'Data'
     RESOURCE_PATH = ROOT_PATH / 'RandomizerUI' / 'Resources'
     SETTINGS_PATH = ROOT_PATH / 'settings.txt'
     LOGS_PATH = ROOT_PATH / 'log.txt'
     VERSION_PATH = ROOT_PATH / 'version.txt'
+    EXL_PATH = ROOT_PATH / 'exl'
