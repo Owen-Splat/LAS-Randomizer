@@ -179,6 +179,7 @@ class ModsProcess(QtCore.QThread):
             "enemy_sizes": self.settings["Randomize Enemy Sizes"]
         }
 
+        self.config_dir.mkdir(parents=True, exist_ok=True)
         with open(self.config_dir / "config.ini", 'w') as f:
             config.write(f)
         self.progress_value += 1
