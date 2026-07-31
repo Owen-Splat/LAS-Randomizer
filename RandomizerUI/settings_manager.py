@@ -15,7 +15,7 @@ CHECKBOX_DEFAULTS = ( # true if in this list, false if not
     "Miscellaneous",
     "Shop",
     "Boss Drops",
-    "Companions",
+    # "Companions",
     "Create Spoiler Log",
     "Open Kanalet",
     "Open Mabe",
@@ -49,7 +49,7 @@ COMBOBOX_DEFAULTS = {
     "Shuffle_Instruments": 4,
     "Required Dungeons":  5,
     "Stealing": 1,
-    "Traps": 1,
+    "Traps": 2,
     "Damage": 1
 }
 
