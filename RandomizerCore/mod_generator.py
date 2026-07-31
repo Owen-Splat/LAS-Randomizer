@@ -161,7 +161,7 @@ class ModsProcess(QtCore.QThread):
         }
 
         config.add_section("blur_removal")
-        config["blue_removal"] = {
+        config["blur_removal"] = {
             "enabled": self.settings["Blur Removal"]
         }
 
@@ -172,6 +172,7 @@ class ModsProcess(QtCore.QThread):
 
         config.add_section("randomizer")
         config["randomizer"] = {
+            "enabled": True,
             "free_book": True,
             "stealing": self.settings["Stealing"],
             "enemies": self.settings["Randomize Enemies"],
