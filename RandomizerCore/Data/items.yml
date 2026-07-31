@@ -490,7 +490,7 @@ Item_Pool:
     model-path: ItemPanelDungeonPiece.bfres
     model-name: PanelDungeonPiece
     npc-key: ItemPanelDungeonPiece
-    chest-type: junk'
+    chest-type: junk
     message: Glossary:glossary_panel11
   rupee-20:
     type: junk

@@ -26,8 +26,8 @@ class InstrumentRandomizer:
                 for k,v in DUNGEON_ENTRANCES.items():
                     dun = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
                     if dun == cur_dun:
-                        ent_keys = list(self.placements['dungeon-entrances'].keys())
-                        ent_values = list(self.placements['dungeon-entrances'].values())
+                        ent_keys = list(self.parent.placements['dungeon-entrances'].keys())
+                        ent_values = list(self.parent.placements['dungeon-entrances'].values())
                         d = DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
                         destination = d[2] + d[3]
             else:
