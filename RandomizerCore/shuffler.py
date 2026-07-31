@@ -494,8 +494,8 @@ class ItemShuffler(QtCore.QThread):
                 indexes_available[self.placements[loc]].remove(self.placements['indexes'][loc])
 
         # Next assign dungeon items before the rest
+        if self.thread_active: ShufflerInstruments(self, access) # instruments need priority
         if self.thread_active: ShufflerDungeonItems(self, access)
-        if self.thread_active: ShufflerInstruments(self, access)
 
         # Shuffle remaining locations
         self.rng.shuffle(self.locations)
