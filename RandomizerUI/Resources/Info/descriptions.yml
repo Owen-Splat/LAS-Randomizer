@@ -97,7 +97,7 @@ Song_Cutscenes:
 Item_Get_Animations:
   Animations from getting items will be sped up
 Movement_Speed:
-  Always have the Piece of Power speed boost
+  Gives a 20% boost to movement speed when walking and swimming
 Item_Pool:
   This controls how many progress items will be added to the item pool
 Traps:

@@ -150,7 +150,7 @@ class ModsProcess(QtCore.QThread):
         config.add_section("movement")
         config["movement"] = {
             "full_direction": self.settings["360 Movement"],
-            "speed": 1.15 if self.settings["Movement Speed"] else 1.0
+            "speed": 1.2 if self.settings["Movement Speed"] else 1.0
         }
 
         config.add_section("nice_items")
@@ -173,7 +173,7 @@ class ModsProcess(QtCore.QThread):
         config.add_section("randomizer")
         config["randomizer"] = {
             "enabled": True,
-            "free_book": True,
+            "free_book": self.settings["Free Book"],
             "stealing": self.settings["Stealing"],
             "enemies": self.settings["Randomize Enemies"],
             "enemy_sizes": self.settings["Randomize Enemy Sizes"]
