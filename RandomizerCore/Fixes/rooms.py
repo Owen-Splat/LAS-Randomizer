@@ -11,6 +11,8 @@ class RoomFixes:
         self.fixWaterLoadingZones()
         if self.parent.settings["Open Mabe"]:
             self.openMabe()
+        if self.parent.settings["Randomize Enemies"]:
+            self.openArmosStairs()
 
 
     def makeGeneralRoomChanges(self):
@@ -138,6 +140,21 @@ class RoomFixes:
                     tile.flags3['respawnload'] = 0
 
             self.parent.file_manager.writeFile(f'{room}.leb', room_data)
+
+
+    def openArmosStairs(self) -> None:
+        """Although we already set the global flags for the 2 stairs under armos,
+        I still had a sword stalfos need to be killed before the stairs appeared
+
+        Instead of figuring out every outlier, it is easier to just delete the enemy actors"""
+
+        room_data: Room = self.parent.file_manager.readFile("Field_10N.leb")
+        del room_data.actors[0]
+        self.parent.file_manager.writeFile("Field_10N.leb", room_data)
+
+        room_data: Room = self.parent.file_manager.readFile("Field_11O.leb")
+        del room_data.actors[2]
+        self.parent.file_manager.writeFile("Field_11O.leb", room_data)
 
 
 WATER_LOADING_ZONES = {

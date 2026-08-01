@@ -70,6 +70,9 @@ class ProgressWindow(QtWidgets.QMainWindow):
         if settings["Open Mabe"]:
             self.num_of_mod_tasks += 4
 
+        if settings["Randomize Enemies"]:
+            self.num_of_mod_tasks += 2
+
         if settings["Chest Types"] == "Texture + Size":
             self.num_of_mod_tasks += 65
 
