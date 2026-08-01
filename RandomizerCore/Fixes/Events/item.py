@@ -25,6 +25,12 @@ class ItemEventFixes:
             ('Dialog', 'Show', {'message': 'SubEvent:ByebyeMadBatter'})
         ])
 
+        # create message for obtaining the bow, for some weird reason the game doesnt have one when you buy it
+        event_tools.addEntryPoint(flowchart, 'Bow')
+        event_tools.createActionChain(flowchart, 'Bow', [
+            ('Dialog', 'Show', {'message': 'UI:ItemName_Bow'})
+        ])
+
         event_tools.findEntryPoint(flowchart, 'GreenClothes').name = 'ClothesGreen'
         event_tools.findEntryPoint(flowchart, 'RedClothes').name = 'ClothesRed'
         event_tools.findEntryPoint(flowchart, 'BlueClothes').name = 'ClothesBlue'
