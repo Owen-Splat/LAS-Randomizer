@@ -1,4 +1,4 @@
-py -3.8 setup.py build
+py -3.12 -m PyInstaller --log-level=WARN randomizer.spec
 if %errorlevel% neq 0 exit /b %errorlevel%
-py -3.8 build.py
+py -3.12 build.py
 if %errorlevel% neq 0 exit /b %errorlevel%

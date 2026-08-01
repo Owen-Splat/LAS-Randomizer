@@ -1,6 +1,7 @@
 __pycache__
 .qt_for_python
 /.idea
+/dist
 /build
 /Models
 /output

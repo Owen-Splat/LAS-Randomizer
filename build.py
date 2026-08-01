@@ -1,28 +1,27 @@
-import os
-import re
-import shutil
-from RandomizerCore.randomizer_data import VERSION
+from pathlib import Path
+import platform, shutil, sys
 
-import glob
-import sys
+base_name = f"LAS Randomizer"
 
-base_name = f"LAS Randomizer v{VERSION}"
-build_path = os.path.join(".", "build")
+exe_ext = ""
+if platform.system() == "Windows":
+    exe_ext = ".exe"
+    platform_name = "win"
+elif platform.system() == "Darwin":
+    exe_ext = ".app"
+    platform_name = "mac"
+elif platform.system() == "Linux":
+    platform_name = "linux"
 
-freeze_path_search = glob.glob(os.path.join(build_path, f"exe.*-{sys.version_info.major}.{sys.version_info.minor}"))
-if len(freeze_path_search) != 1:
-    raise Exception('Freeze Path folder could not be identified.')
+exe_path = Path(sys.argv[0]).parent.absolute() / "dist" / str(base_name + exe_ext)
+if not exe_path.exists():
+    raise Exception("Executable not found: %s" % exe_path)
 
-freeze_path = freeze_path_search.pop()
+release_path = Path(".") / "dist" / "release_archive"
+if release_path.exists() and release_path.is_dir():
+    shutil.rmtree(release_path)
 
-# Getting platform from folder name
-platform_re = re.search(r"exe\.(.*)-.*-.*[0-9]\.[0-9]", freeze_path)
-destination_platform = platform_re.group(1)
-
-base_name = f"LAS Randomizer v{VERSION} {destination_platform}"
-
-release_path = os.path.join(build_path, base_name)
-os.rename(freeze_path, release_path)
-shutil.copyfile("README.md", os.path.join(release_path, "README.txt"))
-shutil.copyfile("LICENSE.txt", os.path.join(release_path, "LICENSE.txt"))
-shutil.make_archive(release_path, "zip", release_path)
+release_path.mkdir(parents=True, exist_ok=True)
+shutil.copyfile("README.md", release_path / "README.txt")
+shutil.copyfile("LICENSE.txt", release_path / "LICENSE.txt")
+shutil.move(exe_path, release_path / str(base_name + exe_ext))
