@@ -12,7 +12,7 @@ from RandomizerCore.randomizer_data import (LIGHT_STYLESHEET, DARK_STYLESHEET,
 
 class Ui_MainWindow(QObject):
     def setupUi(self, window: QMainWindow) -> None:
-        window.setWindowTitle(f"Link's Awakening Switch Randomizer v{APP_VERSION}")
+        window.setWindowTitle(f"DEV BUILD - Link's Awakening Switch Randomizer v{APP_VERSION}")
         self.window = window
         self.theme = str('light')
         self.spacing = 175
