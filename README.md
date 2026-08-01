@@ -40,12 +40,12 @@ https://discord.com/invite/rfBSCUfzj8
 If you want to run from source, then you need to clone this repository and make sure you have Python 3.8+ installed
 
 Open the folder in a command prompt and install dependencies by running:
-`py -3.8 -m pip install -r requirements.txt` (on Windows)
+`py -3.12 -m pip install -r requirements.txt` (on Windows)
 `python3 -m pip install -r requirements.txt` (on Mac)
 `python3 -m pip install $(cat requirements.txt) --user` (on Linux)
 
 Then run the randomizer with:
-`py -3.8 randomizer.py` (on Windows)
+`py -3.12 randomizer.py` (on Windows)
 `python3 randomizer.py` (on Mac)
 `python3 randomizer.py` (on Linux)
 
