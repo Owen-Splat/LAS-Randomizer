@@ -142,6 +142,7 @@ class ItemGetManager:
         # tunics
         if item == 'ClothesRed':
             return event_tools.createActionChain(flowchart, before, [
+                ('EventFlags', 'SetFlag', {'symbol': 'RedTunicFoundFlag', 'value': True}),
                 ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Red_00', 'index': 0, 'restart': False, 'time': 3.58}),
                 ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
                 ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'ClothesRed'})
@@ -149,6 +150,7 @@ class ItemGetManager:
 
         if item == 'ClothesBlue':
             return event_tools.createActionChain(flowchart, before, [
+                ('EventFlags', 'SetFlag', {'symbol': 'BlueTunicFoundFlag', 'value': True}),
                 ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Blue_00', 'index': 0, 'restart': False, 'time': 3.58}),
                 ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
                 ('Link', 'GenericItemGetSequenceByKey', {'itemKey': item, 'keepCarry': False, 'messageEntry': 'ClothesBlue'})
@@ -190,6 +192,11 @@ class ItemGetManager:
 
     def getWithoutAnimation(self, item, index):
         """Same as insertItemGetAnimation but without the Generic ItemGet animation"""
+
+        if item == 'ClothesRed':
+            return [('EventFlags', 'SetFlag', {'symbol': 'RedTunicFoundFlag', 'value': True})]
+        if item == 'ClothesBlue':
+            return [('EventFlags', 'SetFlag', {'symbol': 'BlueTunicFoundFlag', 'value': True})]
 
         return [('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False})]
 
@@ -286,12 +293,14 @@ class ItemGetManager:
         # tunics
         if item == 'ClothesRed':
             return event_tools.createActionChain(flowchart, None, [
+                ('EventFlags', 'SetFlag', {'symbol': 'RedTunicFoundFlag', 'value': True}),
                 ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Red_00', 'index': 0, 'restart': False, 'time': 3.58}),
                 ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ], after)
 
         if item == 'ClothesBlue':
             return event_tools.createActionChain(flowchart, None, [
+                ('EventFlags', 'SetFlag', {'symbol': 'BlueTunicFoundFlag', 'value': True}),
                 ('Link', 'PlayTailorOtherChannelEx', {'channel': 'Change_Color_Blue_00', 'index': 0, 'restart': False, 'time': 3.58}),
                 ('Inventory', 'AddItemByKey', {'itemKey': item, 'count': 1, 'index': index, 'autoEquip': False}),
             ], after)
