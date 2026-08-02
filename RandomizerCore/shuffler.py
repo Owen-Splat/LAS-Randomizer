@@ -533,7 +533,7 @@ class ItemShuffler(QtCore.QThread):
                 self.placements['tarin'] = self.items[0]
                 success = (self.canReachLocation('can-shop', settings_access)
                         or self.canReachLocation(self.dungeon_entrances['tail-cave'], settings_access)
-                        or self.canReachLocation('beach', settings_access)
+                        or self.canReachLocation('beach', settings_access) and not self.settings["Open Mabe"]
                         # or self.canReachLocation('mamasha', placements, settings_access)
                         or self.canReachLocation('ciao-ciao', settings_access)
                         or self.canReachLocation('marin', settings_access)
