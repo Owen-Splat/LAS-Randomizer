@@ -142,7 +142,7 @@ class ItemShuffler(QtCore.QThread):
     def addTraps(self):
         """Adds traps to the item pool. The amount varies based on the trap level & other settings"""
 
-        if self.settings["Traps"] == 'none':
+        if self.settings["Traps"] == 'None':
             return
 
         traps = [k for k in self.item_defs # get all non zol-traps, not optimal but can add traps without editing the shuffler
