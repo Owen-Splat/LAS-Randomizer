@@ -2885,7 +2885,7 @@ shoot-arrows:
   condition-basic: bow & (can-shop | (armos-maze & break-pot) | (D5-7F & kill-helmasaur & feather) | (D6-8D & break-pot) | (D8-4C & (feather | break-pot)) | (D8-8D & feather & key-D8:2) | arrow-capacity)
 can-shop:
   type: interaction
-  condition-basic: can-farm-rupees | sword
+  condition-basic: can-farm-rupees | can-steal & (sword | !stealing-needs-sword)
 can-farm-rupees:
   type: interaction
   condition-basic: bracelet | sword | rod | boomerang | shovel # | kill-octorok: removed because it sucks + enemy rando is a thing now

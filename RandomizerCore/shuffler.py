@@ -452,7 +452,13 @@ class ItemShuffler(QtCore.QThread):
                 junk_items += [key] * self.item_defs[key]['quantity']
 
         # Add the settings into the access. This affects some logic like with fast trendy, free fishing, etc.
-        settings_access = {re.sub(" ", "-", setting).lower(): 1 for setting in self.settings if self.settings[setting] == True}
+        settings_access = {re.sub(" ", "-", setting).lower(): 1 for setting in self.settings
+                           if isinstance(self.settings[setting], bool) and self.settings[setting] == True}
+        if self.settings["Stealing"] in ("Always", "Standard"):
+            settings_access["can-steal"] = 1
+        if self.settings["Stealing"] == "Standard":
+            settings_access["stealing-needs-sword"] = 1
+
         # print(settings_access)
         access.update(settings_access)
 
