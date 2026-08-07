@@ -28,9 +28,9 @@ jobs:
       - run: pip install --upgrade pip
       - run: pip install -r requirements.txt
       - run: mkdir build
-      - run: python setup.py build
+      - run: python -m PyInstaller --log-level=WARN randomizer.spec
       - run: python build.py
       - uses: actions/upload-artifact@v4
         with:
           name: LAS Randomizer-${{ matrix.os }}
-          path: build/*.zip
+          path: dist/release_archive
