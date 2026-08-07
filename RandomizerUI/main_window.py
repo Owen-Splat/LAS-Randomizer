@@ -208,6 +208,7 @@ class MainWindow(QMainWindow):
 
         if (Path(rom_path) / 'romfs').exists():
             rom_path = Path(rom_path) / 'romfs'
+            self.ui.findLineEdit("RomfsLine").setText(str(rom_path))
 
         if not (Path(rom_path) / 'region_common' / 'event' / 'PlayerStart.bfevfl').is_file():
             self.ui.showUserError('RomFS path is not valid!')
