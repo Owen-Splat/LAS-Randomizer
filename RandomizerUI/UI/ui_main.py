@@ -844,7 +844,7 @@ class Ui_MainWindow(QObject):
             'Preset:  Glitched',
             'Preset:  Hell',
             'Preset:  No Logic',
-            'Preset:  Custom',
+            # 'Preset:  Custom',
         ))
         right_button = QPushButton('->', tab)
         right_button.setFixedSize(right_button.size() * 3)
