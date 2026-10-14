@@ -1,5 +1,6 @@
 from RandomizerCore.Tools.event_tools import readFlow, writeFlow
-from RandomizerCore.Tools.oead_tools import readSheet, writeSheet, SARC
+from RandomizerCore.Tools.oead_tools import readSheet, writeSheet
+from RandomizerCore.Tools.sarc import SARC
 from RandomizerCore.Tools.text_tools import TextFile
 from RandomizerCore.Tools.leb import Room
 from RandomizerCore.Tools.lvb import Level
@@ -28,8 +29,6 @@ class FileManager:
             return readFlow(file_path)
         elif file_name.endswith('gsheet'):
             return readSheet(file_path)
-        elif file_name.endswith('arc'):
-            return SARC(file_path)
 
         with open(file_path, 'rb') as f:
             file_data = f.read()
@@ -38,6 +37,8 @@ class FileManager:
             return Room(file_data)
         elif file_name.endswith('lvb'):
             return Level(file_data)
+        elif file_name.endswith('arc'):
+            return SARC(file_data)
 
 
     def writeFile(self, file_name: str, data) -> None:
@@ -58,7 +59,7 @@ class FileManager:
             writeFlow(file_path, data)
         elif file_name.endswith('gsheet'):
             writeSheet(file_path, data)
-        elif file_name.endswith(('leb', 'lvb', 'arc')):
+        elif file_name.endswith(('leb', 'lvb')):
             with open(file_path, 'wb') as f:
                 f.write(data.repack())
         else:

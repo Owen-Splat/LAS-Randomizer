@@ -11,9 +11,9 @@ from RandomizerCore.Tools.bntx_editor import bfres
 
 
 # This method aims to create a custom BNTX archive based on the original one to add a custom title screen
-def createRandomizerTitleScreenArchive(sarc_data):
+def createRandomizerTitleScreenArchive(bntx_data):
     editor = bntx_editor.BNTXEditor()
-    editor.openFile(sarc_data.reader.get_file('timg/__Combined.bntx').data.tobytes())
+    editor.openFile(bntx_data)
 
     texture_to_replace = 'Logo_00^f'
     logo_texs = [t for t in editor.bntx.textures if t.name == texture_to_replace]
@@ -48,7 +48,7 @@ def createRandomizerTitleScreenArchive(sarc_data):
 
     # Inject it back to the BNTX File
     editor.replaceTexByIndex(new_dds, texture_index)
-    sarc_data.writer.files['timg/__Combined.bntx'] = editor.save()
+    return editor.save()
 
 
 def save(dds_file, new_dds: BytesIO):

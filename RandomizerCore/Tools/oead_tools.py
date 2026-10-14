@@ -174,15 +174,3 @@ def createEventTrigger(condition, additionalConditions, entryPoint):
 def createLayoutCondition(category, parameter, layoutId=-1):
 	layout = oead.gsheet.StructArray()
 	layout.append({'category': category, 'parameter': parameter, 'layoutID': layoutId})
-
-
-
-class SARC:
-	def __init__(self, sarcFile: str):
-		with open(sarcFile, 'rb') as f:
-			self.reader = oead.Sarc(f.read())
-		self.writer = oead.SarcWriter.from_sarc(self.reader)
-		oead.SarcWriter.set_endianness(self.writer, oead.Endianness.Little) # Switch uses Little Endian
-	
-	def repack(self):
-		return self.writer.write()[1]

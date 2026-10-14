@@ -5,6 +5,7 @@ __pycache__
 /build
 /Models
 /output
+/RandomizerCore/Tools/gsheet.py
 /RandomizerUI/Resources/__Combined.bntx
 /RandomizerUI/Resources/textures/chest/bfres
 /Test
