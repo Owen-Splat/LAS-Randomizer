@@ -20,6 +20,12 @@ Archipelago generation still uses the pinned `source` and the settings in your
 `.lasap`; changing the main window checkboxes does not change an AP seed.
 Close any older window and reopen the launcher to load this GUI fix.
 
+Before installing, double-click **Build APWorld.cmd** in this folder. It builds
+`las_switch.apworld` from `apworld/las_switch` and replaces any existing copy in
+this folder. Wait for the **Built:** message before continuing. Python 3 must
+be installed; no game files or extra Python packages are needed for this step.
+Rebuild whenever you change the AP world source.
+
 1. Install `las_switch.apworld` in AP's custom_worlds folder and restart AP.
 2. Generate with `Link_Switch.yaml` (edit player name and settings first).
 3. Open **Launch LAS AP Randomizer.cmd**, then **Archipelago → Generate from
