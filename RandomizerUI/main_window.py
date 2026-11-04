@@ -26,7 +26,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.clipboard = QtGui.QClipboard()
         # self.options = ([('English', ''), ('Français', 'eng-fr' ), ('中文', 'eng-chs'), ])
 
-        # Keep track of stuff
+        # Track the current settings and location choices.
         self.mode = str('light')
         self.logic_version = LOGIC_VERSION
         self.logic_defs = LOGIC_RAW
@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.overworld_owls = bool(False)
         self.dungeon_owls = bool(False)
 
-        # Load User Settings
+        # Restore saved settings after applying defaults.
         self.applyDefaults()
         if not DEFAULTS:
             settings_manager.loadSettings(self)
@@ -50,7 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setStyleSheet(DARK_STYLESHEET)
             self.ui.explainationLabel.setStyleSheet('color: rgb(175, 175, 175);')
         
-        ### SUBSCRIBE TO EVENTS
+        # Connect controls to their actions.
         self.ui.actionLight.triggered.connect(self.setLightMode)
         self.ui.actionDark.triggered.connect(self.setDarkMode)
         self.ui.actionChangelog.triggered.connect(self.showChangelog)
@@ -63,7 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.lineEdit_3.textChanged.connect(self.updateSettingsString)
         self.ui.randomizeButton.clicked.connect(self.randomizeButton_Clicked)
         self.ui.resetButton.clicked.connect(self.applyDefaults)
-        self.ui.copyButton.clicked.connect(lambda x: self.clipboard.setText(self.ui.lineEdit_4.text()))
+        self.ui.copyButton.clicked.connect(lambda checked: self.clipboard.setText(self.ui.lineEdit_4.text()))
         self.ui.pasteButton.clicked.connect(self.pasteSettingsString)
         self.ui.randomizeSettingsButton.clicked.connect(self.randomizeSettings)
         self.ui.seashellsComboBox.currentIndexChanged.connect(self.updateSeashells)
@@ -87,11 +87,11 @@ class MainWindow(QtWidgets.QMainWindow):
             if widget is None:
                 continue
             if isinstance(widget, QtWidgets.QCheckBox):
-                widget.clicked.connect(self.checkClicked)
+                widget.clicked.connect(lambda checked, name=option: self.categoryCheckClicked(name, checked))
                 widget.installEventFilter(self)
 
-        ### DESCRIPTIONS
-        desc_items = [
+        # Show help when the pointer rests on these controls.
+        description_widgets = [
             self.ui.seashellsComboBox,
             self.ui.tricksComboBox,
             self.ui.instrumentsComboBox,
@@ -103,7 +103,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.dungeonItemsComboBox,
             self.ui.stealingComboBox
         ]
-        for item in desc_items:
+        for item in description_widgets:
             item.installEventFilter(self)
         
         self.makeSmartComboBoxes()
@@ -113,9 +113,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.ui.retranslateUi(self)
 
         center = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen()).center()
-        geo = self.frameGeometry()
-        geo.moveCenter(center)
-        self.move(geo.topLeft())
+        window_geometry = self.frameGeometry()
+        window_geometry.moveCenter(center)
+        self.move(window_geometry.topLeft())
         
         self.process = UpdateProcess()
         self.process.can_update.connect(self.showUpdate)
@@ -134,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def makeSmartComboBoxes(self):
-        combos = [
+        combo_boxes = [
             self.ui.seashellsComboBox,
             self.ui.tricksComboBox,
             self.ui.instrumentsComboBox,
@@ -145,9 +145,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.dungeonItemsComboBox
         ]
 
-        for combo in combos:
-            combo.__class__ = SmartComboBox
-            combo.popup_closed.connect(self.closeComboBox)
+        for combo_box in combo_boxes:
+            combo_box.__class__ = SmartComboBox
+            combo_box.popup_closed.connect(self.closeComboBox)
     
 
     def closeComboBox(self):
@@ -225,9 +225,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def obtainLogic(self, version_and_logic):
         self.logic_version = version_and_logic[0]
         self.logic_defs = version_and_logic[1]
-        with open(LOGIC_PATH, 'w+') as f:
-            f.write(f'# {self.logic_version}\n')
-            f.write(self.logic_defs)
+        with open(LOGIC_PATH, 'w+') as logic_file:
+            logic_file.write(f'# {self.logic_version}\n')
+            logic_file.write(self.logic_defs)
 
 
     def showLogicUpdate(self, update):
@@ -265,6 +265,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.lineEdit_3.setText(adj1 + adj2 + char)
     
     
+    def categoryCheckClicked(self, name, checked):
+        self.current_option = name
+        self.checkClicked(checked)
+
+
     def checkClicked(self, checked):
         if self.current_option not in settings_manager.CHECK_LOCATIONS:
             return
@@ -355,6 +360,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.showUserError('RomFS path is not valid!')
             return
         
+        if self.ui.seashellsCheck.isChecked() or (self.ui.shopCheck.isCheckable() and self.ui.shopCheck.isChecked()):
+            from RandomizerCore.Native.builder import validate_input
+            try:
+                validate_input(rom_path)
+            except ValueError as exc:
+                self.showUserError(str(exc))
+                return
+
         if not os.path.exists(self.ui.lineEdit_2.text()):
             self.showUserError('Output path does not exist!')
             return
@@ -406,8 +419,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # starting items
         if self.ui.tabWidget.currentIndex() == 1:
             randomized_gear = STARTING_ITEMS[:]
-            for x in self.starting_gear:
-                randomized_gear.remove(x)
+            for starting_item in self.starting_gear:
+                randomized_gear.remove(starting_item)
             
             self.ui.listWidget_5.clear()
             for item in randomized_gear:
@@ -439,34 +452,34 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
     def includeButton_Clicked(self):
-        for i in self.ui.listWidget_2.selectedItems():
-            self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(i))
-            self.excluded_checks.remove(self.listToCheck(i.text()))
-            self.ui.listWidget.addItem(SmartListWidget(i.text()))
+        for selected_item in self.ui.listWidget_2.selectedItems():
+            self.ui.listWidget_2.takeItem(self.ui.listWidget_2.row(selected_item))
+            self.excluded_checks.remove(self.listToCheck(selected_item.text()))
+            self.ui.listWidget.addItem(SmartListWidget(selected_item.text()))
         self.updateSettingsString()
 
 
     def excludeButton_Clicked(self):
-        for i in self.ui.listWidget.selectedItems():
-            self.ui.listWidget.takeItem(self.ui.listWidget.row(i))
-            self.ui.listWidget_2.addItem(SmartListWidget(i.text()))
-            self.excluded_checks.add(self.listToCheck(i.text()))
+        for selected_item in self.ui.listWidget.selectedItems():
+            self.ui.listWidget.takeItem(self.ui.listWidget.row(selected_item))
+            self.ui.listWidget_2.addItem(SmartListWidget(selected_item.text()))
+            self.excluded_checks.add(self.listToCheck(selected_item.text()))
         self.updateSettingsString()
 
 
     def includeButton_3_Clicked(self):
-        for i in self.ui.listWidget_6.selectedItems():
-            self.ui.listWidget_6.takeItem(self.ui.listWidget_6.row(i))
-            self.starting_gear.remove(self.listToItem(i.text()))
-            self.ui.listWidget_5.addItem(i.text())
+        for selected_item in self.ui.listWidget_6.selectedItems():
+            self.ui.listWidget_6.takeItem(self.ui.listWidget_6.row(selected_item))
+            self.starting_gear.remove(self.listToItem(selected_item.text()))
+            self.ui.listWidget_5.addItem(selected_item.text())
         self.updateSettingsString()
 
 
     def excludeButton_3_Clicked(self):
-        for i in self.ui.listWidget_5.selectedItems():
-            self.ui.listWidget_5.takeItem(self.ui.listWidget_5.row(i))
-            self.ui.listWidget_6.addItem(i.text())
-            self.starting_gear.append(self.listToItem(i.text()))
+        for selected_item in self.ui.listWidget_5.selectedItems():
+            self.ui.listWidget_5.takeItem(self.ui.listWidget_5.row(selected_item))
+            self.ui.listWidget_6.addItem(selected_item.text())
+            self.starting_gear.append(self.listToItem(selected_item.text()))
         self.updateSettingsString()
 
 
@@ -474,31 +487,31 @@ class MainWindow(QtWidgets.QMainWindow):
     def checkToList(self, check):
         # slots = ('1St', '2Nd', '3Rd', '4Th', '5Th', '6Th', '7Th')
 
-        s = sub("-", " ", check).title()
+        display_text = sub("-", " ", check).title()
 
         # for slot in slots:
         #     s = s.replace(slot, slot.lower())
         
-        return s
+        return display_text
     
     
     # Some Check to some-check
     def listToCheck(self, check):
-        stayUpper = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
+        dungeon_prefixes = ('d0', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8')
         
-        s = sub(" ", "-", check).lower()
+        display_text = sub(" ", "-", check).lower()
         
-        if s.startswith(stayUpper):
-            s = s.replace('d', 'D', 1)
+        if display_text.startswith(dungeon_prefixes):
+            display_text = display_text.replace('d', 'D', 1)
         
-        return s
+        return display_text
     
 
     # Starting Item to starting-item and also converts names that were changed to look nicer
     def listToItem(self, item):
-        s = sub(" ", "-", item).lower()
+        display_text = sub(" ", "-", item).lower()
         
-        return s
+        return display_text
     
 
     # Sets the app to Light Mode
@@ -565,7 +578,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 settings_manager.loadSettings(self, new_settings)
                 self.ui.lineEdit_4.setText(self.clipboard.text())
                 self.tab_Changed()
-        except: # Lots of potential different errors, so we use a general except to be safe
+        except ValueError as exc:
+            self.showUserError(str(exc))
+        except Exception:
             self.showUserError('Could not decode settings string!')
 
 
@@ -575,7 +590,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tab_Changed()
 
 
-    # Override mouse click event to make certain stuff lose focus
+    # Clear control focus when the background is clicked.
     def mousePressEvent(self, event):
         focused_widget = self.focusWidget()
         if isinstance(focused_widget, QtWidgets.QLineEdit) |\
@@ -607,34 +622,34 @@ class SmartListWidget(QtWidgets.QListWidgetItem):
         try:
             dungeon_checks = ('D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8')
 
-            nums_a = [c for c in self.text() if c.isdigit()]
-            nums_a = "".join(nums_a)
-            str_a = [c for c in self.text() if not c.isdigit()]
-            a = int(nums_a)
+            current_numbers = [c for c in self.text() if c.isdigit()]
+            current_numbers = "".join(current_numbers)
+            current_letters = [c for c in self.text() if not c.isdigit()]
+            current_number = int(current_numbers)
 
-            nums_b = [c for c in other.text() if c.isdigit()]
-            nums_b = "".join(nums_b)
-            str_b = [c for c in other.text() if not c.isdigit()]
-            b = int(nums_b)
+            other_numbers = [c for c in other.text() if c.isdigit()]
+            other_numbers = "".join(other_numbers)
+            other_letters = [c for c in other.text() if not c.isdigit()]
+            other_number = int(other_numbers)
             
             if self.text().startswith(dungeon_checks) and other.text().startswith(dungeon_checks):
-                d = [d for d in dungeon_checks if self.text().startswith(d)]
-                if not other.text().startswith(d[0]):
-                    return int(nums_a[0]) < int(nums_b[0])
+                matching_dungeons = [matching_dungeons for matching_dungeons in dungeon_checks if self.text().startswith(matching_dungeons)]
+                if not other.text().startswith(matching_dungeons[0]):
+                    return int(current_numbers[0]) < int(other_numbers[0])
                 else:
-                    a = int(nums_a[1:])
-                    b = int(nums_b[1:])
-                    if str_a != str_b:
+                    current_number = int(current_numbers[1:])
+                    other_number = int(other_numbers[1:])
+                    if current_letters != other_letters:
                         raise ValueError('')
-                    return a < b
+                    return current_number < other_number
             if self.text().startswith(dungeon_checks) or other.text().startswith(dungeon_checks):
                 raise TypeError('')
             
-            if str_a == str_b:
-                if self.text().startswith(nums_a) and other.text().startswith(nums_b):
-                    return a < b
-                if self.text().endswith(nums_a) and other.text().endswith(nums_b):
-                    return a < b
+            if current_letters == other_letters:
+                if self.text().startswith(current_numbers) and other.text().startswith(other_numbers):
+                    return current_number < other_number
+                if self.text().endswith(current_numbers) and other.text().endswith(other_numbers):
+                    return current_number < other_number
             
             raise TypeError('')
         

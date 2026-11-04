@@ -52,20 +52,20 @@ class ModsProcess(QtCore.QThread):
 
         self.trap_models = data.ITEM_MODELS.copy()
         
-        for i in self.placements['starting-items']:
-            i = self.item_defs[i]['item-key']
-            if i == 'SwordLv1':
-                i = 'SinkingSword'
-            if i in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
-                if self.placements['starting-items'].count(i) < 2:
+        for starting_item_key in self.placements['starting-items']:
+            starting_item_key = self.item_defs[starting_item_key]['item-key']
+            if starting_item_key == 'SwordLv1':
+                starting_item_key = 'SinkingSword'
+            if starting_item_key in ['SinkingSword', 'Shield', 'PowerBraceletLv1']:
+                if self.placements['starting-items'].count(starting_item_key) < 2:
                     continue
-            if i in self.trap_models:
-                del self.trap_models[i]
+            if starting_item_key in self.trap_models:
+                del self.trap_models[starting_item_key]
         
         if not self.settings['shuffle-instruments']:
-            for inst in self.instruments:
-                if inst in self.trap_models:
-                    del self.trap_models[inst]
+            for instrument_name in self.instruments:
+                if instrument_name in self.trap_models:
+                    del self.trap_models[instrument_name]
         
         self.dungeon_trap_models = self.trap_models.copy()
         self.dungeon_trap_models.update({
@@ -102,13 +102,13 @@ class ModsProcess(QtCore.QThread):
     
     
 
-    # STOP THREAD
+    # Stop generating when the user cancels.
     def stop(self):
         self.thread_active = False
     
     
     
-    # automatically called when this thread is started
+    # Build the enabled patches in order.
     def run(self):
         try:
             if self.settings['randomize-music'] and self.thread_active:
@@ -122,7 +122,7 @@ class ModsProcess(QtCore.QThread):
             if self.thread_active: self.makeEventContentChanges()
             if self.thread_active: self.makeTradeQuestChanges()
 
-            if self.thread_active: self.makeSmallKeyChanges() # also handles the golden leaves
+            if self.thread_active: self.makeSmallKeyChanges() # Golden leaves use the same pickup adapter.
             if self.thread_active: self.makeHeartPieceChanges()
             if self.thread_active: self.makeInstrumentChanges()
             # if self.thread_active: self.makeShopChanges()
@@ -159,11 +159,13 @@ class ModsProcess(QtCore.QThread):
             
             # current asm does not appear to break anything, can finally include :)
             if self.thread_active: self.makeExefsPatches()
+            if self.thread_active:
+                self.makeStandaloneRewards()
         
         except Exception:
-            er = traceback.format_exc()
-            print(er)
-            self.error.emit(er)
+            error_details = traceback.format_exc()
+            print(error_details)
+            self.error.emit(error_details)
         
         finally: # regardless if there was an error or not, we want to tell the progress window that this thread has finished
             if IS_RUNNING_FROM_SOURCE:
@@ -214,8 +216,8 @@ class ModsProcess(QtCore.QThread):
             if not self.settings['trade-important']:
                 chest_sizes['trade'] = 0.8
         else:
-            for k in chest_sizes:
-                chest_sizes[k] = 1.0  # if scaled chest sizes is off, set every value to normal size
+            for item_name in chest_sizes:
+                chest_sizes[item_name] = 1.0  # if scaled chest sizes is off, set every value to normal size
 
         for room in chest_rooms:
             if not self.thread_active:
@@ -265,8 +267,8 @@ class ModsProcess(QtCore.QThread):
                 model = data.CHEST_TEXTURES[item_chest_type]
 
             if room == 'taltal-5-chest-puzzle':
-                for i in range(5):
-                    room_data.setChestContent(item_key, item_index, i, size, model)
+                for chest_index in range(5):
+                    room_data.setChestContent(item_key, item_index, chest_index, size, model)
             else:
                 room_data.setChestContent(item_key, item_index, chest_size=size, chest_model=model)
             
@@ -497,13 +499,13 @@ class ModsProcess(QtCore.QThread):
 
         # make the fairy queen send the player to the proper exit if Shuffle Dungeons is on
         if self.settings['shuffle-dungeons']:
-            ent_keys = list(self.placements['dungeon-entrances'].keys())
-            ent_values = list(self.placements['dungeon-entrances'].values())
-            d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index('color-dungeon')]]
-            destin = d[2] + d[3]
+            entrance_names = list(self.placements['dungeon-entrances'].keys())
+            entrance_destinations = list(self.placements['dungeon-entrances'].values())
+            destination_entrance = data.DUNGEON_ENTRANCES[entrance_names[entrance_destinations.index('color-dungeon')]]
+            destination = destination_entrance[2] + destination_entrance[3]
             warp_event = event_tools.findEvent(flow.flowchart, 'Event37')
-            warp_event.data.params.data['level'] = re.match('(.+)_\\d\\d[A-Z]', destin).group(1)
-            warp_event.data.params.data['locator'] = destin
+            warp_event.data.params.data['level'] = re.match('(.+)_\\d\\d[A-Z]', destination).group(1)
+            warp_event.data.params.data['locator'] = destination
         
         self.writeFile('FairyQueen.bfevfl', flow)
 
@@ -1290,9 +1292,9 @@ class ModsProcess(QtCore.QThread):
         random.shuffle(bgms)
 
         # map each track to a new track using the duplicate list
-        for i in data.BGM_TRACKS:
-            ind = bgms.index(random.choice(bgms))
-            self.songs_dict[i] = bgms.pop(ind)
+        for track_name in data.BGM_TRACKS:
+            track_index = bgms.index(random.choice(bgms))
+            self.songs_dict[track_name] = bgms.pop(track_index)
             # print(i, self.songs_dict[i])
         
         # reset RNG so that other things that use it will be the same whether or not shuffled music is on
@@ -1304,7 +1306,7 @@ class ModsProcess(QtCore.QThread):
         """Replaces the BGM info in the lvb files with the shuffled songs"""
 
         levels_path = f'{self.rom_path}/region_common/level'
-        folders = [f for f in os.listdir(levels_path) if not f.endswith('.ldb')]
+        folders = [folder_name for folder_name in os.listdir(levels_path) if not folder_name.endswith('.ldb')]
 
         for folder in folders:
             if not self.thread_active:
@@ -1475,14 +1477,14 @@ class ModsProcess(QtCore.QThread):
             item_key, item_index, model_path, model_name = self.getItemInfo(room, self.dungeon_trap_models)
 
             if self.settings['shuffle-dungeons']:
-                cur_dun = re.match('(.+)_\\d\\d[A-Z]', data.INSTRUMENT_ROOMS[room]).group(1)
-                for k,v in data.DUNGEON_ENTRANCES.items():
-                    dun = re.match('(.+)_\\d\\d[A-Z]', v[0]).group(1)
-                    if dun == cur_dun:
-                        ent_keys = list(self.placements['dungeon-entrances'].keys())
-                        ent_values = list(self.placements['dungeon-entrances'].values())
-                        d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
-                        destination = d[2] + d[3]
+                current_dungeon = re.match('(.+)_\\d\\d[A-Z]', data.INSTRUMENT_ROOMS[room]).group(1)
+                for entrance_name,entrance_details in data.DUNGEON_ENTRANCES.items():
+                    entrance_dungeon = re.match('(.+)_\\d\\d[A-Z]', entrance_details[0]).group(1)
+                    if entrance_dungeon == current_dungeon:
+                        entrance_names = list(self.placements['dungeon-entrances'].keys())
+                        entrance_destinations = list(self.placements['dungeon-entrances'].values())
+                        destination_entrance = data.DUNGEON_ENTRANCES[entrance_names[entrance_destinations.index(entrance_name)]]
+                        destination = destination_entrance[2] + destination_entrance[3]
             else:
                 destination = None
             
@@ -1507,7 +1509,7 @@ class ModsProcess(QtCore.QThread):
             'river-crossing-cave',
             'kanalet-moat-south'
         ]
-        non_sunken = (x for x in data.HEART_ROOMS if x not in sunken)
+        non_sunken = (location_name for location_name in data.HEART_ROOMS if location_name not in sunken)
         
         for room in non_sunken:
             if not self.thread_active:
@@ -1609,11 +1611,11 @@ class ModsProcess(QtCore.QThread):
         flow = self.readFile('SinkingSword.bfevfl')
         room_data = self.readFile('Lv10ClothesDungeon_08D.leb')
         
-        for i in range(28):
+        for rupee_index in range(28):
             if self.thread_active:
-                item_key, item_index, model_path, model_name = self.getItemInfo(f'D0-rupee-{i + 1}', self.dungeon_trap_models)
-                room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{i + 1}', item_key, i)
-                rupees.makeEventChanges(flow.flowchart, i, item_key, item_index)
+                item_key, item_index, model_path, model_name = self.getItemInfo(f'D0-rupee-{rupee_index + 1}', self.dungeon_trap_models)
+                room_data.setRupeeParams(model_path, model_name, f'Lv10Rupee_{rupee_index + 1}', item_key, rupee_index)
+                rupees.makeEventChanges(flow.flowchart, rupee_index, item_key, item_index)
             else: break
         
         self.writeFile('Lv10ClothesDungeon_08D.leb', room_data)
@@ -1861,7 +1863,7 @@ class ModsProcess(QtCore.QThread):
 
         levels_path = f'{self.rom_path}/region_common/level'
         included_folders = ENEMY_DATA['Included_Folders']
-        folders = [f for f in os.listdir(levels_path) if f in included_folders]
+        folders = [file_name for file_name in os.listdir(levels_path) if file_name in included_folders]
         
         num_of_mods = 0
         random.seed(self.seed) # restart the rng so that enemies will be the same regardless of settings
@@ -1870,7 +1872,7 @@ class ModsProcess(QtCore.QThread):
             if not self.thread_active:
                 break
 
-            files = [f for f in os.listdir(f'{levels_path}/{folder}') if f.endswith('.leb')]
+            files = [file_name for file_name in os.listdir(f'{levels_path}/{folder}') if file_name.endswith('.leb')]
 
             for file in files:
                 if not self.thread_active:
@@ -1895,34 +1897,34 @@ class ModsProcess(QtCore.QThread):
     def shuffleDungeons(self):
         """Shuffles the entrances of each dungeon"""
 
-        ent_keys = list(self.placements['dungeon-entrances'].keys())
-        ent_values = list(self.placements['dungeon-entrances'].values())
+        entrance_names = list(self.placements['dungeon-entrances'].keys())
+        entrance_destinations = list(self.placements['dungeon-entrances'].values())
 
-        for k,v in data.DUNGEON_ENTRANCES.items():
+        for entrance_name,entrance_details in data.DUNGEON_ENTRANCES.items():
 
             ######################################################################## - dungeon in
             if not self.thread_active:
                 break
 
-            room_data = self.readFile(f'{v[2]}.leb')
+            room_data = self.readFile(f'{entrance_details[2]}.leb')
                         
-            d = data.DUNGEON_ENTRANCES[self.placements['dungeon-entrances'][k]]
-            destin = d[0] + d[1]
-            room_data.setLoadingZoneTarget(destin, v[4])
+            destination_entrance = data.DUNGEON_ENTRANCES[self.placements['dungeon-entrances'][entrance_name]]
+            destination = destination_entrance[0] + destination_entrance[1]
+            room_data.setLoadingZoneTarget(destination, entrance_details[4])
 
-            self.writeFile(f'{v[2]}.leb', room_data)
+            self.writeFile(f'{entrance_details[2]}.leb', room_data)
             
             ######################################################################## - dungeon out
             if not self.thread_active:
                 break
 
-            room_data = self.readFile(f'{v[0]}.leb')
+            room_data = self.readFile(f'{entrance_details[0]}.leb')
             
-            d = data.DUNGEON_ENTRANCES[ent_keys[ent_values.index(k)]]
-            destin = d[2] + d[3]
-            room_data.setLoadingZoneTarget(destin, 0)
+            destination_entrance = data.DUNGEON_ENTRANCES[entrance_names[entrance_destinations.index(entrance_name)]]
+            destination = destination_entrance[2] + destination_entrance[3]
+            room_data.setLoadingZoneTarget(destination, 0)
 
-            self.writeFile(f'{v[0]}.leb', room_data)
+            self.writeFile(f'{entrance_details[0]}.leb', room_data)
 
 
 
@@ -1931,17 +1933,17 @@ class ModsProcess(QtCore.QThread):
 
         icon_keys = list(data.DUNGEON_MAP_ICONS.keys())
         icon_values = list(data.DUNGEON_MAP_ICONS.values())
-        maps = [i[0] for i in icon_values]
+        maps = [icon_entry[0] for icon_entry in icon_values]
         sheet = self.readFile('UiFieldMapIcons.gsheet')
         for icon in sheet['values']:
             if not self.thread_active:
                 break
 
             if icon['mNameLabel'] in maps:
-                k = icon_keys[maps.index(icon['mNameLabel'])]
-                new_k = self.placements['dungeon-entrances'][k]
-                icon['mNameLabel'] = data.DUNGEON_MAP_ICONS[new_k][0]
-                icon['mFirstShowFlagName'] = data.DUNGEON_MAP_ICONS[new_k][1]
+                entrance_name = icon_keys[maps.index(icon['mNameLabel'])]
+                destination_entrance_name = self.placements['dungeon-entrances'][entrance_name]
+                icon['mNameLabel'] = data.DUNGEON_MAP_ICONS[destination_entrance_name][0]
+                icon['mFirstShowFlagName'] = data.DUNGEON_MAP_ICONS[destination_entrance_name][1]
         
         self.writeFile('UiFieldMapIcons.gsheet', sheet)
 
@@ -1954,7 +1956,7 @@ class ModsProcess(QtCore.QThread):
 
         # allow companions inside every dungeon
         # exception being the Egg since companions can collide with Nightmare and cause a softlock
-        folders = [f for f in os.listdir(levels_path) if f.startswith('Lv') and not f.startswith('Lv09')]
+        folders = [folder_name for folder_name in os.listdir(levels_path) if folder_name.startswith('Lv') and not folder_name.startswith('Lv09')]
 
         for folder in folders:
             if not self.thread_active:
@@ -1965,6 +1967,24 @@ class ModsProcess(QtCore.QThread):
             self.writeFile(f'{folder}.lvb', level)
     
 
+
+    def makeStandaloneRewards(self):
+        from RandomizerCore.Randomizers.indexed_pickups import StandaloneRewards
+        import yaml
+        from RandomizerCore.Paths.randomizer_paths import LOGIC_PATH
+        if not any(self.settings.get(option_name,False) for option_name in ('randomize-shells','randomize-trendy','randomize-shop')):
+            return
+        rewards = StandaloneRewards(self)
+        if self.settings.get('randomize-shells',False):
+            with open(LOGIC_PATH) as stream:
+                rewards.shells(yaml.safe_load(stream))
+        if self.settings.get('randomize-trendy',False):
+            from RandomizerCore.Randomizers.standalone_trendy import stage
+            stage(rewards)
+        if self.settings.get('randomize-shop',False):
+            from RandomizerCore.Randomizers.standalone_shop import stage
+            stage(rewards)
+        rewards.finish()
 
     def makeExefsPatches(self):
         """Creates the necessary exefs_patches for the Randomizer to work correctly"""
@@ -2021,8 +2041,8 @@ class ModsProcess(QtCore.QThread):
             # we want to edit the grid info, which is skipped over by default since we mostly leave it untouched
             # so we have readFile() early return the path, and read the Room data here with edit_grid=True
             room_path = self.readFile(f'{room}.leb', return_path=True)
-            with open(room_path, 'rb') as f:
-                room_data = leb.Room(f.read(), edit_grid=True)
+            with open(room_path, 'rb') as room_file:
+                room_data = leb.Room(room_file.read(), edit_grid=True)
 
             for tile in room_data.grid.tilesdata:
                 if tile.flags3['iswaterlava']:
@@ -2080,11 +2100,11 @@ class ModsProcess(QtCore.QThread):
     def readFile(self, file_name: str, return_path=False):
         """Reads the given file from the rom path, or the output path if it already exists"""
 
-        dir = self.getRelativeDir(file_name)
+        relative_folder = self.getRelativeDir(file_name)
 
-        file_path = f'{self.romfs_dir}/{dir}/{file_name}'
+        file_path = f'{self.romfs_dir}/{relative_folder}/{file_name}'
         if file_name not in self.out_files:
-            file_path = f'{self.rom_path}/{dir}/{file_name}'
+            file_path = f'{self.rom_path}/{relative_folder}/{file_name}'
         
         if return_path:
             return file_path
@@ -2096,8 +2116,8 @@ class ModsProcess(QtCore.QThread):
         elif file_name.endswith('arc'):
             return oead_tools.SARC(file_path)
         
-        with open(file_path, 'rb') as f:
-            file_data = f.read()
+        with open(file_path, 'rb') as input_file:
+            file_data = input_file.read()
         
         if file_name.endswith('leb'):
             return leb.Room(file_data)
@@ -2112,9 +2132,9 @@ class ModsProcess(QtCore.QThread):
         if not self.thread_active:
             return
         
-        dir = self.getRelativeDir(file_name)
-        if dir is not None:
-            file_path = f'{self.romfs_dir}/{dir}/{file_name}'
+        relative_folder = self.getRelativeDir(file_name)
+        if relative_folder is not None:
+            file_path = f'{self.romfs_dir}/{relative_folder}/{file_name}'
         else:
             file_path = f'{self.exefs_dir}/{file_name}'
         
@@ -2125,11 +2145,11 @@ class ModsProcess(QtCore.QThread):
         elif file_name.endswith('gsheet'):
             oead_tools.writeSheet(file_path, data)
         elif file_name.endswith(('leb', 'lvb', 'arc')):
-            with open(file_path, 'wb') as f:
-                f.write(data.repack())
+            with open(file_path, 'wb') as output_file:
+                output_file.write(data.repack())
         else:
-            with open(file_path, 'wb') as f:
-                f.write(data)
+            with open(file_path, 'wb') as output_file:
+                output_file.write(data)
         
         self.out_files.add(file_name)
         self.progress_value += 1
@@ -2141,16 +2161,16 @@ class ModsProcess(QtCore.QThread):
         """Reads the file_name to determine the directory relative to the romfs"""
 
         if file_name.endswith('leb'):
-            dir = f'region_common/level/{file_name.split("_")[0]}'
+            relative_folder = f'region_common/level/{file_name.split("_")[0]}'
         elif file_name.endswith('lvb'):
-            dir = f'region_common/level/{file_name.split(".")[0]}'
+            relative_folder = f'region_common/level/{file_name.split(".")[0]}'
         elif file_name.endswith('gsheet'):
-            dir = 'region_common/datasheets'
+            relative_folder = 'region_common/datasheets'
         elif file_name.endswith('bfevfl'):
-            dir = 'region_common/event'
+            relative_folder = 'region_common/event'
         elif file_name.endswith('arc'):
-            dir = 'region_common/ui'
+            relative_folder = 'region_common/ui'
         else:
             return None
         
-        return dir
+        return relative_folder

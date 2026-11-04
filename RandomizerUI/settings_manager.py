@@ -8,7 +8,8 @@ BASE_OPTIONS = {
     'rapidsCheck': False,
     'dampeCheck': False,
     'trendyCheck': False,
-    'shopCheck': True,
+    'shopCheck': False,
+    'seashellsCheck': False,
     'giftsCheck': True,
     'tradeGiftsCheck': False,
     'bossCheck': True,
@@ -23,8 +24,8 @@ BASE_OPTIONS = {
     'leavesCheck': True,
     'tricksComboBox': 0,
     'bookCheck': True,
-    'extendedConsumableCheck': True, # Helps beginner players not run into the issue of being too low on resources
-    'dungeonItemsComboBox': 3, # Beginner setting to start with maps, compasses, beaks
+    'extendedConsumableCheck': True, # Give new players more consumables.
+    'dungeonItemsComboBox': 3, # Start with maps, compasses and stone beaks.
     'unlockedBombsCheck': True,
     'shuffledBombsCheck': False,
     'stealingCheck': True,
@@ -45,12 +46,12 @@ BASE_OPTIONS = {
     'songsCheck': False,
     'fastFishingCheck': False,
     'dungeonsCheck': False,
-    'blurCheck': True, # May change, lots of people hate the blur and it even hurts some player's eyes
+    'blurCheck': True, # Remove the edge blur by default.
     'ohkoCheck': False,
     'lv1BeamCheck': False,
     'niceRodCheck': True,
     'niceBombsCheck': False,
-    'stealingComboBox': 0, # May change, but players often feel frustrated at not being able to steal, not knowing sword is needed
+    'stealingComboBox': 0, # Allow stealing without needing the sword.
     'chestAnimationsCheck': True,
     'keyAnimationsCheck': True,
     'rupeesSpinBox': 0,
@@ -75,8 +76,9 @@ CHECK_LOCATIONS = {
     'fishingCheck': FISHING_REWARDS,
     'rapidsCheck': RAPIDS_REWARDS,
     'dampeCheck': DAMPE_REWARDS,
-    # 'trendyCheck': TRENDY_REWARDS,
-    # 'shopCheck': SHOP_ITEMS,
+    'trendyCheck': TRENDY_REWARDS,
+    'shopCheck': SHOP_ITEMS,
+    'seashellsCheck': SHELL_LOCATIONS,
     'giftsCheck': FREE_GIFT_LOCATIONS,
     'tradeGiftsCheck': TRADE_GIFT_LOCATIONS,
     'bossCheck': BOSS_LOCATIONS,
@@ -93,23 +95,24 @@ class MyDumper(yaml.Dumper):
 
 
 def applyDefaults(window):
-    for k,v in BASE_OPTIONS.items():
-        if isinstance(v, bool):
-            exec(f"window.ui.{k}.setChecked({v})")
-        elif isinstance(v, int):
-            if k.endswith('ComboBox'):
-                exec(f"window.ui.{k}.setCurrentIndex({v})")
+    for option_name,option_value in BASE_OPTIONS.items():
+        if isinstance(option_value, bool):
+            getattr(window.ui, option_name).setChecked(option_value)
+        elif isinstance(option_value, int):
+            if option_name.endswith('ComboBox'):
+                getattr(window.ui, option_name).setCurrentIndex(option_value)
             else:
-                exec(f"window.ui.{k}.setValue({v})")
+                getattr(window.ui, option_name).setValue(option_value)
         else:
-            exec(f"window.{k} = v")
+            setattr(window, option_name, option_value)
     
     window.excluded_checks.difference_update(MISCELLANEOUS_CHESTS)
     window.excluded_checks.update(FISHING_REWARDS)
     window.excluded_checks.update(RAPIDS_REWARDS)
     window.excluded_checks.update(DAMPE_REWARDS)
-    # window.excluded_checks.update(TRENDY_REWARDS)
-    # window.excluded_checks.difference_update(SHOP_ITEMS)
+    window.excluded_checks.update(TRENDY_REWARDS)
+    window.excluded_checks.update(SHOP_ITEMS)
+    window.excluded_checks.update(SHELL_LOCATIONS)
     window.excluded_checks.difference_update(FREE_GIFT_LOCATIONS)
     window.excluded_checks.update(TRADE_GIFT_LOCATIONS)
     window.excluded_checks.difference_update(BOSS_LOCATIONS)
@@ -131,43 +134,42 @@ def saveSettings(window, for_string=False):
         'platform': PLATFORMS[window.ui.platformComboBox.currentIndex()],
     }
 
-    ldict = locals() # needed to be able to get the new variable value from exec
-    for k,v in BASE_OPTIONS.items():
-        if isinstance(v, bool):
-            exec(f"v = window.ui.{k}.isChecked()", globals(), ldict)
-        elif isinstance(v, int):
-            if k.endswith('ComboBox'):
-                exec(f"v = window.ui.{k}.currentIndex()", globals(), ldict)
+    for option_name,option_value in BASE_OPTIONS.items():
+        if isinstance(option_value, bool):
+            option_value = getattr(window.ui, option_name).isChecked()
+        elif isinstance(option_value, int):
+            if option_name.endswith('ComboBox'):
+                option_value = getattr(window.ui, option_name).currentIndex()
             else:
-                exec(f"v = window.ui.{k}.value()", globals(), ldict)
+                option_value = getattr(window.ui, option_name).value()
         else:
-            exec(f"v = window.{k}", globals(), ldict)
-        settings_dict[k] = ldict['v']
+            option_value = getattr(window, option_name)
+        settings_dict[option_name] = option_value
     
     settings_dict['excluded_locations'] = list(window.excluded_checks)
 
     if for_string:
         return settings_dict
     
-    with open(SETTINGS_PATH, 'w') as f:
-        yaml.dump(settings_dict, f, Dumper=MyDumper, sort_keys=False)
+    with open(SETTINGS_PATH, 'w') as settings_file:
+        yaml.dump(settings_dict, settings_file, Dumper=MyDumper, sort_keys=False)
 
 
 def loadSettings(window, settings_dict=SETTINGS):
-    all_options = [k for k,v in BASE_OPTIONS.items()]
+    all_options = [option_name for option_name,option_value in BASE_OPTIONS.items()]
     all_options.extend(EXTRA_OPTIONS)
     
-    for k,v in settings_dict.items():
-        if k not in all_options:
+    for option_name,option_value in settings_dict.items():
+        if option_name not in all_options:
             continue
         try:
-            if isinstance(v, bool):
-                exec(f"window.ui.{k}.setChecked({v})")
-            elif isinstance(v, int):
-                if k.endswith('ComboBox'):
-                    exec(f"window.ui.{k}.setCurrentIndex({v})")
+            if isinstance(option_value, bool):
+                getattr(window.ui, option_name).setChecked(option_value)
+            elif isinstance(option_value, int):
+                if option_name.endswith('ComboBox'):
+                    getattr(window.ui, option_name).setCurrentIndex(option_value)
                 else:
-                    exec(f"window.ui.{k}.setValue({v})")
+                    getattr(window.ui, option_name).setValue(option_value)
         except:
             pass
     
@@ -212,10 +214,12 @@ def loadSettings(window, settings_dict=SETTINGS):
             window.excluded_checks.update(HEART_PIECE_LOCATIONS)
         if not window.ui.leavesCheck.isChecked():
             window.excluded_checks.update(LEAF_LOCATIONS)
-        # if not window.ui.trendyCheck.isChecked():
-        #     window.excluded_checks.update(TRENDY_REWARDS)
-        # if not window.ui.shopCheck.isChecked():
-        #     window.excluded_checks.update(SHOP_ITEMS)
+        if not window.ui.trendyCheck.isChecked():
+            window.excluded_checks.update(TRENDY_REWARDS)
+        if not window.ui.shopCheck.isChecked():
+            window.excluded_checks.update(SHOP_ITEMS)
+        if not window.ui.seashellsCheck.isChecked():
+            window.excluded_checks.update(SHELL_LOCATIONS)
     try:
         window.starting_gear = []
         for item in settings_dict['starting_gear']:
@@ -239,51 +243,53 @@ def encodeSettings(window) -> str:
     bool_bits = []
     list_bits = []
 
-    for k,v in settings_dict.items():
-        if k in STRING_EXCLUSIONS:
+    for option_name,option_value in settings_dict.items():
+        if option_name in STRING_EXCLUSIONS:
             continue
-        if isinstance(v, bool):
-            bool_bits.append(int(v))
+        if isinstance(option_value, bool):
+            bool_bits.append(int(option_value))
             if len(bool_bits) == 8:
                 bool_bytes.append(bitsToInt(bool_bits))
-        elif isinstance(v, int):
-            int_bytes.append(v)
-        elif isinstance(v, list):
-            if k == 'starting_gear':
-                comp = sorted(STARTING_ITEMS)
-            elif k == 'excluded_locations':
-                comp = sorted(TOTAL_CHECKS)
-            settings_list = list(copy.deepcopy(settings_dict[k]))
-            for c in comp:
-                list_bits.append(1 if c in settings_list else 0)
+        elif isinstance(option_value, int):
+            int_bytes.append(option_value)
+        elif isinstance(option_value, list):
+            if option_name == 'starting_gear':
+                available_choices = sorted(STARTING_ITEMS)
+            elif option_name == 'excluded_locations':
+                available_choices = sorted(TOTAL_CHECKS)
+            settings_list = list(copy.deepcopy(settings_dict[option_name]))
+            for choice in available_choices:
+                list_bits.append(1 if choice in settings_list else 0)
                 if list_bits[-1] == 1:
-                    settings_list.remove(c)
+                    settings_list.remove(choice)
                 if len(list_bits) == 8:
                     list_bytes.append(bitsToInt(list_bits))
-            if list_bits: # flush bits to byte after list is done so that they don't mix
+            if list_bits: # Finish this list before encoding the next one.
                 list_bytes.append(bitsToInt(list_bits))
     
     if bool_bits:
         bool_bytes.append(bitsToInt(bool_bits))
     
-    for b in bool_bytes:
-        settings_str += b.to_bytes(1, 'big', signed=False)
-    for i,b in enumerate(int_bytes):
-        num = 1
-        if i == len(int_bytes)-1:
-            num = 2
-        settings_str += b.to_bytes(num, 'big', signed=False)
-    for b in list_bytes:
-        settings_str += b.to_bytes(1, 'big', signed=False)
+    for byte_value in bool_bytes:
+        settings_str += byte_value.to_bytes(1, 'big', signed=False)
+    for option_index,byte_value in enumerate(int_bytes):
+        byte_count = 1
+        if option_index == len(int_bytes)-1:
+            byte_count = 2
+        settings_str += byte_value.to_bytes(byte_count, 'big', signed=False)
+    for byte_value in list_bytes:
+        settings_str += byte_value.to_bytes(1, 'big', signed=False)
     
     settings_str = base64.b64encode(settings_str).decode("ascii")
-    return settings_str
+    return 'LAS2:' + settings_str
 
 
 def decodeSettings(settings_str: str) -> dict:
     "Decodes the settings string and returns a dictionary of the new settings"
 
-    settings_str = settings_str.encode('ascii')
+    if not settings_str.startswith('LAS2:'):
+        raise ValueError('This build uses LAS2 settings strings. Recreate older settings in the GUI to avoid changing their meaning.')
+    settings_str = settings_str[5:].encode('ascii')
     settings_bytes = base64.b64decode(settings_str)
     new_settings = {}
     
@@ -291,50 +297,50 @@ def decodeSettings(settings_str: str) -> dict:
     new_settings['seed'] = seed
 
     total_bytes = []
-    for b in settings_bytes[len(seed)+1:]:
-        total_bytes.append(b)
+    for byte_value in settings_bytes[len(seed)+1:]:
+        total_bytes.append(byte_value)
     
     check_boxes = []
-    nums_options = []
+    number_options = []
     items = sorted(list(copy.deepcopy(STARTING_ITEMS)))
-    locs = sorted(list(copy.deepcopy(TOTAL_CHECKS)))
+    location_groups = sorted(list(copy.deepcopy(TOTAL_CHECKS)))
 
-    for k,v in BASE_OPTIONS.items():
-        if k in STRING_EXCLUSIONS:
+    for option_name,option_value in BASE_OPTIONS.items():
+        if option_name in STRING_EXCLUSIONS:
             continue
-        if isinstance(v, bool):
-            check_boxes.append(k)
-        elif isinstance(v, int):
-            nums_options.append(k)
+        if isinstance(option_value, bool):
+            check_boxes.append(option_name)
+        elif isinstance(option_value, int):
+            number_options.append(option_name)
     
     check_boxes = optionsToBitList(check_boxes)
     items = optionsToBitList(items)
-    locs = optionsToBitList(locs)
+    location_groups = optionsToBitList(location_groups)
 
     for checks in check_boxes:
         bits = intToBits(total_bytes.pop(0))
-        for i,check in enumerate(checks):
-            new_settings[check] = bool(bits[i])
-    for check in nums_options:
+        for option_index,check in enumerate(checks):
+            new_settings[check] = bool(bits[option_index])
+    for check in number_options:
         if check != 'rupeesSpinBox':
             new_settings[check] = total_bytes.pop(0)
             continue
 
-        n1 = total_bytes.pop(0)
-        n2 = total_bytes.pop(0)
-        new_settings[check] = (n1 << 8) + n2
+        high_byte = total_bytes.pop(0)
+        low_byte = total_bytes.pop(0)
+        new_settings[check] = (high_byte << 8) + low_byte
     
     new_settings['starting_gear'] = []
     for gear in items:
         bits = intToBits(total_bytes.pop(0))
-        sgear = [k for i,k in enumerate(gear) if bits[i] == 1]
-        new_settings['starting_gear'].extend(sgear)
+        selected_gear = [option_name for option_index,option_name in enumerate(gear) if bits[option_index] == 1]
+        new_settings['starting_gear'].extend(selected_gear)
     
     new_settings['excluded_locations'] = []
-    for loc in locs:
+    for loc in location_groups:
         bits = intToBits(total_bytes.pop(0))
-        llist = [k for i,k in enumerate(loc) if bits[i] == 1]
-        new_settings['excluded_locations'].extend(llist)
+        selected_locations = [option_name for option_index,option_name in enumerate(loc) if bits[option_index] == 1]
+        new_settings['excluded_locations'].extend(selected_locations)
     
     return new_settings
 
@@ -342,17 +348,16 @@ def decodeSettings(settings_str: str) -> dict:
 def randomizeSettings(window):
     settings_dict = saveSettings(window, for_string=True)
     
-    ldict = locals()
-    for k,v in BASE_OPTIONS.items():
-        if isinstance(v, bool):
-            settings_dict[k] = bool(random.randint(0, 1))
-        elif isinstance(v, int):
-            if k.endswith('ComboBox'):
-                exec(f"v = window.ui.{k}.count()", globals(), ldict)
-                settings_dict[k] = random.randint(0, ldict['v']-1)
+    for option_name,option_value in BASE_OPTIONS.items():
+        if isinstance(option_value, bool):
+            settings_dict[option_name] = bool(random.randint(0, 1))
+        elif isinstance(option_value, int):
+            if option_name.endswith('ComboBox'):
+                widget_limit = getattr(window.ui, option_name).count()
+                settings_dict[option_name] = random.randint(0, widget_limit-1)
             else:
-                exec(f"v = window.ui.{k}.maximum()", globals(), ldict)
-                settings_dict[k] = min(random.randint(0, ldict['v']), random.randint(0, ldict['v']))
+                widget_limit = getattr(window.ui, option_name).maximum()
+                settings_dict[option_name] = min(random.randint(0, widget_limit), random.randint(0, widget_limit))
         # elif isinstance(v, list):
         #     if k != 'starting_gear':
         #         continue
@@ -370,6 +375,9 @@ def loadRandomizerSettings(window, seed):
 
     mod_settings = {
         'seed': seed,
+        'randomize-shells': window.ui.seashellsCheck.isChecked(),
+        'randomize-trendy': window.ui.trendyCheck.isCheckable() and window.ui.trendyCheck.isChecked(),
+        'randomize-shop': window.ui.shopCheck.isCheckable() and window.ui.shopCheck.isChecked(),
         'logic': LOGIC_PRESETS[window.ui.tricksComboBox.currentIndex()],
         'platform': PLATFORMS[window.ui.platformComboBox.currentIndex()],
         'create-spoiler': window.ui.spoilerCheck.isChecked(),
@@ -396,8 +404,8 @@ def loadRandomizerSettings(window, seed):
         # 'owl-hints': True if OWLS_SETTINGS[window.ui.owlsComboBox.currentIndex()] in ['hints', 'hybrid'] else False,
         'fast-stalfos': window.ui.stalfosCheck.isChecked(),
         'chest-aspect': CHEST_ASPECT_SETTINGS[window.ui.chestAspectComboBox.currentIndex()],
-        'seashells-important': True if len([s for s in SEASHELL_REWARDS if s not in window.excluded_checks]) > 0 else False,
-        'trade-important': True if len([t for t in TRADE_GIFT_LOCATIONS if t not in window.excluded_checks]) > 0 else False,
+        'seashells-important': True if len([shell_location for shell_location in SEASHELL_REWARDS if shell_location not in window.excluded_checks]) > 0 else False,
+        'trade-important': True if len([trade_location for trade_location in TRADE_GIFT_LOCATIONS if trade_location not in window.excluded_checks]) > 0 else False,
         # 'shuffle-companions': window.ui.companionCheck.isChecked(),
         # 'randomize-entrances': window.ui.loadingCheck.isChecked(),
         'randomize-music': window.ui.musicCheck.isChecked(),
@@ -429,19 +437,19 @@ def bitsToInt(bits: list) -> int:
     while len(bits) < 8:
         bits.append(0)
     bits.reverse() # reverse bit order since base64 is big endian
-    bin_str = ''.join(str(i) for i in bits)
+    binary_text = ''.join(str(option_index) for option_index in bits)
     bits[:] = []
-    return int(bin_str, 2)
+    return int(binary_text, 2)
 
 
-def intToBits(num) -> list:
+def intToBits(byte_count) -> list:
     """Takes an unsigned integer and converts it into a list of bits in big endian"""
 
     bits = []
-    f = 1
-    for i in range(8):
-        bits.append(1 if num&f != 0 else 0)
-        f *= 2
+    bit_mask = 1
+    for option_index in range(8):
+        bits.append(1 if byte_count&bit_mask != 0 else 0)
+        bit_mask *= 2
     
     return bits
 
@@ -453,9 +461,9 @@ def optionsToBitList(options) -> list:
     start = 0
     end = len(options) 
     step = 8
-    for i in range(start, end, step): 
-        x = i 
-        new_options.append(options[x:x+step])
+    for option_index in range(start, end, step): 
+        group_start = option_index 
+        new_options.append(options[group_start:group_start+step])
     
     return new_options
 

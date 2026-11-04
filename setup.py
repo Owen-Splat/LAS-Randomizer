@@ -5,7 +5,7 @@ from RandomizerCore.randomizer_data import VERSION
 build_exe_options = {"packages": ["os"], 
                     "excludes": ["tkinter", "unittest", "sqlite3", "numpy", "matplotlib", "zstandard"],
                     "zip_include_packages": ["encodings", "PySide6"],
-                    "include_files": ["RandomizerCore/Data", "RandomizerUI/Resources", "version.txt"],
+                    "include_files": ["RandomizerCore/Data", "RandomizerUI/Resources", "version.txt", ("RandomizerCore/Native", "NativeSources")],
                     "optimize": 2}
 
 base = None

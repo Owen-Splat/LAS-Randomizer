@@ -1,4 +1,6 @@
 ---
+# Keep these IDs unchanged; settings and game generation use them.
+# Overworld and cave chests.
 Chest_Locations:
   - beach-chest
   - taltal-entrance-chest
@@ -21,6 +23,7 @@ Chest_Locations:
   - woods-south-chest
   - woods-north-chest
 
+# One-time fishing rewards.
 Fishing_Rewards:
   - fishing-50
   - fishing-orange
@@ -30,6 +33,7 @@ Fishing_Rewards:
   - fishing-cheep-cheep
   - fishing-ol-baron
 
+# Rapids race and island rewards.
 Rapids_Rewards:
   - rapids-race-45
   - rapids-race-35
@@ -37,6 +41,7 @@ Rapids_Rewards:
   - rapids-middle-island
   - rapids-west-island
 
+# Chamber Dungeon challenge rewards.
 Dampe_Rewards:
   - dampe-page-1
   - dampe-heart-challenge
@@ -44,6 +49,7 @@ Dampe_Rewards:
   - dampe-bottle-challenge
   - dampe-final
 
+# Items given without a trade.
 Free_Gifts:
   - walrus
   - ghost-reward
@@ -58,6 +64,7 @@ Free_Gifts:
   - invisible-zora
   - goriya-trader
 
+# Trade quest rewards.
 Trade_Gifts:
   - mamasha
   - ciao-ciao
@@ -74,6 +81,7 @@ Trade_Gifts:
   - mermaid-martha
   - mermaid-cave
 
+# Boss and miniboss rewards.
 Boss_Locations:
   - lanmola
   - armos-knight
@@ -87,6 +95,7 @@ Boss_Locations:
   - D7-eagle
   - D8-hothead
 
+# Other one-time pickups.
 Misc_Items:
   - washed-up
   - dream-shrine-left
@@ -94,6 +103,7 @@ Misc_Items:
   - woods-loose
   - pothole-final
 
+# Seashell Mansion reward milestones.
 Mansion:
   - 5-seashell-reward
   - 15-seashell-reward
@@ -101,20 +111,30 @@ Mansion:
   - 40-seashell-reward
   - 50-seashell-reward
 
-# Shop_Items:
-#   - shop-slot3-1st
-#   - shop-slot3-2nd
-#   - shop-slot6
+# One-time shop goods; consumables stay repeatable.
+Shop_Items:
+  - shop-slot3-1st
+  - shop-slot3-2nd
+  - shop-slot5-1st
+  - shop-slot5-2nd
+  - shop-slot5-3rd
+  - shop-slot5-4th
+  - shop-slot5-5th
+  - shop-slot5-6th
+  - shop-slot5-7th
+  - shop-slot6
 
-# Trendy_Rewards:
-#   - trendy-prize-1
-#   - trendy-prize-2
-#   - trendy-prize-3
-#   - trendy-prize-4
-#   - trendy-prize-5
-#   - trendy-prize-6
-#   - trendy-prize-final
+# Featured Trendy prizes and the final reward.
+Trendy_Rewards:
+  - trendy-prize-1
+  - trendy-prize-2
+  - trendy-prize-3
+  - trendy-prize-4
+  - trendy-prize-5
+  - trendy-prize-6
+  - trendy-prize-final
 
+# Heart-piece locations.
 Heart_Pieces:
   - animal-village-northwest
   - animal-village-cave
@@ -139,6 +159,7 @@ Heart_Pieces:
   - woods-north-cave-loose
   - diamond-island
 
+# The five Golden Leaf checks.
 Golden_Leaves:
   - kanalet-crow
   - kanalet-mad-bomber
@@ -146,6 +167,7 @@ Golden_Leaves:
   - kanalet-bombed-guard
   - kanalet-final-guard
 
+# Owl statues inside dungeons.
 Dungeon_Owl_Statues:
   - D1-owl-statue-long-hallway
   - D1-owl-statue-spinies
@@ -172,6 +194,7 @@ Dungeon_Owl_Statues:
   - D0-owl-statue-first-switches
   - D0-owl-statue-before-mini-boss
 
+# Owl statues outside dungeons.
 Overworld_Owl_Statues:
   - owl-statue-below-D8
   - owl-statue-moblin-cave
@@ -183,6 +206,7 @@ Overworld_Owl_Statues:
   - owl-statue-rapids
   - owl-statue-taltal-east
 
+# Optional Color Dungeon rupee checks.
 Blue_Rupees:
   - D0-rupee-1
   - D0-rupee-2

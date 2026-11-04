@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <!-- Widget names are shared with the Python UI and saved settings. -->
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
@@ -480,20 +481,20 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <strikeout>true</strikeout>
+           <strikeout>false</strikeout>
           </font>
          </property>
          <property name="whatsThis">
-          <string>This controls whether seashells can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+          <string>Randomize hidden, buried, bomb-hole and underwater shell pickups. Requires clean 1.0.0 ExeFS alongside RomFS. Ground models remain vanilla.</string>
          </property>
          <property name="styleSheet">
-          <string notr="true">color: rgb(80, 80, 80);</string>
+          <string/>
          </property>
          <property name="text">
           <string>Seashells</string>
          </property>
          <property name="checkable">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
         <widget class="QCheckBox" name="shopCheck">
@@ -511,23 +512,23 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <strikeout>true</strikeout>
+           <strikeout>false</strikeout>
           </font>
          </property>
          <property name="toolTip">
           <string/>
          </property>
          <property name="whatsThis">
-          <string>This controls whether the shop can sell progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+          <string>Randomize ten one-time shop goods, including purchases and stolen goods. Requires clean 1.0.0 ExeFS alongside RomFS.</string>
          </property>
          <property name="styleSheet">
-          <string notr="true">color: rgb(80, 80, 80);</string>
+          <string/>
          </property>
          <property name="text">
           <string>Shop</string>
          </property>
          <property name="checkable">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
         <widget class="QCheckBox" name="leavesCheck">
@@ -835,10 +836,10 @@
           <string/>
          </property>
          <property name="whatsThis">
-          <string>This controls whether the Dampé prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic does not work with instrument shuffle,&lt;/u&gt; and may result in unbeatable seeds</string>
+          <string>This controls whether the DampÃƒÆ’Ã‚Â© prizes can be progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;The logic does not work with instrument shuffle,&lt;/u&gt; and may result in unbeatable seeds</string>
          </property>
          <property name="text">
-          <string>Dampé</string>
+          <string>DampÃƒÆ’Ã‚Â©</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -897,23 +898,23 @@
          <property name="font">
           <font>
            <pointsize>9</pointsize>
-           <strikeout>true</strikeout>
+           <strikeout>false</strikeout>
           </font>
          </property>
          <property name="toolTip">
           <string/>
          </property>
          <property name="whatsThis">
-          <string>This controls whether the Trendy Game can contain progress items&lt;br&gt;&lt;/br&gt;&lt;u&gt;Not yet implemented&lt;/u&gt;</string>
+          <string>Randomize six one-time Trendy prizes and the final reward. Repeat prizes and figurines remain vanilla.</string>
          </property>
          <property name="styleSheet">
-          <string notr="true">color: rgb(80, 80, 80);</string>
+          <string/>
          </property>
          <property name="text">
           <string>Trendy Game</string>
          </property>
          <property name="checkable">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </widget>
@@ -3101,12 +3102,12 @@
   </action>
   <action name="actionfran_ais">
    <property name="text">
-    <string>Français</string>
+    <string>FranÃƒÆ’Ã‚Â§ais</string>
    </property>
   </action>
   <action name="action">
    <property name="text">
-    <string>中文</string>
+    <string>ÃƒÂ¤Ã‚Â¸Ã‚Â­ÃƒÂ¦Ã¢â‚¬â€œÃ¢â‚¬Â¡</string>
    </property>
   </action>
   <action name="actionLight">
