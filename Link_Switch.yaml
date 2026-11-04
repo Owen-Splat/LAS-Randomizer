@@ -1,0 +1,198 @@
+# Link's Awakening (Switch) — full Archipelago configuration
+# This file is used by AP generation. Its settings are carried by the .lasap
+# into LAS Randomizer; LAS does not perform a second shuffle.
+name: LinkPlayer
+game: "Link's Awakening (Switch)"
+Link's Awakening (Switch):
+  accessibility: full
+  check_profile: configured
+
+  # Main checks
+  chests: true
+  golden_leaves: true
+  miscellaneous: true
+  free_gifts: true
+  heart_pieces: true
+  seashell_mansion: 50  # 0, 5, 15, 30, 40 or 50: highest randomized reward tier
+  trade_quest: true
+  seashells: true
+  shop: true
+
+  # Minigames
+  dampe: true
+  rapids: true
+  fishing: true
+  trendy_game: true
+
+  # Dungeons
+  blupsanity: false
+  boss_drops: true
+  instruments: true
+  owl_gifts: none  # none, overworld, dungeons or all
+
+  # World
+  randomize_enemies: false
+  randomize_enemy_sizes: false
+  chest_appearance: default  # default, size or texture_and_size
+  open_kanalet: true
+  open_mabe: false
+  open_mamu: true
+  completed_bridge: true
+  classic_d2: false
+  shuffled_dungeons: false
+  extra_consumable_drop: true
+
+  # Logic
+  bad_pets: false
+  free_book: true
+  fast_fishing: false
+  fast_stalfos: false
+  unlocked_bombs: true
+  shuffled_bombs: false
+  shuffled_powder: false
+
+  # Cosmetics and nice items
+  blur_removal: false
+  randomize_music: false
+  nice_bombs: false
+  nice_magic_rod: false
+  sword_beam_with_lv1: false
+
+  # Speed options: true enables the faster version
+  fast_boss_cutscenes: false
+  fast_song_cutscenes: false
+  fast_chest_animations: false
+  fast_key_animations: false
+
+  # Shop and item pool
+  fast_stealing: false
+  stealing: normal  # always, never or normal
+  traps: none  # none, few, several, many or insanity
+
+  # Other
+  one_hit_ko: false
+  death_link: false
+
+  # Quantities are removed from your selected shuffled item pool. AP delivers
+  # them once using normal saved receipts. Keep these types in randomized_items.
+  # Example: starting_items: {sword: 1, shield: 1, bracelet: 2}
+  starting_items: {}
+
+  # Whitelist: remove an item type below to leave its original locations vanilla.
+  # Those vanilla locations are outside AP and do not send network checks.
+  randomized_items:
+    - angler-key
+    - arrow-capacity
+    - bananas
+    - bird-key
+    - blue-tunic
+    - bomb
+    - bomb-capacity
+    - boomerang
+    - boots
+    - bottle
+    - bow
+    - bracelet
+    - broom
+    - chamber-stone
+    - compass-D0
+    - compass-D1
+    - compass-D2
+    - compass-D3
+    - compass-D4
+    - compass-D5
+    - compass-D6
+    - compass-D7
+    - compass-D8
+    - conch-horn
+    - coral-triangle
+    - deathball-trap
+    - dog-food
+    - drown-trap
+    - evening-calm-organ
+    - face-key
+    - feather
+    - fishing-hook
+    - flippers
+    - full-moon-cello
+    - golden-leaf
+    - heart-container
+    - heart-piece
+    - hibiscus
+    - honeycomb
+    - hookshot
+    - key-D0
+    - key-D1
+    - key-D2
+    - key-D3
+    - key-D4
+    - key-D5
+    - key-D6
+    - key-D7
+    - key-D8
+    - letter
+    - magnifying-lens
+    - map-D0
+    - map-D1
+    - map-D2
+    - map-D3
+    - map-D4
+    - map-D5
+    - map-D6
+    - map-D7
+    - map-D8
+    - medicine
+    - mermaid-scale
+    - mushroom
+    - necklace
+    - nightmare-key-D0
+    - nightmare-key-D1
+    - nightmare-key-D2
+    - nightmare-key-D3
+    - nightmare-key-D4
+    - nightmare-key-D5
+    - nightmare-key-D6
+    - nightmare-key-D7
+    - nightmare-key-D8
+    - ocarina
+    - pineapple
+    - powder
+    - powder-capacity
+    - quake-trap
+    - red-tunic
+    - ribbon
+    - rod
+    - rupee-100
+    - rupee-20
+    - rupee-300
+    - rupee-5
+    - rupee-50
+    - sea-lilys-bell
+    - seashell
+    - shell-sensor
+    - shield
+    - shovel
+    - slime-key
+    - song-ballad
+    - song-mambo
+    - song-soul
+    - squish-trap
+    - stalfos-note
+    - stick
+    - stone-beak-D0
+    - stone-beak-D1
+    - stone-beak-D2
+    - stone-beak-D3
+    - stone-beak-D4
+    - stone-beak-D5
+    - stone-beak-D6
+    - stone-beak-D7
+    - stone-beak-D8
+    - surf-harp
+    - sword
+    - tail-key
+    - thunder-drum
+    - wind-marimba
+    - yoshi-doll
+    - zap-trap
+    - zol-trap

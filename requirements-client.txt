@@ -1,0 +1,13 @@
+# Additional packages used by AP's headless core; AP itself remains separately installed.
+PyYAML==6.0.3
+websockets==13.1
+colorama==0.4.6
+jellyfish==1.2.1
+jinja2==3.1.6
+schema==0.7.8
+platformdirs==4.10.1
+certifi==2026.2.25
+orjson==3.11.7
+typing_extensions==4.15.0
+pathspec==1.0.4
+bsdiff4==1.2.6

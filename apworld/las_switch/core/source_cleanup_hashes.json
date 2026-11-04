@@ -1,0 +1,18 @@
+{
+  "RandomizerCore/Randomizers/flags.py": {
+    "upstream": "90ef33f4e0ce250713d7ba9579609670fe7612d0a7d2994744749339afac212e",
+    "cleanup": "bb87f8cbfeba2850013efe1cc465ce35f1441a3a54e163d24e2d43561b138bd0"
+  },
+  "RandomizerCore/Randomizers/miscellaneous.py": {
+    "upstream": "195461219178372d1a76fc677c5f28905d4bde03ffe7b61dba36fa82b158637f",
+    "cleanup": "62450439b9ddf2ad1785b50a3f2361d1c7f6e0a60d2c91bf20b2d7d820b8a5c6"
+  },
+  "RandomizerCore/Tools/leb.py": {
+    "upstream": "42cdafc272b8fc8bcba1ccfc52d5fecc65f5e9744afee0fb163fa1b7074074ca",
+    "cleanup": "2b4f8a2e6af79265e14ac888da6bc6b5f7e40f3c64107fecd782a17ea327721b"
+  },
+  "RandomizerUI/settings_manager.py": {
+    "upstream": "9c71eb04579fe6ecadb54d15041e466ce10f901b35ed79695373228c983bb66a",
+    "cleanup": "f9a7231acded373df1def36b232700caa8c750a59d33e231081ea6a8947319d8"
+  }
+}

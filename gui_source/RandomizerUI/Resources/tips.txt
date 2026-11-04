@@ -1,0 +1,9 @@
+- If you somehow get softlocked, dying and selecting "Save And Quit" will spawn you at Marin's house.
+
+- This game autosaves each time the player obtains an item. Reload that autosave to get back to the beginning of a dungeon!
+
+- You can switch tunics in telephone booths!
+
+- The ghost grave check requires the Surf Harp, you simply just need to walk up to the grave to obtain the item
+
+- The pothole final check currently requires talking to the owl statue when you have the shovel

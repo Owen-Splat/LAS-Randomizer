@@ -1,0 +1,34 @@
+{
+  "game": "Link's Awakening Switch (prototype)",
+  "identity": {
+    "save_id": "research-save-1",
+    "seed": "offline-research-seed",
+    "slot": 1
+  },
+  "options": {
+    "logic": "basic",
+    "owl_gifts": false,
+    "shuffle_dungeons": false,
+    "starting_items": [],
+    "traps": false
+  },
+  "placements": [
+    {
+      "location": "woods-south-chest",
+      "location_id": "las-switch/location/woods-south-chest",
+      "reward": {
+        "game": "Link's Awakening Switch (prototype)",
+        "item": "feather",
+        "item_id": "las-switch/item/feather",
+        "recipient_slot": 2
+      }
+    }
+  ],
+  "schema_version": 1,
+  "source_digest": "fee36592d848f9ae2431b88734b421edbcd499247ddb3bb702f5b7522e868202",
+  "target": {
+    "build_id": null,
+    "emulator": "Ryujinx",
+    "game_version": null
+  }
+}

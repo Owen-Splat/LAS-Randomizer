@@ -1,0 +1,7 @@
+{
+  "romfs": "./gamefiles/romfs",
+  "exefs": "./gamefiles/exefs",
+  "output_parent": "./output_parent",
+  "source": "./source",
+  "gui_source": "./gui_source"
+}

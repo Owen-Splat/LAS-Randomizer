@@ -1,0 +1,22 @@
+{
+  "release": "0.3.0-beta",
+  "ap_tests": 60,
+  "ap_tests_passed": true,
+  "native_tests": 44,
+  "native_passed": 38,
+  "native_skipped": 6,
+  "protocol_capabilities": [
+    "atomic_delivery_v1",
+    "dungeon_rewards_v1",
+    "indexed_rewards_v1",
+    "persistent_checks_v1",
+    "progressive_rewards_v1",
+    "reward_suppression_v1",
+    "victory_v1"
+  ],
+  "normal_beta_generation_verified": true,
+  "full_playthrough_validated": false,
+  "shell_ground_actors_changed": false,
+  "gui_tabs_rendered": true,
+  "stable_release_certified": false
+}

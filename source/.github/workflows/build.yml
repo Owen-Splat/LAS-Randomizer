@@ -1,0 +1,97 @@
+on: workflow_dispatch
+
+jobs:
+  prepare-build-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run : echo "Replacing essential data with the ones from this repository instead of the default ones"
+      - run : sed -i "s/EXTRA_TITLE_DATA\ =.*/EXTRA_TITLE_DATA\ = '- ${{ github.repository_owner }} - ${{ github.ref_name }}'/g" RandomizerCore/randomizer_data.py
+      - run : sed -i "s/MAIN_BRANCH\ =.*/MAIN_BRANCH\ = '${{ github.event.repository.default_branch }}'/g" RandomizerCore/randomizer_data.py
+      - run : sed -i "s/AUTHOR\ =.*/AUTHOR\ = '${{ github.repository_owner }}'/g" RandomizerCore/randomizer_data.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: updated-version-data
+          path: RandomizerCore/randomizer_data.py
+
+  # Application build (For every OS)
+  build:
+    needs : prepare-build-files
+    strategy:
+      matrix:
+        #os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: echo "Preparing '${{ github.event.ref }}' for release"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+          cache: 'pip' # caching pip dependencies
+      # Force upgrading pip (Might be removed at some point)
+      - run: pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: updated-version-data
+          path: RandomizerCore
+      - run: mkdir build
+      - run: python setup.py build
+      - run: python build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-build-${{ matrix.os }}
+          path: build/*.zip
+
+#  dev-release:
+#    needs: build
+#    if: success() && (github.ref_name == github.event.repository.default_branch)
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/download-artifact@v4
+#        with:
+#          path: build
+#          pattern: release-build-*
+#          merge-multiple: true
+#      - uses: "marvinpinto/action-automatic-releases@latest"
+#        with:
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          prerelease: true
+#          automatic_release_tag: "testing"
+#          title: "Release ${{ github.ref_name }}"
+#          files: "build/*.zip"
+
+  prod-release:
+    needs: build
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: build
+          pattern: release-build-*
+          merge-multiple: true
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "${{ github.ref_name }}"
+          title: "Release ${{ github.ref_name }}"
+          files: "build/*.zip"
+
+
+  # Artifact Cleanup (to avoid too much storage)
+  cleanup:
+#    needs: [prepare-build-files, build, dev-release, prod-release]
+    needs: [prepare-build-files, build, prod-release]
+    if: ${{ always() || contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: geekyeggo/delete-artifact@v4
+        with:
+          name: |
+            updated-version-data
+            release-build-*
+          # As this is a cleanup job, if this fails due to non existing files, we don't really care.
+          failOnError: false

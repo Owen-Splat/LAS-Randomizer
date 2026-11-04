@@ -1,0 +1,6 @@
+ziglang==0.14.1
+lz4==4.4.5
+pyelftools==0.33
+# Test dependencies
+unicorn==2.1.4
+capstone==5.0.9

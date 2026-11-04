@@ -1,0 +1,74 @@
+C:\Users\joe_s\Documents\Codex\2026-11-03\this-is-my-ryujinx-install-c-7\work\development_dependencies\Archipelago-0.6.7\NetUtils.py:532: UserWarning: _speedups not available. Falling back to pure python LocationStore. Install a matching C++ compiler for your platform to compile _speedups.
+  warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
+test_deterministic_markers_preserve_manifest_and_unmanaged_rewards (test_native_plan.NativePlanTests.test_deterministic_markers_preserve_manifest_and_unmanaged_rewards) ... ok
+test_rejects_state_capacity_overflow (test_native_plan.NativePlanTests.test_rejects_state_capacity_overflow) ... ok
+test_clean_asset_folder_cannot_be_output (test_patch_pipeline.PatchPipelineTests.test_clean_asset_folder_cannot_be_output) ... ok
+test_existing_output_not_overwritten (test_patch_pipeline.PatchPipelineTests.test_existing_output_not_overwritten) ... ok
+test_failed_generator_does_not_publish_partial_output (test_patch_pipeline.PatchPipelineTests.test_failed_generator_does_not_publish_partial_output) ... ok
+test_native_check_build_requires_save_identity_before_generation (test_patch_pipeline.PatchPipelineTests.test_native_check_build_requires_save_identity_before_generation) ... ok
+test_native_module_required_before_generation (test_patch_pipeline.PatchPipelineTests.test_native_module_required_before_generation) ... ok
+test_patched_main_backend_is_bound_to_clean_executable_and_hashes (test_patch_pipeline.PatchPipelineTests.test_patched_main_backend_is_bound_to_clean_executable_and_hashes) ... ok
+test_play_mode_does_not_publish_a_candidate_that_fails_native_validation (test_patch_pipeline.PatchPipelineTests.test_play_mode_does_not_publish_a_candidate_that_fails_native_validation) ... ok
+test_preparation_preserves_ap_placements_and_input_files (test_patch_pipeline.PatchPipelineTests.test_preparation_preserves_ap_placements_and_input_files) ... ok
+test_tampered_patch_rejected (test_patch_pipeline.PatchPipelineTests.test_tampered_patch_rejected) ... ok
+test_unknown_backend_layout_rejected (test_patch_pipeline.PatchPipelineTests.test_unknown_backend_layout_rejected) ... ok
+test_unknown_executable_build_rejected (test_patch_pipeline.PatchPipelineTests.test_unknown_executable_build_rejected) ... ok
+test_wrong_executable_rejected (test_patch_pipeline.PatchPipelineTests.test_wrong_executable_rejected) ... ok
+test_collection_never_grants_original_reward_and_repeated_check_is_safe (test_prototype.DeliveryTests.test_collection_never_grants_original_reward_and_repeated_check_is_safe) ... ok
+test_overlap_is_deduplicated_conflict_and_gap_rejected_atomically (test_prototype.DeliveryTests.test_overlap_is_deduplicated_conflict_and_gap_rejected_atomically) ... ok
+test_save_rollback_replays_from_restored_game_cursor (test_prototype.DeliveryTests.test_save_rollback_replays_from_restored_game_cursor) ... ok
+test_unsafe_state_crash_and_restart (test_prototype.DeliveryTests.test_unsafe_state_crash_and_restart) ... ok
+test_wrong_save_identity_is_rejected (test_prototype.DeliveryTests.test_wrong_save_identity_is_rejected) ... ok
+test_checked_in_catalog_matches_source_and_ids_are_unique (test_prototype.ManifestTests.test_checked_in_catalog_matches_source_and_ids_are_unique) ... ok
+test_local_reward_is_also_deferred_to_received_history (test_prototype.ManifestTests.test_local_reward_is_also_deferred_to_received_history) ... ok
+test_plan_is_deterministic_does_not_mutate_and_suppresses_foreign_reward (test_prototype.ManifestTests.test_plan_is_deterministic_does_not_mutate_and_suppresses_foreign_reward) ... ok
+test_reject_wrong_source_ids_options_slots_and_unreviewed_check (test_prototype.ManifestTests.test_reject_wrong_source_ids_options_slots_and_unreviewed_check) ... ok
+test_all_source_conditions_parse_without_eval_and_known_chest_requires_bracelet (test_v2.CoreV2Tests.test_all_source_conditions_parse_without_eval_and_known_chest_requires_bracelet) ... ok
+test_backend_cannot_be_faked_by_empty_folder (test_v2.CoreV2Tests.test_backend_cannot_be_faked_by_empty_folder) ... ok
+test_complete_generator_contract_and_source_pin (test_v2.CoreV2Tests.test_complete_generator_contract_and_source_pin) ... ok
+test_configured_categories_cover_all_checks_and_round_trip (test_v2.CoreV2Tests.test_configured_categories_cover_all_checks_and_round_trip) ... ok
+test_face_shrine_routes_keep_required_equipment_and_keys (test_v2.CoreV2Tests.test_face_shrine_routes_keep_required_equipment_and_keys) ... ok
+test_full_inventory_goal_and_all_standard_checks_reachable (test_v2.CoreV2Tests.test_full_inventory_goal_and_all_standard_checks_reachable) ... ok
+test_indexed_and_progressive_delivery_semantics (test_v2.CoreV2Tests.test_indexed_and_progressive_delivery_semantics) ... ok
+test_manifest_tampering_duplicate_remote_and_local_rewards (test_v2.CoreV2Tests.test_manifest_tampering_duplicate_remote_and_local_rewards) ... ok
+test_mock_save_failure_and_restart_use_durable_cursor (test_v2.CoreV2Tests.test_mock_save_failure_and_restart_use_durable_cursor) ... ok
+test_registry_and_pool_mapping (test_v2.CoreV2Tests.test_registry_and_pool_mapping) ... ok
+test_runtime_replay_and_unknown_history_hash (test_v2.CoreV2Tests.test_runtime_replay_and_unknown_history_hash) ... ok
+test_safe_parser_precedence_counts_and_rejection (test_v2.CoreV2Tests.test_safe_parser_precedence_counts_and_rejection) ... ok
+test_deathlink_sends_once_per_local_death_transition (test_client_features.ClientFeatures.test_deathlink_sends_once_per_local_death_transition) ... ok
+test_delayed_remote_death_stays_latched_after_ack (test_client_features.ClientFeatures.test_delayed_remote_death_stays_latched_after_ack) ... ok
+test_disabled_deathlink_does_not_join_or_act (test_client_features.ClientFeatures.test_disabled_deathlink_does_not_join_or_act) ... ok
+test_in_game_hints_require_an_actual_server_hint_and_wait_for_ack (test_client_features.ClientFeatures.test_in_game_hints_require_an_actual_server_hint_and_wait_for_ack) ... ok
+test_mismatched_hint_item_or_recipient_cannot_reveal_a_route (test_client_features.ClientFeatures.test_mismatched_hint_item_or_recipient_cannot_reveal_a_route) ... ok
+test_outgoing_item_history_records_recipient (test_client_features.ClientFeatures.test_outgoing_item_history_records_recipient) ... ok
+test_received_death_queues_until_ready_and_does_not_echo (test_client_features.ClientFeatures.test_received_death_queues_until_ready_and_does_not_echo) ... ok
+test_status_history_and_tracker_use_delivered_not_queued_inventory (test_client_features.ClientFeatures.test_status_history_and_tracker_use_delivered_not_queued_inventory) ... ok
+test_unvalidated_game_history_cannot_send_deathlink (test_client_features.ClientFeatures.test_unvalidated_game_history_cannot_send_deathlink) ... ok
+test_bridge_rejects_mock_by_default_and_wrong_identity (test_network.NetworkTests.test_bridge_rejects_mock_by_default_and_wrong_identity) ... ok
+test_real_ap_server_las_slots_round_trip_reconnect_and_goal (test_network.NetworkTests.test_real_ap_server_las_slots_round_trip_reconnect_and_goal) ... WARNING:asyncio:Executing <Task pending name='Task-52' coro=<NetworkTests.test_real_ap_server_las_slots_round_trip_reconnect_and_goal() running at C:\Users\joe_s\Documents\Codex\2026-11-03\this-is-my-ryujinx-install-c-7\work\las_archipelago_prototype\tests_ap\test_network.py:122> wait_for=<_GatheringFuture pending cb=[Task.task_wakeup()] created at C:\Users\joe_s\AppData\Local\Programs\Python\Python313\Lib\asyncio\tasks.py:765> cb=[_run_until_complete_cb() at C:\Users\joe_s\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:181] created at C:\Users\joe_s\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py:100> took 5.093 seconds
+WARNING:Client:Disconnected from multiworld server, type /connect to reconnect
+WARNING:Client:Disconnected from multiworld server
+ok
+test_starting_items_and_two_way_deathlink_use_real_ap_server (test_network.NetworkTests.test_starting_items_and_two_way_deathlink_use_real_ap_server) ... WARNING:asyncio:Executing <Task pending name='Task-112' coro=<NetworkTests.test_starting_items_and_two_way_deathlink_use_real_ap_server() running at C:\Users\joe_s\Documents\Codex\2026-11-03\this-is-my-ryujinx-install-c-7\work\las_archipelago_prototype\tests_ap\test_network.py:58> wait_for=<_GatheringFuture pending cb=[Task.task_wakeup()] created at C:\Users\joe_s\AppData\Local\Programs\Python\Python313\Lib\asyncio\tasks.py:765> cb=[_run_until_complete_cb() at C:\Users\joe_s\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:181] created at C:\Users\joe_s\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py:100> took 4.990 seconds
+WARNING:Client:Disconnected from multiworld server
+ok
+test_invalid_starting_items_and_quantities_are_rejected (test_options.ExpandedOptions.test_invalid_starting_items_and_quantities_are_rejected) ... ok
+test_manifest_rejects_settings_that_do_not_match_generator_flags (test_options.ExpandedOptions.test_manifest_rejects_settings_that_do_not_match_generator_flags) ... ok
+test_mansion_tiers_change_actual_check_set (test_options.ExpandedOptions.test_mansion_tiers_change_actual_check_set) ... ok
+test_owl_choices_choose_actual_regions_and_logic_flags (test_options.ExpandedOptions.test_owl_choices_choose_actual_regions_and_logic_flags) ... ok
+test_qol_and_world_options_reach_original_las_generator (test_options.ExpandedOptions.test_qol_and_world_options_reach_original_las_generator) ... ok
+test_shuffled_bombs_and_powder_are_progression (test_options.ExpandedOptions.test_shuffled_bombs_and_powder_are_progression) ... ok
+test_shuffled_entrances_share_the_exact_logic_and_generator_permutation (test_options.ExpandedOptions.test_shuffled_entrances_share_the_exact_logic_and_generator_permutation) ... ok
+test_starting_quantities_remove_pool_entries_and_use_ap_precollection (test_options.ExpandedOptions.test_starting_quantities_remove_pool_entries_and_use_ap_precollection) ... ok
+test_trap_levels_mutate_ap_pool_not_original_las_shuffle (test_options.ExpandedOptions.test_trap_levels_mutate_ap_pool_not_original_las_shuffle) ... ok
+test_whitelist_locks_unlisted_items_at_vanilla_checks (test_options.ExpandedOptions.test_whitelist_locks_unlisted_items_at_vanilla_checks) ... ok
+test_full_accessibility_with_all_categories (test_world.RealAPWorldTests.test_full_accessibility_with_all_categories) ... C:\Users\joe_s\Documents\Codex\2026-11-03\this-is-my-ryujinx-install-c-7\work\development_dependencies\Archipelago-0.6.7\BaseClasses.py:450: DeprecationWarning: multiworld.get_all_state no longer caches all_state and this argument will be removed.
+  warnings.warn("multiworld.get_all_state no longer caches all_state and this argument will be removed.",
+ok
+test_three_solo_seeds_fill_beat_and_export (test_world.RealAPWorldTests.test_three_solo_seeds_fill_beat_and_export) ... ok
+test_two_las_slots_generation (test_world.RealAPWorldTests.test_two_las_slots_generation) ... ok
+
+----------------------------------------------------------------------
+Ran 60 tests in 59.940s
+
+OK
