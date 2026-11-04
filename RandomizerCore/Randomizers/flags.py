@@ -139,11 +139,5 @@ def makeFlags(sheet):
     global_flags.addFlag('DampeBottle')
     global_flags.addFlag('DampeFinal')
 
-    # global_flags.addFlag('ShopShovelSteal')
-    # global_flags.addFlag('ShopShovelGet')
-    # global_flags.addFlag('ShopBowSteal')
-    # global_flags.addFlag('ShopBowGet')
-    # global_flags.addFlag('ShopHeartSteal')
-    # global_flags.addFlag('ShopHeartGet')
 
     return global_flags.give_flags()

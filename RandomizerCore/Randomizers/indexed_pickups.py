@@ -89,7 +89,7 @@ class StandaloneRewards:
         for path in Path(worker.romfs_dir).rglob('*.bfevfl'):
             try:
                 flow = event_tools.readFlow(path)
-            except Exception as exc:
+            except Exception as error:
                 raise ValueError('Invalid generated event flow: ' + str(path)) from error
             changed = False
             for event in flow.flowchart.events:

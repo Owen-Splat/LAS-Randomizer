@@ -54,138 +54,57 @@ def changeSunkenSword(flowchart, item_key, item_index, model_path, model_name, r
         act.rotY = MODEL_ROTATIONS[model_name]
 
 
-def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room):
-    if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
-        get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
+def _change_loose_pickup(flowchart, item_key, item_index, model_path,
+                         model_name, room, actor_index, actor_type,
+                         entry_point, collection_flag, reset_rotation):
+    """Share the reward flow while retaining each location's actor setup."""
+    if item_key[:3] == 'Rup':
+        reward_event = event_tools.createActionEvent(
+            flowchart, 'Inventory', 'AddItemByKey',
             {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
     else:
-        get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
+        reward_event = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
 
-    event_tools.addEntryPoint(flowchart, 'Woods')
-    event_tools.createActionChain(flowchart, 'Woods', [
+    event_tools.addEntryPoint(flowchart, entry_point)
+    event_tools.createActionChain(flowchart, entry_point, [
         ('SinkingSword', 'Destroy', {}),
-        ('EventFlags', 'SetFlag', {'symbol': WOODS_LOOSE_FLAG, 'value': True})
-    ], get_anim)
+        ('EventFlags', 'SetFlag', {'symbol': collection_flag, 'value': True}),
+    ], reward_event)
 
-    act = room.actors[3]
-    act.type = 0x194 # sinking sword
-    act.parameters[0] = bytes(model_path, 'utf-8')
-    act.parameters[1] = bytes(model_name, 'utf-8')
-    act.parameters[2] = bytes('Woods', 'utf-8')
-    act.parameters[3] = bytes(WOODS_LOOSE_FLAG, 'utf-8')
-
-    if item_key == 'Seashell':
-        act.parameters[4] = bytes('true', 'utf-8')
-    else:
-        act.parameters[4] = bytes('false', 'utf-8')
-
+    actor = room.actors[actor_index]
+    actor.type = actor_type
+    if reset_rotation:
+        actor.rotY = 0
+    actor.parameters[0] = model_path.encode('utf-8')
+    actor.parameters[1] = model_name.encode('utf-8')
+    actor.parameters[2] = entry_point.encode('utf-8')
+    actor.parameters[3] = collection_flag.encode('utf-8')
+    actor.parameters[4] = b'true' if item_key == 'Seashell' else b'false'
     if model_name in MODEL_SIZES:
-        size = MODEL_SIZES[model_name]
-        act.scaleX = size
-        act.scaleY = size
-        act.scaleZ = size
+        actor.scaleX = actor.scaleY = actor.scaleZ = MODEL_SIZES[model_name]
     if model_name in MODEL_ROTATIONS:
-        act.rotY = MODEL_ROTATIONS[model_name]
+        actor.rotY = MODEL_ROTATIONS[model_name]
+
+
+
+def changeMushroom(flowchart, item_key, item_index, model_path, model_name, room):
+    _change_loose_pickup(flowchart, item_key, item_index, model_path, model_name,
+                         room, 3, 0x194, 'Woods', WOODS_LOOSE_FLAG, False)
+
 
 
 def changeOcarina(flowchart, item_key, item_index, model_path, model_name, room):
-    if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
-        get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-    else:
-        get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
+    _change_loose_pickup(flowchart, item_key, item_index, model_path, model_name,
+                         room, 5, 0x8E, 'DreamShrine', DREAM_SHRINE_FLAG, False)
 
-    event_tools.addEntryPoint(flowchart, 'DreamShrine')
-    event_tools.createActionChain(flowchart, 'DreamShrine', [
-        ('SinkingSword', 'Destroy', {}),
-        ('EventFlags', 'SetFlag', {'symbol': DREAM_SHRINE_FLAG, 'value': True})
-    ], get_anim)
-
-    act = room.actors[5]
-    act.type = 0x8E # yoshi doll, will disappear once you have yoshi, but the player never actually obtains it :)
-    act.parameters[0] = bytes(model_path, 'utf-8')
-    act.parameters[1] = bytes(model_name, 'utf-8')
-    act.parameters[2] = bytes('DreamShrine', 'utf-8')
-    act.parameters[3] = bytes(DREAM_SHRINE_FLAG, 'utf-8') # category 1
-
-    if item_key == 'Seashell':
-        act.parameters[4] = bytes('true', 'utf-8')
-    else:
-        act.parameters[4] = bytes('false', 'utf-8')
-
-    if model_name in MODEL_SIZES:
-        size = MODEL_SIZES[model_name]
-        act.scaleX = size
-        act.scaleY = size
-        act.scaleZ = size
-    if model_name in MODEL_ROTATIONS:
-        act.rotY = MODEL_ROTATIONS[model_name]
 
 
 def changeBirdKey(flowchart, item_key, item_index, model_path, model_name, room):
-    if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
-        get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-    else:
-        get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
+    _change_loose_pickup(flowchart, item_key, item_index, model_path, model_name,
+                         room, 0, 0x194, 'TalTal', ROOSTER_CAVE_FLAG, False)
 
-    event_tools.addEntryPoint(flowchart, 'TalTal')
-    event_tools.createActionChain(flowchart, 'TalTal', [
-        ('SinkingSword', 'Destroy', {}),
-        ('EventFlags', 'SetFlag', {'symbol': ROOSTER_CAVE_FLAG, 'value': True})
-    ], get_anim)
-
-    act = room.actors[0]
-    act.type = 0x194 # sinking sword
-    act.parameters[0] = bytes(model_path, 'utf-8')
-    act.parameters[1] = bytes(model_name, 'utf-8')
-    act.parameters[2] = bytes('TalTal', 'utf-8')
-    act.parameters[3] = bytes(ROOSTER_CAVE_FLAG, 'utf-8')
-
-    if item_key == 'Seashell':
-        act.parameters[4] = bytes('true', 'utf-8')
-    else:
-        act.parameters[4] = bytes('false', 'utf-8')
-
-    if model_name in MODEL_SIZES:
-        size = MODEL_SIZES[model_name]
-        act.scaleX = size
-        act.scaleY = size
-        act.scaleZ = size
-    if model_name in MODEL_ROTATIONS:
-        act.rotY = MODEL_ROTATIONS[model_name]
 
 
 def changeLens(flowchart, item_key, item_index, model_path, model_name, room):
-    if item_key[:3] == 'Rup': # no need for a fancy animation for rupees, just give them to the player
-        get_anim = event_tools.createActionEvent(flowchart, 'Inventory', 'AddItemByKey',
-            {'itemKey': item_key, 'count': 1, 'index': item_index, 'autoEquip': False})
-    else:
-        get_anim = item_get.insertItemGetAnimation(flowchart, item_key, item_index)
-
-    event_tools.addEntryPoint(flowchart, 'MermaidCave')
-    event_tools.createActionChain(flowchart, 'MermaidCave', [
-        ('SinkingSword', 'Destroy', {}),
-        ('EventFlags', 'SetFlag', {'symbol': MERMAID_CAVE_FLAG, 'value': True})
-    ], get_anim)
-
-    act = room.actors[7]
-    act.type = 0x194 # sinking sword
-    act.rotY = 0 # rotate to be facing the screen
-    act.parameters[0] = bytes(model_path, 'utf-8')
-    act.parameters[1] = bytes(model_name, 'utf-8')
-    act.parameters[2] = bytes('MermaidCave', 'utf-8')
-    act.parameters[3] = bytes(MERMAID_CAVE_FLAG, 'utf-8')
-
-    if item_key == 'Seashell':
-        act.parameters[4] = bytes('true', 'utf-8')
-    else:
-        act.parameters[4] = bytes('false', 'utf-8')
-
-    if model_name in MODEL_SIZES:
-        size = MODEL_SIZES[model_name]
-        act.scaleX = size
-        act.scaleY = size
-        act.scaleZ = size
-    if model_name in MODEL_ROTATIONS:
-        act.rotY = MODEL_ROTATIONS[model_name]
+    _change_loose_pickup(flowchart, item_key, item_index, model_path, model_name,
+                         room, 7, 0x194, 'MermaidCave', MERMAID_CAVE_FLAG, True)

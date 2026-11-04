@@ -1,3 +1,4 @@
+import logging
 from RandomizerCore.randomizer_data import *
 import yaml, base64, copy, random
 
@@ -170,8 +171,10 @@ def loadSettings(window, settings_dict=SETTINGS):
                     getattr(window.ui, option_name).setCurrentIndex(option_value)
                 else:
                     getattr(window.ui, option_name).setValue(option_value)
-        except:
-            pass
+        except (AttributeError, TypeError, ValueError, OverflowError) as error:
+            # Keep the default for an invalid setting and report what was skipped.
+            logging.getLogger(__name__).warning(
+                "Could not load setting %s: %s", option_name, error)
     
     if 'theme' in settings_dict:
         if settings_dict['theme'].lower() in ['light', 'dark']:
