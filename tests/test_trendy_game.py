@@ -90,7 +90,17 @@ class TrendyGeneratedAssets(unittest.TestCase):
         parameters = [event.data.params.data for event in flow.flowchart.events if getattr(event.data, 'params', None) is not None]
         for index in range(1, 7):
             self.assertTrue(any(parameter.get('symbol') == f'LAS_CranePrize{index}' and parameter.get('value') is True for parameter in parameters))
-            self.assertTrue(any(parameter.get('value2') == 0x53430000+index for parameter in parameters))
+            # The real dev query returns the raw itemIndex, not an equality bit.
+            dispatch = [event for event in flow.flowchart.events
+                        if getattr(event.data, 'cases', None) is not None and
+                        getattr(event.data, 'params', None) is not None and
+                        event.data.params.data.get('value1') == 'itemIndex' and
+                        0x53430000+index in event.data.cases]
+            self.assertEqual(len(dispatch), 1)
+            self.assertNotIn('value2', dispatch[0].data.params.data)
+            reward = dispatch[0].data.cases[0x53430000+index].v
+            self.assertIsNotNone(reward)
+            self.assertNotEqual(reward.name, 'Event0')
 
 if __name__ == '__main__':
     unittest.main()

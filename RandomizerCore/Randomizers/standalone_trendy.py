@@ -89,13 +89,17 @@ def stage(rewards):
     flowchart = flow.flowchart
     original_event = event_tools.findEvent(flowchart, 'Event0')
     original_events = list(flowchart.events)
-    reward_chain = original_event.name
+    # Dev CompareInt returns value1 directly; its cases must be actual indexes.
+    reward_cases = {layout['itemIndex'] & 0xffffffff: original_event.name
+                    for row in prize_rows for layout in row['layouts']}
     next_event = event_tools.findEvent(flowchart, 'Event1').data.nxt.v.name
     for prize_number in range(6, 0, -1):
         prize_details = selected_prizes['trendy-prize-' + str(prize_number)]
         completion_event = event_tools.createActionEvent(flowchart, 'EventFlags', 'SetFlag', {'symbol': 'LAS_CranePrize' + str(prize_number), 'value': True}, next_event)
         reward_event = rewards.give(flowchart, 'trendy-prize-' + str(prize_number), completion_event)
-        reward_chain = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt', {'value1': 'itemIndex', 'value2': prize_details['marker']}, {0: reward_event, 1: reward_chain})
+        reward_cases[prize_details['marker']] = reward_event
+    reward_chain = event_tools.createSwitchEvent(flowchart, 'FlowControl', 'CompareInt',
+        {'value1': 'itemIndex'}, reward_cases)
     _redirect(flowchart, original_event, event_tools.findEvent(flowchart, reward_chain), original_events)
     event_tools.writeFlow(write_path('region_common/event/PrizeCommon.bfevfl'), flow)
     verified_prize_sheet = sheet_tools.readSheet(read_path('region_common/datasheets/CranePrize.gsheet'))
