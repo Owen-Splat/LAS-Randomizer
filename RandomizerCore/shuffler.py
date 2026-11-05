@@ -49,13 +49,11 @@ class ItemShuffler(QtCore.QThread):
                             if v['type'] == 'item'
                             and v['subtype'] not in ('chest', 'boss', 'enemy', 'drop', 'npc', 'standing', 'overworld-statue',
                                                      'dungeon-statue', 'hidden', 'bomb-hole', 'dig', 'underwater')}
-        self.vanilla_locations.add('trendy-prize-1') # yoshi doll stays until trendy is properly shuffled
-        self.vanilla_locations.add('trendy-prize-2')
-        self.vanilla_locations.add('trendy-prize-3')
-        self.vanilla_locations.add('trendy-prize-4')
-        self.vanilla_locations.add('trendy-prize-5')
-        self.vanilla_locations.add('trendy-prize-6')
-        self.vanilla_locations.add('trendy-prize-final')
+        from RandomizerCore.randomizer_data import TRENDY_REWARDS
+        if self.settings['Trendy Game']:
+            self.vanilla_locations.difference_update(TRENDY_REWARDS)
+        else:
+            self.vanilla_locations.update(TRENDY_REWARDS)
         self.vanilla_locations.remove('shop-slot3-1st')
         self.vanilla_locations.remove('shop-slot3-2nd')
         self.vanilla_locations.remove('shop-slot6')

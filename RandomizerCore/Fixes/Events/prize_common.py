@@ -5,6 +5,8 @@ class PrizeCommonEventFixes:
     """Change the figure to look for when the fast-trendy setting is on, and makes Yoshi not replace Lens"""
 
     def __init__(self, mod_generator) -> None:
+        if mod_generator.settings['Trendy Game']:
+            return
         flow = mod_generator.file_manager.readFile('PrizeCommon.bfevfl')
         self.makeEventChanges(flow.flowchart, mod_generator.settings, mod_generator.flag_manager.flags)
         mod_generator.file_manager.writeFile('PrizeCommon.bfevfl', flow)

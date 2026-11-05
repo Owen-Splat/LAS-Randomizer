@@ -320,7 +320,7 @@ class Ui_MainWindow(QObject):
         rapids_check = QCheckBox('Rapids', minigames_group)
         fishing_check = QCheckBox('Fishing', minigames_group)
         trendy_check = QCheckBox('Trendy Game', minigames_group)
-        trendy_check.setEnabled(False)
+        trendy_check.setEnabled(True)
         gvl = QVBoxLayout()
         hl = QHBoxLayout()
         hl.addWidget(dampe_check)

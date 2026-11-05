@@ -52,3 +52,7 @@ Then run the randomizer with:
 If you are using a different version of Python, change the commands to include your version instead
 
 Once you have installed all the requirements, there is an included **build.bat** file. Run that (you can just enter `build` in the terminal) and it will automatically enter the commands to create a build. Once again, if you are using a different version of Python, you will need to edit this file to match your version
+
+## Standalone Trendy Game dev fix
+
+See [setup, changed behavior and test instructions](docs/TRENDY_DEV_PORT.md).

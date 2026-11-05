@@ -10,6 +10,10 @@ class CraneGameDatasheetFixes:
             self.makeDatasheetChanges(sheet, mod_generator.settings)
             mod_generator.file_manager.writeFile('CranePrize.gsheet', sheet)
 
+        # Randomized prizes are not members of vanilla featured-prize groups.
+        if mod_generator.settings['Trendy Game']:
+            return
+
         if mod_generator.thread_active:
             group1 = mod_generator.file_manager.readFile('CranePrizeFeaturedPrizeGroup1.gsheet')
             # group2 = mod_generator.file_manager.readFile('CranePrizeFeaturedPrizeGroup2.gsheet')

@@ -1,11 +1,16 @@
 
 
 class TrendyGameRandomizer:
-    """Handles placing items in Trendy Game. Current just the final prize"""
+    """Handles placing items in Trendy Game. Includes six physical prizes and the final reward"""
 
     def __init__(self, mod_generator) -> None:
         self.parent = mod_generator
         if self.parent.thread_active: self.trendyChanges()
+        if self.parent.thread_active and self.parent.settings['Trendy Game']:
+            from RandomizerCore.Randomizers.standalone_trendy import stage, DevTrendyRewards
+            rewards = DevTrendyRewards(self.parent)
+            stage(rewards)
+            rewards.save_flags()
 
 
     def trendyChanges(self):

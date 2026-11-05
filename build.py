@@ -17,6 +17,11 @@ exe_path = Path(sys.argv[0]).parent.absolute() / "dist" / str(base_name + exe_ex
 if not exe_path.exists():
     raise Exception("Executable not found: %s" % exe_path)
 
+runtime_path = Path(__file__).resolve().parent / "exl"
+for name in ("main.npdm", "subsdk9"):
+    if not (runtime_path / name).is_file():
+        raise FileNotFoundError("Missing dev runtime: " + str(runtime_path / name) + ". Run build.bat to prepare it.")
+
 release_path = Path(".") / "dist" / "release_archive"
 if release_path.exists() and release_path.is_dir():
     shutil.rmtree(release_path)
@@ -25,3 +30,6 @@ release_path.mkdir(parents=True, exist_ok=True)
 shutil.copyfile("README.md", release_path / "README.txt")
 shutil.copyfile("LICENSE.txt", release_path / "LICENSE.txt")
 shutil.move(exe_path, release_path / str(base_name + exe_ext))
+
+# Ship the runtime beside the executable, where the frozen app reads it.
+shutil.copytree(runtime_path, release_path / "exl")
